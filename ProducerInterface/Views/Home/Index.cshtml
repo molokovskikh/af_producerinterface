@@ -1,0 +1,10 @@
+﻿@using ProducerInterface.Models
+@{
+    ViewBag.Title = "Index";
+	List<Producer> producers = ViewBag.Producers;
+}
+
+<h2>Производители</h2>
+@foreach (var item in producers) {
+	<div>@item.Name</div>
+}
