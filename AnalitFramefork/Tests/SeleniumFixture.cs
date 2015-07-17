@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using CassiniDev;
+using AnalitFramefork.Helpers;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -27,7 +26,6 @@ namespace AnalitFramefork.Tests
 		public static string DefaultUrl = "/";
 		public RemoteWebDriver Browser;
 		public TestSetup TestSetup;
-		public Server Server;
 		public class ChromeOptionsWithPrefs : ChromeOptions
 		{
 			public Dictionary<string, object> prefs { get; set; }
@@ -44,8 +42,8 @@ namespace AnalitFramefork.Tests
 
 		public static string BuildTestUrl(string urlPart)
 		{
-			var WebRoot = TestSetup.WebRoot;
-			var WebPort = TestSetup.WebPort;
+			var WebRoot = ConfigHelper.GetParam("webRoot","/");
+			var WebPort = ConfigHelper.GetParam("webPort");
 			if (!urlPart.StartsWith("/"))
 				urlPart = "/" + urlPart;
 			if (WebRoot.EndsWith("/") && urlPart.Length > 0)
@@ -74,7 +72,7 @@ namespace AnalitFramefork.Tests
 			url = GetUri(url);
 
 			if (Browser == null) {
-				Browser = TestSetup.GlobalDriver;
+				Browser = TestSetup.Browser;
 			}
 
 			Browser.Navigate().GoToUrl(url);

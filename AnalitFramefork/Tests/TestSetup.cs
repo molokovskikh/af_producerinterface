@@ -1,98 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Web.Hosting;
-using CassiniDev;
+using AnalitFramefork.Helpers;
+using IISExpressBootstrapper;
+using NHibernate.Util;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 
 namespace AnalitFramefork.Tests
 {
-
 	/// <summary>
 	/// Загрузчик тестов. Поднимает сервер, запускает хром и так далее.
 	/// Необходимо не забыть добавить аттрибут[SetUpFixture] наследнику данного класса
-	/// Также нужно убедиться, что проект с тестами находится в x86 архитектуре
+	/// Также нужно убедиться, что проект с тестами имеет фреймфорк 4.5
 	/// </summary>
 	[SetUpFixture]
 	public class TestSetup
 	{
-		private static Server _webServer;
 		public static RemoteWebDriver Browser;
-		public static RemoteWebDriver GlobalDriver;
-		public static string defaultUrl = "/";
-		public static string WebRoot;
-		public static int WebPort;
-		public static string WebDir;
+		protected Dictionary<int,IISExpressHost> WebServers;
 
+		/// <summary>
+		/// Метод, который выполняется перед запуском тестов. Выполняется один раз.
+		/// Тут должен находиться код, который запускает браузер, сервер и т.д.
+		/// </summary>
 		[SetUp]
-		public void SetupFixture()
+		public void Setup()
 		{
 			//Все опасные функции, должны быть вызванны до этого момента, так как исключения в сетапе
 			//оставляют невысвобожденные ресурсы браузера и веб сервера
-			GlobalSetup();
-			_webServer = StartServer();
+			StartBrowser();
+			StartServer();
 		}
 
+		/// <summary>
+		/// Метод, который выполняется после выполнения всех тестов.
+		/// Как правило тут находятся код, который отпускает ресурсы: выключает сервер, выключает браузре и т.д.
+		/// </summary>
 		[TearDown]
-		public void TeardownFixture()
+		public void Teardown()
 		{
-			GlobalTearDown();
-			_webServer.ShutDown();
+			StopBrowser();
+			StopServer();
 		}
 
-		public Server StartServer()
+		/// <summary>
+		/// Запуск серверов с проектами. Список проектов, которые необходимо запустить находится в параметре ApplicationsToRun
+		/// Под названием проекта подразумевается его namespace.
+		/// </summary>
+		protected void StartServer()
 		{
-			WebPort = Int32.Parse(ConfigurationManager.AppSettings["webPort"]);
-			WebRoot = ConfigurationManager.AppSettings["webRoot"] ?? "/";
-			WebDir = ConfigurationManager.AppSettings["webDirectory"];
 
-			var webServer = new Server(WebPort, WebRoot, Path.GetFullPath(WebDir));
-			webServer.Start();
-
-			try
-			{
-				SetupEnvironment(webServer);
+			WebServers = new Dictionary<int, IISExpressHost>();
+			var applicationsToRun = ConfigHelper.GetParam("ApplicationsToRun");
+			var names = applicationsToRun.Split(',');
+			var initialPort = Int32.Parse(ConfigHelper.GetParam("webPort")); ;
+			foreach (var name in names) {
+				var server = new IISExpressHost(name, initialPort);
+				WebServers.Add(initialPort++,server);
 			}
-			catch (Exception)
-			{
-				try
-				{
-					webServer.Dispose();
-				}
-				catch (Exception exception)
-				{
-					Console.WriteLine(exception);
-				}
-				throw;
-			}
-
-			return webServer;
+			
 		}
 
-		public static void SetupEnvironment(Server server)
+		/// <summary>
+		/// Запуск браузера
+		/// </summary>
+		protected static void StartBrowser()
 		{
-			var method = server.GetType().GetMethod("GetHost", BindingFlags.Instance | BindingFlags.NonPublic);
-			method.Invoke(server, null);
-
-			var manager = ApplicationManager.GetApplicationManager();
-			var apps = manager.GetRunningApplications();
-			var domain = manager.GetAppDomain(apps.Single().ID);
-			domain.SetData("environment", "test");
-		}
-
-	
-
-		public static void GlobalSetup()
-		{
-			WebPort = Int32.Parse(ConfigurationManager.AppSettings["webPort"]);
-			WebRoot = ConfigurationManager.AppSettings["webRoot"] ?? "/";
-			if (GlobalDriver != null)
+			if (Browser != null)
 				return;
 
 			var path = Directory.GetDirectories("../../../packages/", "*ChromeDriver*").FirstOrDefault() + "/tools/";
@@ -101,18 +79,29 @@ namespace AnalitFramefork.Tests
 				{ "download.prompt_for_download", "false" },
 				{ "download.default_directory", Environment.CurrentDirectory }
 			};
-			GlobalDriver = new ChromeDriver(path, chromeOptions);
-			GlobalDriver.Manage().Window.Size = new Size(1200, 1000);
+			Browser = new ChromeDriver(path, chromeOptions);
+			Browser.Manage().Window.Size = new Size(1200, 1000);
 		}
 
-		public static void GlobalTearDown()
+		/// <summary>
+		/// Остановка браузера
+		/// </summary>
+		protected static void StopBrowser()
 		{
-			if (GlobalDriver != null)
+			if (Browser != null)
 			{
-				GlobalDriver.Quit();
-				GlobalDriver.Dispose();
-				GlobalDriver = null;
+				Browser.Quit();
+				Browser.Dispose();
+				Browser = null;
 			}
+		}
+
+		/// <summary>
+		/// Остановка тестируемых приложений
+		/// </summary>
+		protected void StopServer()
+		{
+			WebServers.ForEach(i => i.Value.Dispose());
 		}
 	}
 }

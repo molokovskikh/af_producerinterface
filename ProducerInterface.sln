@@ -14,24 +14,39 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{817312
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{F187BAFD-EACF-4AFC-966C-4AAB3DCA226E}"
+	ProjectSection(SolutionItems) = preProject
+		global.config.xml = global.config.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{546ED658-BC52-4B7C-B01C-5181E831559F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{546ED658-BC52-4B7C-B01C-5181E831559F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{546ED658-BC52-4B7C-B01C-5181E831559F}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{546ED658-BC52-4B7C-B01C-5181E831559F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{546ED658-BC52-4B7C-B01C-5181E831559F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{546ED658-BC52-4B7C-B01C-5181E831559F}.Release|x86.ActiveCfg = Release|Any CPU
 		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Debug|x86.ActiveCfg = Debug|x86
+		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Debug|x86.Build.0 = Debug|x86
 		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Release|x86.ActiveCfg = Release|Any CPU
+		{980EA06F-2C4A-48BE-AEB0-F435FC1F1F7C}.Release|x86.Build.0 = Release|Any CPU
 		{D660637F-E253-4BB7-A7C9-CCB0F64190C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D660637F-E253-4BB7-A7C9-CCB0F64190C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D660637F-E253-4BB7-A7C9-CCB0F64190C8}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{D660637F-E253-4BB7-A7C9-CCB0F64190C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D660637F-E253-4BB7-A7C9-CCB0F64190C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D660637F-E253-4BB7-A7C9-CCB0F64190C8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using AnalitFramefork.Mvc;
 using NHibernate.Linq;
@@ -13,6 +16,7 @@ namespace ProducerInterface.Controllers
 
         public ActionResult Index()
         {
+			
 	        var producers = DbSession.Query<Producer>().ToList();
 	        ViewBag.Producers = producers;
             return View();

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<appSettings>
+	<add key="webPort" value="59777" />
+	<add key="webDirectory" value="../../../ProducerInterface/" />
+	<add key="DebugMail" value="KvasovTest@analit.net" />
+	<add key="SmtpServer" value="box.analit.net" />
+	<add key="OrderNotificationMail" value="ibilling@ivrn.net" />
+	<add key="WriteOffNotificationMail" value="ibilling@ivrn.net, InternetBilling@analit.net" />
+	<add key="SpeedBoostPackageId" value="23" />
+	<add key="ClientSettingsProvider.ServiceUri" value="" />
+</appSettings>
