@@ -1,0 +1,15 @@
+﻿import System.Linq.Enumerable
+
+Global(
+	Project : "ProducerInterface",
+	HumanReadableName : "Интерфейса производителя",
+	ExcludesDeployDirectory : ("Content",),
+	Config: {
+		"db:generate:log": {@Sufix : "Internet"},
+		"db:seed": {@Profile: "Internet"}
+	}
+)
+
+task @default, [@build]
+
+task @build, []
