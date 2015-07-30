@@ -1,13 +1,10 @@
-﻿using System.Reflection;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using AnalitFramefork;
-using ProducerInterface.Controllers;
 
 namespace ProducerInterface
 {
-
 	/// <summary>
 	/// Главный файл проекта MVC
 	/// </summary>
@@ -16,7 +13,6 @@ namespace ProducerInterface
 		protected void Application_Start()
 		{
 			AreaRegistration.RegisterAllAreas();
-
 			WebApiConfig.Register(GlobalConfiguration.Configuration);
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);

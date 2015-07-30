@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using AnalitFramefork.Components;
 using AnalitFramefork.Extensions;
 using NHibernate;
 using NHibernate.Context;
+using ProducerInterface.Models;
 
 namespace AnalitFramefork
 {
@@ -18,7 +20,7 @@ namespace AnalitFramefork
 		protected static ISessionFactory SessionFactory;
 		protected static ISession Session;
 		protected static HttpApplication Application;
-		protected static Assembly Assembly;
+		public static Assembly Assembly { get; protected set; }
 
 		public static void Initialize(HttpApplication application)
 		{
@@ -31,13 +33,12 @@ namespace AnalitFramefork
 		public static void InitializeSessionFactory()
 		{
 			var configuration = new NHibernate.Cfg.Configuration();
-			var nhibernateConnectionString = ConfigurationManager.AppSettings["NhibernateConnectionString"];
+			var nhibernateConnectionString = Config.GetParam("NhibernateConnectionString");
 			configuration.SetProperty("connection.provider", "NHibernate.Connection.DriverConnectionProvider")
 				.SetProperty("connection.driver_class", "NHibernate.Driver.MySqlDataDriver")
 				.SetProperty("connection.connection_string", nhibernateConnectionString)
 				.SetProperty("dialect", "NHibernate.Dialect.MySQL5Dialect")
 				.SetProperty("current_session_context_class", "web");
-
 			//Раскоментировать, если необходимо изменять имена таблиц для моделей
 			//configuration.SetNamingStrategy(new TableNamingStrategy());
 
@@ -45,7 +46,7 @@ namespace AnalitFramefork
 			//configuration.EventListeners.PreUpdateEventListeners = new IPreUpdateEventListener[] { new ModelCrudListener() };
 			//configuration.EventListeners.PostInsertEventListeners = new IPostInsertEventListener[] { new ModelCrudListener() };
 			//configuration.EventListeners.PreDeleteEventListeners = new IPreDeleteEventListener[] { new ModelCrudListener() };
-			
+
 			//Конфиги
 			//var configurationPath = HttpContext.Current.Server.MapPath(@"~\Nhibernate\hibernate.cfg.xml");
 			//configuration.Configure(configurationPath);
@@ -55,8 +56,18 @@ namespace AnalitFramefork
 			//schema.Create(false, true);
 
 			//Маппинг моделей при помощи аттрибутов
-			var memstream = NHibernate.Mapping.Attributes.HbmSerializer.Default.Serialize(Assembly);
-			configuration.AddInputStream(memstream);
+
+			
+				Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+				foreach (var ass in assemblies) {
+					try {
+						var memstream = NHibernate.Mapping.Attributes.HbmSerializer.Default.Serialize(ass);
+						configuration.AddInputStream(memstream);
+					}
+					catch (Exception ex) {
+						var x =1;
+					}
+				}
 
 			//Создаем фабрику сессий
 			SessionFactory = configuration.BuildSessionFactory();
@@ -64,8 +75,7 @@ namespace AnalitFramefork
 
 		public static ISession OpenSession()
 		{
-			if (!CurrentSessionContext.HasBind(SessionFactory))
-			{
+			if (!CurrentSessionContext.HasBind(SessionFactory)) {
 				Session = SessionFactory.OpenSession();
 				CurrentSessionContext.Bind(Session);
 				Session.BeginTransaction();
