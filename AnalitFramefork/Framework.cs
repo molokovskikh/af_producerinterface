@@ -8,7 +8,6 @@ using AnalitFramefork.Components;
 using AnalitFramefork.Extensions;
 using NHibernate;
 using NHibernate.Context;
-using ProducerInterface.Models;
 
 namespace AnalitFramefork
 {
