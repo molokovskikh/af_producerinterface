@@ -42,8 +42,8 @@ namespace AnalitFramefork.Tests
 
 		public static string BuildTestUrl(string urlPart)
 		{
-			var WebRoot = ConfigHelper.GetParam("webRoot","/");
-			var WebPort = ConfigHelper.GetParam("webPort");
+			var WebRoot = Config.GetParam("webRoot","/");
+			var WebPort = Config.GetParam("webPort");
 			if (!urlPart.StartsWith("/"))
 				urlPart = "/" + urlPart;
 			if (WebRoot.EndsWith("/") && urlPart.Length > 0)

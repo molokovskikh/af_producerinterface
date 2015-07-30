@@ -1,30 +1,36 @@
 ﻿using System;
 using System.Configuration;
 using System.Net.Mail;
+using AnalitFramefork.Helpers;
 
 namespace AnalitFramefork.Components
 {
 	public class EmailSender
 	{
-	
 		public static void SendEmail(string[] to, string subject, string body)
 		{
-			foreach (var s in to)
-			{
-				SendEmail(s, subject, body);
-			}
+			foreach (var s in to) SendEmail(s, subject, body);
 		}
 
 		public static void SendEmail(string to, string subject, string body)
 		{
 			var mail = new MailMessage();
+#if DEBUG
+			mail.To.Add(Config.GetParam("DebugInfoEmail"));
+#else
 			mail.To.Add(to);
-			mail.From = new MailAddress(ConfigurationManager.AppSettings["MailSenderAddress"]);
-			mail.Subject = subject;
+#endif
+
+			mail.From = new MailAddress(Config.GetParam("MailSenderAddress"));
+#if DEBUG
+			mail.Subject = "Moscow Debug - " + subject;
+#else
+			mail.Subject = subject;		
+#endif
 			mail.Body = body;
 			mail.IsBodyHtml = true;
 			SmtpClient smtp = new SmtpClient();
-			smtp.Host = ConfigurationManager.AppSettings["SmtpServer"];
+			smtp.Host = Config.GetParam("SmtpServer");
 			smtp.Port = 25;
 			smtp.UseDefaultCredentials = false;
 			smtp.Send(mail);
@@ -32,9 +38,8 @@ namespace AnalitFramefork.Components
 
 		public static void SendError(string message)
 		{
-			var service = ConfigurationManager.AppSettings["ErrorEmail"];
-			if (string.IsNullOrEmpty(service))
-			{
+			var service = Config.GetParam("ErrorEmail");
+			if (string.IsNullOrEmpty(service)) {
 				return;
 			}
 			message = "<pre>" + message + "</pre>";
@@ -45,7 +50,7 @@ namespace AnalitFramefork.Components
 			mail.Body = message;
 			mail.IsBodyHtml = true;
 			SmtpClient smtp = new SmtpClient();
-			smtp.Host = ConfigurationManager.AppSettings["SmtpServer"];
+			smtp.Host = Config.GetParam("SmtpServer");
 			smtp.Port = 25;
 			smtp.UseDefaultCredentials = false;
 			smtp.Send(mail);
@@ -54,19 +59,15 @@ namespace AnalitFramefork.Components
 		public static void SendDebugInfo(string title, string body)
 		{
 			title = "DebugInfo: " + title;
-			var email = ConfigurationManager.AppSettings["DebugInfoEmail"];
-			if (string.IsNullOrEmpty(email))
-			{
+			var email = Config.GetParam("DebugInfoEmail");
+			if (string.IsNullOrEmpty(email)) {
 				return;
 			}
-			try
-			{
+			try {
 				SendEmail(email, title, body);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 			}
-
 		}
 	}
 }

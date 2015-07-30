@@ -4,7 +4,7 @@ using NHibernate.Mapping.Attributes;
 
 namespace ProducerInterface.Models
 {
-	[Class(0, Table = "Producers", NameType = typeof(Producer))]
+	[Class(Table = "Producers", NameType = typeof(Producer), Schema = "producerinterface")]
 	public class Producer : BaseModel
 	{
 		[Property, Description("Название")]

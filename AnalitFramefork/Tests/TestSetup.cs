@@ -30,6 +30,7 @@ namespace AnalitFramefork.Tests
 		[SetUp]
 		public void Setup()
 		{
+
 			//Все опасные функции, должны быть вызванны до этого момента, так как исключения в сетапе
 			//оставляют невысвобожденные ресурсы браузера и веб сервера
 			StartBrowser();
@@ -55,9 +56,9 @@ namespace AnalitFramefork.Tests
 		{
 
 			WebServers = new Dictionary<int, IISExpressHost>();
-			var applicationsToRun = ConfigHelper.GetParam("ApplicationsToRun");
+			var applicationsToRun = Config.GetParam("ApplicationsToRun");
 			var names = applicationsToRun.Split(',');
-			var initialPort = Int32.Parse(ConfigHelper.GetParam("webPort")); ;
+			var initialPort = Int32.Parse(Config.GetParam("webPort")); ;
 			foreach (var name in names) {
 				var server = new IISExpressHost(name, initialPort);
 				WebServers.Add(initialPort++,server);

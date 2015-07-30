@@ -1,0 +1,15 @@
+﻿@using ProducerControlPanel.Models
+@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Список пользователей";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	List<User> usersList = ViewBag.UsersList;
+	List<Producer> producerList = ViewBag.ProducerList;
+	List<Admin> adminList = ViewBag.AdminList;
+}
+<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+	usersList:<br />
+	@foreach (var item in usersList) {
+		<p>@item.Name</p>
+	} <br /> 
+</div>
