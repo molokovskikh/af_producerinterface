@@ -1,0 +1,3 @@
+[submodule "analitframework"]
+	path = analitframework
+	url = git@git.analit.net:a.sarychev/analitframework.git

@@ -91,8 +91,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnalitFramefork\AnalitFramefork.csproj">
-      <Project>{D660637F-E253-4BB7-A7C9-CCB0F64190C8}</Project>
+    <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">
+      <Project>{d660637f-e253-4bb7-a7c9-ccb0f64190c8}</Project>
       <Name>AnalitFramefork</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProducerInterface\ProducerInterface.csproj">
