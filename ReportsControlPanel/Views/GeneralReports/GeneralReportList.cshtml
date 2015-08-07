@@ -1,0 +1,36 @@
+﻿@using AnalitFramefork.Components
+@using ReportsControlPanel.Models
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ModelFilter<GeneralReport> pager = ViewBag.Filter;
+	var reports = pager.GetItems();
+}
+
+<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+	<div class="row">
+		@{ Html.RenderPartial("Pagination"); }
+	</div>
+	<table id="table-2" class="table table-bordered table-striped datatable dataTable no-footer" role="grid" aria-describedby="table-2_info">
+		<thead>
+			<tr role="row">
+			<th><a href="@pager.OrderBy(s => s.Id)">Номер</a></th>
+			<th><a href="@pager.OrderBy(s => s.Payer.Id)">Плательщик</a></th>
+			<th><a href="@pager.OrderBy(s => s.Title)">Название</a></th>
+			<th>Действия</th>
+		</thead>
+		<tbody>
+			@foreach (var item in reports)
+			{
+				<tr role="row" class="odd">
+					<td>@item.Id</td>
+					<td>@(item.Payer != null ? item.Payer.Name : "" )</td>
+					<td>@item.Title</td>
+					<td></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<div class="row">
+		@{ Html.RenderPartial("Pagination"); }
+	</div>
+</div>
