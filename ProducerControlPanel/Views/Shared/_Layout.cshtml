@@ -1,5 +1,5 @@
 ﻿@using System.Web.UI.WebControls 
-@using AnalitFramefork
+@using AnalitFramefork.Components
 @using ProducerControlPanel.Models
 <!DOCTYPE html>
 @{
@@ -78,7 +78,7 @@
 						<!-- add class "multiple-expanded" to allow multiple submenus to open -->
 						<!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
 						<li>
-							<a href="@Config.GetParam("SiteRoot")">
+							<a href="@GlobalConfig.GetParam("SiteRoot")">
 								<i class="entypo-home"></i>
 								<span class="title">Перейти в ProducerInterface</span>
 							</a>

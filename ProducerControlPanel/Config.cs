@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Reflection;
 using AnalitFramefork;
+using AnalitFramefork.Components;
 
 namespace ProducerControlPanel
 {
-	public class Config : AnalitFramefork.Config
+	public class Config : GlobalConfig
 	{
 		 
 	}
