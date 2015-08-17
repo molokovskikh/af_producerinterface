@@ -175,12 +175,12 @@
 		<!-- Demo Settings -->
 		<script src="~/assets/js/neon-demo.js"></script>
 
-		<script type="text/javascript" src="~/Scripts/jquery-2.1.1.js"></script>
-		<script type="text/javascript" src="~/Scripts/jquery-ui-1.11.1.js"></script>
-		<script type="text/javascript" src="~/Scripts/Helpers.js"></script>
-		<script type="text/javascript" src="~/Scripts/EventEmitter.js"></script>
-		<script type="text/javascript" src="~/Scripts/Window.js"></script>
-		<script type="text/javascript" src="~/Scripts/ControlPanel.js"></script>
+		<script type="text/javascript" src="@GlobalConfig.GetParam("javascriptFolderPath")/jquery-2.1.1.js"></script>
+		<script type="text/javascript" src="@GlobalConfig.GetParam("javascriptFolderPath")/jquery-ui-1.11.1.js"></script>
+		<script type="text/javascript" src="@GlobalConfig.GetParam("javascriptFolderPath")/Helpers.js"></script>
+		<script type="text/javascript" src="@GlobalConfig.GetParam("javascriptFolderPath")/EventEmitter.js"></script>
+		<script type="text/javascript" src="@GlobalConfig.GetParam("javascriptFolderPath")/Window.js"></script>
+		<script type="text/javascript" src="@GlobalConfig.GetParam("javascriptFolderPath")/ControlPanel.js"></script>
 
 		<link rel="stylesheet" href="~/Css/style.css"></link>
 		@RenderSection("JavaScript", required: false)

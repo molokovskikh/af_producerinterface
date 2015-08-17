@@ -17,9 +17,15 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>12.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -116,6 +122,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Config.cs" />
     <Compile Include="Controllers\GeneralReportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -172,6 +179,15 @@
     <Content Include="Assets\css\skins\yellow.css" />
     <Content Include="Assets\css\skins\yellow.min.css" />
     <Content Include="Assets\css\wysihtml5-color.css" />
+    <Content Include="Assets\custom\js\EventEmitter.js" />
+    <Content Include="Assets\custom\js\GeneralReportsController.CreateGeneralReport.js" />
+    <Content Include="Assets\custom\js\Helpers.js" />
+    <Content Include="Assets\custom\js\jquery-2.1.1.js" />
+    <Content Include="Assets\custom\js\jquery-ui-1.11.1.js" />
+    <Content Include="Assets\custom\js\InputSearchDropdown.js" />
+    <Content Include="Assets\custom\js\InputTextEditor.js" />
+    <Content Include="Assets\custom\js\Analit.js" />
+    <Content Include="Assets\custom\js\Window.js" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Assets\fonts\index.html" />
     <Content Include="Assets\fonts\montserrat\font.css" />
@@ -1535,6 +1551,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Assets\custom\css\" />
     <Folder Include="Assets\js\aci-tree\php\tree\Item 2\Item 2\" />
     <Folder Include="Assets\js\aci-tree\php\tree\Item 2\Item 4\" />
     <Folder Include="Assets\js\aci-tree\php\tree\Item 2\Item 5\" />
@@ -1548,6 +1565,7 @@
     <Folder Include="Assets\js\codemirror\bin\" />
     <Folder Include="Assets\js\selectboxit\css\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1767,13 +1785,12 @@
     <Content Include="Assets\js\vertical-timeline\README.md" />
     <Content Include="Assets\js\zurb-responsive-tables\.gitignore" />
     <Content Include="Assets\js\zurb-responsive-tables\javascripts\app.js.orig" />
+    <Content Include="Assets\custom\js\GeneralReportsController.GeneralReportList.js" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\Pagination.cshtml" />
+    <Content Include="Views\GeneralReports\CreateGeneralReport.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -1807,6 +1824,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>xcopy  "$(SolutionDir)analitframework\Mvc\Neon\Views" "$(ProjectDir)Views\Shared"  /Y /I</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
