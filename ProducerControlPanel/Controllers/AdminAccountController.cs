@@ -5,9 +5,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using AnalitFramefork.Components;
 using AnalitFramefork.Helpers;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using NHibernate.Linq;
-using ProducerControlPanel.Models;
 
 namespace ProducerControlPanel.Controllers
 {
@@ -37,12 +37,12 @@ namespace ProducerControlPanel.Controllers
 			//Авторизация для тестов, если пароль совпадает с паролем по умолчанию и логин есть в АД, то все ок
 			var defaultPassword = ConfigurationManager.AppSettings["DefaultEmployeePassword"];
 			if (employee != null && password == defaultPassword) {
-				Session.Add("employee", employee.RowID);
+				Session.Add("employee", employee.Id);
 				return Authenticate("Index", "Admin", username, shouldRemember, impersonateClient);
 			}
 #endif
 			if (ActiveDirectoryHelper.IsAuthenticated(username, password) && employee != null) {
-				Session.Add("employee", employee.RowID);
+				Session.Add("employee", employee.Id);
 				return Authenticate("Index", "Admin", username, shouldRemember, impersonateClient);
 			}
 			ErrorMessage("Неправильный логин или пароль");
@@ -60,7 +60,7 @@ namespace ProducerControlPanel.Controllers
 		[HttpPost]
 		public ActionResult ApplyImpersonation([EntityBinder] Admin admin)
 		{
-			return Authenticate("Statistic", "AdminAccount", Environment.UserName, false, admin.RowID.ToString());
+			return Authenticate("Statistic", "AdminAccount", Environment.UserName, false, admin.Id.ToString());
 		}
 	}
 }

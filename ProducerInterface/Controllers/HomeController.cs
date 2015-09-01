@@ -15,7 +15,7 @@ namespace ProducerInterface.Controllers
 		// GET: /Главная/
 		public ActionResult Index()
 		{
-			ViewBag.CurrentUser = DbSession.Query<User>().FirstOrDefault(e => e.Name == User.Identity.Name);
+			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
 			var producers = DbSession.Query<Producer>().ToList();
 			ViewBag.Producers = producers;
 			return View();

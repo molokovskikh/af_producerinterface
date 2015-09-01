@@ -3,7 +3,7 @@
 @{
 	ViewBag.Title = "Регистрация";
 	Layout = "~/Views/Shared/_Layout.cshtml";
-	var user = (ViewBag.NewUser as User) ?? new User();
+	var user = (ViewBag.NewUser as ProducerUser) ?? new ProducerUser();
 	var producerList = ViewBag.ProducerList as List<Producer>;
 	string login = string.Empty;
 	string password = string.Empty;
@@ -56,16 +56,12 @@
 									@Html.TextBoxFor(s => user.Name, new { @Name = "user.Name", @Class = "form-control" })
 								</div>
 								<div class="form-group">
-									<label>Логин: <span class="required">*</span></label>
-									@Html.TextBoxFor(s => user.Login, new { @Name = "user.Login", @Class = "form-control" }) 
+									<label>Email: <span class="required">*</span></label>
+									@Html.TextBoxFor(s => user.Email, new { @Name = "user.Email", @Class = "form-control" })
 								</div>
 								<div class="form-group">
 									<label>Пароль: <span class="required">*</span></label>
 									@Html.TextBoxFor(s => user.Password, new { @Name = "user.Password", @type = "password", @Class = "form-control" })
-								</div>
-								<div class="form-group">
-									<label>Email: <span class="required">*</span></label>
-									@Html.TextBoxFor(s => user.Email, new { @Name = "user.Email", @Class = "form-control" })
 								</div>
 								<div class="form-group">
 									<label>Должность: <span class="required"></span></label>

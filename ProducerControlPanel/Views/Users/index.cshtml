@@ -1,9 +1,9 @@
-﻿@using ProducerControlPanel.Models
+﻿@using AnalitFramefork.Hibernate.Models
 @using ProducerInterface.Models
 @{
 	ViewBag.Title = "Список пользователей";
 	Layout = "~/Views/Shared/_Layout.cshtml";
-	List<User> usersList = ViewBag.UsersList;
+	List<ProducerUser> usersList = ViewBag.UsersList;
 	List<Producer> producerList = ViewBag.ProducerList;
 	List<Admin> adminList = ViewBag.AdminList;
 }

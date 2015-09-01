@@ -27,6 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>12.0</OldToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -145,6 +146,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Config.cs" />
+    <Compile Include="Models\UserLogModel.cs" />
+    <Compile Include="Models\UserPermission.cs" />
+    <Compile Include="Models\ProfileNews.cs" />
+    <Compile Include="Models\UserRole.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Producer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -355,6 +360,7 @@
     <Content Include="Assets\css\layerslider\skins\v5\skin.css" />
     <Content Include="Assets\css\layerslider\skins\v5\skin.png" />
     <Content Include="Assets\css\morris.css" />
+    <Content Include="Assets\css\producer.css" />
     <Content Include="Assets\css\royalslider\royalslider.css" />
     <Content Include="Assets\css\royalslider\skins\default-inverted\rs-default-inverted.css" />
     <Content Include="Assets\css\royalslider\skins\default-inverted\rs-default-inverted.png" />
@@ -555,6 +561,7 @@
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\Registration\UserPasswordUpdate.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Profile\CreateNews.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">

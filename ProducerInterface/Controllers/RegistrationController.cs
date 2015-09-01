@@ -32,43 +32,45 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
-			ViewBag.CurrentUser = DbSession.Query<User>().FirstOrDefault(e => e.Name == User.Identity.Name);
+			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
 			return View();
 		}
 
 		/// <summary>
 		/// Регистрация пользователя
 		/// </summary>
-		/// <param name="user"></param>
+		/// <param name="producerUser"></param>
 		/// <returns></returns>
-		public ActionResult RegisterUser(User user)
+		public ActionResult RegisterUser(ProducerUser producerUser)
 		{
 			// Проверяем введенные пользователем данные регистрации 
 			string resultMessage = "";
-			if (user.RegistrationIsAllowed(DbSession, ref resultMessage)) {
+			var errors = ValidationRunner.Validate(producerUser);
+			if (errors.Length==0 && producerUser.RegistrationIsAllowed(DbSession, ref resultMessage)) {
 				// хэшируем пароль
-				user.Password = Md5HashHelper.GetHash(user.Password); 
-				user.PasswordUpdated = SystemTime.Now();
+				producerUser.Password = Md5HashHelper.GetHash(producerUser.Password); 
+				producerUser.PasswordUpdated = SystemTime.Now();
 				// сохраняем модель нового пользователя 
-				DbSession.Save(user);
-				var linkWord = Md5HashHelper.GetHash(user.PasswordUpdated.ToString());
+				DbSession.Save(producerUser);
+				var linkWord = Md5HashHelper.GetHash(producerUser.PasswordUpdated.ToString());
 				// письмо пользователю
-				EmailSender.SendEmail(user.Email, "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
+				EmailSender.SendEmail(producerUser.Email, "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
 					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
 									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
-						Config.GetParam("SiteName"), user.Login, Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
+						Config.GetParam("SiteName"), producerUser.Email, Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
 				// письмо письма на аналит 
 				EmailSender.SendEmail(Config.GetParam("AnalitEmail"), "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
 					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
 									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
-						Config.GetParam("SiteName"), user.Login, Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
+						Config.GetParam("SiteName"), producerUser.Email, Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
+				resultMessage = "Регистрация прошла успешно!";
 				SuccessMessage(resultMessage);
 				return RedirectToAction("Index", "Home");
 			}
 			ErrorMessage(resultMessage);
-			ViewBag.NewUser = user;
+			ViewBag.NewUser = producerUser;
 			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
-			return View("Index");
+			return RedirectToAction("Index");
 		}
 		 
 		/// <summary>
@@ -77,7 +79,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult GegistrationConfirm(string key)
 		{
-			var currentUserList = DbSession.Query<User>().ToList();
+			var currentUserList = DbSession.Query<ProducerUser>().ToList();
 			var currentUser = currentUserList.FirstOrDefault(e => Md5HashHelper.GetHash(e.PasswordUpdated.ToString()) == key);
 			if (currentUser != null) {
 				currentUser.Enabled = true;
@@ -102,7 +104,7 @@ namespace ProducerInterface.Controllers
 			var redirectToControll = "Home";
 			// Проверяем введенные пользователем данные авторизации 
 			password = Md5HashHelper.GetHash(password);
-			var authenticatedUser = DbSession.Query<User>().FirstOrDefault(s => s.Login == login
+			var authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == login
 			                                                                    && s.Password == password && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
 			if (authenticatedUser != null) {
 				if (authenticatedUser.PasswordToUpdate) {
@@ -116,7 +118,7 @@ namespace ProducerInterface.Controllers
 			}
 			ErrorMessage("Пользователь с данным логином и паролем не существует или был заблокирован.");
 			// возвращаем пользователя на главную страницу
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction("Index");
 		}
 		/// <summary>
 		/// Обновление пароля пользователя.
@@ -124,7 +126,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult UserPasswordUpdate()
 		{
-			ViewBag.CurrentUser = DbSession.Query<User>().FirstOrDefault(e => e.Name == User.Identity.Name);
+			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
 			return View();
 		}
 
@@ -138,7 +140,7 @@ namespace ProducerInterface.Controllers
 		{
 			int currentUserId = 0;
 			Int32.TryParse(Request.Form["UserNumber"], out currentUserId);
-			var currentUser = DbSession.Query<User>().FirstOrDefault(e => e.Name == User.Identity.Name || e.Id == currentUserId);
+			var currentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name || e.Id == currentUserId);
 			ViewBag.CurrentUser = currentUser;
 			if (currentUser != null) {
 				if (currentUser.Password != Md5HashHelper.GetHash(passwordOld)) {
@@ -172,7 +174,7 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult UserPasswordUpdateRandom(string email)
 		{
-			var authenticatedUser = DbSession.Query<User>().FirstOrDefault(s => s.Email == email);
+			var authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == email);
 			if (authenticatedUser != null) {
 				authenticatedUser.UpdatePasswordByDefault(DbSession);
 				authenticatedUser.Enabled = false;

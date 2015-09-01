@@ -1,13 +1,17 @@
 ﻿using System.ComponentModel;
 using AnalitFramefork.Components;
-using NHibernate.Mapping.Attributes;
+using AnalitFramefork.Components.Validation;
+using AnalitFramefork.Hibernate.Mapping.Attributes;
 
 namespace ProducerInterface.Models
 {
-	[Class(Table = "Producers", NameType = typeof(Producer), Schema = "producerinterface")]
+	/// <summary>
+	/// Модель производителя TODO:добавить недостающие поля
+	/// </summary>
+	[Model(Database = "ProducerInterface", Table = "Producers")]
 	public class Producer : BaseModel
 	{
-		[Property, Description("Название")]
+		[Map, Description("Название"), ValidatorNotEmpty]
 		public virtual string Name { get; set; }
 	}
 }

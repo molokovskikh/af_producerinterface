@@ -1,0 +1,52 @@
+﻿@using ProducerInterface.Models
+@model dynamic
+
+@{
+	ViewBag.Title = "Лог";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var backUrl = (string)ViewBag.BackUrl;
+	var log = (UserLogModel)ViewBag.Log;
+}
+<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+ 
+	<div class="row" style="padding-top: 14px;">
+		<div class="form-group col-lg-4">
+			<label class="col-lg-4 control-label"><strong>Инициатор</strong>:</label>
+			<div class="col-lg-4">
+
+				<span>@log.ProducerUser.Name (@log.ProducerUser.Id))</span>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="padding-top: 14px;">
+		<div class="form-group col-lg-4">
+			<label class="col-lg-4 control-label"><strong>Дата</strong>:</label>
+			<div class="col-lg-4">
+				@log.Date
+			</div>
+		</div>
+	</div>
+	<div class="row" style="padding-top: 14px;">
+		<div class="form-group col-lg-4">
+			<label class="col-lg-4 control-label"><strong>Тип изменения</strong>:</label>
+			<div class="col-lg-4">
+				@log.Type.ToString()
+			</div>
+		</div>
+	</div>
+	<div class="row" style="padding-top: 14px;">
+		<div class="form-group col-lg-4">
+			<label class="col-lg-10 control-label"><strong>Содержание</strong>:</label>
+			<div class="col-lg-10">
+				@Html.Raw(log.Message)
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row buffer-top">
+	<a class="btn btn-blue btn-sm btn-icon icon-left" href="@Url.Action("LogRegUserResultList")">
+		<i class="entypo-left-open"></i>
+		Назад
+	</a>
+</div>

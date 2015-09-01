@@ -4,9 +4,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using AnalitFramefork.Components;
 using AnalitFramefork.Helpers;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using NHibernate.Linq;
-using ProducerControlPanel.Models;
 using ProducerInterface.Models;
 
 namespace ProducerControlPanel.Controllers
@@ -25,8 +25,8 @@ namespace ProducerControlPanel.Controllers
 
 		public ActionResult Index()
 		{
-			ViewBag.UsersList = DbSession.Query<ProducerInterface.Models.User>().ToList();
-			ViewBag.ProducerList = DbSession.Query<ProducerInterface.Models.Producer>().ToList();
+			ViewBag.UsersList = DbSession.Query<ProducerUser>().ToList();
+			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
 			ViewBag.AdminList = DbSession.Query<Admin>().ToList();
 			return View();
 		}

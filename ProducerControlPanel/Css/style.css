@@ -4,7 +4,8 @@
 }
  .servicemen table { table-layout:fixed; overflow:hidden;}
  .servicemen td { height: 40px;}
-
+ .width-default{width: 240px !important;}
+ .error { color: #FF3030;}
  body { color: #424242; }
  body a{ color: #00A651;font-weight: bold; }
  

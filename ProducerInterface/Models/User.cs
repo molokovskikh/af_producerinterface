@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Web.Security;
 using Analit.Components;
 using AnalitFramefork.Components;
 using AnalitFramefork.Components.Validation;
 using AnalitFramefork.Helpers;
+using AnalitFramefork.Hibernate.Mapping.Attributes;
 using NHibernate;
 using NHibernate.Linq;
 using NHibernate.Mapping.Attributes;
@@ -15,67 +17,69 @@ using NHibernate.Validator.Constraints;
 namespace ProducerInterface.Models
 {
 	/// <summary>
-	/// Модель пользователя
+	///     Модель пользователя
 	/// </summary>
-	[Class( Table = "Users", NameType = typeof(User), Schema = "producerinterface")]
-	public class User : BaseModel
+	[Model(Table = "Users", Database = "ProducerInterface")]
+	public class ProducerUser : BaseModel
 	{
-		[Property, Description("ФИО"), NotNullNotEmpty(Message = "Поле должно быть заполненно.")]
+		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("ФИО"), ValidatorNotEmpty]
 		public virtual string Name { get; set; }
 
-		[Property, Description("Логин"), NotNullNotEmpty(Message = "Поле должно быть заполненно."),
-		 Length(Min = 4, Max = 20, Message = "Длина логина должна быть не менее 5 и не более 20 символов.")]
-		public virtual string Login { get; set; }
-
-		[Property, Description("Пароль"), NotNullNotEmpty(Message = "Поле должно быть заполненно."),
+		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Пароль"), ValidatorNotEmpty,
 		 Length(Min = 5, Max = 20, Message = "Длина пароля должна быть не менее 5 и не более 20 символов.")]
 		public virtual string Password { get; set; }
 
-		[Property, Description("e-mail"), NotNullNotEmpty(Message = "Поле должно быть заполненно."), ValidatorEmail]
+		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("e-mail"), ValidatorNotEmpty, ValidatorEmail]
 		public virtual string Email { get; set; }
 
-		[Property, Description("Должность")]
+		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Должность")]
 		public virtual string Appointment { get; set; }
 
-		[Property, Description("Время обновления пароля")]
+		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Время обновления пароля")]
 		public virtual DateTime PasswordUpdated { get; set; }
 
-		[Property, Description("Запрос на обновление пароля")]
+		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Запрос на обновление пароля")]
 		public virtual bool PasswordToUpdate { get; set; }
 
-		[Property, Description("Заблокированный")]
+		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Заблокированный")]
 		public virtual bool Enabled { get; set; }
+		
+		//[Bag(0, Table = "user_role", Lazy = CollectionLazy.False)]
+		//[Key(1, Column = "user", NotNull = false)]
+		//[ManyToMany(2, Column = "role", ClassType = typeof(UserRole))]
+		//public virtual IList<UserRole> Roles { get; set; }
 
-		[ManyToOne]
+		//[Bag(0, Table = "user_role", Lazy = CollectionLazy.False)]
+		//[Key(1, Column = "user", NotNull = false)]
+		//[ManyToMany(2, Column = "permission", ClassType = typeof(UserPermission))]
+		//public virtual IList<UserPermission> Permissions { get; set; }
+
+		[BelongsTo]
 		public virtual Producer Producer { get; set; }
 
 		public virtual bool RegistrationIsAllowed(ISession dbSession, ref string message)
 		{
-			if (Login == null || Login.Length < 5 || Login.Length > 20) {
-				message = "Длина логина должна быть не менее 5 и не более 20 символов.";
-				return false;
-			}
 			if (Producer == null || Producer.Id == 0) {
 				message = "Укажите компанию изготовителя.";
 				return false;
 			}
-			var noSimilarUsers = dbSession.Query<User>().Any(s => s.Login == Login || s.Email == Email);
+			var noSimilarUsers = dbSession.Query<ProducerUser>().Any(s => s.Email == Email);
 			if (noSimilarUsers) {
-				message = "Пользователь с подобным логином или почтой уже зарегистрирован в системе.";
+				message = "Пользователь с данной почтой уже зарегистрирован в системе.";
 				return false;
 			}
 			return true;
 		}
 
 		/// <summary>
-		/// Обновление пароля пользователя, замена на случайный
+		///     Обновление пароля пользователя, замена на случайный
 		/// </summary>
 		/// <param name="dbSession"></param>
 		public virtual string GetRandomPassword(ISession dbSession)
 		{
-			string dateBasePassword = "";
+			var dateBasePassword = "";
 			if (!string.IsNullOrEmpty(Email)) {
-				using (MD5 md5Hash = MD5.Create()) {
+				using (var md5Hash = MD5.Create()) {
 					var dateBaseHash = Md5HashHelper.GetMd5Hash(md5Hash, SystemTime.Now().ToString());
 					dateBasePassword = dateBaseHash.Substring(0, 6);
 					Password = Md5HashHelper.GetMd5Hash(md5Hash, dateBasePassword);
@@ -88,23 +92,23 @@ namespace ProducerInterface.Models
 		}
 
 		/// <summary>
-		/// Обновление пароля пользователя, замена на случайный
+		///     Обновление пароля пользователя, замена на случайный
 		/// </summary>
 		/// <param name="dbSession"></param>
 		public virtual void UpdatePasswordByDefault(ISession dbSession)
 		{
 			if (!string.IsNullOrEmpty(Email)) {
-				string dateBasePassword = GetRandomPassword(dbSession);
+				var dateBasePassword = GetRandomPassword(dbSession);
 				// письмо пользователю
 				EmailSender.SendEmail(Email, "Обновление данных авторизации", "Ваш новый пароль: " + dateBasePassword);
 				// письмо письма на аналит
-				EmailSender.SendEmail(Config.GetParam("AnalitEmail"), "Обновление данных авторизации", "Ваш новый пароль: " + dateBasePassword);
+				EmailSender.SendEmail(GlobalConfig.GetParam("AnalitEmail"), "Обновление данных авторизации",
+					"Ваш новый пароль: " + dateBasePassword);
 			}
 		}
 
-
 		/// <summary>
-		/// Обновление пароля пользователя, заманя на новый
+		///     Обновление пароля пользователя, заманя на новый
 		/// </summary>
 		/// <param name="dbSession">Сесся БД</param>
 		/// <param name="newPassword">Новый пароль</param>
@@ -118,16 +122,29 @@ namespace ProducerInterface.Models
 				// письмо пользователю
 				EmailSender.SendEmail(Email, "Обновление данных авторизации", "Пароль был успешно изменен.");
 				// письмо письма на аналит
-				EmailSender.SendEmail(Config.GetParam("AnalitEmail"), "Обновление данных авторизации", "Пароль был успешно изменен.");
+				EmailSender.SendEmail(GlobalConfig.GetParam("AnalitEmail"), "Обновление данных авторизации",
+					"Пароль был успешно изменен.");
 			}
 		}
 
 		/// <summary>
-		/// Обновление пароля пользователя, замена на случайный
+		///     Обновление пароля пользователя, замена на случайный
 		/// </summary>
 		/// <param name="dbSession"></param>
 		public virtual void ValidateUserPassword(string password)
 		{
 		}
+
+		/// <summary>
+		/// Проверяет, есть ли у клиента права на какой-либо контент или страницу.
+		/// В данный момент только проверяются доступы к старницам на основе ролей.
+		/// </summary>
+		/// <param name="access">Название права</param>
+		/// <returns></returns>
+		//public virtual bool HasAccess(string access)
+		//{
+		//	var hasPermission = Roles.Any(i => i.Permissions.Any(j => j.Name.ToLower() == access.ToLower()));
+		//	return hasPermission;
+		//}
 	}
 }
