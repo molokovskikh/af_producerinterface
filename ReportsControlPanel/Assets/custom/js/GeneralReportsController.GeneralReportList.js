@@ -1,8 +1,8 @@
 ﻿//Изменение плательщика отчета при помощи ajax. Поиск производится при помощи поля, к которому приложен выпадающий список с подсказками
 $(".editPayer").on("click", function () {
 	var wholeElement = $(this).parent().get(0);
-	var textElement = $(parent).find("a");
-	var reportId = $(parent).parent().parent().find("td").html();
+	var textElement = $(wholeElement).find("a").get(0);
+	var reportId = $(wholeElement).parent().parent().find("td").html();
 	var editor = new InputTextEditor(wholeElement, textElement, function (e) {
 		//Если мы закрыли редактор, то и дропдаун нам не нужен
 		dropdown.disable();
@@ -20,6 +20,11 @@ $(".editPayer").on("click", function () {
 			dataType: "json",
 			success: function(data) {
 				console.log("Объект успешно изменен");
+				var href = $(textElement).attr("href");
+				var parts = href.split("=");
+				parts[parts.length - 1] = payerId;
+				href = parts.join("=");
+				$(textElement).attr("href",href);
 			}
 		});
 	});

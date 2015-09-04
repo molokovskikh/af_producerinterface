@@ -3,6 +3,9 @@
  * Apply Here your Custom CSS
  *
 */
+textarea {
+    resize: none;
+}
 .form-control, .panel-primary, .panel-default {
 	border-color: #c7c7c7;
 }

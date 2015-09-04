@@ -1,0 +1,65 @@
+﻿@using System.Globalization
+@using AnalitFramefork.Mvc
+@using Microsoft.Win32.TaskScheduler
+@using ReportsControlPanel.Models
+
+@{
+	WeeklySchedule weeklySchedule = ViewBag.WeeklySchedule;
+	GeneralReport generalReport = ViewBag.GeneralReport;
+	BaseController controller = ViewBag.Controller;
+	var daysofweek = Enum.GetNames(typeof(DaysOfTheWeek)).ToList();
+	daysofweek.Remove("AllDays");
+	var sunday = daysofweek.First();
+	daysofweek.RemoveAt(0);
+	daysofweek.Add(sunday);
+	weeklySchedule.GeneralReport = generalReport;
+}
+
+<div class="panel panel-primary">
+	<div class="panel-body">
+		<div class="col-md-6">
+			@using (@Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+			{
+				@Html.Hidden("scheduleId", weeklySchedule.Id)
+				@Html.HiddenFor(i => weeklySchedule.Id)
+				@Html.HiddenFor(i => weeklySchedule.GeneralReport.Id)
+				<div class="form-group ">
+					<label class="col-sm-3 control-label">Время</label>
+					<div class="col-sm-2">
+						@Html.TextBoxFor(i => weeklySchedule.Hour, new { @class = "form-control form" })
+					</div>
+					<div class="pull-left">:</div>
+					<div class="col-sm-2">
+						@Html.TextBoxFor(i => weeklySchedule.Minute, new { @class = "form-control form" })
+					</div>
+				</div>
+				<div>
+					@ViewBag.Validation.GetError(weeklySchedule, "Hour")
+					@ViewBag.Validation.GetError(weeklySchedule, "Minute")
+				</div>
+				<div class="form-group ">
+					<label class="col-sm-3 control-label">Дни недели</label>
+					<div class="col-sm-9">
+						@for (var i = 0; i < daysofweek.Count; i++)
+						{
+							var day = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), daysofweek[i]);
+							var checkd = weeklySchedule.Days.Contains(day) ? "checked='checked'" : "";
+							<input type='checkbox' name="weeklySchedule.Days[@i].Value" @checkd value="@day" />
+							<span>@DateTimeFormatInfo.CurrentInfo.GetDayName(day)</span>
+						}
+					</div>
+				</div>
+				<div class="form-group ">
+					<button class="btn btn-green" type="submit">@controller.IfEdit("Изменить", "Сохранить")</button>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<a class="btn btn-blue" href="@Url.Action("Schedule",new {id = generalReport.Id})">
+		Назад
+	</a>
+</div>
+

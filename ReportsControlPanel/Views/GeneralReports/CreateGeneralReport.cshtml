@@ -1,8 +1,10 @@
-﻿@using AnalitFramefork.Mvc
+﻿@using AnalitFramefork.Components.Validation
+@using AnalitFramefork.Mvc
 @using ReportsControlPanel.Models
 
 @{
 	GeneralReport generalReport = ViewBag.GeneralReport;
+	ValidationRunner validation = ViewBag.Validation;
 	BaseController controller = ViewBag.Controller;
 }
 

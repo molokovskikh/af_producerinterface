@@ -8,5 +8,6 @@ namespace ReportsControlPanel.Components
 {
 	public class Config : GlobalConfig
 	{
+		public static string CurrentDatabaseName = "Reports";
 	}
 }

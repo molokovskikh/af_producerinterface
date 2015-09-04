@@ -7,8 +7,9 @@ namespace ReportsControlPanel.Controllers
     {
 
 		public ActionResult Index()
-	{
-		return RedirectToAction("GeneralReportList", "GeneralReports");
-	}
+		{
+			return View();
+			//return RedirectToAction("GeneralReportList", "GeneralReports");
+		}
 }
 }

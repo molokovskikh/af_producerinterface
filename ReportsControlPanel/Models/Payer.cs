@@ -15,5 +15,8 @@ namespace ReportsControlPanel.Models
 
 		[Map(Column = "ShortName")]
 		public virtual string Name { get; set; }
+
+		[HasMany]
+		public virtual IList<GeneralReport> GeneralReports { get; set; }
 	}
 }
