@@ -1,0 +1,2069 @@
+-- MySQL dump 10.13  Distrib 5.6.20, for Win64 (x86_64)
+--
+-- Host: testsql.analit.net    Database: Analit
+-- ------------------------------------------------------
+-- Server version	5.6.16
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES cp1251 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `Analit`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `Analit`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `Analit` /*!40100 DEFAULT CHARACTER SET cp1251 */;
+
+USE `Analit`;
+
+--
+-- Table structure for table `menufield`
+--
+
+DROP TABLE IF EXISTS `menufield`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menufield` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(45) NOT NULL,
+  `Link` varchar(255) NOT NULL,
+  `Hint` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sitecontent`
+--
+
+DROP TABLE IF EXISTS `sitecontent`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sitecontent` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Content` longtext NOT NULL,
+  `ViewName` varchar(45) NOT NULL,
+  `ContentType` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `submenufield`
+--
+
+DROP TABLE IF EXISTS `submenufield`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `submenufield` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `MenuField` int(10) unsigned DEFAULT NULL,
+  `Name` varchar(45) NOT NULL,
+  `Link` varchar(255) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_SubMenuField_1` (`MenuField`),
+  CONSTRAINT `FK_SubMenuField_1` FOREIGN KEY (`MenuField`) REFERENCES `menufield` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Current Database: `accessright`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `accessright`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `accessright` /*!40100 DEFAULT CHARACTER SET cp1251 */;
+
+USE `accessright`;
+
+--
+-- Table structure for table `AdminsPermissions`
+--
+
+DROP TABLE IF EXISTS `AdminsPermissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AdminsPermissions` (
+  `AdminId` int(10) unsigned NOT NULL,
+  `PermissionId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`AdminId`,`PermissionId`),
+  KEY `PermissionId` (`PermissionId`),
+  CONSTRAINT `FK_accessright_AdminsPermissions_PermissionId` FOREIGN KEY (`PermissionId`) REFERENCES `Permissions` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissions` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `Type` tinyint(1) unsigned NOT NULL,
+  `Shortcut` varchar(5) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `regionaladmins`
+--
+
+DROP TABLE IF EXISTS `regionaladmins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `regionaladmins` (
+  `RowID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `UserName` varchar(100) DEFAULT '',
+  `ManagerName` varchar(50) NOT NULL DEFAULT '',
+  `PhoneSupport` varchar(20) NOT NULL DEFAULT '',
+  `InternalPhone` varchar(5) DEFAULT NULL COMMENT 'Внутренний номер телефона',
+  `RegionMask` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `Email` varchar(100) NOT NULL DEFAULT '',
+  `Department` int(10) unsigned NOT NULL COMMENT 'Идентификатор подразделения, в котором находится сотрудник: \n0 - Управление,\n1 - Бухгалтерия,\n2 - IT,\n3 - Обработка,\n4 - Техподдержка,\n5 - Отдел регионального развития',
+  PRIMARY KEY (`RowID`)
+) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=cp1251 MIN_ROWS=10 MAX_ROWS=200 PACK_KEYS=0 CHECKSUM=1 ROW_FORMAT=COMPACT COMMENT='InnoDB free: 1414144 kB; InnoDB free: 3432448 kB';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Current Database: `billing`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `billing`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `billing` /*!40100 DEFAULT CHARACTER SET cp1251 */;
+
+USE `billing`;
+
+--
+-- Table structure for table `Accounts`
+--
+
+DROP TABLE IF EXISTS `Accounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Accounts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `WriteTime` datetime DEFAULT NULL,
+  `Type` tinyint(1) unsigned NOT NULL COMMENT 'Тип объекта\r\n0 - пользователь\r\n1 - адрес доставки',
+  `Operator` varchar(255) DEFAULT NULL,
+  `Payment` decimal(19,5) NOT NULL DEFAULT '0.00000',
+  `BeAccounted` tinyint(1) NOT NULL DEFAULT '0',
+  `ReadyForAccounting` tinyint(1) NOT NULL DEFAULT '0',
+  `InvoiceGroup` int(11) NOT NULL DEFAULT '0',
+  `IsFree` tinyint(1) NOT NULL DEFAULT '0',
+  `ObjectId` int(10) unsigned DEFAULT NULL,
+  `Description` varchar(255) DEFAULT NULL,
+  `FreePeriodEnd` datetime DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `ObjectId` (`ObjectId`)
+) ENGINE=InnoDB AUTO_INCREMENT=70177 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ActParts`
+--
+
+DROP TABLE IF EXISTS `ActParts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ActParts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) DEFAULT NULL,
+  `Cost` decimal(19,5) DEFAULT NULL,
+  `Count` int(11) DEFAULT NULL,
+  `Act` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_ActsParts_Act` (`Act`),
+  CONSTRAINT `FK_ActsParts_Act` FOREIGN KEY (`Act`) REFERENCES `Acts` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=174085 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Advertisings`
+--
+
+DROP TABLE IF EXISTS `Advertisings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Advertisings` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Begin` datetime DEFAULT NULL,
+  `End` datetime DEFAULT NULL,
+  `Cost` decimal(19,5) DEFAULT NULL,
+  `PayedSum` decimal(19,5) DEFAULT NULL,
+  `Payer` int(10) unsigned DEFAULT NULL,
+  `Payment` int(10) unsigned DEFAULT NULL,
+  `Invoice` int(10) unsigned DEFAULT NULL,
+  `Act` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_Advertisings_Act` (`Act`),
+  KEY `FK_Advertisings_Invoice` (`Invoice`),
+  KEY `FK_Advertisings_Payer` (`Payer`),
+  CONSTRAINT `FK_Advertisings_Act` FOREIGN KEY (`Act`) REFERENCES `acts` (`Id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Advertisings_Invoice` FOREIGN KEY (`Invoice`) REFERENCES `invoices` (`Id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Advertisings_Payer` FOREIGN KEY (`Payer`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `BalanceOperations`
+--
+
+DROP TABLE IF EXISTS `BalanceOperations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `BalanceOperations` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Type` int(11) NOT NULL DEFAULT '0',
+  `Description` varchar(255) DEFAULT NULL,
+  `Date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Sum` decimal(19,5) NOT NULL DEFAULT '0.00000',
+  `Payer` int(10) unsigned DEFAULT NULL,
+  `BalanceAmount` decimal(19,5) NOT NULL DEFAULT '0.00000',
+  PRIMARY KEY (`Id`),
+  KEY `FK_BalanceOperations_Payer` (`Payer`),
+  CONSTRAINT `FK_BalanceOperations_Payer` FOREIGN KEY (`Payer`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `InvoiceParts`
+--
+
+DROP TABLE IF EXISTS `InvoiceParts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `InvoiceParts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) DEFAULT NULL,
+  `Cost` decimal(19,5) DEFAULT NULL,
+  `Count` int(11) DEFAULT NULL,
+  `Invoice` int(10) unsigned DEFAULT NULL,
+  `Ad` int(10) unsigned DEFAULT NULL,
+  `PayDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Processed` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`),
+  KEY `FK_Invoice_InvoiceParts` (`Invoice`),
+  KEY `FK_InvoiceParts_Ad` (`Ad`),
+  CONSTRAINT `FK_InvoiceParts_Ad` FOREIGN KEY (`Ad`) REFERENCES `Advertisings` (`Id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Invoice_InvoiceParts` FOREIGN KEY (`Invoice`) REFERENCES `Invoices` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=183555 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Invoices`
+--
+
+DROP TABLE IF EXISTS `Invoices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Invoices` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Sum` decimal(19,5) DEFAULT NULL,
+  `Date` datetime DEFAULT NULL,
+  `Period` char(8) DEFAULT NULL,
+  `Recipient` int(10) unsigned DEFAULT NULL,
+  `Payer` int(10) unsigned DEFAULT NULL,
+  `CreatedOn` datetime DEFAULT NULL,
+  `SendToEmail` tinyint(1) NOT NULL DEFAULT '0',
+  `LastErrorNotification` datetime DEFAULT NULL,
+  `PayerName` varchar(255) NOT NULL,
+  `Act` int(10) unsigned DEFAULT NULL,
+  `Customer` varchar(255) DEFAULT NULL,
+  `PaidSum` decimal(19,5) NOT NULL DEFAULT '0.00000',
+  `SendToMinimail` tinyint(1) NOT NULL DEFAULT '0',
+  `BalanceAmount` decimal(19,5) NOT NULL DEFAULT '0.00000',
+  `Author` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_Invoices_Act` (`Act`),
+  KEY `FK_Invoices_Payer` (`Payer`),
+  CONSTRAINT `FK_Invoices_Act` FOREIGN KEY (`Act`) REFERENCES `acts` (`Id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Invoices_Payer` FOREIGN KEY (`Payer`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=201510969 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LegalEntities`
+--
+
+DROP TABLE IF EXISTS `LegalEntities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LegalEntities` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `PayerId` int(10) unsigned NOT NULL,
+  `Name` varchar(100) DEFAULT NULL COMMENT 'Краткое наименование',
+  `FullName` varchar(255) DEFAULT NULL COMMENT 'Полное наименование',
+  PRIMARY KEY (`Id`,`PayerId`) USING BTREE,
+  KEY `FK_LegalEntities_PayerId` (`PayerId`),
+  CONSTRAINT `FK_LegalEntities_PayerId` FOREIGN KEY (`PayerId`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8779 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Nomenclatures`
+--
+
+DROP TABLE IF EXISTS `Nomenclatures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Nomenclatures` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PayerClients`
+--
+
+DROP TABLE IF EXISTS `PayerClients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PayerClients` (
+  `ClientId` int(10) unsigned NOT NULL,
+  `PayerId` int(10) unsigned NOT NULL,
+  KEY `FK_Payers_PayerId` (`PayerId`),
+  KEY `FK_Clients_ClientId` (`ClientId`),
+  CONSTRAINT `FK_Clients_ClientId` FOREIGN KEY (`ClientId`) REFERENCES `customers`.`Clients` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Payers_PayerId` FOREIGN KEY (`PayerId`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Payers`
+--
+
+DROP TABLE IF EXISTS `Payers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Payers` (
+  `PayerID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ShortName` varchar(100) NOT NULL DEFAULT '',
+  `JuridicalName` varchar(255) DEFAULT NULL,
+  `JuridicalAddress` varchar(255) DEFAULT NULL,
+  `BeforeNamePrefix` varchar(100) DEFAULT NULL,
+  `AfterNamePrefix` varchar(100) DEFAULT NULL,
+  `INN` varchar(12) DEFAULT NULL,
+  `KPP` varchar(9) DEFAULT NULL,
+  `OKPO` varchar(8) NOT NULL DEFAULT '',
+  `OKVED` varchar(20) NOT NULL DEFAULT '',
+  `RS` varchar(20) NOT NULL DEFAULT '',
+  `BankName` varchar(255) NOT NULL DEFAULT '',
+  `KS` varchar(20) NOT NULL DEFAULT '',
+  `BIK` varchar(9) NOT NULL DEFAULT '',
+  `OGRN` varchar(13) NOT NULL DEFAULT '',
+  `ActualAddressCountry` varchar(30) DEFAULT '?inney',
+  `ActualAddressIndex` varchar(8) DEFAULT NULL,
+  `ActualAddressProvince` varchar(30) DEFAULT NULL,
+  `ActualAddressTown` varchar(20) DEFAULT NULL,
+  `ActualAddressStreet` varchar(30) DEFAULT NULL,
+  `ActualAddressHouse` varchar(8) DEFAULT NULL,
+  `ActualAddressOffice` varchar(6) DEFAULT NULL,
+  `ReceiverAddress` varchar(255) DEFAULT NULL,
+  `OldPayDate` date NOT NULL DEFAULT '2007-01-01',
+  `OldTariff` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+  `DetailInvoice` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `AutoInvoice` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `PayCycle` tinyint(1) unsigned DEFAULT NULL,
+  `Balance` decimal(10,2) DEFAULT NULL,
+  `DiscountPercent` int(10) unsigned DEFAULT NULL,
+  `Comment` mediumtext,
+  `ContactGroupOwnerId` int(10) unsigned DEFAULT NULL,
+  `AutoLock` tinyint(1) NOT NULL,
+  `NotificationType` tinyint(1) unsigned NOT NULL,
+  `ActualAddressRegion` varchar(30) DEFAULT NULL,
+  `HaveContract` tinyint(1) unsigned NOT NULL,
+  `SendRegisteredLetter` tinyint(1) unsigned NOT NULL,
+  `SendScannedDocuments` tinyint(1) unsigned NOT NULL,
+  `DiscountValue` int(10) unsigned NOT NULL,
+  `DiscountType` int(10) unsigned NOT NULL,
+  `ChangeServiceNameTo` varchar(255) DEFAULT NULL,
+  `ShowDiscount` tinyint(1) unsigned NOT NULL,
+  `RecipientId` int(11) DEFAULT NULL,
+  `EmailInvoice` tinyint(1) NOT NULL DEFAULT '0',
+  `PrintInvoice` tinyint(1) NOT NULL DEFAULT '0',
+  `SendPaymentNotification` tinyint(1) NOT NULL DEFAULT '0',
+  `BeginBalance` decimal(10,0) NOT NULL DEFAULT '0',
+  `BeginBalanceDate` datetime DEFAULT NULL,
+  `DocumentsOnLastWorkingDay` tinyint(1) DEFAULT NULL,
+  `DoNotGroupParts` tinyint(1) DEFAULT '0',
+  `Customer` varchar(255) DEFAULT NULL,
+  `PaymentSum` decimal(19,5) NOT NULL DEFAULT '0.00000',
+  `RegistrationDate` datetime DEFAULT NULL,
+  `Registrant` varchar(255) DEFAULT NULL,
+  `SendToMinimail` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`PayerID`),
+  KEY `FK_payers_ContactGroupOwnerId` (`ContactGroupOwnerId`),
+  KEY `ShorName` (`ShortName`),
+  CONSTRAINT `FK_payers_ContactGroupOwnerId` FOREIGN KEY (`ContactGroupOwnerId`) REFERENCES `contacts`.`contact_group_owners` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10933 DEFAULT CHARSET=cp1251 MIN_ROWS=1000 MAX_ROWS=100000 PACK_KEYS=0 ROW_FORMAT=COMPACT COMMENT='InnoDB free: 3367936 kB; InnoDB free: 4560896 kB; InnoDB fre';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Payments`
+--
+
+DROP TABLE IF EXISTS `Payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Payments` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `PayedOn` datetime NOT NULL,
+  `Sum` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `PayerId` int(10) unsigned DEFAULT NULL,
+  `RecipientId` int(10) unsigned DEFAULT NULL,
+  `RegistredOn` datetime DEFAULT NULL,
+  `Comment` varchar(255) DEFAULT NULL,
+  `DocumentNumber` varchar(255) DEFAULT NULL,
+  `PayerInn` varchar(255) DEFAULT NULL,
+  `PayerName` varchar(255) DEFAULT NULL,
+  `PayerAccountCode` varchar(255) DEFAULT NULL,
+  `PayerBankDescription` varchar(255) DEFAULT NULL,
+  `PayerBankBic` varchar(255) DEFAULT NULL,
+  `PayerBankAccountCode` varchar(255) DEFAULT NULL,
+  `RecipientInn` varchar(255) DEFAULT NULL,
+  `RecipientName` varchar(255) DEFAULT NULL,
+  `RecipientAccountCode` varchar(255) DEFAULT NULL,
+  `RecipientBankDescription` varchar(255) DEFAULT NULL,
+  `RecipientBankBic` varchar(255) DEFAULT NULL,
+  `RecipientBankAccountCode` varchar(255) DEFAULT NULL,
+  `OperatorComment` varchar(255) DEFAULT NULL,
+  `ForAd` tinyint(1) DEFAULT NULL,
+  `AdSum` decimal(19,5) DEFAULT NULL,
+  `Ad` int(10) unsigned DEFAULT NULL,
+  `BalanceAmount` decimal(19,5) NOT NULL DEFAULT '0.00000',
+  PRIMARY KEY (`Id`) USING BTREE,
+  KEY `FK_Payments_PayerId` (`PayerId`),
+  KEY `FK_Payments_Ad` (`Ad`),
+  CONSTRAINT `FK_Payments_Ad` FOREIGN KEY (`Ad`) REFERENCES `Advertisings` (`Id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Payments_PayerId` FOREIGN KEY (`PayerId`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=84461 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Recipients`
+--
+
+DROP TABLE IF EXISTS `Recipients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Recipients` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) DEFAULT NULL,
+  `FullName` varchar(255) DEFAULT NULL,
+  `Address` varchar(255) DEFAULT NULL,
+  `INN` varchar(255) DEFAULT NULL,
+  `KPP` varchar(255) DEFAULT NULL,
+  `BIC` varchar(255) DEFAULT NULL,
+  `BankAccountNumber` varchar(255) DEFAULT NULL,
+  `BankLoroAccount` varchar(255) DEFAULT NULL,
+  `Bank` varchar(255) DEFAULT NULL,
+  `Boss` varchar(255) DEFAULT NULL,
+  `Accountant` varchar(255) DEFAULT NULL,
+  `AccountWarranty` varchar(255) DEFAULT NULL,
+  `UserDescription` varchar(255) NOT NULL,
+  `AddressDescription` varchar(255) NOT NULL,
+  `ReportDescription` varchar(255) NOT NULL,
+  `SupplierDescription` varchar(255) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ReportLogProcessorStates`
+--
+
+DROP TABLE IF EXISTS `ReportLogProcessorStates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ReportLogProcessorStates` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `LastRun` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `acts`
+--
+
+DROP TABLE IF EXISTS `acts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `acts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Period` char(8) DEFAULT NULL,
+  `ActDate` datetime DEFAULT NULL,
+  `Recipient` int(10) unsigned DEFAULT NULL,
+  `Payer` int(10) unsigned DEFAULT NULL,
+  `Sum` decimal(19,5) DEFAULT NULL,
+  `PayerName` varchar(255) DEFAULT NULL,
+  `Customer` varchar(255) DEFAULT NULL,
+  `CreatedOn` datetime DEFAULT '0001-01-01 00:00:00',
+  PRIMARY KEY (`Id`),
+  KEY `FK_Acts_Payer` (`Payer`),
+  CONSTRAINT `FK_Acts_Payer` FOREIGN KEY (`Payer`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=201508619 DEFAULT CHARSET=cp1251 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `freeorders`
+--
+
+DROP TABLE IF EXISTS `freeorders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `freeorders` (
+  `ClientPayerId` int(10) unsigned NOT NULL,
+  `SupplierPayerId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`ClientPayerId`,`SupplierPayerId`),
+  KEY `FK_FreeOrders_2` (`SupplierPayerId`),
+  CONSTRAINT `FK_FreeOrders_1` FOREIGN KEY (`ClientPayerId`) REFERENCES `payers` (`PayerID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_FreeOrders_2` FOREIGN KEY (`SupplierPayerId`) REFERENCES `payers` (`PayerID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ignoredinns`
+--
+
+DROP TABLE IF EXISTS `ignoredinns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ignoredinns` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Inn` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `mailsenthistory`
+--
+
+DROP TABLE IF EXISTS `mailsenthistory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mailsenthistory` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `SentDate` datetime NOT NULL,
+  `UserName` varchar(45) NOT NULL,
+  `Comment` mediumtext NOT NULL,
+  `PayerId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_MailSentHistory_PayerId` (`PayerId`),
+  CONSTRAINT `FK_MailSentHistory_PayerId` FOREIGN KEY (`PayerId`) REFERENCES `payers` (`PayerID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=34057 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `payerauditrecords`
+--
+
+DROP TABLE IF EXISTS `payerauditrecords`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payerauditrecords` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `UserName` varchar(255) DEFAULT NULL,
+  `WriteTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `ObjectId` int(10) unsigned NOT NULL DEFAULT '0',
+  `ObjectType` int(11) NOT NULL DEFAULT '0',
+  `Name` varchar(255) DEFAULT NULL,
+  `Message` varchar(255) DEFAULT NULL,
+  `Administrator` int(10) unsigned DEFAULT NULL,
+  `Payer` int(10) unsigned DEFAULT NULL,
+  `IsHtml` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `Comment` varchar(255) DEFAULT NULL,
+  `ShowOnlyPayer` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`),
+  KEY `FK_Payers_Payer` (`Payer`),
+  KEY `FK_Admin_Administrator` (`Administrator`),
+  CONSTRAINT `FK_Admin_Administrator` FOREIGN KEY (`Administrator`) REFERENCES `accessright`.`regionaladmins` (`RowID`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Payers_Payer` FOREIGN KEY (`Payer`) REFERENCES `Payers` (`PayerID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=42087 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Current Database: `catalogs`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `catalogs`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `catalogs` /*!40100 DEFAULT CHARACTER SET cp1251 */;
+
+USE `catalogs`;
+
+--
+-- Table structure for table `Descriptions`
+--
+
+DROP TABLE IF EXISTS `Descriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Descriptions` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `EnglishName` varchar(255) DEFAULT NULL,
+  `Description` mediumtext COMMENT 'В AnalitF обозначается как Дополнительно',
+  `Interaction` mediumtext COMMENT 'Взаимодействие',
+  `SideEffect` mediumtext COMMENT 'Побочное действие и противопоказания ',
+  `IndicationsForUse` mediumtext COMMENT 'Показания к применению ',
+  `Dosing` mediumtext COMMENT 'Способ применения и дозы',
+  `Warnings` mediumtext COMMENT 'Предостережения и противопоказания',
+  `ProductForm` mediumtext COMMENT 'Форма выпуска',
+  `PharmacologicalAction` mediumtext COMMENT 'Фармакологическое действие',
+  `Storage` mediumtext COMMENT 'Условия хранения',
+  `Expiration` mediumtext COMMENT 'Срок годности',
+  `Composition` mediumtext COMMENT 'Состав',
+  `NeedCorrect` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `UpdateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`),
+  KEY `Name` (`Name`),
+  KEY `EnglishName` (`EnglishName`),
+  KEY `UpdateTime` (`UpdateTime`)
+) ENGINE=InnoDB AUTO_INCREMENT=56811 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ProducerEquivalents`
+--
+
+DROP TABLE IF EXISTS `ProducerEquivalents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProducerEquivalents` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `ProducerId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_ProducerId` (`ProducerId`),
+  CONSTRAINT `FK_ProducerId` FOREIGN KEY (`ProducerId`) REFERENCES `producers` (`Id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3847 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Products`
+--
+
+DROP TABLE IF EXISTS `Products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Products` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `CatalogId` int(10) unsigned NOT NULL,
+  `Hidden` tinyint(1) NOT NULL,
+  `UpdateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Properties` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`,`CatalogId`) USING BTREE,
+  KEY `CatalogId_Idx` (`CatalogId`),
+  CONSTRAINT `FK_products_1` FOREIGN KEY (`CatalogId`) REFERENCES `catalog` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=258987 DEFAULT CHARSET=cp1251 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VIEdit`
+--
+
+DROP TABLE IF EXISTS `VIEdit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VIEdit` (
+  `Name` varchar(255) DEFAULT NULL,
+  `Form` varchar(255) DEFAULT NULL,
+  `MNN` varchar(255) DEFAULT NULL,
+  `VIOld` int(10) unsigned DEFAULT NULL,
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `VI` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=185596 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `assortment`
+--
+
+DROP TABLE IF EXISTS `assortment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `assortment` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `CatalogId` int(10) unsigned NOT NULL,
+  `ProducerId` int(10) unsigned NOT NULL,
+  `Checked` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`CatalogId`,`ProducerId`) USING BTREE,
+  UNIQUE KEY `Id_IDX` (`Id`),
+  KEY `ProducerId_IDX` (`ProducerId`) USING BTREE,
+  CONSTRAINT `FK_Assortment_2` FOREIGN KEY (`ProducerId`) REFERENCES `producers` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Assortment_CatalogId` FOREIGN KEY (`CatalogId`) REFERENCES `catalog` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=728881 DEFAULT CHARSET=cp1251 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `catalog`
+--
+
+DROP TABLE IF EXISTS `catalog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `catalog` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `FormId` int(10) unsigned NOT NULL,
+  `NameId` int(10) unsigned NOT NULL,
+  `VitallyImportant` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `MandatoryList` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `NeedCold` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `Fragile` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `Pharmacie` tinyint(1) NOT NULL DEFAULT '1',
+  `Hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `Name` varchar(255) DEFAULT NULL,
+  `UpdateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Monobrend` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`) USING BTREE,
+  KEY `Index_Name` (`Name`),
+  KEY `NameId_Idx` (`NameId`),
+  KEY `FormId_Idx` (`FormId`),
+  CONSTRAINT `FK_catalog_1` FOREIGN KEY (`FormId`) REFERENCES `catalogforms` (`Id`),
+  CONSTRAINT `FK_catalog_2` FOREIGN KEY (`NameId`) REFERENCES `catalognames` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=193445 DEFAULT CHARSET=cp1251 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `catalogforms`
+--
+
+DROP TABLE IF EXISTS `catalogforms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `catalogforms` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Form` varchar(255) NOT NULL,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=154099 DEFAULT CHARSET=cp1251 PACK_KEYS=1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `catalognames`
+--
+
+DROP TABLE IF EXISTS `catalognames`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `catalognames` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `DescriptionId` int(10) unsigned DEFAULT NULL,
+  `MnnId` int(10) unsigned DEFAULT NULL,
+  `UpdateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`),
+  KEY `MnnId` (`MnnId`)
+) ENGINE=InnoDB AUTO_INCREMENT=20851 DEFAULT CHARSET=cp1251 PACK_KEYS=0 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `mnn`
+--
+
+DROP TABLE IF EXISTS `mnn`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mnn` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Mnn` varchar(255) NOT NULL,
+  `UpdateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `RussianMnn` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `Mnn` (`Mnn`) USING BTREE,
+  UNIQUE KEY `RussianMnn` (`RussianMnn`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4915 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `producers`
+--
+
+DROP TABLE IF EXISTS `producers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `producers` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `Checked` tinyint(1) NOT NULL DEFAULT '0',
+  `UpdateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`),
+  KEY `NameIdx` (`Name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10289 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `productproperties`
+--
+
+DROP TABLE IF EXISTS `productproperties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `productproperties` (
+  `ProductId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `PropertyValueId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`ProductId`,`PropertyValueId`),
+  KEY `FK_ProductProperties_PropertyValueId` (`PropertyValueId`),
+  CONSTRAINT `FK_ProductProperties_ProductId` FOREIGN KEY (`ProductId`) REFERENCES `products` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_ProductProperties_PropertyValueId` FOREIGN KEY (`PropertyValueId`) REFERENCES `propertyvalues` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=258980 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `properties`
+--
+
+DROP TABLE IF EXISTS `properties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `properties` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `PropertyName` varchar(100) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `propertyvalues`
+--
+
+DROP TABLE IF EXISTS `propertyvalues`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `propertyvalues` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Value` varchar(100) NOT NULL,
+  `PropertyId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_PropertyValues_PropertyId` (`PropertyId`) USING BTREE,
+  KEY `Value_IDX` (`Value`),
+  CONSTRAINT `FK_PropertyValues_PropertyId` FOREIGN KEY (`PropertyId`) REFERENCES `properties` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7015 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `suppliercodes`
+--
+
+DROP TABLE IF EXISTS `suppliercodes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `suppliercodes` (
+  `SupplierId` int(10) unsigned NOT NULL DEFAULT '0',
+  `ProductId` int(10) unsigned NOT NULL DEFAULT '0',
+  `ProducerId` int(10) unsigned NOT NULL DEFAULT '0',
+  `SynonymId` int(10) unsigned DEFAULT NULL,
+  `SynonymCrId` int(10) unsigned DEFAULT NULL,
+  `Code` varchar(20) NOT NULL DEFAULT '',
+  `CodeCr` varchar(20) NOT NULL DEFAULT '',
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`SupplierId`,`ProductId`,`ProducerId`,`Code`,`CodeCr`) USING BTREE,
+  UNIQUE KEY `Id` (`Id`),
+  KEY `FK_suppliercodes_SynonymId` (`SynonymId`),
+  KEY `FK_suppliercodes_SynonymCrId` (`SynonymCrId`),
+  KEY `FK_suppliercodes_ProducerId` (`ProducerId`),
+  CONSTRAINT `FK_suppliercodes_ProducerId` FOREIGN KEY (`ProducerId`) REFERENCES `producers` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_suppliercodes_SynonymCrId` FOREIGN KEY (`SynonymCrId`) REFERENCES `farm`.`SynonymFirmCr` (`SynonymFirmCrCode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_suppliercodes_SynonymId` FOREIGN KEY (`SynonymId`) REFERENCES `farm`.`Synonym` (`SynonymCode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1425551 DEFAULT CHARSET=cp1251 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Current Database: `contacts`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `contacts`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `contacts` /*!40100 DEFAULT CHARACTER SET cp1251 */;
+
+USE `contacts`;
+
+--
+-- Table structure for table `PayerOwnerContacts`
+--
+
+DROP TABLE IF EXISTS `PayerOwnerContacts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PayerOwnerContacts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Contact` int(10) unsigned DEFAULT NULL,
+  `Payer` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `UniqueContact` (`Contact`,`Payer`) USING BTREE,
+  KEY `Payer` (`Payer`),
+  CONSTRAINT `Contact` FOREIGN KEY (`Contact`) REFERENCES `contacts` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `Payer` FOREIGN KEY (`Payer`) REFERENCES `billing`.`Payers` (`PayerID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ReportSubscriptionContacts`
+--
+
+DROP TABLE IF EXISTS `ReportSubscriptionContacts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ReportSubscriptionContacts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `PayerContact` int(10) unsigned DEFAULT NULL,
+  `ReportContact` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `PayerContact` (`PayerContact`),
+  KEY `ReportContact` (`ReportContact`),
+  CONSTRAINT `FK_Contacts_ReportSubscriptionContacts_PayerContact` FOREIGN KEY (`PayerContact`) REFERENCES `contacts` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Contacts_ReportSubscriptionContacts_ReportContact` FOREIGN KEY (`ReportContact`) REFERENCES `contacts` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12831 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `contact_group_owners`
+--
+
+DROP TABLE IF EXISTS `contact_group_owners`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contact_group_owners` (
+  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25157 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `contact_groups`
+--
+
+DROP TABLE IF EXISTS `contact_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contact_groups` (
+  `Id` int(10) unsigned NOT NULL DEFAULT '0',
+  `Name` varchar(100) NOT NULL,
+  `Type` tinyint(4) NOT NULL DEFAULT '0',
+  `Public` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `ContactGroupOwnerId` int(11) unsigned NOT NULL,
+  `Specialized` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 - общая группа\r\n1 - специализированная',
+  PRIMARY KEY (`Id`),
+  KEY `FK_contact_groups_ContactGroupOwnerId` (`ContactGroupOwnerId`),
+  CONSTRAINT `FK_contact_groups_ContactGroupOwnerId` FOREIGN KEY (`ContactGroupOwnerId`) REFERENCES `contact_group_owners` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_contact_groups_ContactOwnerId` FOREIGN KEY (`Id`) REFERENCES `contact_owners` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `contact_owners`
+--
+
+DROP TABLE IF EXISTS `contact_owners`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contact_owners` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=509683 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `contacts`
+--
+
+DROP TABLE IF EXISTS `contacts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contacts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Type` int(11) NOT NULL,
+  `Comment` varchar(45) DEFAULT NULL,
+  `ContactText` varchar(512) NOT NULL,
+  `ContactOwnerId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_contacts_ContactOwnerId` (`ContactOwnerId`),
+  CONSTRAINT `FK_contacts_ContactOwnerId` FOREIGN KEY (`ContactOwnerId`) REFERENCES `contact_owners` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=584783 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `persons`
+--
+
+DROP TABLE IF EXISTS `persons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `persons` (
+  `Id` int(10) unsigned NOT NULL DEFAULT '0',
+  `Name` varchar(255) NOT NULL DEFAULT '',
+  `ContactGroupId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_persons_ContactGroupId` (`ContactGroupId`),
+  CONSTRAINT `FK_persons_ContactGroupId` FOREIGN KEY (`ContactGroupId`) REFERENCES `contact_groups` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_persons_ContactOwnerId` FOREIGN KEY (`Id`) REFERENCES `contact_owners` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `regionaldeliverygroups`
+--
+
+DROP TABLE IF EXISTS `regionaldeliverygroups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `regionaldeliverygroups` (
+  `ContactGroupId` int(10) unsigned NOT NULL,
+  `RegionId` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`ContactGroupId`,`RegionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Current Database: `customers`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `customers`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `customers` /*!40100 DEFAULT CHARACTER SET cp1251 */;
+
+USE `customers`;
+
+--
+-- Table structure for table `AddressIntersection`
+--
+
+DROP TABLE IF EXISTS `AddressIntersection`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AddressIntersection` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `AddressId` int(10) unsigned NOT NULL,
+  `IntersectionId` int(10) unsigned NOT NULL,
+  `SupplierDeliveryId` varchar(200) DEFAULT NULL,
+  `ControlMinReq` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Контролировать минимальный заказ\r\n0 - нет\r\n1 - да',
+  `MinReq` int(10) unsigned DEFAULT NULL COMMENT 'Минимальная сумма заказа (в рублях)',
+  `MinReordering` int(10) unsigned DEFAULT NULL COMMENT 'Минимальное значение дозаявки, если неопределенно, то дозаявка невозможена',
+  PRIMARY KEY (`Id`),
+  KEY `FK_AddressIntersection_AddressId` (`AddressId`),
+  KEY `FK_AddressIntersection_IntersectionId` (`IntersectionId`),
+  CONSTRAINT `FK_AddressIntersection_AddressId` FOREIGN KEY (`AddressId`) REFERENCES `addresses` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_AddressIntersection_IntersectionId` FOREIGN KEY (`IntersectionId`) REFERENCES `intersection` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8731165 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Addresses`
+--
+
+DROP TABLE IF EXISTS `Addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Addresses` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `LegacyId` int(10) unsigned DEFAULT NULL,
+  `ClientId` int(10) unsigned NOT NULL,
+  `LegalEntityId` int(10) unsigned NOT NULL,
+  `Enabled` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '0 - Выкл.\r\n1 - Вкл.',
+  `Address` varchar(100) NOT NULL,
+  `ContactGroupId` int(10) unsigned DEFAULT NULL,
+  `AccountingId` int(10) unsigned DEFAULT NULL,
+  `PayerId` int(10) unsigned DEFAULT NULL,
+  `Registrant` varchar(100) DEFAULT NULL,
+  `RegistrationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `RuleGroup` int(10) unsigned DEFAULT NULL,
+  `CheckDailyOrdersSum` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `MaxDailyOrdersSum` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`),
+  KEY `FK_Addresses_ClientId` (`ClientId`),
+  KEY `FK_Addresses_ContactGroupId` (`ContactGroupId`),
+  KEY `AccountingId` (`AccountingId`),
+  KEY `FK_Addresses_PayerId` (`PayerId`),
+  KEY `FK_Addresses_RuleGroup` (`RuleGroup`),
+  CONSTRAINT `FK_Addresses_ClientId` FOREIGN KEY (`ClientId`) REFERENCES `clients` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Addresses_ContactGroupId` FOREIGN KEY (`ContactGroupId`) REFERENCES `contacts`.`contact_groups` (`Id`),
+  CONSTRAINT `FK_Addresses_PayerId` FOREIGN KEY (`PayerId`) REFERENCES `billing`.`payers` (`PayerID`),
+  CONSTRAINT `FK_Addresses_RuleGroup` FOREIGN KEY (`RuleGroup`) REFERENCES `RuleGroups` (`Id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=27795 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `AnalitFNetPriceReplications`
+--
+
+DROP TABLE IF EXISTS `AnalitFNetPriceReplications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AnalitFNetPriceReplications` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `PriceId` int(10) unsigned NOT NULL,
+  `UserId` int(10) unsigned NOT NULL,
+  `UpdateTime` datetime NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_AnalitFNetPriceReplications_PriceId` (`PriceId`),
+  KEY `FK_AnalitFNetPriceReplications_UserId` (`UserId`),
+  CONSTRAINT `FK_AnalitFNetPriceReplications_PriceId` FOREIGN KEY (`PriceId`) REFERENCES `UserSettings`.`PricesData` (`PriceCode`) ON DELETE CASCADE,
+  CONSTRAINT `FK_AnalitFNetPriceReplications_UserId` FOREIGN KEY (`UserId`) REFERENCES `Users` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1974 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `AnalitfNetDatas`
+--
+
+DROP TABLE IF EXISTS `AnalitfNetDatas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AnalitfNetDatas` (
+  `UserId` int(10) unsigned NOT NULL,
+  `LastUpdateAt` datetime NOT NULL,
+  `LastPendingUpdateAt` datetime DEFAULT NULL,
+  `IsBinaryUpdateDisabled` tinyint(1) NOT NULL DEFAULT '0',
+  `BinUpdateChannel` varchar(255) DEFAULT NULL,
+  `ClientToken` varchar(255) DEFAULT NULL,
+  `ClientVersion` varchar(255) DEFAULT NULL,
+  `ClientTokenV2` varchar(255) DEFAULT NULL,
+  `LastReclameUpdateAt` datetime DEFAULT NULL,
+  `LastPendingReclameUpdateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserId`),
+  CONSTRAINT `FK_Customers_AnalitfNetDatas` FOREIGN KEY (`UserId`) REFERENCES `Users` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `AppConfig`
+--
+
+DROP TABLE IF EXISTS `AppConfig`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AppConfig` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Key` varchar(255) DEFAULT NULL,
+  `Value` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Clients`
+--
+
+DROP TABLE IF EXISTS `Clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Clients` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Status` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `FirmType` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `PayerId` int(10) unsigned DEFAULT NULL,
+  `RegionCode` bigint(20) unsigned NOT NULL,
+  `MaskRegion` bigint(20) unsigned NOT NULL,
+  `Name` varchar(255) NOT NULL,
+  `FullName` varchar(255) NOT NULL,
+  `Registrant` varchar(100) DEFAULT NULL,
+  `RegistrationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ContactGroupOwnerId` int(10) unsigned DEFAULT NULL,
+  `SwapFirmCode` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`),
+  KEY `FK_Clients_PayerId` (`PayerId`),
+  KEY `RegionCode` (`RegionCode`),
+  CONSTRAINT `FK_Customers_Clients_RegionCode` FOREIGN KEY (`RegionCode`) REFERENCES `farm`.`Regions` (`RegionCode`)
+) ENGINE=InnoDB AUTO_INCREMENT=18071 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ClienttoAddressMigrations`
+--
+
+DROP TABLE IF EXISTS `ClienttoAddressMigrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ClienttoAddressMigrations` (
+  `UserId` int(10) unsigned NOT NULL,
+  `ClientCode` int(10) unsigned NOT NULL,
+  `AddressId` int(10) unsigned NOT NULL,
+  KEY `FK_ClientToAddressMigrations_UserId` (`UserId`),
+  KEY `FK_ClientToAddressMigrations_AddressId` (`AddressId`),
+  CONSTRAINT `FK_ClientToAddressMigrations_AddressId` FOREIGN KEY (`AddressId`) REFERENCES `addresses` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ClientToAddressMigrations_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ExcludeClientsFromReport`
+--
+
+DROP TABLE IF EXISTS `ExcludeClientsFromReport`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ExcludeClientsFromReport` (
+  `UserId` int(10) unsigned NOT NULL,
+  `ClientId` int(10) unsigned NOT NULL,
+  KEY `ClientId` (`ClientId`),
+  KEY `UserId` (`UserId`),
+  CONSTRAINT `FK_Customers_ExcludeClientsFromReport_ClientId` FOREIGN KEY (`ClientId`) REFERENCES `Clients` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Customers_ExcludeClientsFromReport_UserId` FOREIGN KEY (`UserId`) REFERENCES `Users` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Intersection`
+--
+
+DROP TABLE IF EXISTS `Intersection`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Intersection` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ClientId` int(10) unsigned NOT NULL,
+  `RegionId` bigint(20) unsigned NOT NULL,
+  `PriceId` int(10) unsigned NOT NULL,
+  `LegalEntityId` int(10) unsigned NOT NULL DEFAULT '0',
+  `CostId` int(10) unsigned DEFAULT NULL,
+  `AvailableForClient` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `AgencyEnabled` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Включен административно\r\n0 - выключен (тогда в клиентском интерфейсе этот прайс не будет показываться этому клиенту и этот поставщик не будет видеть этого клиента)\r\n1 - включен',
+  `PriceMarkup` decimal(5,3) NOT NULL DEFAULT '0.000',
+  `SupplierClientId` varchar(200) DEFAULT NULL,
+  `SupplierPaymentId` varchar(200) DEFAULT NULL,
+  `ControlMinReq` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `MinReq` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`ClientId`,`RegionId`,`PriceId`,`LegalEntityId`) USING BTREE,
+  UNIQUE KEY `Uniq` (`Id`),
+  KEY `FK_Intersection_CostId` (`CostId`),
+  KEY `FK_Intersection_LegalEntityId` (`LegalEntityId`),
+  KEY `FK_Intersection_PriceId` (`PriceId`),
+  KEY `FK_Intersection_RegionId` (`RegionId`),
+  CONSTRAINT `FK_Intersection_ClientId` FOREIGN KEY (`ClientId`) REFERENCES `clients` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Intersection_CostId` FOREIGN KEY (`CostId`) REFERENCES `usersettings`.`pricescosts` (`CostCode`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `FK_Intersection_LegalEntityId` FOREIGN KEY (`LegalEntityId`) REFERENCES `Billing`.`LegalEntities` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Intersection_PriceId` FOREIGN KEY (`PriceId`) REFERENCES `usersettings`.`pricesdata` (`PriceCode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Intersection_RegionId` FOREIGN KEY (`RegionId`) REFERENCES `farm`.`regions` (`RegionCode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4489361 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OrderRules`
+--
+
+DROP TABLE IF EXISTS `OrderRules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OrderRules` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Supplier` int(10) unsigned NOT NULL,
+  `RuleGroup` int(10) unsigned NOT NULL,
+  `MaxSum` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_OrderRules_RuleGroup` (`RuleGroup`),
+  KEY `FK_OrderRules_Supplier` (`Supplier`),
+  CONSTRAINT `FK_OrderRules_RuleGroup` FOREIGN KEY (`RuleGroup`) REFERENCES `RuleGroups` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_OrderRules_Supplier` FOREIGN KEY (`Supplier`) REFERENCES `Suppliers` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OrderSwap`
+--
+
+DROP TABLE IF EXISTS `OrderSwap`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OrderSwap` (
+  `SupplierId` int(10) unsigned NOT NULL,
+  `ClientId` int(10) unsigned NOT NULL,
+  `SwapFirmCode` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`SupplierId`,`ClientId`),
+  KEY `FK_OrderSwap_ClientId` (`ClientId`),
+  CONSTRAINT `FK_OrderSwap_ClientId` FOREIGN KEY (`ClientId`) REFERENCES `clients` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Reporters`
+--
+
+DROP TABLE IF EXISTS `Reporters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Reporters` (
+  `Id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `Id` (`Id`),
+  CONSTRAINT `FK_Customers_Reporters_Id` FOREIGN KEY (`Id`) REFERENCES `Services` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RuleGroups`
+--
+
+DROP TABLE IF EXISTS `RuleGroups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RuleGroups` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Services`
+--
+
+DROP TABLE IF EXISTS `Services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Services` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Type` int(11) NOT NULL DEFAULT '0',
+  `Name` varchar(255) DEFAULT NULL,
+  `Disabled` tinyint(1) NOT NULL DEFAULT '0',
+  `HomeRegion` bigint(20) unsigned DEFAULT NULL,
+  `RegionCode` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `HomeRegion` (`HomeRegion`),
+  CONSTRAINT `FK_Customers_Services_HomeRegion` FOREIGN KEY (`HomeRegion`) REFERENCES `farm`.`Regions` (`RegionCode`)
+) ENGINE=InnoDB AUTO_INCREMENT=18071 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Showusers`
+--
+
+DROP TABLE IF EXISTS `Showusers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Showusers` (
+  `PrimaryUserId` int(10) unsigned NOT NULL,
+  `ShowUserId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`PrimaryUserId`,`ShowUserId`),
+  KEY `FK_Users_ShowUserId` (`ShowUserId`),
+  CONSTRAINT `FK_Users_PrimaryUserId` FOREIGN KEY (`PrimaryUserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Users_ShowUserId` FOREIGN KEY (`ShowUserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Suppliers`
+--
+
+DROP TABLE IF EXISTS `Suppliers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Suppliers` (
+  `Id` int(10) unsigned NOT NULL DEFAULT '0',
+  `Name` varchar(255) DEFAULT NULL,
+  `FullName` varchar(255) DEFAULT NULL,
+  `RegionMask` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `Disabled` tinyint(1) NOT NULL DEFAULT '0',
+  `Registrant` varchar(255) DEFAULT NULL,
+  `RegistrationDate` datetime DEFAULT NULL,
+  `HomeRegion` bigint(20) unsigned DEFAULT NULL,
+  `ContactGroupOwnerId` int(10) unsigned DEFAULT NULL,
+  `Payer` int(10) unsigned DEFAULT NULL,
+  `Account` int(10) unsigned DEFAULT NULL,
+  `Address` varchar(255) DEFAULT NULL,
+  `VendorId` varchar(255) DEFAULT NULL,
+  `NotifyWeekEnd` tinyint(1) unsigned NOT NULL,
+  `RejectParser` varchar(255) DEFAULT NULL,
+  `UseSupplierCodes` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`),
+  KEY `FK_Suppliers_Payer` (`Payer`),
+  KEY `HomeRegion` (`HomeRegion`),
+  CONSTRAINT `FK_Customers_Suppliers_HomeRegion` FOREIGN KEY (`HomeRegion`) REFERENCES `farm`.`Regions` (`RegionCode`),
+  CONSTRAINT `FK_Suppliers_Payer` FOREIGN KEY (`Payer`) REFERENCES `billing`.`payers` (`PayerID`)
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `UserAddresses`
+--
+
+DROP TABLE IF EXISTS `UserAddresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserAddresses` (
+  `UserId` int(10) unsigned NOT NULL,
+  `AddressId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`UserId`,`AddressId`),
+  KEY `FK_UserAddresses_AddressId` (`AddressId`),
+  CONSTRAINT `FK_UserAddresses_AddressId` FOREIGN KEY (`AddressId`) REFERENCES `addresses` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserAddresses_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `UserPrices`
+--
+
+DROP TABLE IF EXISTS `UserPrices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserPrices` (
+  `UserId` int(10) unsigned NOT NULL,
+  `PriceId` int(10) unsigned NOT NULL,
+  `RegionId` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`UserId`,`PriceId`,`RegionId`),
+  KEY `FK_UserPrices_PriceId` (`PriceId`),
+  KEY `FK_UserPrices_RegionId` (`RegionId`),
+  CONSTRAINT `FK_UserPrices_PriceId` FOREIGN KEY (`PriceId`) REFERENCES `usersettings`.`pricesdata` (`PriceCode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserPrices_RegionId` FOREIGN KEY (`RegionId`) REFERENCES `farm`.`regions` (`RegionCode`) ON DELETE CASCADE,
+  CONSTRAINT `FK_UserPrices_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Users`
+--
+
+DROP TABLE IF EXISTS `Users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Users` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ClientId` int(10) unsigned DEFAULT NULL,
+  `Enabled` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '0 - Выкл.\r\n1 - Вкл.',
+  `Login` varchar(20) NOT NULL,
+  `FtpAccess` tinyint(4) NOT NULL DEFAULT '0',
+  `Name` varchar(100) DEFAULT NULL,
+  `SendRejects` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `SendWaybills` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SubmitOrders` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `EnableUpdate` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Автоматическое обновление версий\r\n0 - выключено\r\n1 - включено',
+  `Auditor` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `InheritPricesFrom` int(10) unsigned DEFAULT NULL,
+  `Registrant` varchar(100) DEFAULT NULL,
+  `ContactGroupId` int(10) unsigned DEFAULT NULL,
+  `RegistrationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `WorkRegionMask` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `OrderRegionMask` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `AccountingId` int(10) unsigned DEFAULT NULL,
+  `PayerId` int(10) unsigned DEFAULT NULL,
+  `SaveAFDataFiles` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Сохранять подготовленный данные в архив?',
+  `TargetVersion` mediumint(8) unsigned DEFAULT '1325' COMMENT 'Номер версии, до которой программа может автообновляться; null - до максимально возможной.',
+  `UseAdjustmentOrders` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Производить корректировку заказов по цене и количеству перед отправкой?',
+  `PromoFileLimit` int(10) unsigned DEFAULT '512000' COMMENT 'размер файлов с промо-акциями, передаваемый за одно обновление',
+  `RootService` int(10) unsigned DEFAULT NULL,
+  `AllowDownloadUnconfirmedOrders` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Разрешено загружать неподтвержденные заказы с сервера',
+  `ShowSupplierCost` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Показывать столбец Цена поставщика в AnalitF при включенном механизме отсрочки платежа',
+  `IgnoreCheckMinOrder` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Игнорировать проверку минимальной суммы заказа у Поставщика',
+  `UseBatch2` tinyint(1) NOT NULL DEFAULT '0',
+  `SmartOrderRuleId` int(10) unsigned DEFAULT NULL,
+  `CheckClientToken` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `UniqueLogin` (`Login`),
+  KEY `FK_Users_ClientId` (`ClientId`),
+  KEY `FK_Users_InheritPricesFrom` (`InheritPricesFrom`),
+  KEY `FK_Users_ContactGroupId` (`ContactGroupId`),
+  KEY `AccountingId` (`AccountingId`),
+  KEY `FK_Users_PayerId` (`PayerId`),
+  CONSTRAINT `FK_Users_ClientId` FOREIGN KEY (`ClientId`) REFERENCES `clients` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Users_ContactGroupId` FOREIGN KEY (`ContactGroupId`) REFERENCES `contacts`.`contact_groups` (`Id`),
+  CONSTRAINT `FK_Users_InheritPricesFrom` FOREIGN KEY (`InheritPricesFrom`) REFERENCES `users` (`Id`),
+  CONSTRAINT `FK_Users_PayerId` FOREIGN KEY (`PayerId`) REFERENCES `billing`.`payers` (`PayerID`)
+) ENGINE=InnoDB AUTO_INCREMENT=35659 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `suppliercontacts`
+--
+
+DROP TABLE IF EXISTS `suppliercontacts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `suppliercontacts` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ContactType` tinyint(1) NOT NULL DEFAULT '0',
+  `IsVerified` tinyint(1) NOT NULL DEFAULT '0',
+  `ContactValue` varchar(45) DEFAULT NULL,
+  `SupplierId` int(10) unsigned NOT NULL DEFAULT '0',
+  `SendedCode` int(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Current Database: `documents`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `documents`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `documents` /*!40100 DEFAULT CHARACTER SET cp1251 */;
+
+USE `documents`;
+
+--
+-- Table structure for table `Attachments`
+--
+
+DROP TABLE IF EXISTS `Attachments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Attachments` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `MailId` int(10) unsigned NOT NULL,
+  `FileName` varchar(255) NOT NULL,
+  `Extension` varchar(255) NOT NULL,
+  `Size` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_Attachments_MailId` (`MailId`),
+  CONSTRAINT `FK_Attachments_MailId` FOREIGN KEY (`MailId`) REFERENCES `Mails` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=80017 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CertificateFiles`
+--
+
+DROP TABLE IF EXISTS `CertificateFiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CertificateFiles` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `OriginFilename` varchar(255) DEFAULT NULL,
+  `ExternalFileId` varchar(255) DEFAULT NULL,
+  `CertificateSourceId` int(10) unsigned DEFAULT NULL,
+  `Extension` varchar(255) NOT NULL,
+  `Note` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_CertificateFiles_CertificateSourceId` (`CertificateSourceId`),
+  KEY `IDX_CertificateFiles_ExternalFileId` (`ExternalFileId`),
+  CONSTRAINT `FK_CertificateFiles_CertificateSourceId` FOREIGN KEY (`CertificateSourceId`) REFERENCES `CertificateSources` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5073777 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CertificateSourceCatalogs`
+--
+
+DROP TABLE IF EXISTS `CertificateSourceCatalogs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CertificateSourceCatalogs` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `CertificateSourceId` int(10) unsigned NOT NULL,
+  `CatalogId` int(10) unsigned DEFAULT NULL,
+  `SerialNumber` varchar(50) NOT NULL,
+  `SupplierCode` varchar(50) NOT NULL,
+  `OriginFilePath` varchar(255) NOT NULL,
+  `SupplierProducerCode` varchar(255) DEFAULT NULL,
+  `Note` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `IDX_CertificateCatalog` (`SerialNumber`,`SupplierCode`),
+  KEY `FK_CertificateSourceCatalogs_CertificateSourceId` (`CertificateSourceId`),
+  KEY `FK_CertificateSourceCatalogs_CatalogId` (`CatalogId`),
+  CONSTRAINT `FK_CertificateSourceCatalogs_CatalogId` FOREIGN KEY (`CatalogId`) REFERENCES `catalogs`.`catalog` (`Id`),
+  CONSTRAINT `FK_CertificateSourceCatalogs_CertificateSourceId` FOREIGN KEY (`CertificateSourceId`) REFERENCES `CertificateSources` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=578059295 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CertificateSources`
+--
+
+DROP TABLE IF EXISTS `CertificateSources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CertificateSources` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `FtpSupplierId` int(10) unsigned DEFAULT NULL,
+  `SourceClassName` varchar(255) NOT NULL,
+  `LastDecodeTableDownload` datetime DEFAULT NULL COMMENT 'дата изменения файла, скаченного по ftp',
+  `SearchInAssortmentPrice` tinyint(1) NOT NULL DEFAULT '0',
+  `PersonOrientationName` varchar(255) NOT NULL,
+  `Priority` int(11) NOT NULL DEFAULT '0',
+  `IsDisabled` tinyint(1) NOT NULL DEFAULT '0',
+  `LookupUrl` varchar(255) DEFAULT NULL,
+  `DecodeTableUrl` varchar(255) DEFAULT NULL,
+  `FtpFileDate` date DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_CertificateSources_FtpSupplierId` (`FtpSupplierId`),
+  CONSTRAINT `FK_CertificateSources_FtpSupplierId` FOREIGN KEY (`FtpSupplierId`) REFERENCES `customers`.`Suppliers` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CertificateTasks`
+--
+
+DROP TABLE IF EXISTS `CertificateTasks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CertificateTasks` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `CertificateSourceId` int(10) unsigned DEFAULT NULL,
+  `CatalogId` int(10) unsigned NOT NULL,
+  `SerialNumber` varchar(50) NOT NULL,
+  `DocumentBodyId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_CertificateTasks_CatalogId` (`CatalogId`),
+  KEY `FK_CertificateTasks_DocumentBodyId` (`DocumentBodyId`),
+  KEY `FK_CertificateTasks_CertificateSourceId` (`CertificateSourceId`),
+  CONSTRAINT `FK_CertificateTasks_CatalogId` FOREIGN KEY (`CatalogId`) REFERENCES `catalogs`.`catalog` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_CertificateTasks_CertificateSourceId` FOREIGN KEY (`CertificateSourceId`) REFERENCES `certificatesources` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_CertificateTasks_DocumentBodyId` FOREIGN KEY (`DocumentBodyId`) REFERENCES `DocumentBodies` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12450279 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Certificates`
+--
+
+DROP TABLE IF EXISTS `Certificates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Certificates` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `CatalogId` int(10) unsigned NOT NULL,
+  `SerialNumber` varchar(50) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IDX_Certificate` (`CatalogId`,`SerialNumber`),
+  CONSTRAINT `FK_Certificates_CatalogId` FOREIGN KEY (`CatalogId`) REFERENCES `catalogs`.`catalog` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1437385 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `DocumentBodies`
+--
+
+DROP TABLE IF EXISTS `DocumentBodies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DocumentBodies` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `DocumentId` int(10) unsigned NOT NULL,
+  `Product` varchar(255) DEFAULT NULL,
+  `Code` varchar(20) DEFAULT NULL,
+  `CodeCr` varchar(30) DEFAULT NULL,
+  `Certificates` varchar(50) DEFAULT NULL,
+  `CertificatesDate` varchar(20) DEFAULT NULL COMMENT 'Дата выдачи сертификата',
+  `Period` varchar(20) DEFAULT NULL COMMENT 'Срок годности',
+  `Producer` varchar(255) DEFAULT NULL,
+  `Country` varchar(150) DEFAULT NULL COMMENT 'Страна',
+  `ProducerCost` decimal(12,6) unsigned DEFAULT NULL COMMENT 'Цена производителя без НДС',
+  `RegistryCost` decimal(12,6) DEFAULT NULL,
+  `SupplierPriceMarkup` decimal(5,3) DEFAULT NULL COMMENT 'Торговая надбавка оптовика',
+  `SupplierCostWithoutNDS` decimal(12,6) unsigned DEFAULT NULL COMMENT 'Цена поставщика без НДС',
+  `SupplierCost` decimal(12,6) unsigned DEFAULT NULL COMMENT 'Цена поставщика c НДС или цена в отказе',
+  `Quantity` int(11) unsigned DEFAULT NULL,
+  `VitallyImportant` tinyint(1) unsigned DEFAULT NULL,
+  `NDS` int(10) unsigned DEFAULT NULL,
+  `SerialNumber` varchar(50) DEFAULT NULL COMMENT 'номер серии',
+  `ProductId` int(10) unsigned DEFAULT NULL,
+  `ProducerId` int(10) unsigned DEFAULT NULL,
+  `Amount` decimal(12,6) unsigned DEFAULT NULL COMMENT 'Сумма с НДС',
+  `NdsAmount` decimal(12,6) unsigned DEFAULT NULL COMMENT 'Сумма НДС',
+  `Unit` varchar(20) DEFAULT NULL COMMENT 'Единица измерения',
+  `ExciseTax` decimal(12,6) DEFAULT NULL COMMENT 'В том числе акциз',
+  `BillOfEntryNumber` varchar(30) DEFAULT NULL COMMENT '№ Таможенной декларации',
+  `EAN13` varchar(13) DEFAULT NULL COMMENT 'Код EAN-13',
+  `CodeOKDP` varchar(20) DEFAULT NULL COMMENT 'код ОКДП',
+  `CertificateId` int(10) unsigned DEFAULT NULL,
+  `CertificateFilename` varchar(255) DEFAULT NULL COMMENT 'имя файла образа сертификата',
+  `ProtocolFilemame` varchar(255) DEFAULT NULL COMMENT 'имя файла образа протокола',
+  `PassportFilename` varchar(255) DEFAULT NULL COMMENT 'имя файла образа паспорта',
+  `CertificateError` varchar(255) DEFAULT NULL,
+  `CertificateAuthority` varchar(255) DEFAULT NULL,
+  `ExpireInMonths` int(11) DEFAULT NULL,
+  `DateOfManufacture` datetime DEFAULT NULL,
+  `RegistryDate` datetime DEFAULT NULL,
+  `CountryCode` varchar(30) DEFAULT NULL,
+  `TradeCost` decimal(12,6) DEFAULT NULL COMMENT 'оптовая цена',
+  `SaleCost` decimal(12,6) DEFAULT NULL COMMENT 'отпускная цена',
+  `RetailCost` decimal(12,6) DEFAULT NULL COMMENT 'розничная цена',
+  `Cipher` varchar(255) DEFAULT NULL COMMENT 'Шифр',
+  `UnitCode` varchar(255) DEFAULT NULL,
+  `CertificatesEndDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_DocumentBodies_DocumentId` (`DocumentId`),
+  KEY `IDX_DocumentBodies_ProducerId` (`ProducerId`),
+  KEY `FK_DocumentBodies_CertificateId` (`CertificateId`),
+  KEY `IDX_DocumentBodies_SerialNumber` (`SerialNumber`),
+  KEY `FK_DocumentBodies_ProductId` (`ProductId`),
+  CONSTRAINT `FK_DocumentBodies_CertificateId` FOREIGN KEY (`CertificateId`) REFERENCES `Certificates` (`Id`),
+  CONSTRAINT `FK_DocumentBodies_DocumentId` FOREIGN KEY (`DocumentId`) REFERENCES `documentheaders` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_DocumentBodies_ProducerId` FOREIGN KEY (`ProducerId`) REFERENCES `catalogs`.`producers` (`Id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `FK_DocumentBodies_ProductId` FOREIGN KEY (`ProductId`) REFERENCES `catalogs`.`Products` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=324188543 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FileCertificates`
+--
+
+DROP TABLE IF EXISTS `FileCertificates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FileCertificates` (
+  `CertificateId` int(10) unsigned NOT NULL,
+  `CertificateFileId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`CertificateId`,`CertificateFileId`),
+  KEY `FK_FileCertificates_CertificateId` (`CertificateId`),
+  KEY `FK_FileCertificates_CertificateFileId` (`CertificateFileId`),
+  CONSTRAINT `FK_FileCertificates_CertificateFileId` FOREIGN KEY (`CertificateFileId`) REFERENCES `CertificateFiles` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_FileCertificates_CertificateId` FOREIGN KEY (`CertificateId`) REFERENCES `Certificates` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Mails`
+--
+
+DROP TABLE IF EXISTS `Mails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Mails` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `LogTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `SupplierId` int(10) unsigned NOT NULL,
+  `SupplierEmail` varchar(255) NOT NULL,
+  `IsVIPMail` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `Subject` varchar(255) DEFAULT NULL,
+  `Body` mediumtext,
+  `Size` int(10) unsigned NOT NULL,
+  `SHA256Hash` varchar(255) NOT NULL DEFAULT '',
+  `Deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`),
+  KEY `IDX_Mails_LogTime` (`LogTime`),
+  KEY `IDX_Mails_Subject` (`Subject`),
+  KEY `FK_Mails_SupplierId` (`SupplierId`),
+  KEY `IDX_Mails_SupplierEmail` (`SupplierEmail`),
+  KEY `IDX_Mails_SHA256Hash` (`SHA256Hash`),
+  CONSTRAINT `FK_Mails_SupplierId` FOREIGN KEY (`SupplierId`) REFERENCES `customers`.`suppliers` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=83847 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ProtekDocs`
+--
+
+DROP TABLE IF EXISTS `ProtekDocs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProtekDocs` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `DocId` int(11) NOT NULL,
+  `Line` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_ProtekDocs_DocId` (`Line`),
+  CONSTRAINT `FK_ProtekDocs_DocId` FOREIGN KEY (`Line`) REFERENCES `DocumentBodies` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=197839159 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ProtekUsers`
+--
+
+DROP TABLE IF EXISTS `ProtekUsers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProtekUsers` (
+  `userid` int(10) unsigned DEFAULT NULL,
+  `productid` int(10) unsigned DEFAULT NULL,
+  `producerid` int(10) unsigned DEFAULT NULL,
+  `suppliercost` decimal(12,6) unsigned DEFAULT NULL COMMENT 'Цена поставщика c НДС или цена в отказе',
+  `quant` int(10) unsigned DEFAULT NULL,
+  KEY `userid` (`userid`,`productid`,`producerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RejectHeaders`
+--
+
+DROP TABLE IF EXISTS `RejectHeaders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RejectHeaders` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `WriteTime` datetime DEFAULT NULL,
+  `SupplierId` int(10) unsigned DEFAULT NULL,
+  `AddressId` int(10) unsigned DEFAULT NULL,
+  `DownloadId` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `SupplierId` (`SupplierId`),
+  KEY `AddressId` (`AddressId`),
+  KEY `DownloadId` (`DownloadId`),
+  CONSTRAINT `FK_Documents_RejectHeaders_AddressId` FOREIGN KEY (`AddressId`) REFERENCES `Customers`.`Addresses` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Documents_RejectHeaders_DownloadId` FOREIGN KEY (`DownloadId`) REFERENCES `logs`.`Document_logs` (`RowId`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Documents_RejectHeaders_SupplierId` FOREIGN KEY (`SupplierId`) REFERENCES `Customers`.`Suppliers` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=195223 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `SourceSuppliers`
+--
+
+DROP TABLE IF EXISTS `SourceSuppliers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SourceSuppliers` (
+  `CertificateSourceId` int(10) unsigned NOT NULL,
+  `SupplierId` int(10) unsigned NOT NULL,
+  KEY `FK_SourceSuppliers_CertificateSourceId` (`CertificateSourceId`),
+  KEY `FK_SourceSuppliers_SourceSupplierId` (`SupplierId`),
+  CONSTRAINT `FK_SourceSuppliers_CertificateSourceId` FOREIGN KEY (`CertificateSourceId`) REFERENCES `CertificateSources` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_SourceSuppliers_SourceSupplierId` FOREIGN KEY (`SupplierId`) REFERENCES `customers`.`Suppliers` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `SupplierMaps`
+--
+
+DROP TABLE IF EXISTS `SupplierMaps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SupplierMaps` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) DEFAULT NULL,
+  `SupplierId` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `SupplierId` (`SupplierId`),
+  CONSTRAINT `FK_Documents_SupplierMaps_SupplierId` FOREIGN KEY (`SupplierId`) REFERENCES `Customers`.`Suppliers` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Waybill_Sources`
+--
+
+DROP TABLE IF EXISTS `Waybill_Sources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Waybill_Sources` (
+  `FirmCode` int(10) unsigned NOT NULL DEFAULT '0',
+  `EMailFrom` varchar(1000) DEFAULT NULL,
+  `SourceID` int(10) unsigned DEFAULT NULL COMMENT 'тип источника\r\n1 - по email\r\n4 - наш фтп\r\n5 - фтп поставщика',
+  `ReaderClassName` varchar(255) DEFAULT NULL,
+  `WaybillUrl` varchar(255) DEFAULT NULL COMMENT 'URL по которому нужно забирать накладные (пока используется только фтп)',
+  `RejectUrl` varchar(255) DEFAULT NULL COMMENT 'URL по которому нужно забирать отказы (пока используется только фтп)',
+  `UserName` varchar(255) DEFAULT NULL COMMENT 'Имя пользователя',
+  `Password` varchar(255) DEFAULT NULL COMMENT 'Пароль',
+  `DownloadInterval` int(10) unsigned DEFAULT NULL COMMENT 'Интервал в секундах, через который производится обращение к источнику (только для фтп)',
+  `FtpActiveMode` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `LastDownload` datetime DEFAULT NULL,
+  `LastError` datetime DEFAULT NULL,
+  PRIMARY KEY (`FirmCode`),
+  KEY `FK_waybill_sources_SourceID` (`SourceID`)
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `documentheaders`
+--
+
+DROP TABLE IF EXISTS `documentheaders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `documentheaders` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `DownloadId` int(10) unsigned DEFAULT NULL,
+  `WriteTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `DocumentDate` datetime DEFAULT NULL COMMENT 'Дата документа',
+  `FirmCode` int(10) unsigned DEFAULT NULL,
+  `ClientCode` int(10) unsigned DEFAULT NULL,
+  `AddressId` int(10) unsigned DEFAULT NULL,
+  `DocumentType` tinyint(3) unsigned DEFAULT NULL,
+  `ProviderDocumentId` varchar(20) DEFAULT NULL,
+  `OrderId` int(10) unsigned DEFAULT NULL,
+  `Parser` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_DocumentHeaders_AddressId` (`AddressId`),
+  KEY `FK_DocumentHeaders_ClientCode` (`ClientCode`),
+  KEY `FK_DocumentHeaders_OrderId` (`OrderId`),
+  KEY `FK_DocumentHeaders_DownloadId` (`DownloadId`),
+  KEY `WriteTime` (`WriteTime`),
+  CONSTRAINT `FK_DocumentHeaders_AddressId` FOREIGN KEY (`AddressId`) REFERENCES `customers`.`addresses` (`Id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_DocumentHeaders_ClientCode` FOREIGN KEY (`ClientCode`) REFERENCES `usersettings`.`retclientsset` (`ClientCode`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `FK_DocumentHeaders_DownloadId` FOREIGN KEY (`DownloadId`) REFERENCES `logs`.`document_logs` (`RowId`) ON DELETE SET NULL,
+  CONSTRAINT `FK_DocumentHeaders_OrderId` FOREIGN KEY (`OrderId`) REFERENCES `orders`.`ordershead` (`RowID`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=22905769 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `invoiceheaders`
+--
+
+DROP TABLE IF EXISTS `invoiceheaders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invoiceheaders` (
+  `Id` int(10) unsigned NOT NULL DEFAULT '0',
+  `InvoiceNumber` varchar(20) DEFAULT NULL COMMENT 'Номер счет-фактуры',
+  `InvoiceDate` datetime DEFAULT NULL COMMENT 'Дата счет-фактуры',
+  `SellerName` varchar(255) DEFAULT NULL COMMENT 'Наименование продавца',
+  `SellerAddress` varchar(255) DEFAULT NULL COMMENT 'Адрес продавца',
+  `SellerINN` varchar(20) DEFAULT NULL COMMENT 'ИНН продавца',
+  `SellerKPP` varchar(20) DEFAULT NULL COMMENT 'КПП продавца',
+  `ShipperInfo` varchar(255) DEFAULT NULL COMMENT 'Грузоотправитель и его адрес',
+  `ConsigneeInfo` varchar(255) DEFAULT NULL COMMENT 'Грузополучатель и его адрес',
+  `PaymentDocumentInfo` varchar(255) DEFAULT NULL COMMENT 'Поле К платежно-расчетному документу N',
+  `BuyerName` varchar(255) DEFAULT NULL COMMENT 'Наименование покупателя',
+  `BuyerAddress` varchar(255) DEFAULT NULL COMMENT 'Адрес покупателя',
+  `BuyerINN` varchar(20) DEFAULT NULL COMMENT 'ИНН покупателя',
+  `BuyerKPP` varchar(20) DEFAULT NULL COMMENT 'КПП покупателя',
+  `AmountWithoutNDS0` decimal(12,6) DEFAULT NULL COMMENT 'Стоимость товаров без налога для группы товаров, облагаемых ставкой 0% НДС',
+  `AmountWithoutNDS10` decimal(12,6) DEFAULT NULL COMMENT 'Стоимость товаров без налога для группы товаров, облагаемых ставкой 10% НДС',
+  `NDSAmount10` decimal(12,6) DEFAULT NULL COMMENT 'Сумма налога для группы товаров , облагаемых ставкой 10% НДС',
+  `Amount10` decimal(12,6) DEFAULT NULL COMMENT 'Стоимость товаров для группы товаров , облагаемых ставкой 10% НДС всего с учётом налога',
+  `AmountWithoutNDS18` decimal(12,6) DEFAULT NULL COMMENT 'Стоимость товаров без налога для группы товаров, облагаемых ставкой 18% НДС',
+  `NDSAmount18` decimal(12,6) DEFAULT NULL COMMENT 'Сумма налога для группы товаров , облагаемых ставкой 18% НДС',
+  `Amount18` decimal(12,6) DEFAULT NULL COMMENT 'Стоимость товаров для группы товаров , облагаемых ставкой 18% НДС всего с учётом налога',
+  `AmountWithoutNDS` decimal(12,6) DEFAULT NULL COMMENT 'Общая стоимость товаров без налога (указывается в конце таблицы счёт-фактуры по строке «ИТОГО»)',
+  `NDSAmount` decimal(12,6) DEFAULT NULL COMMENT 'Общая сумма налога (указывается в конце таблицы счёт-фактуры по строке «ИТОГО»)',
+  `Amount` decimal(12,6) DEFAULT NULL COMMENT 'Общая стоимость товаров с налогом (указывается в конце таблицы счёт-фактуры по строке «ИТОГО»)',
+  `RecipientName` varchar(255) DEFAULT NULL,
+  `RecipientId` int(11) DEFAULT NULL,
+  `BuyerId` int(11) DEFAULT NULL,
+  `DelayOfPaymentInDays` int(11) DEFAULT NULL,
+  `DelayOfPaymentInBankDays` int(11) DEFAULT NULL,
+  `CommissionFeeContractId` varchar(255) DEFAULT NULL,
+  `CommissionFee` decimal(19,5) DEFAULT NULL,
+  `StoreName` varchar(255) DEFAULT NULL COMMENT 'Склад',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `mailrecipients`
+--
+
+DROP TABLE IF EXISTS `mailrecipients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mailrecipients` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `MailId` int(10) unsigned NOT NULL,
+  `Type` int(11) NOT NULL DEFAULT '0',
+  `RegionId` bigint(20) unsigned DEFAULT NULL,
+  `ClientId` int(10) unsigned DEFAULT NULL,
+  `AddressId` int(10) unsigned DEFAULT NULL,
+  `Email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_MailRecipients_MailId` (`MailId`),
+  KEY `FK_MailRecipients_RegionId` (`RegionId`),
+  KEY `FK_MailRecipients_ClientId` (`ClientId`),
+  KEY `FK_MailRecipients_AddressId` (`AddressId`),
+  CONSTRAINT `FK_MailRecipients_AddressId` FOREIGN KEY (`AddressId`) REFERENCES `customers`.`Addresses` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_MailRecipients_ClientId` FOREIGN KEY (`ClientId`) REFERENCES `customers`.`clients` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_MailRecipients_MailId` FOREIGN KEY (`MailId`) REFERENCES `Mails` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_MailRecipients_RegionId` FOREIGN KEY (`RegionId`) REFERENCES `farm`.`Regions` (`RegionCode`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=99677 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `offers4protek`
+--
+
+DROP TABLE IF EXISTS `offers4protek`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offers4protek` (
+  `userid` int(3) NOT NULL DEFAULT '0',
+  `productid` int(10) unsigned DEFAULT NULL,
+  `producerid` int(10) unsigned DEFAULT NULL,
+  `mincost` decimal(8,2) unsigned DEFAULT NULL,
+  `maxcost` decimal(8,2) unsigned DEFAULT NULL,
+  `ClientId` int(10) unsigned NOT NULL,
+  KEY `Index_1` (`userid`,`productid`,`producerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rejectlines`
+--
+
+DROP TABLE IF EXISTS `rejectlines`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rejectlines` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Code` varchar(255) DEFAULT '0',
+  `Product` varchar(255) DEFAULT NULL,
+  `Producer` varchar(255) DEFAULT NULL,
+  `Cost` decimal(19,2) DEFAULT NULL,
+  `Ordered` int(10) unsigned DEFAULT NULL,
+  `Rejected` int(10) unsigned DEFAULT NULL,
+  `HeaderId` int(10) unsigned DEFAULT NULL,
+  `ProductId` int(10) unsigned DEFAULT NULL,
+  `ProducerId` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `HeaderId` (`HeaderId`),
+  KEY `ProductId` (`ProductId`),
+  KEY `ProducerId` (`ProducerId`),
+  CONSTRAINT `FK_Documents_RejectLines_HeaderId` FOREIGN KEY (`HeaderId`) REFERENCES `RejectHeaders` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Documents_RejectLines_ProducerId` FOREIGN KEY (`ProducerId`) REFERENCES `Catalogs`.`Producers` (`Id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_Documents_RejectLines_ProductId` FOREIGN KEY (`ProductId`) REFERENCES `Catalogs`.`Products` (`Id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1515229 DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rejects`
+--
+
+DROP TABLE IF EXISTS `rejects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rejects` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `OrderLineId` int(10) unsigned NOT NULL,
+  `OrderedQuantity` int(10) unsigned NOT NULL,
+  `OrderedCost` decimal(9,2) unsigned NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2749063 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `waybill_source_types`
+--
+
+DROP TABLE IF EXISTS `waybill_source_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `waybill_source_types` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Type` varchar(5) DEFAULT NULL,
+  `Comment` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=cp1251 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `waybillorders`
+--
+
+DROP TABLE IF EXISTS `waybillorders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `waybillorders` (
+  `DocumentLineId` int(10) unsigned NOT NULL COMMENT 'id позиции в DocumentBodies',
+  `OrderLineId` int(10) unsigned NOT NULL COMMENT 'id позиции в OrdersList',
+  KEY `IDX_waybillorders_DocumentLineId` (`DocumentLineId`),
+  KEY `IDX_waybillorders_OrderLineId` (`OrderLineId`),
+  CONSTRAINT `FK_waybillorders_1` FOREIGN KEY (`DocumentLineId`) REFERENCES `documentbodies` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_waybillorders_2` FOREIGN KEY (`OrderLineId`) REFERENCES `orders`.`orderslist` (`RowID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Current Database: `farm`
+--
+
+/*!40000 DROP DATABASE IF EXISTS `farm`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXI

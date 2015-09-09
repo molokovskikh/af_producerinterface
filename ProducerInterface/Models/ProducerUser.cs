@@ -11,9 +11,7 @@ using AnalitFramefork.Helpers;
 using AnalitFramefork.Hibernate.Mapping.Attributes;
 using NHibernate;
 using NHibernate.Linq;
-using NHibernate.Mapping.Attributes;
 using NHibernate.Validator.Constraints;
-
 namespace ProducerInterface.Models
 {
 	/// <summary>
@@ -22,26 +20,26 @@ namespace ProducerInterface.Models
 	[Model(Table = "Users", Database = "ProducerInterface")]
 	public class ProducerUser : BaseModel
 	{
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("ФИО"), ValidatorNotEmpty]
+		[Map, Description("ФИО"), ValidatorNotEmpty]
 		public virtual string Name { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Пароль"), ValidatorNotEmpty,
+		[Map, Description("Пароль"), ValidatorNotEmpty,
 		 Length(Min = 5, Max = 20, Message = "Длина пароля должна быть не менее 5 и не более 20 символов.")]
 		public virtual string Password { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("e-mail"), ValidatorNotEmpty, ValidatorEmail]
+		[Map, Description("e-mail"), ValidatorNotEmpty, ValidatorEmail]
 		public virtual string Email { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Должность")]
+		[Map, Description("Должность")]
 		public virtual string Appointment { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Время обновления пароля")]
+		[Map, Description("Время обновления пароля")]
 		public virtual DateTime PasswordUpdated { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Запрос на обновление пароля")]
+		[Map, Description("Запрос на обновление пароля")]
 		public virtual bool PasswordToUpdate { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Заблокированный")]
+		[Map, Description("Заблокированный")]
 		public virtual bool Enabled { get; set; }
 		
 		//[Bag(0, Table = "user_role", Lazy = CollectionLazy.False)]

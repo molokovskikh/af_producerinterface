@@ -1,0 +1,21 @@
+﻿@using ProducerInterface.Models
+@{
+	var currentUser = ViewBag.CurrentUser as ProducerUser;
+}
+<aside class="widget list">
+	<header>
+		<h3 class="title">Кабинет производителя<br /> <strong>'@currentUser.Producer.Name'</strong></h3>
+	</header>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Разделы:</h3>
+		</div>
+		<div class="panel-body">
+			<ul>
+				<li><a href="#">- <strong>Отчеты</strong></a></li>
+				<li><a href="#">- <strong>Промо-акции</strong></a></li>
+				<li><a href="@Url.Action("Catalog")">- <strong>Описание препоратов</strong></a></li>
+			</ul>
+		</div>
+	</div>
+</aside><!-- .list -->

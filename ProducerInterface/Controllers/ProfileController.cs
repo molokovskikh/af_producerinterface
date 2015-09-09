@@ -28,35 +28,47 @@ namespace ProducerInterface.Controllers
 				DbSession.Query<ProducerUser>().Where(e => e.Producer == currentUser.Producer).OrderBy(s => s.Name).ToList();
 			ViewBag.ProfileNewsList =
 				DbSession.Query<ProfileNews>().Where(e => e.Producer == currentUser.Producer).OrderByDescending(s => s.CreatedDate).ThenBy(s=>s.Topic).ToList();
-			return View();
+			return View("Index");
 		}
 
-		public ActionResult CreateNews()
+		public ActionResult Catalog(int? id = null)
 		{
-			var currentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
-			ViewBag.CurrentUser = currentUser;
-			return View();
+			if (id.HasValue)
+			{
+				var family  = DbSession.Query<DrugFamily>().FirstOrDefault(i => i.Id == id.Value);
+				ViewBag.DrugFamily = family;
+			}
+			return View("Catalog");
+		}
+
+		public ActionResult CreateDrugDescriptionRemark(int id)
+		{
+			var family = DbSession.Query<DrugFamily>().First(i => i.Id == id);
+			var remark = new DrugDescriptionRemark(family);
+			var mnns = DbSession.Query<MNN>().ToList();
+			ViewBag.AvailibleMnn = mnns;
+			ViewBag.DrugDescriptionRemark = remark;
+            return View("CreateDrugDescriptionRemark");
 		}
 
 		[HttpPost]
-		public ActionResult CreateNews([EntityBinder] ProfileNews profileNews)
+		public ActionResult CreateDrugDescriptionRemark(int id, [EntityBinder] DrugDescriptionRemark drugDescriptionRemark)
 		{
-			var currentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
-			profileNews.Producer = DbSession.Query<Producer>().FirstOrDefault();
-			profileNews.CreatedDate = SystemTime.Now();
-			profileNews.EditedDate = SystemTime.Now();
-			var errors = ValidationRunner.Validate(profileNews);
-			if (errors.Count == 0) {
-				// сохраняем модель нового пользователя 
-				DbSession.Save(profileNews);
-				var message = "Новость добавлена успешно";
-				SuccessMessage(message);
-				return RedirectToAction("Index");
+			var user = GetCurrentUser();
+			var family = DbSession.Query<DrugFamily>().First(i => i.Id == id);
+			drugDescriptionRemark.ProducerUser = user;
+			drugDescriptionRemark.DrugFamily = family;
+			var errors = ValidationRunner.Validate(drugDescriptionRemark);
+			if (errors.Length == 0)
+			{
+				DbSession.Save(drugDescriptionRemark);
+				SuccessMessage("Запрос на изменение описания отправлен модератору.");
+				return Redirect(GetIndexActionUrl());
 			}
-
-			ViewBag.CurrentProfileNews = profileNews;
-			ViewBag.CurrentUser = currentUser;
-			return View();
+			ErrorMessage("Произошла ошибка.");
+			CreateDrugDescriptionRemark(id);
+			ViewBag.DrugDescriptionRemark = drugDescriptionRemark;
+            return View("CreateDrugDescriptionRemark");
 		}
 	}
 }

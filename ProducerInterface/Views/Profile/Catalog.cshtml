@@ -1,0 +1,144 @@
+﻿@using ProducerInterface.Models
+@model dynamic
+
+@{
+	ViewBag.Title = "title";
+	var user = ViewBag.CurrentUser as ProducerUser;
+	var drugFamily = ViewBag.DrugFamily as DrugFamily;
+}
+<section id="main">
+	<div class="container">
+		<div class="row">
+			<div class="content blog col-sm-9 col-md-9">
+				@if (drugFamily == null)
+				{
+					<div>Выбертите препарат из меню</div>
+				}
+				else if (drugFamily.DrugDescription == null)
+				{
+					<div>У данного товара нет описания</div>
+				}
+				else
+				{
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Наименование</h6>
+						</div>
+						<div class="col-md-6">@drugFamily.DrugDescription.Name</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Английское наименование</h6>
+						</div>
+						<div class="col-md-6">@drugFamily.DrugDescription.EnglishName</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Формакологическое действие</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.PharmacologicalAction</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Состав</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.Composition</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Показания к применению</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.IndicationsForUse</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Способ применения и дозы</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.Dosing</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Взаимодействие</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.Interaction</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Побочные эффекты</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.SideEffect</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6 bottom-padding">
+							<h6 class="subtitle">Предостережения и противопоказания</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.Warnings</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6 bottom-padding">
+							<h6 class="subtitle">Форма выпуска</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.ProductForm</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6 bottom-padding">
+							<h6 class="subtitle">Условия хранения</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.Storage</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6 bottom-padding">
+							<h6 class="subtitle">Срок годности</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.Expiration</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6">
+							<h6 class="subtitle">Дополнительно</h6>
+						</div>
+						<div class="col-md-6"> @drugFamily.DrugDescription.Description</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6 bottom-padding">
+							<h6 class="subtitle">МНН</h6>
+						</div>
+						<div class="col-md-6"> @(drugFamily.MNN != null ? drugFamily.MNN.Value : "<span>не указано</span>")</div>
+					</div>
+					<div class="row bottom-padding">
+						<div class="col-md-6 bottom-padding">
+							<h6 class="subtitle">МНН (Русское наименование)</h6>
+						</div>
+						<div class="col-md-6"> @(drugFamily.MNN != null ? drugFamily.MNN.RussianValue : "<span>не указано</span>")</div>
+					</div>
+					<div class="row bottom-padding">
+						<a  href="@Url.Action("CreateDrugDescriptionRemark",new {id = drugFamily.Id})" class="btn btn-info">
+							<i class="fa fa-pencil"></i>
+							<span>Редактировать описание</span>
+						</a>
+					</div>
+						}
+					</div><!-- .content -->
+			<div id="sidebar" class="sidebar col-sm-3 col-md-3">
+				@{ Html.RenderPartial("ProfileMenu"); }
+				<aside class="widget menu">
+					<header>
+						<h6 class="title">Продукты</h6>
+					</header>
+					<nav>
+						<ul>
+							@{ var families = user.Producer.Drugs.Select(i => i.DrugFamily).Distinct(); }
+							@foreach (var family in families)
+							{
+								var activestring = drugFamily == family ? "active" : "";
+								<li class="@activestring">
+									<a href="@Url.Action("Catalog", new {id = family.Id})">@family.Name</a>
+								</li>
+							}
+						</ul>
+					</nav>
+				</aside>
+			</div><!-- .sidebar -->
+		</div>
+	</div>
+	<!-- .container -->
+</section>

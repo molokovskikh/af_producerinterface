@@ -6,11 +6,8 @@
     List<ProducerUser> producerUserList = ViewBag.ProducerUserList;
 	List<ProfileNews> profileNewsList = ViewBag.ProfileNewsList;
 	var currentUser = (ViewBag.CurrentUser as ProducerUser);
-
 }
  
-
-@{
 	<section id="main">
 		<header class="page-header">
 			<div class="container">
@@ -39,107 +36,10 @@
 							</footer>
 						</article>
 					}
-					<article class="post">
-						<h2 class="entry-title"><a href="blog-view.html">Витамины оптом и в розницу</a>
-						</h2>
-						<div class="entry-content">
-							Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-						</div>
-						<footer class="entry-meta">
-							<span class="autor-name">@currentUser.Name</span>,
-							<span class="time">30.07.2015</span>
-							<span class="separator">|</span>
-							<span class="meta">Добавлено в <a href="#">промо-акции</a>, <a href="#">Препараты</a></span>
-							<span class="comments-link pull-right">
-								<a href="#"><i class="fa fa-comment"></i> 3 комментария</a>
-							</span>
-						</footer>
-					</article><!-- .post -->
-					<article class="post">
-						<h2 class="entry-title"><a href="blog-view.html">И снова Анальгетики!</a>
-						</h2>
-						<div class="entry-content">
-							Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-						</div>
-						<footer class="entry-meta">
-							<span class="autor-name">@(producerUserList.FirstOrDefault(s => s != currentUser) )?? currentUser.Name)</span>,
-							<span class="time">29.07.2015</span>
-							<span class="separator">|</span>
-							<span class="meta">Добавлено в <a href="#">отчеты</a>, <a href="#">Анальгетики</a></span>
-							<span class="comments-link pull-right">
-								<a href="#"><i class="fa fa-comment"></i> 1 комментарий</a>
-							</span>
-						</footer>
-					</article><!-- .post -->
-					<article class="post">
-						<h2 class="entry-title"><a href="blog-view.html">Реализация крупной партии кортизола.</a>
-						</h2>
-						<div class="entry-content">
-							Duis aute irure dolor in reprehenderit in voluptate velit, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-						</div>
-						<footer class="entry-meta">
-							<span class="autor-name">@currentUser.Name</span>,
-							<span class="time">29.07.2015</span>
-							<span class="separator">|</span>
-							<span class="meta">Добавлено в <a href="#">промо-акции</a>, <a href="#">Срочно</a></span>
-							<span class="comments-link pull-right"> 
-							</span>
-						</footer>
-					</article><!-- .post -->
-					<article class="post">
-						<h2 class="entry-title"><a href="blog-view.html">Витамины оптом и в розницу</a>
-						</h2>
-						<div class="entry-content">
-							Duis aute irure officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-						</div>
-						<footer class="entry-meta">
-							<span class="autor-name">@currentUser.Name</span>,
-							<span class="time">03.07.2015</span>
-							<span class="separator">|</span>
-							<span class="meta">Добавлено в <a href="#">промо-акции</a>, <a href="#">Препараты</a></span>
-							<span class="comments-link pull-right">
-								<a href="#"><i class="fa fa-comment"></i> 33 комментария</a>
-							</span>
-						</footer>
-					</article><!-- .post -->
-
 				</div><!-- .content -->
-
-				<div id="sidebar" class="sidebar col-sm-3 col-md-3">
-					<aside class="widget list">
-						<header>
-							<h3 class="title">Кабинет производителя<br/> <strong>'@currentUser.Producer.Name'</strong></h3>
-						</header> 
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Разделы:</h3>
-							</div>
-							<div class="panel-body">
-								<ul>
-									<li><a href="#">- <strong>Отчеты</strong></a></li>
-									<li><a href="#">- <strong>Промо-акции</strong></a></li>
-									<li><a href="#">- <strong>Описание препоратов</strong></a></li> 
-								</ul>
-							</div>
-						</div>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title"><ul>  <li><a href="#">Участники:</a> (@producerUserList.Count)</li></ul></h3>
-							</div>
-							<div class="panel-body">
-								<ul>  
-									@foreach (var item in producerUserList)
-									{
-										<li><a href="#">@item.Name</a></li>
-									}
-								</ul>
-							</div>
-						</div>
-					</aside><!-- .list --> 
-				</div><!-- .sidebar -->
+				@{ Html.RenderPartial("SideBar"); }
 			</div>
 		</div>
 		<!-- .container -->
 	</section>
 	<!-- #main -->
-} 

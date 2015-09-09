@@ -87,6 +87,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NHibernate.Validator.1.3.2.4000\lib\Net35\NHibernate.Validator.Specific.dll</HintPath>
     </Reference>
+    <Reference Include="ProducerInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\ProducerInterface.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -146,11 +150,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Config.cs" />
+    <Compile Include="Models\Drug.cs" />
+    <Compile Include="Models\DrugDescription.cs" />
+    <Compile Include="Models\DrugDescriptionRemark.cs" />
+    <Compile Include="Models\DrugFamily.cs" />
+    <Compile Include="Models\MNN.cs" />
     <Compile Include="Models\UserLogModel.cs" />
     <Compile Include="Models\UserPermission.cs" />
     <Compile Include="Models\ProfileNews.cs" />
     <Compile Include="Models\UserRole.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\ProducerUser.cs" />
     <Compile Include="Models\Producer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -375,6 +384,14 @@
     <Content Include="Assets\css\settings.css" />
     <Content Include="Assets\css\style.css" />
     <Content Include="Assets\css\video-js.min.css" />
+    <Content Include="Assets\custom\js\Analit.js" />
+    <Content Include="Assets\custom\js\EventEmitter.js" />
+    <Content Include="Assets\custom\js\Helpers.js" />
+    <Content Include="Assets\custom\js\InputSearchDropdown.js" />
+    <Content Include="Assets\custom\js\InputTextEditor.js" />
+    <Content Include="Assets\custom\js\jquery-2.1.1.js" />
+    <Content Include="Assets\custom\js\jquery-ui-1.11.1.js" />
+    <Content Include="Assets\custom\js\Window.js" />
     <Content Include="Assets\fonts\bootstrap\glyphicons-halflings-regular.svg" />
     <Content Include="Assets\fonts\fontawesome\fontawesome-webfont.svg" />
     <Content Include="Assets\fonts\revicons.svg" />
@@ -521,6 +538,7 @@
   <ItemGroup>
     <Folder Include="Analit\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Assets\custom\css\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
@@ -562,6 +580,10 @@
     <Content Include="Views\Registration\UserPasswordUpdate.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Profile\CreateNews.cshtml" />
+    <Content Include="Views\Profile\Catalog.cshtml" />
+    <Content Include="Views\Profile\ProfileMenu.cshtml" />
+    <Content Include="Views\Profile\SideBar.cshtml" />
+    <Content Include="Views\Profile\CreateDrugDescriptionRemark.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">
