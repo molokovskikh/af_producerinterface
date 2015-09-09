@@ -6,15 +6,14 @@ using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc.Attributes;
 using NHibernate.Linq;
 using ProducerControlPanel.Models;
-using Remotion.Linq.Clauses;
 using ProducerInterface.Models;
+using Remotion.Linq.Clauses;
 
 namespace ProducerControlPanel.Controllers
 {
 	/// <summary>
 	///     Главная
 	/// </summary>
-	[Authorize]
 	[Description("Панель администратора"), MainMenu]
 	public class AdminController : BaseAdminController
 	{
@@ -28,8 +27,9 @@ namespace ProducerControlPanel.Controllers
 		{
 			return View();
 		}
+
 		/// <summary>
-		///		Список логов
+		///     Список логов
 		/// </summary>
 		/// <returns></returns>
 		[Description("Список логов админов"), MainMenu]
@@ -54,16 +54,16 @@ namespace ProducerControlPanel.Controllers
 			ViewBag.BackUrl = (path == string.Empty ? "/Admin/LogRegAdminResultList" : path);
 			return View();
 		}
+
 		/// <summary>
-		///		Список логов
+		///     Список логов
 		/// </summary>
 		/// <returns></returns>
 		[Description("Список логов пользователей"), MainMenu]
 		public ActionResult LogRegUserResultList()
 		{
 			var pager = new ModelFilter<UserLogModel>(this);
-			if (pager.GetParam("orderBy") == null)
-			{
+			if (pager.GetParam("orderBy") == null) {
 				pager.SetOrderBy("Id", OrderingDirection.Desc);
 			}
 			pager.GetCriteria();

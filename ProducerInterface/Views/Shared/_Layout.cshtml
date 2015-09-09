@@ -101,29 +101,33 @@
 												<span class="icon-bar"></span>
 												<span class="icon-bar"></span>
 											</button>
-
-											<nav class="collapse collapsing navbar-collapse">
-												<ul class="nav navbar-nav navbar-center">
-													<li class="parent">
-														<a href="@Url.Action("Index", "Home")">Главная</a>
-													</li>
-													<li class="parent">
-														@if (user == null)
-														{
-															<a href="@Url.Action("Index", "Registration")">Войти</a>
-														}
-														else
-														{
-															<a href="@Url.Action("Index", "Profile")">Кабинет произодителя</a>
-															<ul class="sub">
-																<li><a href="@Url.Action("LogOut", "Registration")">Выйти</a></li>
-															</ul>
-														}
-													</li>
-												</ul>
-											</nav>
-										</div>
-									</div><!-- .primary -->
+												<nav class="collapse collapsing navbar-collapse">
+													<ul class="nav navbar-nav navbar-center">
+														<li class="parent">
+															<a href="@Url.Action("Index", "Home")">Главная</a>
+														</li>
+														<li class="parent">
+															@if (user == null) {
+																<a href="@Url.Action("Index", "Registration")">Войти</a>
+															}
+															else {
+																<a href="@Url.Action("Index", "Profile")">Кабинет произодителя</a>
+																<ul class="sub">
+																	@if (user.Permissions.Any(s => s.Name.ToLower() == "permissions_listuser"))
+																	{
+																	<li>
+																		<a href="@Url.Action("ListUser", "Permissions")">Редактор прав</a>
+																	</li>
+																	}
+																	<li><a href="@Url.Action("LogOut", "Registration")">Выйти</a>
+																</ul>
+															}
+														</li>
+													</ul>
+												</nav>
+											</div>
+										</div><!-- .primary -->
+									</div>
 								</div>
 							</div>
 

@@ -1,0 +1,46 @@
+﻿@using ProducerInterface.Models
+
+@{
+	ViewBag.Title = "Редактировать права";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var currentPermission = (ViewBag.CurrentPermission as UserPermission);
+}
+
+
+@{
+	<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+		@using (Html.BeginForm("EditPermission", "UserPermissions", FormMethod.Post))
+		{
+			@Html.HiddenFor(s => currentPermission.Id, new { @Name = "permission.Id" })
+			<div class="row buffer-top">
+				<div class="form-group col-lg-4">
+					<label class="col-lg-4 control-label"><strong>Название</strong>:</label>
+					<div class="col-lg-8">
+						@Html.TextBoxFor(s => currentPermission.Name, new {@Name = "permission.Name", @Class = "form-control width-default", @Placeholder = "Название"})
+						@ViewBag.Validation.GetError(currentPermission, "Name")
+					</div>
+				</div>
+			</div>
+			<div class="row buffer-top">
+				<div class="form-group col-lg-4">
+					<label class="col-lg-4 control-label"><strong>Описание</strong>:</label>
+					<div class="col-lg-8">
+						@Html.TextAreaFor(s => currentPermission.Description, new {@Name = "permission.Description", @Class = "form-control width-default", @Rows = "7"})
+						@ViewBag.Validation.GetError(currentPermission, "Description")
+					</div>
+				</div>
+			</div>
+			<div class="row buffer-top">
+				<div class="form-group col-lg-4">
+					<button type="submit" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-brush"></i>Редактировать права</button>
+				</div>
+			</div>
+		}
+	</div>
+	<div class="row buffer-top">
+		<a class="btn btn-blue btn-sm btn-icon icon-left" href="@Url.Action("ListPermissions")">
+			<i class="entypo-left-open"></i>
+			Назад
+		</a>
+	</div>
+}

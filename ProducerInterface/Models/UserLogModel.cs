@@ -12,13 +12,13 @@ namespace ProducerInterface.Models
 	[Model(Database = "ProducerInterface", Table = "user_logs")]
 	public class UserLogModel : LogModel
 	{
-		[BelongsTo("UserId"), Description("Инициатор события")]
+		[BelongsTo, Description("Инициатор события")]
 		public virtual ProducerUser ProducerUser { get; set; }
 
 		public override void SetAdditionParams(BaseController controller)
 		{
-			var ctrl = (BaseInterfaceController) controller;
-			ProducerUser = ctrl.GetCurrentUser();
+			var ctrl = (BaseProducerInterfaceController) controller;
+			ProducerUser = ctrl.GetCurrentUser(false);
 		}
 	}
 }

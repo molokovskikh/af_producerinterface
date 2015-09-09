@@ -15,7 +15,7 @@ using ProducerInterface.Models;
 
 namespace ProducerInterface.Controllers
 {
-	public class RegistrationController : BaseInterfaceController
+	public class RegistrationController : BaseProducerInterfaceController
 	{
 		//todo: перенести из админки всплывающее окно сообщения, добавить отображение валидации полей.
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)

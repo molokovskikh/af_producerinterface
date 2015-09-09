@@ -5,7 +5,7 @@
 
 	var page = 1; // присвоение текущего номера страницы по умолчанию
 	page = pager.Page; // присвоение текущего номера страницы по умолчанию объекта листалки
-
+	pager.Execute();
 	var count = pager.TotalItems; // общее кол-во элементов
 	var pageCount = pager.PagesCount; // общее кол-во страниц
 	var prevClass = page <= 1 ? "disabled" : ""; // назначение скрывающего стиля, при пороговом количестве эл-тов

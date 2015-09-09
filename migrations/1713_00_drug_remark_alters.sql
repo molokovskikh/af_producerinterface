@@ -9,7 +9,7 @@ alter table producerInterface.DrugDescriptionRemark
 	add index (ProducerUserId), 
 	add constraint DrugDescriptionRemark_ProducerUserId 
 	foreign key (ProducerUserId) 
-	references ProducerInterface.Users (Id);
+	references ProducerInterface.produceruser (Id);
 
 alter table producerInterface.DrugDescriptionRemark 
 	add index (DrugFamilyId), 

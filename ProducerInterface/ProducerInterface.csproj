@@ -142,10 +142,11 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\BaseInterfaceController.cs" />
+    <Compile Include="Controllers\BaseProducerInterfaceController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
+    <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -584,6 +585,8 @@
     <Content Include="Views\Profile\ProfileMenu.cshtml" />
     <Content Include="Views\Profile\SideBar.cshtml" />
     <Content Include="Views\Profile\CreateDrugDescriptionRemark.cshtml" />
+    <Content Include="Views\Permissions\ListUser.cshtml" />
+    <Content Include="Views\Permissions\ManageUserPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">

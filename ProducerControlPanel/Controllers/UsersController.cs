@@ -14,7 +14,6 @@ namespace ProducerControlPanel.Controllers
 	/// <summary>
 	/// Страница управления пользователями
 	/// </summary>
-	[Authorize]
 	public class UsersController : BaseAdminController
 	{
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)

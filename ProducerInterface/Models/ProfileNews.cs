@@ -8,9 +8,9 @@ using AnalitFramefork.Hibernate.Mapping.Attributes;
 namespace ProducerInterface.Models
 {
 	/// <summary>
-	/// Модекль новости в профиле
+	/// Модель новости в профиле
 	/// </summary>
-	[Model(Database = "ProducerInterface", Table = "profile_news")]
+	[Model(Database = "ProducerInterface")]
 	public class ProfileNews : BaseModel
 	{
 		public ProfileNews()
