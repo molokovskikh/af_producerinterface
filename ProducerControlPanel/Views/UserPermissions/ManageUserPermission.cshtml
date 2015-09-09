@@ -1,0 +1,56 @@
+﻿@using AnalitFramefork.Helpers
+@using AnalitFramefork.Hibernate.Models
+@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Редактировать права";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var permissionsList = (ViewBag.PermissionsList as IList<UserPermission>);
+	var currentPermission = (ViewBag.CurrentPermissions as UserPermission);
+	var currentUser = (ViewBag.CurrentUser as ProducerUser);
+}
+
+@{
+	<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+		@using (Html.BeginForm("AddUserPermission", "userPermissions", FormMethod.Post)) {
+			@Html.HiddenFor(s => currentUser.Id)
+			<div class="row buffer-top">
+				<div class="form-group col-lg-4">
+					<label class="col-lg-4 control-label"><strong>ФИО</strong>:</label>
+					<div class="col-lg-8">
+						@currentUser.Name (@currentUser.Id)
+					</div>
+				</div>
+			</div>
+			<div class="row buffer-top">
+				<div class="form-group col-lg-4">
+					<label class="col-lg-4 control-label"><strong>Права</strong>:</label>
+					<div class="col-lg-8">
+						@Html.DropDownListExtendedFor(s => currentPermission.Id, permissionsList, s => s.Description, null, new {@Name = "permission.Id", @Class = "form-control width-default"}, currentPermission.Id)
+						@ViewBag.Validation.GetError(currentPermission, "Description")
+					</div>
+				</div>
+			</div>
+			<div class="row buffer-top">
+				<div class="form-group col-lg-4">
+					<button type="submit" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-brush"></i>Добавить права</button>
+				</div>
+			</div>
+		}
+		@using (Html.BeginForm("DeleteUserPermission", "userPermissions", FormMethod.Post)) {
+			@Html.HiddenFor(s => currentUser.Id)
+			foreach (var item in currentUser.Permissions) {
+				<div class="row buffer-top">
+					<div class="form-group col-lg-4">
+						<button type="submit" class="btn-link entypo-cancel-circled" name="permission.Id" value="@item.Id" style="color: red"></button> @item.Description
+					</div>
+				</div>
+			}
+		}
+	</div>
+	<div class="row buffer-top">
+		<a class="btn btn-blue btn-sm btn-icon icon-left" href="@Url.Action("ListUser")">
+			<i class="entypo-left-open"></i>
+			Назад
+		</a>
+	</div>
+}

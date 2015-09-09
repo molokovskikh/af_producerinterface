@@ -5,17 +5,17 @@
 @{
 	ViewBag.Title = "Лог";
 	Layout = "~/Views/Shared/_Layout.cshtml";
-	var backUrl = (string)ViewBag.BackUrl;
-	var log = (AdminLogModel)ViewBag.Log;
+	var backUrl = (string) ViewBag.BackUrl;
+	var log = (AdminLogModel) ViewBag.Log;
 }
 <div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
- 
+
 	<div class="row" style="padding-top: 14px;">
 		<div class="form-group col-lg-4">
 			<label class="col-lg-4 control-label"><strong>Инициатор</strong>:</label>
 			<div class="col-lg-4">
 
-				<span>@log.Admin.UserName (@log.Admin.Id)</span>
+				<span>@(log.Admin != null ? log.Admin.UserName + " (" + log.Admin.Id + ") " : "") </span>
 			</div>
 		</div>
 	</div>

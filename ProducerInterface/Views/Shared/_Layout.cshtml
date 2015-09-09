@@ -114,7 +114,13 @@
 															else {
 																<a href="@Url.Action("Index", "Profile")">Кабинет произодителя</a>
 																<ul class="sub">
-																	<li><a href="@Url.Action("LogOut", "Registration")">Выйти</a></li>
+																	@if (user.Permissions.Any(s => s.Name.ToLower() == "permissions_listuser"))
+																	{
+																	<li>
+																		<a href="@Url.Action("ListUser", "Permissions")">Редактор прав</a>
+																	</li>
+																	}
+																	<li><a href="@Url.Action("LogOut", "Registration")">Выйти</a>
 																</ul>
 															}
 														</li>

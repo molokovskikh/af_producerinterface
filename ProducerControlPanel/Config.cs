@@ -11,5 +11,6 @@ namespace ProducerControlPanel
 	public class Config : GlobalConfig
 	{
 		public static bool EnableCrudListener = true;
+		public static bool RuntimeHibernateMigration = false;
 	}
 }

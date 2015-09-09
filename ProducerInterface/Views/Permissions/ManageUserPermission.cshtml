@@ -1,0 +1,77 @@
+﻿@using AnalitFramefork.Helpers
+@using AnalitFramefork.Hibernate.Models
+@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Редактировать права";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var permissionsList = (ViewBag.PermissionsList as IList<UserPermission>);
+	var currentPermission = (ViewBag.CurrentPermissions as UserPermission);
+	var currentUser = (ViewBag.CurrentUser as ProducerUser);
+	var modifiedUser = (ViewBag.ModifiedUser as ProducerUser);
+}
+
+@{
+	<section id="main">
+		<header class="page-header">
+			<div class="container">
+				<h1 class="title">Здравствуйте, @currentUser.Name !</h1>
+			</div>
+		</header>
+		<div class="container">
+
+			<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+				@using (Html.BeginForm("AddUserPermission", "Permissions", FormMethod.Post)) {
+					@Html.HiddenFor(s => modifiedUser.Id)
+					<div class="row buffer-top">
+						<div class="form-group col-lg-4">
+							<label class="col-lg-4 control-label"><strong>ФИО</strong>:</label>
+							<div class="col-lg-8">
+								<strong>@modifiedUser.Name</strong>
+							</div>
+						</div>
+					</div>
+					<div class="row buffer-top">
+						<div class="form-group col-lg-4">
+							<label class="col-lg-4 control-label"><strong>E-mail</strong>:</label>
+							<div class="col-lg-8">
+								<span>@modifiedUser.Email</span>
+							</div>
+						</div>
+					</div>
+					<div class="row buffer-top">
+						<div class="form-group col-lg-4">
+							<label class="col-lg-4 control-label"><strong>Права</strong>:</label>
+							<div class="col-lg-8">
+								@Html.DropDownListExtendedFor(s => currentPermission.Id, permissionsList, s => s.Description, null, new {@Name = "permission.Id", @Class = "form-control width-default"}, currentPermission.Id)
+								@ViewBag.Validation.GetError(currentPermission, "Description")
+							</div>
+						</div>
+					</div>
+					<div class="row buffer-top">
+						<div class="form-group col-lg-4">
+							<button type="submit" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-brush"></i>Добавить права</button>
+						</div>
+					</div>
+				}
+				@using (Html.BeginForm("DeleteUserPermission", "Permissions", FormMethod.Post)) {
+					@Html.HiddenFor(s => modifiedUser.Id)
+					foreach (var item in modifiedUser.Permissions) {
+						<div class="row buffer-top">
+							<div class="form-group col-lg-4">
+								<button type="submit" class="fa fa-ban btn btn-default btn-xs" name="permission.Id" value="@item.Id"></button> @item.Description
+							</div>
+						</div>
+					}
+				}
+			</div>
+			<div class="row buffer-top">
+				<a class="btn btn-blue btn-sm btn-icon icon-left" href="@Url.Action("ListUser")">
+					<i class="entypo-left-open"></i>
+					Назад
+				</a>
+			</div>
+
+		</div>
+		<!-- .container -->
+	</section>
+}

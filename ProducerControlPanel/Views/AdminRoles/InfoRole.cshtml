@@ -1,0 +1,34 @@
+﻿@using AnalitFramefork.Hibernate.Models
+@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Подробнее о роли";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var currentRole = (ViewBag.CurrentRole as AdminRole);
+}
+
+@{
+	<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Наименование</strong>:</label>
+				<div class="col-lg-8">
+					<span>@currentRole.Name</span>
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Описание</strong>:</label>
+				<div class="col-lg-8">
+					@currentRole.Description
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<a class="btn btn-blue btn-sm btn-icon icon-left" href="@Url.Action("ListRoles")">
+				<i class="entypo-left-open"></i>
+				Назад
+			</a>
+		</div>
+	</div>
+}

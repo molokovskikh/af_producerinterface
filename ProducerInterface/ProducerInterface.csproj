@@ -138,10 +138,11 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\BaseInterfaceController.cs" />
+    <Compile Include="Controllers\BaseProducerInterfaceController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
+    <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -150,7 +151,7 @@
     <Compile Include="Models\UserPermission.cs" />
     <Compile Include="Models\ProfileNews.cs" />
     <Compile Include="Models\UserRole.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\ProducerUser.cs" />
     <Compile Include="Models\Producer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -562,6 +563,8 @@
     <Content Include="Views\Registration\UserPasswordUpdate.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Profile\CreateNews.cshtml" />
+    <Content Include="Views\Permissions\ListUser.cshtml" />
+    <Content Include="Views\Permissions\ManageUserPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">
