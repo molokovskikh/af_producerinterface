@@ -30,7 +30,8 @@ namespace ProducerControlPanel.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Login(string username, string password, string returnUrl, bool shouldRemember = false, string impersonateClient = "")
+		public ActionResult Login(string username, string password, string returnUrl, bool shouldRemember = false,
+			string impersonateClient = "")
 		{
 			var employee = DbSession.Query<Admin>().FirstOrDefault(p => p.UserName == username);
 #if DEBUG
@@ -55,8 +56,7 @@ namespace ProducerControlPanel.Controllers
 			SetCookie(FormsAuthentication.FormsCookieName, null);
 			return RedirectToAction("Index");
 		}
-
-		[Authorize(Roles = "Admin")]
+		
 		[HttpPost]
 		public ActionResult ApplyImpersonation([EntityBinder] Admin admin)
 		{

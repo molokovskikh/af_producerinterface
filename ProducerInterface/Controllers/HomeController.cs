@@ -9,7 +9,7 @@ using ProducerInterface.Models;
 
 namespace ProducerInterface.Controllers
 {
-	public class HomeController : BaseInterfaceController
+	public class HomeController : BaseProducerInterfaceController
 	{
 		//
 		// GET: /Главная/

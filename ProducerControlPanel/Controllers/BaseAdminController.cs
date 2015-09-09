@@ -19,28 +19,44 @@ namespace ProducerControlPanel.Controllers
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
-			base.OnActionExecuting(filterContext);
+			// думаю, это нужно rbyenm в Tuple<> список или просто по две переменные: Controll, Action, чтобы дальше использовать в Url.Action() и GetPermissionName()
+			const string unAuthorizedRedirectA = "adminaccount_index";
+			const string unAuthorizedRedirectB = "adminaccount_login";
+			const string noPermissionRedirect = "adminaccount_index";
+			
+            base.OnActionExecuting(filterContext);
 
-			ViewBag.Admin = GetCurrentUser();
-
+			var admin = GetCurrentUser();
+			ViewBag.Admin = admin;
 			ViewBag.JavascriptParams["baseurl"] = GetBaseUrl();
-			ViewBag.ActionName = filterContext.RouteData.Values["action"].ToString();
-			ViewBag.ControllerName = GetType().Name.Replace("Controller", "");
-			ViewBag.Controller = this;
-			//if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
-			//{
-			//	string loginUrl = Url.Action("Index", "AdminAccount"); // Default Login Url 
-			//	filterContext.Result = new RedirectResult(loginUrl);
-			//	return;
-			//}
 
-			//var currentUser = GetCurrentUser();
-			//CrudListener.SetEmployee(currentUser.Id);
-			//string name = ViewBag.ControllerName + "Controller_" + ViewBag.ActionName;
-			//var permission = DbSession.Query<Permission>().FirstOrDefault(i => i.Name == name);
-			////@todo убрать проверку, на accessDenined, а вместо этого просто не генерировать его. В целом подумать
-			//if (permission != null && permission.Name != "AdminController_AccessDenined" && (currentUser == null || !currentUser.HasAccess(permission.Name)))
-			//	filterContext.Result = new RedirectResult("/Admin/AccessDenined");
+			var actionName = filterContext.RouteData.Values["action"].ToString();
+			var controllerName = GetType().Name.Replace("Controller", "");
+			string currentPermissionName = GetPermissionName(controllerName, actionName);
+
+			var currentPermission = GetActionPermission(currentPermissionName);
+
+			ViewBag.ActionName = actionName;
+			ViewBag.ControllerName = controllerName;
+			ViewBag.Controller = this;
+
+			//редирект для неавторизованного пользователя
+			if ((admin == null )
+			    && currentPermissionName != unAuthorizedRedirectA
+				&& currentPermissionName != unAuthorizedRedirectB) {
+				string loginUrl = Url.Action("Index", "AdminAccount"); // Default Login Url 
+				ErrorMessage("Для входа перехода на данную страницу Вам необходимо зарегистрироваться.");
+				filterContext.Result = new RedirectResult(loginUrl);
+				return;
+			}
+			//редирект для пользователя, без соответствующих прав
+			if (admin != null && currentPermission != null && !admin.CheckPermission(currentPermission)
+			    && currentPermissionName != noPermissionRedirect) {
+				var redirectUrl = Url.Action("Index", "Admin"); // Default Login Url 
+				ErrorMessage("У Вас нет прав доступа к запрашиваемой странице.");
+				filterContext.Result = new RedirectResult(redirectUrl);
+				return;
+			}
 
 			//Если у контроллера, есть описательный аттрибут, то создаем хлебные крошки
 			var hasDescription = Attribute.IsDefined(GetType(), typeof (DescriptionAttribute));
@@ -48,13 +64,29 @@ namespace ProducerControlPanel.Controllers
 				SetBreadcrumb(this.GetDescription());
 		}
 
-		public Admin GetCurrentUser()
+		/// <summary>
+		///     Получение прав для текущего экшена
+		/// </summary>
+		/// <returns>Права</returns>
+		public AdminPermission GetActionPermission(string permissionName)
+		{
+			var permission =
+				DbSession.Query<AdminPermission>()
+					.FirstOrDefault(s => s.Name.ToLower() == permissionName);
+			return permission;
+		}
+
+		/// <summary>
+		/// Получение текущего пользователя
+		/// </summary>
+		/// <returns></returns>
+		public Admin GetCurrentUser(bool getFromSession = true)
 		{
 			if (User == null || (User.Identity.Name == string.Empty) || DbSession == null || !DbSession.IsConnected) {
 				CurrentUser = null;
 				return null;
 			}
-			if (CurrentUser == null || User.Identity.Name != CurrentUser.UserName) {
+			if (getFromSession && (CurrentUser == null || User.Identity.Name != CurrentUser.UserName)) {
 				CurrentUser = DbSession.Query<Admin>().FirstOrDefault(e => e.UserName == User.Identity.Name);
 			}
 			return CurrentUser;

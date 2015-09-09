@@ -1,0 +1,32 @@
+﻿@using AnalitFramefork.Components
+@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Добавить новость";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var currentUser = (ViewBag.CurrentUser as ProducerUser);
+	ModelFilter<ProducerUser> pager = ViewBag.Pager;
+	var producerUserList = pager.GetItems();
+}
+
+@{
+	<section id="main">
+		<header class="page-header">
+			<div class="container">
+				<h1 class="title">Здравствуйте, @currentUser.Name !</h1>
+			</div>
+		</header>
+		<div class="container">
+			@foreach (var item in producerUserList) {
+				<ul class="list-group">
+					<li class="list-group-item">
+						<strong>@item.Name</strong>, <span>@item.Email</span>
+						<a class="badge" href="@Url.Action("ManageUserPermission", "Permissions", new {item.Id})">
+							Изменить права
+						</a>
+					</li>
+				</ul>
+			}
+		</div>
+		<!-- .container -->
+	</section>
+}

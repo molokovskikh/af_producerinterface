@@ -9,9 +9,8 @@ namespace ProducerInterface.Controllers
 {
 	/// <summary>
 	///     Страница профиля пользователя
-	/// </summary>
-	[Authorize]
-	public class ProfileController : BaseInterfaceController
+	/// </summary> 
+	public class ProfileController : BaseProducerInterfaceController
 	{
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{

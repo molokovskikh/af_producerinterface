@@ -19,7 +19,7 @@ namespace ProducerControlPanel.Models
 		public override void SetAdditionParams(BaseController controller)
 		{
 			var ctrl = (BaseAdminController) controller;
-			Admin = ctrl.GetCurrentUser();
+			Admin = ctrl.GetCurrentUser(false);
 		}
 	}
 }

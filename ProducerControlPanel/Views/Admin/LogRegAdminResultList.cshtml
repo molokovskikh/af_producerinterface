@@ -41,9 +41,9 @@
 					<span>@log.Id</span>
 				</td>
 				<td>
-					<span>@log.Admin.Id</span></td>
+					<span>@(log.Admin !=null ? log.Admin.Id.ToString():"")</span></td>
 				<td>
-					<span>@log.Admin.UserName</span></td>
+					<span>@(log.Admin != null ? log.Admin.UserName : "")</span></td>
 				<td>
 					<span>@log.Type.ToString()</span></td>
 				<td>

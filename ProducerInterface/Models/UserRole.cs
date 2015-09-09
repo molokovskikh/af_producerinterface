@@ -26,6 +26,6 @@ namespace ProducerInterface.Models
 	//	[Key(1, Column = "role", NotNull = false)]
 	//	[ManyToMany(2, Column = "user", ClassType = typeof(User))]
 	//	public virtual IList<User> Users { get; set; }
-		
+
 	//}
 }

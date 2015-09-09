@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Web.Security;
 using Analit.Components;
 using AnalitFramefork.Components;
 using AnalitFramefork.Components.Validation;
@@ -11,7 +10,6 @@ using AnalitFramefork.Helpers;
 using AnalitFramefork.Hibernate.Mapping.Attributes;
 using NHibernate;
 using NHibernate.Linq;
-using NHibernate.Mapping.Attributes;
 using NHibernate.Validator.Constraints;
 
 namespace ProducerInterface.Models
@@ -19,40 +17,33 @@ namespace ProducerInterface.Models
 	/// <summary>
 	///     Модель пользователя
 	/// </summary>
-	[Model(Table = "Users", Database = "ProducerInterface")]
+	[Model(Database = "ProducerInterface")]
 	public class ProducerUser : BaseModel
 	{
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("ФИО"), ValidatorNotEmpty]
+		[Map, Description("ФИО"), ValidatorNotEmpty]
 		public virtual string Name { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Пароль"), ValidatorNotEmpty,
+		[Map, Description("Пароль"), ValidatorNotEmpty,
 		 Length(Min = 5, Max = 20, Message = "Длина пароля должна быть не менее 5 и не более 20 символов.")]
 		public virtual string Password { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("e-mail"), ValidatorNotEmpty, ValidatorEmail]
+		[Map, Description("e-mail"), ValidatorNotEmpty, ValidatorEmail]
 		public virtual string Email { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Должность")]
+		[Map, Description("Должность")]
 		public virtual string Appointment { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Время обновления пароля")]
+		[Map, Description("Время обновления пароля")]
 		public virtual DateTime PasswordUpdated { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Запрос на обновление пароля")]
+		[Map, Description("Запрос на обновление пароля")]
 		public virtual bool PasswordToUpdate { get; set; }
 
-		[AnalitFramefork.Hibernate.Mapping.Attributes.Map, Description("Заблокированный")]
+		[Map, Description("Заблокированный")]
 		public virtual bool Enabled { get; set; }
-		
-		//[Bag(0, Table = "user_role", Lazy = CollectionLazy.False)]
-		//[Key(1, Column = "user", NotNull = false)]
-		//[ManyToMany(2, Column = "role", ClassType = typeof(UserRole))]
-		//public virtual IList<UserRole> Roles { get; set; }
 
-		//[Bag(0, Table = "user_role", Lazy = CollectionLazy.False)]
-		//[Key(1, Column = "user", NotNull = false)]
-		//[ManyToMany(2, Column = "permission", ClassType = typeof(UserPermission))]
-		//public virtual IList<UserPermission> Permissions { get; set; }
+		[HasMany(Table = "usertouserrole", ManyToMany = true)]
+		public virtual IList<UserPermission> Permissions { get; set; }
 
 		[BelongsTo]
 		public virtual Producer Producer { get; set; }
@@ -69,6 +60,32 @@ namespace ProducerInterface.Models
 				return false;
 			}
 			return true;
+		}
+
+		/// <summary>
+		///     Проверка прав
+		/// </summary>
+		/// <param name="permission">Права (если Null, возвращает true)</param>
+		/// <returns>Подтверждение прав</returns>
+		public virtual bool CheckPermission(UserPermission permission)
+		{
+			if (permission == null) {
+				return true;
+			}
+			var permissionExists = GetUserPermissions().Any(s => s == permission);
+			return permissionExists;
+		}
+
+		/// <summary>
+		///     Получение всех прав пользователя
+		/// </summary>
+		/// <returns></returns>
+		public virtual IList<UserPermission> GetUserPermissions()
+		{
+			var permissionsList = new List<UserPermission>();
+			//	Roles.ForEach(s => permissionsList.AddRange(s.Permissions));
+			permissionsList.AddRange(Permissions);
+			return permissionsList;
 		}
 
 		/// <summary>
@@ -134,17 +151,5 @@ namespace ProducerInterface.Models
 		public virtual void ValidateUserPassword(string password)
 		{
 		}
-
-		/// <summary>
-		/// Проверяет, есть ли у клиента права на какой-либо контент или страницу.
-		/// В данный момент только проверяются доступы к старницам на основе ролей.
-		/// </summary>
-		/// <param name="access">Название права</param>
-		/// <returns></returns>
-		//public virtual bool HasAccess(string access)
-		//{
-		//	var hasPermission = Roles.Any(i => i.Permissions.Any(j => j.Name.ToLower() == access.ToLower()));
-		//	return hasPermission;
-		//}
 	}
 }
