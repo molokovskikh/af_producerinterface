@@ -41,7 +41,7 @@
 									@Html.TextBoxFor(s => password, new { @Name = "password", type = "password", @Class = "form-control" })
 								</div>
 								<div class="buttons-box clearfix">
-									<button type="submit" class="btn btn-primary">Войти</button>
+									<button id="getAuthorization" type="submit" class="btn btn-primary">Войти</button>
 									<a href="@Url.Action("UserPasswordUpdate", "Registration")" class="forgot">Забыли пароль?</a>
 									<span class="required"><b>*</b> Поля, обязательные для заполнения</span>
 								</div>

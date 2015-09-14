@@ -19,5 +19,8 @@ namespace ProducerInterface.Models
 
 		[BelongsTo(Column = "NameId")]
 		public virtual DrugFamily DrugFamily { get; set; }
+
+		[BelongsTo(Column = "FormId")]
+		public virtual DrugForm DrugForm { get; set; }
 	}
 }

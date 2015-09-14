@@ -102,10 +102,18 @@ namespace ProducerInterface.Controllers
 		{
 			var redirectToAction = "Index";
 			var redirectToControll = "Home";
+			string originalPass = password;
 			// Проверяем введенные пользователем данные авторизации 
 			password = Md5HashHelper.GetHash(password);
 			var authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == login
 			                                                                    && s.Password == password && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
+#if DEBUG
+			//Авторизация для тестов, если пароль совпадает с паролем по умолчанию и логин есть в АД, то все ок
+			if (originalPass == Config.GetParam("DefaultUserPassword")) {
+				authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == login && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
+				password = originalPass;
+			}
+#endif
 			if (authenticatedUser != null) {
 				if (authenticatedUser.PasswordToUpdate) {
 					redirectToAction = "UserPasswordUpdate";

@@ -154,6 +154,7 @@
     <Compile Include="Models\Drug.cs" />
     <Compile Include="Models\DrugDescription.cs" />
     <Compile Include="Models\DrugDescriptionRemark.cs" />
+    <Compile Include="Models\DrugForm.cs" />
     <Compile Include="Models\DrugFamily.cs" />
     <Compile Include="Models\MNN.cs" />
     <Compile Include="Models\UserLogModel.cs" />
