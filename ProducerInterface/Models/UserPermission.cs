@@ -18,6 +18,6 @@ namespace ProducerInterface.Models
 		public virtual string Description { get; set; }
 
 		[HasMany(Table = "usertouserrole", ManyToMany = true)]
-		public virtual IList<ProducerUser> Admins { get; set; }
+		public virtual IList<ProducerUser> Users { get; set; }
 	}
 }

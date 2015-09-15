@@ -9,12 +9,9 @@ namespace ProducerInterfaceTest.Functional.Home.Index
 	{
 		[Test]
 		public void VisualTest()
-		{
-			var setup = new TestSetup();
-			setup.Setup(); 
-			Open("/");
-			Open("/");
-			AssertText("Тестовый");
+		{ 
+			LoginForUser();
+			AssertText("Кабинет произодителя");
 		}
 	}
 }

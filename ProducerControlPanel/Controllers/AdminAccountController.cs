@@ -36,7 +36,7 @@ namespace ProducerControlPanel.Controllers
 			var employee = DbSession.Query<Admin>().FirstOrDefault(p => p.UserName == username);
 #if DEBUG
 			//Авторизация для тестов, если пароль совпадает с паролем по умолчанию и логин есть в АД, то все ок
-			var defaultPassword = ConfigurationManager.AppSettings["DefaultEmployeePassword"];
+			var defaultPassword = Config.GetParam("DefaultUserPassword");
 			if (employee != null && password == defaultPassword) {
 				Session.Add("employee", employee.Id);
 				return Authenticate("Index", "Admin", username, shouldRemember, impersonateClient);

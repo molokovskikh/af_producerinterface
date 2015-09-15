@@ -23,6 +23,16 @@
 			</div>
 			<div class="row buffer-top">
 				<div class="form-group col-lg-4">
+					<label class="col-lg-4 control-label"><strong>Поставщик</strong>:</label>
+					<div class="col-lg-8">
+						@Html.DropDownListExtendedFor(s => profileNews.Producer, producers, obj => obj.Name, null,
+							new { @Name = "profileNews.Producer.Id", @Class = "form-control width-default", @Placeholder = "Заголовок" })
+						@ViewBag.Validation.GetError(profileNews, "Producer")
+					</div>
+				</div>
+			</div>
+			<div class="row buffer-top">
+				<div class="form-group col-lg-4">
 					<label class="col-lg-4 control-label"><strong>Заголовок</strong>:</label>
 					<div class="col-lg-8">
 						@Html.TextBoxFor(s => profileNews.Topic, new {@Name = "profileNews.Topic", @Class = "form-control width-default", @Placeholder = "Заголовок"})

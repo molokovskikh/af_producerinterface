@@ -8,9 +8,15 @@ using NHibernate.Mapping;
 
 namespace ProducerInterface.Models
 {
-	[Model("catalog","catalogs")]
+	[Model("catalog", "catalogs")]
 	public class Drug : BaseModel
 	{
+		public Drug()
+		{
+			Producers = new List<Producer>();
+			Promotions = new List<Promotion>();
+		}
+
 		[Map]
 		public virtual string Name { get; set; }
 
@@ -19,5 +25,11 @@ namespace ProducerInterface.Models
 
 		[BelongsTo(Column = "NameId")]
 		public virtual DrugFamily DrugFamily { get; set; }
+
+		[BelongsTo(Column = "FormId")]
+		public virtual DrugForm DrugForm { get; set; }
+
+		[HasMany(Table = "promotiontodrug", Database = "ProducerInterface", ManyToMany = true)]
+		public virtual IList<Promotion> Promotions { get; set; }
 	}
 }
