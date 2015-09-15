@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
-using Analit.Components;
 using AnalitFramefork.Components;
 using AnalitFramefork.Extensions;
+using AnalitFramefork.Mvc;
 using AnalitFramefork.Mvc.Attributes;
 using NHibernate.Linq;
 using ProducerInterface.Models;

@@ -7,13 +7,12 @@ using System.Web;
 using System.Web.Mvc;
 using AnalitFramefork.Components;
 using AnalitFramefork.Extensions;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using AnalitFramefork.Mvc.Attributes;
-using Common.Schedule;
 using Microsoft.Win32.TaskScheduler;
 using NHibernate.Linq;
 using ReportsControlPanel.Components;
-using ReportsControlPanel.Models;
 
 namespace ReportsControlPanel.Controllers
 {

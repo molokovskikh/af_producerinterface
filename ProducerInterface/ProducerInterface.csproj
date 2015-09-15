@@ -595,6 +595,8 @@
     <Content Include="Views\Permissions\ManageUserPermission.cshtml" />
     <Content Include="Views\Profile\Promotions.cshtml" />
     <Content Include="Views\Profile\ManagePromotion.cshtml" />
+    <Content Include="Views\Profile\Reports.cshtml" />
+    <Content Include="Views\Profile\CreateRatingReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">

@@ -132,23 +132,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Config.cs" />
-    <Compile Include="Components\ScheduleHelper.cs" />
     <Compile Include="Controllers\GeneralReportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Contact.cs" />
-    <Compile Include="Models\ContactGroup.cs" />
-    <Compile Include="Models\ReportExecuteForm.cs" />
-    <Compile Include="Models\GeneralReport.cs" />
-    <Compile Include="Models\MonthlySchedule.cs" />
-    <Compile Include="Models\Payer.cs" />
-    <Compile Include="Models\ReportSendLog.cs" />
-    <Compile Include="Models\ReportExecuteLog.cs" />
-    <Compile Include="Models\Schedule.cs" />
-    <Compile Include="Models\SingleExecutionMailingAddress.cs" />
-    <Compile Include="Models\WeeklySchedule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1584,6 +1572,7 @@
     <Folder Include="Assets\js\codemirror\bin\" />
     <Folder Include="Assets\js\selectboxit\css\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Models\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>

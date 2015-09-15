@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using Analit.Components;
 using AnalitFramefork.Components;
 using AnalitFramefork.Components.Validation;
 using AnalitFramefork.Hibernate.Mapping.Attributes;

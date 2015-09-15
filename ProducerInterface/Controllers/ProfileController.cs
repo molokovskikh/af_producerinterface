@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using Analit.Components;
 using AnalitFramefork.Components;
+using AnalitFramefork.Mvc;
+using AnalitFramefork.Hibernate.Models;
 using NHibernate.Linq;
 using ProducerInterface.Models;
 
@@ -162,6 +163,135 @@ namespace ProducerInterface.Controllers
 				ErrorMessage("Акция отсутствует.");
 			}
 			return RedirectToAction("ManagePromotion", new {id=promotionId});
+		}
+
+		public ActionResult Reports()
+		{
+			return View("Reports");
+		}
+
+		public ActionResult CreateRatingReport()
+		{
+			var reporttype = DbSession.Query<ReportType>().First(i => i.FilePrefix == "Rating");
+			var form = new ReportExecuteForm();
+			form.UseEmailList = false;
+            ViewBag.Form = form;
+			ViewBag.ReportType = reporttype;
+			return View("CreateRatingReport");
+		}
+
+		[HttpPost]
+		public ActionResult CreateRatingReport([EntityBinder] ReportExecuteForm reportExecuteForm)
+		{
+			var report = new GeneralReport();
+			report.Title = "Отчет пользователя " + GetCurrentUser().Email + ", поставщика "+ GetCurrentUser().Producer.Name + " (отключен)";
+			report.ReportFileName = "Рейтинговый отчет";
+			report.Enabled = false;
+			var subreport = new Report();
+			subreport.Type = DbSession.Query<ReportType>().First(i => i.Id == 6);
+			subreport.Name = "Отчет пользователя " + GetCurrentUser().Email + ", поставщика " + GetCurrentUser().Producer.Name + " (отключен)";
+			subreport.Enabled = true;
+			
+			//Оказывается, что обязательные параметры создаются триггером
+			//var junk = new ReportPropertyValue();
+			//junk.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "JunkState");
+			//junk.Value = "0";
+			//subreport.Properties.Add(junk);
+
+			//var ReportInterval = new ReportPropertyValue();
+			//ReportInterval.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "ReportInterval");
+			//ReportInterval.Value = "27";
+			//subreport.Properties.Add(ReportInterval);
+
+			//var ByPreviousMonth = new ReportPropertyValue();
+			//ByPreviousMonth.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "ByPreviousMonth");
+			//ByPreviousMonth.Value = "1";
+			//subreport.Properties.Add(ByPreviousMonth);
+
+			//var BuildChart = new ReportPropertyValue();
+			//BuildChart.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "BuildChart");
+			//BuildChart.Value = "0";
+			//subreport.Properties.Add(BuildChart);
+
+			//var DoNotShowAbsoluteValues = new ReportPropertyValue();
+			//DoNotShowAbsoluteValues.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "DoNotShowAbsoluteValues");
+			//DoNotShowAbsoluteValues.Value = "0";
+			//subreport.Properties.Add(DoNotShowAbsoluteValues);
+
+			var FullNamePosition = new ReportPropertyValue();
+			FullNamePosition.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "FullNamePosition");
+			FullNamePosition.Value = "0";
+			subreport.Properties.Add(FullNamePosition);
+
+			var FullNameEqual = new ReportPropertyValue();
+			FullNameEqual.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "FullNameEqual");
+			FullNameEqual.Value = "1";
+			subreport.Properties.Add(FullNameEqual);
+
+			var RegionPosition = new ReportPropertyValue();
+			RegionPosition.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "RegionPosition");
+			RegionPosition.Value = "3";
+			subreport.Properties.Add(RegionPosition);
+
+			var FirmCrPosition = new ReportPropertyValue();
+			FirmCrPosition.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "FirmCrPosition");
+			FirmCrPosition.Value = "2";
+			subreport.Properties.Add(FirmCrPosition);
+
+			var FirmCodePosition = new ReportPropertyValue();
+			FirmCodePosition.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "FirmCodePosition");
+			FirmCodePosition.Value = "4";
+			subreport.Properties.Add(FirmCodePosition);
+
+			var RegionEqual = new ReportPropertyValue();
+			RegionEqual.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "RegionEqual");
+			RegionEqual.Value = "1";
+			subreport.Properties.Add(RegionEqual);
+
+			var FirmCodeNonEqual = new ReportPropertyValue();
+			FirmCodeNonEqual.Property = DbSession.Query<ReportTypeProperty>().First(i => i.Name == "FirmCodeNonEqual");
+			FirmCodeNonEqual.Value = "1";
+			subreport.Properties.Add(FirmCodeNonEqual);
+			foreach (var prop in subreport.Properties)
+				prop.Report = subreport;
+			reportExecuteForm.UserEmail = GetCurrentUser().Email;
+			var errors = ValidationRunner.Validate(reportExecuteForm);
+			if (errors.Length == 0)
+			{
+				DbSession.Save(report);
+				subreport.GeneralReport = report;
+				DbSession.Save(subreport);
+				DbSession.Flush();
+				DbSession.Refresh(subreport);
+
+				var ByPreviousMonth= subreport.Properties.First(i => i.Property.Name == "ByPreviousMonth");
+				ByPreviousMonth.Value = "1";
+				var ReportInterval = subreport.Properties.First(i => i.Property.Name == "ReportInterval");
+				ReportInterval.Value = "27";
+
+				var regions = subreport.Properties.First(i => i.Property.Name == "RegionEqual");
+				regions.Values.Add(new ReportPropertyListValue() { Property = RegionEqual, Value = "1" });
+				DbSession.Save(regions);
+
+				var drugs = subreport.Properties.First(i => i.Property.Name == "FullNameEqual");
+				var druglist = GetCurrentUser().Producer.Drugs;
+				foreach(var drug in druglist)
+					drugs.Values.Add(new ReportPropertyListValue() { Property = drugs, Value = drug.Id.ToString() });
+				DbSession.Save(drugs);
+
+				DbSession.Save(subreport);
+				DbSession.Flush();
+
+				reportExecuteForm.ProcessReport(report, DbSession, GetCurrentUser().Email);
+				var actionErrors = reportExecuteForm.GetErrors();
+				if (actionErrors.Length == 0)
+					SuccessMessage(reportExecuteForm.Execute == true ? "Отчет запущен" : "Отчет выслан");
+				else
+					ErrorMessage(actionErrors[0].Message);
+			}
+
+			ViewBag.ReportExecuteForm = reportExecuteForm;
+			return View("CreateRatingReport");
 		}
 	}
 }

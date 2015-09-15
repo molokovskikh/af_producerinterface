@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Analit.Components;
+using AnalitFramefork.Components;
 using AnalitFramefork.Hibernate.Models;
 using NHibernate;
 using NHibernate.Linq;
