@@ -1,0 +1,102 @@
+﻿@using AnalitFramefork.Helpers
+@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Добавить новость";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var currentUser = (ViewBag.CurrentUser as ProducerUser);
+	var promotion = (ViewBag.CurrentPromotion as Promotion);
+	var drugList = promotion.Id != 0 ? currentUser.Producer.Drugs.Where(s => !promotion.Drugs.Any(d => d == s)).OrderBy(s => s.Name).ToList() : null;
+}
+
+
+@{
+	<section id="main">
+		<header class="page-header">
+			<div class="container">
+				<h1 class="title">Здравствуйте, @currentUser.Name !</h1>
+			</div>
+		</header>
+		<div class="container">
+			@using (Html.BeginForm("ManagePromotion", "Profile", FormMethod.Post))
+			{
+				<p>
+					<a href="@Url.Action("Promotions")" class="btn btn-info">
+						<span>Назад</span>
+					</a>
+				</p>
+				@Html.HiddenFor(s => promotion.Id)
+				<div class="form-group">
+					<label class="control-label">Заголовок:</label>
+					@Html.TextBoxFor(s => promotion.Name, new {@name = "promotion.Name", @Class = "form-control width-default", @Placeholder = "Заголовок"})
+					@ViewBag.Validation.GetError(promotion, "Name")
+				</div>
+				<div class="form-group">
+					<label class="control-label">Дата начала:</label>
+					@Html.TextBoxFor(o => promotion.Begin, promotion.Begin.ToString("dd.MM.yyyy"),
+						new
+						{
+							@Value = (promotion.Begin.Year > 1900 ? promotion.Begin.ToString("dd.MM.yyyy") : ""),
+							@data_format = "dd.mm.yyyy",
+							@class = "form-control",
+							@data_provide = "datepicker-inline"
+						})
+				</div>
+				<div class="form-group">
+					<label class="control-label">Дата конца:</label>
+					@Html.TextBoxFor(o => promotion.End, promotion.Begin.ToString("dd.MM.yyyy"),
+						new
+						{
+							@Value = (promotion.Begin.Year > 1900 ? promotion.Begin.ToString("dd.MM.yyyy") : ""),
+							@data_format = "dd.mm.yyyy",
+							@class = "form-control",
+							@data_provide = "datepicker-inline"
+						})
+				</div>
+				<div class="form-group">
+					<label class="control-label">Содержание:</label>
+					@Html.TextAreaFor(s => promotion.Annotation, new {@Class = "form-control width-default", @Rows = "7"})
+					@ViewBag.Validation.GetError(promotion, "Annotation")
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-6 box">
+					<button type="submit" class="btn btn-primary filter-buttons active-form">@(promotion != null && promotion.Id != 0?"Обновить акцию": "Добавить Акцию")</button>
+				</div>
+			}
+		</div>
+		@if (promotion != null && promotion.Id != 0) {
+			<div class="container">
+				<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+					@using (Html.BeginForm("AddPromotionDrug", "Profile", FormMethod.Post)) {
+						@Html.HiddenFor(s => promotion.Id, new {@Name = "promotionId"})
+						<div class="row buffer-top">
+							<div class="form-group col-lg-4">
+								<label class="col-lg-4 control-label"><strong>Препараты</strong>:</label>
+								<div class="col-lg-8">
+									@Html.DropDownListExtendedFor(s => promotion.Id, drugList, s => s.Name, null, new {@Name = "drugId", @Class = "form-control width-default"})
+								</div>
+							</div>
+						</div>
+						<p>
+							<div class="row buffer-top">
+								<div class="form-group col-lg-4">
+									<button type="submit" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-brush"></i>Добавить препарат</button>
+								</div>
+							</div>
+						</p>
+					}
+					@using (Html.BeginForm("RemovePromotionDrug", "Profile", FormMethod.Post)) {
+						@Html.HiddenFor(s => promotion.Id, new {@Name = "promotionId"})
+						foreach (var item in promotion.Drugs) {
+							<p class="row buffer-top">
+								<div class="form-group col-lg-4">
+									<button type="submit" class="fa fa-ban btn btn-default btn-xs" name="drugId" value="@item.Id"></button> @item.Name
+								</div>
+							</p>
+						}
+					}
+				</div>
+			</div>
+		}
+		<!-- .container -->
+	</section>
+	<!-- #main -->
+}

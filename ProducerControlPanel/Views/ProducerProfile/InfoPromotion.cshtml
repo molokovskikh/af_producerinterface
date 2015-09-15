@@ -1,0 +1,91 @@
+﻿@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Добавить новость";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var promotion = (ViewBag.CurrentPromotion as Promotion);
+}
+
+
+@{
+	<div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
+		@Html.HiddenFor(s => promotion.Id)
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Поставщик</strong>:</label>
+				<div class="col-lg-8">
+					<span>@(promotion.ProducerUser != null ? promotion.ProducerUser.Name : "")</span>
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Распространитель</strong>:</label>
+				<div class="col-lg-8">
+					<span>@(promotion.Producer != null ? promotion.Producer.Name : "")</span>
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Препарат</strong>:</label>
+				<div class="col-lg-8">
+					<span>@promotion.Drug</span>
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Заголовок</strong>:</label>
+				<div class="col-lg-8">
+					@promotion.Name
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Содержание</strong>:</label>
+				<div class="col-lg-8">
+					@promotion.Annotation
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Дата начала</strong>:</label>
+				<div class="col-lg-8">
+					@promotion.Begin
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Дата конца</strong>:</label>
+				<div class="col-lg-8">
+					@promotion.End
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Дата изменения</strong>:</label>
+				<div class="col-lg-8">
+					@promotion.UpdateTime
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<div class="form-group col-lg-4">
+				<label class="col-lg-4 control-label"><strong>Подтверждена</strong>:</label>
+				<div class="col-lg-8">
+					@(promotion.Status ? "Да" : "Нет")
+				</div>
+			</div>
+		</div>
+		<div class="row buffer-top">
+			<a class="btn btn-blue btn-sm btn-icon icon-left" href="@Url.Action("ListPromotions")">
+				<i class="entypo-left-open"></i>
+				Назад
+			</a>
+		</div>
+	</div>
+}
