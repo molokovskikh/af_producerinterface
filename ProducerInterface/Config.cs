@@ -8,6 +8,6 @@ namespace ProducerInterface
 	{
 		public static bool EnableCrudListener = true;
 		public static bool RuntimeHibernateMigration = false;
-		public static string RedirectUnAuthorizedUserUrl = "/Registration/";
+		public static string UnAuthorizedUserRout = "Registration/Index";
 	}
 }
