@@ -26,6 +26,7 @@ namespace ProducerControlPanel.Controllers
 		{
 			if (Request.IsAuthenticated)
 				return RedirectToAction("Index", "Admin");
+			
 			return View();
 		}
 
