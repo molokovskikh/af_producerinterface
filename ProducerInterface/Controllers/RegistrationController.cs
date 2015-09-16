@@ -9,6 +9,7 @@ using System.Web.Security;
 using AnalitFramefork.Components;
 using AnalitFramefork.Helpers;
 using AnalitFramefork.Mvc;
+using NHibernate.Id;
 using NHibernate.Linq;
 using ProducerInterface.Models;
 
@@ -31,7 +32,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
-			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
+			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == User.Identity.Name);
 			return View();
 		}
 
@@ -45,9 +46,9 @@ namespace ProducerInterface.Controllers
 			// Проверяем введенные пользователем данные регистрации 
 			string resultMessage = "";
 			var errors = ValidationRunner.Validate(producerUser);
-			if (errors.Length==0 && producerUser.RegistrationIsAllowed(DbSession, ref resultMessage)) {
+			if (errors.Length == 0 && producerUser.RegistrationIsAllowed(DbSession, ref resultMessage)) {
 				// хэшируем пароль
-				producerUser.Password = Md5HashHelper.GetHash(producerUser.Password); 
+				producerUser.Password = Md5HashHelper.GetHash(producerUser.Password);
 				producerUser.PasswordUpdated = SystemTime.Now();
 				// сохраняем модель нового пользователя 
 				DbSession.Save(producerUser);
@@ -58,12 +59,14 @@ namespace ProducerInterface.Controllers
 				EmailSender.SendEmail(producerUser.Email, "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
 					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
 									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
-						Config.GetParam("SiteName"), producerUser.Email, Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
+						Config.GetParam("SiteName"), producerUser.Email,
+						Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
 				// письмо письма на аналит 
 				EmailSender.SendEmail(Config.GetParam("AnalitEmail"), "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
 					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
 									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
-						Config.GetParam("SiteName"), producerUser.Email, Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
+						Config.GetParam("SiteName"), producerUser.Email,
+						Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
 				resultMessage = "Регистрация прошла успешно!";
 				SuccessMessage(resultMessage);
 				return RedirectToAction("Index", "Home");
@@ -73,7 +76,7 @@ namespace ProducerInterface.Controllers
 			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
 			return RedirectToAction("Index");
 		}
-		 
+
 		/// <summary>
 		/// Подтверждение регистрации пользователя по ссылке в письме
 		/// </summary>
@@ -86,8 +89,18 @@ namespace ProducerInterface.Controllers
 				currentUser.Enabled = true;
 				currentUser.PasswordUpdated = SystemTime.Now();
 				currentUser.PasswordToUpdate = false;
+				var permissionList = DbSession.Query<UserPermission>().ToList();
+				if (currentUserList.Count(s => s.Id != currentUser.Id && s.Producer.Id == currentUser.Producer.Id) == 0) {
+					permissionList.ForEach(s => currentUser.Permissions.Add(s));
+				}
+				else {
+					var permissionOfProfile = permissionList.Where(
+						s => s.Name.ToLower() == "profile_index"
+						).ToList();
+					foreach (var item in permissionOfProfile) currentUser.Permissions.Add(item);
+				}
 				DbSession.Save(currentUser);
-				return Authenticate("Index", "Home", currentUser.Name, true);
+				return Authenticate("Index", "Home", currentUser.Email, true);
 			}
 			return RedirectToAction("Index", "Home");
 		}
@@ -107,11 +120,15 @@ namespace ProducerInterface.Controllers
 			// Проверяем введенные пользователем данные авторизации 
 			password = Md5HashHelper.GetHash(password);
 			var authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == login
-			                                                                    && s.Password == password && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
+			                                                                            && s.Password == password &&
+			                                                                            (s.Enabled ||
+			                                                                             s.Enabled == false && s.PasswordToUpdate));
 #if DEBUG
 			//Авторизация для тестов, если пароль совпадает с паролем по умолчанию и логин есть в АД, то все ок
 			if (originalPass == Config.GetParam("DefaultUserPassword")) {
-				authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == login && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
+				authenticatedUser =
+					DbSession.Query<ProducerUser>()
+						.FirstOrDefault(s => s.Email == login && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
 				password = originalPass;
 			}
 #endif
@@ -123,12 +140,13 @@ namespace ProducerInterface.Controllers
 					return View("UserPasswordUpdate");
 				}
 				// авторизуем пользователя, если все есть совпадение в БД
-				return Authenticate(redirectToAction, redirectToControll, authenticatedUser.Name, true);
+				return Authenticate(redirectToAction, redirectToControll, authenticatedUser.Email, true);
 			}
 			ErrorMessage("Пользователь с данным логином и паролем не существует или был заблокирован.");
 			// возвращаем пользователя на главную страницу
 			return RedirectToAction("Index");
 		}
+
 		/// <summary>
 		/// Обновление пароля пользователя.
 		/// </summary>
@@ -149,7 +167,8 @@ namespace ProducerInterface.Controllers
 		{
 			int currentUserId = 0;
 			Int32.TryParse(Request.Form["UserNumber"], out currentUserId);
-			var currentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name || e.Id == currentUserId);
+			var currentUser =
+				DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name || e.Id == currentUserId);
 			ViewBag.CurrentUser = currentUser;
 			if (currentUser != null) {
 				if (currentUser.Password != Md5HashHelper.GetHash(passwordOld)) {
@@ -188,7 +207,7 @@ namespace ProducerInterface.Controllers
 				authenticatedUser.UpdatePasswordByDefault(DbSession);
 				authenticatedUser.Enabled = false;
 				authenticatedUser.PasswordToUpdate = true;
-				DbSession.Save(authenticatedUser); 
+				DbSession.Save(authenticatedUser);
 				ErrorMessage("На указанную почту было выслано сообщение с новым паролем.");
 				return RedirectToAction("Index", "Home");
 			}

@@ -41,7 +41,7 @@
 			foreach (var item in currentUser.Permissions) {
 				<div class="row buffer-top">
 					<div class="form-group col-lg-4">
-						<button type="submit" class="btn-link entypo-cancel-circled" name="permission.Id" value="@item.Id" style="color: red"></button> @item.Description
+						<button type="submit" class="btn-link entypo-cancel-circled" name="permission.Id" value="@item.Id" style="color: red"></button> @Html.Raw(item.Description)
 					</div>
 				</div>
 			}

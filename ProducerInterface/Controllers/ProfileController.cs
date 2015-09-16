@@ -22,7 +22,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.ProducerList = DbSession.Query<Producer>().OrderBy(s => s.Name).ToList();
-			var currentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
+			var currentUser = GetCurrentUser();
 			ViewBag.CurrentUser = currentUser;
 			ViewBag.ProducerUserList =
 				DbSession.Query<ProducerUser>().Where(e => e.Producer == currentUser.Producer).OrderBy(s => s.Name).ToList();

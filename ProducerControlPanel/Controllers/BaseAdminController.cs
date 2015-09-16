@@ -23,8 +23,8 @@ namespace ProducerControlPanel.Controllers
 			const string unAuthorizedRedirectA = "adminaccount_index";
 			const string unAuthorizedRedirectB = "adminaccount_login";
 			const string noPermissionRedirect = "adminaccount_index";
-			
-            base.OnActionExecuting(filterContext);
+
+			base.OnActionExecuting(filterContext);
 
 			var admin = GetCurrentUser();
 			ViewBag.Admin = admin;
@@ -41,9 +41,9 @@ namespace ProducerControlPanel.Controllers
 			ViewBag.Controller = this;
 
 			//редирект для неавторизованного пользователя
-			if ((admin == null )
+			if ((admin == null)
 			    && currentPermissionName != unAuthorizedRedirectA
-				&& currentPermissionName != unAuthorizedRedirectB) {
+			    && currentPermissionName != unAuthorizedRedirectB) {
 				string loginUrl = Url.Action("Index", "AdminAccount"); // Default Login Url 
 				ErrorMessage("Для входа перехода на данную страницу Вам необходимо зарегистрироваться.");
 				RedirectUnAuthorizedUser(filterContext);
@@ -54,7 +54,7 @@ namespace ProducerControlPanel.Controllers
 			    && currentPermissionName != noPermissionRedirect) {
 				var redirectUrl = Url.Action("Index", "Admin"); // Default Login Url 
 				ErrorMessage("У Вас нет прав доступа к запрашиваемой странице.");
-				RedirectUnAuthorizedUser(filterContext);
+				RedirectUnAuthorizedUser(filterContext, redirectUrl, false);
 				return;
 			}
 
