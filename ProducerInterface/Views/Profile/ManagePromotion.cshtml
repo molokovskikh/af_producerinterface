@@ -17,6 +17,9 @@
 			</div>
 		</header>
 		<div class="container">
+			<b style="color: red">
+				На данной странице создается и редактируется акция. Сначала акция создается, потом пользователь перенаправляется на страницу ее редактирования, где может добавить препараты в акцию.
+			</b>
 			@using (Html.BeginForm("ManagePromotion", "Profile", FormMethod.Post))
 			{
 				<p>
@@ -36,7 +39,7 @@
 						new
 						{
 							@Value = (promotion.Begin.Year > 1900 ? promotion.Begin.ToString("dd.MM.yyyy") : ""),
-							@data_format = "dd.mm.yyyy",
+							@data_date_format = "dd.mm.yyyy",
 							@class = "form-control",
 							@data_provide = "datepicker-inline"
 						})
@@ -47,7 +50,7 @@
 						new
 						{
 							@Value = (promotion.Begin.Year > 1900 ? promotion.Begin.ToString("dd.MM.yyyy") : ""),
-							@data_format = "dd.mm.yyyy",
+							@data_date_format = "dd.mm.yyyy",
 							@class = "form-control",
 							@data_provide = "datepicker-inline"
 						})
@@ -58,7 +61,7 @@
 					@ViewBag.Validation.GetError(promotion, "Annotation")
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-6 box">
-					<button type="submit" class="btn btn-primary filter-buttons active-form">@(promotion != null && promotion.Id != 0?"Обновить акцию": "Добавить Акцию")</button>
+					<button type="submit" class="btn btn-primary filter-buttons active-form">@(promotion != null && promotion.Id != 0 ? "Обновить акцию" : "Добавить Акцию")</button>
 				</div>
 			}
 		</div>

@@ -185,7 +185,7 @@ namespace ProducerInterface.Controllers
 		{
 			var report = new GeneralReport();
 			report.Title = "Отчет пользователя " + GetCurrentUser().Email + ", поставщика "+ GetCurrentUser().Producer.Name + " (отключен)";
-			report.ReportFileName = "Рейтинговый отчет";
+			report.ReportFileName = "Рейтинговый отчет WORWAG PHARMA GmbH";
 			report.Enabled = false;
 			var subreport = new Report();
 			subreport.Type = DbSession.Query<ReportType>().First(i => i.Id == 6);

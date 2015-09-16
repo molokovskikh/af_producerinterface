@@ -51,6 +51,8 @@ namespace ProducerInterface.Controllers
 				producerUser.PasswordUpdated = SystemTime.Now();
 				// сохраняем модель нового пользователя 
 				DbSession.Save(producerUser);
+
+
 				var linkWord = Md5HashHelper.GetHash(producerUser.PasswordUpdated.ToString());
 				// письмо пользователю
 				EmailSender.SendEmail(producerUser.Email, "Успешная регистрация на сайте " + Config.GetParam("SiteName"),

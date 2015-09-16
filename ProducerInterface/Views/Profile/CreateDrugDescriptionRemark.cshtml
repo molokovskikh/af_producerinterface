@@ -12,6 +12,10 @@
 			<div class="content blog col-sm-9 col-md-9">
 					<form id="contactform" class="form-box register-form contact-form" method="POST">
 						<h3 class="title">Запрос на изменение описания</h3>
+						<b style="color: red">
+							На данной странице создается правка по описанию препаратов и МНН. Позже правки могут быть применены администратором или отклонены.
+							Они отображаются в панели управления в разделе "Список правок пользователей"
+						</b>
 						<div>
 							<label>Наименование:</label>
 							@Html.TextBoxFor(i => drugDescriptionRemark.Name, new {@class = "form-control"})
@@ -65,12 +69,12 @@
 							@Html.TextAreaFor(i => drugDescriptionRemark.Description, new {@class = "form-control"})
 						</div>
 						<div>
-							<label>Дополнительно:</label>
+							<label>МНН:</label>
 							@Html.DropDownListExtendedFor(i => drugDescriptionRemark.MNN,mnns,i => i.Value,null, new { @class = "form-control" }, drugDescriptionRemark.MNN != null ? drugDescriptionRemark.MNN.Id.ToString() : "0")
 						</div>
 						<div class="clearfix"></div>
 						<div class="buttons-box clearfix">
-							<button type="submit" class="btn btn-default">Отправить</button>
+							<button type="submit" class="btn btn-info">Отправить</button>
 						</div><!-- .buttons-box -->
 					</form>
 				</div>

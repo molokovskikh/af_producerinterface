@@ -11,7 +11,12 @@
 	<div class="container">
 		<div class="row">
 			<div class="content blog col-sm-9 col-md-9">
-				<a href="@Url.Action("CreateRatingReport")">Рейтинговый отчет</a>
+				<b style="color: red">
+					На данной странице выводится список шаблонов для отчетов доступных пользователям
+				</b>
+				<div>
+					<a href="@Url.Action("CreateRatingReport")">Рейтинговый отчет</a>
+				</div>
 			</div><!-- .content -->
 			@{ Html.RenderPartial("SideBar"); }
 		</div>
