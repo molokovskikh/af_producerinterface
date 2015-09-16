@@ -46,7 +46,7 @@ namespace ProducerControlPanel.Controllers
 				&& currentPermissionName != unAuthorizedRedirectB) {
 				string loginUrl = Url.Action("Index", "AdminAccount"); // Default Login Url 
 				ErrorMessage("Для входа перехода на данную страницу Вам необходимо зарегистрироваться.");
-				filterContext.Result = new RedirectResult(loginUrl);
+				RedirectUnAuthorizedUser(filterContext);
 				return;
 			}
 			//редирект для пользователя, без соответствующих прав
@@ -54,7 +54,7 @@ namespace ProducerControlPanel.Controllers
 			    && currentPermissionName != noPermissionRedirect) {
 				var redirectUrl = Url.Action("Index", "Admin"); // Default Login Url 
 				ErrorMessage("У Вас нет прав доступа к запрашиваемой странице.");
-				filterContext.Result = new RedirectResult(redirectUrl);
+				RedirectUnAuthorizedUser(filterContext);
 				return;
 			}
 

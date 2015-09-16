@@ -23,35 +23,34 @@ namespace ProducerInterface.Controllers
 			const string unRegisteredRedirect = "registration_index";
 			const string unAuthorizedRedirect = "registration_userauthentication";
 			const string notConfirmedRedirect = "registration_gegistrationconfirm";
-            const string noPermissionRedirect = "home_Index";
+			const string noPermissionRedirect = "home_Index";
 
-            base.OnActionExecuting(filterContext);
+			base.OnActionExecuting(filterContext);
 			var user = GetCurrentUser();
 			ViewBag.CurrentUser = user;
 
 			var actionName = filterContext.RouteData.Values["action"].ToString();
 			var controllerName = GetType().Name.Replace("Controller", "");
+
 			string currentPermissionName = GetPermissionName(controllerName, actionName);
 
 			var currentPermission = GetActionPermission(currentPermissionName);
 
 			//редирект для неавторизованного пользователя
 			if ((user == null && currentPermission != null)
-				&& (currentPermissionName != unRegisteredRedirect 
-				&& currentPermissionName != unAuthorizedRedirect
-				&& currentPermissionName != notConfirmedRedirect)) {
-				var loginUrl = Url.Action("Index", "Registration");
+			    && (currentPermissionName != unRegisteredRedirect
+			        && currentPermissionName != unAuthorizedRedirect
+			        && currentPermissionName != notConfirmedRedirect)) {
 				ErrorMessage("Для входа перехода на данную страницу Вам необходимо зарегистрироваться.");
-				filterContext.Result = new RedirectResult(loginUrl);
+				RedirectUnAuthorizedUser(filterContext);
 				return;
 			}
 			//редирект для пользователя, без соответствующих прав
 			if (user != null && currentPermission != null && !user.CheckPermission(currentPermission)
-				&& currentPermissionName != noPermissionRedirect)
-			{
+			    && currentPermissionName != noPermissionRedirect) {
 				var loginUrl = Url.Action("Index", "Home");
 				ErrorMessage("У Вас нет прав доступа к запрашиваемой странице.");
-				filterContext.Result = new RedirectResult(loginUrl);
+				RedirectUnAuthorizedUser(filterContext);
 				return;
 			}
 		}
@@ -76,7 +75,7 @@ namespace ProducerInterface.Controllers
 		/// <returns>Права</returns>
 		public UserPermission GetActionPermission(string permissionName)
 		{
-            var permission =
+			var permission =
 				DbSession.Query<UserPermission>()
 					.FirstOrDefault(s => s.Name.ToLower() == permissionName);
 			return permission;
