@@ -12,10 +12,19 @@ namespace ProducerInterface.Models
 	[Model(Database = "catalogs", Table = "Producers")]
 	public class Producer : BaseModel
 	{
+		public Producer()
+		{
+			Drugs = new List<Drug>();
+			//ProducerUsers = new List<ProducerUser>();
+		}
+
 		[Map, Description("Название"), ValidatorNotEmpty]
 		public virtual string Name { get; set; } 
 
 		[HasMany(ManyToMany = true, Table= "assortment", Column = "CatalogId")]
 		public virtual IList<Drug> Drugs { get; set; }
+
+		//[HasMany(ManyToMany = true, Table = "ProducerUser", Database = "ProducerInterface", Column = "ProducerId")]
+		//public virtual IList<ProducerUser> ProducerUsers { get; set; }
 	}
 }

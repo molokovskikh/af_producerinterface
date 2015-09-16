@@ -56,17 +56,18 @@
 				@using (Html.BeginForm("DeleteUserPermission", "Permissions", FormMethod.Post)) {
 					@Html.HiddenFor(s => modifiedUser.Id)
 					foreach (var item in modifiedUser.Permissions) {
-						<div class="row buffer-top">
-							<div class="form-group col-lg-4">
-								<button type="submit" class="fa fa-ban btn btn-default btn-xs" name="permission.Id" value="@item.Id"></button> @item.Description
+						<p>
+							<div class="row buffer-top">
+								<div class="form-group">
+										<button type="submit" class="fa fa-ban btn btn-default btn-xs" name="permission.Id" value="@item.Id"></button> @Html.Raw(item.Description) 
+								</div>
 							</div>
-						</div>
+						</p>
 					}
 				}
 			</div>
 			<div class="row buffer-top">
-				<a class="btn btn-blue btn-sm btn-icon icon-left" href="@Url.Action("ListUser")">
-					<i class="entypo-left-open"></i>
+				<a class="btn btn-info" href="@Url.Action("ListUser")">
 					Назад
 				</a>
 			</div>

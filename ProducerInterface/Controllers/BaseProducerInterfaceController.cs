@@ -32,8 +32,19 @@ namespace ProducerInterface.Controllers
 			var actionName = filterContext.RouteData.Values["action"].ToString();
 			var controllerName = GetType().Name.Replace("Controller", "");
 
-			string currentPermissionName = GetPermissionName(controllerName, actionName);
+			//Обновление прав при их отсуствии
+			if (DbSession.Query<UserPermission>().Count() == 0) {
+				UserPermission.UpdatePermissions<UserPermission>(DbSession, this, typeof (BaseProducerInterfaceController));
+				//удаление ненужных прав
+				var ListToRemove = DbSession.Query<UserPermission>().ToList()
+					.Where(s => s.Name.ToLower().IndexOf("home_") != -1
+					            || s.Name.ToLower().IndexOf("registration_") != -1
+					).ToList();
+				ListToRemove.ForEach(s => { DbSession.Delete(s); });
+			}
 
+
+			string currentPermissionName = GetPermissionName(controllerName, actionName);
 			var currentPermission = GetActionPermission(currentPermissionName);
 
 			//редирект для неавторизованного пользователя
@@ -50,7 +61,7 @@ namespace ProducerInterface.Controllers
 			    && currentPermissionName != noPermissionRedirect) {
 				var loginUrl = Url.Action("Index", "Home");
 				ErrorMessage("У Вас нет прав доступа к запрашиваемой странице.");
-				RedirectUnAuthorizedUser(filterContext);
+				RedirectUnAuthorizedUser(filterContext, loginUrl, false);
 				return;
 			}
 		}
@@ -63,7 +74,7 @@ namespace ProducerInterface.Controllers
 			}
 			if (getFromSession && (CurrentProducerUser == null || User.Identity.Name != CurrentProducerUser.Name)) {
 				CurrentProducerUser =
-					DbSession.Query<ProducerInterface.Models.ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
+					DbSession.Query<ProducerInterface.Models.ProducerUser>().FirstOrDefault(e => e.Email == User.Identity.Name);
 			}
 			return CurrentProducerUser;
 		}

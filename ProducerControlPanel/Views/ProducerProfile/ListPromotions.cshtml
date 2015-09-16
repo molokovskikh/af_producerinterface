@@ -20,6 +20,7 @@
 					<a href="@pager.OrderBy(s => s.Id)">Номер</a>
 				</th>
 				<th class="sorting" tabindex="0" aria-controls="table-2">Пользователь</th>
+				<th class="sorting" tabindex="0" aria-controls="table-2">Производитель</th>
 				<th class="sorting" tabindex="0" aria-controls="table-2">Препараты</th>
 				<th class="sorting" tabindex="0" aria-controls="table-2">
 					<a href="@pager.OrderBy(s => s.Name)">Заголовок</a>
@@ -50,7 +51,10 @@
 						<span>@(item.ProducerUser != null ? item.ProducerUser.Name : "")</span>
 					</td>
 					<td>
-						<span>@(new HtmlString(string.Join("<br/>",item.Drugs.Select(s => s.Name))))</span>
+						<span>@(item.ProducerUser != null ? item.Producer.Name : "")</span>
+					</td>
+					<td>
+						<span>@(new HtmlString(string.Join("<br/>", item.Drugs.Select(s => s.Name))))</span>
 					</td>
 					<td>
 						<span>@item.Name</span>
