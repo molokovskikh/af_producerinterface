@@ -10,7 +10,7 @@ using ProducerInterfaceTest.Infrastructure;
 namespace ProducerControlPanelTest.Functional.Home.Index
 {
 	[TestFixture]
-	class IndexFixture : BaseFixture
+	class IndexFixture : ProducerInterfaceControlPanelFixture
 	{
 		[Test]
 		public void VisualTest()
