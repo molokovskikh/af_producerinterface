@@ -1821,10 +1821,7 @@
     <Content Include="Views\UserPermissions\ListPermissions.cshtml" />
     <Content Include="Views\UserPermissions\ListUser.cshtml" />
     <Content Include="Views\UserPermissions\ManageUserPermission.cshtml" />
-    <Content Include="Views\ProducerProfile\InfoPromotion.cshtml" />
     <None Include="Views\ProducerProfile\ListPromotions.cshtml" />
-    <Content Include="Views\ProducerProfile\EditPromotion.cshtml" />
-    <Content Include="Views\ProducerProfile\CreatePromotion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">

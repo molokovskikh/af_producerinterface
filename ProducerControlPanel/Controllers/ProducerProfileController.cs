@@ -145,19 +145,7 @@ namespace ProducerControlPanel.Controllers
 			ViewBag.Pager = pager;
 			return View();
 		}
-
-		/// <summary>
-		///     Просмотр акции из личного кабинета поставщика
-		/// </summary>
-		public ActionResult InfoPromotion(int id)
-		{
-			var promotion = DbSession.Query<Promotion>().FirstOrDefault(s => s.Id == id);
-			if (promotion == null) {
-				return RedirectToAction("ListPromotions");
-			}
-			ViewBag.CurrentPromotion = promotion;
-			return View();
-		}
+		 
 
 		/// <summary>
 		///     Зтатус заявки
@@ -182,72 +170,6 @@ namespace ProducerControlPanel.Controllers
 				ErrorMessage(message);
 			}
 			return RedirectToAction("ListPromotions");
-		}
-
-		/// <summary>
-		///     Создание акции в личном кабинете поставщика
-		/// </summary>
-		public ActionResult CreatePromotion()
-		{
-			ViewBag.ProducerList = DbSession.Query<Producer>().OrderBy(s => s.Name).ToList();
-			//TODO:список лекарств (поиск)
-			ViewBag.DrugList = DbSession.Query<Drug>().OrderBy(s => s.Name).Take(30).ToList();
-			ViewBag.CurrentPromotion = new Promotion();
-			return View();
-		}
-
-		[HttpPost]
-		public ActionResult CreatePromotion([EntityBinder] Promotion promotion)
-		{
-			promotion.UpdateTime = SystemTime.Now();
-			promotion.RegionMask = 1;
-			promotion.Admin = GetCurrentUser();
-			var errors = ValidationRunner.Validate(promotion);
-			if (errors.Count == 0) {
-				// сохраняем модель нового пользователя 
-				DbSession.Save(promotion);
-				var message = "Акция добавлена успешно";
-				SuccessMessage(message);
-				return RedirectToAction("ListPromotions");
-			}
-			ViewBag.ProducerList = DbSession.Query<Producer>().OrderBy(s => s.Name).ToList();
-			ViewBag.DrugList = DbSession.Query<Drug>().OrderBy(s => s.Name).Take(30).ToList();
-			ViewBag.CurrentPromotion = promotion;
-			return View();
-		}
-
-		/// <summary>
-		///     Редактирование акции в личном кабинете поставщика
-		/// </summary>
-		public ActionResult EditPromotion(int id)
-		{
-			var promotion = DbSession.Query<Promotion>().FirstOrDefault(s => s.Id == id);
-			if (promotion == null) {
-				return RedirectToAction("ListPromotions");
-			}
-			ViewBag.DrugList = DbSession.Query<Drug>().OrderBy(s => s.Name).Take(30).ToList();
-			ViewBag.ProducerList = DbSession.Query<Producer>().OrderBy(s => s.Name).ToList();
-			ViewBag.CurrentPromotion = promotion;
-			return View();
-		}
-
-		[HttpPost]
-		public ActionResult EditPromotion([EntityBinder] Promotion promotion)
-		{
-			var errors = ValidationRunner.Validate(promotion);
-			promotion.Admin = GetCurrentUser();
-			if (errors.Count == 0) {
-				promotion.UpdateTime = SystemTime.Now();
-				// сохраняем модель акции
-				DbSession.Save(promotion);
-				var message = "Акция изменена успешно";
-				SuccessMessage(message);
-				return RedirectToAction("ListPromotions");
-			}
-			ViewBag.ProducerList = DbSession.Query<Producer>().OrderBy(s => s.Name).ToList();
-			ViewBag.DrugList = DbSession.Query<Drug>().OrderBy(s => s.Name).Take(30).ToList();
-			ViewBag.CurrentPromotion = promotion;
-			return View();
 		}
 
 		/// <summary>
