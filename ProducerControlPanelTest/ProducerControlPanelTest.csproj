@@ -101,10 +101,12 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Functional\ProducerControlPanelTest\Home\Index\IndexFixture.cs" />
+    <Compile Include="Functional\ProducerControlPanelTest\UserPermissions\CreatePermissionFixture.cs" />
+    <Compile Include="Functional\ProducerControlPanelTest\UserPermissions\UserPermissionsFixture.cs" />
     <Compile Include="Infrastructure\Helpers\ModelGenerator.cs" />
     <Compile Include="Infrastructure\Helpers\ModelCleaner.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Infrastructure\BaseFixture.cs" />
+    <Compile Include="Infrastructure\ProducerInterfaceControlPanelFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

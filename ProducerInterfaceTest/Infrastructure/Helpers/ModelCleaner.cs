@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using AnalitFramefork.Components;
 using AnalitFramefork.Extensions;
 using AnalitFramefork.Hibernate.Mapping.Attributes;
+using AnalitFramefork.Hibernate.Models;
 using MySql.Data.MySqlClient;
 using NHibernate;
+using ProducerControlPanel.Models;
 using ProducerInterface.Models;
 
 namespace ProducerInterfaceTest.Infrastructure.Helpers
@@ -86,6 +88,7 @@ namespace ProducerInterfaceTest.Infrastructure.Helpers
 			List<Type> order = new List<Type>()
 			{
 				typeof (UserLogModel),
+				typeof (AdminLogModel),
 				typeof (UserPermission),
 				typeof (ProfileNews),
 				typeof (ProducerUser),
@@ -100,7 +103,25 @@ namespace ProducerInterfaceTest.Infrastructure.Helpers
 			//Таблицы, которые не надо очищать (из полного списка моделей)
 			List<Type> dontCleanList = new List<Type>()
 			{
+				typeof (MonthlySchedule),
+				typeof (WeeklySchedule),
+				typeof (SingleExecutionMailingAddress),
+				typeof (ReportTypeProperty),
+				typeof (ReportType),
+				typeof (ReportSendLog),
+				typeof (ReportPropertyValue),
+				typeof (ReportPropertyListValue),
+				typeof (ReportExecuteLog),
+                typeof (ReportExecuteForm),
+                typeof (Report),
+                typeof (Payer),
+                typeof (GeneralReport),
+                typeof (Contact),
+                typeof (AdminRole),
+                typeof (AdminPermission),
+                typeof (Admin)
 				//no elements
+				
 			};
 			////Обязательная отчистка - проводится в самом Начале
 			List<string> tablesToCleanList_AtFirst = new List<string>()
