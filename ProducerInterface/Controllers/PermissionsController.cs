@@ -13,6 +13,7 @@ namespace ProducerInterface.Controllers
 	/// <summary>
 	///     Главная
 	/// </summary>
+	[AnalitSecuredController]
 	[Description("Права пользователей"), MainMenu]
 	public class PermissionsController : BaseProducerInterfaceController
 	{

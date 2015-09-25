@@ -68,13 +68,13 @@ namespace ProducerInterface.Controllers
 
 		public ProducerInterface.Models.ProducerUser GetCurrentUser(bool getFromSession = true)
 		{
-			if (User == null || (User.Identity.Name == String.Empty) || DbSession == null || !DbSession.IsConnected) {
+			if (CurrentAnalitUser == null || (CurrentAnalitUser.Name == String.Empty) || DbSession == null || !DbSession.IsConnected) {
 				CurrentProducerUser = null;
 				return null;
 			}
 			if (getFromSession && (CurrentProducerUser == null || User.Identity.Name != CurrentProducerUser.Name)) {
 				CurrentProducerUser =
-					DbSession.Query<ProducerInterface.Models.ProducerUser>().FirstOrDefault(e => e.Email == User.Identity.Name);
+					DbSession.Query<ProducerInterface.Models.ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
 			}
 			return CurrentProducerUser;
 		}

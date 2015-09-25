@@ -15,6 +15,7 @@ namespace ProducerControlPanel.Controllers
 	/// <summary>
 	///     Роли администраторов
 	/// </summary> 
+	[AnalitSecuredController]
 	public class AdminRolesController : BaseAdminController
 	{
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)

@@ -6,6 +6,7 @@ using AnalitFramefork.Components;
 using AnalitFramefork.Helpers;
 using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
+using AnalitFramefork.Mvc.Attributes;
 using NHibernate.Linq;
 using ProducerInterface.Models;
 
@@ -14,6 +15,7 @@ namespace ProducerControlPanel.Controllers
 	/// <summary>
 	/// Страница управления пользователями
 	/// </summary>
+	[AnalitSecuredController]
 	public class UsersController : BaseAdminController
 	{
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)

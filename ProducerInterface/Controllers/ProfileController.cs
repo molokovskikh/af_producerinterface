@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using AnalitFramefork.Components;
 using AnalitFramefork.Mvc;
 using AnalitFramefork.Hibernate.Models;
+using AnalitFramefork.Mvc.Attributes;
 using NHibernate.Linq;
 using ProducerInterface.Models;
 
@@ -11,6 +12,7 @@ namespace ProducerInterface.Controllers
 	/// <summary>
 	///     Страница профиля пользователя
 	/// </summary> 
+	[AnalitSecuredController]
 	public class ProfileController : BaseProducerInterfaceController
 	{
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)

@@ -82,12 +82,13 @@ namespace ProducerControlPanel.Controllers
 		/// <returns></returns>
 		public Admin GetCurrentUser(bool getFromSession = true)
 		{
-			if (User == null || (User.Identity.Name == string.Empty) || DbSession == null || !DbSession.IsConnected) {
+			if (CurrentAnalitUser == null || (CurrentAnalitUser.Name == string.Empty) || DbSession == null ||
+			    !DbSession.IsConnected) {
 				CurrentUser = null;
 				return null;
 			}
-			if (getFromSession && (CurrentUser == null || User.Identity.Name != CurrentUser.UserName)) {
-				CurrentUser = DbSession.Query<Admin>().FirstOrDefault(e => e.UserName == User.Identity.Name);
+			if (getFromSession && (CurrentUser == null || CurrentAnalitUser.Name != CurrentUser.UserName)) {
+				CurrentUser = DbSession.Query<Admin>().FirstOrDefault(e => e.UserName == CurrentAnalitUser.Name);
 			}
 			return CurrentUser;
 		}

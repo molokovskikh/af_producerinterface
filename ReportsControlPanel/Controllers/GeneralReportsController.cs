@@ -41,7 +41,7 @@ namespace ReportsControlPanel.Controllers
 			var report = DbSession.Query<GeneralReport>().First(i => i.Id == id);
 			var form = new ReportExecuteForm();
 			form.ImportEmailsFromReport(report);
-			form.UserEmail = User.Identity.Name.Replace(@"ANALIT\", string.Empty);
+			form.UserEmail = CurrentAnalitUser.Name.Replace(@"ANALIT\", string.Empty);
 			form.UseEmailList = true;
 
 			ViewBag.ReportExecuteForm = form;
@@ -61,7 +61,7 @@ namespace ReportsControlPanel.Controllers
 			var errors = ValidationRunner.Validate(reportExecuteForm);
 			if (errors.Length == 0)
 			{
-				var useremail = User.Identity.Name.Replace(@"ANALIT\", string.Empty);;
+				var useremail = CurrentAnalitUser.Name.Replace(@"ANALIT\", string.Empty);;
 				reportExecuteForm.ProcessReport(report, DbSession, useremail);
 				var actionErrors = reportExecuteForm.GetErrors();
 				if (actionErrors.Length == 0)
