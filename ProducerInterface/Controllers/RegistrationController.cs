@@ -84,9 +84,10 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult GegistrationConfirm(string key)
 		{
-			var currentUserList = DbSession.Query<ProducerUser>().Where(s=>s.Enabled).ToList();
+			var currentUserList = DbSession.Query<ProducerUser>().ToList();
 			var currentUser = currentUserList.FirstOrDefault(e => Md5HashHelper.GetHash(e.PasswordUpdated.ToString()) == key);
-			if (currentUser != null) {
+			currentUserList = currentUserList.Where(s => s.Enabled).ToList();
+            if (currentUser != null) {
 				currentUser.Enabled = true;
 				currentUser.PasswordUpdated = SystemTime.Now();
 				currentUser.PasswordToUpdate = false;
