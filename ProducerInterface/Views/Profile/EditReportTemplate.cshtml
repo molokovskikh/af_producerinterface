@@ -1,0 +1,37 @@
+﻿@using AnalitFramefork.Extensions
+@using AnalitFramefork.Hibernate.Models
+@model dynamic
+
+@{
+    var reportTemplateForm = ViewBag.ReportTemplateForm as ReportTemplateForm;
+    var reportTemplate = reportTemplateForm.ReportTemplate;
+}
+
+<section id="main">
+    <div class="container">
+        <div class="row">
+            <div class="content blog col-sm-9 col-md-9">
+                <form id="contactform" class="form-box register-form contact-form" method="POST">
+                    <h3 class="title">Редактирование отчета</h3>
+                    <div class="col-sm-12">
+                        <label>Наименование:</label>
+                        @Html.TextBoxFor(i => reportTemplateForm.ReportTemplate.Title, new { @class = "form-control" })
+                    </div>
+                    <div  class="col-sm-12">
+                        <label>Тип:</label>
+                        <input type="text" class="form-control" disabled="disabled" value="@reportTemplate.Type.GetDescription()"/>
+                    </div>
+                    @{ var paramview = reportTemplate.Type + "Params"; }
+                    @{ Html.RenderPartial(paramview);}
+                    <div class="clearfix"></div>
+                    <div class="buttons-box clearfix">
+                        <button type="submit" class="btn btn-info">Сохранить</button>
+                    </div><!-- .buttons-box -->
+                </form>
+            </div>
+            @{ Html.RenderPartial("SideBar");}
+        </div>
+
+    </div>
+
+</section>

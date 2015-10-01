@@ -1,0 +1,46 @@
+﻿@using AnalitFramefork.Extensions
+@using AnalitFramefork.Hibernate.Models
+@using AnalitFramefork.Mvc
+@using NHibernate.Linq
+@using NHibernate.Util
+@using ProducerInterface.Controllers
+@{
+    var reportTemplate = ViewBag.ReportTemplate as ReportTemplate;
+    var controller = ViewBag.Controller as BaseProducerInterfaceController;
+    var DbSession = controller.DbSession;
+    var user = controller.GetCurrentUser();
+}
+
+<div>
+    <label>Список значений региона:</label>
+    @{
+        var list = new List<SelectListItem>();
+        list.Add(new SelectListItem() {Text = "Воронеж"});
+        list.Add(new SelectListItem() {Text = "Ростов"});
+        list.Add(new SelectListItem() {Text = "Самара"});
+        list.Add(new SelectListItem() {Text = "Пенза"});
+        list.Add(new SelectListItem() {Text = "Москва"});
+        list.Add(new SelectListItem() {Text = "Санкт-Петербург"});
+        list.Add(new SelectListItem() {Text = "Рязань"});
+        list.Add(new SelectListItem() {Text = "Волоколамск"});
+    }
+    @Html.DropDownList("dsada", list, new {multiple = "multiple"})
+</div>
+<div>
+    <label>Список значений полного именования:</label>
+    @{
+        var drugs = user.Producer.Drugs;
+        list = new List<SelectListItem>();
+        drugs.ForEach(i => list.Add(new SelectListItem() {Text = i.Name}));
+    }
+    @Html.DropDownList("dsada", list, new {multiple = "multiple"})
+</div>
+<div>
+    <label>Список исключений Поставщик:</label>
+    @{
+        var suppliers = DbSession.Query<Supplier>().Where(i => i.Disabled == false && !i.Name.Contains("иатриц") && !i.Name.Contains("ассортимент"));
+        list = new List<SelectListItem>();
+        suppliers.ForEach(i => list.Add(new SelectListItem() {Text = i.Name}));
+    }
+    @Html.DropDownList("dsada", list, new { multiple = "multiple" })
+</div>

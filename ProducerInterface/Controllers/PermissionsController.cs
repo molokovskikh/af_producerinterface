@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using AnalitFramefork.Components;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using AnalitFramefork.Mvc.Attributes;
 using NHibernate.Linq;

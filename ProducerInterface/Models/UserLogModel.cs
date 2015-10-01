@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using AnalitFramefork.Components;
 using AnalitFramefork.Hibernate.Mapping.Attributes;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using ProducerInterface.Controllers;
 

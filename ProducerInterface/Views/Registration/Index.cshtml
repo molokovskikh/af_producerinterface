@@ -1,5 +1,6 @@
 ﻿@using AnalitFramefork.Components
 @using AnalitFramefork.Helpers
+@using AnalitFramefork.Hibernate.Models
 @using ProducerInterface.Models
 @{
 	ViewBag.Title = "Регистрация";
@@ -20,7 +21,7 @@
 			<div class="row">
 				<div class="content col-sm-12 col-md-12">
 					<b style="color: red">
-						На данной странице происходит регистрация. По ее окончанию на указанный email и на @GlobalConfig.AnalitEmail будет выслано письмо с ссылкой по которой надо пройти.
+						На данной странице происходит регистрация. По ее окончанию на указанный email и на @GlobalConfig.ProducerInterfaceForwardEmail будет выслано письмо с ссылкой по которой надо пройти.
 						После прохождения по ссылке пользователь будет автоматически авторизован.
 						Сейчас ведется работа над тем, чтобы пользователям сразу назначались права.
 						Первому пользователю даются все права, остальным только право на посещение профиля.

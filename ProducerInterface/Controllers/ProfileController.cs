@@ -169,7 +169,10 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Reports()
 		{
-			return View("Reports");
+			var user = GetCurrentUser();
+			var templates = user.Producer.GetReportTemplates();
+			ViewBag.ReportTemplates = templates;
+            return View("Reports");
 		}
 
 		public ActionResult CreateRatingReport()
@@ -272,13 +275,13 @@ namespace ProducerInterface.Controllers
 				ReportInterval.Value = "27";
 
 				var regions = subreport.Properties.First(i => i.Property.Name == "RegionEqual");
-				regions.Values.Add(new ReportPropertyListValue() { Property = RegionEqual, Value = "1" });
+			//	regions.Values.Add(new ReportPropertyListValue() { Property = RegionEqual, Value = "1" });
 				DbSession.Save(regions);
 
 				var drugs = subreport.Properties.First(i => i.Property.Name == "FullNameEqual");
 				var druglist = GetCurrentUser().Producer.Drugs;
-				foreach(var drug in druglist)
-					drugs.Values.Add(new ReportPropertyListValue() { Property = drugs, Value = drug.Id.ToString() });
+				foreach (var drug in druglist) ;
+			//		drugs.Values.Add(new ReportPropertyListValue() { Property = drugs, Value = drug.Id.ToString() });
 				DbSession.Save(drugs);
 
 				DbSession.Save(subreport);
@@ -294,6 +297,178 @@ namespace ProducerInterface.Controllers
 
 			ViewBag.ReportExecuteForm = reportExecuteForm;
 			return View("CreateRatingReport");
+		}
+
+		public ActionResult CreateReportTemplate()
+		{
+			return SimpleCreate<ReportTemplate>();
+		}
+
+		[HttpPost]
+		public ActionResult CreateReportTemplate([EntityBinder] ReportTemplate reportTemplate)
+		{
+			reportTemplate.GeneralReport = new GeneralReport();
+			reportTemplate.User = GetCurrentUser();
+			reportTemplate.Update(reportTemplate.User);
+			var errors = ValidationRunner.Validate(reportTemplate);
+			if (errors.Length == 0)
+			{
+				reportTemplate.GeneralReport.Title = "Отчет пользователя " + GetCurrentUser().Email + ", поставщика " + GetCurrentUser().Producer.Name + "";
+				reportTemplate.GeneralReport.ReportFileName = reportTemplate.Title;
+				reportTemplate.GeneralReport.Enabled = false;
+				DbSession.Save(reportTemplate.GeneralReport);
+				DbSession.Save(reportTemplate);
+				//Создание подотчета 
+				//var subreport = new Report();
+				//subreport.Name = "Отчет пользователя " + GetCurrentUser().Email + ", поставщика " + GetCurrentUser().Producer.Name + " (отключен)";
+				//subreport.Enabled = true;
+				//subreport.GeneralReport = reportTemplate.GeneralReport;
+				//switch (reportTemplate.Type) 
+				//{
+				//	case ReportTemplateType.ProducerRating:
+				//		subreport.Type = DbSession.Query<ReportType>().First(i => i.Id == 6);
+				//		break;
+				//}
+				//DbSession.Save(subreport);
+				SuccessMessage("Отчет успешно создан");
+				return RedirectToAction("EditReportTemplate", new {id = reportTemplate.Id});
+			}
+
+			ViewBag.ReportTemplate = reportTemplate;
+			return View("CreateReportTemplate");
+		}
+
+		public ActionResult EditReportTemplate(int id)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			var form = ReportTemplateForm.CreateReportTemplateForm(template, DbSession);
+            ViewBag.ReportTemplateForm = form;
+			return View("EditReportTemplate");
+		}
+
+		[HttpPost]
+		public ActionResult EditReportTemplate(int id, ReportTemplate reportTemplate)
+		{
+			//Так как мы не знаем изначально тип формы которая нам высылается, придется создать сначала форму данного типа, а потом уже забиндить ее
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			var form = ReportTemplateForm.CreateReportTemplateForm(template, DbSession);
+			var binder = new EntityBinder();
+			binder.MapModel(Request, form);
+			form.Refresh();
+			var errors = ValidationRunner.Validate(form);
+			if (errors.Length == 0)
+			{
+				form.Save(DbSession);
+				SuccessMessage("Изменения успешно внесены");
+				return RedirectToAction("EditReportTemplate", new {id});
+			}
+			ErrorMessage(errors.First().Message);
+            ViewBag.ReportTemplateForm = form;
+			return View("EditReportTemplate");
+		}
+
+		public ActionResult EditGeneralReport(int id)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			ViewBag.ReportTemplate = template;
+			return View("EditGeneralReport");
+		}
+
+		public ActionResult RunGeneralReport(int id)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			var form = new ReportExecuteForm();
+			form.UseEmailList = false;
+			ViewBag.Form = form;
+			ViewBag.ReportTemplate = template;
+			return View("RunGeneralReport");
+		}
+
+		[HttpPost]
+		public ActionResult RunGeneralReport(int id, [EntityBinder] ReportExecuteForm reportExecuteForm)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			reportExecuteForm.UserEmail = GetCurrentUser().Email;
+			var errors = ValidationRunner.Validate(reportExecuteForm);
+			if (errors.Length == 0)
+			{
+				reportExecuteForm.ProcessReport(template.GeneralReport, DbSession, GetCurrentUser().Email);
+				var actionErrors = reportExecuteForm.GetErrors();
+				if (actionErrors.Length == 0)
+					SuccessMessage(reportExecuteForm.Execute == true ? "Отчет запущен" : "Отчет выслан");
+				else
+					ErrorMessage(actionErrors[0].Message);
+			}
+			else
+				ErrorMessage(errors.First().Message);
+
+			ViewBag.Form = reportExecuteForm;
+			ViewBag.ReportTemplate = template;
+			return View("RunGeneralReport");
+		}
+
+		public ActionResult CreateMonthlySchedule(int id)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			var schedule = new MonthlySchedule();
+			schedule.GeneralReport = template.GeneralReport;
+			ViewBag.MonthlySchedule = schedule;
+			return View("CreateMonthlySchedule");
+		}
+
+		[HttpPost]
+		public ActionResult CreateMonthlySchedule(int id, MonthlySchedule monthlySchedule)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			var url = Url.Action("EditGeneralReport", new {id = template.Id});
+			return SimplePostEdit<MonthlySchedule>(monthlySchedule.Id, new SimpleData() { SuccessUrl = url });
+		}
+
+		public ActionResult CreateWeeklySchedule(int id)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			var schedule = new WeeklySchedule();
+			schedule.GeneralReport = template.GeneralReport;
+			ViewBag.WeeklySchedule = schedule;
+			return View("CreateWeeklySchedule");
+		}
+
+		[HttpPost]
+		public ActionResult CreateWeeklySchedule(int id, WeeklySchedule weeklySchedule)
+		{
+			var template = DbSession.Query<ReportTemplate>().First(i => i.Id == id);
+			var url = Url.Action("EditGeneralReport", new { id = template.Id });
+			return SimplePostEdit<WeeklySchedule>(weeklySchedule.Id, new SimpleData() { SuccessUrl = url });
+		}
+
+		public JsonResult FindSuppliers(string id, string regions, string suppliers)
+		{
+			var regionNames = regions.Split(',');
+			var regionModels = DbSession.Query<Region>().Where(i => regionNames.Contains(i.Title)).ToList();
+			var supplierNames = suppliers.Split(',');
+			var supplierModels = DbSession.Query<Supplier>().Where(i => supplierNames.Contains(i.Name)).ToList();
+			var foundSuppliers = ProducerRatingReportTemplateForm.FindSuppliers(DbSession, id, regionModels, supplierModels);
+			var result = foundSuppliers.Select(i => new {Name = i.Name, Value = i.Id});
+			return Json(result);
+		}
+
+		public JsonResult FindRegions(string id, string regions)
+		{
+			var regionNames = regions.Split(',');
+			var regionModels = DbSession.Query<Region>().Where(i => regionNames.Contains(i.Title)).ToList();
+			var foundRegions = ProducerRatingReportTemplateForm.FindRegions(DbSession, id, regionModels);
+			var result = foundRegions.Select(i => new {Name = i.Title, Value = i.Id});
+			return Json(result);
+		}
+
+		public JsonResult FindDrugs(string id, string drugs)
+		{
+			var drugNames = drugs.Split(',');
+			var drugModels = DbSession.Query<Drug>().Where(i => drugNames.Contains(i.Name)).ToList();
+			var producer = GetCurrentUser().Producer;
+			var foundDrugs = ProducerRatingReportTemplateForm.FindDrugs(DbSession, id, producer, drugModels);
+			var result = foundDrugs.Select(i => new {Name = i.Name, Value = i.Id});
+			return Json(result);
 		}
 	}
 }

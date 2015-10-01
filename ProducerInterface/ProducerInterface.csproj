@@ -151,19 +151,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Config.cs" />
-    <Compile Include="Models\Promotion.cs" />
-    <Compile Include="Models\Drug.cs" />
-    <Compile Include="Models\DrugDescription.cs" />
-    <Compile Include="Models\DrugDescriptionRemark.cs" />
-    <Compile Include="Models\DrugForm.cs" />
-    <Compile Include="Models\DrugFamily.cs" />
-    <Compile Include="Models\MNN.cs" />
+    <Compile Include="Models\ReportTemplateForm.cs" />
+    <Compile Include="Models\ProducerReportTemplateForm.cs" />
     <Compile Include="Models\UserLogModel.cs" />
-    <Compile Include="Models\UserPermission.cs" />
-    <Compile Include="Models\ProfileNews.cs" />
-    <Compile Include="Models\UserRole.cs" />
-    <Compile Include="Models\ProducerUser.cs" />
-    <Compile Include="Models\Producer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -581,6 +571,7 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Assets\custom\js\ProfileController.EditReportTemplate.js" />
     <None Include="Properties\PublishProfiles\test2.analit.net.pubxml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
@@ -597,6 +588,14 @@
     <Content Include="Views\Profile\ManagePromotion.cshtml" />
     <Content Include="Views\Profile\Reports.cshtml" />
     <Content Include="Views\Profile\CreateRatingReport.cshtml" />
+    <Content Include="Views\Profile\CreateReportTemplate.cshtml" />
+    <Content Include="Views\Profile\EditReportTemplate.cshtml" />
+    <Content Include="Views\Profile\ProducerRatingParams.cshtml" />
+    <Content Include="Views\Profile\RunGeneralReport.cshtml" />
+    <Content Include="Views\Profile\EditGeneralReport.cshtml" />
+    <Content Include="Views\Profile\DrugstoreRatingParams.cshtml" />
+    <Content Include="Views\Profile\CreateMonthlySchedule.cshtml" />
+    <Content Include="Views\Profile\CreateWeeklySchedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">
@@ -635,6 +634,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>xcopy  "$(SolutionDir)analitframework\Mvc\Assets\*" "$(ProjectDir)Assets\custom\Analit"  /Y /I /E</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

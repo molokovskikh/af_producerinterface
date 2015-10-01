@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using NHibernate.Linq;
 using ProducerInterface.Models;

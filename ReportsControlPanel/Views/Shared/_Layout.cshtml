@@ -169,10 +169,7 @@
 	<script src="~/assets/js/neon-demo.js"></script>
 
 	<link rel="stylesheet" href="~/Css/style.css"></link>
-	@controller.JavascriptFile("jquery-2.1.1.js")
-	@controller.JavascriptFile("Analit.js")
-	@controller.JavascriptFile("InputSearchDropDown.js")
-	@controller.JavascriptFile("InputTextEditor.js")
+    @controller.GetJavascriptFileLinks();
 	@if (IsSectionDefined("JavaScript"))
 	{
 		@RenderSection("JavaScript", required: false)

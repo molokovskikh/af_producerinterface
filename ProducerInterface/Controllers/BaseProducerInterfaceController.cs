@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using AnalitFramefork.Extensions;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using NHibernate.Linq;
 using ProducerInterface.Models;
@@ -66,15 +67,14 @@ namespace ProducerInterface.Controllers
 			}
 		}
 
-		public ProducerInterface.Models.ProducerUser GetCurrentUser(bool getFromSession = true)
+		public ProducerUser GetCurrentUser(bool getFromSession = true)
 		{
 			if (CurrentAnalitUser == null || (CurrentAnalitUser.Name == String.Empty) || DbSession == null || !DbSession.IsConnected) {
 				CurrentProducerUser = null;
 				return null;
 			}
 			if (getFromSession && (CurrentProducerUser == null || User.Identity.Name != CurrentProducerUser.Name)) {
-				CurrentProducerUser =
-					DbSession.Query<ProducerInterface.Models.ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
+				CurrentProducerUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
 			}
 			return CurrentProducerUser;
 		}

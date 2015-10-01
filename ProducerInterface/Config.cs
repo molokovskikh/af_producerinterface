@@ -7,7 +7,8 @@ namespace ProducerInterface
 	public class Config : GlobalConfig
 	{
 		public static bool EnableCrudListener = true;
-		public static bool RuntimeHibernateMigration = false;
 		public static string UnAuthorizedUserRout = "Registration/Index";
+		public static string MailSenderAddress = "office@analit.net";
+		public static string SiteName = "АналитФармация";
 	}
 }

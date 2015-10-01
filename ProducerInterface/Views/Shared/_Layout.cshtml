@@ -1,6 +1,7 @@
-﻿ @using AnalitFramefork.Mvc @using ProducerInterface.Models
+﻿ @using AnalitFramefork.Hibernate.Models @using AnalitFramefork.Mvc @using ProducerInterface.Models
 @{
-	var user = (ViewBag.CurrentUser as ProducerUser);
+    var user = (ViewBag.CurrentUser as ProducerUser);
+    BaseController controller = ViewBag.Controller;
 }
 <!DOCTYPE html> 
 <html>
@@ -45,7 +46,7 @@
 		<link rel="stylesheet" href="~/Assets/css/customizer/home-pages-customizer.css">
 		<!-- IE Styles-->
 		<link rel='stylesheet' href="~/Assets/css/ie/ie.css">
-
+        @controller.GetCssFileLinks()
 		<!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -272,30 +273,18 @@
 	<div class="clearfix"></div>
 		<!-- Техническая информация -->
 	<div class="JavascriptParams" style="display: none">
-		@{
-			BaseController controller = ViewBag.Controller;
-			var dic = ViewBag.JavascriptParams as Dictionary<string, string>;
-			if (dic != null && dic.Count != 0)
-			{
-				foreach (var key in dic.Keys)
-				{
-					<div id="@key">@dic[key]</div>
-				}
-			}
-		}
+	    @{
+	        var dic = ViewBag.JavascriptParams as Dictionary<string, string>;
+	        if (dic != null && dic.Count != 0)
+	        {
+	            foreach (var key in dic.Keys)
+	            {
+	                <div id="@key">@dic[key]</div>
+	            }
+	        }
+	    }
 	</div>
-		@controller.JavascriptFile("jquery-2.1.1.js")
-		@controller.JavascriptFile("Analit.js")
-		@controller.JavascriptFile("InputSearchDropDown.js")
-		@controller.JavascriptFile("InputTextEditor.js")
-		@if (IsSectionDefined("JavaScript"))
-		{
-			@RenderSection("JavaScript", required: false)
-		}
-		else
-		{
-			@controller.GetActionScripts()
-		}
+        @controller.GetJavascriptFileLinks()
 		<!--[if (!IE)|(gt IE 8)]><!-->
 		<script src="~/Assets/js/jquery-2.1.3.min.js"></script>
 		<!--<![endif]-->
@@ -344,7 +333,14 @@
 		<script src="~/Assets/js/jplayer/jplayer.playlist.min.js"></script>
 		<script src="~/Assets/js/jquery.scrollbar.min.js"></script>
 		<script src="~/Assets/js/main.js"></script>
-
+        @if (IsSectionDefined("JavaScript"))
+        {
+            @RenderSection("JavaScript", required: false)
+        }
+        else
+        {
+            @controller.GetActionScripts()
+        }
 	</body>
 
 

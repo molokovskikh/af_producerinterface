@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AnalitFramefork.Hibernate.Models;
 using NHibernate.Driver;
 using NHibernate.Linq;
 using NUnit.Framework;

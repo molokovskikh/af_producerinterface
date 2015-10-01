@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using AnalitFramefork.Components;
 using AnalitFramefork.Helpers;
+using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
 using NHibernate.Id;
 using NHibernate.Linq;
@@ -62,7 +63,7 @@ namespace ProducerInterface.Controllers
 						Config.GetParam("SiteName"), producerUser.Email,
 						Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
 				// письмо письма на аналит 
-				EmailSender.SendEmail(Config.GetParam("AnalitEmail"), "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
+				EmailSender.SendEmail(Config.GetParam("ProducerInterfaceForwardEmail"), "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
 					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
 									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
 						Config.GetParam("SiteName"), producerUser.Email,
