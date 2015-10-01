@@ -21,9 +21,7 @@ namespace ProducerInterface.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			// думаю, это нужно кинуть в Tuple<> список или просто по две переменные: Controll, Action, чтобы дальше использовать в Url.Action() и GetPermissionName()
-			const string unRegisteredRedirect = "registration_index";
-			const string unAuthorizedRedirect = "registration_userauthentication";
-			const string notConfirmedRedirect = "registration_gegistrationconfirm";
+		
 			const string noPermissionRedirect = "home_Index";
 
 			base.OnActionExecuting(filterContext);
@@ -47,16 +45,7 @@ namespace ProducerInterface.Controllers
 
 			string currentPermissionName = GetPermissionName(controllerName, actionName);
 			var currentPermission = GetActionPermission(currentPermissionName);
-
-			//редирект для неавторизованного пользователя
-			if ((user == null && currentPermission != null)
-			    && (currentPermissionName != unRegisteredRedirect
-			        && currentPermissionName != unAuthorizedRedirect
-			        && currentPermissionName != notConfirmedRedirect)) {
-				ErrorMessage("Для входа перехода на данную страницу Вам необходимо зарегистрироваться.");
-				RedirectUnAuthorizedUser(filterContext);
-				return;
-			}
+			
 			//редирект для пользователя, без соответствующих прав
 			if (user != null && currentPermission != null && !user.CheckPermission(currentPermission)
 			    && currentPermissionName != noPermissionRedirect) {

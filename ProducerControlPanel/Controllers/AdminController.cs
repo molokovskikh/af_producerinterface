@@ -14,6 +14,7 @@ namespace ProducerControlPanel.Controllers
 	/// <summary>
 	///     Главная
 	/// </summary>
+	[AnalitSecuredController]
 	[Description("Панель администратора"), MainMenu]
 	public class AdminController : BaseAdminController
 	{

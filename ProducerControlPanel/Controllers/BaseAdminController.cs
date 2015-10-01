@@ -19,10 +19,7 @@ namespace ProducerControlPanel.Controllers
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
-			// думаю, это нужно rbyenm в Tuple<> список или просто по две переменные: Controll, Action, чтобы дальше использовать в Url.Action() и GetPermissionName()
-			const string unAuthorizedRedirectA = "adminaccount_index";
-			const string unAuthorizedRedirectB = "adminaccount_login";
-			const string noPermissionRedirect = "adminaccount_index";
+			const string noPermissionRedirect = "admin_index";
 
 			base.OnActionExecuting(filterContext);
 
@@ -39,16 +36,7 @@ namespace ProducerControlPanel.Controllers
 			ViewBag.ActionName = actionName;
 			ViewBag.ControllerName = controllerName;
 			ViewBag.Controller = this;
-
-			//редирект для неавторизованного пользователя
-			if ((admin == null)
-			    && currentPermissionName != unAuthorizedRedirectA
-			    && currentPermissionName != unAuthorizedRedirectB) {
-				string loginUrl = Url.Action("Index", "AdminAccount"); // Default Login Url 
-				ErrorMessage("Для входа перехода на данную страницу Вам необходимо зарегистрироваться.");
-				RedirectUnAuthorizedUser(filterContext);
-				return;
-			}
+			
 			//редирект для пользователя, без соответствующих прав
 			if (admin != null && currentPermission != null && !admin.CheckPermission(currentPermission)
 			    && currentPermissionName != noPermissionRedirect) {
