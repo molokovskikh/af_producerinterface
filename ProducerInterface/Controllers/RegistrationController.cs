@@ -32,7 +32,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
-			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == User.Identity.Name);
+			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
 			return View();
 		}
 
@@ -153,7 +153,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult UserPasswordUpdate()
 		{
-			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name);
+			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == CurrentAnalitUser.Name);
 			return View();
 		}
 
@@ -168,7 +168,7 @@ namespace ProducerInterface.Controllers
 			int currentUserId = 0;
 			Int32.TryParse(Request.Form["UserNumber"], out currentUserId);
 			var currentUser =
-				DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == User.Identity.Name || e.Id == currentUserId);
+				DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == CurrentAnalitUser.Name || e.Id == currentUserId);
 			ViewBag.CurrentUser = currentUser;
 			if (currentUser != null) {
 				if (currentUser.Password != Md5HashHelper.GetHash(passwordOld)) {
@@ -222,7 +222,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult LogOut()
 		{
 			// зануляем куки регистрации формой
-			SetCookie(FormsAuthentication.FormsCookieName, null);
+			LogoutUser();
 			// возвращаем пользователя на главную страницу
 			return RedirectToAction("Index", "Home");
 		}

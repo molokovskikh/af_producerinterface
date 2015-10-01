@@ -14,6 +14,7 @@ namespace ProducerControlPanel.Controllers
 	/// <summary>
 	///     Страница профиля пользователя
 	/// </summary>
+	[AnalitSecuredController]
 	[Description("Профиль пользователя"), MainMenu]
 	public class ProducerProfileController : BaseAdminController
 	{

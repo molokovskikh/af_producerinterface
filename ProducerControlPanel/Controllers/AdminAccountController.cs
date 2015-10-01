@@ -53,9 +53,10 @@ namespace ProducerControlPanel.Controllers
 
 		public ActionResult AdminLogout()
 		{
-			FormsAuthentication.SignOut();
-			SetCookie(FormsAuthentication.FormsCookieName, null);
-			return RedirectToAction("Index");
+			//FormsAuthentication.SignOut();
+			//SetCookie(FormsAuthentication.FormsCookieName, null);
+			LogoutUser();
+            return RedirectToAction("Index");
 		}
 		
 		[HttpPost]

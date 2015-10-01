@@ -4,17 +4,17 @@
 @{
 	ViewBag.Title = "Лог";
 	Layout = "~/Views/Shared/_Layout.cshtml";
-	var backUrl = (string)ViewBag.BackUrl;
-	var log = (UserLogModel)ViewBag.Log;
+	var backUrl = (string) ViewBag.BackUrl;
+	var log = (UserLogModel) ViewBag.Log;
 }
 <div id="table-2_wrapper" class="dataTables_wrapper form-inline no-footer">
- 
+
 	<div class="row" style="padding-top: 14px;">
 		<div class="form-group col-lg-4">
 			<label class="col-lg-4 control-label"><strong>Инициатор</strong>:</label>
 			<div class="col-lg-4">
 
-				<span>@log.ProducerUser.Name (@log.ProducerUser.Id))</span>
+				<span>@(log.ProducerUser != null ? log.ProducerUser.Name + " " + log.ProducerUser.Id : "")</span>
 			</div>
 		</div>
 	</div>

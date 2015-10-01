@@ -12,5 +12,7 @@ namespace ProducerControlPanel
 	{
 		public static bool EnableCrudListener = true;
 		public static bool RuntimeHibernateMigration = false;
+		public static string CookieName = "ProducerControlPanel";
+		public static string RedirectAfterAuthentication = "Admin/Index";
 	}
 }

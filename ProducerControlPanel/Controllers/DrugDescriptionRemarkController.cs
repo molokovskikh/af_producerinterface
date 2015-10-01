@@ -18,6 +18,7 @@ namespace ProducerControlPanel.Controllers
 	/// <summary>
 	/// Страница управления пользователями
 	/// </summary>
+	[AnalitSecuredController]
 	[Description("Правки описаний препаратов")]
 	public class DrugDescriptionRemarkController : BaseAdminController
 	{

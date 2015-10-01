@@ -15,6 +15,7 @@ namespace ProducerControlPanel.Controllers
 	/// <summary>
 	///     Редактирование прав администраторов
 	/// </summary>
+	[AnalitSecuredController]
 	[Description("Права администраторов"), MainMenu]
 	public class AdminPermissionsController : BaseAdminController
 	{
