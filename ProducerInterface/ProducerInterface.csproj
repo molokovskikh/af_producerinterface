@@ -592,6 +592,7 @@
     <Content Include="Views\Profile\DrugstoreRatingParams.cshtml" />
     <Content Include="Views\Profile\CreateMonthlySchedule.cshtml" />
     <Content Include="Views\Profile\CreateWeeklySchedule.cshtml" />
+    <Content Include="Views\Profile\Products.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\analitframework\AnalitFramefork.csproj">
