@@ -33,7 +33,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
-			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
+			ViewBag.CurrentUser =  DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
 			return View();
 		}
 
@@ -53,8 +53,6 @@ namespace ProducerInterface.Controllers
 				producerUser.PasswordUpdated = SystemTime.Now();
 				// сохраняем модель нового пользователя 
 				DbSession.Save(producerUser);
-
-
 				var linkWord = Md5HashHelper.GetHash(producerUser.PasswordUpdated.ToString());
 				// письмо пользователю
 				EmailSender.SendEmail(producerUser.Email, "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
@@ -102,7 +100,7 @@ namespace ProducerInterface.Controllers
 					foreach (var item in permissionOfProfile) currentUser.Permissions.Add(item);
 				}
 				DbSession.Save(currentUser);
-				return Authenticate("Index", "Home", currentUser.Email, true);
+				return Authenticate(currentUser.Email, true);
 			}
 			return RedirectToAction("Index", "Home");
 		}
@@ -116,8 +114,6 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult UserAuthentication(string login, string password)
 		{
-			var redirectToAction = "Index";
-			var redirectToControll = "Home";
 			string originalPass = password;
 			// Проверяем введенные пользователем данные авторизации 
 			password = Md5HashHelper.GetHash(password);
@@ -127,7 +123,8 @@ namespace ProducerInterface.Controllers
 			                                                                             s.Enabled == false && s.PasswordToUpdate));
 #if DEBUG
 			//Авторизация для тестов, если пароль совпадает с паролем по умолчанию и логин есть в АД, то все ок
-			if (originalPass == Config.GetParam("DefaultUserPassword")) {
+			if (originalPass == Config.GetParam("DefaultUserPassword"))
+			{
 				authenticatedUser =
 					DbSession.Query<ProducerUser>()
 						.FirstOrDefault(s => s.Email == login && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
@@ -136,13 +133,11 @@ namespace ProducerInterface.Controllers
 #endif
 			if (authenticatedUser != null) {
 				if (authenticatedUser.PasswordToUpdate) {
-					redirectToAction = "UserPasswordUpdate";
-					redirectToControll = "Registration";
 					ViewBag.CurrentUser = authenticatedUser;
 					return View("UserPasswordUpdate");
 				}
 				// авторизуем пользователя, если все есть совпадение в БД
-				return Authenticate(redirectToAction, redirectToControll, authenticatedUser.Email, true);
+				return Authenticate(authenticatedUser.Email, true);
 			}
 			ErrorMessage("Пользователь с данным логином и паролем не существует или был заблокирован.");
 			// возвращаем пользователя на главную страницу
@@ -190,7 +185,7 @@ namespace ProducerInterface.Controllers
 				currentUser.PasswordToUpdate = false;
 				DbSession.Save(currentUser);
 				ErrorMessage("На указанную почту было выслано сообщение с новым паролем.");
-				return Authenticate("Index", "Home", currentUser.Name, true);
+				return Authenticate(currentUser.Name, true);
 			}
 			ErrorMessage("Пользователя с введенным email адресом не существует.");
 			return View();

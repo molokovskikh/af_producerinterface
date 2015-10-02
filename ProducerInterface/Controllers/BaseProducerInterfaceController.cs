@@ -2,9 +2,11 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
+using AnalitFramefork.Components;
 using AnalitFramefork.Extensions;
 using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
+using NHibernate;
 using NHibernate.Linq;
 using ProducerInterface.Models;
 
@@ -20,45 +22,27 @@ namespace ProducerInterface.Controllers
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
-			// думаю, это нужно кинуть в Tuple<> список или просто по две переменные: Controll, Action, чтобы дальше использовать в Url.Action() и GetPermissionName()
-		
-			const string noPermissionRedirect = "home_Index";
+			const string ignorePermissionRedirect = "home_Index";
 
 			base.OnActionExecuting(filterContext);
 			var user = GetCurrentUser();
 			ViewBag.CurrentUser = user;
 
-			var actionName = filterContext.RouteData.Values["action"].ToString();
-			var controllerName = GetType().Name.Replace("Controller", "");
-
-			//Обновление прав при их отсуствии
-			if (DbSession.Query<UserPermission>().Count() == 0) {
-				UserPermission.UpdatePermissions<UserPermission>(DbSession, this, typeof (BaseProducerInterfaceController));
-				//удаление ненужных прав
-				var ListToRemove = DbSession.Query<UserPermission>().ToList()
-					.Where(s => s.Name.ToLower().IndexOf("home_") != -1
-					            || s.Name.ToLower().IndexOf("registration_") != -1
-					).ToList();
-				ListToRemove.ForEach(s => { DbSession.Delete(s); });
-			}
-
-
-			string currentPermissionName = GetPermissionName(controllerName, actionName);
-			var currentPermission = GetActionPermission(currentPermissionName);
-			
-			//редирект для пользователя, без соответствующих прав
-			if (user != null && currentPermission != null && !user.CheckPermission(currentPermission)
-			    && currentPermissionName != noPermissionRedirect) {
-				var loginUrl = Url.Action("Index", "Home");
-				ErrorMessage("У Вас нет прав доступа к запрашиваемой странице.");
-				RedirectUnAuthorizedUser(filterContext, loginUrl, false);
-				return;
-			}
+			//Проверка наличия прав
+			CheckForExistenceOfUserPermissions(DbSession, this);
+			//Проверка прав
+			AuthorizationModule.CheckPermissions(DbSession, filterContext, user, ignorePermissionRedirect);
 		}
 
+		/// <summary>
+		/// Получение текущего пользователя
+		/// </summary>
+		/// <param name="getFromSession">По умолчанию пользователь получается запросом</param>
+		/// <returns></returns>
 		public ProducerUser GetCurrentUser(bool getFromSession = true)
 		{
-			if (CurrentAnalitUser == null || (CurrentAnalitUser.Name == String.Empty) || DbSession == null || !DbSession.IsConnected) {
+			if (CurrentAnalitUser == null || (CurrentAnalitUser.Name == String.Empty) || DbSession == null ||
+			    !DbSession.IsConnected) {
 				CurrentProducerUser = null;
 				return null;
 			}
@@ -67,18 +51,23 @@ namespace ProducerInterface.Controllers
 			}
 			return CurrentProducerUser;
 		}
-
 		/// <summary>
-		///     Получение прав для текущего экшена
+		/// Проверка наличия прав в БД
 		/// </summary>
-		/// <param name="permissionName"></param>
-		/// <returns>Права</returns>
-		public UserPermission GetActionPermission(string permissionName)
+		/// <param name="dbSession">Хибер-сессия</param>
+		/// <param name="controller">Контроллер</param>
+		public static void CheckForExistenceOfUserPermissions(ISession dbSession, Controller controller)
 		{
-			var permission =
-				DbSession.Query<UserPermission>()
-					.FirstOrDefault(s => s.Name.ToLower() == permissionName);
-			return permission;
+			//Обновление прав при их отсуствии
+			if (dbSession.Query<UserPermission>().Count() == 0) {
+				UserPermission.UpdatePermissions<UserPermission>(dbSession, controller, typeof (BaseProducerInterfaceController));
+				//удаление ненужных прав
+				var ListToRemove = dbSession.Query<UserPermission>().ToList()
+					.Where(s => s.Name.ToLower().IndexOf("home_") != -1
+					            || s.Name.ToLower().IndexOf("registration_") != -1
+					).ToList();
+				ListToRemove.ForEach(s => { dbSession.Delete(s); });
+			}
 		}
 	}
 }
