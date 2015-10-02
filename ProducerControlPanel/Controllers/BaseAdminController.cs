@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
+using AnalitFramefork.Components;
 using AnalitFramefork.Extensions;
 using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc;
@@ -19,32 +20,21 @@ namespace ProducerControlPanel.Controllers
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
-			const string noPermissionRedirect = "admin_index";
+			const string ignorePermissionRedirect = "admin_index";
 
 			base.OnActionExecuting(filterContext);
-
-			var admin = GetCurrentUser();
-			ViewBag.Admin = admin;
-			ViewBag.JavascriptParams["baseurl"] = GetBaseUrl();
-
 			var actionName = filterContext.RouteData.Values["action"].ToString();
 			var controllerName = GetType().Name.Replace("Controller", "");
-			string currentPermissionName = GetPermissionName(controllerName, actionName);
 
-			var currentPermission = GetActionPermission(currentPermissionName);
+			var admin = GetCurrentUser();
 
+			ViewBag.Admin = admin;
+			ViewBag.JavascriptParams["baseurl"] = GetBaseUrl();
 			ViewBag.ActionName = actionName;
 			ViewBag.ControllerName = controllerName;
 			ViewBag.Controller = this;
-			
-			//редирект для пользователя, без соответствующих прав
-			if (admin != null && currentPermission != null && !admin.CheckPermission(currentPermission)
-			    && currentPermissionName != noPermissionRedirect) {
-				var redirectUrl = Url.Action("Index", "Admin"); // Default Login Url 
-				ErrorMessage("У Вас нет прав доступа к запрашиваемой странице.");
-				RedirectUnAuthorizedUser(filterContext, redirectUrl, false);
-				return;
-			}
+			//Проверка прав
+			AuthorizationModule.CheckPermissions(DbSession, filterContext, admin, ignorePermissionRedirect);
 
 			//Если у контроллера, есть описательный аттрибут, то создаем хлебные крошки
 			var hasDescription = Attribute.IsDefined(GetType(), typeof (DescriptionAttribute));
@@ -52,17 +42,6 @@ namespace ProducerControlPanel.Controllers
 				SetBreadcrumb(this.GetDescription());
 		}
 
-		/// <summary>
-		///     Получение прав для текущего экшена
-		/// </summary>
-		/// <returns>Права</returns>
-		public AdminPermission GetActionPermission(string permissionName)
-		{
-			var permission =
-				DbSession.Query<AdminPermission>()
-					.FirstOrDefault(s => s.Name.ToLower() == permissionName);
-			return permission;
-		}
 
 		/// <summary>
 		/// Получение текущего пользователя

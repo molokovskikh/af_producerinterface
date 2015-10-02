@@ -24,9 +24,6 @@ namespace ProducerControlPanel.Controllers
 
 		public ActionResult Index()
 		{
-			if (Request.IsAuthenticated)
-				return RedirectToAction("Index", "Admin");
-			
 			return View();
 		}
 
@@ -34,18 +31,18 @@ namespace ProducerControlPanel.Controllers
 		public ActionResult Login(string username, string password, string returnUrl, bool shouldRemember = false,
 			string impersonateClient = "")
 		{
-			var employee = DbSession.Query<Admin>().FirstOrDefault(p => p.UserName == username);
+			var admin = DbSession.Query<Admin>().FirstOrDefault(p => p.UserName == username);
 #if DEBUG
 			//Авторизация для тестов, если пароль совпадает с паролем по умолчанию и логин есть в АД, то все ок
 			var defaultPassword = Config.GetParam("DefaultUserPassword");
-			if (employee != null && password == defaultPassword) {
-				Session.Add("employee", employee.Id);
-				return Authenticate("Index", "Admin", username, shouldRemember, impersonateClient);
+			if (admin != null && password == defaultPassword) {
+				Session.Add("employee", admin.Id);
+				return Authenticate(username, shouldRemember, admin.Id.ToString());
 			}
 #endif
-			if (ActiveDirectoryHelper.IsAuthenticated(username, password) && employee != null) {
-				Session.Add("employee", employee.Id);
-				return Authenticate("Index", "Admin", username, shouldRemember, impersonateClient);
+			if (ActiveDirectoryHelper.IsAuthenticated(username, password) && admin != null) {
+				Session.Add("employee", admin.Id);
+				return Authenticate(username, shouldRemember, admin.Id.ToString());
 			}
 			ErrorMessage("Неправильный логин или пароль");
 			return Redirect(returnUrl);
@@ -56,13 +53,13 @@ namespace ProducerControlPanel.Controllers
 			//FormsAuthentication.SignOut();
 			//SetCookie(FormsAuthentication.FormsCookieName, null);
 			LogoutUser();
-            return RedirectToAction("Index");
+			return RedirectToAction("Index");
 		}
-		
+
 		[HttpPost]
 		public ActionResult ApplyImpersonation([EntityBinder] Admin admin)
 		{
-			return Authenticate("Statistic", "AdminAccount", Environment.UserName, false, admin.Id.ToString());
+			return Authenticate(Environment.UserName, false, admin.Id.ToString());
 		}
 	}
 }
