@@ -1852,7 +1852,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>xcopy  "$(SolutionDir)analitframework\Mvc\Neon\Views" "$(ProjectDir)Views\Shared"  /Y /I</PreBuildEvent>
+    <PreBuildEvent>xcopy  "$(SolutionDir)analitframework\Mvc\Neon\Views" "$(ProjectDir)Views\Shared"  /Y /I
+xcopy  "$(SolutionDir)analitframework\Mvc\Assets\*" "$(ProjectDir)Assets\custom\Analit"  /Y /I /E</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
