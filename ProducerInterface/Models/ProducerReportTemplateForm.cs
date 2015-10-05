@@ -143,6 +143,9 @@ namespace AnalitFramefork.Hibernate.Models
 
 		private void PrepareReport()
 		{
+			ReportTemplate.GeneralReport.ReportFileName = "";
+			DbSession.Save(ReportTemplate.GeneralReport);
+
 			Report subreport;
 			if (!ReportTemplate.GeneralReport.Reports.Any())
 			{
@@ -153,12 +156,13 @@ namespace AnalitFramefork.Hibernate.Models
 				subreport.Name = "Отчет пользователя " + ReportTemplate.User.Email + ", поставщика " +
 				                 ReportTemplate.User.Producer.Name;
 				ReportTemplate.GeneralReport.Reports.Add(subreport);
+				DbSession.Save(subreport);
+				DbSession.Flush();
+				DbSession.Refresh(subreport);
 			}
 			else
 				subreport = ReportTemplate.GeneralReport.Reports.First();
-			DbSession.Save(subreport);
-			DbSession.Flush();
-			DbSession.Refresh(subreport);
+			
 			//Дефолтные параметры для всех отчетов
 			//Они создаются триггером в БД, поэтому и делаем Flush + Refresh
 			ReportPropertyValue prop;

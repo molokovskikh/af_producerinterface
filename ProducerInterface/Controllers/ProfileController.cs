@@ -314,7 +314,7 @@ namespace ProducerInterface.Controllers
 			if (errors.Length == 0)
 			{
 				reportTemplate.GeneralReport.Title = "Отчет пользователя " + GetCurrentUser().Email + ", поставщика " + GetCurrentUser().Producer.Name + "";
-				reportTemplate.GeneralReport.ReportFileName = reportTemplate.Title;
+				reportTemplate.GeneralReport.ReportFileName = "";
 				reportTemplate.GeneralReport.Enabled = false;
 				DbSession.Save(reportTemplate.GeneralReport);
 				DbSession.Save(reportTemplate);
