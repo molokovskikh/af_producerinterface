@@ -37,6 +37,11 @@ namespace ProducerInterface.Controllers
 			return View("Index");
 		}
 
+		public ActionResult Products()
+		{
+			return View("Products");
+		}
+
 		public ActionResult Catalog(int? id = null)
 		{
 			if (id.HasValue) {
