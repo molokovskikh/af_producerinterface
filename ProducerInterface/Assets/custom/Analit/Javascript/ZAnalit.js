@@ -160,15 +160,21 @@ function Analit() {
 		}.bind(this));
 	}
 
-	this.showMessages = function() {
-		var msg = this.getCookie("SuccessMessage", true);
-		if (msg) {
-			$('.server-message').prepend('<div class="col-md-12 alert alert-success">'+ msg +'</div>');
-		} else {
-			msg = this.getCookie("ErrorMessage", true);
-			if(msg)
-				$('.server-message').prepend('<div class="col-md-12 alert alert-danger">' + msg + '</div>');
-		}
+	this.showMessages = function () {
+	    var msg = this.getCookie("SuccessMessage", true);
+	    if (msg) {
+	        this.showSuccessMessage(msg);
+	    } else {
+	        msg = this.getCookie("ErrorMessage", true);
+	        if (msg)
+	            this.showErrorMessage(msg);
+	    }
+	}
+	this.showErrorMessage = function (msg) {
+	    $('.server-message').html('<div class="col-md-12 alert alert-danger">' + msg + '</div>');
+	}
+	this.showSuccessMessage = function (msg) {
+	    $('.server-message').html('<div class="col-md-12 alert alert-success">' + msg + '</div>');
 	}
 
 	this.initialize();

@@ -1,26 +1,31 @@
-﻿function InputSearchDropdown(input, url, callback) {
-	console.log("Запускаем выпадающие подсказки для элемента ", input);
+﻿function InputSearchDropdown(input, route, callback) {
+    console.log("Запускаем выпадающие подсказки для элемента ", input);
+    var self = this;
 	var lastRequest;
 	var dropdown;
+	var onchange = function () { };
+    var onRequestSend = function() {};
 
 	var initialize = function() {
 		dropdown = $("<div class='analit-dropdown'></div>").get(0);
 		$(input).after(dropdown);
 		$(dropdown).hide();
-		$(input).on("keydown", onkeydown);
+		$(input).on("keyup", self.search);
 	}
 
-	var onkeydown = function() {
+	this.search = function () {
 		if (lastRequest)
 			lastRequest.abort();
 		var name = $(input).val();
-		if (!name)
-			return;
 
+		var data = { id: name}
+	    onRequestSend(data);
+	    var url = cli.getParam("baseurl") + route;
 		lastRequest = $.ajax({
-			url: cli.getParam("baseurl") + url + "?id=" + encodeURIComponent(name),
+			url: url,
 			type: 'POST',
 			dataType: "json",
+            data : data,
 			success: function(data) {
 				var obj = data;
 				var str = "";
@@ -37,11 +42,12 @@
 					$(input).val(name);
 					e.stopPropagation();
 					var event = { Value: value, Name: name }
-					callback(event);
+					callback.bind(self,event)();
 				});
 				$(dropdown).show();
 				if (obj.length <= 0)
-					$(dropdown).hide();
+				    $(dropdown).hide();
+				onchange.bind(self, obj)();
 			},
 			error: function(event) {
 				if (event.statusText == "abort")
@@ -50,16 +56,23 @@
 			}
 		});
 	};
-
 	this.disable = function() {
-		$(input).off("keydown", null, onkeydown);
+	    $(input).off("keyup", null, self.search);
 		$(dropdown).remove();
 	}
 	
 	this.getElement = function() {
 		return dropdown;
 	}
-
+    this.getSelectElement = function() {
+        return input;
+    }
+    this.onChange = function(callback) {
+        onchange = callback;
+    }
+    this.onRequestSend = function(callback) {
+        onRequestSend = callback;
+    }
 	initialize();
 }
 

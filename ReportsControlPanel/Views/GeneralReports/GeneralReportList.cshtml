@@ -40,9 +40,11 @@
 			<thead>
 				<tr role="row">
 					<th><a href="@pager.OrderBy(s => s.Id)">Номер</a></th>
-					<th><a href="@pager.OrderBy(s => s.Payer.Id)">Плательщик</a></th>
-					<th><a href="@pager.OrderBy(s => s.Title)">Название</a></th>
-					<th><a href="@pager.OrderBy(s => s.Enabled)">Включен</a></th>
+				    <th class="col-sm-1"><a href="@pager.OrderBy(s => s.Payer.Id)">Биллинг Код</a></th>
+                    <th class="col-sm-1"><a href="@pager.OrderBy(s => s.Payer.Id)">Плательщик</a></th>
+                    <th><a href="@pager.OrderBy(s => s.Enabled)">Включен</a></th>
+                    <th><a href="@pager.OrderBy(s => s.Public)">Публичный</a></th>
+					<th class="col-sm-4"><a href="@pager.OrderBy(s => s.Title)">Название</a></th>
 					<th>Действия</th>
 			</thead>
 			<tbody>
@@ -51,24 +53,31 @@
 			{
 				odd = odd == "even" ? "odd" : "even";
 				<tr role="row" class="@odd">
-					<td>@item.Id</td>
-					<td>
-						<div>
-							@if (item.Payer != null)
-							{
-								<a href="@(Config.AdminInterfaceUrl)Billing/edit.rails?BillingCode=@item.Payer.Id">@item.Payer.Name</a>
-							}
-							<i class="editPayer icon entypo-pencil"></i>
-						</div>
-					</td>
+				    <td>@item.Id</td>
+				    <td>
+				        @if (item.Payer != null)
+                        {
+                            <a href="@string.Format("http://stat.analit.net/adm/Billing/edit.rails?BillingCode={0}", @item.Payer.Id)">@item.Payer.Id</a>
+                        }
+				    </td>
+				    <td>
+				        <div>
+				            @if (item.Payer != null)
+				            {
+				                <a href="@(Config.AdminInterfaceUrl)Billing/edit.rails?BillingCode=@item.Payer.Id">@item.Payer.Name</a>
+				            }
+				            <i class="editPayer icon entypo-pencil"></i>
+				        </div>
+				    </td>
+                    <td>@(item.Enabled ? "Да" : "Нет")</td>
+                    <td>@(item.Public ? "Да" : "Нет")</td>
 					<td>@item.Title</td>
-					<td>@(item.Enabled ? "Да" : "Нет")</td>
 					<td>
-						<a class="btn btn-success btn-sm btn-icon icon-left" href="@Url.Action("Reports", "GeneralReports", new {id = item.Id})">
+						<a class="btn btn-success btn-sm btn-icon icon-left" href="@string.Format("https://local.stat.analit.net/reportConf/Contacts/Show?reportId={0}",item.Id)">
 							<i class="entypo-docs"></i>
 							Отчеты
 						</a>
-						<a class="btn btn-success btn-sm btn-icon icon-left" href="@Url.Action("Contacts", "GeneralReports", new {id = item.Id})">
+						<a class="btn btn-success btn-sm btn-icon icon-left" href="@string.Format("https://local.stat.analit.net/reportConf/Reports/Reports.aspx?r={0}",item.Id)">
 							<i class="entypo-users"></i>
 							Рассылка
 						</a>

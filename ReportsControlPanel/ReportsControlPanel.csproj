@@ -17,7 +17,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
@@ -186,15 +186,8 @@
     <Content Include="Assets\css\skins\yellow.css" />
     <Content Include="Assets\css\skins\yellow.min.css" />
     <Content Include="Assets\css\wysihtml5-color.css" />
-    <Content Include="Assets\custom\js\EventEmitter.js" />
     <Content Include="Assets\custom\js\GeneralReportsController.CreateGeneralReport.js" />
-    <Content Include="Assets\custom\js\Helpers.js" />
-    <Content Include="Assets\custom\js\jquery-2.1.1.js" />
-    <Content Include="Assets\custom\js\jquery-ui-1.11.1.js" />
-    <Content Include="Assets\custom\js\InputSearchDropdown.js" />
-    <Content Include="Assets\custom\js\InputTextEditor.js" />
-    <Content Include="Assets\custom\js\Analit.js" />
-    <Content Include="Assets\custom\js\Window.js" />
+    <Content Include="Assets\custom\js\GeneralReportsController.Schedule.js" />
     <Content Include="Assets\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Assets\fonts\index.html" />
     <Content Include="Assets\fonts\montserrat\font.css" />
@@ -1794,6 +1787,7 @@
     <Content Include="Assets\js\zurb-responsive-tables\.gitignore" />
     <Content Include="Assets\js\zurb-responsive-tables\javascripts\app.js.orig" />
     <Content Include="Assets\custom\js\GeneralReportsController.GeneralReportList.js" />
+    <None Include="Properties\PublishProfiles\production.pubxml" />
     <None Include="Properties\PublishProfiles\test.analit.net.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -1,6 +1,7 @@
 ﻿@using System.Activities.Statements
 @using System.Globalization
 @using AnalitFramefork.Components
+@using AnalitFramefork.Extensions
 @using AnalitFramefork.Hibernate.Models
 @using Microsoft.Win32.TaskScheduler
 
@@ -10,9 +11,10 @@
 	var sunday = daysofweek.First();
 	daysofweek.RemoveAt(0);
 	daysofweek.Add(sunday);
-	var useremail = User.Identity.Name.Replace(@"ANALIT\", string.Empty);
-	useremail = useremail != "" ? useremail : "(не удалось определить почту!)";
 	ReportExecuteForm reportExecuteForm = ViewBag.ReportExecuteForm;
+    var reportStatus = reportExecuteForm.GetReportStatus(report);
+    var needToBlockControls = reportStatus == ReportExecutionStatus.InProgress ? true : false;
+    var additionalButtonHtml = needToBlockControls ? "disabled='disabled'" : "";
 }
 
 <div class="panel panel-default panel-dark">
@@ -26,9 +28,11 @@
 	</div>
 	<div class="panel-body">
 		<span>Состояние</span>
-		<span>
-			<b>@report.GetStateDescription()</b>
+	    <span class="status">
+			<b>@reportStatus.GetDescription()</b>
 		</span>
+        <div class="hidden reportId">@report.Id</div>
+        <div class="hidden lastExecutionDate">@reportExecuteForm.GetLastExecutionDate(report)</div>
 	</div>
 </div>
 
@@ -41,16 +45,16 @@
 	</div>
 	<div class="panel-body">
 		<form  method="post" class="form form-horizontal">
-			<div class="form-group">
-				<label class="col-sm-1">От</label>
-				<div class="col-sm-1">
-					@Html.TextBoxFor(i => reportExecuteForm.StartTime, new {@data_format = "dd.mm.yyyy", @class = "form-control", @data_provide = "datepicker-inline"})
-				</div>
+		<div class="form-group">
+			<label class="col-sm-1">От</label>
+			<div class="col-sm-1">
+				@Html.TextBoxFor(i => reportExecuteForm.StartTime, "{0:dd.MM.yyyy}", new { @data_format = "dd.mm.yyyy", @class = "datepicker form-control"})
 			</div>
+		</div>
 		<div class="form-group">
 			<label class="col-sm-1">До</label>
 			<div class="col-sm-1">
-					@Html.TextBoxFor(i => reportExecuteForm.EndTime, new { @data_format = "dd.mm.yyyy", @class = "form-control", @data_provide = "datepicker-inline" })
+					@Html.TextBoxFor(i => reportExecuteForm.EndTime, "{0:dd.MM.yyyy}", new { @data_format = "dd.mm.yyyy", @class = "datepicker form-control"})
 			</div>
 		</div>
 
@@ -58,8 +62,8 @@
 			<div class="col-sm-1"></div>
 			<div class="col-sm-3">
 				<div class="div">
-					@Html.RadioButtonFor(i => reportExecuteForm.UseEmailList,false)
-					<span>Выслать на @useremail</span>
+					@Html.RadioButtonFor(i => reportExecuteForm.UseEmailList, false)
+					<span>Выслать на @reportExecuteForm.UserEmail</span>
 				</div>
 				<div class="div">
 					@Html.RadioButtonFor(i => reportExecuteForm.UseEmailList, true)
@@ -77,7 +81,7 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-5">
-					<button type="submit"  class="btn btn-green" name="reportExecuteForm.Execute" value="true">Запустить отчет</button>
+					<button type="submit" @additionalButtonHtml  class="btn btn-green run" name="reportExecuteForm.Execute" value="true">Запустить отчет</button>
 					<button type="submit"  class="btn btn-blue" name="reportExecuteForm.Execute" value="false">Отправить готовый отчет</button>
 				</div>
 			</div>
@@ -186,7 +190,7 @@
 		</table>
 	</div>
 
-	<div class="panel panel-default panel-dark">
+	<div class="panel panel-default panel-dark executions">
 		<div class="panel-heading">
 			<div class="panel-title">
 				<span>Статистика запусков</span>

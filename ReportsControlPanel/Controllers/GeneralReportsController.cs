@@ -20,6 +20,13 @@ namespace ReportsControlPanel.Controllers
 	public class GeneralReportsController : BaseController
 	{
 
+		[Description("Перейти в старый интерфейс"), MainMenu]
+		public ActionResult GoToOldReportInterface()
+		{
+			var url = "https://local.stat.analit.net/reportConf/Reports/GeneralReports.aspx";
+            return Redirect(url);
+		}
+
 		[Description("Список отчетов"), MainMenu]
 		public ActionResult GeneralReportList()
 		{
@@ -41,7 +48,7 @@ namespace ReportsControlPanel.Controllers
 			var report = DbSession.Query<GeneralReport>().First(i => i.Id == id);
 			var form = new ReportExecuteForm();
 			form.ImportEmailsFromReport(report);
-			form.UserEmail = CurrentAnalitUser.Name.Replace(@"ANALIT\", string.Empty);
+			form.UserEmail = User.Identity.Name.Replace(@"ANALIT\", string.Empty) + "@analit.net";
 			form.UseEmailList = true;
 
 			ViewBag.ReportExecuteForm = form;
@@ -61,8 +68,7 @@ namespace ReportsControlPanel.Controllers
 			var errors = ValidationRunner.Validate(reportExecuteForm);
 			if (errors.Length == 0)
 			{
-				var useremail = CurrentAnalitUser.Name.Replace(@"ANALIT\", string.Empty);;
-				reportExecuteForm.ProcessReport(report, DbSession, useremail);
+				reportExecuteForm.ProcessReport(report, DbSession);
 				var actionErrors = reportExecuteForm.GetErrors();
 				if (actionErrors.Length == 0)
 					SuccessMessage(reportExecuteForm.Execute == true ? "Отчет запущен" : "Отчет выслан");
@@ -74,6 +80,13 @@ namespace ReportsControlPanel.Controllers
             return View("Schedule");
 		}
 
+		public JsonResult GetGeneralReportSatus(uint id, DateTime? lastExecutionDate = null)
+		{
+			var report = DbSession.Query<GeneralReport>().First(i => i.Id == id);
+			var status = report.GetStatus(lastExecutionDate);
+			var result = new {Status = status, Message = status.GetDescription()};
+			return Json(result);
+		}
 		/// <summary>
 		/// Страница создания отчета.
 		/// </summary>
