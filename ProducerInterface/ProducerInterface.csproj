@@ -147,8 +147,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Config.cs" />
+    <Compile Include="Models\DrugstoreRatingReportTemplateForm.cs" />
     <Compile Include="Models\ReportTemplateForm.cs" />
-    <Compile Include="Models\ProducerReportTemplateForm.cs" />
+    <Compile Include="Models\SupplierRatingReportTemplateForm.cs" />
     <Compile Include="Models\UserLogModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -586,7 +587,7 @@
     <Content Include="Views\Profile\CreateRatingReport.cshtml" />
     <Content Include="Views\Profile\CreateReportTemplate.cshtml" />
     <Content Include="Views\Profile\EditReportTemplate.cshtml" />
-    <Content Include="Views\Profile\ProducerRatingParams.cshtml" />
+    <Content Include="Views\Profile\SupplierRatingParams.cshtml" />
     <Content Include="Views\Profile\RunGeneralReport.cshtml" />
     <Content Include="Views\Profile\EditGeneralReport.cshtml" />
     <Content Include="Views\Profile\DrugstoreRatingParams.cshtml" />

@@ -452,7 +452,7 @@ namespace ProducerInterface.Controllers
 			var regionModels = DbSession.Query<Region>().Where(i => regionNames.Contains(i.Title)).ToList();
 			var supplierNames = suppliers.Split(',');
 			var supplierModels = DbSession.Query<Supplier>().Where(i => supplierNames.Contains(i.Name)).ToList();
-			var foundSuppliers = ProducerRatingReportTemplateForm.FindSuppliers(DbSession, id, regionModels, supplierModels);
+			var foundSuppliers = SupplierRatingReportTemplateForm.FindSuppliers(DbSession, id, regionModels, supplierModels);
 			var result = foundSuppliers.Select(i => new {Name = i.Name, Value = i.Id});
 			return Json(result);
 		}
@@ -461,7 +461,7 @@ namespace ProducerInterface.Controllers
 		{
 			var regionNames = regions.Split(',');
 			var regionModels = DbSession.Query<Region>().Where(i => regionNames.Contains(i.Title)).ToList();
-			var foundRegions = ProducerRatingReportTemplateForm.FindRegions(DbSession, id, regionModels);
+			var foundRegions = DrugstoreRatingReportTemplateForm.FindRegions(DbSession, id, regionModels);
 			var result = foundRegions.Select(i => new {Name = i.Title, Value = i.Id});
 			return Json(result);
 		}
@@ -471,7 +471,7 @@ namespace ProducerInterface.Controllers
 			var drugNames = drugs.Split(',');
 			var drugModels = DbSession.Query<Drug>().Where(i => drugNames.Contains(i.Name)).ToList();
 			var producer = GetCurrentUser().Producer;
-			var foundDrugs = ProducerRatingReportTemplateForm.FindDrugs(DbSession, id, producer, drugModels);
+			var foundDrugs = DrugstoreRatingReportTemplateForm.FindDrugs(DbSession, id, producer, drugModels);
 			var result = foundDrugs.Select(i => new {Name = i.Name, Value = i.Id});
 			return Json(result);
 		}
