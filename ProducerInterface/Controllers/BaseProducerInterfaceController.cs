@@ -31,7 +31,7 @@ namespace ProducerInterface.Controllers
 			//Проверка наличия прав
 			CheckForExistenceOfUserPermissions(DbSession, this);
 			//Проверка прав
-			AuthorizationModule.CheckPermissions(DbSession, filterContext, user, ignorePermissionRedirect);
+			AuthenticationModule.CheckPermissions(DbSession, filterContext, user, ignorePermissionRedirect);
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace ProducerInterface.Controllers
 				CurrentProducerUser = null;
 				return null;
 			}
-			if (getFromSession && (CurrentProducerUser == null || User.Identity.Name != CurrentProducerUser.Name)) {
+			if (getFromSession && (CurrentProducerUser == null || CurrentAnalitUser.Name != CurrentProducerUser.Email)) {
 				CurrentProducerUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
 			}
 			return CurrentProducerUser;
