@@ -34,7 +34,7 @@ namespace ProducerControlPanel.Controllers
 			ViewBag.ControllerName = controllerName;
 			ViewBag.Controller = this;
 			//Проверка прав
-			AuthorizationModule.CheckPermissions(DbSession, filterContext, admin, ignorePermissionRedirect);
+			AuthenticationModule.CheckPermissions(DbSession, filterContext, admin, ignorePermissionRedirect);
 
 			//Если у контроллера, есть описательный аттрибут, то создаем хлебные крошки
 			var hasDescription = Attribute.IsDefined(GetType(), typeof (DescriptionAttribute));

@@ -150,7 +150,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult UserPasswordUpdate()
 		{
-			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == CurrentAnalitUser.Name);
+			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
 			return View();
 		}
 
@@ -165,7 +165,7 @@ namespace ProducerInterface.Controllers
 			int currentUserId = 0;
 			Int32.TryParse(Request.Form["UserNumber"], out currentUserId);
 			var currentUser =
-				DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Name == CurrentAnalitUser.Name || e.Id == currentUserId);
+				DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name || e.Id == currentUserId);
 			ViewBag.CurrentUser = currentUser;
 			if (currentUser != null) {
 				if (currentUser.Password != Md5HashHelper.GetHash(passwordOld)) {
@@ -184,8 +184,8 @@ namespace ProducerInterface.Controllers
 				currentUser.Enabled = true;
 				currentUser.PasswordToUpdate = false;
 				DbSession.Save(currentUser);
-				ErrorMessage("На указанную почту было выслано сообщение с новым паролем.");
-				return Authenticate(currentUser.Name, true);
+				SuccessMessage("На указанную почту было выслано сообщение с новым паролем.");
+				return Authenticate(currentUser.Email, true);
 			}
 			ErrorMessage("Пользователя с введенным email адресом не существует.");
 			return View();
@@ -205,7 +205,7 @@ namespace ProducerInterface.Controllers
 				authenticatedUser.Enabled = false;
 				authenticatedUser.PasswordToUpdate = true;
 				DbSession.Save(authenticatedUser);
-				ErrorMessage("На указанную почту было выслано сообщение с новым паролем.");
+				SuccessMessage("На указанную почту было выслано сообщение с новым паролем.");
 				return RedirectToAction("Index", "Home");
 			}
 			ErrorMessage("Пользователя с введенным email адресом не существует.");
