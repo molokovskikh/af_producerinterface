@@ -273,6 +273,7 @@
 	<div class="clearfix"></div>
 		<!-- Техническая информация -->
 	<div class="JavascriptParams" style="display: none">
+
 	    @{
 	        var dic = ViewBag.JavascriptParams as Dictionary<string, string>;
 	        if (dic != null && dic.Count != 0)
@@ -283,6 +284,7 @@
 	            }
 	        }
 	    }
+
 	</div>
         @controller.GetJavascriptFileLinks()
 		<!--[if (!IE)|(gt IE 8)]><!-->
