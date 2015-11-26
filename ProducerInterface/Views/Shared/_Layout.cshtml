@@ -1,4 +1,5 @@
 ﻿ @using AnalitFramefork.Hibernate.Models @using AnalitFramefork.Mvc @using ProducerInterface.Models
+@using System.Web.Optimization
 @{
     var user = (ViewBag.CurrentUser as ProducerUser);
     BaseController controller = ViewBag.Controller;
@@ -15,9 +16,12 @@
 
 		<title>Аналит | @ViewBag.Title</title>
 
+        @Styles.Render("~/Assets/css")
 
-		<!-- Favicon -->
-		<link rel="shortcut icon" href="~/Assets/img/favicon.ico">
+		<!-- Favicon (in ~/favicon.ico)--> 
+@*
+            <link rel="shortcut icon" href="~/Assets/img/favicon.ico">
+
 
 		<!-- Font -->
 		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Arimo:400,700,400italic,700italic'>
@@ -46,6 +50,8 @@
 		<link rel="stylesheet" href="~/Assets/css/customizer/home-pages-customizer.css">
 		<!-- IE Styles-->
 		<link rel='stylesheet' href="~/Assets/css/ie/ie.css">
+*@
+
         @controller.GetCssFileLinks()
 		<!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -54,7 +60,7 @@
 		<![endif]-->
 		 
 	</head>
-	<body class="fixed-header">
+	<body class="fixed-header" style="background-color:#D0D0D0;">
 	<div class="page-box">
 		<div class="server-message"></div>
 		<div class="page-box-content">
@@ -65,24 +71,25 @@
 							<div class="col-xs-6 col-md-2 col-lg-3 logo-box">
 								<div class="logo">
 									<a href="@Url.Action("Index", "Home")">
-										<img src="~/Assets/img/logo.svg" class="logo-img" alt="">
+										<img src="~/Assets/img/aflogo.png" class="logo-img" alt="">
 									</a>
 								</div>
 							</div><!-- .logo-box -->
 							<div class="col-xs-6 col-md-10 col-lg-9 right-box">
 								<div class="right-box-wrapper">
-									<div class="header-icons">
-										<div class="search-header hidden-600">
-											<a href="#">
+									<div class="header-icons">									
+                                    	<div class="search-header hidden-600">
+										@*	<a>
 												<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
 													<path d="M12.001,10l-0.5,0.5l-0.79-0.79c0.806-1.021,1.29-2.308,1.29-3.71c0-3.313-2.687-6-6-6C2.687,0,0,2.687,0,6
 					s2.687,6,6,6c1.402,0,2.688-0.484,3.71-1.29l0.79,0.79l-0.5,0.5l4,4l2-2L12.001,10z M6,10c-2.206,0-4-1.794-4-4s1.794-4,4-4
 					s4,1.794,4,4S8.206,10,6,10z"></path>
 													<image src="~/Assets/img/png-icons/search-icon.png" alt="" width="16" height="16" style="vertical-align: top;">
 												</svg>
-											</a>
-										</div>
-										<!-- .search-header -->
+											</a>*@
+										</div>		
+                                    <!-- .search-header -->
+
 										<div class="phone-header hidden-600">
 											<a href="#">
 												<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
@@ -134,11 +141,12 @@
 
 							<div class="phone-active col-sm-9 col-md-9">
 								<a href="#" class="close"><span>close</span>×</a>
-								<span class="title">Call Us</span> <strong>+1 (777) 123 45 67</strong>
+								<span class="title">Телефон</span> <strong>8-800-555-46-88</strong>
 							</div>
-							<div class="search-active col-sm-9 col-md-9">
+					
+                    @*		<div class="search-active col-sm-9 col-md-9">
 								<a href="#" class="close"><span>закрыть</span>×</a>
-								<form name="search-form" class="search-form">
+                                <form name="search-form" class="search-form">
 									<input class="search-string form-control" type="search" placeholder="Поиск" name="search-string">
 									<button class="search-submit">
 										<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
@@ -148,8 +156,9 @@
 											<image src="~/Assets/img/png-icons/search-icon.png" alt="" width="16" height="16" style="vertical-align: top;">
 										</svg>
 									</button>
-								</form>
+								</form>        
 							</div>
+                   *@
 						</div><!-- .row -->
 					</div><!-- .header-wrapper -->
 				</div><!-- .header-two -->
@@ -160,6 +169,7 @@
 	</div><!-- .page-box -->
 
 		<footer id="footer">
+            @*
 			<div class="footer-top">
 				<div class="container">
 					<div class="row sidebar">
@@ -223,12 +233,12 @@
 					</div>
 				</div>
 			</div><!-- .footer-top -->
-
+            *@
 			<div class="footer-bottom">
 				<div class="container">
 					<div class="row">
 						<div class="copyright col-xs-12 col-sm-3 col-md-3">
-							Copyright © ItemBridge Inc., 2013
+							Аналит Фармация, 2011
 						</div>
 
 						<div class="phone col-xs-6 col-sm-3 col-md-3">
@@ -239,8 +249,8 @@
 			  M11.001,12H5V2h6V12z"></path>
 								</svg>
 							</div>
-							<strong class="title">Call Us:</strong> +1 (877) 123-45-67 <br>
-							<strong>or</strong> +1 (777) 123-45-67
+							<strong class="title">Телефон:</strong>8-800-555-46-88<br>
+							<strong></strong>
 						</div>
 
 						<div class="address col-xs-6 col-sm-3 col-md-3">
@@ -258,7 +268,7 @@
 									</g>
 								</svg>
 							</div>
-							49 Archdale, 2B Charleston 5655, Excel Tower<br> OPG Rpad, 4538FH
+							<br>
 						</div>
 
 						<div class="col-xs-12 col-sm-3 col-md-3">

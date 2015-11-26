@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using AnalitFramefork;
-
+using System.Web.Optimization;
 namespace ProducerInterface
 {
 	/// <summary>
@@ -16,6 +16,7 @@ namespace ProducerInterface
                 WebApiConfig.Register(GlobalConfiguration.Configuration);
                 FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                 RouteConfig.RegisterRoutes(RouteTable.Routes);
+                ProducerInterface.BundleConfig.RegisterBundles(BundleTable.Bundles);
                 Framework.Initialize(this);         
 		}
 	}
