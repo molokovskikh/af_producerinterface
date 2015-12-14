@@ -5,3 +5,6 @@
 *.user
 *.gen.*
 packages
+./vs/
+.ProducerInterface/Properties/PublishProfiles/TEST LOCAL.pubxml
+./ProducerInterface/ProducerInterface.csproj
