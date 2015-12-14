@@ -524,8 +524,10 @@
     <Content Include="Assets\js\price-regulator\jshashtable-2.1_src.js" />
     <Content Include="Assets\js\price-regulator\tmpl.js" />
     <Content Include="Assets\js\raphael.min.js" />
+    <Content Include="Assets\js\html5shiv.js" />
     <Content Include="Assets\js\revolution\jquery.themepunch.revolution.min.js" />
     <Content Include="Assets\js\revolution\jquery.themepunch.tools.min.js" />
+    <Content Include="Assets\js\respond.min.js" />
     <Content Include="Assets\js\SmoothScroll.js" />
     <Content Include="Assets\js\spin.min.js" />
     <Content Include="Assets\js\video.js" />

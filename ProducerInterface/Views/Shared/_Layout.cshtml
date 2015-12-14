@@ -15,16 +15,15 @@
 		<meta name="author" content="" />
 
 		<title>Аналит | @ViewBag.Title</title>
+        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Arimo:400,700,400italic,700italic'>
 
         @Styles.Render("~/Assets/css")
 
 		<!-- Favicon (in ~/favicon.ico)--> 
 @*
             <link rel="shortcut icon" href="~/Assets/img/favicon.ico">
-
-
-		<!-- Font -->
-		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Arimo:400,700,400italic,700italic'>
+    
+		<!-- Font -->		
 		<!-- Plagins CSS -->
 		<link rel="stylesheet" href="~/Assets/css/bootstrap.css">
 		<link rel="stylesheet" href="~/Assets/css/font-awesome.min.css">
@@ -53,9 +52,10 @@
 *@
 
         @controller.GetCssFileLinks()
+
 		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <script src="~/Assets/js/respond.min.js"></script>
+            <script src="~/Assets/js/html5shiv.js"></script>		
 			<link rel='stylesheet' href="~/Assets/css/ie/ie8.css">
 		<![endif]-->
 		 
@@ -114,6 +114,7 @@
 														<li class="parent">
 															<a href="@Url.Action("Index", "Home")">Главная</a>
 														</li>
+
 														<li class="parent">
 															@if (user == null) {
 																<a href="@Url.Action("Index", "Registration")">Войти</a>
@@ -127,10 +128,23 @@
 																		<a href="@Url.Action("ListUser", "Permissions")">Редактор прав</a>
 																	</li>
 																	}
-																	<li><a href="@Url.Action("LogOut", "Registration")">Выйти</a>
+                                                                  
+																	<li><a href="@Url.Action("LogOut", "Registration")">Выйти</a></li>
 																</ul>
-															}
-														</li>
+															}                                                                  
+														</li>  
+                                                        @if (user != null)
+                                                        {
+                                                        <li class="parent">
+                                                            <a>Разделы</a>
+                                                            <ul class="sub">
+                                                                <li><a href="@Url.Action("Reports", "Profile")">Отчеты</a></li>
+                                                                <li><a href="@Url.Action("Promotions", "Profile")">Промо-акции</a></li>
+                                                                <li><a href="@Url.Action("Products", "Profile")">Описание препаратов</a></li>
+                                                            </ul>
+                                                            
+                                                        </li>   
+                                                        }                                           
 													</ul>
 												</nav>
 											</div>
