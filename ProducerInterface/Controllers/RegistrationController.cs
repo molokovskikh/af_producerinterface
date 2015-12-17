@@ -60,7 +60,7 @@ namespace ProducerInterface.Controllers
 									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
 						Config.GetParam("SiteName"), producerUser.Email,
 						Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
-				// письмо письма на аналит 
+				// письмо на аналит 
 				EmailSender.SendEmail(Config.GetParam("ProducerInterfaceForwardEmail"), "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
 					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
 									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",

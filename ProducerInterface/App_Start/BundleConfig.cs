@@ -45,8 +45,6 @@ namespace ProducerInterface
 "~/Assets/js/jquery.sparkline.min.js",
 "~/Assets/js/jquery.easypiechart.min.js",
 "~/Assets/js/jquery.easing.1.3.js",
-"~/Assets/js/jquery.fancybox.pack.js",
-"~/Assets/js/isotope.pkgd.min.js",
 "~/Assets/js/jquery.knob.js",
 "~/Assets/js/jquery.selectBox.min.js",
 "~/Assets/js/jquery.royalslider.min.js",

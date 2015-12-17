@@ -1,1084 +1,1132 @@
-﻿ 
+﻿
 @using AnalitFramefork.Hibernate.Models
-@using ProducerInterface.Models 
+@using ProducerInterface.Models
+@using System.Web.Optimization
 @{
-	ViewBag.Title = "Главная";
-	Layout = "~/Views/Shared/_Layout.cshtml"; 
-	List<Producer> producers = ViewBag.Producers;
-	var user = (ViewBag.CurrentUser as ProducerUser); 
-} 
-
-<div class="slider rs-slider load">
-	<div class="tp-banner-container">
-		<div class="tp-banner">
-			<ul>
-				<li data-delay="7000" data-transition="fade" data-slotamount="7" data-masterspeed="2000">
-					<div class="elements">
-						<div class="tp-caption lfl"
-							 data-x="211"
-							 data-y="203"
-							 data-speed="1000"
-							 data-start="1500"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 2">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img1.png" width="217" height="172" alt="">
-						</div> 
-
-						<div class="tp-caption lft"
-							 data-x="97"
-							 data-y="271"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img2.png" width="71" height="104" alt="">
-						</div>
-
-						<div class="tp-caption lft"
-							 data-x="479"
-							 data-y="271"
-							 data-speed="1000"
-							 data-start="1200"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img2.png" width="71" height="104" alt="">
-						</div>
-
-						<div class="tp-caption lfb"
-							 data-x="-32"
-							 data-y="372"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img3.png" width="764" height="76" alt="">
-						</div>
-
-						<div class="tp-caption lft"
-							 data-x="166"
-							 data-y="167"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img4.png" width="247" height="71" alt="">
-						</div>
-
-						<div class="tp-caption customin"
-							 data-x="177"
-							 data-y="62"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 100%;"
-							 data-speed="700"
-							 data-start="1400"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 3">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img5.png" width="166" height="107" alt="">
-						</div>
-
-						<div class="tp-caption lft"
-							 data-x="487"
-							 data-y="69"
-							 data-speed="1000"
-							 data-start="1500"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 1">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img6.png" width="104" height="157" alt="">
-						</div>
-
-						<div class="tp-caption lfl"
-							 data-x="539"
-							 data-y="177"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 3">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img7.png" width="95" height="197" alt="">
-						</div>
-
-						<div class="tp-caption lfl lft"
-							 data-x="7"
-							 data-y="134"
-							 data-speed="1000"
-							 data-start="1700"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 3">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img8.png" width="275" height="240" alt="">
-						</div>
-
-						<div class="tp-caption customin"
-							 data-x="375"
-							 data-y="78"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1000"
-							 data-start="1500"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img9.png" width="101" height="101" alt="">
-						</div>
-
-						<div class="tp-caption lfb"
-							 data-x="141"
-							 data-y="297"
-							 data-speed="1000"
-							 data-start="1800"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img10.png" width="64" height="77" alt="">
-						</div>
-
-						<div class="tp-caption lfl"
-							 data-x="428"
-							 data-y="356"
-							 data-speed="500"
-							 data-start="2000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 3">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img11.png" width="35" height="14" alt="">
-						</div>
-
-						<div class="tp-caption lfb"
-							 data-x="225"
-							 data-y="335"
-							 data-speed="1000"
-							 data-start="1880"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img12.png" width="33" height="25" alt="">
-						</div>
-
-						<div class="tp-caption lfb"
-							 data-x="258"
-							 data-y="341"
-							 data-speed="1000"
-							 data-start="1960"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img13.png" width="33" height="25" alt="">
-						</div>
-
-						<div class="tp-caption lfb"
-							 data-x="395"
-							 data-y="335"
-							 data-speed="1000"
-							 data-start="2040"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img14.png" width="33" height="25" alt="">
-						</div>
-
-						<h2 class="tp-caption lft skewtotop title"
-							data-x="722"
-							data-y="101"
-							data-speed="1000"
-							data-start="1700"
-							data-easing="Power4.easeOut"
-							data-endspeed="500"
-							data-endeasing="Power1.easeIn">
-							<strong>DIY</strong>
-						</h2>
-
-						<div class="tp-caption lfr skewtoright description"
-							 data-x="707"
-							 data-y="189"
-							 data-speed="1000"
-							 data-start="1500"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="max-width: 480px">
-							<p>
-								We added <strong>more than 80 items</strong> to the standard page design.
-								You can form the page yourself by placing any information
-								you want – graphs, tables, buttons, slides, animated
-								content, maps and so on.
-							</p>
-						</div>
-						<a href="#"
-						   class="btn cherry tp-caption lfb btn-default"
-						   data-x="722"
-						   data-y="342"
-						   data-speed="1000"
-						   data-start="1700"
-						   data-easing="Power4.easeOut"
-						   data-endspeed="500"
-						   data-endeasing="Power1.easeIn">
-							Read more
-						</a>
-					</div>
-
-					<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
-				</li>
-
-				<li data-delay="7000" data-transition="fade" data-slotamount="7" data-masterspeed="2000">
-					<div class="elements">
-						<div class="tp-caption lfb skewtobottom"
-							 data-x="145"
-							 data-y="66"
-							 data-speed="1000"
-							 data-start="500"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 3">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-phone.png" width="375" height="434" alt="">
-						</div>
-
-						<div class="tp-caption lfb skewtobottom"
-							 data-x="307"
-							 data-y="105"
-							 data-speed="1000"
-							 data-start="500"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="400"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 1">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-phone-bg.png" width="160" height="296" alt="">
-						</div>
-
-						<h2 class="tp-caption sft skewtotop title"
-							data-x="590"
-							data-y="101"
-							data-speed="1000"
-							data-start="500"
-							data-easing="Power4.easeOut"
-							data-endspeed="400"
-							data-endeasing="Power1.easeIn">
-							Clean &amp; Valid code
-						</h2>
-
-						<div class="tp-caption lfr skewtoright description cm-description-2"
-							 data-x="575"
-							 data-y="189"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="400"
-							 data-endeasing="Power1.easeIn"
-							 style="max-width: 600px;">
-							<p>
-								Perfect HTML5 &amp; CSS3. Valid code, latest technologies, always
-								up-to-date. Compatible with the latest desktop and mobile
-								browsers down to IE8. Works perfectly wherever you need
-								and wherever you want.
-							</p>
-						</div>
-						<a href="#"
-						   class="btn tp-caption customin cherry btn-default"
-						   data-x="590"
-						   data-y="332"
-						   data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-						   data-speed="1200"
-						   data-start="1400"
-						   data-easing="Power3.easeInOut"
-						   data-endspeed="300"
-						   style="z-index: 5">
-							Read more
-						</a>
-						<div class="tp-caption customin customout"
-							 data-x="337"
-							 data-y="148"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1200"
-							 data-start="800"
-							 data-easing="Power3.easeInOut"
-							 data-endspeed="300"
-							 style="z-index: 5">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-html5-1.png" width="99" height="111" alt="">
-						</div>
-
-						<div class="tp-caption customin"
-							 data-x="355"
-							 data-y="158"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1200"
-							 data-start="1200"
-							 data-easing="Power3.easeInOut"
-							 data-end="3300"
-							 data-endspeed="400"
-							 style="z-index: 5">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-html5-2.png" width="72" height="91" alt="">
-						</div>
-
-						<div class="tp-caption customin"
-							 data-x="355"
-							 data-y="158"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1200"
-							 data-start="3700"
-							 data-easing="Power3.easeInOut"
-							 data-endspeed="100"
-							 style="z-index: 5">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-css3.png" width="72" height="91" alt="">
-						</div>
-
-						<div class="tp-caption lfb skewtobottom customin customout phone-text"
-							 data-x="359"
-							 data-y="325"
-							 data-customin="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power0.easeOut"
-							 data-end="3500"
-							 data-endspeed="400"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 2">
-							HTML5
-						</div>
-
-						<div class="tp-caption lfb skewtobottom customin customout phone-text"
-							 data-x="365"
-							 data-y="325"
-							 data-customin="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1000"
-							 data-start="3600"
-							 data-easing="Power0.easeOut"
-							 data-endspeed="400"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 2">
-							CSS3
-						</div>
-					</div>
-
-					<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
-				</li>
-
-				<li data-delay="10300" data-transition="fade" data-slotamount="7" data-masterspeed="2000" class="slid2">
-					<div class="elements">
-						<h2 class="tp-caption sft skewtotop title"
-							data-x="15"
-							data-y="101"
-							data-speed="1000"
-							data-start="1100"
-							data-easing="Power4.easeOut"
-							data-endspeed="400"
-							data-endeasing="Power1.easeIn">
-							Four homepages
-						</h2>
-
-						<div class="tp-caption lfl skewtoleft description col-xs-5"
-							 data-x="0"
-							 data-y="189"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="400"
-							 data-endeasing="Power1.easeIn"
-							 style="max-width: 520px;">
-							<p>
-								We have developed four different homepages for you to choose
-								the most convenient one. Make your choice based on your own
-								taste and sense of style, use extra elements and Twitter
-								Bootstrap to build any page you want.
-							</p>
-						</div>
-						<a href="#"
-						   class="btn btn-primary tp-caption customin"
-						   data-x="15"
-						   data-y="332"
-						   data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-						   data-speed="1200"
-						   data-start="1000"
-						   data-easing="Power3.easeInOut"
-						   data-endspeed="300"
-						   style="z-index: 5">
-							Read more
-						</a>
-
-						<div class="tp-caption lfb skewtobottom customin"
-							 data-x="right"
-							 data-hoffset="100"
-							 data-y="70"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:-360;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1000"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-end="14000"
-							 data-endspeed="500"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 3">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-img.png" width="731" height="284" alt="">
-						</div>
-
-						<div class="tp-caption lfb customout"
-							 data-x="right"
-							 data-hoffset="-126"
-							 data-y="70"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="400"
-							 data-start="2000"
-							 data-easing="Power0.easeOut"
-							 data-end="3000"
-							 data-endspeed="400"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 2">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage1.png" width="277" height="280" alt="">
-						</div>
-
-						<div class="tp-caption lfb customout"
-							 data-x="right"
-							 data-hoffset="-126"
-							 data-y="70"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="400"
-							 data-start="3500"
-							 data-easing="Power0.easeOut"
-							 data-end="4500"
-							 data-endspeed="400"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 2">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage2.png" width="277" height="280" alt="">
-						</div>
-
-						<div class="tp-caption lfb customout"
-							 data-x="right"
-							 data-hoffset="-126"
-							 data-y="70"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="400"
-							 data-start="5000"
-							 data-easing="Power0.easeOut"
-							 data-end="6000"
-							 data-endspeed="400"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 2">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage3.png" width="277" height="280" alt="">
-						</div>
-
-						<div class="tp-caption lfb customout"
-							 data-x="right"
-							 data-hoffset="-126"
-							 data-y="70"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="400"
-							 data-start="6500"
-							 data-easing="Power0.easeOut"
-							 data-end="7500"
-							 data-endspeed="400"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 2">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage4.png" width="277" height="280" alt="">
-						</div>
-
-						<div class="tp-caption  customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="2300"
-							 data-easing="Power0.easeOut"
-							 data-end="3800"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-one.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="3800"
-							 data-easing="Power0.easeOut"
-							 data-end="5300"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-two.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="5300"
-							 data-easing="Power0.easeOut"
-							 data-end="6800"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-three.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="6800"
-							 data-easing="Power0.easeOut"
-							 data-end="8000"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="8200"
-							 data-easing="Power0.easeOut"
-							 data-end="8300"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="8400"
-							 data-easing="Power0.easeOut"
-							 data-end="8500"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="8600"
-							 data-easing="Power0.easeOut"
-							 data-end="8700"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-208"
-							 data-y="130"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="8800"
-							 data-easing="Power0.easeOut"
-							 data-end="8900"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-239"
-							 data-y="187"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="9000"
-							 data-easing="Power0.easeOut"
-							 data-end="10300"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate1.png" width="48" height="48" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-224"
-							 data-y="172"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="9100"
-							 data-easing="Power0.easeOut"
-							 data-end="10200"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate2.png" width="79" height="79" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-209"
-							 data-y="157"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="9200"
-							 data-easing="Power0.easeOut"
-							 data-end="10100"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate3.png" width="110" height="107" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-194"
-							 data-y="142"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="9300"
-							 data-easing="Power0.easeOut"
-							 data-end="10000"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate4.png" width="140" height="138" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-179"
-							 data-y="127"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="9400"
-							 data-easing="Power0.easeOut"
-							 data-end="9900"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate5.png" width="170" height="168" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-164"
-							 data-y="112"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="9500"
-							 data-easing="Power0.easeOut"
-							 data-end="9800"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate6.png" width="200" height="200" alt="">
-						</div>
-
-						<div class="tp-caption customin customout"
-							 data-x="right"
-							 data-hoffset="-149"
-							 data-y="97"
-							 data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1"
-							 data-start="9600"
-							 data-easing="Power0.easeOut"
-							 data-end="9700"
-							 data-endspeed="1"
-							 data-endeasing="Power0.easeIn"
-							 data-captionhidden="on"
-							 style="z-index: 4">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate7.png" width="231" height="231" alt="">
-						</div>
-					</div>
-
-					<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
-				</li>
-
-				<li data-delay="8000" data-transition="fade" data-slotamount="7" data-masterspeed="2000">
-					<div class="elements">
-						<div class="tp-caption lfl skewtoleft"
-							 data-x="-121"
-							 data-y="bottom"
-							 data-speed="1500"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="1000"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 1">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-pig.png" width="576" height="393" alt="">
-						</div>
-
-						<div class="tp-caption lfl skewtoleft"
-							 data-x="-121"
-							 data-y="bottom"
-							 data-speed="1500"
-							 data-start="1000"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="1000"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 3">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-pig2.png" width="576" height="393" alt="">
-						</div>
-						<h2 class="tp-caption lft skewtotop title"
-							data-x="509"
-							data-y="122"
-							data-speed="1500"
-							data-start="1000"
-							data-easing="Power0.easeOut"
-							data-endspeed="1000"
-							data-endeasing="Power1.easeIn">
-							<strong>Save money</strong>
-						</h2>
-
-						<h2 class="tp-caption lfr skewtoright title"
-							data-x="755"
-							data-y="122"
-							data-speed="1500"
-							data-start="1000"
-							data-easing="Power4.easeOut"
-							data-endspeed="1000"
-							data-endeasing="Power1.easeIn">
-							on additional plugin!
-						</h2>
-
-						<div class="tp-caption customin customout description col-xs-5"
-							 data-x="527"
-							 data-y="196"
-							 data-customin="x:0;y:0;z:50;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0;"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="1000"
-							 data-start="1500"
-							 data-easing="Back.easeInOut"
-							 data-endspeed="400"
-							 data-endeasing="Power1.easeIn"
-							 style="max-width: 500px;">
-							<p>
-								Create a responsive or fullwidth slider with must-see-effects.
-								Plugin features tons of unique transition effects, an image
-								preloader, video embedding, autoplay and lots of easy to
-								set options to create your own effects.
-							</p>
-						</div>
-						<a href="#"
-						   class="tp-caption btn orang lfb skewtobottom"
-						   data-x="509"
-						   data-y="338"
-						   data-speed="1000"
-						   data-start="1500"
-						   data-easing="Power3.easeInOut"
-						   data-endspeed="300">
-							Read more
-						</a>
-						<div class="tp-caption lft customout"
-							 data-x="136"
-							 data-y="140"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="500"
-							 data-start="2200"
-							 data-easing="Power4.easeOut"
-							 data-endspeed="100"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 2">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-coin.png" width="64" height="68" alt="">
-						</div>
-
-						<div class="tp-caption lft customout"
-							 data-x="136"
-							 data-y="30"
-							 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-							 data-speed="500"
-							 data-start="2700"
-							 data-easing="Power4.easeOut"
-							 data-endeasing="Power1.easeIn"
-							 style="z-index: 2">
-							<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-coin.png" width="64" height="68" alt="">
-						</div>
-					</div>
-
-					<img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
-				</li>
-			</ul>
-			<div class="tp-bannertimer"></div>
-		</div>
-	</div>
-</div><!-- .rs-slider -->
-<div class="clearfix"></div>
-<section id="main">
-	<article class="content">
-
-
-		<!-- .full-width-box -->
-
-		<div class="container">
-			<div class="row services">
-				<div class="col-sm-12 col-md-12">
-					<div class="title-box">
-						<h1 class="title">Services</h1>
-					</div>
-				</div>
-
-				<div class="big-services-box col-sm-4 col-md-4">
-					<div>
-						<div class="big-icon bg animated wobble" data-appear-animation="wobble"><i class="fa fa-picture-o"></i></div>
-						<h4 class="title animated bounceInLeft" data-appear-animation="bounceInLeft">Web Design</h4>
-						<div class="text-small animated bounceInLeft" data-appear-animation="bounceInLeft">
-							Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat.
-							<div class="clearfix"></div><br>
-							<button class="btn btn-default">Read more</button>
-						</div>
-					</div>
-				</div><!-- .services-box-two -->
-
-				<div class="big-services-box col-sm-4 col-md-4">
-					<div>
-						<div class="big-icon bg animated wobble" data-appear-animation="wobble"><i class="fa fa-wrench"></i></div>
-						<h4 class="title animated bounceInUp" data-appear-animation="bounceInUp">Graphic Design</h4>
-						<div class="text-small animated bounceInUp" data-appear-animation="bounceInUp">
-							---
-							<div class="clearfix"></div><br>
-							<button class="btn btn-default">Read more</button>
-						</div>
-					</div>
-				</div><!-- .services-box-two -->
-
-				<div class="big-services-box col-sm-4 col-md-4">
-					<div>
-						<div class="big-icon bg animated wobble" data-appear-animation="wobble"><i class="fa fa-bug"></i></div>
-						<h4 class="title animated bounceInRight" data-appear-animation="bounceInRight">Internet Marketing</h4>
-						<div class="text-small animated bounceInRight" data-appear-animation="bounceInRight">
-							The readable content of a page when looking at its layout. The point of using. Duis aute irure dolor reprehenderit in voluptate velit esse cillum.
-							<div class="clearfix"></div><br>
-							<button class="btn btn-default">Read more</button>
-						</div>
-					</div>
-				</div><!-- .services-box-two -->
-			</div>
-			<br><br>
-		</div>
-
-		<!-- .full-width-box -->
-
-		<div class="container">
-			<div class="row">
-				<div class="bottom-padding col-sm-6 col-md-6">
-					<div class="carousel-box overflow no-nav" data-carousel-pagination="true" data-carousel-nav="false" data-carousel-one="true" data-autoplay-disable="true">
-						<div class="title-box">
-							<a class="next" href="#">
-								<svg x="0" y="0" width="9px" height="16px" viewBox="0 0 9 16" enable-background="new 0 0 9 16" xml:space="preserve">
-								<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#fcfcfc" points="1,0.001 0,1.001 7,8 0,14.999 1,15.999 9,8 "></polygon>
-							</svg>
-							</a>
-							<a class="prev" href="#">
-								<svg x="0" y="0" width="9px" height="16px" viewBox="0 0 9 16" enable-background="new 0 0 9 16" xml:space="preserve">
-								<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#fcfcfc" points="8,15.999 9,14.999 2,8 9,1.001 8,0.001 0,8 "></polygon>
-							</svg>
-							</a>
-							<h2 class="title">Posts</h2>
-						</div>
-
-						<div class="clearfix"></div>
-
-						<div class="row">
-							<div class="caroufredsel_wrapper" style="display: block; text-align: start; float: none; position: relative; top: auto; right: auto; bottom: auto; left: auto; z-index: auto; width: 600px; height: 310px; margin: 0px; overflow: hidden;">
-								<div class="carousel no-responsive" style="text-align: left; float: none; position: absolute; top: 0px; right: auto; bottom: auto; left: 0px; margin: 0px; width: 3000px; height: 310px;">
-									<div class="post" style="width: 570px;">
-										<h2 class="entry-title"><a href="#">Lorem ipsum dolor sit.</a></h2>
-										<div class="entry-content">
-									    ---
+    ViewBag.Title = "Главная";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Producer> producers = ViewBag.Producers;
+    var user = (ViewBag.CurrentUser as ProducerUser);
+}
+    <div class="slider rs-slider load">
+        <div class="tp-banner-container">
+            <div class="tp-banner">
+              
+                    <ul>
+                        <li data-delay="7000" data-transition="fade" data-slotamount="7" data-masterspeed="2000">
+                            <div class="elements">
+                                <div class="tp-caption lfl"
+                                     data-x="211"
+                                     data-y="203"
+                                     data-speed="1000"
+                                     data-start="1500"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 2">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img1.png" width="217" height="172" alt="">
+                                </div>
+
+                                <div class="tp-caption lft"
+                                     data-x="97"
+                                     data-y="271"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img2.png" width="71" height="104" alt="">
+                                </div>
+
+                                <div class="tp-caption lft"
+                                     data-x="479"
+                                     data-y="271"
+                                     data-speed="1000"
+                                     data-start="1200"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img2.png" width="71" height="104" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb"
+                                     data-x="-32"
+                                     data-y="372"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img3.png" width="764" height="76" alt="">
+                                </div>
+
+                                <div class="tp-caption lft"
+                                     data-x="166"
+                                     data-y="167"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img4.png" width="247" height="71" alt="">
+                                </div>
+
+                                <div class="tp-caption customin"
+                                     data-x="177"
+                                     data-y="62"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 100%;"
+                                     data-speed="700"
+                                     data-start="1400"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 3">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img5.png" width="166" height="107" alt="">
+                                </div>
+
+                                <div class="tp-caption lft"
+                                     data-x="487"
+                                     data-y="69"
+                                     data-speed="1000"
+                                     data-start="1500"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 1">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img6.png" width="104" height="157" alt="">
+                                </div>
+
+                                <div class="tp-caption lfl"
+                                     data-x="539"
+                                     data-y="177"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 3">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img7.png" width="95" height="197" alt="">
+                                </div>
+
+                                <div class="tp-caption lfl lft"
+                                     data-x="7"
+                                     data-y="134"
+                                     data-speed="1000"
+                                     data-start="1700"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 3">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img8.png" width="275" height="240" alt="">
+                                </div>
+
+                                <div class="tp-caption customin"
+                                     data-x="375"
+                                     data-y="78"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1000"
+                                     data-start="1500"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img9.png" width="101" height="101" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb"
+                                     data-x="141"
+                                     data-y="297"
+                                     data-speed="1000"
+                                     data-start="1800"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img10.png" width="64" height="77" alt="">
+                                </div>
+
+                                <div class="tp-caption lfl"
+                                     data-x="428"
+                                     data-y="356"
+                                     data-speed="500"
+                                     data-start="2000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 3">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img11.png" width="35" height="14" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb"
+                                     data-x="225"
+                                     data-y="335"
+                                     data-speed="1000"
+                                     data-start="1880"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img12.png" width="33" height="25" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb"
+                                     data-x="258"
+                                     data-y="341"
+                                     data-speed="1000"
+                                     data-start="1960"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img13.png" width="33" height="25" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb"
+                                     data-x="395"
+                                     data-y="335"
+                                     data-speed="1000"
+                                     data-start="2040"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-img14.png" width="33" height="25" alt="">
+                                </div>
+
+                                <h2 class="tp-caption lft skewtotop title"
+                                    data-x="722"
+                                    data-y="101"
+                                    data-speed="1000"
+                                    data-start="1700"
+                                    data-easing="Power4.easeOut"
+                                    data-endspeed="500"
+                                    data-endeasing="Power1.easeIn">
+                                    <strong>DIY</strong>
+                                </h2>
+
+                                <div class="tp-caption lfr skewtoright description"
+                                     data-x="707"
+                                     data-y="189"
+                                     data-speed="1000"
+                                     data-start="1500"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="max-width: 480px">
+                                    <p>
+                                        We added <strong>more than 80 items</strong> to the standard page design.
+                                        You can form the page yourself by placing any information
+                                        you want – graphs, tables, buttons, slides, animated
+                                        content, maps and so on.
+                                    </p>
+                                </div>
+                                <a href="#"
+                                   class="btn cherry tp-caption lfb btn-default"
+                                   data-x="722"
+                                   data-y="342"
+                                   data-speed="1000"
+                                   data-start="1700"
+                                   data-easing="Power4.easeOut"
+                                   data-endspeed="500"
+                                   data-endeasing="Power1.easeIn">
+                                    Read more
+                                </a>
+                            </div>
+
+                            <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider4-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
+                        </li>
+
+                        <li data-delay="7000" data-transition="fade" data-slotamount="7" data-masterspeed="2000">
+                            <div class="elements">
+                                <div class="tp-caption lfb skewtobottom"
+                                     data-x="145"
+                                     data-y="66"
+                                     data-speed="1000"
+                                     data-start="500"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 3">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-phone.png" width="375" height="434" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb skewtobottom"
+                                     data-x="307"
+                                     data-y="105"
+                                     data-speed="1000"
+                                     data-start="500"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="400"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 1">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-phone-bg.png" width="160" height="296" alt="">
+                                </div>
+
+                                <h2 class="tp-caption sft skewtotop title"
+                                    data-x="590"
+                                    data-y="101"
+                                    data-speed="1000"
+                                    data-start="500"
+                                    data-easing="Power4.easeOut"
+                                    data-endspeed="400"
+                                    data-endeasing="Power1.easeIn">
+                                    Clean &amp; Valid code
+                                </h2>
+
+                                <div class="tp-caption lfr skewtoright description cm-description-2"
+                                     data-x="575"
+                                     data-y="189"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="400"
+                                     data-endeasing="Power1.easeIn"
+                                     style="max-width: 600px;">
+                                    <p>
+                                        Perfect HTML5 &amp; CSS3. Valid code, latest technologies, always
+                                        up-to-date. Compatible with the latest desktop and mobile
+                                        browsers down to IE8. Works perfectly wherever you need
+                                        and wherever you want.
+                                    </p>
+                                </div>
+                                <a href="#"
+                                   class="btn tp-caption customin cherry btn-default"
+                                   data-x="590"
+                                   data-y="332"
+                                   data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                   data-speed="1200"
+                                   data-start="1400"
+                                   data-easing="Power3.easeInOut"
+                                   data-endspeed="300"
+                                   style="z-index: 5">
+                                    Read more
+                                </a>
+                                <div class="tp-caption customin customout"
+                                     data-x="337"
+                                     data-y="148"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1200"
+                                     data-start="800"
+                                     data-easing="Power3.easeInOut"
+                                     data-endspeed="300"
+                                     style="z-index: 5">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-html5-1.png" width="99" height="111" alt="">
+                                </div>
+
+                                <div class="tp-caption customin"
+                                     data-x="355"
+                                     data-y="158"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1200"
+                                     data-start="1200"
+                                     data-easing="Power3.easeInOut"
+                                     data-end="3300"
+                                     data-endspeed="400"
+                                     style="z-index: 5">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-html5-2.png" width="72" height="91" alt="">
+                                </div>
+
+                                <div class="tp-caption customin"
+                                     data-x="355"
+                                     data-y="158"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1200"
+                                     data-start="3700"
+                                     data-easing="Power3.easeInOut"
+                                     data-endspeed="100"
+                                     style="z-index: 5">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-css3.png" width="72" height="91" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb skewtobottom customin customout phone-text"
+                                     data-x="359"
+                                     data-y="325"
+                                     data-customin="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power0.easeOut"
+                                     data-end="3500"
+                                     data-endspeed="400"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 2">
+                                    HTML5
+                                </div>
+
+                                <div class="tp-caption lfb skewtobottom customin customout phone-text"
+                                     data-x="365"
+                                     data-y="325"
+                                     data-customin="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:55;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1000"
+                                     data-start="3600"
+                                     data-easing="Power0.easeOut"
+                                     data-endspeed="400"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 2">
+                                    CSS3
+                                </div>
+                            </div>
+
+                            <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider1-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
+                        </li>
+
+                        <li data-delay="10300" data-transition="fade" data-slotamount="7" data-masterspeed="2000" class="slid2">
+                            <div class="elements">
+                                <h2 class="tp-caption sft skewtotop title"
+                                    data-x="15"
+                                    data-y="101"
+                                    data-speed="1000"
+                                    data-start="1100"
+                                    data-easing="Power4.easeOut"
+                                    data-endspeed="400"
+                                    data-endeasing="Power1.easeIn">
+                                    Four homepages
+                                </h2>
+
+                                <div class="tp-caption lfl skewtoleft description col-xs-5"
+                                     data-x="0"
+                                     data-y="189"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="400"
+                                     data-endeasing="Power1.easeIn"
+                                     style="max-width: 520px;">
+                                    <p>
+                                        We have developed four different homepages for you to choose
+                                        the most convenient one. Make your choice based on your own
+                                        taste and sense of style, use extra elements and Twitter
+                                        Bootstrap to build any page you want.
+                                    </p>
+                                </div>
+                                <a href="#"
+                                   class="btn btn-primary tp-caption customin"
+                                   data-x="15"
+                                   data-y="332"
+                                   data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                   data-speed="1200"
+                                   data-start="1000"
+                                   data-easing="Power3.easeInOut"
+                                   data-endspeed="300"
+                                   style="z-index: 5">
+                                    Read more
+                                </a>
+
+                                <div class="tp-caption lfb skewtobottom customin"
+                                     data-x="right"
+                                     data-hoffset="100"
+                                     data-y="70"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:-360;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1000"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-end="14000"
+                                     data-endspeed="500"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 3">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-img.png" width="731" height="284" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb customout"
+                                     data-x="right"
+                                     data-hoffset="-126"
+                                     data-y="70"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="400"
+                                     data-start="2000"
+                                     data-easing="Power0.easeOut"
+                                     data-end="3000"
+                                     data-endspeed="400"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 2">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage1.png" width="277" height="280" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb customout"
+                                     data-x="right"
+                                     data-hoffset="-126"
+                                     data-y="70"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="400"
+                                     data-start="3500"
+                                     data-easing="Power0.easeOut"
+                                     data-end="4500"
+                                     data-endspeed="400"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 2">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage2.png" width="277" height="280" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb customout"
+                                     data-x="right"
+                                     data-hoffset="-126"
+                                     data-y="70"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="400"
+                                     data-start="5000"
+                                     data-easing="Power0.easeOut"
+                                     data-end="6000"
+                                     data-endspeed="400"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 2">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage3.png" width="277" height="280" alt="">
+                                </div>
+
+                                <div class="tp-caption lfb customout"
+                                     data-x="right"
+                                     data-hoffset="-126"
+                                     data-y="70"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="400"
+                                     data-start="6500"
+                                     data-easing="Power0.easeOut"
+                                     data-end="7500"
+                                     data-endspeed="400"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 2">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-homepage4.png" width="277" height="280" alt="">
+                                </div>
+
+                                <div class="tp-caption  customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="2300"
+                                     data-easing="Power0.easeOut"
+                                     data-end="3800"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-one.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="3800"
+                                     data-easing="Power0.easeOut"
+                                     data-end="5300"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-two.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="5300"
+                                     data-easing="Power0.easeOut"
+                                     data-end="6800"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-three.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="6800"
+                                     data-easing="Power0.easeOut"
+                                     data-end="8000"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="8200"
+                                     data-easing="Power0.easeOut"
+                                     data-end="8300"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="8400"
+                                     data-easing="Power0.easeOut"
+                                     data-end="8500"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="8600"
+                                     data-easing="Power0.easeOut"
+                                     data-end="8700"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-208"
+                                     data-y="130"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="8800"
+                                     data-easing="Power0.easeOut"
+                                     data-end="8900"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-four.png" width="110" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-239"
+                                     data-y="187"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="9000"
+                                     data-easing="Power0.easeOut"
+                                     data-end="10300"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate1.png" width="48" height="48" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-224"
+                                     data-y="172"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="9100"
+                                     data-easing="Power0.easeOut"
+                                     data-end="10200"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate2.png" width="79" height="79" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-209"
+                                     data-y="157"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="9200"
+                                     data-easing="Power0.easeOut"
+                                     data-end="10100"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate3.png" width="110" height="107" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-194"
+                                     data-y="142"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="9300"
+                                     data-easing="Power0.easeOut"
+                                     data-end="10000"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate4.png" width="140" height="138" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-179"
+                                     data-y="127"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="9400"
+                                     data-easing="Power0.easeOut"
+                                     data-end="9900"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate5.png" width="170" height="168" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-164"
+                                     data-y="112"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="9500"
+                                     data-easing="Power0.easeOut"
+                                     data-end="9800"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate6.png" width="200" height="200" alt="">
+                                </div>
+
+                                <div class="tp-caption customin customout"
+                                     data-x="right"
+                                     data-hoffset="-149"
+                                     data-y="97"
+                                     data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:1;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1"
+                                     data-start="9600"
+                                     data-easing="Power0.easeOut"
+                                     data-end="9700"
+                                     data-endspeed="1"
+                                     data-endeasing="Power0.easeIn"
+                                     data-captionhidden="on"
+                                     style="z-index: 4">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-quadrate7.png" width="231" height="231" alt="">
+                                </div>
+                            </div>
+
+                            <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider2-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
+                        </li>
+
+                        <li data-delay="8000" data-transition="fade" data-slotamount="7" data-masterspeed="2000">
+                            <div class="elements">
+                                <div class="tp-caption lfl skewtoleft"
+                                     data-x="-121"
+                                     data-y="bottom"
+                                     data-speed="1500"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="1000"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 1">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-pig.png" width="576" height="393" alt="">
+                                </div>
+
+                                <div class="tp-caption lfl skewtoleft"
+                                     data-x="-121"
+                                     data-y="bottom"
+                                     data-speed="1500"
+                                     data-start="1000"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="1000"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 3">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-pig2.png" width="576" height="393" alt="">
+                                </div>
+                                <h2 class="tp-caption lft skewtotop title"
+                                    data-x="509"
+                                    data-y="122"
+                                    data-speed="1500"
+                                    data-start="1000"
+                                    data-easing="Power0.easeOut"
+                                    data-endspeed="1000"
+                                    data-endeasing="Power1.easeIn">
+                                    <strong>Save money</strong>
+                                </h2>
+
+                                <h2 class="tp-caption lfr skewtoright title"
+                                    data-x="755"
+                                    data-y="122"
+                                    data-speed="1500"
+                                    data-start="1000"
+                                    data-easing="Power4.easeOut"
+                                    data-endspeed="1000"
+                                    data-endeasing="Power1.easeIn">
+                                    on additional plugin!
+                                </h2>
+
+                                <div class="tp-caption customin customout description col-xs-5"
+                                     data-x="527"
+                                     data-y="196"
+                                     data-customin="x:0;y:0;z:50;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0;"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="1000"
+                                     data-start="1500"
+                                     data-easing="Back.easeInOut"
+                                     data-endspeed="400"
+                                     data-endeasing="Power1.easeIn"
+                                     style="max-width: 500px;">
+                                    <p>
+                                        Create a responsive or fullwidth slider with must-see-effects.
+                                        Plugin features tons of unique transition effects, an image
+                                        preloader, video embedding, autoplay and lots of easy to
+                                        set options to create your own effects.
+                                    </p>
+                                </div>
+                                <a href="#"
+                                   class="tp-caption btn orang lfb skewtobottom"
+                                   data-x="509"
+                                   data-y="338"
+                                   data-speed="1000"
+                                   data-start="1500"
+                                   data-easing="Power3.easeInOut"
+                                   data-endspeed="300">
+                                    Read more
+                                </a>
+                                <div class="tp-caption lft customout"
+                                     data-x="136"
+                                     data-y="140"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="500"
+                                     data-start="2200"
+                                     data-easing="Power4.easeOut"
+                                     data-endspeed="100"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 2">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-coin.png" width="64" height="68" alt="">
+                                </div>
+
+                                <div class="tp-caption lft customout"
+                                     data-x="136"
+                                     data-y="30"
+                                     data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                     data-speed="500"
+                                     data-start="2700"
+                                     data-easing="Power4.easeOut"
+                                     data-endeasing="Power1.easeIn"
+                                     style="z-index: 2">
+                                    <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-coin.png" width="64" height="68" alt="">
+                                </div>
+                            </div>
+
+                            <img class="replace-2x" src="~/Assets/content/img/slider/rs-slider3-bg.jpg" alt="" data-bgfit="cover" data-bgposition="center top" data-bgrepeat="no-repeat">
+                        </li>
+                    </ul>
+
+
+                <div class="tp-bannertimer"></div>
+            </div>
+        </div>
+    </div><!-- .rs-slider -->
+    <div class="clearfix"></div>
+   
+         <section id="main">
+            <article class="content">
+
+
+                <!-- .full-width-box -->
+
+                <div class="container">
+                    <div class="row services">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="title-box">
+                                <h1 class="title">Services</h1>
+                            </div>
+                        </div>
+
+                        <div class="big-services-box col-sm-4 col-md-4">
+                            <div>
+                                <div class="big-icon bg animated wobble" data-appear-animation="wobble"><i class="fa fa-picture-o"></i></div>
+                                <h4 class="title animated bounceInLeft" data-appear-animation="bounceInLeft">Web Design</h4>
+                                <div class="text-small animated bounceInLeft" data-appear-animation="bounceInLeft">
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat.
+                                    <div class="clearfix"></div><br>
+                                    <button class="btn btn-default">Read more</button>
+                                </div>
+                            </div>
+                        </div><!-- .services-box-two -->
+
+                        <div class="big-services-box col-sm-4 col-md-4">
+                            <div>
+                                <div class="big-icon bg animated wobble" data-appear-animation="wobble"><i class="fa fa-wrench"></i></div>
+                                <h4 class="title animated bounceInUp" data-appear-animation="bounceInUp">Graphic Design</h4>
+                                <div class="text-small animated bounceInUp" data-appear-animation="bounceInUp">
+                                    ---
+                                    <div class="clearfix"></div><br>
+                                    <button class="btn btn-default">Read more</button>
+                                </div>
+                            </div>
+                        </div><!-- .services-box-two -->
+
+                        <div class="big-services-box col-sm-4 col-md-4">
+                            <div>
+                                <div class="big-icon bg animated wobble" data-appear-animation="wobble"><i class="fa fa-bug"></i></div>
+                                <h4 class="title animated bounceInRight" data-appear-animation="bounceInRight">Internet Marketing</h4>
+                                <div class="text-small animated bounceInRight" data-appear-animation="bounceInRight">
+                                    The readable content of a page when looking at its layout. The point of using. Duis aute irure dolor reprehenderit in voluptate velit esse cillum.
+                                    <div class="clearfix"></div><br>
+                                    <button class="btn btn-default">Read more</button>
+                                </div>
+                            </div>
+                        </div><!-- .services-box-two -->
+                    </div>
+                    <br><br>
+                </div>
+
+                <!-- .full-width-box -->
+
+                <div class="container">
+                    <div class="row">
+                        <div class="bottom-padding col-sm-6 col-md-6">
+                            <div class="carousel-box overflow no-nav" data-carousel-pagination="true" data-carousel-nav="false" data-carousel-one="true" data-autoplay-disable="true">
+                                <div class="title-box">
+                                    <a class="next" href="#">
+                                        <svg x="0" y="0" width="9px" height="16px" viewBox="0 0 9 16" enable-background="new 0 0 9 16" xml:space="preserve">
+                                        <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#fcfcfc" points="1,0.001 0,1.001 7,8 0,14.999 1,15.999 9,8 "></polygon>
+                                    </svg>
+                                    </a>
+                                    <a class="prev" href="#">
+                                        <svg x="0" y="0" width="9px" height="16px" viewBox="0 0 9 16" enable-background="new 0 0 9 16" xml:space="preserve">
+                                        <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#fcfcfc" points="8,15.999 9,14.999 2,8 9,1.001 8,0.001 0,8 "></polygon>
+                                    </svg>
+                                    </a>
+                                    <h2 class="title">Posts</h2>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="row">
+                                    <div class="caroufredsel_wrapper" style="display: block; text-align: start; float: none; position: relative; top: auto; right: auto; bottom: auto; left: auto; z-index: auto; width: 600px; height: 310px; margin: 0px; overflow: hidden;">
+                                        <div class="carousel no-responsive" style="text-align: left; float: none; position: absolute; top: 0px; right: auto; bottom: auto; left: 0px; margin: 0px; width: 3000px; height: 310px;">
+                                            <div class="post" style="width: 570px;">
+                                                <h2 class="entry-title"><a href="#">Lorem ipsum dolor sit.</a></h2>
+                                                <div class="entry-content">
+                                                ---
+                                                </div>
+
+                                                <div class="entry-meta">
+                                                    <span class="autor-name">Mike Example</span>,
+                                                    <span class="time">03.11.2012</span>
+                                                    <span class="separator">|</span>
+                                                    <span class="meta">Posted in <a href="#">Sports</a>, <a href="#">Movies</a></span>
+                                                    <span class="comments-link pull-right">
+                                                        <a href="#"><i class="fa fa-comment"></i> 3 comment(s)</a>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="post" style="width: 570px;">
+                                                <h2 class="entry-title"><a href="/blog-view.html">Lorem ipsum dolor sit.</a></h2>
+                                                <div class="entry-content">
+                                                ---
+                                                </div>
+
+                                                <div class="entry-meta">
+                                                    <span class="autor-name">Mike Example</span>,
+                                                    <span class="time">03.11.2012</span>
+                                                    <span class="separator">|</span>
+                                                    <span class="meta">Posted in <a href="#">Sports</a>, <a href="#">Movies</a></span>
+                                                    <span class="comments-link pull-right">
+                                                        <a href="#"><i class="fa fa-comment"></i> 3 comment(s)</a>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
 
-										<div class="entry-meta">
-											<span class="autor-name">Mike Example</span>,
-											<span class="time">03.11.2012</span>
-											<span class="separator">|</span>
-											<span class="meta">Posted in <a href="#">Sports</a>, <a href="#">Movies</a></span>
-											<span class="comments-link pull-right">
-												<a href="#"><i class="fa fa-comment"></i> 3 comment(s)</a>
-											</span>
-										</div>
-									</div>
+                                <div class="clearfix"></div>
 
-									<div class="post" style="width: 570px;">
-										<h2 class="entry-title"><a href="/blog-view.html">Lorem ipsum dolor sit.</a></h2>
-										<div class="entry-content">
-										---
+                                <div class="pagination switches" style="display: inline-block;"><a href="#" class="selected"><span>1</span></a><a href="#"><span>2</span></a></div>
+                            </div>
+                        </div>
+
+                        <div class="bottom-padding col-sm-6 col-md-6">
+                            <div class="title-box">
+                                <h2 class="title">Open a few toggles at a time</h2>
+                            </div>
+
+                            <div class="panel-group multi-collapse" id="accordion2">
+                                <div class="panel panel-default active">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapse21">
+                                                Portfolio Pages
+                                            </a>
                                         </div>
-
-										<div class="entry-meta">
-											<span class="autor-name">Mike Example</span>,
-											<span class="time">03.11.2012</span>
-											<span class="separator">|</span>
-											<span class="meta">Posted in <a href="#">Sports</a>, <a href="#">Movies</a></span>
-											<span class="comments-link pull-right">
-												<a href="#"><i class="fa fa-comment"></i> 3 comment(s)</a>
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="clearfix"></div>
-
-						<div class="pagination switches" style="display: inline-block;"><a href="#" class="selected"><span>1</span></a><a href="#"><span>2</span></a></div>
-					</div>
-				</div>
-
-				<div class="bottom-padding col-sm-6 col-md-6">
-					<div class="title-box">
-						<h2 class="title">Open a few toggles at a time</h2>
-					</div>
-
-					<div class="panel-group multi-collapse" id="accordion2">
-						<div class="panel panel-default active">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion2" href="#collapse21">
-										Portfolio Pages
-									</a>
-								</div>
-							</div>
-							<div id="collapse21" class="panel-collapse collapse in">
-								<div class="panel-body">
-									<img class="replace-2x alignright" src="http://placehold.it/100x62" width="100" height="62" alt="">
-								---	
+                                    </div>
+                                    <div id="collapse21" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <img class="replace-2x alignright" src="http://placehold.it/100x62" width="100" height="62" alt="">
+                                        ---
+                                        </div>
+                                    </div>
                                 </div>
-							</div>
-						</div>
 
-						<div class="panel panel-default active">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion2" href="#collapse22">
-										Gallery Pages
-									</a>
-								</div>
-							</div>
-							<div id="collapse22" class="panel-collapse collapse in">
-								<div class="panel-body">
-								---
+                                <div class="panel panel-default active">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapse22">
+                                                Gallery Pages
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="collapse22" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                        ---
+                                        </div>
+                                    </div>
                                 </div>
-							</div>
-						</div>
 
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion2" href="#collapse23">
-										Styles Pages
-									</a>
-								</div>
-							</div>
-							<div id="collapse23" class="panel-collapse collapse">
-								<div class="panel-body">
-									<img class="replace-2x alignleft" src="~/Assets/img/100x62.png" width="100" height="62" alt="">
-								---
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapse23">
+                                                Styles Pages
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="collapse23" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <img class="replace-2x alignleft" src="~/Assets/img/100x62.png" width="100" height="62" alt="">
+                                        ---
+                                        </div>
+                                    </div>
                                 </div>
-							</div>
-						</div>
 
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion2" href="#collapse24">
-										Shop Pages
-									</a>
-								</div>
-							</div>
-							<div id="collapse24" class="panel-collapse collapse">
-								<div class="panel-body">
-									<img class="replace-2x alignleft" src="~/Assets/img/100x62.png" width="100" height="62" alt="">
-								---
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapse24">
+                                                Shop Pages
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="collapse24" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <img class="replace-2x alignleft" src="~/Assets/img/100x62.png" width="100" height="62" alt="">
+                                        ---
+                                        </div>
+                                    </div>
                                 </div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<div id="cm-video-bg" class="full-width-box bottom-padding">
-			<div class="fwb-bg fwb-video band-16">
-				<video autoplay="" muted="" loop="">
-					<source src="/Assets/content/video/video.mp4" type="video/mp4">
-					<source src="/Assets/content/video/video.webm" type="video/webm">
-				</video>
-				<div class="overlay"></div>
-			</div>
+                <div id="cm-video-bg" class="full-width-box bottom-padding">
+                    <div class="fwb-bg fwb-video band-16">
+                        <video autoplay="" muted="" loop="">
+                            <source src="/Assets/content/video/video.mp4" type="video/mp4">
+                            <source src="/Assets/content/video/video.webm" type="video/webm">
+                        </video>
+                        <div class="overlay"></div>
+                    </div>
 
-			<div class="container">
-				<div class="row">
-					<div class="white text-center col-sm-12 col-md-12">
-						<div class="title-box text-center title-white">
-							<h1 class="title">Video Background</h1>
-						</div>
-						<p>---</p>
-						<a href="#" class="btn btn-default">Read more</a>
-					</div>
-				</div>
-			</div>
-		</div><!-- .full-width-box -->
-		<!-- .full-width-box -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="white text-center col-sm-12 col-md-12">
+                                <div class="title-box text-center title-white">
+                                    <h1 class="title">Video Background</h1>
+                                </div>
+                                <p>---</p>
+                                <a href="#" class="btn btn-default">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- .full-width-box -->
+                <!-- .full-width-box -->
 
 
-	</article>
-</section>
-	<!-- #main -->
+            </article>
+        </section>
+    <!-- #main -->
+
+@section JavaScript
+{
+
+<script src="~/Assets/js/price-regulator/jshashtable-2.1_src.js"></script>
+<script src="~/Assets/js/price-regulator/jquery.numberformatter-1.2.3.js"></script>
+<script src="~/Assets/js/price-regulator/tmpl.js"></script>
+<script src="~/Assets/js/price-regulator/jquery.dependClass-0.1.js"></script>
+<script src="~/Assets/js/price-regulator/draggable-0.1.js"></script>
+<script src="~/Assets/js/price-regulator/jquery.slider.js"></script>
+<script src="~/Assets/js/jquery.carouFredSel-6.2.1-packed.js"></script>
+<script src="~/Assets/js/jquery.touchwipe.min.js"></script>
+<script src="~/Assets/js/jquery.elevateZoom-3.0.8.min.js"></script>
+<script src="~/Assets/js/jquery.imagesloaded.min.js"></script>
+<script src="~/Assets/js/jquery.appear.js"></script>
+<script src="~/Assets/js/jquery.sparkline.min.js"></script>
+<script src="~/Assets/js/jquery.easypiechart.min.js"></script>
+<script src="~/Assets/js/jquery.easing.1.3.js"></script>
+<script src="~/Assets/js/jquery.knob.js"></script>
+<script src="~/Assets/js/jquery.selectBox.min.js"></script>
+<script src="~/Assets/js/jquery.royalslider.min.js"></script>
+<script src="~/Assets/js/jquery.tubular.1.0.js"></script>
+<script src="~/Assets/js/SmoothScroll.js"></script>
+<script src="~/Assets/js/country.js"></script>
+<script src="~/Assets/js/spin.min.js"></script>
+<script src="~/Assets/js/ladda.min.js"></script>
+<script src="~/Assets/js/masonry.pkgd.min.js"></script>
+<script src="~/Assets/js/morris.min.js"></script>
+<script src="~/Assets/js/raphael.min.js"></script>
+<script src="~/Assets/js/video.js"></script>
+<script src="~/Assets/js/pixastic.custom.js"></script>
+<script src="~/Assets/js/livicons-1.4.min.js"></script>
+<script src="~/Assets/js/layerslider/greensock.js"></script>
+<script src="~/Assets/js/layerslider/layerslider.transitions.js"></script>
+<script src="~/Assets/js/layerslider/layerslider.kreaturamedia.jquery.js"></script>
+<script src="~/Assets/js/revolution/jquery.themepunch.tools.min.js"></script>
+<script src="~/Assets/js/revolution/jquery.themepunch.revolution.min.js"></script>
+<script src="~/Assets/js/bootstrapValidator.min.js"></script>
+<script src="~/Assets/js/bootstrap-datepicker.js"></script>
+<script src="~/Assets/js/jplayer/jquery.jplayer.min.js"></script>
+<script src="~/Assets/js/jplayer/jplayer.playlist.min.js"></script>
+<script src="~/Assets/js/jquery.scrollbar.min.js"></script>
+
+}

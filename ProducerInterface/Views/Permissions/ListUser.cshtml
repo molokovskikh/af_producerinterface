@@ -17,17 +17,27 @@
 			</div>
 		</header>
 		<div class="container">
-			@foreach (var item in producerUserList) {
+
+            @if (producerUserList != null && producerUserList.Count() >= 1)
+            {
+
+			foreach (var item in producerUserList)
+            {
 				<ul class="list-group">
 					<li class="list-group-item">
 						<strong>@item.Name</strong>, <span>@item.Email</span>
-						<a class="badge" href="@Url.Action("ManageUserPermission", "Permissions", new {item.Id})">
+						<a class="badge" href="@Url.Action("ManageUserPermission", "Permissions", new { item.Id })">
 							Изменить права
 						</a>
 					</li>
 				</ul>
-			}
-		</div>
+            }
+            }
+            else
+            {
+             <h3 class="title">У вас есть доступ на изменение прав коллег, <br/> но они пока не зарегистрированы или не подтвердили свою регистрацию</h3>
+            }
+                </div>
 		<!-- .container -->
 	</section>
 }

@@ -3,6 +3,10 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using AnalitFramefork;
 using System.Web.Optimization;
+using System.Collections.Specialized;
+using System.Configuration;
+using Quartz.Impl;
+
 namespace ProducerInterface
 {
 	/// <summary>
@@ -19,5 +23,16 @@ namespace ProducerInterface
                 ProducerInterface.BundleConfig.RegisterBundles(BundleTable.Bundles);
                 Framework.Initialize(this);         
 		}
-	}
+
+        protected void Application_End()
+        {
+#if DEBUG
+            //var props = (NameValueCollection)ConfigurationManager.GetSection("quartzDebug");
+            //var sf = new StdSchedulerFactory(props);
+            //var scheduler = sf.GetScheduler();
+            //if (scheduler.IsStarted)
+            //    scheduler.Shutdown();
+#endif
+        }
+    }
 }
