@@ -35,22 +35,17 @@ namespace ProducerInterface.Controllers
         protected long producerId;
         protected NamesHelper h;
         protected Quartz.IScheduler scheduler;
-
-        public void GetThisUser()
+             
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var CurrentUser = GetCurrentUser();
-            userId = CurrentUser.Id;
-            producerId = CurrentUser.Producer.Id;
-        }
+            base.OnActionExecuting(filterContext);
 
-        public ReportController()
-        {
             cntx = new reportData();
-            // TODO: берётся у юзера
-            //var CurrentUser = GetCurrentUser();
-            //userId = CurrentUser.Id;
-            //producerId = CurrentUser.Producer.Id;
-              //  cntx.usernames.Single(x => x.UserId == userId).ProducerId;
+          //  TODO: берётся у юзера
+            var CurrentUser = GetCurrentUser();
+            userId = 1; // CurrentUser.Id;
+            producerId = 55;  // CurrentUser.Producer.Id;
+          //  cntx.usernames.Single(x => x.UserId == userId).ProducerId;
 
             h = new NamesHelper(cntx, userId);
 #if DEBUG
@@ -62,7 +57,6 @@ namespace ProducerInterface.Controllers
 
         public ActionResult AddJob(int Id)
         {
-            GetThisUser();
             // получили пустую модель нужного типа
             var type = GetModelType(Id);
             var model = (Quartz.Job.Models.Report)Activator.CreateInstance(type);
@@ -89,9 +83,8 @@ namespace ProducerInterface.Controllers
                 return View(model);
             }
 
-            var key = new Quartz.JobKey(Guid.NewGuid().ToString(), userId.ToString());
-            var message = "Отчёт успешно добавлен";
-            var job = Quartz.JobBuilder.Create<ReportJob>()
+            var key = new JobKey(Guid.NewGuid().ToString(), userId.ToString());
+            var job = JobBuilder.Create<ReportJob>()
                 .WithIdentity(key)
                 .StoreDurably()
                 .WithDescription(model.ToString())
@@ -104,8 +97,7 @@ namespace ProducerInterface.Controllers
             catch (Exception e)
             {
                 logger.Error($"Job {key.Name} {key.Group} add failed:" + e.Message, e);
-                message = e.Message;
-                return View("Error", (object)message);
+                return View("Error", (object)(e.Message));
             }
 
             var userName = cntx.usernames.Single(x => x.UserId == userId).UserName;
@@ -122,28 +114,72 @@ namespace ProducerInterface.Controllers
                 ProducerId = producerId,
                 ReportType = model.Id,
                 SchedName = scheduler.SchedulerName,
-                Scheduler = "Задать расписание"
+                Scheduler = "Расписание не задано"
             };
 
             cntx.jobextend.Add(jext);
             cntx.SaveChanges();
-            return View("Success", (object)message);
+            return View("Success", (object)"Отчёт успешно добавлен");
         }
 
-        public ActionResult Edit(string jobName, string jobGroup)
+        public ActionResult Delete(string jobName, string jobGroup)
         {
-            GetThisUser();
             var key = new JobKey(jobName, jobGroup);
             var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
-            var jext = cntx.jobextend.SingleOrDefault(x => x.SchedName == scheduler.SchedulerName
-                                                                        && x.JobName == jobName
-                                                                        && x.JobGroup == jobGroup
-                                                                        && x.ProducerId == producerId
-                                                                        && x.Enable == true);
+            var jext = GetJobExtend(jobName, jobGroup);
+            if (jext == null)
+                return View("Error", (object)"Дополнительные параметры задачи не найдены");
 
+            try
+            {
+                scheduler.PauseJob(key);
+            }
+            catch (Exception e)
+            {
+                logger.Error($"Job {key.Name} {key.Group} paused failed:" + e.Message, e);
+                return View("Error", (object)(e.Message));
+            }
+            jext.Enable = false;
+            cntx.SaveChanges();
+            return View("Success", (object)"Задача удалена");
+        }
+
+        public ActionResult Restore(string jobName, string jobGroup)
+        {
+            var key = new JobKey(jobName, jobGroup);
+            var job = scheduler.GetJobDetail(key);
+            if (job == null)
+                return View("Error", (object)"Задача не найдена");
+
+            var jext = GetJobExtend(jobName, jobGroup);
+            if (jext == null)
+                return View("Error", (object)"Дополнительные параметры задачи не найдены");
+
+            try
+            {
+                scheduler.ResumeJob(key);
+            }
+            catch (Exception e)
+            {
+                logger.Error($"Job {key.Name} {key.Group} resume failed:" + e.Message, e);
+                return View("Error", (object)(e.Message));
+            }
+            jext.Enable = true;
+            cntx.SaveChanges();
+            return View("Success", (object)"Задача восстановлена");
+        }
+
+        public ActionResult Edit(string jobName, string jobGroup)
+        {
+            var key = new JobKey(jobName, jobGroup);
+            var job = scheduler.GetJobDetail(key);
+            if (job == null)
+                return View("Error", (object)"Задача не найдена");
+
+            var jext = GetJobExtend(jobName, jobGroup);
             if (jext == null)
                 return View("Error", (object)"Дополнительные параметры задачи не найдены");
 
@@ -173,7 +209,7 @@ namespace ProducerInterface.Controllers
             }
 
             // строим новый джоб
-            var newJob = Quartz.JobBuilder.Create<ReportJob>()
+            var newJob = JobBuilder.Create<ReportJob>()
                 .WithIdentity(key)
                 .StoreDurably()
                 .WithDescription(model.ToString())
@@ -199,34 +235,102 @@ namespace ProducerInterface.Controllers
 
         public ActionResult JobList()
         {
-            GetThisUser();
             var jobList = cntx.jobextend.Where(x => x.ProducerId == producerId
-                                                            && x.SchedName == scheduler.SchedulerName
-                                                            && x.Enable == true).ToList();
+                                                                                            && x.SchedName == scheduler.SchedulerName
+                                                                                            && x.Enable == true).ToList();
             return View(jobList);
         }
 
         public ActionResult RunNow(string jobName, string jobGroup)
         {
-            GetThisUser();
-            var message = "АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же будет отправлен на указанные адреса электронной почты";
             var key = JobKey.Create(jobName, jobGroup);
+            var job = scheduler.GetJobDetail(key);
+            if (job == null)
+                return View("Error", (object)"Задача не найдена");
+
+            var param = (Quartz.Job.Models.Report)job.JobDataMap["param"];
+
+            if (param is IntervalReport)
+            {
+                var model = new SetDateInterval()
+                {
+                    JobName = key.Name,
+                    JobGroup = key.Group
+                };
+                var castparam = (IntervalReport)param;
+                var now = DateTime.Now;
+                // за предыдущий месяц
+                if (castparam.ByPreviousMonth)
+                {
+                    // по : 00:00:00 первый день текущего месяца
+                    model.DateTo = new DateTime(now.Year, now.Month, 1);
+                    // с: 00:00:00 первый день предыдущего месяца
+                    model.DateFrom = model.DateTo.AddMonths(-1);
+                }
+                // за X предыдущих дней от момента запуска
+                else {
+                    // по: 00:00:00 сегодня
+                    model.DateTo = new DateTime(now.Year, now.Month, now.Day);
+                    // с: 00:00:00 за Interval дней
+                    model.DateFrom = model.DateTo.AddDays(-castparam.Interval.Value);
+                }
+                return View(model);
+            }
+            // TODO при появлении неинтервальных отчётов добавить код
+            else
+                return View("Error", (object)"Отчёт этого типа невозможно запустить вручную");
+        }
+
+        [HttpPost]
+        public ActionResult RunNow(SetDateInterval model)
+        {
+            if (model.DateToUi < model.DateFrom)
+                ModelState.AddModelError("DateToUi", "Дата \"с...\" должна быть меньше или равна дате \"по...\"");
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var key = JobKey.Create(model.JobName, model.JobGroup);
+            var job = scheduler.GetJobDetail(key);
+            if (job == null)
+                return View("Error", (object)"Задача не найдена");
+
+            // строим новый джоб
+            var newJob = JobBuilder.Create<ReportJob>()
+                .WithIdentity(key)
+                .StoreDurably()
+                .WithDescription(model.ToString())
+                .Build();
+
+            var param = (Quartz.Job.Models.Report)job.JobDataMap["param"];
+            if (param is IntervalReport)
+            {
+                var castparam = (IntervalReport)param;
+                castparam.DateFrom = model.DateFrom;
+                castparam.DateTo = model.DateTo;
+                newJob.JobDataMap["param"] = castparam;
+            }
+            // TODO при появлении неинтервальных отчётов добавить код
+            else
+                return View("Error", (object)"Отчёт этого типа невозможно запустить вручную");
+
             try
             {
+                // новый джоб заменяет старый
+                scheduler.AddJob(newJob, true);
+                // новый джоб заменяет старый
                 scheduler.TriggerJob(key);
             }
             catch (Exception e)
             {
-                logger.Error($"Job {key.Name} {key.Group} run failed:" + e.Message, e);
-                message = e.Message;
-                return View("Error", (object)message);
+                logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
+                return View("Error", (object)(e.Message));
             }
-            return View("Success", (object)message);
+
+            return View("Success", (object)"АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же будет отправлен на указанные адреса электронной почты");
         }
 
         public ActionResult ScheduleJob(string jobName, string jobGroup)
         {
-            GetThisUser();
             var model = new Cron();
             model.JobName = jobName;
             model.JobGroup = jobGroup;
@@ -234,7 +338,7 @@ namespace ProducerInterface.Controllers
             model.CronExpression = "0 10 * * 1";
 
             // если триггер вставлялся, то с идентификатором задачи
-            var oldTriggerKey = new Quartz.TriggerKey(jobName, jobGroup);
+            var oldTriggerKey = new TriggerKey(jobName, jobGroup);
             // используются только cron-триггеры
             var oldTrigger = (ICronTrigger)(scheduler.GetTrigger(oldTriggerKey));
             // если триггер уже был - устанавливаем UI его значением
@@ -247,31 +351,18 @@ namespace ProducerInterface.Controllers
         [HttpPost]
         public ActionResult ScheduleJob(Cron model)
         {
-            GetThisUser();
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var message = "Расписание успешно изменено";
-            var jext = cntx.jobextend.Where(x => x.SchedName == scheduler.SchedulerName
-                                                                                    && x.JobName == model.JobName
-                                                                                    && x.JobGroup == model.JobGroup
-                                                                                    && x.ProducerId == producerId
-                                                                                    && x.Enable == true).SingleOrDefault();
-
+            var jext = GetJobExtend(model.JobName, model.JobGroup);
             if (jext == null)
-            {
-                message = "Дополнительные параметры задачи не найдены";
-                return View("Error", (object)message);
-            }
+                return View("Error", (object)"Дополнительные параметры задачи не найдены");
 
             var job = scheduler.GetJobDetail(JobKey.Create(model.JobName, model.JobGroup));
             if (job == null)
-            {
-                message = "Задача не найдена";
-                return View("Error", (object)message);
-            }
+                return View("Error", (object)"Задача не найдена");
 
             // новый триггер для этой задачи
             var trigger = TriggerBuilder.Create()
@@ -295,18 +386,16 @@ namespace ProducerInterface.Controllers
             catch (Exception e)
             {
                 logger.Error($"Job {model.JobGroup} {model.JobName} scheduler add failed:" + e.Message, e);
-                message = e.Message;
-                return View("Error", (object)message);
+                return View("Error", (object)(e.Message));
             }
             // меняем человекочитаемое описание в доп. параметрах задачи
             jext.Scheduler = model.CronHumanText;
             cntx.SaveChanges();
-            return View("Success", (object)message);
+            return View("Success", (object)"Расписание успешно установлено");
         }
 
         public JsonResult GetSupplierJson(List<decimal> RegionCodeEqual, List<long> SupplierIdNonEqual)
         {
-            GetThisUser();
             if (SupplierIdNonEqual == null)
                 SupplierIdNonEqual = new List<long>();
 
@@ -315,6 +404,17 @@ namespace ProducerInterface.Controllers
             {
                 results = (h.GetSupplierList(RegionCodeEqual).Select(x => new { value = x.Value, text = x.Text, selected = supplierStringList.Contains(x.Value) }))
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        // доп. инфа по джобу
+        protected jobextend GetJobExtend(string jobName, string jobGroup)
+        {
+            return cntx.jobextend.SingleOrDefault(x => x.SchedName == scheduler.SchedulerName
+                                                            && x.JobName == jobName
+                                                            && x.JobGroup == jobGroup
+                                                            && x.ProducerId == producerId
+                                                            && x.Enable == true);
+
         }
 
         protected Type GetModelType(int id)
@@ -346,7 +446,7 @@ namespace ProducerInterface.Controllers
 
         //	logger.Debug($"Start setting job {model.JobGroup} {model.JobName}");
 
-        protected Quartz.IScheduler GetDebagSheduler()
+        protected IScheduler GetDebagSheduler()
         {
             var props = (NameValueCollection)ConfigurationManager.GetSection("quartzDebug");
             var sf = new StdSchedulerFactory(props);
@@ -366,7 +466,7 @@ namespace ProducerInterface.Controllers
             return scheduler;
         }
 
-        protected Quartz.IScheduler GetRemoteSheduler()
+        protected IScheduler GetRemoteSheduler()
         {
             var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
             var sf = new StdSchedulerFactory(props);

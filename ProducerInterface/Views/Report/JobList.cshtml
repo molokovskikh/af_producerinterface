@@ -49,7 +49,8 @@
             @Html.ActionLink("Edit", "Edit", new { jobName = item.JobName, jobGroup = item.JobGroup }) |
             @Html.ActionLink("RunNow", "RunNow", new { jobName = item.JobName, jobGroup = item.JobGroup }) |
             @Html.ActionLink("Delete", "Delete", new { jobName = item.JobName, jobGroup = item.JobGroup })
-        </td>
+            @*@Html.ActionLink("Restore", "Restore", new { jobName = item.JobName, jobGroup = item.JobGroup })*@
+       </td>
     </tr>
 }
 

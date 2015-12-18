@@ -1,4 +1,4 @@
-﻿// Создание кода T4 для модели "C:\Users\alegusov\projects\producerinterface\Quartz.Job\EDM\ReportData.edmx" включено. 
+﻿// Создание кода T4 для модели "C:\Users\maksimenko\projects\QuartzTest\Quartz.Job\EDM\ReportData.edmx" включено. 
 // Чтобы включить формирование кода прежних версий, измените значение свойства "Стратегия создания кода" конструктора
 // на "Legacy ObjectContext". Это свойство доступно в окне "Свойства", если модель
 // открыта в конструкторе.

@@ -29,18 +29,28 @@ namespace Quartz.Job.Models
 
 		[Display(Name = "Отправить на e-mail")]
 		[Required(ErrorMessage = "Не указаны e-mail")]
-		[UIHint("StringList")]
+		[UIHint("MailTo")]
 		public List<string> MailTo { get; set; }
 
 		public abstract List<string> GetHeaders(HeaderHelper h);
 
-		public abstract Report Process(Report param, JobKey key);
+		public abstract Report Process(Report param, JobKey key, bool runNow);
 
 		public abstract string GetSpName();
 
 		public abstract Dictionary<string, object> GetSpParams();
 
-		public abstract List<ErrorMessage> Validate();
+		public virtual List<ErrorMessage> Validate()
+		{
+			var errors = new List<ErrorMessage>();
+			var ea = new EmailAddressAttribute();
+			var ok = true;
+			foreach (var mail in MailTo)
+				ok = ok && ea.IsValid(mail);
+			if(!ok)
+				errors.Add(new ErrorMessage("MailTo", "Неверный формат почтового адреса"));
+			return errors;
+		}
 
 		public abstract Dictionary<string, object> ViewDataValues(NamesHelper h);
 

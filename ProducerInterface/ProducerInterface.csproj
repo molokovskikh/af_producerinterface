@@ -557,6 +557,24 @@
     <Content Include="Assets\js\SmoothScroll.js" />
     <Content Include="Assets\js\spin.min.js" />
     <Content Include="Assets\js\video.js" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\chosen-sprite%402x.png" />
+    <Content Include="Content\css\chosen-sprite.png" />
+    <Content Include="Content\css\chosen.css" />
+    <Content Include="Content\css\datepicker.css" />
+    <Content Include="Content\css\jqCron.css" />
+    <Content Include="Content\css\loading.gif" />
+    <Content Include="Content\css\Site.css" />
+    <Content Include="Content\js\bootstrap-datepicker.js" />
+    <Content Include="Content\js\chosen.jquery.js" />
+    <Content Include="Content\js\initAddJob.js" />
+    <Content Include="Content\js\initCron.js" />
+    <Content Include="Content\js\initDatePicker.js" />
+    <Content Include="Content\js\jqCron.js" />
+    <Content Include="Content\js\jqCron.ru.js" />
+    <None Include="Content\js\_references.js" />
+    <Content Include="Content\js\Old\initAddJob.js" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -570,6 +588,7 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Report\RunNow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analit\" />

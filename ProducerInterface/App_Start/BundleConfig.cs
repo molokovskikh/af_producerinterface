@@ -30,6 +30,23 @@ namespace ProducerInterface
 "~/Assets/css/ie/ie.css",
 "~/Assets/css/bootstrap.css"
                 ));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqCron").Include(
+                            "~/Content/js/jqCron.js",
+                            "~/Content/js/jqCron.ru.js",
+                            "~/Content/js/chosen.jquery.js",
+                            "~/Content/js/bootstrap-datepicker.js",
+                            //"~/Scripts/ajax-chosen.js",
+                            "~/Scripts/bootstrap-datepicker.js"                            
+                            //"~/Scripts/init.js"
+                            ));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                            "~/Content/css/bootstrap.css",
+                            "~/Content/css/site.css",
+                            "~/Content/css/chosen.css",
+                            "~/Content/datepicker.css",
+                            "~/Content/css/jqCron.css"));
+
             bundles.Add(new ScriptBundle("~/Assets/js").Include(
 "~/Assets/js/price-regulator/jshashtable-2.1_src.js",
 "~/Assets/js/price-regulator/jquery.numberformatter-1.2.3.js",

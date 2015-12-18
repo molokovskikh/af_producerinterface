@@ -36,11 +36,11 @@ namespace Quartz.Job.Models
 			return result;
 		}
 
-		public override Report Process(Report param, JobKey key)
+		public override Report Process(Report param, JobKey key, bool runNow)
 		{
-			var castparam = base.Process(param, key);
+			var castparam = base.Process(param, key, runNow);
 			var processor = new Processor<PharmacyRatingReportRow>();
-			processor.Process(castparam, key);
+			processor.Process(castparam, key, runNow);
 			return castparam;
 		}
 

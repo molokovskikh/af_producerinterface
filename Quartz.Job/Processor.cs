@@ -24,7 +24,7 @@ namespace Quartz.Job
 			_helper = new HeaderHelper(_cntx);
 		}
 
-		public void Process(Report param, JobKey key)
+		public void Process(Report param, JobKey key, bool runNow)
 		{
 			var querySort = new List<T>();
 			var connString = ConfigurationManager.ConnectionStrings["quartz"].ConnectionString;

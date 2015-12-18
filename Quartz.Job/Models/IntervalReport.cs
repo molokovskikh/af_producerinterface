@@ -29,17 +29,23 @@ namespace Quartz.Job.Models
 			Interval = 7;
 		}
 
-		public override Report Process(Report param, JobKey key)
+		public override Report Process(Report param, JobKey key, bool runNow)
 		{
 			var castparam = (IntervalReport)param;
-			// за предыдущий месяц
+			// если запуск вручную - не пересчитываем даты
+			if (runNow)
+				return castparam;
+
+			// если запуск по крону - пересчитываем даты относительно момента запуска
 			var now = DateTime.Now;
+			// за предыдущий месяц
 			if (castparam.ByPreviousMonth) {
 				// по : 00:00:00 первый день текущего месяца
 				castparam.DateTo = new DateTime(now.Year, now.Month, 1);
 				// с: 00:00:00 первый день предыдущего месяца
 				castparam.DateFrom = castparam.DateTo.AddMonths(-1);
 			}
+			// за X предыдущих дней от момента запуска
 			else {
 				// по: 00:00:00 сегодня
 				castparam.DateTo = new DateTime(now.Year, now.Month, now.Day);
@@ -51,7 +57,7 @@ namespace Quartz.Job.Models
 
 		public override List<ErrorMessage> Validate()
 		{
-			var errors = new List<ErrorMessage>();
+			var errors = base.Validate();
 			if (!ByPreviousMonth && !Interval.HasValue)
 				errors.Add(new ErrorMessage("Interval", "Не указан интервал"));
 			return errors;
