@@ -1,0 +1,18 @@
+﻿@model string
+@{
+    ViewBag.Title = "Сообщение";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row margin5" style="background-color: darksalmon; margin-bottom: 1em; padding: 1em;">
+            @Html.DisplayForModel()
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.ActionLink("Назад", "JobList")
+    </div>
+</div>

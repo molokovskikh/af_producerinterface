@@ -1,245 +1,125 @@
-﻿ @using AnalitFramefork.Hibernate.Models @using AnalitFramefork.Mvc @using ProducerInterface.Models
-@using System.Web.Optimization
+﻿@using ProducerInterface.Models
+@using System.Web.Mvc.Html
+@model ProducerInterface.Models.LoginValidation
+
 @{
-    var user = (ViewBag.CurrentUser as ProducerUser);
-    BaseController controller = ViewBag.Controller;
+    var user = ViewBag.CurrentUser;
+
 }
-<!DOCTYPE html> 
+
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аналит @ViewBag.Title</title>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="Neon Admin Panel" />
-		<meta name="author" content="" />
+    @Styles.Render("~/Content/css")
+    @RenderSection("styles", required: false)
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
 
-		<title>Аналит | @ViewBag.Title</title>
-        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Arimo:400,700,400italic,700italic'>
+    <div class="server-message" style="font-size:1.5em; text-align:center;"></div>
 
-        @Styles.Render("~/Assets/css")
-        @Styles.Render("~/Content/css")
+    <div class="navbar navbar-fixed-top navbar-default">
+        <div class="container">
+            <div class="navbar-header navbar-left">
+                <button type="button" class="navbar-toggle navbar-left" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+               <a href="@Url.Action("Index","Home")" class="navbar-brand">
+                    <img class="image-brand" src="~/Content/Image/aflogo.png" />
+                </a>        
+            </div>
 
-		<!-- Favicon (in ~/favicon.ico)--> 
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="@Url.Action("Index","Home")"><span class="glyphicon glyphicon-home"></span> Главная</a></li>
 
-        @controller.GetCssFileLinks()
+                </ul>
+                <ul class="nav navbar-nav navbar-right" role="navigation">
+                    @if (user != null)
+                    {
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle"> <span class="glyphicon glyphicon-align-justify"></span>&nbsp; Разделы сайта</a>
 
-		<!--[if lt IE 9]>
-            <script src="~/Assets/js/respond.min.js"></script>
-            <script src="~/Assets/js/html5shiv.js"></script>		
-			<link rel='stylesheet' href="~/Assets/css/ie/ie8.css">
-		<![endif]-->
-		 
-	</head>
-	<body class="fixed-header" style="background-color:#D0D0D0;">
-	<div class="page-box">
-		<div class="server-message"></div>
-		<div class="page-box-content">
-			<header class="header header-two">
-				<div class="header-wrapper">
-					<div class="container">
-						<div class="row">
-							<div class="col-xs-6 col-md-2 col-lg-3 logo-box">
-								<div class="logo">
-									<a href="@Url.Action("Index", "Home")">
-										<img src="~/Assets/img/aflogo.png" class="logo-img" alt="">
-									</a>
-								</div>
-							</div><!-- .logo-box -->
-							<div class="col-xs-6 col-md-10 col-lg-9 right-box">
-								<div class="right-box-wrapper">
-									<div class="header-icons">									
-                                    	<div class="search-header hidden-600">
-										@*	<a>
-												<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
-													<path d="M12.001,10l-0.5,0.5l-0.79-0.79c0.806-1.021,1.29-2.308,1.29-3.71c0-3.313-2.687-6-6-6C2.687,0,0,2.687,0,6
-					s2.687,6,6,6c1.402,0,2.688-0.484,3.71-1.29l0.79,0.79l-0.5,0.5l4,4l2-2L12.001,10z M6,10c-2.206,0-4-1.794-4-4s1.794-4,4-4
-					s4,1.794,4,4S8.206,10,6,10z"></path>
-													<image src="~/Assets/img/png-icons/search-icon.png" alt="" width="16" height="16" style="vertical-align: top;">
-												</svg>
-											</a>*@
-										</div>		
-                                    <!-- .search-header -->
+                            <ul class="dropdown-menu">
+                                <li><a href="/Report/JobList">Отчеты</a></li>
+                                <li><a href="#">Акции</a></li>
+                                <li><a href="#">Описания препаратов</a></li>
+                            </ul>
+                        </li>
 
-										<div class="phone-header hidden-600">
-											<a href="#">
-												<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
-													<path d="M11.001,0H5C3.896,0,3,0.896,3,2c0,0.273,0,11.727,0,12c0,1.104,0.896,2,2,2h6c1.104,0,2-0.896,2-2
-					c0-0.273,0-11.727,0-12C13.001,0.896,12.105,0,11.001,0z M8,15c-0.552,0-1-0.447-1-1s0.448-1,1-1s1,0.447,1,1S8.553,15,8,15z
-					M11.001,12H5V2h6V12z"></path>
-													<image src="~/Assets/img/png-icons/phone-icon.png" alt="" width="16" height="16" style="vertical-align: top;"/>
-												</svg>
-											</a>
-										</div><!-- .phone-header -->
-									</div><!-- .header-icons -->
-									<div class="primary">
-										<div class="navbar navbar-default" role="navigation">
-											<button type="button" class="navbar-toggle btn-navbar collapsed" data-toggle="collapse" data-target=".primary .navbar-collapse">
-												<span class="text">Menu</span>
-												<span class="icon-bar"></span>
-												<span class="icon-bar"></span>
-												<span class="icon-bar"></span>
-											</button>
-												<nav class="collapse collapsing navbar-collapse">
-													<ul class="nav navbar-nav navbar-center">
-														<li class="parent">
-															<a href="@Url.Action("Index", "Home")">Главная</a>
-														</li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Email</a>
 
-														<li class="parent">
-															@if (user == null) {
-																<a href="@Url.Action("Index", "Registration")">Войти</a>
-															}
-															else {
-																<a href="@Url.Action("Index", "Profile")">Кабинет произодителя</a>
-																<ul class="sub">
-																	@if (user.Permissions.Any(s => s.Name.ToLower() == "permissions_listuser"))
-																	{
-																	<li>
-																		<a href="@Url.Action("ListUser", "Permissions")">Редактор прав</a>
-																	</li>
-																	}
-                                                                  
-																	<li><a href="@Url.Action("LogOut", "Registration")">Выйти</a></li>
-																</ul>
-															}                                                                  
-														</li>  
-                                                        @if (user != null)
-                                                        {
-                                                        <li class="parent">
-                                                            <a>Разделы</a>
-                                                            <ul class="sub">
-                                                                <li><a href="@Url.Action("JobList", "Report")">Отчеты</a></li>
-                                                                <li><a href="@Url.Action("Promotions", "Profile")">Промо-акции</a></li>
-                                                                <li><a href="@Url.Action("Products", "Profile")">Описание препаратов</a></li>
-                                                            </ul>
-                                                            
-                                                        </li>   
-                                                        }                                           
-													</ul>
-												</nav>
-											</div>
-										</div><!-- .primary -->
-									</div>
-								</div>
-							</div>
+                            <ul class="dropdown-menu">
+                                <li><a href="/Profile/Index">Кабинет произврдителя</a></li>
+                                <li><a href="/Registration/LogOut">Выход</a></li>
+                            </ul>
+                        </li>    
+                                    
+                    }
+                    else
+                    {
+                    <li><a href="@Url.Action("Registration", "Registration")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
+                    <li class="dropdown">
+                       
+                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" style="width:300px; padding:10px; padding-bottom:0px;">
+                                    <form method="post" action="~/Registration/UserAuthentication">
+                                        <div class="form-group-lg">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.login, null, new { @Name = "login", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12" , @placeholder="Логин"})
+                                                @Html.ValidationMessageFor(model => model.login)
+                                                <br/>
+                                                @*<input class="form-control input-group-lg" type="text" id="login" Name="login" placeholder="Логин" />*@
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.password, null, new { @Name = "password", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12", @placeholder="Пароль"})
+                                                @Html.ValidationMessageFor(model => model.password)
+                                                <br />
+                                                @*<input class="form-control input-group-lg" type="password" id="password" Name="password" placeholder="Пароль" />*@
+                                            </div>
+                                            <div class="form-group col-lg-12 col-sm-12 col-xs-12 col-md-12">
 
-							<div class="phone-active col-sm-9 col-md-9">
-								<a href="#" class="close"><span>close</span>×</a>
-								<span class="title">Телефон</span> <strong>8-800-555-46-88</strong>
-							</div>
-					
-                    @*		<div class="search-active col-sm-9 col-md-9">
-								<a href="#" class="close"><span>закрыть</span>×</a>
-                                <form name="search-form" class="search-form">
-									<input class="search-string form-control" type="search" placeholder="Поиск" name="search-string">
-									<button class="search-submit">
-										<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
-											<path fill="#231F20" d="M12.001,10l-0.5,0.5l-0.79-0.79c0.806-1.021,1.29-2.308,1.29-3.71c0-3.313-2.687-6-6-6C2.687,0,0,2.687,0,6
-				s2.687,6,6,6c1.402,0,2.688-0.484,3.71-1.29l0.79,0.79l-0.5,0.5l4,4l2-2L12.001,10z M6,10c-2.206,0-4-1.794-4-4s1.794-4,4-4
-				s4,1.794,4,4S8.206,10,6,10z"></path>
+                                                <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-xs-12 col-md-12" value="Войти" />
+                                            </div>
+                                            <div class="form-group">
+                                                <center>
+                                                    <a href="#">Забыли пароль?</a>
+                                                </center>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>                                        
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <div class="otstup"></div>
+        @RenderBody()
+        <footer class="panel-footer navbar-fixed-bottom">
+            <center>
+                <p>&copy; @DateTime.Now.Year – Аналит Фармация | Телефон:8-800-555-46-88</p>
+            </center>
+        </footer>
+    </div>
 
-											<image src="~/Assets/img/png-icons/search-icon.png" alt="" width="16" height="16" style="vertical-align: top;">
-										</svg>
-									</button>
-								</form>        
-							</div>
-                   *@
-						</div><!-- .row -->
-					</div><!-- .header-wrapper -->
-			@*	</div><!-- .header-two --> *@
-			</header><!-- .header -->
-
-			@RenderBody()
-		</div><!-- .page-box-content -->
-	</div><!-- .page-box -->
-
-		<footer id="footer">    
-			<div class="footer-bottom">
-				<div class="container">
-					<div class="row">
-						<div class="copyright col-xs-12 col-sm-3 col-md-3">
-							Аналит Фармация, 2011
-						</div>
-
-						<div class="phone col-xs-6 col-sm-3 col-md-3">
-							<div class="footer-icon">
-								<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
-									<path fill="#c6c6c6" d="M11.001,0H5C3.896,0,3,0.896,3,2c0,0.273,0,11.727,0,12c0,1.104,0.896,2,2,2h6c1.104,0,2-0.896,2-2
-			  c0-0.273,0-11.727,0-12C13.001,0.896,12.105,0,11.001,0z M8,15c-0.552,0-1-0.447-1-1s0.448-1,1-1s1,0.447,1,1S8.553,15,8,15z
-			  M11.001,12H5V2h6V12z"></path>
-								</svg>
-							</div>
-							<strong class="title">Телефон:</strong>8-800-555-46-88<br>
-							<strong></strong>
-						</div>
-
-						<div class="address col-xs-6 col-sm-3 col-md-3">
-							<div class="footer-icon">
-								<svg x="0" y="0" width="16px" height="16px" viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
-									<g>
-										<g>
-											<path fill="#c6c6c6" d="M8,16c-0.256,0-0.512-0.098-0.707-0.293C7.077,15.491,2,10.364,2,6c0-3.309,2.691-6,6-6
-				  c3.309,0,6,2.691,6,6c0,4.364-5.077,9.491-5.293,9.707C8.512,15.902,8.256,16,8,16z M8,2C5.795,2,4,3.794,4,6
-				  c0,2.496,2.459,5.799,4,7.536c1.541-1.737,4-5.04,4-7.536C12.001,3.794,10.206,2,8,2z"></path>
-										</g>
-										<g>
-											<circle fill="#c6c6c6" cx="8.001" cy="6" r="2"></circle>
-										</g>
-									</g>
-								</svg>
-							</div>
-							<br>
-						</div>
-
-						<div class="col-xs-12 col-sm-3 col-md-3">
-							<a href="#" class="up">
-								<span class="glyphicon glyphicon-arrow-up"></span>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div><!-- .footer-bottom -->
-		</footer>
-	<div class="clearfix"></div>
-		<!-- Техническая информация -->
-	<div class="JavascriptParams" style="display: none">
-	    @{
-	        var dic = ViewBag.JavascriptParams as Dictionary<string, string>;
-	        if (dic != null && dic.Count != 0)
-	        {
-	            foreach (var key in dic.Keys)
-	            {
-	                <div id="@key">@dic[key]</div>
-	            }
-	        }
-	    }
-	</div>
-        @controller.GetJavascriptFileLinks()
-
-		<!--[if (!IE)|(gt IE 8)]><!-->
-		<script src="~/Assets/js/jquery-2.1.3.min.js"></script>
-		<!--<![endif]-->
-		<!--[if lte IE 8]>
-			<script src="~/Assets/js/jquery-1.9.1.min.js"></script>
-		<![endif]-->
-
-		<script src="~/Assets/js/bootstrap.min.js"></script>
-        <script src="~/Assets/js/jquery.fancybox.pack.js"></script>
-        <script src="~/Assets/js/isotope.pkgd.min.js"></script>
-        <script src="~/Assets/js/main.js"></script>
-        
-        @Scripts.Render("~/bundles/jqCron")
-
-
-        @if (IsSectionDefined("JavaScript"))
-        {
-            @RenderSection("JavaScript", required: false)
-        }
-        else
-        {
-            @controller.GetActionScripts()
-        }
-
-	</body>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/WorkPlace/Analit.js"></script>
+    <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
 </html>

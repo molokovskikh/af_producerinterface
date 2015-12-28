@@ -7,6 +7,7 @@
     <div class="col-md-12">
         @using (Html.BeginForm()) {
             <fieldset>
+
                 <legend>@Model.Name</legend>
                 @Html.ValidationSummary(true)
                 @Html.EditorFor(m => m.CastomName)
@@ -22,10 +23,12 @@
                         <input id="btn" type="submit" value="Сохранить"/>
                     </div>
                 </div>
+
             </fieldset>
         }
     </div>
 </div>
 @section javascript {
     <script src="~/Content/js/initAddJob.js"></script>
+    <script src="~/Content/js/chosen.jquery.js"></script>
 }

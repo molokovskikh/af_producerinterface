@@ -2,28 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-
-using AnalitFramefork.Hibernate.Models;
-using AnalitFramefork.Mvc;
-using NHibernate.Linq;
-using ProducerInterface.Models;
-
 using Quartz;
-
 using Quartz.Impl;
 using Quartz.Job;
 using Quartz.Job.Models;
-
 using System.Configuration;
 using Common.Logging;
 using Quartz.Job.EDM;
 
-
 namespace ProducerInterface.Controllers
 {
-    public class ReportController : BaseProducerInterfaceController
+    public class ReportController : pruducercontroller.BaseController
     {
         //
         // GET: /Report/
@@ -43,8 +33,8 @@ namespace ProducerInterface.Controllers
             cntx = new reportData();
           //  TODO: берётся у юзера
             var CurrentUser = GetCurrentUser();
-            userId = 1; // CurrentUser.Id;
-            producerId = 55;  // CurrentUser.Producer.Id;
+            userId = CurrentUser.Id;
+            producerId =(long) CurrentUser.ProducerId;
           //  cntx.usernames.Single(x => x.UserId == userId).ProducerId;
 
             h = new NamesHelper(cntx, userId);

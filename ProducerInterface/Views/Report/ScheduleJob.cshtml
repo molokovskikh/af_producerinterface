@@ -8,6 +8,7 @@
     <div class="col-md-12">
         @using (Html.BeginForm()) {
             <fieldset>
+
                 @Html.EditorFor(m => m.CronExpression)
                 @Html.EditorFor(m => m.CronHumanText)
                 @Html.EditorFor(m => m.JobGroup)
@@ -20,6 +21,7 @@
                         <input id="btn" type="submit" value="Применить"/>
                     </div>
                 </div>
+
             </fieldset>
         }
     </div>

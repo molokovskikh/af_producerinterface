@@ -118,10 +118,6 @@
       <Project>{4436A72E-730B-497C-989C-42BBB4208024}</Project>
       <Name>ProducerControlPanel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProducerInterface\ProducerInterface.csproj">
-      <Project>{546ed658-bc52-4b7c-b01c-5181e831559f}</Project>
-      <Name>ProducerInterface</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

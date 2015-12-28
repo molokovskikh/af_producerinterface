@@ -1,0 +1,29 @@
+﻿@model Quartz.Job.Models.SetDateInterval
+
+@{
+  ViewBag.Title = "Добавить расписание";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm()) {
+        <fieldset>
+            @Html.EditorFor(m => m.DateFrom)
+            @Html.EditorFor(m => m.DateToUi)
+            @Html.EditorFor(m => m.JobGroup)
+            @Html.EditorFor(m => m.JobName)
+            <div class="row margin5">
+                <div class="flabel col-md-4">
+                    @Html.ActionLink("Назад", "JobList")
+                </div>
+                <div class="feditor col-md-8">
+                    <input id="btn" type="submit" value="Сформировать отчет" />
+                </div>
+            </div>
+        </fieldset>
+        }
+    </div>
+</div>
+@section scripts {
+    <script src="~/Content/js/initDatePicker.js"></script>
+}

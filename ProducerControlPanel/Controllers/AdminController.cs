@@ -6,7 +6,7 @@ using AnalitFramefork.Hibernate.Models;
 using AnalitFramefork.Mvc.Attributes;
 using NHibernate.Linq;
 using ProducerControlPanel.Models;
-using ProducerInterface.Models;
+using ProducerInterface.Nodels;
 using Remotion.Linq.Clauses;
 
 namespace ProducerControlPanel.Controllers

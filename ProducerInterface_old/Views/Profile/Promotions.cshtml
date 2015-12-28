@@ -1,0 +1,50 @@
+﻿@using AnalitFramefork.Hibernate.Models
+@using ProducerInterface.Models
+@{
+	ViewBag.Title = "Промо-акции";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	List<Promotion> promotionList = ViewBag.PromotionList;
+}
+
+<section id="main">
+	<div class="container">
+		<div class="row">
+			<div class="content blog col-sm-9 col-md-9">
+				<h3 class="title">Промо-акции</h3>
+				<p>
+					<a href="@Url.Action("ManagePromotion")" class="btn btn-info">
+						<i class="fa fa-pencil"></i>
+						<span>Добавить акцию</span>
+					</a>
+				</p>
+				<b style="color: red">
+					На данной странице отображается список подтвержденных, администратором акций. То есть после создания, акция не будет там отображаться.
+					При кажом изменении акции, она снова становится неподтвержденной. Подтвержденный акции не будут отображаться в Analit-f.net (согласовано вчера с Михаилом Епихиным).
+					Тем не менее у нас уже есть план как их отобразить, так что при необходимости мы можем это быстро сделать.
+				</b>
+				@foreach (var item in promotionList) {
+					<article class="post">
+						<h2 class="entry-title">
+							@item.Name
+						</h2>
+						<div class="entry-content">
+							@item.Annotation
+						</div>
+						<footer class="entry-meta">
+							<span class="autor-name">@item.ProducerUser.Name</span>,
+							<span class="time">@item.UpdateTime</span>
+							<span class="separator">|</span>
+							<span class="meta">Добавлено в <a href="#">промо-акции</a>, <a href="#">Препараты</a></span>
+							<span class="comments-link pull-right">
+									<a href="@Url.Action("ManagePromotion", new {id = item.Id})"><i class="fa fa-pencil"></i>  изменить</a>
+								</span>
+						</footer>
+					</article>
+				}
+			</div><!-- .content -->
+			@{ Html.RenderPartial("SideBar"); }
+		</div>
+	</div>
+	<!-- .container -->
+</section>
+<!-- #main -->

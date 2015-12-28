@@ -1,11 +1,9 @@
-﻿@model DateTime?
-<div class="row margin5">
-    <div class="flabel col-md-4">
-        @Html.LabelFor(m => m)
-    </div>
-    <div class="feditor col-md-8">
-        @Html.TextBox("", String.Format("{0:dd.MM.yyyy}", Model), new { @readonly = "readonly"})
-        @Html.ValidationMessageFor(m => m)
+﻿@model DateTime
+<div class="form-group">       
+        @Html.LabelFor(m => m, new { @class= "col-sm-3" })      
+    <div class="col-sm-9">
+        @Html.TextBox("", String.Format("{0:dd.MM.yyyy}", Model), new { @readonly = "readonly" , @class="form-control"})
+        @Html.ValidationMessageFor(m => m)      
     </div>
 </div>
 

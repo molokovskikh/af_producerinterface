@@ -5,223 +5,306 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
-using AnalitFramefork.Components;
-using AnalitFramefork.Helpers;
-using AnalitFramefork.Hibernate.Models;
-using AnalitFramefork.Mvc;
-using NHibernate.Id;
-using NHibernate.Linq;
 using ProducerInterface.Models;
 
 namespace ProducerInterface.Controllers
 {
-	public class RegistrationController : BaseProducerInterfaceController
-	{
-		//todo: перенести из админки всплывающее окно сообщения, добавить отображение валидации полей.
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
-		{
-			base.OnActionExecuting(filterContext);
-			if (filterContext == null) {
-				throw new ArgumentNullException("filterContext");
-			}
-		}
+    public class RegistrationController : pruducercontroller.BaseController
+    {
 
-		//
-		// GET: /Registration/
-		// Форма авторизации / регистрации
-		public ActionResult Index()
-		{
-			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
-			ViewBag.CurrentUser =  DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
-			return View();
-		}
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            if (filterContext == null)
+            {
+                throw new ArgumentNullException("filterContext");
+            }
+        }
 
-		/// <summary>
-		/// Регистрация пользователя
-		/// </summary>
-		/// <param name="producerUser"></param>
-		/// <returns></returns>
-		public ActionResult RegisterUser(ProducerUser producerUser)
-		{
-			// Проверяем введенные пользователем данные регистрации 
-			string resultMessage = "";
-			var errors = ValidationRunner.Validate(producerUser);
-			if (errors.Length == 0 && producerUser.RegistrationIsAllowed(DbSession, ref resultMessage)) {
-				// хэшируем пароль
-				producerUser.Password = Md5HashHelper.GetHash(producerUser.Password);
-				producerUser.PasswordUpdated = SystemTime.Now();
-				// сохраняем модель нового пользователя 
-				DbSession.Save(producerUser);
-				var linkWord = Md5HashHelper.GetHash(producerUser.PasswordUpdated.ToString());
-				// письмо пользователю
-				EmailSender.SendEmail(producerUser.Email, "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
-					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
-									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
-						Config.GetParam("SiteName"), producerUser.Email,
-						Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
-				// письмо на аналит 
-				EmailSender.SendEmail(Config.GetParam("ProducerInterfaceForwardEmail"), "Успешная регистрация на сайте " + Config.GetParam("SiteName"),
-					string.Format(@"Вы успешно зарегистрировались на сайте {0} под логином {1},
-									для завершение регистрации перейдите по <a href='{2}'>ссылке</a>.",
-						Config.GetParam("SiteName"), producerUser.Email,
-						Config.GetParam("SiteRoot") + "Registration/GegistrationConfirm?key=" + linkWord));
-				resultMessage = "Регистрация прошла успешно!";
-				SuccessMessage(resultMessage);
-				return RedirectToAction("Index", "Home");
-			}
-			ErrorMessage(resultMessage);
-			ViewBag.NewUser = producerUser;
-			ViewBag.ProducerList = DbSession.Query<Producer>().ToList();
-			return RedirectToAction("Index");
-		}
+        // GET: Registration
+        public ActionResult Index()
+        {
+            var ModelView = new Models.LoginValidation();
+            return View(ModelView);
+        }
 
-		/// <summary>
-		/// Подтверждение регистрации пользователя по ссылке в письме
-		/// </summary>
-		/// <returns></returns>
-		public ActionResult GegistrationConfirm(string key)
-		{
-			var currentUserList = DbSession.Query<ProducerUser>().ToList();
-			var currentUser = currentUserList.FirstOrDefault(e => Md5HashHelper.GetHash(e.PasswordUpdated.ToString()) == key);
-			currentUserList = currentUserList.Where(s => s.Enabled).ToList();
-            if (currentUser != null) {
-				currentUser.Enabled = true;
-				currentUser.PasswordUpdated = SystemTime.Now();
-				currentUser.PasswordToUpdate = false;
-				var permissionList = DbSession.Query<UserPermission>().ToList();
-				if (currentUserList.Count(s => s.Id != currentUser.Id && s.Producer.Id == currentUser.Producer.Id) == 0) {
-					permissionList.ForEach(s => currentUser.Permissions.Add(s));
-				}
-				else {
-					var permissionOfProfile = permissionList.Where(
-						s => s.Name.ToLower() == "profile_index"
-						).ToList();
-					foreach (var item in permissionOfProfile) currentUser.Permissions.Add(item);
-				}
-				DbSession.Save(currentUser);
-				return Authenticate(currentUser.Email, true);
-			}
-			return RedirectToAction("Index", "Home");
-		}
+        [HttpGet]
+        public ActionResult Registration()
+        {
+            var ModelView = new Models.RegistrerValidation();
 
-		/// <summary>
-		/// Авторизация пользователя (аутентификация)
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="password"></param>
-		/// <returns></returns>
-		[HttpPost]
-		public ActionResult UserAuthentication(string login, string password)
-		{
-			string originalPass = password;
-			// Проверяем введенные пользователем данные авторизации 
-			password = Md5HashHelper.GetHash(password);
-			var authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == login
-			                                                                            && s.Password == password &&
-			                                                                            (s.Enabled ||
-			                                                                             s.Enabled == false && s.PasswordToUpdate));
-#if DEBUG
-			//Авторизация для тестов, если пароль совпадает с паролем по умолчанию и логин есть в АД, то все ок
-			if (originalPass == Config.GetParam("DefaultUserPassword"))
-			{
-				authenticatedUser =
-					DbSession.Query<ProducerUser>()
-						.FirstOrDefault(s => s.Email == login && (s.Enabled || s.Enabled == false && s.PasswordToUpdate));
-				password = originalPass;
-			}
-#endif
-			if (authenticatedUser != null) {
-				if (authenticatedUser.PasswordToUpdate) {
-					ViewBag.CurrentUser = authenticatedUser;
-					return View("UserPasswordUpdate");
-				}
-				// авторизуем пользователя, если все есть совпадение в БД
-				return Authenticate(authenticatedUser.Email, true);
-			}
-			ErrorMessage("Пользователь с данным логином и паролем не существует или был заблокирован.");
-			// возвращаем пользователя на главную страницу
-			return RedirectToAction("Index");
-		}
+            var X = _BD_.producernames.Select(xxx => new Models.OptionElement2 { Text = xxx.ProducerName, Value = xxx.ProducerId }).ToList();
 
-		/// <summary>
-		/// Обновление пароля пользователя.
-		/// </summary>
-		/// <returns></returns>
-		public ActionResult UserPasswordUpdate()
-		{
-			ViewBag.CurrentUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
-			return View();
-		}
+            var ProducerList = new List<Models.OptionElement>();
+            ProducerList.Add(new Models.OptionElement { Text = "", Value = "" });
+            ProducerList.AddRange(X.Select(xxx => new Models.OptionElement { Text = xxx.Text, Value = (string)xxx.Value.ToString() }).ToList());
+
+            ViewBag.ProducerList = ProducerList;
+
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult Registration(Models.RegistrerValidation NewAccount = null)
+        {         
+
+            if (ModelState.IsValid)
+            {
+                // проверка на существование eMail в БД
+
+                var YesNouMail = _BD_.produceruser.Where(xxx => xxx.Email == NewAccount.login).FirstOrDefault();
+
+                if (YesNouMail == null || YesNouMail.Email != "")
+                {
+                    Models.produceruser New_User = new Models.produceruser();
+                    New_User.Email = NewAccount.login;
+                    New_User.Name = NewAccount.Name;
+                    New_User.Enabled = 0;
+                    New_User.Appointment = NewAccount.Appointment;
+                    string Password = GetRandomPassword();
+                    New_User.Password = Md5HashHelper.GetHash(Password);
+                    New_User.ProducerId = NewAccount.Producers;
+                    New_User.PasswordUpdated = SystemTime.GetDefaultDate();
+                    _BD_.Entry(New_User).State = System.Data.Entity.EntityState.Added;
+                    _BD_.SaveChanges();
+
+                    Models.EmailSender.SendEmail(NewAccount.login, "Успешная регистрация на сайте: " + GetSiteName, "Ваш пароль для входа на сайт: " + Password);
+
+                    Models.EmailSender.SendEmail(ForwardEmail, "Успешная регистрация на сайте: " + GetSiteName, "Ваш пароль для входа на сайт: " + Password);
+
+                    SuccessMessage("Регистрация прошла успешно! Пароль для входа выслан на вашу почту " + NewAccount.login);
+
+                    return RedirectToAction("Index", "Home");
+
+                }
+                else
+                {
+                    // eMail уже зарегистрирован в Базе (Активный он или нет, не важно.)
+                    // т.к. Заблокированный не сможет второй раз зарегистрироватся
+
+                    string Errorstr = "Данный eMail уже зарегистрирован, попробуйте восстановить пароль.";
+
+                    ErrorMessage(Errorstr);
+                    return RedirectToAction("PasswordRecovery", "Registration", new { eMail = NewAccount.login });
+                }
+            }
+            else
+            {
+                string Errorstr = "Некорректно заполнены поля формы / или не все";
+                ErrorMessage(Errorstr);
+                return RedirectToAction("Registration", "Registration");
+            }         
+        }
+               
+        public ActionResult PasswordRecovery(string eMail = "")
+        {
+            var Login = new Models.PasswordUpdate();
+            Login.login = eMail;        
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PasswordRecoverySendMail(string login = "")
+        {
+            if (String.IsNullOrEmpty(login))
+            {
+                ErrorMessage("Вы не указали eMail");
+                return RedirectToAction("PasswordRecovery", "Registration");
+            }
+            else
+            {
+                var User = _BD_.produceruser.Where(xxx => xxx.Email == login).FirstOrDefault();
+
+                if (User != null && User.Email != "")
+                {
+
+                    // проверка не заблокирован ли пользователь
+                    if (User.Enabled == 0 && User.PasswordUpdated == null)
+                    {
+                        // пользователь зарегистрировался, но ни разу не входил
+                        // отсылаем новвый пароль на почту
+
+                        string Password = GetRandomPassword();
+                        User.Password = Md5HashHelper.GetHash(Password);
+                        _BD_.Entry(User).State = System.Data.Entity.EntityState.Modified;
+                        _BD_.SaveChanges();
+
+                        Models.EmailSender.SendEmail(login, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
+                        Models.EmailSender.SendEmail(ForwardEmail, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
+
+                        SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        if (User.Enabled == 1)
+                        {
+                            string Password = GetRandomPassword();
+                            User.Password = Md5HashHelper.GetHash(Password);
+                            _BD_.Entry(User).State = System.Data.Entity.EntityState.Modified;
+                            _BD_.SaveChanges();
+
+                            SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
+                            return RedirectToAction("Index", "Home");
+                            // отсылаем новвый пароль на поччту
+                        }
+                        else
+                        {
+                            ErrorMessage("Мало вероятно, что кто-то увидит это сообщение");
+                            return RedirectToAction("Index","Home");
+                        }
+                    }
+                }
+                else
+                {
+                    // пользователь не найден
+                    // отсылаем на домашнюю, с ошибкой
+
+                    ErrorMessage("Пользователь с почтовым ящиком не найден в базе или заблокирован");
+                    return RedirectToAction("PasswordRecovery", "Registration");
+
+                }
+            }         
+        }
+
+        [HttpPost]
+        public ActionResult UserAuthentication(Models.LoginValidation User_)
+        {
+
+            if (String.IsNullOrEmpty(User_.login) && String.IsNullOrEmpty(User_.password))
+            {
+                ErrorMessage("Некорректно введены данные.");
+                ViewBag.CurrentUser = null;
+                return RedirectToAction("Index", "Home");
+            }
+
+            // валидация
+
+            var ThisUser = _BD_.produceruser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower()).FirstOrDefault();
+
+            if (ThisUser == null || ThisUser.Email == "")
+            {
+                ErrorMessage("Пользователь с данным Логином не существует.");
+                ViewBag.CurrentUser = null;
+                return RedirectToAction("Index", "Home");
+            }
+
+            // проверка наличия в БД
 
 
-		/// <summary>
-		/// Обновление пароля пользователя.
-		/// </summary>
-		/// <returns></returns>
-		[HttpPost]
-		public ActionResult UserPasswordUpdate(string passwordOld, string passwordNew, string passwordProof)
-		{
-			int currentUserId = 0;
-			Int32.TryParse(Request.Form["UserNumber"], out currentUserId);
-			var currentUser =
-				DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name || e.Id == currentUserId);
-			ViewBag.CurrentUser = currentUser;
-			if (currentUser != null) {
-				if (currentUser.Password != Md5HashHelper.GetHash(passwordOld)) {
-					ErrorMessage("Введенный старый пароль не совпадает с действительным.");
-					return View();
-				}
-				if (passwordNew != passwordProof) {
-					ErrorMessage("Введенный новый пароль не совпадает с его подтверждением.");
-					return View();
-				}
-				if (passwordNew.Length < 5) {
-					ErrorMessage("Новый пароль должен быть длиннее 5 символов.");
-					return View();
-				}
-				currentUser.UpdatePassword(DbSession, passwordNew);
-				currentUser.Enabled = true;
-				currentUser.PasswordToUpdate = false;
-				DbSession.Save(currentUser);
-				SuccessMessage("На указанную почту было выслано сообщение с новым паролем.");
-				return Authenticate(currentUser.Email, true);
-			}
-			ErrorMessage("Пользователя с введенным email адресом не существует.");
-			return View();
-		}
+            string originalPass = User_.password;            
+            User_.password = Md5HashHelper.GetHash(User_.password);
 
-		/// <summary>
-		/// Изменение пароля пользователя на временный
-		/// </summary>
-		/// <param name="email"></param>
-		/// <returns></returns>
-		[HttpPost]
-		public ActionResult UserPasswordUpdateRandom(string email)
-		{
-			var authenticatedUser = DbSession.Query<ProducerUser>().FirstOrDefault(s => s.Email == email);
-			if (authenticatedUser != null) {
-				authenticatedUser.UpdatePasswordByDefault(DbSession);
-				authenticatedUser.Enabled = false;
-				authenticatedUser.PasswordToUpdate = true;
-				DbSession.Save(authenticatedUser);
-				SuccessMessage("На указанную почту было выслано сообщение с новым паролем.");
-				return RedirectToAction("Index", "Home");
-			}
-			ErrorMessage("Пользователя с введенным email адресом не существует.");
-			return RedirectToAction("UserPasswordUpdate");
-		}
+            if (User_.password != ThisUser.Password)
+            {
+                ErrorMessage("Неправильно введён пароль.");
+                ViewBag.CurrentUser = null;
+                return RedirectToAction("Index", "Home");
+            }
 
-		/// <summary>
-		/// Выход из профиля пользователя , сброс куки
-		/// </summary>
-		/// <returns></returns>
-		public ActionResult LogOut()
-		{
-			// зануляем куки регистрации формой
-			LogoutUser();
-			// возвращаем пользователя на главную страницу
-			return RedirectToAction("Index", "Home");
-		}
-	}
+            // проверка пароля
+
+            // если всё выше перечисленное пройдено,
+            // проверяем первый раз логинится пользователь или второй или после смены пароля
+        
+
+            if (ThisUser.Enabled == 1) // логинится не впервый раз и не заблокирован
+            {
+         
+                CurrentUser = ThisUser;
+                ViewBag.CurrentUser = ThisUser as produceruser;
+                AutorizedUser = ThisUser as produceruser;
+                return Autentificate(this, shouldRemember: true);
+            }
+                 
+
+            if (ThisUser.Enabled == 0 && (ThisUser.PasswordUpdated.Value == SystemTime.GetDefaultDate())) // логинится впервые
+            { 
+                
+                var ListUser = _BD_.produceruser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1).ToList();
+
+                List<Models.userpermission> LST = _BD_.userpermission.ToList();
+
+                if (ListUser == null || ListUser.Count() == 0)
+                {
+                    // данный пользователь зарегистрировался первым, даём ему все права
+
+                    foreach (var X in LST)
+                    {
+                        var AddOnePermission = new Models.usertouserrole();
+                        AddOnePermission.ProducerUserId = ThisUser.Id;
+                        AddOnePermission.UserPermissionId = X.Id;
+                        _BD_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
+                    }
+
+                }
+                else
+                {
+
+                    // Даём ему права для входа в ЛК
+
+                    var AddOnePermission = new Models.usertouserrole();
+                    AddOnePermission.ProducerUserId = ThisUser.Id;
+                    AddOnePermission.UserPermissionId = LST.Where(xxx => xxx.Name == "Profile_Index").First().Id;
+                    _BD_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
+                }
+                SuccessMessage("Вы успешно подтвердили свою регистрацию на сайте");
+
+                ThisUser.PasswordUpdated = SystemTime.Now();
+                ThisUser.Enabled = 1;                
+                _BD_.Entry(ThisUser).State = System.Data.Entity.EntityState.Modified;
+
+                _BD_.SaveChanges();
+
+                 CurrentUser = ThisUser;
+                 ViewBag.CurrentUser = ThisUser;
+                 AutorizedUser = ThisUser;
+                return Autentificate(this, shouldRemember: true);
+            }
+
+            if(ThisUser.Enabled == 0 && ThisUser.PasswordUpdated != null)
+            {
+                if (ThisUser.PasswordUpdated == SystemTime.GetDefaultDate())
+                {
+                    // Восстановление пароля
+
+                    ThisUser.Enabled = 1;
+                    ThisUser.PasswordUpdated = SystemTime.Now();
+                    _BD_.Entry(ThisUser).State = System.Data.Entity.EntityState.Modified;
+                    _BD_.SaveChanges();
+
+                    //CurrentUser = ThisUser;
+                    ViewBag.CurrentUser = ThisUser;
+                    AutorizedUser = ThisUser;
+                    return Autentificate(this, shouldRemember: true);
+                }
+                else
+                {
+                    // Аккаунт заблокирован
+
+                    ErrorMessage("Аккаунт заблокирован");
+                    //CurrentUser = null;
+                    ViewBag.CurrentUser = null;
+                    AutorizedUser = null;
+                    ErrorMessage("Аккаунт заблокирован");
+                    return RedirectToAction("Index", "Home");
+                }            
+            }
+              
+
+            // CurrentUser = null;
+             ViewBag.CurrentUser = null;
+            // AutorizedUser = null;
+            return RedirectToAction("Index","Home");
+        }
+
+        public ActionResult LogOut()
+        {
+            // зануляем куки регистрации формой
+            LogOut_User();
+            // возвращаем пользователя на главную страницу
+            return RedirectToAction("Index", "Home");
+
+        }
+    }
 }

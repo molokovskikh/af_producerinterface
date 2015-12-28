@@ -1,0 +1,1109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище producerinterfaceModel" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="drugdescriptionremark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="EnglishName" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="Interaction" Type="varchar" MaxLength="255" />
+          <Property Name="SideEffect" Type="varchar" MaxLength="255" />
+          <Property Name="IndicationsForUse" Type="varchar" MaxLength="255" />
+          <Property Name="Dosing" Type="varchar" MaxLength="255" />
+          <Property Name="Warnings" Type="varchar" MaxLength="255" />
+          <Property Name="ProductForm" Type="varchar" MaxLength="255" />
+          <Property Name="PharmacologicalAction" Type="varchar" MaxLength="255" />
+          <Property Name="Storage" Type="varchar" MaxLength="255" />
+          <Property Name="Expiration" Type="varchar" MaxLength="255" />
+          <Property Name="Composition" Type="varchar" MaxLength="255" />
+          <Property Name="CreationDate" Type="datetime" Precision="0" />
+          <Property Name="Status" Type="int" />
+          <Property Name="ModificationDate" Type="datetime" Precision="0" />
+          <Property Name="ModificatorId" Type="uint" />
+          <Property Name="ProducerUserId" Type="uint" />
+          <Property Name="DrugFamilyId" Type="uint" />
+          <Property Name="MNNId" Type="uint" />
+        </EntityType>
+        <EntityType Name="producers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="text" />
+        </EntityType>
+        <EntityType Name="produceruser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Appointment" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProducerId" Type="uint" />
+          <Property Name="PasswordUpdated" Type="datetime" Precision="0" />
+          <Property Name="PasswordToUpdate" Type="tinyint" Nullable="false" />
+          <Property Name="Enabled" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="profilenews">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Topic" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Text" Type="text" Nullable="false" />
+          <Property Name="ProducerId" Type="uint" />
+          <Property Name="EditedDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="promotions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="Enabled" Type="bool" Nullable="false" />
+          <Property Name="AdminId" Type="uint" />
+          <Property Name="ProducerId" Type="uint" Nullable="false" />
+          <Property Name="ProducerUserId" Type="uint" Nullable="false" />
+          <Property Name="Annotation" Type="mediumtext" Nullable="false" />
+          <Property Name="PromoFile" Type="varchar" MaxLength="255" />
+          <Property Name="AgencyDisabled" Type="bool" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="RegionMask" Type="ubigint" Nullable="false" />
+          <Property Name="Begin" Type="datetime" Precision="0" />
+          <Property Name="End" Type="datetime" Precision="0" />
+          <Property Name="Status" Type="bool" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.promotiontodrug" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="promotiontodrug">
+          <Key>
+            <PropertyRef Name="DrugId" />
+            <PropertyRef Name="PromotionId" />
+          </Key>
+          <Property Name="DrugId" Type="uint" Nullable="false" />
+          <Property Name="PromotionId" Type="uint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reporttemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="255" />
+          <Property Name="Type" Type="int" />
+          <Property Name="GeneralReportId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Modificator" Type="int" />
+          <Property Name="CreationDate" Type="datetime" Precision="0" />
+          <Property Name="ModificationDate" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="user_logs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProducerUserId" Type="uint" />
+          <Property Name="ModelId" Type="uint" />
+          <Property Name="ModelClass" Type="varchar" MaxLength="50" />
+          <Property Name="Date" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Type" Type="tinyint" Nullable="false" />
+          <Property Name="Message" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="userpermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="text" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.userpermissionrole" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="userpermissionrole">
+          <Key>
+            <PropertyRef Name="UserRoleId" />
+          </Key>
+          <Property Name="UserPermissionId" Type="uint" />
+          <Property Name="UserRoleId" Type="uint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="userrole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="usertouserrole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ProducerUserId" Type="uint" />
+          <Property Name="UserRoleId" Type="uint" />
+          <Property Name="UserPermissionId" Type="uint" />
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.producernames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="producernames">
+          <Key>
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="ProducerName" />
+          </Key>
+          <Property Name="ProducerId" Type="uint" Nullable="false" />
+          <Property Name="ProducerName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.produserslist" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="produserslist">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Checked" />
+            <PropertyRef Name="UpdateTime" />
+          </Key>
+          <Property Name="Id" Type="uint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Checked" Type="bool" Nullable="false" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" Nullable="false" />
+        </EntityType>
+        <Association Name="DrugDescriptionRemark_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="drugdescriptionremark" Type="Self.drugdescriptionremark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="drugdescriptionremark">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_profile_news_producers">
+          <End Role="producers" Type="Self.producers" Multiplicity="0..1" />
+          <End Role="profilenews" Type="Self.profilenews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="profilenews">
+              <PropertyRef Name="ProducerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_promotioncatalogs_supplierpromotions">
+          <End Role="promotions" Type="Self.promotions" Multiplicity="1" />
+          <End Role="promotiontodrug" Type="Self.promotiontodrug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotiontodrug">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_promotions_produceruser">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="1" />
+          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_logs_users">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="user_logs" Type="Self.user_logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="user_logs">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_permission_role_user_permissions">
+          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="userpermissionrole" Type="Self.userpermissionrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userpermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="userpermissionrole">
+              <PropertyRef Name="UserPermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_permission_role_user_roleslist">
+          <End Role="userrole" Type="Self.userrole" Multiplicity="1" />
+          <End Role="userpermissionrole" Type="Self.userpermissionrole" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="userrole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="userpermissionrole">
+              <PropertyRef Name="UserRoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_user_permissions">
+          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userpermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="UserPermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_user_roleslist">
+          <End Role="userrole" Type="Self.userrole" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userrole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="UserRoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_users">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="promotions_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="1" />
+          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="promotiontodrug_PromotionId">
+          <End Role="promotions" Type="Self.promotions" Multiplicity="1" />
+          <End Role="promotiontodrug" Type="Self.promotiontodrug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotiontodrug">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_logs_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="user_logs" Type="Self.user_logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="user_logs">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usertouserrole_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usertouserrole_UserPermissionId">
+          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userpermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="UserPermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище producerinterfaceModelContainer">
+          <EntitySet Name="drugdescriptionremark" EntityType="Self.drugdescriptionremark" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="producers" EntityType="Self.producers" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="produceruser" EntityType="Self.produceruser" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="profilenews" EntityType="Self.profilenews" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="promotions" EntityType="Self.promotions" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="user_logs" EntityType="Self.user_logs" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="userpermission" EntityType="Self.userpermission" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="userrole" EntityType="Self.userrole" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="usertouserrole" EntityType="Self.usertouserrole" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="promotiontodrug" EntityType="Self.promotiontodrug" store:Type="Tables" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`promotiontodrug`.`DrugId`, 
+`promotiontodrug`.`PromotionId`
+FROM `promotiontodrug` AS `promotiontodrug`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="userpermissionrole" EntityType="Self.userpermissionrole" store:Type="Tables" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`userpermissionrole`.`UserPermissionId`, 
+`userpermissionrole`.`UserRoleId`
+FROM `userpermissionrole` AS `userpermissionrole`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="producernames" EntityType="Self.producernames" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`producernames`.`ProducerId`, 
+`producernames`.`ProducerName`
+FROM `producernames` AS `producernames`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="produserslist" EntityType="Self.produserslist" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`produserslist`.`Id`, 
+`produserslist`.`Name`, 
+`produserslist`.`Checked`, 
+`produserslist`.`UpdateTime`
+FROM `produserslist` AS `produserslist`</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="Self.DrugDescriptionRemark_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="drugdescriptionremark" EntitySet="drugdescriptionremark" />
+          </AssociationSet>
+          <AssociationSet Name="FK_profile_news_producers" Association="Self.FK_profile_news_producers">
+            <End Role="producers" EntitySet="producers" />
+            <End Role="profilenews" EntitySet="profilenews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="Self.FK_promotioncatalogs_supplierpromotions">
+            <End Role="promotions" EntitySet="promotions" />
+            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
+          </AssociationSet>
+          <AssociationSet Name="FK_promotions_produceruser" Association="Self.FK_promotions_produceruser">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_logs_users" Association="Self.FK_user_logs_users">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="user_logs" EntitySet="user_logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_permission_role_user_permissions" Association="Self.FK_user_permission_role_user_permissions">
+            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="userpermissionrole" EntitySet="userpermissionrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_permission_role_user_roleslist" Association="Self.FK_user_permission_role_user_roleslist">
+            <End Role="userrole" EntitySet="userrole" />
+            <End Role="userpermissionrole" EntitySet="userpermissionrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_user_permissions" Association="Self.FK_user_role_user_permissions">
+            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_user_roleslist" Association="Self.FK_user_role_user_roleslist">
+            <End Role="userrole" EntitySet="userrole" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_users" Association="Self.FK_user_role_users">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="promotions_ProducerUserId" Association="Self.promotions_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="promotiontodrug_PromotionId" Association="Self.promotiontodrug_PromotionId">
+            <End Role="promotions" EntitySet="promotions" />
+            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
+          </AssociationSet>
+          <AssociationSet Name="user_logs_ProducerUserId" Association="Self.user_logs_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="user_logs" EntitySet="user_logs" />
+          </AssociationSet>
+          <AssociationSet Name="usertouserrole_ProducerUserId" Association="Self.usertouserrole_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="usertouserrole_UserPermissionId" Association="Self.usertouserrole_UserPermissionId">
+            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="producerinterfaceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="drugdescriptionremark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EnglishName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Interaction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SideEffect" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IndicationsForUse" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Dosing" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Warnings" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ProductForm" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PharmacologicalAction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Storage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Expiration" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Composition" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreationDate" Type="DateTime" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ModificationDate" Type="DateTime" />
+          <Property Name="ModificatorId" Type="Int64" />
+          <Property Name="ProducerUserId" Type="Int64" />
+          <Property Name="DrugFamilyId" Type="Int64" />
+          <Property Name="MNNId" Type="Int64" />
+          <NavigationProperty Name="produceruser" Relationship="Self.DrugDescriptionRemark_ProducerUserId" FromRole="drugdescriptionremark" ToRole="produceruser" />
+        </EntityType>
+        <EntityType Name="producers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="profilenews" Relationship="Self.FK_profile_news_producers" FromRole="producers" ToRole="profilenews" />
+        </EntityType>
+        <EntityType Name="produceruser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Appointment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProducerId" Type="Int64" />
+          <Property Name="PasswordUpdated" Type="DateTime" />
+          <Property Name="PasswordToUpdate" Type="SByte" Nullable="false" />
+          <Property Name="Enabled" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="drugdescriptionremark" Relationship="Self.DrugDescriptionRemark_ProducerUserId" FromRole="produceruser" ToRole="drugdescriptionremark" />
+          <NavigationProperty Name="promotions" Relationship="Self.FK_promotions_produceruser" FromRole="produceruser" ToRole="promotions" />
+          <NavigationProperty Name="user_logs" Relationship="Self.FK_user_logs_users" FromRole="produceruser" ToRole="user_logs" />
+          <NavigationProperty Name="usertouserrole" Relationship="Self.FK_user_role_users" FromRole="produceruser" ToRole="usertouserrole" />
+          <NavigationProperty Name="promotions1" Relationship="Self.promotions_ProducerUserId" FromRole="produceruser" ToRole="promotions" />
+          <NavigationProperty Name="user_logs1" Relationship="Self.user_logs_ProducerUserId" FromRole="produceruser" ToRole="user_logs" />
+          <NavigationProperty Name="usertouserrole1" Relationship="Self.usertouserrole_ProducerUserId" FromRole="produceruser" ToRole="usertouserrole" />
+        </EntityType>
+        <EntityType Name="profilenews">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Topic" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Text" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProducerId" Type="Int64" />
+          <Property Name="EditedDate" Type="DateTime" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <NavigationProperty Name="producers" Relationship="Self.FK_profile_news_producers" FromRole="profilenews" ToRole="producers" />
+        </EntityType>
+        <EntityType Name="promotions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="AdminId" Type="Int64" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerUserId" Type="Int64" Nullable="false" />
+          <Property Name="Annotation" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PromoFile" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="AgencyDisabled" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RegionMask" Type="Decimal" Nullable="false" />
+          <Property Name="Begin" Type="DateTime" />
+          <Property Name="End" Type="DateTime" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="produceruser" Relationship="Self.FK_promotions_produceruser" FromRole="promotions" ToRole="produceruser" />
+          <NavigationProperty Name="produceruser1" Relationship="Self.promotions_ProducerUserId" FromRole="promotions" ToRole="produceruser" />
+          <NavigationProperty Name="promotiontodrug" Relationship="Self.FK_promotioncatalogs_supplierpromotions" FromRole="promotions" ToRole="promotiontodrug" />
+          <NavigationProperty Name="promotiontodrug1" Relationship="Self.promotiontodrug_PromotionId" FromRole="promotions" ToRole="promotiontodrug" />
+        </EntityType>
+        <EntityType Name="reporttemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="GeneralReportId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Modificator" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" />
+          <Property Name="ModificationDate" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="user_logs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProducerUserId" Type="Int64" />
+          <Property Name="ModelId" Type="Int64" />
+          <Property Name="ModelClass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Type" Type="SByte" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="produceruser" Relationship="Self.FK_user_logs_users" FromRole="user_logs" ToRole="produceruser" />
+          <NavigationProperty Name="produceruser1" Relationship="Self.user_logs_ProducerUserId" FromRole="user_logs" ToRole="produceruser" />
+        </EntityType>
+        <EntityType Name="userpermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="userpermissionrole" Relationship="Self.FK_user_permission_role_user_permissions" FromRole="userpermission" ToRole="userpermissionrole" />
+          <NavigationProperty Name="usertouserrole" Relationship="Self.FK_user_role_user_permissions" FromRole="userpermission" ToRole="usertouserrole" />
+          <NavigationProperty Name="usertouserrole1" Relationship="Self.usertouserrole_UserPermissionId" FromRole="userpermission" ToRole="usertouserrole" />
+        </EntityType>
+        <EntityType Name="userrole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="userpermissionrole" Relationship="Self.FK_user_permission_role_user_roleslist" FromRole="userrole" ToRole="userpermissionrole" />
+          <NavigationProperty Name="usertouserrole" Relationship="Self.FK_user_role_user_roleslist" FromRole="userrole" ToRole="usertouserrole" />
+        </EntityType>
+        <EntityType Name="usertouserrole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ProducerUserId" Type="Int64" />
+          <Property Name="UserRoleId" Type="Int64" />
+          <Property Name="UserPermissionId" Type="Int64" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="produceruser" Relationship="Self.FK_user_role_users" FromRole="usertouserrole" ToRole="produceruser" />
+          <NavigationProperty Name="produceruser1" Relationship="Self.usertouserrole_ProducerUserId" FromRole="usertouserrole" ToRole="produceruser" />
+          <NavigationProperty Name="userpermission" Relationship="Self.FK_user_role_user_permissions" FromRole="usertouserrole" ToRole="userpermission" />
+          <NavigationProperty Name="userpermission1" Relationship="Self.usertouserrole_UserPermissionId" FromRole="usertouserrole" ToRole="userpermission" />
+          <NavigationProperty Name="userrole" Relationship="Self.FK_user_role_user_roleslist" FromRole="usertouserrole" ToRole="userrole" />
+        </EntityType>
+        <EntityType Name="promotiontodrug">
+          <Key>
+            <PropertyRef Name="DrugId" />
+            <PropertyRef Name="PromotionId" />
+          </Key>
+          <Property Name="DrugId" Type="Int64" Nullable="false" />
+          <Property Name="PromotionId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="promotions" Relationship="Self.FK_promotioncatalogs_supplierpromotions" FromRole="promotiontodrug" ToRole="promotions" />
+          <NavigationProperty Name="promotions1" Relationship="Self.promotiontodrug_PromotionId" FromRole="promotiontodrug" ToRole="promotions" />
+        </EntityType>
+        <EntityType Name="userpermissionrole">
+          <Key>
+            <PropertyRef Name="UserRoleId" />
+          </Key>
+          <Property Name="UserPermissionId" Type="Int64" />
+          <Property Name="UserRoleId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="userpermission" Relationship="Self.FK_user_permission_role_user_permissions" FromRole="userpermissionrole" ToRole="userpermission" />
+          <NavigationProperty Name="userrole" Relationship="Self.FK_user_permission_role_user_roleslist" FromRole="userpermissionrole" ToRole="userrole" />
+        </EntityType>
+        <EntityType Name="producernames">
+          <Key>
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="ProducerName" />
+          </Key>
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="produserslist">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Checked" />
+            <PropertyRef Name="UpdateTime" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Checked" Type="Boolean" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <Association Name="DrugDescriptionRemark_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="drugdescriptionremark" Type="Self.drugdescriptionremark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="drugdescriptionremark">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_profile_news_producers">
+          <End Role="producers" Type="Self.producers" Multiplicity="0..1" />
+          <End Role="profilenews" Type="Self.profilenews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="profilenews">
+              <PropertyRef Name="ProducerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_promotions_produceruser">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="1" />
+          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_logs_users">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="user_logs" Type="Self.user_logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="user_logs">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_users">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="promotions_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="1" />
+          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_logs_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="user_logs" Type="Self.user_logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="user_logs">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usertouserrole_ProducerUserId">
+          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_promotioncatalogs_supplierpromotions">
+          <End Role="promotions" Type="Self.promotions" Multiplicity="1" />
+          <End Role="promotiontodrug" Type="Self.promotiontodrug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotiontodrug">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="promotiontodrug_PromotionId">
+          <End Role="promotions" Type="Self.promotions" Multiplicity="1" />
+          <End Role="promotiontodrug" Type="Self.promotiontodrug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotiontodrug">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_permission_role_user_permissions">
+          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="userpermissionrole" Type="Self.userpermissionrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userpermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="userpermissionrole">
+              <PropertyRef Name="UserPermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_user_permissions">
+          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userpermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="UserPermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usertouserrole_UserPermissionId">
+          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userpermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="UserPermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_permission_role_user_roleslist">
+          <End Role="userrole" Type="Self.userrole" Multiplicity="1" />
+          <End Role="userpermissionrole" Type="Self.userpermissionrole" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="userrole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="userpermissionrole">
+              <PropertyRef Name="UserRoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_role_user_roleslist">
+          <End Role="userrole" Type="Self.userrole" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userrole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="UserRoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="producerinterface_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="drugdescriptionremark" EntityType="Self.drugdescriptionremark" />
+          <EntitySet Name="producers" EntityType="Self.producers" />
+          <EntitySet Name="produceruser" EntityType="Self.produceruser" />
+          <EntitySet Name="profilenews" EntityType="Self.profilenews" />
+          <EntitySet Name="promotions" EntityType="Self.promotions" />
+          <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" />
+          <EntitySet Name="user_logs" EntityType="Self.user_logs" />
+          <EntitySet Name="userpermission" EntityType="Self.userpermission" />
+          <EntitySet Name="userrole" EntityType="Self.userrole" />
+          <EntitySet Name="usertouserrole" EntityType="Self.usertouserrole" />
+          <EntitySet Name="promotiontodrug" EntityType="Self.promotiontodrug" />
+          <EntitySet Name="userpermissionrole" EntityType="Self.userpermissionrole" />
+          <EntitySet Name="producernames" EntityType="Self.producernames" />
+          <EntitySet Name="produserslist" EntityType="Self.produserslist" />
+          <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="Self.DrugDescriptionRemark_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="drugdescriptionremark" EntitySet="drugdescriptionremark" />
+          </AssociationSet>
+          <AssociationSet Name="FK_profile_news_producers" Association="Self.FK_profile_news_producers">
+            <End Role="producers" EntitySet="producers" />
+            <End Role="profilenews" EntitySet="profilenews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_promotions_produceruser" Association="Self.FK_promotions_produceruser">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_logs_users" Association="Self.FK_user_logs_users">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="user_logs" EntitySet="user_logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_users" Association="Self.FK_user_role_users">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="promotions_ProducerUserId" Association="Self.promotions_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="user_logs_ProducerUserId" Association="Self.user_logs_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="user_logs" EntitySet="user_logs" />
+          </AssociationSet>
+          <AssociationSet Name="usertouserrole_ProducerUserId" Association="Self.usertouserrole_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="Self.FK_promotioncatalogs_supplierpromotions">
+            <End Role="promotions" EntitySet="promotions" />
+            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
+          </AssociationSet>
+          <AssociationSet Name="promotiontodrug_PromotionId" Association="Self.promotiontodrug_PromotionId">
+            <End Role="promotions" EntitySet="promotions" />
+            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_permission_role_user_permissions" Association="Self.FK_user_permission_role_user_permissions">
+            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="userpermissionrole" EntitySet="userpermissionrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_user_permissions" Association="Self.FK_user_role_user_permissions">
+            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="usertouserrole_UserPermissionId" Association="Self.usertouserrole_UserPermissionId">
+            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_permission_role_user_roleslist" Association="Self.FK_user_permission_role_user_roleslist">
+            <End Role="userrole" EntitySet="userrole" />
+            <End Role="userpermissionrole" EntitySet="userpermissionrole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_role_user_roleslist" Association="Self.FK_user_role_user_roleslist">
+            <End Role="userrole" EntitySet="userrole" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище producerinterfaceModelContainer" CdmEntityContainer="producerinterface_Entities">
+          <EntitySetMapping Name="drugdescriptionremark">
+            <EntityTypeMapping TypeName="producerinterfaceModel.drugdescriptionremark">
+              <MappingFragment StoreEntitySet="drugdescriptionremark">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EnglishName" ColumnName="EnglishName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Interaction" ColumnName="Interaction" />
+                <ScalarProperty Name="SideEffect" ColumnName="SideEffect" />
+                <ScalarProperty Name="IndicationsForUse" ColumnName="IndicationsForUse" />
+                <ScalarProperty Name="Dosing" ColumnName="Dosing" />
+                <ScalarProperty Name="Warnings" ColumnName="Warnings" />
+                <ScalarProperty Name="ProductForm" ColumnName="ProductForm" />
+                <ScalarProperty Name="PharmacologicalAction" ColumnName="PharmacologicalAction" />
+                <ScalarProperty Name="Storage" ColumnName="Storage" />
+                <ScalarProperty Name="Expiration" ColumnName="Expiration" />
+                <ScalarProperty Name="Composition" ColumnName="Composition" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModificationDate" ColumnName="ModificationDate" />
+                <ScalarProperty Name="ModificatorId" ColumnName="ModificatorId" />
+                <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
+                <ScalarProperty Name="DrugFamilyId" ColumnName="DrugFamilyId" />
+                <ScalarProperty Name="MNNId" ColumnName="MNNId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producers">
+            <EntityTypeMapping TypeName="producerinterfaceModel.producers">
+              <MappingFragment StoreEntitySet="producers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="produceruser">
+            <EntityTypeMapping TypeName="producerinterfaceModel.produceruser">
+              <MappingFragment StoreEntitySet="produceruser">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Appointment" ColumnName="Appointment" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="PasswordUpdated" ColumnName="PasswordUpdated" />
+                <ScalarProperty Name="PasswordToUpdate" ColumnName="PasswordToUpdate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="profilenews">
+            <EntityTypeMapping TypeName="producerinterfaceModel.profilenews">
+              <MappingFragment StoreEntitySet="profilenews">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Topic" ColumnName="Topic" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="EditedDate" ColumnName="EditedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="promotions">
+            <EntityTypeMapping TypeName="producerinterfaceModel.promotions">
+              <MappingFragment StoreEntitySet="promotions">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
+                <ScalarProperty Name="Annotation" ColumnName="Annotation" />
+                <ScalarProperty Name="PromoFile" ColumnName="PromoFile" />
+                <ScalarProperty Name="AgencyDisabled" ColumnName="AgencyDisabled" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RegionMask" ColumnName="RegionMask" />
+                <ScalarProperty Name="Begin" ColumnName="Begin" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reporttemplate">
+            <EntityTypeMapping TypeName="producerinterfaceModel.reporttemplate">
+              <MappingFragment StoreEntitySet="reporttemplate">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="GeneralReportId" ColumnName="GeneralReportId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Modificator" ColumnName="Modificator" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="ModificationDate" ColumnName="ModificationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_logs">
+            <EntityTypeMapping TypeName="producerinterfaceModel.user_logs">
+              <MappingFragment StoreEntitySet="user_logs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
+                <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+                <ScalarProperty Name="ModelClass" ColumnName="ModelClass" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userpermission">
+            <EntityTypeMapping TypeName="producerinterfaceModel.userpermission">
+              <MappingFragment StoreEntitySet="userpermission">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userrole">
+            <EntityTypeMapping TypeName="producerinterfaceModel.userrole">
+              <MappingFragment StoreEntitySet="userrole">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usertouserrole">
+            <EntityTypeMapping TypeName="producerinterfaceModel.usertouserrole">
+              <MappingFragment StoreEntitySet="usertouserrole">
+                <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
+                <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+                <ScalarProperty Name="UserPermissionId" ColumnName="UserPermissionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="promotiontodrug">
+            <EntityTypeMapping TypeName="producerinterfaceModel.promotiontodrug">
+              <MappingFragment StoreEntitySet="promotiontodrug">
+                <ScalarProperty Name="DrugId" ColumnName="DrugId" />
+                <ScalarProperty Name="PromotionId" ColumnName="PromotionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userpermissionrole">
+            <EntityTypeMapping TypeName="producerinterfaceModel.userpermissionrole">
+              <MappingFragment StoreEntitySet="userpermissionrole">
+                <ScalarProperty Name="UserPermissionId" ColumnName="UserPermissionId" />
+                <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producernames">
+            <EntityTypeMapping TypeName="producerinterfaceModel.producernames">
+              <MappingFragment StoreEntitySet="producernames">
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="produserslist">
+            <EntityTypeMapping TypeName="producerinterfaceModel.produserslist">
+              <MappingFragment StoreEntitySet="produserslist">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Checked" ColumnName="Checked" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

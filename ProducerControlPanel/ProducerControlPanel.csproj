@@ -1828,10 +1828,6 @@
       <Project>{d660637f-e253-4bb7-a7c9-ccb0f64190c8}</Project>
       <Name>AnalitFramefork</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProducerInterface\ProducerInterface.csproj">
-      <Project>{546ed658-bc52-4b7c-b01c-5181e831559f}</Project>
-      <Name>ProducerInterface</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

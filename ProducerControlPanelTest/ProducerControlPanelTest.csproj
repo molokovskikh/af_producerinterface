@@ -126,11 +126,6 @@
       <Project>{980ea06f-2c4a-48be-aeb0-f435fc1f1f7c}</Project>
       <Name>ProducerInterfaceTest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProducerInterface\ProducerInterface.csproj">
-      <Project>{546ed658-bc52-4b7c-b01c-5181e831559f}</Project>
-      <Name>ProducerInterface</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,75 @@
+﻿@using AnalitFramefork.Hibernate.Models
+@using ProducerInterface.Controllers
+@model dynamic
+@{
+    var reportExecuteForm = ViewBag.Form as ReportExecuteForm;
+    var controller = ViewBag.Controller as ProfileController;
+
+}
+<section id="main">
+    <header class="page-header">
+        <div class="container">
+        </div>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="content blog col-sm-9 col-md-9">
+                <div class="panel panel-default panel-dark">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <span>Единоразовый запуск отчета</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form method="post" class="form form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-1">От</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(i => reportExecuteForm.StartTime, new { @data_date_format = "dd.mm.yyyy", @class = "form-control", @data_provide = "datepicker-inline" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1">До</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(i => reportExecuteForm.EndTime, new { @data_date_format = "dd.mm.yyyy", @class = "form-control", @data_provide = "datepicker-inline" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-3">
+                                    <div class="div">
+                                        @Html.RadioButtonFor(i => reportExecuteForm.UseEmailList, false)
+                                        <span>Выслать на @controller.GetCurrentUser().Email</span>
+                                    </div>
+                                    <div class="div">
+                                        @Html.RadioButtonFor(i => reportExecuteForm.UseEmailList, true)
+                                        <span>Использовать список</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1">Адреса</label>
+                                <div class="col-sm-5">
+                                    @Html.TextAreaFor(i => reportExecuteForm.Emails, new { @class = "form-control" })
+                                    @Html.HiddenFor(i => reportExecuteForm.UserEmail)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-success" name="reportExecuteForm.Execute" value="true">Запустить отчет</button>
+                                </div>
+                                <div class="col-sm-5">
+                                    <button type="submit" class="btn btn-info" name="reportExecuteForm.Execute" value="false">Выслать готовый</button>
+                                </div>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div><!-- .content -->
+            @{ Html.RenderPartial("SideBar"); }
+        </div>
+    </div>
+    <!-- .container -->
+</section>

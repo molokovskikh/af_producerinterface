@@ -1,0 +1,114 @@
+﻿body {
+    background-color:#D0D0D0;
+}
+.image-brand {
+// height:22px;
+}
+
+.otstup {
+height:35px;
+}
+.navbar-brand {
+padding:5px;
+margin:0px;
+}
+
+.overlay{
+    opacity: 0.50; /* Прозрачность */
+    background-color: white;
+    position:fixed; 
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    z-index:100;
+}
+#modal-auth{
+    width: 375px;
+    height: 200px;
+    border: 1px solid #D6D6D6;
+    background-color: white;
+    position: fixed;
+    top: -220px; /* По умолчанию окно над сайтом и его не видно. */
+    left: 50%;  
+    margin-left: -190px;
+    z-index: 9999; /* Слой. Нужен для того, чтобы окно было над всеми объектами */
+   /* Тень для окна авторизации, в трех вариантах для разных браузеров*/
+   -moz-box-shadow: 0 0 10px #C0C0C0;
+   -webkit-box-shadow: 0 0 10px #C0C0C0;
+    box-shadow: 0 0 10px #C0C0C0;  
+     
+}
+#modal-auth h3{
+    font: 22px sans-serif;
+    margin-left: 20px;
+    margin-top: 23px;
+}
+#modal-close{
+    display: inline-block;
+    background: url(./images/modal-close.png) no-repeat;
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    margin-left: 345px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+#modal-email-pass label{
+    font: bold 13px sans-serif;
+    position: absolute;
+    margin-left: 20px;
+    margin-top: 4px;
+}
+#modal-email-pass li{
+    margin-top: 18px;
+}
+#modal-email-pass input#modal-email,#modal-email-pass input#modal-pass{
+    width: 184px;
+    height: 22px;
+    border: 1px solid #D4D4D4;
+    margin-left: 100px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font: 14px sans-serif;
+}
+#modal-email-pass input#modal-email:focus ,#modal-email-pass input#modal-pass:focus {
+    border: 1px solid #D6CCB4;
+   -moz-box-shadow: 0 0 12px #FFF3D6;
+   -webkit-box-shadow: 0 0 12px #FFF3D6;
+    box-shadow: 0 0 12px #FFF3D6; 
+}
+#modal-remind{
+    color: #264C7B;
+    font: 13px sans-serif;
+    margin-left: 8px;
+    cursor: pointer;
+}
+#modal-enter{
+    font: 14px sans-serif;
+    height: 26px;
+    border: 1px solid #CDCDCD;
+    background: url(grd-button-auth-norm.png) repeat-x;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius:3px ; 
+    -webkit-border-radius:3px ; 
+    -moz-border-radius:3px ;
+    cursor: pointer; 
+    margin-left: 100px; 
+}
+#modal-enter:hover{
+    background: url(grd-button-auth-hover.png) repeat-x;
+}
+#modal-reg{
+    color: #264C7B;
+    font: 13px sans-serif;
+    margin-left: 10px;   
+    text-decoration: none; 
+}
+#modal-click{
+    font: 20px sans-serif;
+    cursor: pointer;
+    text-decoration: underline;
+}
+

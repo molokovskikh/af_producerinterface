@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2ab6ac44cf914c89a957d50ea58b9d29" Name="Diagram1">
+        <EntityTypeShape EntityType="producerinterfaceModel.drugdescriptionremark" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.producers" Width="1.5" PointX="5.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.produceruser" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.profilenews" Width="1.5" PointX="8" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.promotions" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.reporttemplate" Width="1.5" PointX="8.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.user_logs" Width="1.5" PointX="3" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.userpermission" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.userrole" Width="1.5" PointX="3.75" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.usertouserrole" Width="1.5" PointX="6" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.promotiontodrug" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.userpermissionrole" Width="1.5" PointX="8" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.producernames" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterfaceModel.produserslist" Width="1.5" PointX="10.75" PointY="1.5" IsExpanded="true" />
+        <AssociationConnector Association="producerinterfaceModel.DrugDescriptionRemark_ProducerUserId" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_profile_news_producers" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_promotions_produceruser" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_user_logs_users" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_user_role_users" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.promotions_ProducerUserId" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.user_logs_ProducerUserId" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.usertouserrole_ProducerUserId" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_promotioncatalogs_supplierpromotions" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.promotiontodrug_PromotionId" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_user_permission_role_user_permissions" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_user_role_user_permissions" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.usertouserrole_UserPermissionId" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_user_permission_role_user_roleslist" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterfaceModel.FK_user_role_user_roleslist" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

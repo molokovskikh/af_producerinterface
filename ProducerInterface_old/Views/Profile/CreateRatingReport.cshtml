@@ -1,0 +1,78 @@
+﻿@using AnalitFramefork.Hibernate.Models
+@using ProducerInterface.Controllers
+@model dynamic
+@{
+	var type = ViewBag.ReportType as ReportType;
+	var reportExecuteForm = ViewBag.Form as ReportExecuteForm;
+	var controller = ViewBag.Controller as ProfileController;
+	
+}
+<section id="main">
+	<header class="page-header">
+		<div class="container">
+		</div>
+	</header>
+	<div class="container">
+		<div class="row">
+			<div class="content blog col-sm-9 col-md-9">
+				<div class="panel panel-default panel-dark">
+					<div class="panel-heading">
+						<div class="panel-title">
+							<span>Единоразовый запуск отчета</span>
+						</div>
+					</div>
+					<div class="panel-body">
+						<b style="color: red">
+							На данной странице запускается рейтинговый отчет. Параметры взяты из отчета "WORWAG PHARMA GmbH". Регион: Воронеж. Список препаратов берется от текущего производителя.
+							При работе данного функционала создается новый генеральный отчет, подотчет и его параметры в БД. Соответственно использование этого функционала сейчас создает мусор в базе данных.
+							Я смогу вычистить весь этот мусор, так как я его помечаю. Опасаюсь, что часть мусора будет видна пользователям в каком-то другом проекте - я все проверил, вроде нигде лишние данные не должны отображаться.
+						</b>
+						<form method="post" class="form form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-1">От</label>
+							<div class="col-sm-3">
+								@Html.TextBoxFor(i => reportExecuteForm.StartTime, new {@data_date_format = "dd.mm.yyyy", @class = "form-control", @data_provide = "datepicker-inline"})
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-1">До</label>
+							<div class="col-sm-3">
+								@Html.TextBoxFor(i => reportExecuteForm.EndTime, new {@data_date_format = "dd.mm.yyyy", @class = "form-control", @data_provide = "datepicker-inline"})
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-1"></div>
+							<div class="col-sm-3">
+								<div class="div">
+									@Html.RadioButtonFor(i => reportExecuteForm.UseEmailList, false)
+									<span>Выслать на @controller.GetCurrentUser().Email</span>
+								</div>
+								<div class="div">
+									@Html.RadioButtonFor(i => reportExecuteForm.UseEmailList, true)
+									<span>Использовать список</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-1">Адреса</label>
+							<div class="col-sm-5">
+								@Html.TextAreaFor(i => reportExecuteForm.Emails, new {@class = "form-control"})
+								@Html.HiddenFor(i => reportExecuteForm.UserEmail)
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-5">
+								<button type="submit" class="btn btn-info" name="reportExecuteForm.Execute" value="true">Запустить отчет</button>
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+			</div><!-- .content -->
+			@{ Html.RenderPartial("SideBar"); }
+		</div>
+	</div>
+	<!-- .container -->
+</section>

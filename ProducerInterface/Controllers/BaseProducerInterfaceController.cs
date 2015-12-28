@@ -1,73 +1,116 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
-using AnalitFramefork.Components;
-using AnalitFramefork.Extensions;
-using AnalitFramefork.Hibernate.Models;
-using AnalitFramefork.Mvc;
-using NHibernate;
-using NHibernate.Linq;
 using ProducerInterface.Models;
+using System.Configuration;
+using System.ComponentModel;
+using System.Data.Entity;
 
 namespace ProducerInterface.Controllers
 {
-	public class BaseProducerInterfaceController : BaseController
-	{
-		//
-		// GET: /BaseInterfaceController/
+    public class BaseProducerInterfaceController : BaseController
+    {
 
-		[Description("Текущий пользователь")]
-		private ProducerUser CurrentProducerUser { get; set; }
+        //OnActionExecuting
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            // Инициализация пользователя Cockie
+            // Проверка доступа к акшену           
+            base.OnActionExecuting(filterContext);
 
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
-		{
-			const string ignorePermissionRedirect = "home_Index";
+            string[] ignorePermissionRedirect = ConfigurationManager.AppSettings["IgnoreAction"].ToString().ToLower().Split(new char[] { ',' });
 
-			base.OnActionExecuting(filterContext);
-			var user = GetCurrentUser();
-			ViewBag.CurrentUser = user;
+            var _User = GetCurrentUser();
+            ViewBag.CurrentUser = _User;
 
-			//Проверка наличия прав
-			CheckForExistenceOfUserPermissions(DbSession, this);
-			//Проверка прав
-			AuthenticationModule.CheckPermissions(DbSession, filterContext, user, ignorePermissionRedirect);
-		}
+            ViewBag.LoginModel = new Models.LoginValidation();
 
-		/// <summary>
-		/// Получение текущего пользователя
-		/// </summary>
-		/// <param name="getFromSession">По умолчанию пользователь получается запросом</param>
-		/// <returns></returns>
-		public ProducerUser GetCurrentUser(bool getFromSession = true)
-		{
-			if (CurrentAnalitUser == null || (CurrentAnalitUser.Name == String.Empty) || DbSession == null ||
-			    !DbSession.IsConnected) {
-				CurrentProducerUser = null;
-				return null;
-			}
-			if (getFromSession && (CurrentProducerUser == null || CurrentAnalitUser.Name != CurrentProducerUser.Email)) {
-				CurrentProducerUser = DbSession.Query<ProducerUser>().FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
-			}
-			return CurrentProducerUser;
-		}
-		/// <summary>
-		/// Проверка наличия прав в БД
-		/// </summary>
-		/// <param name="dbSession">Хибер-сессия</param>
-		/// <param name="controller">Контроллер</param>
-		public static void CheckForExistenceOfUserPermissions(ISession dbSession, Controller controller)
-		{
-			//Обновление прав при их отсуствии
-			if (dbSession.Query<UserPermission>().Count() == 0) {
-				UserPermission.UpdatePermissions<UserPermission>(dbSession, controller, typeof (BaseProducerInterfaceController));
-				//удаление ненужных прав
-				var ListToRemove = dbSession.Query<UserPermission>().ToList()
-					.Where(s => s.Name.ToLower().IndexOf("home_") != -1
-					            || s.Name.ToLower().IndexOf("registration_") != -1
-					).ToList();
-				ListToRemove.ForEach(s => { dbSession.Delete(s); });
-			}
-		}
-	}
+
+            CheckForExsistenceOfUserPermission(this);
+            AuthentificationModule.CheckPermission(filterContext, _User, ignorePermissionRedirect);        
+        }
+
+        
+      
+        public produceruser GetCurrentUser(bool getFormSession = true)
+        {
+            if (CurrentAnalitUser == null || (CurrentAnalitUser.Name == String.Empty))
+            {
+                CurrentProduserUser = null;
+                return null;
+            }
+            if (getFormSession && (CurrentProduserUser == null || CurrentProduserUser.Name != CurrentProduserUser.Email))
+            {
+              //  string Name = 
+                CurrentProduserUser = DB.produceruser.FirstOrDefault(e => e.Email == CurrentAnalitUser.Name);
+            }
+            return CurrentProduserUser;
+        }
+
+        // проверка наличия пермишена для контроллера, 1. есть ли он в Ignore Листе (список хранится в Web.config key=IgnoreAction / через запятую)
+        public static void CheckForExsistenceOfUserPermission(Controller CurentController)
+        {
+            bool NotFoundPermission = true; // поумолчанию true -- пока не найден в списке игнорируемых или в списке БД.
+
+            // получаем список игнорируемых акшенов и webconfig > IgnoreAction  (список игнорируемых экшенов перечислен через запятую.)
+            string[] IgnoreAction = ConfigurationManager.AppSettings["IgnoreAction"].ToString().ToLower().Split(new char[] { ',' });
+                     
+            string controllerName = CurentController.GetType().Name.Replace("Controller", "").ToLower().ToString();
+            string actionName = CurentController.Request.RequestContext.RouteData.GetRequiredString("action").ToLower().ToString();
+
+            string PermissionName = controllerName + "_" + actionName;
+
+            foreach (var PermStrWebConfig in IgnoreAction)
+            {
+                if (PermStrWebConfig == PermissionName)
+                {
+                    NotFoundPermission = false;
+                    break;
+                }
+            }
+
+            if (NotFoundPermission)
+            {
+          
+                var listPermission = DB.userpermission
+                    .Where(xxx => xxx.Name == PermissionName)
+                    .Select(xx =>xx.Name.ToLower()).ToList();
+
+                // проверяем наличии доступа в БД. // таблица содержит список контролеров + акшенов // на момент разработки не более 25. (запрос пыполнится моментально)
+
+                if (listPermission == null || listPermission.Count() == 0)
+                {
+                    // если в БД не найден пермишн, намм надо его добавить
+
+                    var permishion = new userpermission();
+                    var url = CurentController.Url.Action(actionName, controllerName);
+                    permishion.Description = "Доступ к странице <a href='" + url + "'>" + PermissionName + "</a>";
+                    permishion.Name = PermissionName;
+
+                    DB.Entry(permishion).State = System.Data.Entity.EntityState.Added;
+                    DB.SaveChanges();
+                    //  и дать доступ всем пользователям (которые первыми зарегистрировались и подтвердили регистрацию от каждого Производителя.)
+
+                    List<produceruser> UsersProducerUser = DB.produceruser.Where(xxx => xxx.Enabled == 1)
+                        .GroupBy(xxx => xxx.ProducerId).Select(xxx => xxx.OrderByDescending(p => p.ProducerId).FirstOrDefault()).ToList();
+
+                    long idPermission = DB.userpermission.Where(xxx => xxx.Name == PermissionName).First().Id;
+
+
+                    foreach (var User in UsersProducerUser)
+                    {
+                        long IdUser = User.Id;
+                        usertouserrole NewRole = new usertouserrole();
+                        NewRole.UserPermissionId = idPermission;
+                        NewRole.ProducerUserId = User.Id;
+                        DB.Entry(NewRole).State = System.Data.Entity.EntityState.Added;
+                    }
+
+                    DB.SaveChanges();
+                }
+            }            
+        }
+    }
 }

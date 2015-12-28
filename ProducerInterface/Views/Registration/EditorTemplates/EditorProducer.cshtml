@@ -1,0 +1,24 @@
+﻿@model long?
+
+@{ 
+    var PropName = ViewData.ModelMetadata.PropertyName;
+    //var PropList = (List<ProducerInterface.Models.OptionElement>)ViewBag.ProducerList;
+
+    var errorClass = "";
+    var state = ViewData.ModelState[PropName];
+
+
+        if(state != null && state.Errors.Count > 0)
+            {
+          errorClass = " input-validation-error";
+        }    
+}
+<div class="form-group">
+    @Html.Label("Производитель:* ", new { @class = "Form-control" })
+
+<br />
+    <div class="@("feditor col-md-8" + errorClass)">
+        @Html.DropDownListFor(m => m, new SelectList(ViewBag.ProducerList, "Value", "Text", Model), new { style = "display: none;" })
+        @Html.ValidationMessageFor(m => m)
+    </div>
+    </div>

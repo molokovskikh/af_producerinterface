@@ -1,0 +1,27 @@
+﻿@using System.Resources
+@using Quartz.Job.Models
+@model int?
+@{
+  // имя свойства
+  var propName = ViewData.ModelMetadata.PropertyName;
+  // лист всех вариантов для построения селекта
+  var propList = new List<OptionElement>();
+  for (int i = 1; i < 28; i++) {
+      propList.Add(new OptionElement() { Text = i.ToString(), Value = i.ToString()});
+  }
+  // класс для ошибки валидации, если есть
+  var errorClass = "";
+  var state = ViewData.ModelState[propName];
+  if (state != null && state.Errors.Count > 0) {
+      errorClass = " input-validation-error";
+  }
+}
+<div class="row margin5">
+    <div class="flabel col-md-4">
+        @Html.LabelFor(m => m)
+    </div>
+    <div class="@("feditor col-md-8" + errorClass)">
+        @Html.DropDownListFor(m => m, new SelectList(propList, "Value", "Text", Model), new {style="display: none;"})
+        @Html.ValidationMessageFor(m => m)
+    </div>
+</div>
