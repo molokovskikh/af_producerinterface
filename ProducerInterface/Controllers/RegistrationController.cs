@@ -163,9 +163,7 @@ namespace ProducerInterface.Controllers
 
                             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
 
-                            long X = User.Id;
-
-                            Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, 10, Password, Request.UserHostAddress.ToString());
+                            Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
 
                             return RedirectToAction("Index", "Home");
                             // отсылаем новвый пароль на поччту
@@ -200,8 +198,7 @@ namespace ProducerInterface.Controllers
 
             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Email);
 
-            Quartz.Job.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress.ToString());
-
+						Quartz.Job.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress);
 
             return RedirectToAction("Index", "Profile");
         }
