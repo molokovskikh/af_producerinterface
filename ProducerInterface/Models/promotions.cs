@@ -11,7 +11,7 @@ namespace ProducerInterface.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
     public partial class promotions
     {
         public promotions()
@@ -35,6 +35,9 @@ namespace ProducerInterface.Models
         public Nullable<System.DateTime> End { get; set; }
         public bool Status { get; set; }
     
+
+        [UIHint("LongList")]
+        public virtual List<long> DrugList { get; set; }
         public virtual produceruser produceruser { get; set; }
         public virtual produceruser produceruser1 { get; set; }
         public virtual ICollection<promotiontodrug> promotiontodrug { get; set; }

@@ -186,6 +186,7 @@
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmailSender.cs" />
+    <Compile Include="Models\Producer.cs" />
     <Compile Include="Models\ProducerInterfaceAdoModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -274,6 +275,7 @@
     <Content Include="Content\Chosen\js\initCron.js" />
     <Content Include="Content\Chosen\js\initDatePicker.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
+    <Content Include="Content\Chosen\js\InitPromotionGrugList.js" />
     <Content Include="Content\Chosen\js\InitRegistrationChosen.js" />
     <Content Include="Content\Chosen\js\jqCron.js" />
     <Content Include="Content\Chosen\js\jqCron.ru.js" />
@@ -343,6 +345,7 @@
     <Content Include="Views\Report\RunNow.cshtml" />
     <Content Include="Views\Report\ScheduleJob.cshtml" />
     <Content Include="Views\Report\Success.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\LongList.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -390,6 +393,9 @@
     <Content Include="Views\Profile\EditGeneralReport.cshtml" />
     <Content Include="Views\Profile\EditReportTemplate.cshtml" />
     <Content Include="Views\Report\DisplayReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CronIntervalParam.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
+    <Content Include="Views\Profile\EditorTemplates\LongList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

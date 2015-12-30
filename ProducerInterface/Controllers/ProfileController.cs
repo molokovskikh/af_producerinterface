@@ -43,19 +43,19 @@ namespace ProducerInterface.Controllers
 
         public ActionResult Index()
         {
-            var ModelView = new Models.RegistrerValidation();
-            Quartz.Job.EDM.reportData cntx;
-            Quartz.Job.NamesHelper h;
-            cntx = new Quartz.Job.EDM.reportData();
-            h = new Quartz.Job.NamesHelper(cntx, 0);
-            scheduler = GetRemoteSheduler();
+            //var ModelView = new Models.RegistrerValidation();
+            //Quartz.Job.EDM.reportData cntx;
+            //Quartz.Job.NamesHelper h;
+            //cntx = new Quartz.Job.EDM.reportData();
+            //h = new Quartz.Job.NamesHelper(cntx, 0);
+            //scheduler = GetRemoteSheduler();
 
-            var jobList = cntx.jobextend.Where(x => x.ProducerId == CurrentUser.ProducerId
-                                                                                        && x.SchedName == scheduler.SchedulerName
-                                                                                        && x.Enable == true).ToList();
+            //var jobList = cntx.jobextend.Where(x => x.ProducerId == CurrentUser.ProducerId
+            //                                                                            && x.SchedName == scheduler.SchedulerName
+            //                                                                            && x.Enable == true).ToList();
 
-            return View(jobList);
-
+            //return View(jobList);
+            return View();
         }
 
         public ActionResult Promotions()
@@ -66,7 +66,33 @@ namespace ProducerInterface.Controllers
             return View();
         }
 
+        public ActionResult ManagePromotion(long? id)
+        {
+            var CurrentPromotion = new promotions();
+            var currentUser = GetCurrentUser();
 
+            var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
+            var sf = new StdSchedulerFactory(props);
+            var scheduler = sf.GetScheduler();
+            var ModelView = new Models.RegistrerValidation();
+            Quartz.Job.EDM.reportData cntx;
+            Quartz.Job.NamesHelper h;
+            cntx = new Quartz.Job.EDM.reportData();
+            h = new Quartz.Job.NamesHelper(cntx, CurrentUser.Id);            
+          
+            ViewData["DrugList"] = h.GetCatalogList();
+            if (id.HasValue)
+            {
+                //ViewBag.CurrentPromotion = DbSession.Query<Promotion>().FirstOrDefault(s => s.Id == id);
+                // редактирование существующей
+                CurrentPromotion = _BD_.promotions.FirstOrDefault(x => x.Id == id); 
+            }
+            else {              
+                // Создание новой акции нежное значение уже присвоено
+                //var CurrentPromotion = new promotions();
+            }
+            return View(CurrentPromotion);
+        }
 
 
 

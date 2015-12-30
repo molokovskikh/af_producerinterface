@@ -1,11 +1,10 @@
-﻿@using AnalitFramefork.Hibernate.Models
-@using ProducerInterface.Models
+﻿@using ProducerInterface.Models
 @{
-	var currentUser = ViewBag.CurrentUser as ProducerUser;
+	var currentUser = ViewBag.CurrentUser as produceruser;
 }
 <aside class="widget list">
 	<header>
-		<h3 class="title">Кабинет производителя<br /> <strong>'@currentUser.Producer.Name'</strong></h3>
+		<h3 class="title">Кабинет производителя №<br /> <strong>'@currentUser.ProducerId'</strong></h3>
         <h3 class="title">Здравствуйте, <br/> <strong> @ViewBag.CurrentUser.Name !</strong></h3>
 	</header>
 	<div class="panel panel-default">

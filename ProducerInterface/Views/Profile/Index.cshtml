@@ -1,11 +1,23 @@
-﻿@using Quartz.Job.Models
-@model List<Quartz.Job.EDM.jobextend>
+﻿@*@using Quartz.Job.Models
+@model List<Quartz.Job.EDM.jobextend>*@
+
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUser = ViewBag.CurrentUser as ProducerInterface.Models.produceruser;
+   
 }
 
-@{Quartz.Job.EDM.jobextend dummyModel = null;}
+<div class="jumbotron">
+    <h3>Идинтификационный номер производителя: @currentUser.ProducerId</h3>
+    <p class="lead">Личный кабинет производителя, текущего залогиневшегося пользователя.</p>
+    <p><a href="#" class="btn btn-primary btn-lg">Не нажимайте данную кнопку &raquo;</a></p>
+</div>
+
+
+
+@*@{Quartz.Job.EDM.jobextend dummyModel = null;}
 
 @if (Model != null && Model.Count > 0)
 {
@@ -42,20 +54,7 @@
 
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.CustomName)
-
-                                    @*<a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета" style="margin-right:10px;">
-                                        <span class="glyphicon glyphicon-th-list"></span>
-                                    </a>
-
-                                    <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Разовое формирование отчета за истекшие периоды времени и даты" style="margin-right:10px;">
-                                        <span class="glyphicon glyphicon-play"></span>
-                                    </a>
-
-                                    <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Удалить отчет" style="margin-right:10px;">
-                                        <span class="glyphicon glyphicon-remove-circle"></span>
-                                    </a>*@
-
+                                    @Html.DisplayFor(modelItem => item.CustomName)       
                                 </td>
                                 <td>
                                     @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
@@ -76,4 +75,4 @@
             </div>
         </div>
     </section>
-}
+}*@
