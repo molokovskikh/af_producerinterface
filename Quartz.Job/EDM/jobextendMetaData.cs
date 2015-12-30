@@ -9,7 +9,15 @@ namespace Quartz.Job.EDM
 		public Reports ReportTypeEnum
 		{
 			get { return (Reports)ReportType; }
+			set { ReportType = (int)value; }
 		}
+
+		public DisplayStatus DisplayStatusEnum
+		{
+			get { return (DisplayStatus)DisplayStatus; }
+			set { DisplayStatus = (int)value; }
+		}
+
 	}
 
 	public class JobExtendMetaData
@@ -44,8 +52,18 @@ namespace Quartz.Job.EDM
 		[ScaffoldColumn(false)]
 		public System.DateTime CreationDate { get; set; }
 
-		[Display(Name = "Последние изменения")]
+		//[Display(Name = "Последние изменения")]
+		[ScaffoldColumn(false)]
 		public System.DateTime LastModified { get; set; }
+
+		[ScaffoldColumn(false)]
+		public int DisplayStatus { get; set; }
+
+		[Display(Name = "Статус")]
+		public DisplayStatus DisplayStatusEnum { get; }
+
+		[Display(Name = "Запуск")]
+		public System.DateTime LastRun { get; set; }
 
 		[ScaffoldColumn(false)]
 		public bool Enable { get; set; }

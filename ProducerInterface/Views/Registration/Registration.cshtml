@@ -6,34 +6,36 @@
 }
 
 @*<div class="jumbotron col-xs-12 col-sm-push-4 col-sm-4  col-md-push-3 col-md-6 col-xs-12 col-sm-push-4 col-sm-4  col-md-push-4 col-md-4">*@
-<div class="jumbotron centered">
+<div class="centered">  
+    <div class="row">
+        <div class="page-header">
+            <h3>Регистрация на сайте</h3>
+        </div>
 
-    <h3>Регистрация на сайте.</h3>
-    <br />
-
-    @using (Html.BeginForm("Registration", "Registration", FormMethod.Post))
+        @using (Html.BeginForm("Registration", "Registration", FormMethod.Post))
             {
-        @Html.ValidationSummary(true, "")     
-        @Html.EditorFor(m => m.Name)
-        @Html.EditorFor(m => m.login)
-        @Html.EditorFor(m => m.Appointment)   
-        @Html.EditorFor(m => m.Producers)
-        
-        <br/>
+            @Html.ValidationSummary(true, "")
+            @Html.EditorFor(m => m.Name)
+            @Html.EditorFor(m => m.login)
+            @Html.EditorFor(m => m.Appointment)
+            @Html.EditorFor(m => m.Producers)
 
-        <div class="form-group col-lg-12 col-sm-12 col-md-12 col-xs-12">
-            <input type="submit" class="btn btn-success col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация" />
-        </div>
-        <div class="form-group">
-            <a href="~/Registration/Index" class="">Я уже регистрировался</a>
-        </div>
-        <div class="form-group">
-            <a href="/Registration/PasswordRecovery" class="">Забыли пароль?</a>
-        </div>
+            <br />
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация" />
+            </div>
+            <div class="form-group">
+                <a href="~/Registration/Index" class="">Я уже регистрировался</a>
+            </div>
+            <div class="form-group">
+                <a href="~/Registration/PasswordRecovery" class="">Забыли пароль?</a>
+            </div>
     }
+    </div>
 </div>
 
-@section scripts
+@section JavaScript
 {    
 <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
 <script src="~/Content/Chosen/js/chosen.jquery.js"></script>

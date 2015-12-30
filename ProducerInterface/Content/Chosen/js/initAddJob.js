@@ -5,26 +5,11 @@
 	$('#SupplierIdNonEqual').chosen({ width: '95%' });
 	$('#MailTo').chosen({ width: '95%' });
 
-	var interval = $('#Interval');
-	interval.chosen({ width: '30%' });
-
-	// при чеке За предыдущий месяц гасим выбор интервала
-	var bm = $('#ByPreviousMonth');
-	if (bm.prop('checked'))
-		interval.prop('disabled', true).trigger("chosen:updated");
-
-	bm.click(function () {
-		if ($(this).prop('checked'))
-			interval.prop('disabled', true).trigger("chosen:updated");
-		else
-			interval.removeProp('disabled').trigger("chosen:updated");
-	});
-
 	// при изменении регионов загружаем список поставщиков из этих регионов
 	$('#RegionCodeEqual').on('change', function () {
 		var sup = $('#SupplierIdNonEqual');
 		var prm = $(this).serialize() + "&" + sup.serialize();
-		$.getJSON('/ProducerInterface/Report/GetSupplierJson', prm, function (data) {
+		$.getJSON('/Report/GetSupplierJson', prm, function (data) {
 			sup.children().remove();
 			$.each(data.results, function(index, item) {
 				var op = $('<option></option>')

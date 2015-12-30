@@ -11,10 +11,12 @@ namespace ProducerInterface.Controllers
 {
     public class RegistrationController : pruducercontroller.BaseController
     {
+        private Quartz.Job.EDM.reportData cntx;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+            cntx = new Quartz.Job.EDM.reportData();
             if (filterContext == null)
             {
                 throw new ArgumentNullException("filterContext");
@@ -31,15 +33,10 @@ namespace ProducerInterface.Controllers
         [HttpGet]
         public ActionResult Registration()
         {
-            var ModelView = new Models.RegistrerValidation();
-
-            var X = _BD_.producernames.Select(xxx => new Models.OptionElement2 { Text = xxx.ProducerName, Value = xxx.ProducerId }).ToList();
-
-            var ProducerList = new List<Models.OptionElement>();
-            ProducerList.Add(new Models.OptionElement { Text = "", Value = "" });
-            ProducerList.AddRange(X.Select(xxx => new Models.OptionElement { Text = xxx.Text, Value = (string)xxx.Value.ToString() }).ToList());
-
-            ViewBag.ProducerList = ProducerList;
+            var ModelView = new Models.RegistrerValidation();            
+            Quartz.Job.NamesHelper h;            
+            h = new Quartz.Job.NamesHelper(cntx, 0);                     
+            ViewBag.ProducerList = h.GetProducerList(); 
 
             return View();
         }
@@ -68,9 +65,11 @@ namespace ProducerInterface.Controllers
                     _BD_.Entry(New_User).State = System.Data.Entity.EntityState.Added;
                     _BD_.SaveChanges();
 
-                    Models.EmailSender.SendEmail(NewAccount.login, "Успешная регистрация на сайте: " + GetSiteName, "Ваш пароль для входа на сайт: " + Password);
+                    string eMail = New_User.Email;
 
-                    Models.EmailSender.SendEmail(ForwardEmail, "Успешная регистрация на сайте: " + GetSiteName, "Ваш пароль для входа на сайт: " + Password);
+                    New_User = _BD_.produceruser.Where(xxx => xxx.Email == eMail).First();
+                    
+                    Quartz.Job.EmailSender.SendRegistrationMessage(cntx, New_User.Id, Password, Request.UserHostAddress.ToString());
 
                     SuccessMessage("Регистрация прошла успешно! Пароль для входа выслан на вашу почту " + NewAccount.login);
 
@@ -129,8 +128,26 @@ namespace ProducerInterface.Controllers
                         _BD_.Entry(User).State = System.Data.Entity.EntityState.Modified;
                         _BD_.SaveChanges();
 
-                        Models.EmailSender.SendEmail(login, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
-                        Models.EmailSender.SendEmail(ForwardEmail, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
+                        Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
+
+
+        //public static void SendRegistrationMessage(reportData cntx, long userId, string password, string ip)
+        //{
+        //SendPasswordMessage(cntx, userId, password, MailType.Registration, ip);
+        //}
+
+        //public static void SendPasswordChangeMessage(reportData cntx, long userId, string password, string ip)
+        //{
+        //SendPasswordMessage(cntx, userId, password, MailType.PasswordChange, ip);
+        //}
+
+        //public static void SendPasswordRecoveryMessage(reportData cntx, long userId, string password, string ip)
+        //{
+        //SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
+        //}
+
+                        //Models.EmailSender.SendEmail(login, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
+                        //Models.EmailSender.SendEmail(ForwardEmail, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
 
                         SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
                         return RedirectToAction("Index", "Home");
@@ -145,6 +162,11 @@ namespace ProducerInterface.Controllers
                             _BD_.SaveChanges();
 
                             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
+
+                            long X = User.Id;
+
+                            Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, 10, Password, Request.UserHostAddress.ToString());
+
                             return RedirectToAction("Index", "Home");
                             // отсылаем новвый пароль на поччту
                         }
@@ -166,6 +188,24 @@ namespace ProducerInterface.Controllers
                 }
             }         
         }
+             
+        public ActionResult ChangePassword()
+        {
+            var User = _BD_.produceruser.Where(xxx => xxx.Email == CurrentUser.Email).FirstOrDefault();
+            string password = GetRandomPassword();
+            User.Password = Md5HashHelper.GetHash(password);
+
+            _BD_.Entry(User).State = System.Data.Entity.EntityState.Modified;
+            _BD_.SaveChanges();
+
+            SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Email);
+
+            Quartz.Job.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress.ToString());
+
+
+            return RedirectToAction("Index", "Profile");
+        }
+
 
         [HttpPost]
         public ActionResult UserAuthentication(Models.LoginValidation User_)
@@ -211,8 +251,8 @@ namespace ProducerInterface.Controllers
             if (ThisUser.Enabled == 1) // логинится не впервый раз и не заблокирован
             {
          
-                CurrentUser = ThisUser;
-                ViewBag.CurrentUser = ThisUser as produceruser;
+                //CurrentUser = ThisUser;
+                //ViewBag.CurrentUser = ThisUser as produceruser;
                 AutorizedUser = ThisUser as produceruser;
                 return Autentificate(this, shouldRemember: true);
             }
@@ -256,8 +296,8 @@ namespace ProducerInterface.Controllers
 
                 _BD_.SaveChanges();
 
-                 CurrentUser = ThisUser;
-                 ViewBag.CurrentUser = ThisUser;
+                 //CurrentUser = ThisUser;
+                 //ViewBag.CurrentUser = ThisUser;
                  AutorizedUser = ThisUser;
                 return Autentificate(this, shouldRemember: true);
             }
@@ -274,7 +314,7 @@ namespace ProducerInterface.Controllers
                     _BD_.SaveChanges();
 
                     //CurrentUser = ThisUser;
-                    ViewBag.CurrentUser = ThisUser;
+                    //ViewBag.CurrentUser = ThisUser;
                     AutorizedUser = ThisUser;
                     return Autentificate(this, shouldRemember: true);
                 }
@@ -284,7 +324,7 @@ namespace ProducerInterface.Controllers
 
                     ErrorMessage("Аккаунт заблокирован");
                     //CurrentUser = null;
-                    ViewBag.CurrentUser = null;
+                    //ViewBag.CurrentUser = null;
                     AutorizedUser = null;
                     ErrorMessage("Аккаунт заблокирован");
                     return RedirectToAction("Index", "Home");
@@ -293,7 +333,7 @@ namespace ProducerInterface.Controllers
               
 
             // CurrentUser = null;
-             ViewBag.CurrentUser = null;
+            // ViewBag.CurrentUser = null;
             // AutorizedUser = null;
             return RedirectToAction("Index","Home");
         }

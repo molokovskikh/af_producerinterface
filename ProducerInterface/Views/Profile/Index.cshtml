@@ -1,8 +1,79 @@
-﻿
+﻿@using Quartz.Job.Models
+@model List<Quartz.Job.EDM.jobextend>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+@{Quartz.Job.EDM.jobextend dummyModel = null;}
 
+@if (Model != null && Model.Count > 0)
+{
+    <section id="main">
+        <header>
+            <div class="container">
+                <h3>Список отчетов</h3>
+            </div>
+        </header>
+        <div class="container">
+            <div class="row">
+                <div class="content blog col-sm-12 col-md-12">
+
+                    <table style="width:100%;" class="table-bordered table-striped">
+                        <tr class="first last">
+                            <th>
+                                @Html.DisplayNameFor(model => dummyModel.CustomName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => dummyModel.Scheduler)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => dummyModel.ReportTypeEnum)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => dummyModel.Creator)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => dummyModel.LastModified)
+                            </th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CustomName)
+
+                                    @*<a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета" style="margin-right:10px;">
+                                        <span class="glyphicon glyphicon-th-list"></span>
+                                    </a>
+
+                                    <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Разовое формирование отчета за истекшие периоды времени и даты" style="margin-right:10px;">
+                                        <span class="glyphicon glyphicon-play"></span>
+                                    </a>
+
+                                    <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Удалить отчет" style="margin-right:10px;">
+                                        <span class="glyphicon glyphicon-remove-circle"></span>
+                                    </a>*@
+
+                                </td>
+                                <td>
+                                    @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReportTypeEnum)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Creator)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastModified)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+}

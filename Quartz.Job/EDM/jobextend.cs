@@ -24,6 +24,8 @@ namespace Quartz.Job.EDM
         public string Creator { get; set; }
         public System.DateTime CreationDate { get; set; }
         public System.DateTime LastModified { get; set; }
+        public int DisplayStatus { get; set; }
+        public Nullable<System.DateTime> LastRun { get; set; }
         public bool Enable { get; set; }
     }
 }

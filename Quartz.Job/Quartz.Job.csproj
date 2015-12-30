@@ -72,6 +72,10 @@
     <Reference Include="Quartz">
       <HintPath>..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="StringFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StringFormat.1.0.0\lib\StringFormat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -108,14 +112,27 @@
     <Compile Include="EDM\jobextend.cs">
       <DependentUpon>ReportData.tt</DependentUpon>
     </Compile>
+    <Compile Include="EDM\mailformwithfooter.cs">
+      <DependentUpon>ReportData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDM\reportxml.cs">
+      <DependentUpon>ReportData.tt</DependentUpon>
+    </Compile>
     <Compile Include="EDM\usernames.cs">
       <DependentUpon>ReportData.tt</DependentUpon>
     </Compile>
     <Compile Include="EDM\jobextendMetaData.cs" />
-    <Compile Include="Models\Cron.cs" />
+    <Compile Include="Models\MailTypeEnum.cs" />
+    <Compile Include="Models\IInterval.cs" />
+    <Compile Include="Models\CronIntervalParam.cs" />
     <Compile Include="Models\NotMinDateAttribute.cs" />
+    <Compile Include="Models\DisplayStatusEnum.cs" />
     <Compile Include="Models\ReportsEnum.cs" />
-    <Compile Include="Models\SetDateInterval.cs" />
+    <Compile Include="Models\CronParam.cs" />
+    <Compile Include="Models\IntervalReport.cs" />
+    <Compile Include="Models\TriggerParam.cs" />
+    <Compile Include="Models\RunNowParam.cs" />
+    <Compile Include="Models\RunNowIntervalParam.cs" />
     <Compile Include="Models\SupplierRating\SupplierRatingReport.cs" />
     <Compile Include="Models\SupplierRating\SupplierRatingReportRow.cs" />
     <Compile Include="HeaderHelper.cs" />
@@ -166,7 +183,6 @@
     <Compile Include="Models\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="Models\RatingReportRow.cs" />
     <Compile Include="Models\PharmacyRating\PharmacyRatingReportRow.cs" />
-    <Compile Include="Models\IntervalReport.cs" />
     <Compile Include="Models\ProductRating\ProductRatingReport.cs" />
     <Compile Include="Models\ProductRating\ProductRatingReportRow.cs" />
     <Compile Include="Models\Report.cs" />

@@ -3,11 +3,18 @@
     ViewBag.Title = "Home Page";
 }
 
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p>
+        <a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a>
+    </p>
+</div>
+
 <div class="row">
     <div class="col-md-12">
         @using (Html.BeginForm()) {
             <fieldset>
-
                 <legend>@Model.Name</legend>
                 @Html.ValidationSummary(true)
                 @Html.EditorFor(m => m.CastomName)
@@ -17,18 +24,16 @@
                 @Html.EditorFor(m => m.MailSubject)
                 <div class="row margin5">
                     <div class="flabel col-md-4">
-                        @Html.ActionLink("Назад", "JobList")
+                        @Html.ActionLink("К списку отчётов", "JobList", new {r = Guid.NewGuid()})
                     </div>
                     <div class="feditor col-md-8">
                         <input id="btn" type="submit" value="Сохранить"/>
                     </div>
                 </div>
-
             </fieldset>
         }
     </div>
 </div>
-@section javascript {
-    <script src="~/Content/js/initAddJob.js"></script>
-    <script src="~/Content/js/chosen.jquery.js"></script>
+@section JavaScript {
+<script src="~/Content/Chosen/js/initAddJob.js"></script>    
 }

@@ -27,6 +27,10 @@ namespace Quartz.Job.Models
 		[Required]
 		public int Id { get; set; }
 
+		[ScaffoldColumn(false)]
+		[Required]
+		public long ProducerId { get; set; }
+
 		[Display(Name = "Отправить на e-mail")]
 		[Required(ErrorMessage = "Не указаны e-mail")]
 		[UIHint("MailTo")]
@@ -34,7 +38,7 @@ namespace Quartz.Job.Models
 
 		public abstract List<string> GetHeaders(HeaderHelper h);
 
-		public abstract Report Process(Report param, JobKey key, bool runNow);
+		public abstract Report Process(JobKey key, Report jparam, TriggerParam tparam);
 
 		public abstract string GetSpName();
 

@@ -33,5 +33,7 @@ namespace Quartz.Job.EDM
         public virtual DbSet<catalognames> catalognames { get; set; }
         public virtual DbSet<usernames> usernames { get; set; }
         public virtual DbSet<jobextend> jobextend { get; set; }
+        public virtual DbSet<reportxml> reportxml { get; set; }
+        public virtual DbSet<mailformwithfooter> mailformwithfooter { get; set; }
     }
 }

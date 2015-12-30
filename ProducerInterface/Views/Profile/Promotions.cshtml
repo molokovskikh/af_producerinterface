@@ -1,9 +1,6 @@
-﻿@using AnalitFramefork.Hibernate.Models
-@using ProducerInterface.Models
-@{
+﻿@{
 	ViewBag.Title = "Промо-акции";
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	List<Promotion> promotionList = ViewBag.PromotionList;
+	Layout = "~/Views/Shared/_Layout.cshtml";	
 }
 
 <section id="main">
@@ -22,7 +19,7 @@
 					При кажом изменении акции, она снова становится неподтвержденной. Подтвержденный акции не будут отображаться в Analit-f.net (согласовано вчера с Михаилом Епихиным).
 					Тем не менее у нас уже есть план как их отобразить, так что при необходимости мы можем это быстро сделать.
 				</b>
-				@foreach (var item in promotionList) {
+				@foreach (var item in  ViewBag.PromotionList) {
 					<article class="post">
 						<h2 class="entry-title">
 							@item.Name

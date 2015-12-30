@@ -12,7 +12,9 @@
         <EntityTypeShape EntityType="ReportDataModel.assortment" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="ReportDataModel.catalognames" Width="1.5" PointX="4.5" PointY="2.75" />
         <EntityTypeShape EntityType="ReportDataModel.usernames" Width="1.5" PointX="6.5" PointY="0.75" />
-        <EntityTypeShape EntityType="ReportDataModel.jobextend" Width="1.5" PointX="6.5" PointY="3.625" />
+        <EntityTypeShape EntityType="ReportDataModel.jobextend" Width="1.5" PointX="6.5" PointY="3.25" />
+        <EntityTypeShape EntityType="ReportDataModel.reportxml" Width="1.5" PointX="8.5" PointY="0.75" />
+        <EntityTypeShape EntityType="ReportDataModel.mailformwithfooter" Width="1.5" PointX="8.5" PointY="3.25" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

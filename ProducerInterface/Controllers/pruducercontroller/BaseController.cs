@@ -53,7 +53,10 @@ namespace ProducerInterface.Controllers.pruducercontroller
         public ActionResult Autentificate(Controller currentController,bool shouldRemember, string userData = "")
         {
             string autorizeddd = Autentificates(this, AutorizedUser.Email, shouldRemember, userData);
-            return Redirect(autorizeddd);        
+
+            string controllerName = (autorizeddd.Split(new Char[] { '/' }))[0];
+            string actionName = (autorizeddd.Split(new Char[] { '/' }))[1];
+            return RedirectToAction(actionName, controllerName);
         }
 
         public string Autentificates(Controller CRT,string username,bool shouldRemember,string userData = "")
@@ -127,11 +130,14 @@ namespace ProducerInterface.Controllers.pruducercontroller
                 {
                     // CurrentUser = null если не авторизован
                     string url = GetunAuthorizedUserRedirectUrl;
+                    string actionName_ = (url.Split(new Char[] { '/' }))[1];
+                    string controllerName_ = (url.Split(new Char[] { '/' }))[0];
                     if (url != String.Empty)
                     {
                         ClearAllCookies();
                         this.ErrorMessage("У вас нет прав доступа к запрашиваемой странице.");
-                        filterContext.Result = new RedirectResult(url);
+                        filterContext.Result = RedirectToAction(actionName_, controllerName_);
+                        // filterContext.Result = new RedirectResult(url);
                     }
                 }
                 else
@@ -147,9 +153,11 @@ namespace ProducerInterface.Controllers.pruducercontroller
                     {
                         this.ErrorMessage("У вас нет прав доступа к запрашиваемой странице.");
                         string url = GetredirectAfterAuthentication;
+                        string actionName_ = (url.Split(new Char[] { '/' }))[1];
+                        string controllerName_ = (url.Split(new Char[] { '/' }))[0];
                         if (url != String.Empty)
                         {
-                            filterContext.Result = new RedirectResult(url);
+                            filterContext.Result = RedirectToAction(actionName_, controllerName_);
                         }
 
                     }

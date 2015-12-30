@@ -17,8 +17,8 @@ namespace ProducerInterface.Controllers.pruducercontroller
         public produceruser CurrentUser { get; set; }
 
         public string GetCoockieName { get { return "ValidationUserCookie"; } }
-        public string GetunAuthorizedUserRedirectUrl { get { return "/Home/index"; }  }
-        public string GetredirectAfterAuthentication { get { return "/Profile/index"; } }
+        public string GetunAuthorizedUserRedirectUrl { get { return "Home/index"; }  }
+        public string GetredirectAfterAuthentication { get { return "Profile/index"; } }
 
         public int MaxPasswordLeight {
             get { return 6; }

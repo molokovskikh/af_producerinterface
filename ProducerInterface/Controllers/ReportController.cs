@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Web.Mvc;
+
 using Quartz;
 using Quartz.Impl;
 using Quartz.Job;
 using Quartz.Job.Models;
+
 using System.Configuration;
 using Common.Logging;
 using Quartz.Job.EDM;
+
+using ProducerInterface.Models;
+using System.Data;
+using System.IO;
 
 namespace ProducerInterface.Controllers
 {
@@ -21,9 +27,10 @@ namespace ProducerInterface.Controllers
         protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
 
         protected reportData cntx;
+        protected NamesHelper h;
         protected long userId;
         protected long producerId;
-        protected NamesHelper h;
+      
         protected Quartz.IScheduler scheduler;
              
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -32,7 +39,7 @@ namespace ProducerInterface.Controllers
 
             cntx = new reportData();
           //  TODO: берётся у юзера
-            var CurrentUser = GetCurrentUser();
+          //  var CurrentUser = GetCurrentUser();
             userId = CurrentUser.Id;
             producerId =(long) CurrentUser.ProducerId;
           //  cntx.usernames.Single(x => x.UserId == userId).ProducerId;
@@ -44,13 +51,16 @@ namespace ProducerInterface.Controllers
 			scheduler = GetRemoteSheduler();
 #endif
         }
+        
+
 
         public ActionResult AddJob(int Id)
         {
             // получили пустую модель нужного типа
             var type = GetModelType(Id);
-            var model = (Quartz.Job.Models.Report)Activator.CreateInstance(type);
+            var model = (Report)Activator.CreateInstance(type);
             model.Id = Id;
+            model.ProducerId = producerId;
             model.MailSubject = h.GetMailOkReportSubject();
 
             // при GET - отправили её пользователю на заполнение
@@ -73,7 +83,7 @@ namespace ProducerInterface.Controllers
                 return View(model);
             }
 
-            var key = new JobKey(Guid.NewGuid().ToString(), userId.ToString());
+            var key = new JobKey(Guid.NewGuid().ToString(), $"p{producerId}");
             var job = JobBuilder.Create<ReportJob>()
                 .WithIdentity(key)
                 .StoreDurably()
@@ -173,7 +183,7 @@ namespace ProducerInterface.Controllers
             if (jext == null)
                 return View("Error", (object)"Дополнительные параметры задачи не найдены");
 
-            var model = (Quartz.Job.Models.Report)job.JobDataMap["param"];
+            var model = (Report)job.JobDataMap["param"];
 
             // при GET - отправили её пользователю на заполнение
             if (HttpContext.Request.HttpMethod == "GET")
@@ -184,9 +194,10 @@ namespace ProducerInterface.Controllers
 
             // при POST - биндим
             var type = GetModelType(jext.ReportType);
-            model = (Quartz.Job.Models.Report)Activator.CreateInstance(type);
+            model = (Report)Activator.CreateInstance(type);
 
             Bind(model, type);
+            model.ProducerId = producerId;
 
             foreach (var error in model.Validate())
                 ModelState.AddModelError(error.PropertyName, error.Message);
@@ -234,81 +245,50 @@ namespace ProducerInterface.Controllers
         public ActionResult RunNow(string jobName, string jobGroup)
         {
             var key = JobKey.Create(jobName, jobGroup);
+            // нашли задачу
             var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
-            var param = (Quartz.Job.Models.Report)job.JobDataMap["param"];
+            var jext = GetJobExtend(jobName, jobGroup);
+            if (jext == null)
+                return View("Error", (object)"Дополнительные параметры задачи не найдены");
 
-            if (param is IntervalReport)
-            {
-                var model = new SetDateInterval()
-                {
-                    JobName = key.Name,
-                    JobGroup = key.Group
-                };
-                var castparam = (IntervalReport)param;
-                var now = DateTime.Now;
-                // за предыдущий месяц
-                if (castparam.ByPreviousMonth)
-                {
-                    // по : 00:00:00 первый день текущего месяца
-                    model.DateTo = new DateTime(now.Year, now.Month, 1);
-                    // с: 00:00:00 первый день предыдущего месяца
-                    model.DateFrom = model.DateTo.AddMonths(-1);
-                }
-                // за X предыдущих дней от момента запуска
-                else {
-                    // по: 00:00:00 сегодня
-                    model.DateTo = new DateTime(now.Year, now.Month, now.Day);
-                    // с: 00:00:00 за Interval дней
-                    model.DateFrom = model.DateTo.AddDays(-castparam.Interval.Value);
-                }
-                return View(model);
-            }
+            var param = (Report)job.JobDataMap["param"];
+            ViewBag.Title = $"Запуск \"{param.CastomName}\"";
+
+            RunNowParam model;
+            if (param is IInterval)
+                model = new RunNowIntervalParam();
             // TODO при появлении неинтервальных отчётов добавить код
             else
                 return View("Error", (object)"Отчёт этого типа невозможно запустить вручную");
-        }
 
-        [HttpPost]
-        public ActionResult RunNow(SetDateInterval model)
-        {
-            if (model.DateToUi < model.DateFrom)
-                ModelState.AddModelError("DateToUi", "Дата \"с...\" должна быть меньше или равна дате \"по...\"");
+            // при GET возвращаем пустую модель для заполнения
+            if (HttpContext.Request.HttpMethod == "GET")
+                return View(model);
+
+            // биндим
+            Bind(model, model.GetType());
+
+            model.UserId = userId;
+
+            foreach (var error in model.Validate())
+                ModelState.AddModelError(error.PropertyName, error.Message);
+
+            // если модель невалидна - возвращаем пользователю
             if (!ModelState.IsValid)
                 return View(model);
 
-            var key = JobKey.Create(model.JobName, model.JobGroup);
-            var job = scheduler.GetJobDetail(key);
-            if (job == null)
-                return View("Error", (object)"Задача не найдена");
-
-            // строим новый джоб
-            var newJob = JobBuilder.Create<ReportJob>()
-                .WithIdentity(key)
-                .StoreDurably()
-                .WithDescription(model.ToString())
+            var trigger = (ISimpleTrigger)TriggerBuilder.Create()
+                .StartNow()
+                .ForJob(job.Key)
                 .Build();
-
-            var param = (Quartz.Job.Models.Report)job.JobDataMap["param"];
-            if (param is IntervalReport)
-            {
-                var castparam = (IntervalReport)param;
-                castparam.DateFrom = model.DateFrom;
-                castparam.DateTo = model.DateTo;
-                newJob.JobDataMap["param"] = castparam;
-            }
-            // TODO при появлении неинтервальных отчётов добавить код
-            else
-                return View("Error", (object)"Отчёт этого типа невозможно запустить вручную");
+            trigger.JobDataMap["tparam"] = model;
 
             try
             {
-                // новый джоб заменяет старый
-                scheduler.AddJob(newJob, true);
-                // новый джоб заменяет старый
-                scheduler.TriggerJob(key);
+                scheduler.ScheduleJob(trigger);
             }
             catch (Exception e)
             {
@@ -316,55 +296,80 @@ namespace ProducerInterface.Controllers
                 return View("Error", (object)(e.Message));
             }
 
-            return View("Success", (object)"АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же будет отправлен на указанные адреса электронной почты");
+            // отправили статус, что отчёт готовится
+            jext.DisplayStatusEnum = DisplayStatus.Processed;
+            jext.LastRun = DateTime.Now;
+            cntx.SaveChanges();
+
+            var message = "АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же ";
+            if (model.ByDisplay)
+                message = message + "появится в списке отчётов";
+            if (model.ByDisplay && model.ByEmail)
+                message = message + " и ";
+            if (model.ByEmail)
+                message = message + "будет отправлен на указанные адреса электронной почты";
+
+            return View("Success", (object)message);
         }
 
         public ActionResult ScheduleJob(string jobName, string jobGroup)
         {
-            var model = new Cron();
-            model.JobName = jobName;
-            model.JobGroup = jobGroup;
-            // значение по умолчанию для UI - без первого нуля для секунд и без знаков "?"
-            model.CronExpression = "0 10 * * 1";
-
-            // если триггер вставлялся, то с идентификатором задачи
-            var oldTriggerKey = new TriggerKey(jobName, jobGroup);
-            // используются только cron-триггеры
-            var oldTrigger = (ICronTrigger)(scheduler.GetTrigger(oldTriggerKey));
-            // если триггер уже был - устанавливаем UI его значением
-            if (oldTrigger != null)
-                model.CronExpression = FormatCronForUI(oldTrigger.CronExpressionString);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult ScheduleJob(Cron model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var jext = GetJobExtend(model.JobName, model.JobGroup);
-            if (jext == null)
-                return View("Error", (object)"Дополнительные параметры задачи не найдены");
-
-            var job = scheduler.GetJobDetail(JobKey.Create(model.JobName, model.JobGroup));
+            var key = JobKey.Create(jobName, jobGroup);
+            // нашли задачу
+            var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
+            var jext = GetJobExtend(key.Name, key.Group);
+            if (jext == null)
+                return View("Error", (object)"Дополнительные параметры задачи не найдены");
+
+            var param = (Report)job.JobDataMap["param"];
+            ViewBag.Title = $"Расписание для \"{param.CastomName}\"";
+
+            CronParam model;
+            if (param is IInterval)
+                model = new CronIntervalParam();
+            // TODO при появлении неинтервальных отчётов добавить код
+            else
+                return View("Error", (object)"Отчёт этого типа невозможно запустить вручную");
+
+            // триггер вставлялся с идентификатором задачи
+            var oldTriggerKey = new TriggerKey(key.Name, key.Group);
+            // используются только cron-триггеры
+            var oldTrigger = (ICronTrigger)(scheduler.GetTrigger(oldTriggerKey));
+
+            // при GET возвращаем пустую модель для заполнения
+            if (HttpContext.Request.HttpMethod == "GET")
+            {
+                //// если триггер уже был - устанавливаем UI его значением
+                if (oldTrigger != null)
+                    model = (CronParam)oldTrigger.JobDataMap["tparam"];
+                //if (oldTrigger != null)
+                //	model.CronExpression = oldTrigger.CronExpressionString;
+                return View(model);
+            }
+
+            // биндим
+            Bind(model, model.GetType());
+
+            model.UserId = userId;
+
+            foreach (var error in model.Validate())
+                ModelState.AddModelError(error.PropertyName, error.Message);
+
+            // если модель невалидна - возвращаем пользователю
+            if (!ModelState.IsValid)
+                return View(model);
+
             // новый триггер для этой задачи
             var trigger = TriggerBuilder.Create()
-                .WithIdentity(model.JobName, model.JobGroup)
+                .WithIdentity(key.Name, key.Group)
                 .WithCronSchedule(model.CronExpression)
                 .ForJob(job.Key)
                 .WithDescription(model.CronHumanText)
                 .Build();
-
-            // триггер вставлялся с идентификатором задачи
-            var oldTriggerKey = new TriggerKey(model.JobName, model.JobGroup);
-            var oldTrigger = scheduler.GetTrigger(oldTriggerKey);
+            trigger.JobDataMap["tparam"] = model;
 
             try
             {
@@ -375,13 +380,24 @@ namespace ProducerInterface.Controllers
             }
             catch (Exception e)
             {
-                logger.Error($"Job {model.JobGroup} {model.JobName} scheduler add failed:" + e.Message, e);
+                logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
                 return View("Error", (object)(e.Message));
             }
             // меняем человекочитаемое описание в доп. параметрах задачи
             jext.Scheduler = model.CronHumanText;
             cntx.SaveChanges();
             return View("Success", (object)"Расписание успешно установлено");
+        }
+
+        public ActionResult DisplayReport(string jobName, string jobGroup)
+        {
+            var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == jobName && x.JobGroup == jobGroup);
+            if (jxml == null)
+                return View("Error", (object)"Отчёт не найден");
+
+            var ds = new DataSet();
+            ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
+            return View(ds);
         }
 
         public JsonResult GetSupplierJson(List<decimal> RegionCodeEqual, List<long> SupplierIdNonEqual)
@@ -396,21 +412,30 @@ namespace ProducerInterface.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetDisplayStatusJson(string jobName, string jobGroup)
+        {
+            var jext = GetJobExtend(jobName, jobGroup);
+            return Json(new
+            {
+                status = jext.DisplayStatus,
+                url = Url.Action("DisplayReport", "Report", new { jobName = jobName, jobGroup = jobGroup })
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         // доп. инфа по джобу
         protected jobextend GetJobExtend(string jobName, string jobGroup)
         {
             return cntx.jobextend.SingleOrDefault(x => x.SchedName == scheduler.SchedulerName
-                                                            && x.JobName == jobName
-                                                            && x.JobGroup == jobGroup
-                                                            && x.ProducerId == producerId
-                                                            && x.Enable == true);
-
+                                                                                                && x.JobName == jobName
+                                                                                                && x.JobGroup == jobGroup
+                                                                                                && x.ProducerId == producerId
+                                                                                                && x.Enable == true);
         }
 
         protected Type GetModelType(int id)
         {
             var typeName = ((Reports)id).ToString();
-            var type = Type.GetType($"Quartz.Job.Models.{typeName}, {typeof(Quartz.Job.Models.Report).Assembly.FullName}");
+            var type = Type.GetType($"Quartz.Job.Models.{typeName}, {typeof(Report).Assembly.FullName}");
             if (type == null)
                 throw new NotSupportedException($"Не удалось создать тип {typeName} по идентификатору {id}");
             return type;
@@ -428,7 +453,7 @@ namespace ProducerInterface.Controllers
             });
         }
 
-        protected void SetViewData(Quartz.Job.Models.Report model)
+        protected void SetViewData(Report model)
         {
             foreach (var item in model.ViewDataValues(h))
                 ViewData[item.Key] = item.Value;
@@ -472,11 +497,6 @@ namespace ProducerInterface.Controllers
                 throw new NotSupportedException("Должен использоваться удалённый ServerScheduler");
 
             return scheduler;
-        }
-
-        private string FormatCronForUI(string cron)
-        {
-            return cron.Substring(2).Replace("?", "*");
         }
     }
 }

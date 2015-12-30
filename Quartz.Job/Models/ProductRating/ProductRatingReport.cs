@@ -32,16 +32,16 @@ namespace Quartz.Job.Models
 			result.Add(h.GetDateHeader(DateFrom, DateTo));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
 			result.Add(h.GetProductHeader(CatalogIdEqual));
-			result.Add(h.GetNotSupplierHeader(SupplierIdNonEqual));
+			if (SupplierIdNonEqual != null)
+				result.Add(h.GetNotSupplierHeader(SupplierIdNonEqual));
 			return result;
 		}
 
-		public override Report Process(Report param, JobKey key, bool runNow)
+		public override Report Process(JobKey key, Report jparam, TriggerParam tparam)
 		{
-			var castparam = base.Process(param, key, runNow);
-			var processor = new Processor<PharmacyRatingReportRow>();
-			processor.Process(castparam, key, runNow);
-			return castparam;
+			var processor = new Processor<ProductRatingReportRow>();
+			processor.Process(key, jparam, tparam);
+			return jparam;
 		}
 
 		public override string GetSpName()
@@ -54,7 +54,11 @@ namespace Quartz.Job.Models
 			var spparams = new Dictionary<string, object>();
 			spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
 			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
-			spparams.Add("@SupplierId", String.Join(",", SupplierIdNonEqual));
+			// чтоб правильно работала хп при отсутствии ограничений на поставщиков, заведомо несуществующий Id
+			if (SupplierIdNonEqual == null)
+				spparams.Add("@SupplierId", -1);
+			else
+				spparams.Add("@SupplierId", String.Join(",", SupplierIdNonEqual));
 			spparams.Add("@DateFrom", DateFrom);
 			spparams.Add("@DateTo", DateTo);
 			return spparams;

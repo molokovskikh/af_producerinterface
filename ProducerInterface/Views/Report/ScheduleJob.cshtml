@@ -1,31 +1,31 @@
-﻿@model Quartz.Job.Models.Cron
+﻿@model Quartz.Job.Models.CronParam
 
-@{
-  ViewBag.Title = "Добавить расписание";
-}
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
 
 <div class="row">
     <div class="col-md-12">
         @using (Html.BeginForm()) {
             <fieldset>
-
-                @Html.EditorFor(m => m.CronExpression)
-                @Html.EditorFor(m => m.CronHumanText)
-                @Html.EditorFor(m => m.JobGroup)
-                @Html.EditorFor(m => m.JobName)
+                <legend>@ViewBag.Title</legend>
+                @Html.ValidationSummary(true)
+                @Html.EditorForModel()
                 <div class="row margin5">
                     <div class="flabel col-md-4">
-                        @Html.ActionLink("Назад", "JobList")
+                        @Html.ActionLink("К списку отчётов", "JobList", new { r = Guid.NewGuid() })
                     </div>
                     <div class="feditor col-md-8">
                         <input id="btn" type="submit" value="Применить"/>
                     </div>
                 </div>
-
             </fieldset>
         }
     </div>
 </div>
 @section JavaScript {
-    <script src="~/Content/js/initCron.js"></script>
+<script src="~/Content/Chosen/js/initCron.js"></script>
+    @*<script src="~/Scripts/initCron.js"></script>*@
 }

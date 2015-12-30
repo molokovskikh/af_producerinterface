@@ -1,8 +1,0 @@
-﻿li .createLink { display: none; }
-
-li:hover .createLink {
-	color: #C10841 !important;
-	display: inline-block;
-	margin-left: 6px;
-	position: absolute;
-}

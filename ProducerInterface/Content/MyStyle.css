@@ -1,16 +1,45 @@
 ﻿body {
-    background-color:#D0D0D0;
-}
+    background-color:#EEE;
+    font-family:Arial, Helvetica, sans-serif;
+   }
 .image-brand {
-// height:22px;
+ height:30px;
 }
 
 .otstup {
 height:35px;
 }
 .navbar-brand {
-padding:5px;
+padding:10px;
 margin:0px;
+display: block;
+max-height: 32px;
+position: relative;
+margin-right: 36px;
+margin-left: 18px;
+left:10px;
+}
+
+#main_container{
+ height: 100%;
+}
+
+.body-content {
+    height: 100%;
+/*    background-color: red;  */
+background-color:white;
+padding:50px;
+height:100%;
+border:1px solid #ccc !important;
+}
+
+.row {
+padding:50px;
+}
+
+.navbar-fixed-bottom p 
+{
+    padding-top:8px;
 }
 
 .overlay{

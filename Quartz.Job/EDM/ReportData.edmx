@@ -21,7 +21,20 @@
           <Property Name="Creator" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="CreationDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="DisplayStatus" Type="int" Nullable="false" />
+          <Property Name="LastRun" Type="datetime" Precision="0" />
           <Property Name="Enable" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reportxml">
+          <Key>
+            <PropertyRef Name="SchedName" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="JobGroup" />
+          </Key>
+          <Property Name="SchedName" Type="varchar" MaxLength="120" Nullable="false" />
+          <Property Name="JobName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="JobGroup" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Xml" Type="mediumtext" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.quartz.assortment" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -46,6 +59,21 @@
           <Property Name="CatalogId" Type="uint" Nullable="false" />
           <Property Name="CatalogName" Type="varchar" MaxLength="511" />
           <Property Name="IsPharmacie" Type="bool" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.quartz.mailformwithfooter" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="mailformwithfooter">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Subject" />
+            <PropertyRef Name="IsBodyHtml" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Subject" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Body" Type="mediumtext" />
+          <Property Name="Footer" Type="text" />
+          <Property Name="IsBodyHtml" Type="bool" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="250" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.quartz.pharmacynames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -103,6 +131,7 @@
         </EntityType>
         <EntityContainer Name="Хранилище ReportDataModelContainer">
           <EntitySet Name="jobextend" EntityType="Self.jobextend" Schema="quartz" store:Type="Tables" />
+          <EntitySet Name="reportxml" EntityType="Self.reportxml" Schema="quartz" store:Type="Tables" />
           <EntitySet Name="assortment" EntityType="Self.assortment" store:Type="Views" store:Schema="quartz">
             <DefiningQuery>SELECT
 `assortment`.`CatalogId`, 
@@ -117,6 +146,16 @@ FROM `assortment` AS `assortment`</DefiningQuery>
 `catalognames`.`CatalogName`, 
 `catalognames`.`IsPharmacie`
 FROM `catalognames` AS `catalognames`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="mailformwithfooter" EntityType="Self.mailformwithfooter" store:Type="Views" store:Schema="quartz">
+            <DefiningQuery>SELECT
+`mailformwithfooter`.`Id`, 
+`mailformwithfooter`.`Subject`, 
+`mailformwithfooter`.`Body`, 
+`mailformwithfooter`.`Footer`, 
+`mailformwithfooter`.`IsBodyHtml`, 
+`mailformwithfooter`.`Description`
+FROM `mailformwithfooter` AS `mailformwithfooter`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="pharmacynames" EntityType="Self.pharmacynames" store:Type="Views" store:Schema="quartz">
             <DefiningQuery>SELECT
@@ -173,6 +212,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="catalognames" EntityType="ReportDataModel.catalognames" />
           <EntitySet Name="usernames" EntityType="ReportDataModel.usernames" />
           <EntitySet Name="jobextend" EntityType="ReportDataModel.jobextend" />
+          <EntitySet Name="reportxml" EntityType="ReportDataModel.reportxml" />
+          <EntitySet Name="mailformwithfooter" EntityType="ReportDataModel.mailformwithfooter" />
         </EntityContainer>
         <EntityType Name="suppliernames">
           <Key>
@@ -246,7 +287,33 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Creator" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" />
           <Property Name="LastModified" Type="DateTime" Nullable="false" />
+          <Property Name="DisplayStatus" Type="Int32" Nullable="false" />
+          <Property Name="LastRun" Type="DateTime" />
           <Property Name="Enable" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reportxml">
+          <Key>
+            <PropertyRef Name="SchedName" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="JobGroup" />
+          </Key>
+          <Property Name="SchedName" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="JobGroup" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Xml" Type="String" Nullable="false" MaxLength="16777215" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="mailformwithfooter">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Subject" />
+            <PropertyRef Name="IsBodyHtml" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Body" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Footer" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="IsBodyHtml" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -321,6 +388,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <EntityTypeMapping TypeName="ReportDataModel.jobextend">
               <MappingFragment StoreEntitySet="jobextend">
                 <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="LastRun" ColumnName="LastRun" />
+                <ScalarProperty Name="DisplayStatus" ColumnName="DisplayStatus" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
@@ -331,6 +400,28 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="JobGroup" ColumnName="JobGroup" />
                 <ScalarProperty Name="JobName" ColumnName="JobName" />
                 <ScalarProperty Name="SchedName" ColumnName="SchedName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reportxml">
+            <EntityTypeMapping TypeName="ReportDataModel.reportxml">
+              <MappingFragment StoreEntitySet="reportxml">
+                <ScalarProperty Name="Xml" ColumnName="Xml" />
+                <ScalarProperty Name="JobGroup" ColumnName="JobGroup" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="SchedName" ColumnName="SchedName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mailformwithfooter">
+            <EntityTypeMapping TypeName="ReportDataModel.mailformwithfooter">
+              <MappingFragment StoreEntitySet="mailformwithfooter">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsBodyHtml" ColumnName="IsBodyHtml" />
+                <ScalarProperty Name="Footer" ColumnName="Footer" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

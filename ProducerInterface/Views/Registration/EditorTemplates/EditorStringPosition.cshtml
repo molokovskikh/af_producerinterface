@@ -1,6 +1,6 @@
 ﻿@model String
 
-<div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-    <label>@Html.LabelFor(m => m)<span class="required"></span></label>
+<div class="form-group">
+    <label>@Html.LabelFor(m => m)<strong class="required">*</strong></label>
     @Html.TextBoxFor(model => model, null, new { @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12" })  
 </div>

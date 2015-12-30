@@ -6,7 +6,7 @@
     //$('#MailTo').chosen({ width: '95%' });
 
     var ProducerUser = $('#Producers');
-    ProducerUser.chosen({ width: '90%' });
+    ProducerUser.chosen({ width: '60%' });
 });
 //    // при чеке За предыдущий месяц гасим выбор интервала
 //    var bm = $('#ByPreviousMonth');
@@ -24,7 +24,7 @@
 //    $('#RegionCodeEqual').on('change', function () {
 //        var sup = $('#SupplierIdNonEqual');
 //        var prm = $(this).serialize() + "&" + sup.serialize();
-//        $.getJSON('/ProducerInterface/Report/GetSupplierJson', prm, function (data) {
+//        $.getJSON('/ProducerInterfaceControlPanel/Report/GetSupplierJson', prm, function (data) {
 //            sup.children().remove();
 //            $.each(data.results, function (index, item) {
 //                var op = $('<option></option>')

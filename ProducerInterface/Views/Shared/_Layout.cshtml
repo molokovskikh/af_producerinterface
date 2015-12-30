@@ -1,6 +1,6 @@
 ﻿@using ProducerInterface.Models
 @using System.Web.Mvc.Html
-@model ProducerInterface.Models.LoginValidation
+
 
 @{
     var user = ViewBag.CurrentUser;
@@ -19,7 +19,10 @@
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
+<body name="main_container" class="main_container" id="main_container">
+
+    @*<div class="container col-sm-12 col-lg-12 col-md-12" style="height:1000em;position:absolute; background-color:white;">
+    </div>*@
 
     <div class="server-message" style="font-size:1.5em; text-align:center;"></div>
 
@@ -38,78 +41,53 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="@Url.Action("Index","Home")"><span class="glyphicon glyphicon-home"></span> Главная</a></li>
-
-                </ul>
-                <ul class="nav navbar-nav navbar-right" role="navigation">
-                    @if (user != null)
+                    @*<li><a href="@Url.Action("Index","Home")"><span class="glyphicon glyphicon-home"></span> Главная</a></li>*@
+                    @if(user != null)
                     {
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle"> <span class="glyphicon glyphicon-align-justify"></span>&nbsp; Разделы сайта</a>
+                        <li><a href="~/Report/JobList/"><span class="glyphicon glyphicon-th-list"> </span> Отчеты</a></li>
+                        <li><a href="~/Profile/Promotions/"><span class="glyphicon glyphicon-star-empty"> </span> Акции</a></li>
+                        <li><a href="~/Profile/Products/"><span class="glyphicon glyphicon-align-justify"> </span> Описания препаратов</a></li>
+                    }
+                </ul>
 
-                            <ul class="dropdown-menu">
-                                <li><a href="/Report/JobList">Отчеты</a></li>
-                                <li><a href="#">Акции</a></li>
-                                <li><a href="#">Описания препаратов</a></li>
-                            </ul>
-                        </li>
-
+        @if (user != null)
+        {                 
+                    <ul class="nav navbar-nav navbar-right" role="navigation">
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Email</a>
-
                             <ul class="dropdown-menu">
-                                <li><a href="/Profile/Index">Кабинет произврдителя</a></li>
-                                <li><a href="/Registration/LogOut">Выход</a></li>
+                                <li><a href="~/Profile/Index">Кабинет произврдителя</a></li>
+                                <li class="divider"></li>
+                                <li><a href="@Url.Action("ChangePassword","Registration")">Сменить пароль</a></li>   
+                                <li class="divider"></li>
+                                <li><a href="~/Registration/LogOut">Выход</a></li>
                             </ul>
-                        </li>    
-                                    
-                    }
-                    else
-                    {
-                    <li><a href="@Url.Action("Registration", "Registration")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
-                    <li class="dropdown">
-                       
-                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                                    <span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu" style="width:300px; padding:10px; padding-bottom:0px;">
-                                    <form method="post" action="~/Registration/UserAuthentication">
-                                        <div class="form-group-lg">
-                                            <div class="form-group">
-                                                @Html.TextBoxFor(model => model.login, null, new { @Name = "login", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12" , @placeholder="Логин"})
-                                                @Html.ValidationMessageFor(model => model.login)
-                                                <br/>
-                                                @*<input class="form-control input-group-lg" type="text" id="login" Name="login" placeholder="Логин" />*@
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.TextBoxFor(model => model.password, null, new { @Name = "password", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12", @placeholder="Пароль"})
-                                                @Html.ValidationMessageFor(model => model.password)
-                                                <br />
-                                                @*<input class="form-control input-group-lg" type="password" id="password" Name="password" placeholder="Пароль" />*@
-                                            </div>
-                                            <div class="form-group col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                        </li>
+                    </ul>
+        }
+        else
+        {
+                    <ul class="nav navbar-nav navbar-right" role="navigation">
 
-                                                <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-xs-12 col-md-12" value="Войти" />
-                                            </div>
-                                            <div class="form-group">
-                                                <center>
-                                                    <a href="#">Забыли пароль?</a>
-                                                </center>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>                                        
-                    </li>
-                    }
-                </ul>
+                        <li><a href="@Url.Action("Registration", "Registration")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
+                        <li class="dropdown">
+
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
+                            </a>
+                            @Html.Partial("LoginPartialView")
+                        </li>
+                    </ul>
+        }
             </div>
         </div>
     </div>
     <div class="container body-content">
-        <div class="otstup"></div>
-        @RenderBody()
+        <div class="content">
+            @RenderBody()
+        </div>
         <footer class="panel-footer navbar-fixed-bottom">
-            <center>
+            <center>             
                 <p>&copy; @DateTime.Now.Year – Аналит Фармация | Телефон:8-800-555-46-88</p>
             </center>
         </footer>
@@ -120,6 +98,6 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/WorkPlace/Analit.js"></script>
     <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
-    @RenderSection("scripts", required: false)
+    @RenderSection("JavaScript", required: false)
 </body>
 </html>

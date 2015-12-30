@@ -223,59 +223,59 @@ var jqCronDefaultSettings = {
 		};
 
 		// get cron value
-		//this.getCron = function(){
-		//	var period = _selectorPeriod.getValue();
-		//	var items = ['*', '*', '*', '*', '*'];
-		//	if(period == 'hour') {
-		//		items[0] = _selectorMins.getCronValue();
-		//	}
-		//	if(period == 'day' || period == 'week' || period == 'month' || period == 'year') {
-		//		items[0] = _selectorTimeM.getCronValue();
-		//		items[1] = _selectorTimeH.getCronValue();
-		//	}
-		//	if(period == 'month' || period == 'year') {
-		//		items[2] = _selectorDom.getCronValue();
-		//	}
-		//	if(period == 'year') {
-		//		items[3] = _selectorMonth.getCronValue();
-		//	}
-		//	if(period == 'week') {
-		//		items[4] = _selectorDow.getCronValue();
-		//	}
-		//	return items.join(' ');
-		//};
-
-		// To support Quartz https://github.com/arnapou/jqCron/issues/4
-		this.getCron = function () {
+		this.getCron = function(){
 			var period = _selectorPeriod.getValue();
-
-			// Add 0 as the first item in the array and increment the array index by 1 when setting the value in the below code
-			// Added ? where ever applicable in the cron expression to support quartz scheduler
-
-			var items = ['0', '*', '*', '*', '*', '*'];
-			if (period == 'hour') {
-				items[1] = _selectorMins.getCronValue();
-				items[5] = '?';  // To support Quartz
+			var items = ['*', '*', '*', '*', '*'];
+			if(period == 'hour') {
+				items[0] = _selectorMins.getCronValue();
 			}
-			if (period == 'day' || period == 'week' || period == 'month' || period == 'year') {
-				items[1] = _selectorTimeM.getCronValue();
-				items[2] = _selectorTimeH.getCronValue();
-				items[5] = '?';  // To support Quartz
+			if(period == 'day' || period == 'week' || period == 'month' || period == 'year') {
+				items[0] = _selectorTimeM.getCronValue();
+				items[1] = _selectorTimeH.getCronValue();
 			}
-			if (period == 'month' || period == 'year') {
-				items[3] = _selectorDom.getCronValue();
-				items[5] = '?';  // To support Quartz
+			if(period == 'month' || period == 'year') {
+				items[2] = _selectorDom.getCronValue();
 			}
-			if (period == 'year') {
-				items[4] = _selectorMonth.getCronValue();
-				items[5] = '?';  // To support Quartz
+			if(period == 'year') {
+				items[3] = _selectorMonth.getCronValue();
 			}
-			if (period == 'week') {
-				items[3] = '?';  // To support Quartz
-				items[5] = _selectorDow.getCronValue();
+			if(period == 'week') {
+				items[4] = _selectorDow.getCronValue();
 			}
 			return items.join(' ');
 		};
+
+		// To support Quartz https://github.com/arnapou/jqCron/issues/4
+		//this.getCron = function () {
+		//	var period = _selectorPeriod.getValue();
+
+		//	// Add 0 as the first item in the array and increment the array index by 1 when setting the value in the below code
+		//	// Added ? where ever applicable in the cron expression to support quartz scheduler
+
+		//	var items = ['0', '*', '*', '*', '*', '*'];
+		//	if (period == 'hour') {
+		//		items[1] = _selectorMins.getCronValue();
+		//		items[5] = '?';  // To support Quartz
+		//	}
+		//	if (period == 'day' || period == 'week' || period == 'month' || period == 'year') {
+		//		items[1] = _selectorTimeM.getCronValue();
+		//		items[2] = _selectorTimeH.getCronValue();
+		//		items[5] = '?';  // To support Quartz
+		//	}
+		//	if (period == 'month' || period == 'year') {
+		//		items[3] = _selectorDom.getCronValue();
+		//		items[5] = '?';  // To support Quartz
+		//	}
+		//	if (period == 'year') {
+		//		items[4] = _selectorMonth.getCronValue();
+		//		items[5] = '?';  // To support Quartz
+		//	}
+		//	if (period == 'week') {
+		//		items[3] = '?';  // To support Quartz
+		//		items[5] = _selectorDow.getCronValue();
+		//	}
+		//	return items.join(' ');
+		//};
 
 		// set cron (string like * * * * *)
 		this.setCron = function(str) {

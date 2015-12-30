@@ -52,7 +52,7 @@ namespace Quartz.Job
 		public List<OptionElement> GetRegionList()
 		{
 			var results = _cntx.regionnames
-				.OrderBy(x => x.RegionName).ToList()
+				.OrderBy(x => x.RegionName)
 				.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
 				.ToList();
 			return results;
@@ -64,7 +64,7 @@ namespace Quartz.Job
 			var producerId = _cntx.usernames.Single(x => x.UserId == _userId).ProducerId;
 			var results = _cntx.assortment
 				.Where(x => x.ProducerId == producerId)
-				.OrderBy(x => x.CatalogName).ToList()
+				.OrderBy(x => x.CatalogName)
 				.Select(x => new OptionElement { Value = x.CatalogId.ToString(), Text = x.CatalogName })
 				.ToList();
 			return results;
@@ -81,10 +81,18 @@ namespace Quartz.Job
 			var suppliers = _cntx.suppliernames.ToList();
 			var results = suppliers
 				.Where(x => ((ulong)x.HomeRegion.Value & regionMask) > 0)
-				.OrderBy(x => x.SupplierName).ToList()
+				.OrderBy(x => x.SupplierName)
 				.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName }).ToList();
 			return results;
 		}
 
-	}
+        public List<OptionElement> GetProducerList()
+        {
+            var X = _cntx.producernames.ToList().Select(xxx => new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList();
+            var Y = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
+            Y.AddRange(X);
+
+            return Y;
+        }
+    }
 }
