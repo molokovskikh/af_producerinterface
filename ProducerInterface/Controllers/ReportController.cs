@@ -38,18 +38,25 @@ namespace ProducerInterface.Controllers
             base.OnActionExecuting(filterContext);
 
             cntx = new reportData();
-          //  TODO: берётся у юзера
-          //  var CurrentUser = GetCurrentUser();
-            userId = CurrentUser.Id;
-            producerId =(long) CurrentUser.ProducerId;
-          //  cntx.usernames.Single(x => x.UserId == userId).ProducerId;
+            //  TODO: берётся у юзера            
+            try
+            {
+                userId = CurrentUser.Id;    
+                producerId =(long) CurrentUser.ProducerId;
+            }
+            catch
+            {
+                // Ignore
+            }
+
+            
 
             h = new NamesHelper(cntx, userId);
-#if DEBUG
+            #if DEBUG
             scheduler = GetDebagSheduler();
-#else
+            #else
 			scheduler = GetRemoteSheduler();
-#endif
+            #endif
         }
         
 
@@ -239,6 +246,8 @@ namespace ProducerInterface.Controllers
             var jobList = cntx.jobextend.Where(x => x.ProducerId == producerId
                                                                                             && x.SchedName == scheduler.SchedulerName
                                                                                             && x.Enable == true).ToList();
+
+
             return View(jobList);
         }
 

@@ -22,19 +22,23 @@
 }
 
 <div class="row margin5">
-    <div class="flabel col-md-4">
-        @Html.LabelFor(m => m)
-    </div>
-    <div class="@("feditor col-md-8" + errorClass)">
-        @Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new { style = "display: none;" })
-        @Html.ValidationMessageFor(m => m)
+    <div class="form-group">
+        <div class="flabel col-md-4">
+            @Html.LabelFor(m => m)
+        </div>
+        <div class="@("feditor col-md-8" + errorClass)">
+            @Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new { style = "display: none;" })
+            @Html.ValidationMessageFor(m => m)
+        </div>
     </div>
 </div>
 
 <div class="row margin5">
-    <div class="flabel col-md-4">&nbsp;</div>
-    <div class="feditor col-md-8">
-        Адрес @Html.TextBox("addMail")
-        <input type="button" id="addBtn" name="addBtn" value="добавить" />
+    <div class="form-group">
+        <div class="flabel col-md-4">&nbsp;</div>
+        <div class="feditor col-md-8">
+            Адрес @Html.TextBox("addMail")
+            <input type="button" id="addBtn" name="addBtn" value="добавить" />
+        </div>
     </div>
 </div>
