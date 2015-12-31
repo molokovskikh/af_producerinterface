@@ -23,6 +23,12 @@ left:10px;
 #main_container{
  height: 100%;
 }
+.form-control-mycontrol {
+min-width: 0;
+width: 100% !important;
+display: inline;
+
+}
 
 .body-content {
     height: 100%;

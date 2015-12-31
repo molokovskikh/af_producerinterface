@@ -3,25 +3,31 @@
 @model promotions
 @{
     ViewBag.Title = "Добавить новость";
-    Layout = "~/Views/Shared/_Layout.cshtml";   
- 
+    Layout = "~/Views/Shared/_Layout.cshtml";  
 }
 
-
-    <div class="row">
+    <div class="row" style="width:100%;">
     
-        <h3>@(Model != null && Model.Id != 0 ? "@Model.Name" : "Новая акция")</h3>        
-                   
+        <h3>@(Model != null && Model.Id != 0 ? "@Model.Name" : "Новая акция")</h3> 
         <br/>   
     @using (Html.BeginForm("ManagePromotion", "Profile", FormMethod.Post))
     {
         @Html.HiddenFor(s => s.Id)
 
+        <div class="row" style="width:100%;">            
+            <div class="form-group">
+                <label class="control-label">Заголовок:</label>          
+                @Html.TextBoxFor(s => s.Name, new { @Name = "promotion.Name", @Class = "form-control form-control-mycontrol", @Placeholder = "Заголовок" })
+            </div>
+        </div>
+
         <div class="row">
-            <div class="page-header">
-                <label class="control-label">Заголовок:</label>
-                @Html.TextBoxFor(s => s.Name, new { @Name = "promotion.Name", @Class = "form-control width-default", @Placeholder = "Заголовок", @style="width:100%;" })
-            </div>          
+            <div class="form-group">
+                <label class="control-label">Содержание:</label>
+                @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control width-default", @Rows = "7" })
+            </div>
+            <label>Список лекарств, участвующих в акции: </label>
+            @Html.EditorFor(Model => Model.DrugList)
         </div>
 
         <div class="row">
@@ -31,15 +37,7 @@
             <div class="form-group">
                 @Html.EditorFor(m => m.End, new { @class = "form-control" })
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label class="control-label">Содержание:</label>
-                @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control width-default", @Rows = "7" })
-            </div>
-            <label>Список лекарств, участвующих в акции: </label>
-            @Html.EditorFor(Model => Model.DrugList)
-        </div>
+        </div>      
         <div class="row" style="margin-top:25px;">
             <div class="col-xs-12 col-sm-6 col-md-6 box">
                 <a href="@Url.Action("Promotions")" class="btn btn-primary">Назад</a>
