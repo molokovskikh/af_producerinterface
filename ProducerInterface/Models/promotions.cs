@@ -30,21 +30,10 @@ namespace ProducerInterface.Models
         public string PromoFile { get; set; }
         public bool AgencyDisabled { get; set; }
         public string Name { get; set; }
-        public decimal RegionMask { get; set; }
-
-        [UIHint("Date")]
-        [Display(Name="Дата начала акции:")]
-        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
-        public Nullable<System.DateTime> Begin { get; set; }
-
-        [UIHint("Date")]
-        [Display(Name = "Дата окончания акции:")]
-        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+        public decimal RegionMask { get; set; }    
+        public Nullable<System.DateTime> Begin { get; set; }        
         public Nullable<System.DateTime> End { get; set; }
-        public bool Status { get; set; }
-    
-
-        [UIHint("LongList")]
+        public bool Status { get; set; }           
         public virtual List<long> DrugList { get; set; }
         public virtual produceruser produceruser { get; set; }
         public virtual produceruser produceruser1 { get; set; }

@@ -6,7 +6,7 @@
     //$('#MailTo').chosen({ width: '95%' });
 
     var ProducerUser = $('#Producers');
-    ProducerUser.chosen({ width: '100%', height: '45px' });
+    ProducerUser.chosen({ width: '100%' });
 });
 //    // при чеке За предыдущий месяц гасим выбор интервала
 //    var bm = $('#ByPreviousMonth');

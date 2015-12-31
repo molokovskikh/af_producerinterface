@@ -21,25 +21,7 @@ namespace ProducerInterface.Controllers
             base.OnActionExecuting(filterContext);
             ViewBag.BreadCrumb = "Профиль пользователя";            
         }
-        protected Quartz.IScheduler scheduler;
-
-        protected IScheduler GetRemoteSheduler()
-        {
-            var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
-            var sf = new StdSchedulerFactory(props);
-            var scheduler = sf.GetScheduler();
-
-            // проверяем имя шедулера
-            if (scheduler.SchedulerName != "ServerScheduler")
-                throw new NotSupportedException("Должен использоваться ServerScheduler");
-
-            // проверяем удалённый ли шедулер
-            var metaData = scheduler.GetMetaData();
-            if (!metaData.SchedulerRemote)
-                throw new NotSupportedException("Должен использоваться удалённый ServerScheduler");
-
-            return scheduler;
-        }
+    
 
         public ActionResult Index()
         {
@@ -61,20 +43,16 @@ namespace ProducerInterface.Controllers
         public ActionResult Promotions()
         {
             var currentUser = GetCurrentUser();
-            var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
-            ViewBag.PromotionList = list;
-            return View();
+            //var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
+            IEnumerable<Models.promotions> list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId).ToList();        
+            return View(list);
         }
 
         public ActionResult ManagePromotion(long? id)
         {
-            var CurrentPromotion = new promotions();
+            PromotionValidation ViewPromotion = new PromotionValidation();
             var currentUser = GetCurrentUser();
-
-            var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
-            var sf = new StdSchedulerFactory(props);
-            var scheduler = sf.GetScheduler();
-            var ModelView = new Models.RegistrerValidation();
+            var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");         
             Quartz.Job.EDM.reportData cntx;
             Quartz.Job.NamesHelper h;
             cntx = new Quartz.Job.EDM.reportData();
@@ -85,15 +63,81 @@ namespace ProducerInterface.Controllers
             {
                 //ViewBag.CurrentPromotion = DbSession.Query<Promotion>().FirstOrDefault(s => s.Id == id);
                 // редактирование существующей
-                CurrentPromotion = _BD_.promotions.FirstOrDefault(x => x.Id == id); 
+         
+                ViewPromotion = _BD_.promotions.Where(xxx=>xxx.Id == id).ToList().Select(xxx=> new PromotionValidation {Id=xxx.Id, Name= xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, DrugList = xxx.DrugList, Status = xxx.Status}).FirstOrDefault();
+                ViewPromotion.DrugList = _BD_.promotiontodrug.Where(xxx => xxx.PromotionId == id).ToList().Select(xxx => xxx.DrugId).ToList();
             }
             else {              
-                // Создание новой акции нежное значение уже присвоено
+                // Создание новой акции нужное значение уже присвоено
                 //var CurrentPromotion = new promotions();
             }
-            return View(CurrentPromotion);
+            int TEMPO = 1;
+            return View(ViewPromotion);
         }
 
+        [HttpPost]
+        public ActionResult ManagePromotion(PromotionValidation New_and_Edit_Promotion)
+        {
+            var model = New_and_Edit_Promotion;
+                   
+
+            if (ModelState.IsValid)
+            {
+                produceruser user_ = GetCurrentUser();
+                promotions NewPromotion = new promotions();
+
+                NewPromotion.UpdateTime = SystemTime.Now();
+                NewPromotion.ProducerId = (long)user_.ProducerId;
+                NewPromotion.ProducerUserId = user_.Id;
+                NewPromotion.Status = false;
+
+                NewPromotion.Name = model.Name;
+                NewPromotion.Annotation = model.Annotation;
+                NewPromotion.Begin = model.Begin;
+                NewPromotion.End = model.End;
+                NewPromotion.RegionMask = 1;
+           //     NewPromotion.DrugList = model.DrugList;            
+
+                if (model.Id == 0)
+                {
+                    model.Id = default(long);
+                    NewPromotion.Id = default(long);
+                    _BD_.Entry(NewPromotion).State = System.Data.Entity.EntityState.Added;
+                    _BD_.SaveChanges();                                
+                }
+                else
+                { 
+                    NewPromotion.Id = model.Id;
+                    _BD_.Entry(NewPromotion).State = System.Data.Entity.EntityState.Modified;
+                    List<promotiontodrug> LST = _BD_.promotiontodrug.Where(xxx => xxx.PromotionId == model.Id).ToList();
+
+                    foreach (var DrugInPromotion in LST)
+                    {
+                        _BD_.promotiontodrug.Remove(DrugInPromotion);
+                    }                 
+                }
+
+                foreach (var X in model.DrugList)
+                {
+                    _BD_.Entry(new Models.promotiontodrug { DrugId = X, PromotionId = model.Id }).State = System.Data.Entity.EntityState.Added;
+                }
+                _BD_.SaveChanges();
+
+                SuccessMessage("Акция добавлена(изменена), в списке отобразится после подсверждения");
+                return RedirectToAction("Promotions", "Profile");
+
+            }
+            else
+            {
+                Quartz.Job.EDM.reportData cntx;
+                Quartz.Job.NamesHelper h;
+                cntx = new Quartz.Job.EDM.reportData();
+                h = new Quartz.Job.NamesHelper(cntx, CurrentUser.Id);
+
+                ViewData["DrugList"] = h.GetCatalogList();
+                return View(model);
+            }
+        }
 
 
 

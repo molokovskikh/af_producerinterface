@@ -1,4 +1,6 @@
-﻿@{
+﻿@using ProducerInterface.Models;
+@model IEnumerable<ProducerInterface.Models.promotions>
+@{
 	ViewBag.Title = "Промо-акции";
 	Layout = "~/Views/Shared/_Layout.cshtml";	
 }
@@ -17,28 +19,38 @@
             
             <hr/>
             	
-            @if (ViewBag.PromotionList != null && ViewBag.PromotionList.Count > 0)
+            @if (Model != null && Model.Count() > 0)
             {
-				foreach (var item in ViewBag.PromotionList)
-                {
-					<article class="post">
-						<h2 class="entry-title">
-							@item.Name
-						</h2>
-						<div class="entry-content">
-							@item.Annotation
-						</div>
-						<footer class="entry-meta">
-							<span class="autor-name">@item.ProducerUser.Name</span>,
-							<span class="time">@item.UpdateTime</span>
-							<span class="separator">|</span>
-							<span class="meta">Добавлено в <a href="#">промо-акции</a>, <a href="#">Препараты</a></span>
-							<span class="comments-link pull-right">
-									<a href="@Url.Action("ManagePromotion", new { id = item.Id })"><i class="fa fa-pencil"></i>  изменить</a>
-								</span>
-						</footer>
-					</article>
-                }
+
+                <div class="row">
+                    <table class="table-striped table-bordered">
+                        <tr>
+                            <th>Заголовок</th>
+                            <th>Содержание</th>
+                            <th>Добавлено</th>
+                            <th>Препараты</th>
+                            <th>Действия</th>
+                            <th>Статус</th>
+                        </tr>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Annotation</td>
+                                <td>@item.ProducerUserId</td>
+                                <td>@* @item.promotiontodrug  *@</td>
+                                <td><a href="@Url.Action("ManagePromotion", new { Id = item.Id })" title="Редактировать"><span class="glyphicon glyphicon-th-list"></span></a>
+                                </td>
+                                <td>
+                                    <p>@(item.Status == false ? "Не подтверждена" : "Подтверждена")</p>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             }
             else
             {

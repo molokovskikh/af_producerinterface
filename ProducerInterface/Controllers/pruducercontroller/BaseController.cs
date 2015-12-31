@@ -14,31 +14,13 @@ namespace ProducerInterface.Controllers.pruducercontroller
         {
              base.OnActionExecuting(filterContext);
 
-            // действие до начала нашего экшена
-            
-            //ViewBag.ActionName = filterContext.RouteData.Values["action"].ToString();
-            //ViewBag.ControllerName = GetType().Name.Replace("Controller", "");
-            //ViewBag.Controller = this;
-
-            //CurrentUser = AutorizedUser;
-
-            //if (CurrentUser != null)
-            //{
-            //    string redirectUrl = IsSecuredController(this, filterContext);
-            //    if (redirectUrl != String.Empty)
-            //    {
-            //        filterContext.Result = new RedirectResult(redirectUrl, true);
-            //    }
-            //}
-
-            //produceruser User_ = GetCurrentUser();
-            //ViewBag.CurrentUser = User_;
-
-            //ViewBag.LoginModel = new Models.LoginValidation();
+            // действие до начала нашего экшена      
 
             AutorizedUser = GetUser(this);
+
             CurrentUser = GetCurrentUser();            
             ViewBag.CurrentUser = CurrentUser;
+            
 
             CheckForExsistenceOfUserPermission();
             //// проверяем есть ли пермишн к данному контролер/акшену,
@@ -110,7 +92,9 @@ namespace ProducerInterface.Controllers.pruducercontroller
                     string name = ticket.Name;
                     string userData = ticket.UserData;
                     string version = ticket.Version.ToString();
-                    currentUser.Name = name;
+                    currentUser.Name = name;             
+                    authCookie.Expires = SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
+                    Response.Cookies.Set(authCookie);
                 }
             }
             catch (Exception) { /*IGNORE*/ }
@@ -328,7 +312,10 @@ namespace ProducerInterface.Controllers.pruducercontroller
                 CurrentUser = _BD_.produceruser.FirstOrDefault(e => e.Email == AutorizedUser.Name);
             }
             return CurrentUser;
-        }
+
+
+
+        }       
 
         public string GetRandomPassword()
         {      

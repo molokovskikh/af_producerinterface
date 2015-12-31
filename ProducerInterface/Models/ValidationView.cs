@@ -3,11 +3,56 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Quartz.Job.Models;
 
 namespace ProducerInterface.Models
 {
     public class ValidationView
     {
+    }
+
+    public class PromotionValidation
+    {
+        public long Id { get; set; }
+
+        public PromotionValidation()
+        {
+               
+        }
+
+        [Display(Name = "Заголовок")]
+        [Required(ErrorMessage = " Название акции не заполнено")]
+        public string Name { get; set; }
+
+        [Display(Name = "Содержание")]
+        [Required(ErrorMessage = "Добавьте содержание")]
+        public string Annotation { get; set; }
+
+        [UIHint("Date")]
+        [Display(Name = "Дата начала акции")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+
+        public Nullable<System.DateTime> Begin { get; set; }
+
+        [UIHint("Date")]
+        [Display(Name = "Дата окончания акции")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+
+        public Nullable<System.DateTime> End { get; set; }
+        public bool Status { get; set; }
+
+        [UIHint("LongList")]
+        [Required(ErrorMessage = "Добавьте лекарства участвующие в акции")]
+        public virtual List<long> DrugList { get; set; }
+
+        //public override List<ErrorMessage> Validate()
+        //{
+        //    var errors = new List<ErrorMessage>();           
+        //    if (arrInput.Length != 5)
+        //        errors.Add(new ErrorMessage("", "Неправильный формат строки Cron"));
+        //    return errors;
+        //}
+
     }
 
     public class LoginValidation

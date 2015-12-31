@@ -27,7 +27,6 @@ left:10px;
 min-width: 0;
 width: 100% !important;
 display: inline;
-
 }
 
 .body-content {
@@ -37,6 +36,10 @@ background-color:white;
 padding:50px;
 height:100%;
 border:1px solid #ccc !important;
+}
+
+.form-refactoring-w400 {
+max-width:400px;
 }
 
 .form-group-otstup {
