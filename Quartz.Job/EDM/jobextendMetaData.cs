@@ -40,7 +40,7 @@ namespace Quartz.Job.EDM
 		[ScaffoldColumn(false)]
 		public int ReportType { get; set; }
 
-		[Display(Name = "Тип")]
+		[Display(Name = "Тип и Параметры")]
 		public Reports ReportTypeEnum { get; }
 
 		[ScaffoldColumn(false)]

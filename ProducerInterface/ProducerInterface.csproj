@@ -174,6 +174,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OldProfileController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\pruducercontroller\BaseController.cs" />
     <Compile Include="Controllers\pruducercontroller\ConfigurationController.cs" />
@@ -403,6 +404,7 @@
     <Folder Include="Views\Autorization\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Configuration\" />
+    <Folder Include="Views\OldProfile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
