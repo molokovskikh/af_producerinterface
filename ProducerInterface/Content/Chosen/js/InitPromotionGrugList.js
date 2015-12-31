@@ -6,7 +6,7 @@
     //$('#MailTo').chosen({ width: '95%' });
 
     var DrugList = $('#DrugList');
-    DrugList.chosen({ width: '60%' });
+    DrugList.chosen({ width: '100%' });
 });
 //    // при чеке За предыдущий месяц гасим выбор интервала
 //    var bm = $('#ByPreviousMonth');

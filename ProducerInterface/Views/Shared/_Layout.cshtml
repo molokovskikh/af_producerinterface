@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Аналит @ViewBag.Title</title>
 
+    <link href="~/Content/Chosen/css/Site.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
@@ -92,10 +93,10 @@
             </center>
         </footer>
     </div>
-
+  
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/WorkPlace/Analit.js"></script>
     <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
     @RenderSection("JavaScript", required: false)

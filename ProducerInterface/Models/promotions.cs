@@ -31,7 +31,15 @@ namespace ProducerInterface.Models
         public bool AgencyDisabled { get; set; }
         public string Name { get; set; }
         public decimal RegionMask { get; set; }
+
+        [UIHint("Date")]
+        [Display(Name="Дата начала акции:")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public Nullable<System.DateTime> Begin { get; set; }
+
+        [UIHint("Date")]
+        [Display(Name = "Дата окончания акции:")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public Nullable<System.DateTime> End { get; set; }
         public bool Status { get; set; }
     

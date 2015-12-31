@@ -13,9 +13,9 @@
   }
 }
 <div class="row margin5">
-    <div class="flabel col-md-4">
+    @*<div class="flabel col-md-4">
         @Html.LabelFor(m => m)
-    </div>
+    </div>*@
     <div class="@("feditor col-md-8" + errorClass)">
         @Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new {style = "display: none;"})
         @Html.ValidationMessageFor(m => m)

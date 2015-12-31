@@ -396,6 +396,7 @@
     <Content Include="Views\Report\EditorTemplates\CronIntervalParam.cshtml" />
     <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\LongList.cshtml" />
+    <Content Include="Views\Profile\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

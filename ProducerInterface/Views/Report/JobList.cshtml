@@ -45,12 +45,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomName)
-
                     <a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета"><span class="glyphicon glyphicon-th-list"></span></a>
-                    <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-play" title="Разовое формирование отчета за истекшие периоды времени и даты"></span></a>
                     <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-ban-circle" title="Удалить отчет"></span></a>
-
+                    
+                    @Html.DisplayFor(modelItem => item.CustomName)               
                 </td>
                 <td>
                     @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
@@ -62,10 +60,12 @@
                     @Html.DisplayFor(modelItem => item.Creator)
                 </td>
                 <td>
+                    <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-play" title="Разовое формирование отчета за истекшие периоды времени и даты"></span></a>
                     @Html.DisplayFor(modelItem => item.LastRun)
                 </td>
                 <td class="@(item.DisplayStatusEnum == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup }))">
-                    @if (item.DisplayStatusEnum == DisplayStatus.Ready)
+                 
+                     @if (item.DisplayStatusEnum == DisplayStatus.Ready)
                     {
                         <a href="@Url.Action("DisplayReport", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })">
                             @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
