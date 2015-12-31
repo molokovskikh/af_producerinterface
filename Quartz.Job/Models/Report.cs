@@ -47,6 +47,8 @@ namespace Quartz.Job.Models
 		public virtual List<ErrorMessage> Validate()
 		{
 			var errors = new List<ErrorMessage>();
+			if (MailTo == null)
+				return errors;
 			var ea = new EmailAddressAttribute();
 			var ok = true;
 			foreach (var mail in MailTo)
