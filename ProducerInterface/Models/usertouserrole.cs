@@ -19,10 +19,10 @@ namespace ProducerInterface.Models
         public Nullable<long> UserPermissionId { get; set; }
         public long Id { get; set; }
     
-        public virtual produceruser produceruser { get; set; }
-        public virtual produceruser produceruser1 { get; set; }
+        public virtual userrole userrole { get; set; }
         public virtual userpermission userpermission { get; set; }
         public virtual userpermission userpermission1 { get; set; }
-        public virtual userrole userrole { get; set; }
+        public virtual produceruser produceruser { get; set; }
+        public virtual produceruser produceruser1 { get; set; }
     }
 }

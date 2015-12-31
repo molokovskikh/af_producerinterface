@@ -17,7 +17,7 @@ namespace ProducerInterface.Models
         public Nullable<long> UserPermissionId { get; set; }
         public long UserRoleId { get; set; }
     
-        public virtual userpermission userpermission { get; set; }
         public virtual userrole userrole { get; set; }
+        public virtual userpermission userpermission { get; set; }
     }
 }

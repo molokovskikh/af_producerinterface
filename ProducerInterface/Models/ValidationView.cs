@@ -82,7 +82,7 @@ namespace ProducerInterface.Models
         [UIHint("EditorMailReg")]
         [Display(Name = "E-mail")]
         [Required(ErrorMessage = "Введите E-mail")]
-        [EmailAddress(ErrorMessage = "Введите корректынй E-mail")]
+        [EmailAddress(ErrorMessage = "Введите корректый E-mail")]
         public string login { get; set; }
                    
 
@@ -94,7 +94,7 @@ namespace ProducerInterface.Models
       
         [UIHint("EditorProducer")]
         [Required(ErrorMessage = "Выберите компанию")]
-        [Display(Name = "Выберите вышу компанию: ")]
+        [Display(Name = "Выберите вашу компанию: ")]
         public long Producers { get; set; }
     }
 
@@ -103,7 +103,7 @@ namespace ProducerInterface.Models
         [UIHint("EditorMail")]
         [Display(Name = "E-mail")]
         [Required(ErrorMessage = "Введите E-mail")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Введите корректынй E-mail")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Введите корректый E-mail")]
         public string login { get; set; }
     }
 

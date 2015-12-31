@@ -12,9 +12,10 @@ namespace ProducerInterface.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class producernames
+    public partial class drugfamily
     {
+        public long FamilyId { get; set; }
+        public string FamilyName { get; set; }
         public long ProducerId { get; set; }
-        public string ProducerName { get; set; }
     }
 }

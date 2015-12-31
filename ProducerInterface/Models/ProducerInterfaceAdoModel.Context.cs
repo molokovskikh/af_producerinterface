@@ -25,19 +25,18 @@ namespace ProducerInterface.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<drugdescriptionremark> drugdescriptionremark { get; set; }
         public DbSet<producers> producers { get; set; }
-        public DbSet<produceruser> produceruser { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<user_logs> user_logs { get; set; }
-        public DbSet<userpermission> userpermission { get; set; }
         public DbSet<userrole> userrole { get; set; }
         public DbSet<usertouserrole> usertouserrole { get; set; }
-        public DbSet<promotiontodrug> promotiontodrug { get; set; }
         public DbSet<userpermissionrole> userpermissionrole { get; set; }
-        public DbSet<producernames> producernames { get; set; }
-        public DbSet<produserslist> produserslist { get; set; }
+        public DbSet<userpermission> userpermission { get; set; }
+        public DbSet<drugdescriptionremark> drugdescriptionremark { get; set; }
+        public DbSet<produceruser> produceruser { get; set; }
+        public DbSet<promotiontodrug> promotiontodrug { get; set; }
+        public DbSet<drugfamily> drugfamily { get; set; }
     }
 }

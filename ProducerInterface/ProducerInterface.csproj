@@ -173,8 +173,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DrugController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\OldProfileController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\pruducercontroller\BaseController.cs" />
     <Compile Include="Controllers\pruducercontroller\ConfigurationController.cs" />
@@ -184,6 +184,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\drugdescriptionremark.cs">
+      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\drugfamily.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmailSender.cs" />
@@ -203,16 +206,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ProducerInterfaceAdoModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\producernames.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\producers.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\produceruser.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\produserslist.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\profilenews.cs">
@@ -398,6 +395,8 @@
     <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\LongList.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Drug\Catalog.cshtml" />
+    <Content Include="Views\Drug\Index.cshtml" />
     <Content Include="Views\Report\Web.config">
       <SubType>Designer</SubType>
     </Content>
