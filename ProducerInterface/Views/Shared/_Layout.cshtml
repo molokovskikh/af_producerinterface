@@ -46,7 +46,7 @@
                     @if(user != null)
                     {
                         <li><a href="~/Report/JobList/"><span class="glyphicon glyphicon-th-list"> </span> Отчеты</a></li>
-                        <li><a href="~/Profile/Promotions/"><span class="glyphicon glyphicon-star-empty"> </span> Акции</a></li>
+                        <li><a href="~/Promotion/"><span class="glyphicon glyphicon-star-empty"> </span> Акции</a></li>
                         <li><a href="~/Drug/Index/"><span class="glyphicon glyphicon-align-justify"> </span> Описания препаратов</a></li>
                     }
                 </ul>
@@ -58,6 +58,8 @@
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Email</a>
                             <ul class="dropdown-menu">
                                 <li><a href="~/Profile/Index">Кабинет производителя</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/Permission/Index">Редактирование прав</a></li>
                                 <li class="divider"></li>
                                 <li><a href="@Url.Action("ChangePassword","Registration")">Сменить пароль</a></li>   
                                 <li class="divider"></li>
@@ -96,7 +98,12 @@
   
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/jqueryval")
+  
+    @if (user == null)
+    {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
     <script src="~/Scripts/WorkPlace/Analit.js"></script>
     <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
     @RenderSection("JavaScript", required: false)

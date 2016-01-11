@@ -34,9 +34,9 @@ namespace ProducerInterface.Models
         public DbSet<usertouserrole> usertouserrole { get; set; }
         public DbSet<userpermissionrole> userpermissionrole { get; set; }
         public DbSet<userpermission> userpermission { get; set; }
-        public DbSet<drugdescriptionremark> drugdescriptionremark { get; set; }
         public DbSet<produceruser> produceruser { get; set; }
-        public DbSet<promotiontodrug> promotiontodrug { get; set; }
         public DbSet<drugfamily> drugfamily { get; set; }
+        public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
+        public DbSet<promotionToDrug> promotionToDrug { get; set; }
     }
 }

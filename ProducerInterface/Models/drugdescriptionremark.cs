@@ -12,7 +12,7 @@ namespace ProducerInterface.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class drugdescriptionremark
+    public partial class DrugDescriptionRemark
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -36,6 +36,6 @@ namespace ProducerInterface.Models
         public Nullable<long> DrugFamilyId { get; set; }
         public Nullable<long> MNNId { get; set; }
     
-        public virtual produceruser produceruser { get; set; }
+        public virtual produceruser ProducerUser { get; set; }
     }
 }

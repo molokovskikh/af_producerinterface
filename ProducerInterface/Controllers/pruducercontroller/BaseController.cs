@@ -20,58 +20,15 @@ namespace ProducerInterface.Controllers.pruducercontroller
 
             CurrentUser = GetCurrentUser();            
             ViewBag.CurrentUser = CurrentUser;
-            
 
-            CheckForExsistenceOfUserPermission();
             //// проверяем есть ли пермишн к данному контролер/акшену,
             ////если нет то он добавится в БД и будет дан доступ всем Первым зарегистрировавшимся пользователям от каждого Производителя
+            CheckForExsistenceOfUserPermission();           
 
-            CheckPermission(this, filterContext, CurrentUser);
             //// проверяем права у пользователя 
-
-
+            CheckPermission(filterContext, CurrentUser);
         }
-
-        public ActionResult Autentificate(Controller currentController,bool shouldRemember, string userData = "")
-        {
-            string autorizeddd = Autentificates(this, AutorizedUser.Email, shouldRemember, userData);
-
-            string controllerName = (autorizeddd.Split(new Char[] { '/' }))[0];
-            string actionName = (autorizeddd.Split(new Char[] { '/' }))[1];
-            return RedirectToAction(actionName, controllerName);
-        }
-
-        public string Autentificates(Controller CRT,string username,bool shouldRemember,string userData = "")
-        {
-            string CoockieName = GetCoockieName;
-
-            var redirectAfterAuthentication = GetredirectAfterAuthentication;
-            string[] url = redirectAfterAuthentication.Split('/');
-            var controller = url[0];
-            var action = url.Length > 1 ? url[1] : "Index";
-
-            var ticket = new FormsAuthenticationTicket(
-                1,
-                this.AutorizedUser.Email,
-                SystemTime.Now(),
-                SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
-                shouldRemember,
-                userData,
-                FormsAuthentication.FormsCookiePath
-                );
-
-            var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
-
-            if (shouldRemember)
-            {
-                cookie.Expires = SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
-            }
-            FormsAuthentication.SetAuthCookie(AutorizedUser.Name, false);
-            Response.Cookies.Set(cookie);
-
-            return GetredirectAfterAuthentication;
-        }
-
+        
         public produceruser GetUser(Controller currentController)
         {
             var currentUser = new produceruser();
@@ -102,7 +59,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
             return currentUser;
         }
 
-        public void CheckPermission(BaseController currentController, ActionExecutingContext filterContext, produceruser user_)
+        public void CheckPermission(ActionExecutingContext filterContext, produceruser user_)
         {
             var actionName = filterContext.RouteData.Values["action"].ToString();
             var controllerName = filterContext.Controller.GetType().Name.Replace("Controller", "");
@@ -120,18 +77,25 @@ namespace ProducerInterface.Controllers.pruducercontroller
                     {
                         ClearAllCookies();
                         this.ErrorMessage("У вас нет прав доступа к запрашиваемой странице.");
-                        filterContext.Result = RedirectToAction(actionName_, controllerName_);
+                        filterContext.Result = RedirectToAction(actionName_.ToLower(), controllerName_.ToLower());
                         // filterContext.Result = new RedirectResult(url);
                     }
                 }
                 else
-                {
-                    var PermissionsUser = _BD_.userpermission.FirstOrDefault(x => x.Name.ToLower() == currentPermissionName);
+                {                   
 
+                    var PermissionsUser = _BD_.userpermission.FirstOrDefault(x => x.Name.ToLower() == currentPermissionName);
+                    
                     if (CurrentUser != null && currentPermissionName != null && !CheckPermission(PermissionsUser))
                     {
-                        // this.ErrorMessage("1 У вас нет прав доступа к запрашиваемой странице.");
+                        //string url = GetredirectAfterAuthentication;
+                        //string actionName_ = (url.Split(new Char[] { '/' }))[1];
+                        //string controllerName_ = (url.Split(new Char[] { '/' }))[0];
+                        //filterContext.Result = RedirectToAction(actionName_, controllerName_);
                         // доступ есть!
+                        string url = GetredirectAfterAuthentication;
+
+
                     }
                     else
                     {
@@ -141,7 +105,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
                         string controllerName_ = (url.Split(new Char[] { '/' }))[0];
                         if (url != String.Empty)
                         {
-                            filterContext.Result = RedirectToAction(actionName_, controllerName_);
+                            filterContext.Result = RedirectToAction(actionName_.ToLower(), controllerName_.ToLower());
                         }
 
                     }
@@ -155,15 +119,14 @@ namespace ProducerInterface.Controllers.pruducercontroller
             {
                 return false;
             }
-            bool X = GetUserPermissions().Any(s => s.userpermission == permission);
-            return GetUserPermissions().Any(s => s.userpermission == permission);
+
+           bool X = GetUserPermissions().Any(s => s.userpermission.Name.ToLower() == permission.Name.ToLower());
+           return X;
         }
 
         public IList<usertouserrole> GetUserPermissions()
         {            
-            var permissionsList = AutorizedUser.usertouserrole.ToList();  
-            //	Roles.ForEach(s => permissionsList.AddRange(s.Permissions));
-           // permissionsList.AddRange(permissionsList);
+            var permissionsList = AutorizedUser.usertouserrole.ToList();          
             return permissionsList;
         }
 
@@ -268,7 +231,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
 
                 if (listPermission == null || listPermission.Count() == 0)
                 {
-                    // если в БД не найден пермишн, намм надо его добавить
+                    // если в БД не найден пермишн, нам надо его добавить
 
                     var permishion = new userpermission();
                     var url = this.Url.Action(actionName, controllerName);
@@ -278,20 +241,36 @@ namespace ProducerInterface.Controllers.pruducercontroller
                     _BD_.Entry(permishion).State = System.Data.Entity.EntityState.Added;
                     _BD_.SaveChanges();
                     //  и дать доступ всем пользователям (которые первыми зарегистрировались и подтвердили регистрацию от каждого Производителя.)
+                    // у данных пользователей есть пермишн, Admin_Admin (он может быть не только у первых зарегистрированных а так же у пользователей, которым дали данный доступ)
 
-                    List<produceruser> UsersProducerUser = _BD_.produceruser.Where(xxx => xxx.Enabled == 1)
-                        .GroupBy(xxx => xxx.ProducerId).Select(xxx => xxx.OrderByDescending(p => p.ProducerId).FirstOrDefault()).ToList();
+                    List<produceruser> UsersProducerUser = _BD_.produceruser.Where(xxx => xxx.Enabled == 1).ToList();
+
+                    List<produceruser> AdminPermission = new List<produceruser>();
+                    foreach (var x in UsersProducerUser)
+                    {
+                        string AdminPermissonName = System.Configuration.ConfigurationManager.AppSettings["AdminActionName"].ToString();
+                        long AdminPermissionId = _BD_.userpermission.Where(xxx => xxx.Name.ToLower().Contains(AdminPermissonName.ToLower())).Select(xxx => xxx.Id).First();
+                        bool PermissionAdmin = _BD_.usertouserrole.Any(xxx => xxx.Id == AdminPermissionId && xxx.ProducerUserId == x.Id);
+
+                        if (PermissionAdmin)
+                        {
+                            AdminPermission.Add(x);
+                        }
+
+                    }
+
+                       // .GroupBy(xxx => xxx.ProducerId).Select(xxx => xxx.OrderByDescending(p => p.ProducerId).FirstOrDefault()).ToList();
 
                     long idPermission = _BD_.userpermission.Where(xxx => xxx.Name == PermissionName).First().Id;
 
 
-                    foreach (var User in UsersProducerUser)
+                    foreach (var User in AdminPermission)
                     {
                         long IdUser = User.Id;
                         usertouserrole NewRole = new usertouserrole();
                         NewRole.UserPermissionId = idPermission;
                         NewRole.ProducerUserId = User.Id;
-                        _BD_.Entry(NewRole).State = System.Data.Entity.EntityState.Added;
+                        _BD_.usertouserrole.Add(NewRole);
                     }
 
                     _BD_.SaveChanges();

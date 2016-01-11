@@ -1,0 +1,72 @@
+﻿@using ProducerInterface.Models;
+@model IEnumerable<ProducerInterface.Models.promotions>
+@{
+    ViewBag.Title = "Промо-акции";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="main">
+    <div class="container">
+        <div class="row">
+            <div class="content blog col-sm-9 col-md-9">
+                <h3 class="title">Промо-акции</h3>
+                <p>
+                    <a href="@Url.Action("Manage")" class="btn btn-primary">
+                        <i class="fa fa-pencil"></i>
+                        <span>Добавить акцию</span>
+                    </a>
+                </p>
+
+                <hr />
+
+                @if (Model != null && Model.Count() > 0)
+            {
+
+                    <div class="row">
+                        <table class="table-striped table-bordered">
+                            <tr>
+                                <th>Заголовок</th>
+                                <th>Содержание</th>
+                                <th>Добавлено/Изменено</th>
+                                <th>Последнее изменение вносилось</th>
+                                <th>Препараты</th>
+                                <th>Действия</th>
+                                <th>Статус</th>
+                            </tr>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.Annotation</td>
+                                        <td>@item.produceruser.Name</td>
+                                        <td>@item.UpdateTime.ToString("dd-MM-yyyy")</td>
+                                        <td>@* @item.promotiontodrug  *@</td>
+                                        <td>
+                                            <a href="@Url.Action("Manage", new { Id = item.Id })" title="Редактировать"><span class="glyphicon glyphicon-th-list"></span></a>
+                                            <a href="@Url.Action("Delete", new { Id = item.Id })" title="Удалить"><span class="glyphicon glyphicon-remove-circle"></span></a>
+                                        </td>
+                                        <td>
+                                            <p>@(item.Status == false ? "Не подтверждена" : "Подтверждена")</p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="content blog col-sm-9 col-md-9">
+                            <h4>Акций не зарегистрировано</h4>
+                        </div>
+                    </div>
+                }
+            </div><!-- .content -->         
+        </div>
+    </div>
+    <!-- .container -->
+</section>
+<!-- #main -->

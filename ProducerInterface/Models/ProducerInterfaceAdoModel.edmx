@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Хранилище producerinterfaceModel" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="drugdescriptionremark">
+        <EntityType Name="DrugDescriptionRemark">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -38,7 +38,7 @@
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="text" />
         </EntityType>
-        <EntityType Name="produceruser">
+        <EntityType Name="ProducerUser">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -82,9 +82,7 @@
           <Property Name="End" Type="datetime" Precision="0" />
           <Property Name="Status" Type="bool" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "def.producerinterface.promotiontodrug" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <EntityType Name="promotiontodrug">
+        <EntityType Name="promotionToDrug">
           <Key>
             <PropertyRef Name="DrugId" />
             <PropertyRef Name="PromotionId" />
@@ -117,7 +115,7 @@
           <Property Name="Type" Type="tinyint" Nullable="false" />
           <Property Name="Message" Type="text" Nullable="false" />
         </EntityType>
-        <EntityType Name="userpermission">
+        <EntityType Name="UserPermission">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -164,13 +162,13 @@
           <Property Name="ProducerId" Type="uint" Nullable="false" />
         </EntityType>
         <Association Name="DrugDescriptionRemark_ProducerUserId">
-          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
-          <End Role="drugdescriptionremark" Type="Self.drugdescriptionremark" Multiplicity="*" />
+          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="0..1" />
+          <End Role="DrugDescriptionRemark" Type="Self.DrugDescriptionRemark" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="produceruser">
+            <Principal Role="ProducerUser">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="drugdescriptionremark">
+            <Dependent Role="DrugDescriptionRemark">
               <PropertyRef Name="ProducerUserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -189,21 +187,21 @@
         </Association>
         <Association Name="FK_promotioncatalogs_supplierpromotions">
           <End Role="promotions" Type="Self.promotions" Multiplicity="1" />
-          <End Role="promotiontodrug" Type="Self.promotiontodrug" Multiplicity="*" />
+          <End Role="promotionToDrug" Type="Self.promotionToDrug" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="promotions">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="promotiontodrug">
+            <Dependent Role="promotionToDrug">
               <PropertyRef Name="PromotionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_promotions_produceruser">
-          <End Role="produceruser" Type="Self.produceruser" Multiplicity="1" />
+          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="1" />
           <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="produceruser">
+            <Principal Role="ProducerUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="promotions">
@@ -212,10 +210,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_user_logs_users">
-          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="0..1" />
           <End Role="user_logs" Type="Self.user_logs" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="produceruser">
+            <Principal Role="ProducerUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="user_logs">
@@ -224,10 +222,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_user_permission_role_user_permissions">
-          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="0..1" />
           <End Role="userpermissionrole" Type="Self.userpermissionrole" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="userpermission">
+            <Principal Role="UserPermission">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="userpermissionrole">
@@ -248,10 +246,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_user_role_user_permissions">
-          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
+          <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="0..1" />
           <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="userpermission">
+            <Principal Role="UserPermission">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="usertouserrole">
@@ -272,94 +270,29 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_user_role_users">
-          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
+          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="0..1" />
           <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="produceruser">
+            <Principal Role="ProducerUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="usertouserrole">
               <PropertyRef Name="ProducerUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="promotions_ProducerUserId">
-          <End Role="produceruser" Type="Self.produceruser" Multiplicity="1" />
-          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="produceruser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="promotions">
-              <PropertyRef Name="ProducerUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="promotiontodrug_PromotionId">
-          <End Role="promotions" Type="Self.promotions" Multiplicity="1" />
-          <End Role="promotiontodrug" Type="Self.promotiontodrug" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="promotions">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="promotiontodrug">
-              <PropertyRef Name="PromotionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="user_logs_ProducerUserId">
-          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
-          <End Role="user_logs" Type="Self.user_logs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="produceruser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="user_logs">
-              <PropertyRef Name="ProducerUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="usertouserrole_ProducerUserId">
-          <End Role="produceruser" Type="Self.produceruser" Multiplicity="0..1" />
-          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="produceruser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="usertouserrole">
-              <PropertyRef Name="ProducerUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="usertouserrole_UserPermissionId">
-          <End Role="userpermission" Type="Self.userpermission" Multiplicity="0..1" />
-          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="userpermission">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="usertouserrole">
-              <PropertyRef Name="UserPermissionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Хранилище producerinterfaceModelContainer">
-          <EntitySet Name="drugdescriptionremark" EntityType="Self.drugdescriptionremark" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="DrugDescriptionRemark" EntityType="Self.DrugDescriptionRemark" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="producers" EntityType="Self.producers" Schema="producerinterface" store:Type="Tables" />
-          <EntitySet Name="produceruser" EntityType="Self.produceruser" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ProducerUser" EntityType="Self.ProducerUser" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="profilenews" EntityType="Self.profilenews" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotions" EntityType="Self.promotions" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="promotionToDrug" EntityType="Self.promotionToDrug" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="user_logs" EntityType="Self.user_logs" Schema="producerinterface" store:Type="Tables" />
-          <EntitySet Name="userpermission" EntityType="Self.userpermission" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="userrole" EntityType="Self.userrole" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="usertouserrole" EntityType="Self.usertouserrole" Schema="producerinterface" store:Type="Tables" />
-          <EntitySet Name="promotiontodrug" EntityType="Self.promotiontodrug" store:Type="Tables" store:Schema="producerinterface">
-            <DefiningQuery>SELECT
-`promotiontodrug`.`DrugId`, 
-`promotiontodrug`.`PromotionId`
-FROM `promotiontodrug` AS `promotiontodrug`</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="userpermissionrole" EntityType="Self.userpermissionrole" store:Type="Tables" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `userpermissionrole`.`UserPermissionId`, 
@@ -374,8 +307,8 @@ FROM `userpermissionrole` AS `userpermissionrole`</DefiningQuery>
 FROM `drugfamily` AS `drugfamily`</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="Self.DrugDescriptionRemark_ProducerUserId">
-            <End Role="produceruser" EntitySet="produceruser" />
-            <End Role="drugdescriptionremark" EntitySet="drugdescriptionremark" />
+            <End Role="ProducerUser" EntitySet="ProducerUser" />
+            <End Role="DrugDescriptionRemark" EntitySet="DrugDescriptionRemark" />
           </AssociationSet>
           <AssociationSet Name="FK_profile_news_producers" Association="Self.FK_profile_news_producers">
             <End Role="producers" EntitySet="producers" />
@@ -383,18 +316,18 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="Self.FK_promotioncatalogs_supplierpromotions">
             <End Role="promotions" EntitySet="promotions" />
-            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
+            <End Role="promotionToDrug" EntitySet="promotionToDrug" />
           </AssociationSet>
           <AssociationSet Name="FK_promotions_produceruser" Association="Self.FK_promotions_produceruser">
-            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="ProducerUser" EntitySet="ProducerUser" />
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           <AssociationSet Name="FK_user_logs_users" Association="Self.FK_user_logs_users">
-            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="ProducerUser" EntitySet="ProducerUser" />
             <End Role="user_logs" EntitySet="user_logs" />
           </AssociationSet>
           <AssociationSet Name="FK_user_permission_role_user_permissions" Association="Self.FK_user_permission_role_user_permissions">
-            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="UserPermission" EntitySet="UserPermission" />
             <End Role="userpermissionrole" EntitySet="userpermissionrole" />
           </AssociationSet>
           <AssociationSet Name="FK_user_permission_role_user_roleslist" Association="Self.FK_user_permission_role_user_roleslist">
@@ -402,7 +335,7 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
             <End Role="userpermissionrole" EntitySet="userpermissionrole" />
           </AssociationSet>
           <AssociationSet Name="FK_user_role_user_permissions" Association="Self.FK_user_role_user_permissions">
-            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="UserPermission" EntitySet="UserPermission" />
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
           <AssociationSet Name="FK_user_role_user_roleslist" Association="Self.FK_user_role_user_roleslist">
@@ -410,27 +343,7 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
           <AssociationSet Name="FK_user_role_users" Association="Self.FK_user_role_users">
-            <End Role="produceruser" EntitySet="produceruser" />
-            <End Role="usertouserrole" EntitySet="usertouserrole" />
-          </AssociationSet>
-          <AssociationSet Name="promotions_ProducerUserId" Association="Self.promotions_ProducerUserId">
-            <End Role="produceruser" EntitySet="produceruser" />
-            <End Role="promotions" EntitySet="promotions" />
-          </AssociationSet>
-          <AssociationSet Name="promotiontodrug_PromotionId" Association="Self.promotiontodrug_PromotionId">
-            <End Role="promotions" EntitySet="promotions" />
-            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
-          </AssociationSet>
-          <AssociationSet Name="user_logs_ProducerUserId" Association="Self.user_logs_ProducerUserId">
-            <End Role="produceruser" EntitySet="produceruser" />
-            <End Role="user_logs" EntitySet="user_logs" />
-          </AssociationSet>
-          <AssociationSet Name="usertouserrole_ProducerUserId" Association="Self.usertouserrole_ProducerUserId">
-            <End Role="produceruser" EntitySet="produceruser" />
-            <End Role="usertouserrole" EntitySet="usertouserrole" />
-          </AssociationSet>
-          <AssociationSet Name="usertouserrole_UserPermissionId" Association="Self.usertouserrole_UserPermissionId">
-            <End Role="userpermission" EntitySet="userpermission" />
+            <End Role="ProducerUser" EntitySet="ProducerUser" />
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
         </EntityContainer>
@@ -478,8 +391,7 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
           <Property Name="Status" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="produceruser" Relationship="producerinterfaceModel.FK_promotions_produceruser" FromRole="promotions" ToRole="produceruser" />
           <NavigationProperty Name="produceruser1" Relationship="producerinterfaceModel.promotions_ProducerUserId" FromRole="promotions" ToRole="produceruser" />
-          <NavigationProperty Name="promotiontodrug" Relationship="producerinterfaceModel.FK_promotioncatalogs_supplierpromotions" FromRole="promotions" ToRole="promotiontodrug" />
-          <NavigationProperty Name="promotiontodrug1" Relationship="producerinterfaceModel.promotiontodrug_PromotionId" FromRole="promotions" ToRole="promotiontodrug" />
+          <NavigationProperty Name="promotionToDrug" Relationship="producerinterfaceModel.FK_promotioncatalogs_supplierpromotions" FromRole="promotions" ToRole="promotionToDrug" />
           </EntityType>
         <EntityType Name="reporttemplate">
           <Key>
@@ -611,13 +523,7 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
             <End Role="userpermission" EntitySet="userpermission" />
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
-          <EntitySet Name="drugdescriptionremark" EntityType="producerinterfaceModel.drugdescriptionremark" />
           <EntitySet Name="produceruser" EntityType="producerinterfaceModel.produceruser" />
-          <EntitySet Name="promotiontodrug" EntityType="producerinterfaceModel.promotiontodrug" />
-          <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="producerinterfaceModel.DrugDescriptionRemark_ProducerUserId">
-            <End Role="produceruser" EntitySet="produceruser" />
-            <End Role="drugdescriptionremark" EntitySet="drugdescriptionremark" />
-          </AssociationSet>
           <AssociationSet Name="FK_promotions_produceruser" Association="producerinterfaceModel.FK_promotions_produceruser">
             <End Role="produceruser" EntitySet="produceruser" />
             <End Role="promotions" EntitySet="promotions" />
@@ -642,17 +548,19 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
             <End Role="produceruser" EntitySet="produceruser" />
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
+          <EntitySet Name="drugfamily" EntityType="producerinterfaceModel.drugfamily" />
+          <EntitySet Name="DrugDescriptionRemark" EntityType="producerinterfaceModel.DrugDescriptionRemark" />
+          <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="producerinterfaceModel.DrugDescriptionRemark_ProducerUserId">
+            <End Role="produceruser" EntitySet="produceruser" />
+            <End Role="DrugDescriptionRemark" EntitySet="DrugDescriptionRemark" />
+          </AssociationSet>
+          <EntitySet Name="promotionToDrug" EntityType="producerinterfaceModel.promotionToDrug" />
           <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="producerinterfaceModel.FK_promotioncatalogs_supplierpromotions">
             <End Role="promotions" EntitySet="promotions" />
-            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
+            <End Role="promotionToDrug" EntitySet="promotionToDrug" />
           </AssociationSet>
-          <AssociationSet Name="promotiontodrug_PromotionId" Association="producerinterfaceModel.promotiontodrug_PromotionId">
-            <End Role="promotions" EntitySet="promotions" />
-            <End Role="promotiontodrug" EntitySet="promotiontodrug" />
-          </AssociationSet>
-          <EntitySet Name="drugfamily" EntityType="producerinterfaceModel.drugfamily" />
-        </EntityContainer>
-        <EntityType Name="userpermission">
+          </EntityContainer>
+        <EntityType Name="userpermission" Abstract="false">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -699,34 +607,7 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="drugdescriptionremark">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="EnglishName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Interaction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="SideEffect" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="IndicationsForUse" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Dosing" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Warnings" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="ProductForm" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="PharmacologicalAction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Storage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Expiration" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Composition" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="CreationDate" Type="DateTime" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="ModificationDate" Type="DateTime" />
-          <Property Name="ModificatorId" Type="Int64" />
-          <Property Name="ProducerUserId" Type="Int64" />
-          <Property Name="DrugFamilyId" Type="Int64" />
-          <Property Name="MNNId" Type="Int64" />
-          <NavigationProperty Name="produceruser" Relationship="producerinterfaceModel.DrugDescriptionRemark_ProducerUserId" FromRole="drugdescriptionremark" ToRole="produceruser" />
-        </EntityType>
-        <EntityType Name="produceruser">
+        <EntityType Name="produceruser" Abstract="false">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -739,36 +620,14 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
           <Property Name="PasswordUpdated" Type="DateTime" />
           <Property Name="PasswordToUpdate" Type="SByte" Nullable="false" />
           <Property Name="Enabled" Type="SByte" Nullable="false" />
-          <NavigationProperty Name="drugdescriptionremark" Relationship="producerinterfaceModel.DrugDescriptionRemark_ProducerUserId" FromRole="produceruser" ToRole="drugdescriptionremark" />
           <NavigationProperty Name="promotions" Relationship="producerinterfaceModel.FK_promotions_produceruser" FromRole="produceruser" ToRole="promotions" />
           <NavigationProperty Name="user_logs" Relationship="producerinterfaceModel.FK_user_logs_users" FromRole="produceruser" ToRole="user_logs" />
           <NavigationProperty Name="usertouserrole" Relationship="producerinterfaceModel.FK_user_role_users" FromRole="produceruser" ToRole="usertouserrole" />
           <NavigationProperty Name="promotions1" Relationship="producerinterfaceModel.promotions_ProducerUserId" FromRole="produceruser" ToRole="promotions" />
           <NavigationProperty Name="user_logs1" Relationship="producerinterfaceModel.user_logs_ProducerUserId" FromRole="produceruser" ToRole="user_logs" />
           <NavigationProperty Name="usertouserrole1" Relationship="producerinterfaceModel.usertouserrole_ProducerUserId" FromRole="produceruser" ToRole="usertouserrole" />
+          <NavigationProperty Name="DrugDescriptionRemark" Relationship="producerinterfaceModel.DrugDescriptionRemark_ProducerUserId" FromRole="produceruser" ToRole="DrugDescriptionRemark" />
         </EntityType>
-        <EntityType Name="promotiontodrug">
-          <Key>
-            <PropertyRef Name="DrugId" />
-            <PropertyRef Name="PromotionId" />
-          </Key>
-          <Property Name="DrugId" Type="Int64" Nullable="false" />
-          <Property Name="PromotionId" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="promotions" Relationship="producerinterfaceModel.FK_promotioncatalogs_supplierpromotions" FromRole="promotiontodrug" ToRole="promotions" />
-          <NavigationProperty Name="promotions1" Relationship="producerinterfaceModel.promotiontodrug_PromotionId" FromRole="promotiontodrug" ToRole="promotions" />
-        </EntityType>
-        <Association Name="DrugDescriptionRemark_ProducerUserId">
-          <End Type="producerinterfaceModel.produceruser" Role="produceruser" Multiplicity="0..1" />
-          <End Type="producerinterfaceModel.drugdescriptionremark" Role="drugdescriptionremark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="produceruser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="drugdescriptionremark">
-              <PropertyRef Name="ProducerUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_promotions_produceruser">
           <End Type="producerinterfaceModel.produceruser" Role="produceruser" Multiplicity="1" />
           <End Type="producerinterfaceModel.promotions" Role="promotions" Multiplicity="*" />
@@ -841,30 +700,6 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_promotioncatalogs_supplierpromotions">
-          <End Type="producerinterfaceModel.promotions" Role="promotions" Multiplicity="1" />
-          <End Type="producerinterfaceModel.promotiontodrug" Role="promotiontodrug" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="promotions">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="promotiontodrug">
-              <PropertyRef Name="PromotionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="promotiontodrug_PromotionId">
-          <End Type="producerinterfaceModel.promotions" Role="promotions" Multiplicity="1" />
-          <End Type="producerinterfaceModel.promotiontodrug" Role="promotiontodrug" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="promotions">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="promotiontodrug">
-              <PropertyRef Name="PromotionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="drugfamily">
           <Key>
             <PropertyRef Name="FamilyId" />
@@ -875,7 +710,67 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
           <Property Name="FamilyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="ProducerId" Type="Int64" Nullable="false" />
         </EntityType>
-      </Schema>
+        <EntityType Name="DrugDescriptionRemark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EnglishName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Interaction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SideEffect" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IndicationsForUse" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Dosing" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Warnings" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ProductForm" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PharmacologicalAction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Storage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Expiration" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Composition" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreationDate" Type="DateTime" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ModificationDate" Type="DateTime" />
+          <Property Name="ModificatorId" Type="Int64" />
+          <Property Name="ProducerUserId" Type="Int64" />
+          <Property Name="DrugFamilyId" Type="Int64" />
+          <Property Name="MNNId" Type="Int64" />
+          <NavigationProperty Name="ProducerUser" Relationship="producerinterfaceModel.DrugDescriptionRemark_ProducerUserId" FromRole="DrugDescriptionRemark" ToRole="produceruser" />
+        </EntityType>
+        <Association Name="DrugDescriptionRemark_ProducerUserId">
+          <End Type="producerinterfaceModel.produceruser" Role="produceruser" Multiplicity="0..1" />
+          <End Type="producerinterfaceModel.DrugDescriptionRemark" Role="DrugDescriptionRemark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="produceruser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DrugDescriptionRemark">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="promotionToDrug">
+          <Key>
+            <PropertyRef Name="DrugId" />
+            <PropertyRef Name="PromotionId" />
+          </Key>
+          <Property Name="DrugId" Type="Int64" Nullable="false" />
+          <Property Name="PromotionId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="promotions" Relationship="producerinterfaceModel.FK_promotioncatalogs_supplierpromotions" FromRole="promotionToDrug" ToRole="promotions" />
+        </EntityType>
+        <Association Name="FK_promotioncatalogs_supplierpromotions">
+          <End Type="producerinterfaceModel.promotions" Role="promotions" Multiplicity="1" />
+          <End Type="producerinterfaceModel.promotionToDrug" Role="promotionToDrug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotionToDrug">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -975,18 +870,42 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="drugfamily">
+            <EntityTypeMapping TypeName="producerinterfaceModel.drugfamily">
+              <MappingFragment StoreEntitySet="drugfamily">
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+                <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="userpermission">
-            <EntityTypeMapping TypeName="producerinterfaceModel.userpermission">
-              <MappingFragment StoreEntitySet="userpermission">
+            <EntityTypeMapping TypeName="IsTypeOf(producerinterfaceModel.userpermission)">
+              <MappingFragment StoreEntitySet="UserPermission">
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="drugdescriptionremark">
-            <EntityTypeMapping TypeName="producerinterfaceModel.drugdescriptionremark">
-              <MappingFragment StoreEntitySet="drugdescriptionremark">
+          <EntitySetMapping Name="produceruser">
+            <EntityTypeMapping TypeName="IsTypeOf(producerinterfaceModel.produceruser)">
+              <MappingFragment StoreEntitySet="ProducerUser">
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="PasswordToUpdate" ColumnName="PasswordToUpdate" />
+                <ScalarProperty Name="PasswordUpdated" ColumnName="PasswordUpdated" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="Appointment" ColumnName="Appointment" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DrugDescriptionRemark">
+            <EntityTypeMapping TypeName="producerinterfaceModel.DrugDescriptionRemark">
+              <MappingFragment StoreEntitySet="DrugDescriptionRemark">
                 <ScalarProperty Name="MNNId" ColumnName="MNNId" />
                 <ScalarProperty Name="DrugFamilyId" ColumnName="DrugFamilyId" />
                 <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
@@ -1011,35 +930,11 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="produceruser">
-            <EntityTypeMapping TypeName="producerinterfaceModel.produceruser">
-              <MappingFragment StoreEntitySet="produceruser">
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-                <ScalarProperty Name="PasswordToUpdate" ColumnName="PasswordToUpdate" />
-                <ScalarProperty Name="PasswordUpdated" ColumnName="PasswordUpdated" />
-                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
-                <ScalarProperty Name="Appointment" ColumnName="Appointment" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="promotiontodrug">
-            <EntityTypeMapping TypeName="producerinterfaceModel.promotiontodrug">
-              <MappingFragment StoreEntitySet="promotiontodrug">
+          <EntitySetMapping Name="promotionToDrug">
+            <EntityTypeMapping TypeName="producerinterfaceModel.promotionToDrug">
+              <MappingFragment StoreEntitySet="promotionToDrug">
                 <ScalarProperty Name="PromotionId" ColumnName="PromotionId" />
                 <ScalarProperty Name="DrugId" ColumnName="DrugId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="drugfamily">
-            <EntityTypeMapping TypeName="producerinterfaceModel.drugfamily">
-              <MappingFragment StoreEntitySet="drugfamily">
-                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
-                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
-                <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

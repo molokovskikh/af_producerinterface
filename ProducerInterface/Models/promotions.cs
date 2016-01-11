@@ -16,8 +16,7 @@ namespace ProducerInterface.Models
     {
         public promotions()
         {
-            this.promotiontodrug = new HashSet<promotiontodrug>();
-            this.promotiontodrug1 = new HashSet<promotiontodrug>();
+            this.promotionToDrug = new HashSet<promotionToDrug>();
         }
     
         public long Id { get; set; }
@@ -37,7 +36,6 @@ namespace ProducerInterface.Models
     
         public virtual produceruser produceruser { get; set; }
         public virtual produceruser produceruser1 { get; set; }
-        public virtual ICollection<promotiontodrug> promotiontodrug { get; set; }
-        public virtual ICollection<promotiontodrug> promotiontodrug1 { get; set; }
+        public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
     }
 }
