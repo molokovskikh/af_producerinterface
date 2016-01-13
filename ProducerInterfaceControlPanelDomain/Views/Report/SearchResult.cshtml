@@ -1,0 +1,94 @@
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.jobextendwithproducer>
+
+@{
+    ViewBag.Title = "Отчёты выбранного производителя";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (ViewBag.Search != null)
+{
+<a href="~/Report/Index" class="btn btn-primary">Назад к поиску</a>
+}
+<h3>@ViewBag.ProducerName</h3>
+@if (Model != null && Model.Count() > 0)
+{
+    <h4>Список отчетов</h4>
+
+<hr/>
+
+if (ViewBag.Preview != null)
+{
+<a href="~/Report/ActiveReport/@ViewBag.Preview" class="btn btn-primary">Предыдущие @ViewBag.CountPage</a>
+}
+if (ViewBag.Next != null)
+{
+<a href="~/Report/ActiveReport/@ViewBag.Next" class="btn btn-primary">Следующие @ViewBag.CountPage</a>
+}
+
+<hr />
+
+    <table class="table-bordered table-striped table-responsive" id="table-vidth-100prc">
+        <tr>
+            <th>
+                <label>Название</label>
+            </th>
+            <th>
+                <label>Тип</label>
+            </th>
+            @*<th>
+                <label>Расписание</label>
+            </th>*@   
+            <th>
+                <label>Приизводитель</label>
+            </th>    
+            <th>
+                <label>Создана</label>
+            </th>
+            <th>
+                <label>Запуск</label>
+            </th>     
+            <th>
+                <label>Shed Name</label>
+            </th>      
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @*<a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-ban-circle" title="Удалить отчет"></span></a>*@
+                    @Html.DisplayFor(modelItem => item.CustomName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.ReportType)
+                </td>
+              
+                  @*<td>
+             // закомичен акшен        @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
+                    @Html.DisplayFor(modelItem => item.Scheduler)
+                </td>*@  
+                 
+                <td>              
+                @Html.DisplayFor(modelItem => item.ProducerName)             
+                </td>           
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @*<a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-play" title="Разовое формирование отчета за истекшие периоды времени и даты"></span></a>*@
+                    @Html.DisplayFor(modelItem => item.LastRun)
+                </td>   
+                <td>
+                    @Html.DisplayFor(modelItem => item.SchedName)
+                </td>
+            </tr>
+        }
+    </table>  
+    <br/>
+}
+else
+{
+<h4>Отчётов не найдено</h4> 
+}
+

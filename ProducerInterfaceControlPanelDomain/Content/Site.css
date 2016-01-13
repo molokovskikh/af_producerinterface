@@ -1,0 +1,78 @@
+﻿body {
+    /*padding-top: 50px;*/
+    padding-bottom: 20px;
+    min-width:768px;
+    font-family:Arial, Helvetica, sans-serif;
+    width:100%;
+    padding:0px;
+    margin:0px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 450px;
+}
+
+#accordion-menu {
+    position:fixed;
+    margin-top:0px;
+    width:280px;    
+    border-radius:0px;   
+    height:100%;
+    background-color:#110d33;
+      
+}
+    #accordion-menu span {
+    margin-right:1em;
+    }
+    #accordion-menu .panel {
+    border-radius:0px;    
+    }
+     #accordion-menu .panel-title {
+    border-radius:0px;    
+    }
+    #accordion-menu .panel-heading {
+    border-radius:0px;    
+    }
+    #accordion-menu a {
+    text-decoration:none;
+    width:100%;
+    margin-left:5px;
+    text-align:left;
+    align-content:left;
+    }
+    #accordion-menu .panel-body {    
+    padding:0px; 
+    border-radius:0px;    
+    }
+    #accordion-menu .btn {
+    border-radius:0px;    
+    }
+    #accordion-menu .menu-account {
+        color: whitesmoke;
+    }
+#table-vidth-100prc {
+width:100%;
+}
+    #table-vidth-100prc th {
+    text-align:center;
+    align-content:center;
+    }
+#form-group-mial-list p{
+    font-style:italic;
+}

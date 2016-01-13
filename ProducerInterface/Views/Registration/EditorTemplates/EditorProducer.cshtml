@@ -14,9 +14,6 @@
         }    
 }
 <div class="form-group">
-    @Html.Label("Производитель* ", new { @class = "Form-control" })
-
-<br />
     <div class="@("feditor col-md-12" + errorClass)">
         @Html.DropDownListFor(m => m, new SelectList(ViewBag.ProducerList, "Value", "Text", Model), new { style = "display: none;" })
         @Html.ValidationMessageFor(m => m)

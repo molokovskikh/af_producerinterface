@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.mailform>
+
+@{
+    ViewBag.Title = "Шаблоны Писем";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if(Model != null && Model.Count() > 0)
+{
+    <hr />
+    <h2>Шаблоны писем</h2>
+    <h4>На данный момент их @Model.Count() </h4>
+    <hr />
+
+    <div>
+
+        @foreach(var Item in Model)
+        {
+        <div class="Form-Group" id="form-group-mial-list">
+            <p>@Item.Description</p>
+            <a href="~/Mail/Edit/@Item.Id" class="btn btn-primary">Редактирование шаблона</a>
+            <hr />
+        </div>
+        }
+
+    </div>
+
+}
+else
+{
+<hr />
+<h2>Шаблоны писем</h2>
+<h4>Шаблонов не найдено в Базе данных</h4>
+<hr />
+}
+
