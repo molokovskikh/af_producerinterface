@@ -1,0 +1,21 @@
+﻿@model string
+
+@{
+    // имя свойства
+    var field = ViewData.ModelMetadata.PropertyName;
+    var fieldTxt = field + "Txt";
+    var fieldEditor = field + "Editor";
+}
+
+<div id="@fieldTxt" style="white-space: pre-wrap;">@Html.DisplayTextFor(m => m)
+    <div style="text-align: right">
+        <span class="glyphicon glyphicon-pencil" title="Редактировать" onclick="EditToggle('@field')"></span>
+    </div>
+</div>
+<div style="display: none;" id="@fieldEditor">
+    @Html.TextAreaFor(m => m, new { style = "width: 100%;", rows = 10 })
+    <div style="text-align: right; margin: 1em 0 1em 0;">
+        <span class="btn btn-primary" onclick="EditToggle('@field')">Отменить</span> 
+        <span class="btn btn-primary" onclick="EditDescription('@field')">Сохранить</span>
+    </div>
+</div>

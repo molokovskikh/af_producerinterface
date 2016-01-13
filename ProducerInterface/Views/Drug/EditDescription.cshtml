@@ -1,0 +1,37 @@
+﻿@using ProducerInterface.Models
+@model drugdescriptionremark
+
+@{
+  ViewBag.Title = "Описание препарата";
+}
+
+<h4>@ViewBag.Title</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm()) {
+        <fieldset>
+            @Html.ValidationSummary(true)
+            @Html.EditorForModel()
+            <div class="row margin5">
+                <div class="flabel col-md-4">
+                    @Html.ActionLink("К списку препаратов", "Index")
+                </div>
+                @*<div class="feditor col-md-8">
+                    <input id="btn" type="submit" value="Сохранить" class="btn btn-primary" />
+                </div>*@
+            </div>
+            @Html.Hidden("url", Url.Action("EditField", "Drug"))
+        </fieldset>
+        }
+    </div>
+</div>
+
+@section JavaScript {
+<script src="~/Content/Chosen/js/initDrug.js"></script>
+}
+
+
+@*<div>У данного товара нет описания</div>*@
+
+

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ProducerInterface.Models;
 
 namespace ProducerInterface.Controllers
 {
@@ -41,13 +42,32 @@ namespace ProducerInterface.Controllers
 			//return null;
 		}
 
-		public ActionResult Catalog(long id)
+		public ActionResult EditDescription(long id)
 		{
-			//if (id.HasValue) {
-			//	var family = DbSession.Query<DrugFamily>().FirstOrDefault(i => i.Id == id.Value);
-			//	ViewBag.DrugFamily = family;
-			//}
-			return null; //View();
+			id = 9872;
+			// TODO: сейчас неправильная БД
+			var model = _BD_.drugdescriptionremark.SingleOrDefault(x => x.DrugFamilyId == id);
+			if (model == null) {
+				model = new drugdescriptionremark();
+				model.CreationDate = DateTime.Now;
+				model.ModificationDate = DateTime.Now;
+				model.DrugFamilyId = id;
+				model.ProducerUserId = userId;
+			}
+			return View(model);
+		}
+
+		public JsonResult EditField(long id, string field, string value)
+		{
+			//_BD_.Configuration.ProxyCreationEnabled = false;
+			var model = _BD_.drugdescriptionremark.Single(x => x.Id == id);
+			var propertyInfo = model.GetType().GetProperty(field);
+			propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
+
+			//model.PharmacologicalAction = "ff"; //"Ингибитор АПФ. Антигипертензивный препарат. Механизм действия связан с ингибированием активности АПФ, что приводит к подавлению образования ангиотензина II из ангиотензина I и к прямому уменьшению выделения альдостерона. Уменьшает деградацию брадикинина и правка";
+			
+			_BD_.SaveChanges();
+			return Json(new { field = field, value = value });
 		}
 
 		//public ActionResult CreateDrugDescriptionRemark(int id)

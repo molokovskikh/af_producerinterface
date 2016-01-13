@@ -42,7 +42,7 @@ namespace ProducerInterface.Controllers
             try
             {
                 userId = CurrentUser.Id;    
-                producerId =(long) CurrentUser.ProducerId;
+                producerId = (long)CurrentUser.ProducerId;
             }
             catch
             {

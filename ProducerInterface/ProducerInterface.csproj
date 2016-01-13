@@ -186,6 +186,7 @@
     <Compile Include="Models\drugdescriptionremark.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DrugDescriptionRemarkMetaData.cs" />
     <Compile Include="Models\drugfamily.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
@@ -270,6 +271,7 @@
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
     <Content Include="Content\Chosen\js\chosen.jquery.js" />
     <Content Include="Content\Chosen\js\initAddJob.js" />
+    <Content Include="Content\Chosen\js\initDrug.js" />
     <Content Include="Content\Chosen\js\initCron.js" />
     <Content Include="Content\Chosen\js\initDatePicker.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
@@ -395,11 +397,13 @@
     <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\LongList.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\Date.cshtml" />
-    <Content Include="Views\Drug\Catalog.cshtml" />
+    <Content Include="Views\Drug\EditDescription.cshtml" />
     <Content Include="Views\Drug\Index.cshtml" />
     <Content Include="Views\Report\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Drug\EditorTemplates\TextArea.cshtml" />
+    <Content Include="Views\Drug\EditorTemplates\TextBox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
