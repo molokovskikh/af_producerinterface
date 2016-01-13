@@ -8,6 +8,11 @@ namespace ProducerInterface.Controllers
 {
     public class HomeController : pruducercontroller.BaseController
     {
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+        }
         public ActionResult Index()
         {        
             return View("Index");

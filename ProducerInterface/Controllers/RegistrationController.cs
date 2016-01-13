@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterface.Models;
+using System.Web.Security;
 
 namespace ProducerInterface.Controllers
 {
@@ -51,7 +52,7 @@ namespace ProducerInterface.Controllers
 
                 var YesNouMail = _BD_.produceruser.Where(xxx => xxx.Email == NewAccount.login).FirstOrDefault();
 
-                if (YesNouMail == null || YesNouMail.Email != "")
+                if (YesNouMail == null && NewAccount.login != "")
                 {
                     Models.produceruser New_User = new Models.produceruser();
                     New_User.Email = NewAccount.login;
@@ -91,7 +92,12 @@ namespace ProducerInterface.Controllers
             {
                 string Errorstr = "Некорректно заполнены поля формы / или не все";
                 ErrorMessage(Errorstr);
-                return RedirectToAction("Registration", "Registration");
+                Quartz.Job.NamesHelper h;
+                h = new Quartz.Job.NamesHelper(cntx, 0);
+                ViewBag.ProducerList = h.GetProducerList();
+                return View(NewAccount);
+
+               // return RedirectToAction("Registration", "Registration");
             }         
         }
                
@@ -129,25 +135,6 @@ namespace ProducerInterface.Controllers
                         _BD_.SaveChanges();
 
                         Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
-
-
-        //public static void SendRegistrationMessage(reportData cntx, long userId, string password, string ip)
-        //{
-        //SendPasswordMessage(cntx, userId, password, MailType.Registration, ip);
-        //}
-
-        //public static void SendPasswordChangeMessage(reportData cntx, long userId, string password, string ip)
-        //{
-        //SendPasswordMessage(cntx, userId, password, MailType.PasswordChange, ip);
-        //}
-
-        //public static void SendPasswordRecoveryMessage(reportData cntx, long userId, string password, string ip)
-        //{
-        //SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
-        //}
-
-                        //Models.EmailSender.SendEmail(login, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
-                        //Models.EmailSender.SendEmail(ForwardEmail, "Восстановление пароля на сайт producerinterface.analit.net", "Ваш новый пароль: " + Password);
 
                         SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
                         return RedirectToAction("Index", "Home");
@@ -202,8 +189,7 @@ namespace ProducerInterface.Controllers
 
             return RedirectToAction("Index", "Profile");
         }
-
-
+        
         [HttpPost]
         public ActionResult UserAuthentication(Models.LoginValidation User_)
         {
@@ -282,7 +268,10 @@ namespace ProducerInterface.Controllers
 
                     var AddOnePermission = new Models.usertouserrole();
                     AddOnePermission.ProducerUserId = ThisUser.Id;
-                    AddOnePermission.UserPermissionId = LST.Where(xxx => xxx.Name == "Profile_Index").First().Id;
+
+
+                    
+                    AddOnePermission.UserPermissionId = LST.Where(xxx => xxx.Name.ToLower() == ("Profile_Index").ToLower()).First().Id;
                     _BD_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
                 }
                 SuccessMessage("Вы успешно подтвердили свою регистрацию на сайте");
@@ -333,6 +322,46 @@ namespace ProducerInterface.Controllers
             // ViewBag.CurrentUser = null;
             // AutorizedUser = null;
             return RedirectToAction("Index","Home");
+        }
+
+        public ActionResult Autentificate(Controller currentController, bool shouldRemember, string userData = "")
+        {
+            string autorizeddd = Autentificates(this, AutorizedUser.Email, shouldRemember, userData);
+
+            string controllerName = (autorizeddd.Split(new Char[] { '/' }))[0];
+            string actionName = (autorizeddd.Split(new Char[] { '/' }))[1];
+            return RedirectToAction(actionName, controllerName);
+        }
+
+        public string Autentificates(Controller CRT, string username, bool shouldRemember, string userData = "")
+        {
+            string CoockieName = GetCoockieName;
+
+            var redirectAfterAuthentication = GetredirectAfterAuthentication;
+            string[] url = redirectAfterAuthentication.Split('/');
+            var controller = url[0];
+            var action = url.Length > 1 ? url[1] : "Index";
+
+            var ticket = new FormsAuthenticationTicket(
+                1,
+                this.AutorizedUser.Email,
+                SystemTime.Now(),
+                SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
+                shouldRemember,
+                userData,
+                FormsAuthentication.FormsCookiePath
+                );
+
+            var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
+
+            if (shouldRemember)
+            {
+                cookie.Expires = SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
+            }
+            FormsAuthentication.SetAuthCookie(AutorizedUser.Name, false);
+            Response.Cookies.Set(cookie);
+
+            return GetredirectAfterAuthentication;
         }
 
         public ActionResult LogOut()

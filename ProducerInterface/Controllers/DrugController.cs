@@ -44,30 +44,32 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult EditDescription(long id)
 		{
-			id = 9872;
-			// TODO: сейчас неправильная БД
-			var model = _BD_.drugdescriptionremark.SingleOrDefault(x => x.DrugFamilyId == id);
-			if (model == null) {
-				model = new drugdescriptionremark();
-				model.CreationDate = DateTime.Now;
-				model.ModificationDate = DateTime.Now;
-				model.DrugFamilyId = id;
-				model.ProducerUserId = userId;
-			}
-			return View(model);
+			//id = 9872;
+			//// TODO: сейчас неправильная БД
+			//var model = _BD_.drugdescriptionremark.SingleOrDefault(x => x.DrugFamilyId == id);
+			//if (model == null) {
+			//	model = new drugdescriptionremark();
+			//	model.CreationDate = DateTime.Now;
+			//	model.ModificationDate = DateTime.Now;
+			//	model.DrugFamilyId = id;
+			//	model.ProducerUserId = userId;
+			//}
+			//return View(model);
+			return null;
 		}
 
 		public JsonResult EditField(long id, string field, string value)
 		{
-			//_BD_.Configuration.ProxyCreationEnabled = false;
-			var model = _BD_.drugdescriptionremark.Single(x => x.Id == id);
-			var propertyInfo = model.GetType().GetProperty(field);
-			propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
+			////_BD_.Configuration.ProxyCreationEnabled = false;
+			//var model = _BD_.drugdescriptionremark.Single(x => x.Id == id);
+			//var propertyInfo = model.GetType().GetProperty(field);
+			//propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
 
-			//model.PharmacologicalAction = "ff"; //"Ингибитор АПФ. Антигипертензивный препарат. Механизм действия связан с ингибированием активности АПФ, что приводит к подавлению образования ангиотензина II из ангиотензина I и к прямому уменьшению выделения альдостерона. Уменьшает деградацию брадикинина и правка";
+			////model.PharmacologicalAction = "ff"; //"Ингибитор АПФ. Антигипертензивный препарат. Механизм действия связан с ингибированием активности АПФ, что приводит к подавлению образования ангиотензина II из ангиотензина I и к прямому уменьшению выделения альдостерона. Уменьшает деградацию брадикинина и правка";
 			
-			_BD_.SaveChanges();
-			return Json(new { field = field, value = value });
+			//_BD_.SaveChanges();
+			//return Json(new { field = field, value = value });
+			return null;
 		}
 
 		//public ActionResult CreateDrugDescriptionRemark(int id)

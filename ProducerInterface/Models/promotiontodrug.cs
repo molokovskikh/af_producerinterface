@@ -12,12 +12,11 @@ namespace ProducerInterface.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class promotiontodrug
+    public partial class promotionToDrug
     {
         public long DrugId { get; set; }
         public long PromotionId { get; set; }
     
         public virtual promotions promotions { get; set; }
-        public virtual promotions promotions1 { get; set; }
     }
 }

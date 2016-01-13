@@ -1,0 +1,25 @@
+﻿@using ProducerInterface.Models
+
+@{
+    ViewBag.Title = "Добавление(удаление) прав";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if(ViewBag.UserList != null)
+{
+    foreach(var User in ViewBag.UserList)
+{
+    <div class="row">
+        <p>@User.Name</p>
+        <a class="btn btn-primary"><span class="glyphicon glyphicon-cog" href="/Permission/Change/@User.Id"></span></a>
+    </div>
+}
+
+}
+else
+{
+<div class="row">
+    <h3>Других пользователей не зарегистрировано</h3>
+    <h4>Или они не подтвердили свою регистрацию</h4>
+</div>
+}

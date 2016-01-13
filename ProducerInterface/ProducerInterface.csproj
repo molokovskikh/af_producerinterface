@@ -175,7 +175,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DrugController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\pruducercontroller\BaseController.cs" />
     <Compile Include="Controllers\pruducercontroller\ConfigurationController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
@@ -183,7 +185,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\drugdescriptionremark.cs">
+    <Compile Include="Models\DrugDescriptionRemark.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DrugDescriptionRemarkMetaData.cs" />
@@ -219,7 +221,7 @@
     <Compile Include="Models\promotions.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\promotiontodrug.cs">
+    <Compile Include="Models\promotionToDrug.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\reporttemplate.cs">
@@ -402,6 +404,13 @@
     <Content Include="Views\Report\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Promotion\Index.cshtml" />
+    <Content Include="Views\Promotion\Manage.cshtml" />
+    <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Promotion\EditorTemplates\LongList.cshtml" />
+    <Content Include="Views\Permission\Index.cshtml" />
+    <Content Include="Views\Permission\Change.cshtml" />
+    <Content Include="Views\Promotion\Delete.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\TextBox.cshtml" />
   </ItemGroup>

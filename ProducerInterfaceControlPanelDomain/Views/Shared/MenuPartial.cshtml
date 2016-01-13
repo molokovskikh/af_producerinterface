@@ -1,0 +1,107 @@
+﻿<div class="panel-group panel-success" id="accordion-menu">
+    <!-- Логин Пользователя-->
+    <div class="menu-account">
+        <center>
+            <h5>Добро пожаловать</h5>
+            <h4><span class="glyphicon glyphicon-user"></span>@ViewBag.currentUser</h4>
+        </center>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-parent="#accordion-menu" href="~/Home/Index"><span class="glyphicon glyphicon-home"></span>Домашняя страница</a>
+            </h4>
+        </div>
+    </div>
+
+    <!-- 1 панель -->
+    <div class="panel panel-primary">
+        <!-- Заголовок 1 панели -->
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion-menu" href="#collapseOne"><span class="glyphicon glyphicon-cog"></span>Отчеты производителей</a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+            <!-- Содержимое 1 панели -->
+            <div class="panel-body">
+                <a href="~/Report/Index" class="btn btn-primary">Поиск отчетов производителей</a>
+                <br />
+                <a href="~/Report/ActiveReport" class="btn btn-primary">Список активных отчетов</a>
+                <br />
+                <a href="~/Report/NotActiveReport" class="btn btn-primary">Список удаленных отчетов</a>
+            </div>
+        </div>
+    </div>
+    <!-- 2 панель -->
+    <div class="panel panel-primary">
+        <!-- Заголовок 2 панели -->
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion-menu" href="#collapseTwo"><span class="glyphicon glyphicon-user"></span>Права пользователей</a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse">
+            <!-- Содержимое 2 панели -->
+            <div class="panel-body">
+                <a href="#" class="btn btn-primary">Список пользователей</a>
+                <br />
+                <a href="#" class="btn btn-primary">Права</a>
+            </div>
+        </div>
+    </div>
+    <!-- 3 панель -->
+    <div class="panel panel-primary">
+        <!-- Заголовок 3 панели -->
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion-menu" href="#collapseThree"><span class="glyphicon glyphicon-th-list"></span>Описание препаратов</a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse">
+            <!-- Содержимое 3 панели -->
+            <div class="panel-body">
+                <a href="#" class="btn btn-primary">Список правок пользователей</a>
+            </div>
+        </div>
+    </div>
+    <!-- 4 панель -->
+    <div class="panel panel-primary">
+        <!-- Заголовок 4 панели -->
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a  href="~/Mail/Index"><span class="glyphicon glyphicon-envelope"></span>Почтовые сообщения</a>
+            </h4>
+        </div>
+                @*
+                data-toggle="collapse" data-parent="#accordion-menu"
+
+        <div id="collapseFor" class="panel-collapse collapse">
+            <!-- Содержимое 4 панели -->
+            <div class="panel-body">
+                <a href="#" class="btn btn-primary">Сообщения для пользователей</a>
+                <br />
+                <a href="#" class="btn btn-primary">Сообщения для администраторов</a>
+            </div>
+        </div>
+                *@
+    </div>
+    <!-- 5 панель -->
+    <div class="panel panel-primary">
+        <!-- Заголовок 5 панели -->
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion-menu" href="#collapseFive"><span class="glyphicon glyphicon-user"></span>Права Администраторов</a>
+            </h4>
+        </div>
+        <div id="collapseFive" class="panel-collapse collapse">
+            <!-- Содержимое 5 панели -->
+            <div class="panel-body">
+                <a href="#" class="btn btn-primary">Список Администраторов</a>
+                <br />
+                <a href="#" class="btn btn-primary">Список групп АД</a>
+            </div>
+        </div>
+    </div>
+</div>

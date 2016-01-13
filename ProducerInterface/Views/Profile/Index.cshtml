@@ -3,16 +3,18 @@
 
 
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
     var currentUser = ViewBag.CurrentUser as ProducerInterface.Models.produceruser;
-   
+    ViewBag.Title = "Кабинет производителя";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="jumbotron">
-    <h3>Идинтификационный номер производителя: @currentUser.ProducerId</h3>
-    <p class="lead">Личный кабинет производителя, текущего залогиневшегося пользователя.</p>
-    <p><a href="#" class="btn btn-primary btn-lg">Не нажимайте данную кнопку &raquo;</a></p>
+    <h3>Идинтификационный номер производителя: @currentUser.ProducerId.</h3>
+
+    <hr/>
+
+    <p class="lead">Вы вошли как @currentUser.Name.</p>
+    <h3>Здесь могла бы быть ваша реклама</h3>
 </div>
 
 

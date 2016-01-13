@@ -5,7 +5,7 @@ using System.Web.Mvc;
 namespace ProducerInterface.Models
 {
 	[MetadataType(typeof(DrugDescriptionRemarkMetaData))]
-	public partial class drugdescriptionremark
+	public partial class DrugDescriptionRemark
 	{
 		[HiddenInput(DisplayValue = false)]
 		public int DescriptionId
