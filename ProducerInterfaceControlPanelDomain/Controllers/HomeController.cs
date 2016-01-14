@@ -10,10 +10,18 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 {
     public class HomeController : BaseController
     {
+       
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Стартовая страница сайта, которая будет доступна после авторизации</returns>
         public ActionResult Index()
         {
             IEnumerable<string> X = Groups().ToList();
           ViewBag.ListGroup = X;
+          
+          
+        
             return View(X);
         }
 

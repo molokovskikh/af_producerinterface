@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
@@ -34,6 +34,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -172,6 +174,18 @@
     <Compile Include="Models\catalognames.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ControlPanelGroup.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ControlPanelPermission.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ControlPanelUser.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\controlpaneluserpermission.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DrugDescriptionRemark.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
@@ -201,6 +215,9 @@
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProducerUser.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\profilenews.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\promotions.cs">

@@ -50,5 +50,10 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<usernames> usernames { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
+        public DbSet<profilenews> profilenews { get; set; }
+        public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
+        public DbSet<ControlPanelUser> ControlPanelUser { get; set; }
+        public DbSet<controlpaneluserpermission> controlpaneluserpermission { get; set; }
     }
 }

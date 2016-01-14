@@ -1,4 +1,7 @@
 ﻿
+@if(ViewBag.currentUser != null)
+{
+
 <div class="panel-group panel-success" id="accordion-menu">
     <div class="menu-account">
         <center>
@@ -106,4 +109,15 @@
     </div>
 </div>
 
-
+}
+else
+{
+<div class="panel-group panel-success" id="accordion-menu">
+    <div class="menu-account">
+        <center>
+            <h5>Добро пожаловать</h5>
+            <h4><span class="glyphicon glyphicon-user"></span>Инкогнито</h4>
+        </center>
+    </div>
+</div>
+    }

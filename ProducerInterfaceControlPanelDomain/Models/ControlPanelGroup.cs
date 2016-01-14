@@ -12,12 +12,19 @@ namespace ProducerInterfaceControlPanelDomain.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class drugfamily
+    public partial class ControlPanelGroup
     {
-        public long FamilyId { get; set; }
-        public string FamilyName { get; set; }
-        public long ProducerId { get; set; }
-        public Nullable<long> DescriptionId { get; set; }
-        public Nullable<long> MnnId { get; set; }
+        public ControlPanelGroup()
+        {
+            this.ControlPanelPermission = new HashSet<ControlPanelPermission>();
+            this.ControlPanelUser = new HashSet<ControlPanelUser>();
+        }
+    
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public bool Enabled { get; set; }
+    
+        public virtual ICollection<ControlPanelPermission> ControlPanelPermission { get; set; }
+        public virtual ICollection<ControlPanelUser> ControlPanelUser { get; set; }
     }
 }

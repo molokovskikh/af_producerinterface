@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Назначеине сообщения  @Html.DisplayFor(m=>m.Description)</h2>
+<h2>Назначеине сообщения  "@Html.DisplayFor(m=>m.Description)"</h2>
 
 <hr/>
 
@@ -15,7 +15,7 @@
     {
 
         @Html.HiddenFor(model=>model.Id)
-
+        @Html.HiddenFor(model=>model.Description)
         <div class="form-group">
             <p>Тема сообщения</p>
             @Html.TextBoxFor(model=>model.Subject, new {@class="form-control"})

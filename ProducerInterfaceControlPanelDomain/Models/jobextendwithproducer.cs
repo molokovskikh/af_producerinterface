@@ -23,5 +23,10 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public bool Enable { get; set; }
         public System.DateTime CreationDate { get; set; }
         public string ProducerName { get; set; }
+        public string JobGroup { get; set; }
+        public string Scheduler { get; set; }
+        public string Creator { get; set; }
+        public System.DateTime LastModified { get; set; }
+        public int DisplayStatus { get; set; }
     }
 }

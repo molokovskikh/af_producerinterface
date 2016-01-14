@@ -22,15 +22,22 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             if (IsAuthenticated(login, password))
             {
                 SetLoginCookie((object)login);
+
+                // Add User In BD
+
+                // Проверяем наличие пользователя в БД
+
+
                 return RedirectToAction("Index", "Home");                
             }
+            ErrorMessage("Неверные логин и пароль " + ErrorMessageString);
             return RedirectToAction("Index", "Registration");
         }
 
         private DirectoryEntry entryAu;
         private string _path;
         private string _filterAttribute;
-        public string ErrorMessage;
+        public string ErrorMessageString;
 
         //"LDAP://OU=Клиенты,DC=adc,DC=analit,DC=net"
 
@@ -63,7 +70,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             {
                 //_log.Info("Пароль или логин был введен неправильно");
                 //_log.Info(ErrorMessage);
-                ErrorMessage = ex.Message;
+                ErrorMessageString = ex.Message;
                 return false;
             }
             entryAu.RefreshCache();

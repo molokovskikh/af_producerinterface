@@ -43,6 +43,14 @@
         <AssociationConnector Association="producerinterface_Model.FK_user_permission_role_user_roleslist" ManuallyRouted="false" />
         <AssociationConnector Association="producerinterface_Model.FK_user_role_user_roleslist" ManuallyRouted="false" />
         <EntityTypeShape EntityType="producerinterface_Model.jobextendwithproducer" Width="1.5" PointX="12.375" PointY="14.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.profilenews" Width="1.5" PointX="8" PointY="1.875" />
+        <AssociationConnector Association="producerinterface_Model.FK_profile_news_producers" />
+        <EntityTypeShape EntityType="producerinterface_Model.ControlPanelGroup" Width="1.5" PointX="14.375" PointY="16.625" />
+        <EntityTypeShape EntityType="producerinterface_Model.ControlPanelPermission" Width="1.5" PointX="16.625" PointY="18" />
+        <EntityTypeShape EntityType="producerinterface_Model.ControlPanelUser" Width="1.5" PointX="16.625" PointY="15.125" />
+        <AssociationConnector Association="producerinterface_Model.ControlPanelGroupToPermission" />
+        <AssociationConnector Association="producerinterface_Model.ControlPanelUserToGroup" />
+        <EntityTypeShape EntityType="producerinterface_Model.controlpaneluserpermission" Width="1.5" PointX="15.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -12,12 +12,15 @@ namespace ProducerInterfaceControlPanelDomain.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class drugfamily
+    public partial class profilenews
     {
-        public long FamilyId { get; set; }
-        public string FamilyName { get; set; }
-        public long ProducerId { get; set; }
-        public Nullable<long> DescriptionId { get; set; }
-        public Nullable<long> MnnId { get; set; }
+        public long Id { get; set; }
+        public string Topic { get; set; }
+        public string Text { get; set; }
+        public Nullable<long> ProducerId { get; set; }
+        public System.DateTime EditedDate { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+    
+        public virtual producers producers { get; set; }
     }
 }

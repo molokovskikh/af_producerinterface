@@ -12,12 +12,20 @@ namespace ProducerInterfaceControlPanelDomain.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class drugfamily
+    public partial class controlpaneluserpermission
     {
-        public long FamilyId { get; set; }
-        public string FamilyName { get; set; }
-        public long ProducerId { get; set; }
-        public Nullable<long> DescriptionId { get; set; }
-        public Nullable<long> MnnId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Appointment { get; set; }
+        public sbyte Enabled { get; set; }
+        public long IdUser { get; set; }
+        public long IdGroup { get; set; }
+        public string GroupName { get; set; }
+        public long IdPermission { get; set; }
+        public string ControllerAction { get; set; }
+        public string ActionAttributes { get; set; }
+        public string Description { get; set; }
+        public bool Enable_Group { get; set; }
+        public bool Enable_Permission { get; set; }
     }
 }
