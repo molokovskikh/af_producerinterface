@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<string>
+
+@{
     ViewBag.Title = "Домащняя страница";
 }
 
@@ -9,5 +11,17 @@
 
   <div class="jumbotron">
     <h5>Сдесь могла бы быть ваша реклама</h5>
-</div>
+
+      <div class="row">@User.Identity.Name</div>
+
+      @foreach(var XXX in ViewBag.ListGroup)
+      {
+      <div class="row">
+            @Html.DisplayFor(itemModel => XXX)
+      </div>      
+      }
+
+     
+
+  </div>
 

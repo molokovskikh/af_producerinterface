@@ -17,6 +17,8 @@
 
 <hr/>
 
+if(ViewBag.Preview != null || ViewBag.Next != null) {
+
 if (ViewBag.Preview != null)
 {
 <a href="~/Report/ActiveReport/@ViewBag.Preview" class="btn btn-primary">Предыдущие @ViewBag.CountPage</a>
@@ -25,10 +27,10 @@ if (ViewBag.Next != null)
 {
 <a href="~/Report/ActiveReport/@ViewBag.Next" class="btn btn-primary">Следующие @ViewBag.CountPage</a>
 }
-
-<hr />
-
+    <hr />
+}
     <table class="table-bordered table-striped table-responsive" id="table-vidth-100prc">
+
         <tr>
             <th>
                 <label>Название</label>
@@ -36,9 +38,9 @@ if (ViewBag.Next != null)
             <th>
                 <label>Тип</label>
             </th>
-            @*<th>
+            <th>
                 <label>Расписание</label>
-            </th>*@   
+            </th>
             <th>
                 <label>Приизводитель</label>
             </th>    
@@ -64,10 +66,10 @@ if (ViewBag.Next != null)
                     @Html.DisplayFor(modelItem=>item.ReportType)
                 </td>
               
-                  @*<td>
-             // закомичен акшен        @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
-                    @Html.DisplayFor(modelItem => item.Scheduler)
-                </td>*@  
+               <td>
+                    @*@Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
+                    @Html.DisplayFor(modelItem => item.Scheduler)*@
+                </td>
                  
                 <td>              
                 @Html.DisplayFor(modelItem => item.ProducerName)             

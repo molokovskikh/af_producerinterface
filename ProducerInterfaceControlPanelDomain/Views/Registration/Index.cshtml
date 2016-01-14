@@ -1,0 +1,20 @@
+﻿@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ <div class="page-container">
+
+    <h2>Для входа в панель управления требуется Авторизация</h2>
+
+    @using(Html.BeginForm())
+     {
+        <div class="form-group">
+            <input type="text" id="login" name="login" class="form-control" placeholder="Имя пользователя" />
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" name="password" class="form-control" placeholder="Пароль" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Войти" class="btn btn-primary" />
+        </div>
+     }
+</div>
