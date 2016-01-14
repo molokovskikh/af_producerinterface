@@ -26,7 +26,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             }
             else
             {
-                filterContext.Result = RedirectToAction("Index","Registration");
+                string cntrName = filterContext.Controller.GetType().Name.Replace("Controller", "").ToLower();
+                if (cntrName != "registration")
+                {
+                    filterContext.Result = RedirectToAction("Index", "Registration");
+                }
             }
         }
 
