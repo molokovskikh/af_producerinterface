@@ -12,12 +12,16 @@ namespace ProducerInterface.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class drugfamily
+    public partial class produceruserpermission
     {
-        public long FamilyId { get; set; }
-        public string FamilyName { get; set; }
-        public long ProducerId { get; set; }
-        public Nullable<long> DescriptionId { get; set; }
-        public Nullable<long> MnnId { get; set; }
+        public long userId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public sbyte Enabled { get; set; }
+        public Nullable<System.DateTime> PasswordUpdated { get; set; }
+        public Nullable<long> ProducerId { get; set; }
+        public Nullable<long> UserPermissionId { get; set; }
+        public Nullable<long> roleId { get; set; }
+        public string roleName { get; set; }
     }
 }

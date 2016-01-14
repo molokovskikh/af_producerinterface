@@ -26,7 +26,6 @@ namespace ProducerInterface.Models
         }
     
         public DbSet<producers> producers { get; set; }
-        public DbSet<profilenews> profilenews { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<user_logs> user_logs { get; set; }
@@ -38,5 +37,9 @@ namespace ProducerInterface.Models
         public DbSet<drugfamily> drugfamily { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<promotionToDrug> promotionToDrug { get; set; }
+        public DbSet<drugdescription> drugdescription { get; set; }
+        public DbSet<formsakacatalog> formsakacatalog { get; set; }
+        public DbSet<profilenews> profilenews { get; set; }
+        public DbSet<produceruserpermission> produceruserpermission { get; set; }
     }
 }

@@ -185,6 +185,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\drugdescription.cs">
+      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DrugDescriptionRemark.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
@@ -193,6 +196,9 @@
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmailSender.cs" />
+    <Compile Include="Models\formsakacatalog.cs">
+      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Producer.cs" />
     <Compile Include="Models\ProducerInterfaceAdoModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -213,6 +219,9 @@
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\produceruser.cs">
+      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\produceruserpermission.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\profilenews.cs">
