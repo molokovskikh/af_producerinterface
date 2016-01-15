@@ -66,25 +66,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             controllerAcctributes = "";
 
-            foreach (var X in ValuesForm)
-            {
-                if (controllerAcctributes == "")
-                {
-                    controllerAcctributes += X.ToString();
-                }
-                else { controllerAcctributes += "," + X.ToString(); }
-            }
+            controllerAcctributes = Request.HttpMethod.ToString();
 
-            foreach (var X in ValuesNames)
-            {
-                if (controllerAcctributes == "")
-                {
-                    controllerAcctributes += X.ToString();
-                }
-                else { controllerAcctributes += "," + X.ToString(); }
-            }
             bool PermitionExsist = false;
-
 
 
             if (controllerAcctributes != "")

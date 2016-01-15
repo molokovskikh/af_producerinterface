@@ -23,8 +23,8 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public string ControllerAction { get; set; }
         public string ActionAttributes { get; set; }
         public string Description { get; set; }
-        public bool Enabled { get; set; }
-    
+        public bool Enabled { get; set; }    
+
         public virtual ICollection<ControlPanelGroup> ControlPanelGroup { get; set; }
     }
 }

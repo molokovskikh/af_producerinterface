@@ -8,24 +8,91 @@
 <hr />
 
 
-<table class="table-bordered table-condensed table-striped" id="table-vidth-100prc">
+<div class="panel-group panel-success" id="accordionlistpermission">
+
+@foreach (var UserItem in Model)
+{
+    <h3>@UserItem.Name</h3>
+
+    <div class="panel panel-default">
+     
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapsePermissionList_@UserItem.Id" data-parent="#accordionlistpermission"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp; Раскрыть</a>
+            </h4>
+        </div>
+        <div id="collapsePermissionList_@UserItem.Id" class="panel-collapse collapse">
+         
+            <h4>Список групп </h4>
+                <div class="form-group">
+                    @for (int i = 0; i < UserItem.CountGroup; i++)
+                    {
+                        <p>@UserItem.Groups[i]</p>
+                    }
+                </div>
+
+            <hr/>
+
+            <h4>Список прав: </h4>
+            <div class="form-group">
+                @for (int i2 = 0; i2 < UserItem.CountPermissions; i2++)
+                {
+                    <p>@UserItem.ListPermission[i2]</p>
+                }
+            </div>
+
+        </div>
+    </div>
+}
+
+</div>
+
+@*<table class="table-bordered table-condensed table-striped" id="table-vidth-100prc">
     <tr>
         <th>Id</th>
         <th>Логин</th>
         <th>Список групп</th>
+        <th>Список доступов</th>
     </tr>
-    @foreach (var UserItem in Model)
-    {
-        <tr>
-            <td>@UserItem.Id</td>
-            <td>@UserItem.Name</td>
-            <td>
-                @for (int i = 0; i < UserItem.CountGroup; i++)
+    <tbody id="accordion-listpermission" class="panel-group panel-default">
+        @foreach (var UserItem in Model)
+        {
+
+            <tr>
+               <td>@UserItem.Id</td>
+                <td>@UserItem.Name</td>
+                <td>
+                    @for (int i = 0; i < UserItem.CountGroup; i++)
                 {
-                    <p>@UserItem.Groups[i]</p>
-                }
-            </td>
-        </tr>
-    }
-</table>
+                        <p>@UserItem.Groups[i]</p>
+                    }
+                </td>
+                <td class="table-max-width-150px">
+                    <div class="panel panel-default">
+                        <!-- Заголовок панели -->
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapsePermissionList_@UserItem.Id"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp; Развернуть список (@UserItem.CountPermissions)</a>
+                            </h4>
+                        </div>
+                        <div id="collapsePermissionList_@UserItem.Id" data-parent="#accordion-listpermission" class="panel-collapse collapse">
+                            <!-- Содержимое 3 панели -->
+                            <div class="panel-body">
+
+                                @for (int i2 = 0; i2 < UserItem.CountPermissions; i2++)
+                                {
+                                    <p>@UserItem.ListPermission[i2]</p>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+
+</table>*@
 

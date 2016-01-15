@@ -4,9 +4,11 @@
     //$('#CatalogIdEqual').chosen({ width: '95%' });
     //$('#SupplierIdNonEqual').chosen({ width: '95%' });
     //$('#MailTo').chosen({ width: '95%' });
+    var UserList = $('#ListUser');
+    UserList.chosen({ width: '100%' });
 
-    var DrugList = $('#DrugList');
-    DrugList.chosen({ width: '100%' });
+    var PermissionList = $('#ListPermission');
+    PermissionList.chosen({ width: '100%' });
 });
 //    // при чеке За предыдущий месяц гасим выбор интервала
 //    var bm = $('#ByPreviousMonth');

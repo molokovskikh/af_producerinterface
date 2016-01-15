@@ -286,7 +286,7 @@
     <Content Include="Content\Chosen\js\initCron.js" />
     <Content Include="Content\Chosen\js\initDatePicker.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
-    <Content Include="Content\Chosen\js\InitPromotionGrugList.js" />
+    <Content Include="Content\Chosen\js\initChangeGroupPermission.js" />
     <Content Include="Content\Chosen\js\InitReportSearchChosen.js" />
     <Content Include="Content\Chosen\js\jqCron.js" />
     <Content Include="Content\Chosen\js\jqCron.ru.js" />
@@ -353,10 +353,13 @@
     <Content Include="Views\Mail\Edit.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
-    <Content Include="Views\Permission\EditorTemplates\EditorProducer.cshtml" />
+    <Content Include="Views\Permission\EditorTemplates\LongListPermission.cshtml" />
     <Content Include="Views\Permission\Index.cshtml" />
     <Content Include="Views\Permission\Group.cshtml" />
     <Content Include="Views\Permission\Users.cshtml" />
+    <Content Include="Views\Permission\ChangeGroupParameters.cshtml" />
+    <Content Include="Views\Permission\EditorTemplates\LongListUser.cshtml" />
+    <Content Include="Views\Permission\CreateGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

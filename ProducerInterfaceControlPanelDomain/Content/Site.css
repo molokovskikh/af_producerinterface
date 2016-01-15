@@ -57,8 +57,7 @@ textarea {
     text-decoration:none;
     width:100%;
     margin-left:5px;
-    text-align:left;
-    align-content:left;
+    text-align:left;    
     }
     #accordion-menu .panel-body {    
     padding:0px; 
@@ -77,6 +76,13 @@ width:100%;
     text-align:center;
     align-content:center;
     }
+    #table-vidth-100prc .table-max-width-150px {
+    max-width:150px;
+    }
+        #table-vidth-100prc .table-max-width-150px a {
+        text-decoration:none;
+        }
+
 #form-group-mial-list p{
     font-style:italic;
 }
