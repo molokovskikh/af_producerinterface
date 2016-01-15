@@ -34,6 +34,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             if (currentUser != null)
             {
                 ViewBag.currentUser = currentUser;
+
+                CheckGlobalPermission(); // проверка наличия в данного экшена в БД
+                var UserPermitionExsist = CheckUserPermission(); // проверка прав пользователя
+
+                if (!UserPermitionExsist)
+                {
+                    ErrorMessage("У вас нет доступа к данной странице или для изменения данных");
+                    //  Response.AddHeader("Status Code", "204");
+                    filterContext.Result = RedirectToAction("Index", "Home");
+                }
+
             }
             else
             {               
@@ -43,19 +54,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                     filterContext.Result = RedirectToAction("Index", "Registration");
                 }
                 // Не авторизован, уже заходит на страницу авторизции
-            }
-
-                    
-            CheckGlobalPermission(); // проверка наличия в данного экшена в БД
-            var UserPermitionExsist = CheckUserPermission(); // проверка прав пользователя
-
-            if (!UserPermitionExsist)
-            {
-                ErrorMessage("У вас нет доступа к данной странице или для изменения данных");
-                //  Response.AddHeader("Status Code", "204");
-                filterContext.Result = RedirectToAction("Index", "Home");
-            }
-
+            }      
         }
 
         public void CheckGlobalPermission()
@@ -90,11 +89,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             if (controllerAcctributes != "")
             {
-                PermitionExsist = cntx_.controlpaneluserpermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes.Contains(controllerAcctributes));
+                PermitionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes.Contains(controllerAcctributes));
             }
             else
             {
-                PermitionExsist = cntx_.controlpaneluserpermission.Any(xxx => xxx.ControllerAction == permissionName);
+                PermitionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.ControllerAction == permissionName);
                 controllerAcctributes = null;
             }
             
@@ -110,6 +109,26 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 
                 cntx_.ControlPanelPermission.Add(NewPermittion);
                 cntx_.SaveChanges();
+
+                string AdminGroupname = GetWebConfigParameters("AdminGroupName");
+                bool AdminGroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Name == AdminGroupname);
+
+                if (AdminGroupExsist)
+                {
+                    var AdminGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroupname).First();
+                    AdminGroup.ControlPanelPermission.Add(NewPermittion);
+                    cntx_.SaveChanges();
+                }
+                else
+                {
+                    var NewAdminGroup = new Models.ControlPanelGroup();
+                    NewAdminGroup.Enabled = true;
+                    NewAdminGroup.Name = AdminGroupname;
+                    cntx_.ControlPanelGroup.Add(NewAdminGroup);
+                    cntx_.SaveChanges();
+                    NewAdminGroup.ControlPanelPermission.Add(NewPermittion);
+                    cntx_.SaveChanges();
+                }
             }
 
             // пермишен добавлен в БАЗУ, если его не было, если был, то повторно не добавляется
@@ -133,24 +152,26 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 }
             }
 
-            bool UserPermitionExsist = false;
+            //bool UserPermitionExsist = false;
 
             // проверяем не состоит ли пользователь в группе 'Администраторы' название группы хранится в web.config key=AdminGroupName
 
-            string AdminGroupName = GetWebConfigParameters("AdminGroupName");
+            //string AdminGroupName = GetWebConfigParameters("AdminGroupName");
 
-            UserPermitionExsist = cntx_.controlpaneluserpermission.Any(xxx => xxx.Name == currentUser && xxx.GroupName == AdminGroupName);
+            //UserPermitionExsist = cntx_.controlpaneluserpermission.Any(xxx => xxx.Name == currentUser && xxx.GroupName == AdminGroupName);
+            //if (UserPermitionExsist)
+            //{
+            //    return true; // пользователь состоит в группе Администраторы
+            //}
 
-            if (UserPermitionExsist)
-            {
-                return true; // пользователь состоит в группе Администраторы
-            }
 
+            // если аттрибуты запроса пусты / нет в запросе передаваемых параметров
             if (controllerAcctributes == null)
             {
                 return cntx_.controlpaneluserpermission.Any(xxx => xxx.Name == currentUser && xxx.ControllerAction == permissionName);
             }
 
+            // в запросе есть передаваемые параметры
             return cntx_.controlpaneluserpermission.Any(xxx => xxx.Name == currentUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
 
         }

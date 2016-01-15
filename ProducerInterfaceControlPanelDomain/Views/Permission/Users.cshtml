@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.ListUserView>
+@{
+    ViewBag.Title = "Список пользователей сайта";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Список пользователей сайта</h2>
+<hr />
+
+
+<table class="table-bordered table-condensed table-striped" id="table-vidth-100prc">
+    <tr>
+        <th>Id</th>
+        <th>Логин</th>
+        <th>Список групп</th>
+    </tr>
+    @foreach (var UserItem in Model)
+    {
+        <tr>
+            <td>@UserItem.Id</td>
+            <td>@UserItem.Name</td>
+            <td>
+                @for (int i = 0; i < UserItem.CountGroup; i++)
+                {
+                    <p>@UserItem.Groups[i]</p>
+                }
+            </td>
+        </tr>
+    }
+</table>
+

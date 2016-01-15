@@ -60,7 +60,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             int PagerMax =(CounMax/ CountListInOnePage);
 
-            if (PagerMax == Id)
+            if (PagerMax == Id && Id != 0)
             {
                 ViewBag.Preview = (Id - 1);
             }

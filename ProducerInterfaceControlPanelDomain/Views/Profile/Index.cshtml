@@ -1,0 +1,31 @@
+﻿@model ProducerInterfaceControlPanelDomain.Models.ControlPanelUser
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h3>Ваш профиль</h3>
+    <hr />
+        
+        @using (Html.BeginForm("SaveProfile", "Profile", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.Enabled)
+            @Html.HiddenFor(m => m.Name)
+
+        <div class="form-group">
+            <label>Почтовый адресс</label> <br/>
+            @Html.TextBoxFor(m => m.Email, new { @class="form-control", @placeholder="office@analit.net"})
+            @Html.ValidationMessageFor(m=>m.Email)
+        </div>
+        <div class="form-group">
+            <label>Должность</label> <br />
+            @Html.TextBoxFor(m => m.Appointment, new { @class = "form-control", @placeholder = "office@analit.net" })
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Сохранить"/>
+        </div>    
+        }
+
+

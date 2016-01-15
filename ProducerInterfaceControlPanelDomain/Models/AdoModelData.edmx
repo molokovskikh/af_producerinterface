@@ -266,27 +266,21 @@
             <PropertyRef Name="Email" />
             <PropertyRef Name="Appointment" />
             <PropertyRef Name="Enabled" />
-            <PropertyRef Name="IdUser" />
-            <PropertyRef Name="IdGroup" />
-            <PropertyRef Name="GroupName" />
-            <PropertyRef Name="IdPermission" />
-            <PropertyRef Name="ControllerAction" />
-            <PropertyRef Name="Enable_Group" />
             <PropertyRef Name="Enable_Permission" />
           </Key>
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Appointment" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Enabled" Type="tinyint" Nullable="false" />
-          <Property Name="IdUser" Type="uint" Nullable="false" />
-          <Property Name="IdGroup" Type="uint" Nullable="false" />
-          <Property Name="GroupName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IdPermission" Type="uint" Nullable="false" />
-          <Property Name="ControllerAction" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdUser" Type="uint" />
+          <Property Name="IdGroup" Type="uint" />
+          <Property Name="GroupName" Type="varchar" MaxLength="50" />
+          <Property Name="IdPermission" Type="uint" />
+          <Property Name="ControllerAction" Type="varchar" MaxLength="50" />
           <Property Name="ActionAttributes" Type="text" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
-          <Property Name="Enable_Group" Type="bool" Nullable="false" />
-          <Property Name="Enable_Permission" Type="bool" Nullable="false" />
+          <Property Name="Enable_Group" Type="bool" />
+          <Property Name="Enable_Permission" Type="tinyint" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamily" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -1530,27 +1524,21 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <PropertyRef Name="Email" />
             <PropertyRef Name="Appointment" />
             <PropertyRef Name="Enabled" />
-            <PropertyRef Name="IdUser" />
-            <PropertyRef Name="IdGroup" />
-            <PropertyRef Name="GroupName" />
-            <PropertyRef Name="IdPermission" />
-            <PropertyRef Name="ControllerAction" />
-            <PropertyRef Name="Enable_Group" />
             <PropertyRef Name="Enable_Permission" />
           </Key>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Appointment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Enabled" Type="SByte" Nullable="false" />
-          <Property Name="IdUser" Type="Int64" Nullable="false" />
-          <Property Name="IdGroup" Type="Int64" Nullable="false" />
-          <Property Name="GroupName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IdPermission" Type="Int64" Nullable="false" />
-          <Property Name="ControllerAction" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdUser" Type="Int64" />
+          <Property Name="IdGroup" Type="Int64" />
+          <Property Name="GroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdPermission" Type="Int64" />
+          <Property Name="ControllerAction" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ActionAttributes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Enable_Group" Type="Boolean" Nullable="false" />
-          <Property Name="Enable_Permission" Type="Boolean" Nullable="false" />
+          <Property Name="Enable_Group" Type="Boolean" />
+          <Property Name="Enable_Permission" Type="SByte" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>

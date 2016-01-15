@@ -18,14 +18,14 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public string Email { get; set; }
         public string Appointment { get; set; }
         public sbyte Enabled { get; set; }
-        public long IdUser { get; set; }
-        public long IdGroup { get; set; }
+        public Nullable<long> IdUser { get; set; }
+        public Nullable<long> IdGroup { get; set; }
         public string GroupName { get; set; }
-        public long IdPermission { get; set; }
+        public Nullable<long> IdPermission { get; set; }
         public string ControllerAction { get; set; }
         public string ActionAttributes { get; set; }
         public string Description { get; set; }
-        public bool Enable_Group { get; set; }
-        public bool Enable_Permission { get; set; }
+        public Nullable<bool> Enable_Group { get; set; }
+        public sbyte Enable_Permission { get; set; }
     }
 }

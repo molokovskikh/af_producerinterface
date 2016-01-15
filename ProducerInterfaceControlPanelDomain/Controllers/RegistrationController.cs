@@ -21,17 +21,89 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             if (IsAuthenticated(login, password))
             {
-                SetLoginCookie((object)login);
+                var X = cntx_.ControlPanelUser.Where(xxx => xxx.Name == login).FirstOrDefault();
 
-                // Add User In BD
+                if(X == null)
+                {
+                    //  AddUserInDB(login);  // добавление обычного пользователя, у которого не будет прав
+                    AddAdminUserInBD(login); // добавление администратора
+                }
 
-                // Проверяем наличие пользователя в БД
-
-
+                SetLoginCookie((object)login);    
                 return RedirectToAction("Index", "Home");                
             }
             ErrorMessage("Неверные логин и пароль " + ErrorMessageString);
             return RedirectToAction("Index", "Registration");
+        }
+
+        public void AddUserInDB(string LogIn)
+        {
+            Models.ControlPanelUser CPU = new Models.ControlPanelUser();
+
+            CPU.Name = LogIn;
+            CPU.Enabled = 1;
+            CPU.Email = "";
+            CPU.Appointment = "";
+            
+            cntx_.ControlPanelUser.Add(CPU);
+
+            cntx_.SaveChanges();
+
+            string AdminGroup = GetWebConfigParameters("Все");
+
+            long IdGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroup).FirstOrDefault().Id;
+
+            if (IdGroup > 0)
+            {
+                var Group = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == IdGroup).First();
+                Group.ControlPanelUser.Add(CPU);
+                cntx_.SaveChanges();
+            }
+            else
+            {
+                var Group = new Models.ControlPanelGroup();
+                Group.Name = AdminGroup;
+                Group.ControlPanelUser.Add(CPU);
+            }
+
+            cntx_.SaveChanges();
+
+        }
+
+        public void AddAdminUserInBD(string LogIn)
+        {
+            Models.ControlPanelUser CPU = new Models.ControlPanelUser();
+
+            CPU.Name = LogIn;            
+            CPU.Enabled = 1;
+            CPU.Email = "";
+            CPU.Appointment = "";
+
+            cntx_.ControlPanelUser.Add(CPU);
+
+            cntx_.SaveChanges();
+
+            string AdminGroup = GetWebConfigParameters("AdminGroupName");
+
+            var GroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Name == AdminGroup);
+
+            if (GroupExsist)
+            {
+                var Group = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroup).First();
+                Group.ControlPanelUser.Add(CPU);             
+            }
+            else
+            {
+                var Group = new Models.ControlPanelGroup();
+                Group.Name = AdminGroup;
+                Group.Enabled = true;
+                cntx_.ControlPanelGroup.Add(Group);
+                cntx_.SaveChanges();
+                Group.ControlPanelUser.Add(CPU);             
+            }
+
+            cntx_.SaveChanges();
+
         }
 
         private DirectoryEntry entryAu;

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<string>
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.promotions>
 
 @{
     ViewBag.Title = "Домащняя страница";
@@ -10,9 +10,18 @@
 </div>
 
   <div class="jumbotron">
-    <h5>Сдесь могла бы быть ваша реклама</h5>
+    <h5>Список подтверждённых Промо-Акций производителей</h5>
 
-      <div class="row">@User.Identity.Name</div>
+      @foreach (var PromotionItem in Model)
+      {
+        <div class="col-sm-4" id="Promo-Action">
+            <h5><span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp;&nbsp; @PromotionItem.Name</h5>
+            <p>Описание: <br/> @PromotionItem.Annotation</p>     
+            <br/>      
+        </div>
+      }   
+
+      @*<div class="row">@User.Identity.Name</div>
 
       @foreach(var XXX in ViewBag.ListGroup)
       {
@@ -23,7 +32,7 @@
 
       <a class="form-control">
           @ViewBag.x
-      </a>
+      </a>*@
 
      
 

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.ControlPanelUser>
+@{
+    ViewBag.Title = "Список администраторов";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Администраторы сайта</h2>
+
+<hr />
+
+<table class="table-bordered table-condensed table-striped" id="table-vidth-100prc">
+    <tr>
+        <th>Логин</th>
+        <th>Почтовый адрес</th>      
+    </tr>
+    @foreach (var Administrator in Model)
+    {
+        <tr>
+            <td>@Administrator.Name</td>
+            <td><a href="mailto:@Administrator.Email">@Administrator.Email </a></td>
+        </tr>
+    }
+</table>

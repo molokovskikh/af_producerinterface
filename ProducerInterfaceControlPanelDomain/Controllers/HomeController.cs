@@ -17,14 +17,24 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         /// <returns>Стартовая страница сайта, которая будет доступна после авторизации</returns>
         public ActionResult Index()
         {
-            IEnumerable<string> X = Groups().ToList();
-          ViewBag.ListGroup = X;
-          
-          
-        
-            return View(X);
+            //IEnumerable<string> X = Groups().ToList();
+            //ViewBag.ListGroup = X;
+
+            var ListActionInProducers = cntx_.promotions.Where(xxx => xxx.Begin < DateTime.Now && xxx.End > DateTime.Now && xxx.Enabled == true).ToList();
+                    
+            return View(ListActionInProducers);
+
         }
 
+
+
+
+
+
+
+
+
+        // возвращает список групп из АД для текущего пользователя. NTLM пользователя 
         public List<string> Groups()
         {
             List<string> groups = new List<string>();

@@ -40,6 +40,10 @@ textarea {
     #accordion-menu span {
     margin-right:1em;
     }
+       #accordion-menu #loginspan {
+    margin-right:0 auto;
+    }
+
     #accordion-menu .panel {
     border-radius:0px;    
     }
@@ -75,4 +79,7 @@ width:100%;
     }
 #form-group-mial-list p{
     font-style:italic;
+}
+#Promo-Action {
+min-height:15em;
 }

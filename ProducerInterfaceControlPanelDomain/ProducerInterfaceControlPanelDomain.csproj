@@ -148,6 +148,8 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
+    <Compile Include="Controllers\PermissionController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
@@ -204,6 +206,7 @@
     <Compile Include="Models\mailformwithfooter.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MyViewModels.cs" />
     <Compile Include="Models\OptionElement.cs" />
     <Compile Include="Models\pharmacynames.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
@@ -349,6 +352,11 @@
     <Content Include="Views\Mail\Index.cshtml" />
     <Content Include="Views\Mail\Edit.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Permission\EditorTemplates\EditorProducer.cshtml" />
+    <Content Include="Views\Permission\Index.cshtml" />
+    <Content Include="Views\Permission\Group.cshtml" />
+    <Content Include="Views\Permission\Users.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
