@@ -23,6 +23,7 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public long Id { get; set; }
         public string Name { get; set; }
         public bool Enabled { get; set; }
+        public string Description { get; set; }
     
         public virtual ICollection<ControlPanelPermission> ControlPanelPermission { get; set; }
         public virtual ICollection<ControlPanelUser> ControlPanelUser { get; set; }

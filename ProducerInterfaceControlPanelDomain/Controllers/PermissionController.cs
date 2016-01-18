@@ -17,11 +17,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             return View(ListAdministrators);
         }
-
-        //<a href = "~/Permission/Users" class="btn btn-primary">Список пользователей</a>
-        //  <br />
-        //  <a href = "~/Permission/Group" class="btn btn-primary">Список групп</a>
-
+            
         public ActionResult Group()
         {
             var ListGroup = cntx_.ControlPanelGroup.ToList()
@@ -29,6 +25,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                     Id = xxx.Id,
                     CountUser = xxx.ControlPanelUser.Where(eee => eee.Enabled == 1).Count(),
                     NameGroup = xxx.Name,
+                    Description = xxx.Description,
                     Users = xxx.ControlPanelUser.Where(zzz => zzz.Enabled == 1).Select(zzz => zzz.Name).ToArray(),
                     Permissions = xxx.ControlPanelPermission.Where(zzz => zzz.Enabled == true).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes).ToArray()
                 });
@@ -61,36 +58,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                             .Select(yyy => yyy.ControllerAction + "  " + yyy.ActionAttributes).Distinct().ToArray()
                 }
                 ).ToList();
-              
-
-
-            //var ListUser = cntx_.ControlPanelUser.ToList().
-            //    Select(xxx => new Models.ListUserView {
-            //        Id = xxx.Id,
-            //        Name = xxx.Name,                  
-            //        Groups = xxx.ControlPanelGroup.Where(eee => eee.Enabled == true).Select(eee => eee.Name).ToArray(),
-            //        CountGroup = xxx.ControlPanelGroup.Where(eee => eee.Enabled == true).Count(),
-
-            //            ListPermission = cntx_.controlpaneluserpermission.ToList().Where(eee => eee.Name == currentUser && eee.Enable_Permission == 1 && eee.IdGroup == xxx.ControlPanelGroup.Where(zzz=>zzz.Id == xxx.ControlPanelGroup.).First().Id).Select(zzz=>zzz.ControllerAction + "  " + zzz.ActionAttributes)     
-            //            .ToList()                   
-            //            .GroupBy(zzz => zzz)
-            //            .Select(zzz => zzz.First())                      
-            //            .ToArray(),
-
-            //        CountPermissions = cntx_.controlpaneluserpermission.ToList().Where(eee => eee.Name == currentUser && eee.Enable_Permission == 1 && eee.IdGroup == xxx.ControlPanelGroup.Where(zzz => zzz.Name == xxx.Name).First().Id).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes)
-            //            .ToList()
-            //            .GroupBy(zzz => zzz)
-            //            .Select(zzz => zzz.First())
-            //            .Count()
-            //    });       
-
-            //var ListPermission = cntx_.controlpaneluserpermission.Where(xxx => xxx.Name == currentUser && xxx.Enable_Permission == 1).ToList();
-            //foreach(var X in ListUser)
-            //{
-            // X.ListPermission = ListPermission.GroupBy(xxx => xxx.IdPermission).Select(xxx => xxx.First()).Select(eee => eee.ControllerAction + eee.ActionAttributes).ToArray();
-            // X.CountPermissions = X.ListPermission.Count();
-            //}  
-
             return View(ListUserViewModel);
         }
 
@@ -132,6 +99,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 var GroupInDB = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == ChangedGroup.Id).First();
 
                 GroupInDB.Name = ChangedGroup.Name;
+                GroupInDB.Description = ChangedGroup.Description;
                 cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
           
                 
@@ -193,6 +161,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
                 cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Added;    
                 GroupInDB.Name = ChangedGroup.Name;
+                GroupInDB.Description = ChangedGroup.Description;
                 cntx_.SaveChanges(); // сохраняем, что бы присвоился Id
 
                 // заполняем список пермишенов для данной группы

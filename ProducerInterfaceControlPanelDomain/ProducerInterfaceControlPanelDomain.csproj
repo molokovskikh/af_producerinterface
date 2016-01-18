@@ -149,6 +149,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
+    <Compile Include="Controllers\ProducerUserPermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -220,6 +221,9 @@
     <Compile Include="Models\ProducerUser.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\produceruserpermission.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\profilenews.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
@@ -283,6 +287,7 @@
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
     <Content Include="Content\Chosen\js\chosen.jquery.js" />
     <Content Include="Content\Chosen\js\initAddJob.js" />
+    <Content Include="Content\Chosen\js\initChangeGroupPermissionProducerUser.js" />
     <Content Include="Content\Chosen\js\initCron.js" />
     <Content Include="Content\Chosen\js\initDatePicker.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
@@ -290,7 +295,6 @@
     <Content Include="Content\Chosen\js\InitReportSearchChosen.js" />
     <Content Include="Content\Chosen\js\jqCron.js" />
     <Content Include="Content\Chosen\js\jqCron.ru.js" />
-    <Content Include="Content\Chosen\js\Old\initAddJob.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -360,6 +364,11 @@
     <Content Include="Views\Permission\ChangeGroupParameters.cshtml" />
     <Content Include="Views\Permission\EditorTemplates\LongListUser.cshtml" />
     <Content Include="Views\Permission\CreateGroup.cshtml" />
+    <Content Include="Views\ProducerUserPermission\Index.cshtml" />
+    <Content Include="Views\ProducerUserPermission\EditorTemplates\LongListPermission.cshtml" />
+    <Content Include="Views\ProducerUserPermission\Edit.cshtml" />
+    <Content Include="Views\ProducerUserPermission\ListPermission.cshtml" />
+    <Content Include="Views\ProducerUserPermission\EditPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

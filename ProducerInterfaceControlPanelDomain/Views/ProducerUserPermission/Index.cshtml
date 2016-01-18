@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.ProducerUser>
+@using ProducerInterfaceControlPanelDomain.Models;
+@{
+    ViewBag.Title = "Список пользователей 'Интерфейс производителя'";
+   
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Список пользователей, интерфейс производителя</h2>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>ФИО</th>
+        <th>Почтовый адрес</th>
+        <th>Список прав</th>       
+    </tr>
+
+
+    @foreach (var UserPermissionItem in Model)
+    {
+        <tr>
+            <td><p>@UserPermissionItem.Name</p></td>
+            <td><p>@UserPermissionItem.Email</p></td>        
+            <td class="table-max-width-150px">
+
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapsePermissionList_@UserPermissionItem.Id" data-parent="#accordionlistpermission"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp; Раскрыть ( @UserPermissionItem.usertouserrole.Where(xxx=>xxx.ProducerUserId == UserPermissionItem.Id).Count() )</a>
+                    </h4>
+                </div>
+                <div id="collapsePermissionList_@UserPermissionItem.Id" class="panel-collapse collapse">
+                    @foreach (var PermissionItem in (UserPermissionItem.usertouserrole.Where(xxx=>xxx.ProducerUserId == UserPermissionItem.Id).ToList().Select(xxx => new ProducerInterfaceControlPanelDomain.Models.OptionElement { Text = xxx.UserPermission.Name, Value = xxx.UserPermission.Name.ToString() }).ToList()))
+
+                    {
+                        <p>@PermissionItem.Text</p>
+                    }
+                    <a class="btn btn-primary" href="~/ProducerUserPermission/EditUserPermission/@UserPermissionItem.Id">Изменить</a>       
+                </div>
+
+            </td>
+
+        </tr>
+    }
+
+</table>
+

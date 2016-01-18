@@ -8,7 +8,7 @@
 
 <hr />
 
-<table class="table-bordered table-condensed table-striped" id="table-vidth-100prc">
+<table class="table-bordered table-condensed table-striped" id="table-width-100prc">
     <tr>     
         @*<th>Id группы</th>*@ 
         <th>Название группы</th>
@@ -21,7 +21,16 @@
             @*<td>@GroupItem.Id</td>*@
             <td>
                 <p>@GroupItem.NameGroup</p>
-                <a class="btn btn-primary" href="~/Permission/GetOneGroup/@GroupItem.Id">Изменить</a>
+
+                @if (GroupItem.Description == null || GroupItem.Description == "")
+                {
+                    @*Описание у группы отсутствует*@
+                }
+                else
+                {
+                    <p>Описание <br />' @GroupItem.Description '</p>
+                }          
+                <a class="btn btn-primary" href="~/Permission/GetOneGroup/@GroupItem.Id">Редактировать группу</a>
             </td>
             <td>                       
                 @for (int i = 0; i < GroupItem.CountUser; i++)

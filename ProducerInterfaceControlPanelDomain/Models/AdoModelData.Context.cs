@@ -55,5 +55,6 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
         public DbSet<ControlPanelUser> ControlPanelUser { get; set; }
         public DbSet<controlpaneluserpermission> controlpaneluserpermission { get; set; }
+        public DbSet<produceruserpermission> produceruserpermission { get; set; }
     }
 }

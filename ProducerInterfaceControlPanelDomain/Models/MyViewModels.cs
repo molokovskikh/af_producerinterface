@@ -10,6 +10,7 @@ namespace ProducerInterfaceControlPanelDomain.Models
     {
         public long Id { get; set; }
         public string NameGroup { get; set; }
+        public string Description { get; set; }
         public int CountUser { get; set; }
         public string[] Users { get; set; }     
         public string[] Permissions { get; set; }
@@ -23,6 +24,15 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public int CountPermissions { get; set; }
         public string[] ListPermission { get; set; }
     }
+
+    public partial class ProducerUser
+    {
+        public List<OptionElement> ListPermission { get; set; }
+
+        [UIHint("LongListPermission")]
+        public List<long> ListSelectedPermission { get; set; }
+    }
+
 
     [MetadataType(typeof(ControlPanelGroupMetaData))]
     partial class ControlPanelGroup

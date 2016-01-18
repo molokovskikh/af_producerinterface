@@ -12,19 +12,16 @@ namespace ProducerInterfaceControlPanelDomain.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlPanelPermission
+    public partial class produceruserpermission
     {
-        public ControlPanelPermission()
-        {
-            this.ControlPanelGroup = new HashSet<ControlPanelGroup>();
-        }
-    
-        public long Id { get; set; }
-        public string ControllerAction { get; set; }
-        public string ActionAttributes { get; set; }
-        public string Description { get; set; }
-        public bool Enabled { get; set; }
-    
-        public virtual ICollection<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public long userId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public sbyte Enabled { get; set; }
+        public Nullable<System.DateTime> PasswordUpdated { get; set; }
+        public Nullable<long> ProducerId { get; set; }
+        public Nullable<long> UserPermissionId { get; set; }
+        public Nullable<long> roleId { get; set; }
+        public string roleName { get; set; }
     }
 }
