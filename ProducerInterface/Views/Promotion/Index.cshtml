@@ -1,5 +1,5 @@
-﻿@using ProducerInterface.Models;
-@model IEnumerable<ProducerInterface.Models.promotions>
+﻿@using EntityContext.ContextModels;
+@model IEnumerable<EntityContext.ContextModels.promotions>
 @{
     ViewBag.Title = "Промо-акции";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -40,7 +40,7 @@
                                     <tr>
                                         <td>@item.Name</td>
                                         <td>@item.Annotation</td>
-                                        <td>@item.produceruser.Name</td>
+                                        <td>@item.ProducerUser.Name</td>
                                         <td>@item.UpdateTime.ToString("dd-MM-yyyy")</td>
                                         <td>@* @item.promotiontodrug  *@</td>
                                         <td>

@@ -56,6 +56,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
             catch (Exception e)
             {
                 //IGNORE
+                var x = e;
                 return null;
             }
         }

@@ -302,24 +302,6 @@
     <Content Include="Views\Registration\EditorTemplates\EditorStringPosition.cshtml" />
     <Content Include="Views\Registration\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Shared\LoginPartialView.cshtml" />
-    <Content Include="Views\Profile\ManagePromotion.cshtml" />
-    <Content Include="Views\Profile\Products.cshtml" />
-    <Content Include="Views\Profile\ProfileMenu.cshtml" />
-    <Content Include="Views\Profile\Promotions.cshtml" />
-    <Content Include="Views\Profile\Reports.cshtml" />
-    <Content Include="Views\Profile\RunGeneralReport.cshtml" />
-    <Content Include="Views\Profile\SideBar.cshtml" />
-    <Content Include="Views\Profile\SupplierRatingParams.cshtml" />
-    <Content Include="Views\Profile\Catalog.cshtml" />
-    <Content Include="Views\Profile\CreateDrugDescriptionRemark.cshtml" />
-    <Content Include="Views\Profile\CreateMonthlySchedule.cshtml" />
-    <Content Include="Views\Profile\CreateNews.cshtml" />
-    <Content Include="Views\Profile\CreateRatingReport.cshtml" />
-    <Content Include="Views\Profile\CreateReportTemplate.cshtml" />
-    <Content Include="Views\Profile\CreateWeeklySchedule.cshtml" />
-    <Content Include="Views\Profile\DrugstoreRatingParams.cshtml" />
-    <Content Include="Views\Profile\EditGeneralReport.cshtml" />
-    <Content Include="Views\Profile\EditReportTemplate.cshtml" />
     <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\Report\EditorTemplates\CronIntervalParam.cshtml" />
     <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
@@ -342,6 +324,9 @@
     <Content Include="Views\UserPermission\Index.cshtml" />
     <Content Include="Views\UserPermission\Edit.cshtml" />
     <Content Include="Views\UserPermission\EditorTemplates\LongList.cshtml" />
+    <Content Include="Views\Drug\EditForms.cshtml" />
+    <Content Include="Views\Drug\DisplayForms.cshtml" />
+    <Content Include="Views\Drug\EditMnn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

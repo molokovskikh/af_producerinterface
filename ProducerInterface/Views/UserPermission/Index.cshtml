@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProducerInterface.Models.produceruser>
+﻿@model IEnumerable<EntityContext.ContextModels.ProducerUser>
 @{
     ViewBag.Title = "Список пользователей";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -27,7 +27,7 @@
             <td>@ItemUser.Email</td>
 
             <td>
-               @foreach(var ItemPermission in (ItemUser.usertouserrole.Where(xxx=>xxx.ProducerUserId == ItemUser.Id).Select(xxx=>xxx.userpermission.Name).ToList()))
+               @foreach(var ItemPermission in (ItemUser.usertouserrole.Where(xxx=>xxx.ProducerUserId == ItemUser.Id).Select(xxx=>xxx.UserPermission.Name).ToList()))
                 {
                     <p>@ItemPermission</p>
                 }

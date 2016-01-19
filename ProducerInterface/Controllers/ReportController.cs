@@ -13,7 +13,6 @@ using System.Configuration;
 using Common.Logging;
 using Quartz.Job.EDM;
 
-using ProducerInterface.Models;
 using System.Data;
 using System.IO;
 

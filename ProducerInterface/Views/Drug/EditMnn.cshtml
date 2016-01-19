@@ -1,8 +1,8 @@
 ﻿@using EntityContext.ContextModels
-@model drugdescription
+@model drugmnn
 
 @{
-    var title = $"Описание препарата \"{ViewData["familyName"]}\"";
+    var title = $"МНН препарата \"{ViewData["familyName"]}\"";
     ViewBag.Title = title;
 }
 
@@ -24,7 +24,7 @@
                     @Html.ActionLink("К списку препаратов", "Index")
                 </div>
             </div>
-            @Html.Hidden("url", Url.Action("EditDescriptionField", "Drug"))
+            @Html.Hidden("url", Url.Action("EditMnnField", "Drug"))
         </fieldset>
         }
     </div>
@@ -34,7 +34,5 @@
 <script src="~/Content/Chosen/js/initDrug.js"></script>
 }
 
-
-@*<div>У данного товара нет описания</div>*@
 
 
