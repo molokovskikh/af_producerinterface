@@ -151,6 +151,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProducerUserPermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
@@ -189,10 +190,19 @@
     <Compile Include="Models\controlpaneluserpermission.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\drugdescription.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DrugDescriptionRemark.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\drugfamily.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\drugformproducer.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\drugmnn.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\jobextend.cs">
@@ -292,6 +302,7 @@
     <Content Include="Content\Chosen\js\initDatePicker.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
     <Content Include="Content\Chosen\js\initChangeGroupPermission.js" />
+    <Content Include="Content\Chosen\js\InitSearchPromotionChosen.js" />
     <Content Include="Content\Chosen\js\InitReportSearchChosen.js" />
     <Content Include="Content\Chosen\js\jqCron.js" />
     <Content Include="Content\Chosen\js\jqCron.ru.js" />
@@ -369,6 +380,9 @@
     <Content Include="Views\ProducerUserPermission\Edit.cshtml" />
     <Content Include="Views\ProducerUserPermission\ListPermission.cshtml" />
     <Content Include="Views\ProducerUserPermission\EditPermission.cshtml" />
+    <Content Include="Views\Promotion\Index.cshtml" />
+    <Content Include="Views\Promotion\Search.cshtml" />
+    <Content Include="Views\Promotion\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

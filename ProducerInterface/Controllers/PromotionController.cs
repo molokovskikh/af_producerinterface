@@ -36,6 +36,7 @@ namespace ProducerInterface.Controllers
         {
             PromotionValidation ViewPromotion = new PromotionValidation();
             var currentUser = GetCurrentUser();
+
             var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
             Quartz.Job.EDM.reportData cntx;
             Quartz.Job.NamesHelper h;

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.promotions>
+@{
+    ViewBag.Title = "Список Акций";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var DrugListItems = ViewBag.ListDrugs as IEnumerable<ProducerInterfaceControlPanelDomain.Models.catalognames>;
+    var ProducersList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceControlPanelDomain.Models.producernames>;
+}
+
+<h2>
+    Список Промо-Акций  
+    @if (ViewBag.ProducerName != null)
+{ @ViewBag.ProducerName }
+    else
+    {
+        if (ViewBag.EnabledPromotion == true)
+        {
+            <span>Подтверждённых</span>
+        }
+        else
+        {
+            <span>Не подтверждённых</span>
+        }
+    }
+</h2>
+
+<hr/>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Название Промо Акции</th>
+        <th>Приозводитель</th>
+        <th>ФИО автора</th>
+        <th>Список лекарств</th>
+        <th>Подробнее</th>
+    </tr>
+
+    @foreach (var PromotionItem in Model)
+    {
+        <tr>
+            <td>@PromotionItem.Name</td>
+
+            <td>@ProducersList.Where(xxx => xxx.ProducerId == PromotionItem.ProducerId).First().ProducerName</td>
+            <td>@PromotionItem.ProducerUser.Name</td>
+            <td>
+
+                @foreach (var DrugItem in PromotionItem.promotionToDrug)
+                {
+                    <p>@DrugListItems.Where(xxx => xxx.CatalogId == DrugItem.DrugId).First().CatalogName</p>
+                   
+                }
+
+            </td>
+
+            <th><a href="~/Promotion/Edit/@PromotionItem.Id" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp; Подробно</a></th>
+
+        </tr>
+
+    }
+</table>
+

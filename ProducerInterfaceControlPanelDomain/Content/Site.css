@@ -50,17 +50,21 @@ textarea {
      #accordion-menu .panel-title {
     border-radius:0px;    
     }
+    #accordion-menu .panel .panel-heading {
+    background-color:#1F1F2F;
+    }
+
     #accordion-menu .panel-heading {
     border-radius:0px;    
     }
     #accordion-menu a {        
     text-decoration:none;
     width:100%;
-    margin-left:5px;
+    margin-left:0px;
     text-align:left;    
     }
         #accordion-menu .panel-collapse a {
-        background-color:#a0a9ea;        
+        background-color:#31375F;        
         }
 
     #accordion-menu .panel-body {    
