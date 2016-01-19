@@ -11,6 +11,14 @@ namespace ProducerInterface.Models
     {
     }
 
+    public partial class produceruser
+    {
+        [Display(Name="Списко прав")]
+        [UIHint("LongList")]
+        public List<long> UserPermission { get; set; }
+    }
+
+
     public class PromotionValidation
     {
         public long Id { get; set; }

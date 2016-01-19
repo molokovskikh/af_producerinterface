@@ -14,7 +14,14 @@ namespace ProducerInterfaceControlPanelDomain.Models
     
     public partial class producers
     {
+        public producers()
+        {
+            this.profilenews = new HashSet<profilenews>();
+        }
+    
         public long Id { get; set; }
         public string Name { get; set; }
+    
+        public virtual ICollection<profilenews> profilenews { get; set; }
     }
 }

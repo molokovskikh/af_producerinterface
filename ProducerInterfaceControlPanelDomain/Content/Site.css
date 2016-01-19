@@ -40,22 +40,35 @@ textarea {
     #accordion-menu span {
     margin-right:1em;
     }
+       #accordion-menu #loginspan {
+    margin-right:0 auto;
+    }
+
     #accordion-menu .panel {
     border-radius:0px;    
     }
      #accordion-menu .panel-title {
     border-radius:0px;    
     }
+    #accordion-menu .panel .panel-heading {
+    background-color:#1F1F2F;
+    }
+
     #accordion-menu .panel-heading {
     border-radius:0px;    
     }
-    #accordion-menu a {
+    #accordion-menu a {   
+    max-height:28px;     
     text-decoration:none;
     width:100%;
-    margin-left:5px;
-    text-align:left;
-    align-content:left;
+    margin-left:0px;
+    text-align:left;    
     }
+        #accordion-menu .panel-collapse a {
+        background-color:#31375F;        
+        max-height:28px;     
+        }
+
     #accordion-menu .panel-body {    
     padding:0px; 
     border-radius:0px;    
@@ -66,13 +79,23 @@ textarea {
     #accordion-menu .menu-account {
         color: whitesmoke;
     }
-#table-vidth-100prc {
+#table-width-100prc {
 width:100%;
 }
-    #table-vidth-100prc th {
+    #table-width-100prc th {
     text-align:center;
     align-content:center;
     }
+    #table-width-100prc .table-max-width-150px {
+    max-width:150px;
+    }
+        #table-width-100prc .table-max-width-150px a {
+        text-decoration:none;
+        }
+
 #form-group-mial-list p{
     font-style:italic;
+}
+#Promo-Action {
+min-height:15em;
 }

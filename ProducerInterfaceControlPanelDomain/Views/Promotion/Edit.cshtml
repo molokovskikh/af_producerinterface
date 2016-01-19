@@ -1,0 +1,79 @@
+﻿@model ProducerInterfaceControlPanelDomain.Models.promotions
+@{
+    ViewBag.Title = "Редактирование Промо-Акции";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var DrugListItems = ViewBag.ListDrugs as List<ProducerInterfaceControlPanelDomain.Models.catalognames>;
+    var ProducersList = ViewBag.ProducerList as ProducerInterfaceControlPanelDomain.Models.producernames;
+}
+
+<h2>Промо Акция '@Model.Name'</h2>
+<h3>Производитель '@ProducersList.ProducerName'</h3>
+<h4>
+    <strong>Статус </strong>
+    @if (Model.Status == false)
+    {
+        <span>Не подтверждена</span>
+    }
+    else
+    {
+        <span>Подтверждена</span>
+    }
+</h4>
+<hr/>
+
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+
+        @Html.HiddenFor(m=>m.Id)
+
+        <div class="form-group">
+            <label>Описание</label> <br/>
+            @Html.DisplayTextFor(m => m.Annotation)
+        </div>
+
+        <div class="form-group">
+            <label>Дата начала</label> <br />
+            <p>@Model.Begin.Value.ToString("0:dd/MM/yyyy")</p>
+        </div>
+
+        <div class="form-group">
+            <label>Дата Окончания</label> <br />
+            <p>@Model.Begin.Value.ToString("0:dd/MM/yyyy")</p>
+        </div>
+
+        <div class="form-group">         
+          
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseDrus" style="text-decoration:none;"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp;  Лекаства (@Model.promotionToDrug.Count() шт.)</a>
+                    </h4>
+                </div>
+                <div id="collapseDrus" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <hr />
+                        @foreach (var DrugItem_ in Model.promotionToDrug)
+                        {
+                            @DrugListItems.Where(xxx => xxx.CatalogId == DrugItem_.DrugId).First().CatalogName
+                        }
+                    </div>
+                </div>
+            </div>  
+                 
+        </div>
+
+    if (Model.Status == false)
+    {
+        <div class="form-group">
+            <input type="submit" value="Подтвердить" class="btn btn-primary" />
+            <a class="btn btn-primary" href="~/Promotion/Index">Назад к списку</a>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+           <a class="btn btn-primary" href="~/Promotion/Index">Назад к списку</a>
+        </div>
+    }
+}

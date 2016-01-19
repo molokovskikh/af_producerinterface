@@ -17,5 +17,7 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public long FamilyId { get; set; }
         public string FamilyName { get; set; }
         public long ProducerId { get; set; }
+        public Nullable<long> DescriptionId { get; set; }
+        public Nullable<long> MnnId { get; set; }
     }
 }

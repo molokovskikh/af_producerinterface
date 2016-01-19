@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
@@ -34,6 +34,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -146,6 +148,10 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
+    <Compile Include="Controllers\PermissionController.cs" />
+    <Compile Include="Controllers\ProducerUserPermissionController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
@@ -172,10 +178,22 @@
     <Compile Include="Models\catalognames.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DrugDescriptionRemark.cs">
+    <Compile Include="Models\ControlPanelGroup.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ControlPanelPermission.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ControlPanelUser.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\controlpaneluserpermission.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\drugfamily.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\drugformproducer.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\jobextend.cs">
@@ -190,6 +208,7 @@
     <Compile Include="Models\mailformwithfooter.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MyViewModels.cs" />
     <Compile Include="Models\OptionElement.cs" />
     <Compile Include="Models\pharmacynames.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
@@ -201,6 +220,12 @@
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProducerUser.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\produceruserpermission.cs">
+      <DependentUpon>AdoModelData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\profilenews.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\promotions.cs">
@@ -263,14 +288,15 @@
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
     <Content Include="Content\Chosen\js\chosen.jquery.js" />
     <Content Include="Content\Chosen\js\initAddJob.js" />
+    <Content Include="Content\Chosen\js\initChangeGroupPermissionProducerUser.js" />
     <Content Include="Content\Chosen\js\initCron.js" />
     <Content Include="Content\Chosen\js\initDatePicker.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
-    <Content Include="Content\Chosen\js\InitPromotionGrugList.js" />
+    <Content Include="Content\Chosen\js\initChangeGroupPermission.js" />
+    <Content Include="Content\Chosen\js\InitSearchPromotionChosen.js" />
     <Content Include="Content\Chosen\js\InitReportSearchChosen.js" />
     <Content Include="Content\Chosen\js\jqCron.js" />
     <Content Include="Content\Chosen\js\jqCron.ru.js" />
-    <Content Include="Content\Chosen\js\Old\initAddJob.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -332,6 +358,22 @@
     <Content Include="Views\Mail\Index.cshtml" />
     <Content Include="Views\Mail\Edit.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Permission\EditorTemplates\LongListPermission.cshtml" />
+    <Content Include="Views\Permission\Index.cshtml" />
+    <Content Include="Views\Permission\Group.cshtml" />
+    <Content Include="Views\Permission\Users.cshtml" />
+    <Content Include="Views\Permission\ChangeGroupParameters.cshtml" />
+    <Content Include="Views\Permission\EditorTemplates\LongListUser.cshtml" />
+    <Content Include="Views\Permission\CreateGroup.cshtml" />
+    <Content Include="Views\ProducerUserPermission\Index.cshtml" />
+    <Content Include="Views\ProducerUserPermission\EditorTemplates\LongListPermission.cshtml" />
+    <Content Include="Views\ProducerUserPermission\Edit.cshtml" />
+    <Content Include="Views\ProducerUserPermission\ListPermission.cshtml" />
+    <Content Include="Views\ProducerUserPermission\EditPermission.cshtml" />
+    <Content Include="Views\Promotion\Index.cshtml" />
+    <Content Include="Views\Promotion\Search.cshtml" />
+    <Content Include="Views\Promotion\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

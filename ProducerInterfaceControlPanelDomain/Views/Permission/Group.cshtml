@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ProducerInterfaceControlPanelDomain.Models.ListGroupView>
+@{
+    ViewBag.Title = "Список групп сайта";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Группы созданные на сайте</h2>
+
+<hr />
+
+<table class="table-bordered table-condensed table-striped" id="table-width-100prc">
+    <tr>     
+        @*<th>Id группы</th>*@ 
+        <th>Название группы</th>
+        <th>Список пользователей</th>
+        <th>Список доступных Экшенов</th>
+    </tr>
+    @foreach (var GroupItem in Model)
+    {
+        <tr>
+            @*<td>@GroupItem.Id</td>*@
+            <td>
+                <p>@GroupItem.NameGroup</p>
+
+                @if (GroupItem.Description == null || GroupItem.Description == "")
+                {
+                    @*Описание у группы отсутствует*@
+                }
+                else
+                {
+                    <p>Описание <br />' @GroupItem.Description '</p>
+                }          
+                <a class="btn btn-primary" href="~/Permission/GetOneGroup/@GroupItem.Id">Редактировать группу</a>
+            </td>
+            <td>                       
+                @for (int i = 0; i < GroupItem.CountUser; i++)
+                {
+                    <p>@GroupItem.Users[i]</p>
+                }                     
+            </td>
+            <td>
+                @for (int i = 0; i < GroupItem.Permissions.Count(); i++)
+                {
+                    <p>@GroupItem.Permissions[i]</p>
+                }
+            </td>
+        </tr>
+    }
+</table>

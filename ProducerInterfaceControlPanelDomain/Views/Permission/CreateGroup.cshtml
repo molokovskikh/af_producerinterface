@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Создание группы";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Создание Группы</h2>
+
+<hr />
+
+@using (Html.BeginForm("CreateGroupPermission", "Permission"))
+{
+
+    <div class="form-group">
+        <label>Укажите название группы</label>
+        <input type="text" class="form-control" id="Id" name="Id" placeholder="Менеджеры и т.д."/>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Далее" />
+    </div>
+
+        }

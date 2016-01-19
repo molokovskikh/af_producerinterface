@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ProducerInterface.Models.produceruser>
+@{
+    ViewBag.Title = "Список пользователей";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Список сотрудников</h2>
+
+<hr />
+
+@if (Model.Count() > 1)
+{
+
+<table>
+    <tr>
+        <th>ФИО</th>
+        <th>Почтовый адресс</th>
+        <th>Список Прав</th>
+        <th>Действия</th>
+    </tr>
+
+    @foreach (var ItemUser in Model.Where(xxx=>xxx.Id != ViewBag.CurrentUser.Id).ToList())
+    {
+        
+        <tr>
+            <td>@ItemUser.Name</td>
+            <td>@ItemUser.Email</td>
+
+            <td>
+               @foreach(var ItemPermission in (ItemUser.usertouserrole.Where(xxx=>xxx.ProducerUserId == ItemUser.Id).Select(xxx=>xxx.userpermission.Name).ToList()))
+                {
+                    <p>@ItemPermission</p>
+                }
+            </td>
+            <td>
+                <a href="~/UserPermission/Edit/@ItemUser.Id">Редактировать права</a>
+            </td>
+</tr>
+
+    }
+</table>
+}
+else
+{
+    <h3>От вашей компании зарегистрировались и подтвердили регистрацию только Вы.</h3>
+}

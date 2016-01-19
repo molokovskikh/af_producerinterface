@@ -157,7 +157,7 @@ namespace ProducerInterface.Controllers
                         }
                         else
                         {
-                            ErrorMessage("Мало вероятно, что кто-то увидит это сообщение");
+                            ErrorMessage("Ваша учетная запись Заблокирована, для обращений используйте адрес " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
                             return RedirectToAction("Index","Home");
                         }
                     }
@@ -167,7 +167,7 @@ namespace ProducerInterface.Controllers
                     // пользователь не найден
                     // отсылаем на домашнюю, с ошибкой
 
-                    ErrorMessage("Пользователь с почтовым ящиком не найден в базе или заблокирован");
+                    ErrorMessage("Пользователь с почтовым ящиком не найден в базе или заблокирован , для обращений используйте адрес " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
                     return RedirectToAction("PasswordRecovery", "Registration");
 
                 }

@@ -25,7 +25,6 @@ namespace ProducerInterfaceControlPanelDomain.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<mailform> mailform { get; set; }
         public DbSet<producers> producers { get; set; }
@@ -50,5 +49,12 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<usernames> usernames { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
+        public DbSet<profilenews> profilenews { get; set; }
+        public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
+        public DbSet<ControlPanelUser> ControlPanelUser { get; set; }
+        public DbSet<controlpaneluserpermission> controlpaneluserpermission { get; set; }
+        public DbSet<produceruserpermission> produceruserpermission { get; set; }
+        public DbSet<drugformproducer> drugformproducer { get; set; }
     }
 }

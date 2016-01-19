@@ -16,7 +16,6 @@ namespace ProducerInterfaceControlPanelDomain.Models
     {
         public ProducerUser()
         {
-            this.DrugDescriptionRemark = new HashSet<DrugDescriptionRemark>();
             this.promotions = new HashSet<promotions>();
             this.user_logs = new HashSet<user_logs>();
             this.usertouserrole = new HashSet<usertouserrole>();
@@ -35,7 +34,6 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public sbyte PasswordToUpdate { get; set; }
         public sbyte Enabled { get; set; }
     
-        public virtual ICollection<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public virtual ICollection<promotions> promotions { get; set; }
         public virtual ICollection<user_logs> user_logs { get; set; }
         public virtual ICollection<usertouserrole> usertouserrole { get; set; }

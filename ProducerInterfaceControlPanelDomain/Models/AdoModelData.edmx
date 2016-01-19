@@ -5,31 +5,51 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Хранилище producerinterface_Model" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="DrugDescriptionRemark">
+        <EntityType Name="ControlPanelGroup">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="255" />
-          <Property Name="EnglishName" Type="varchar" MaxLength="255" />
-          <Property Name="Description" Type="varchar" MaxLength="255" />
-          <Property Name="Interaction" Type="varchar" MaxLength="255" />
-          <Property Name="SideEffect" Type="varchar" MaxLength="255" />
-          <Property Name="IndicationsForUse" Type="varchar" MaxLength="255" />
-          <Property Name="Dosing" Type="varchar" MaxLength="255" />
-          <Property Name="Warnings" Type="varchar" MaxLength="255" />
-          <Property Name="ProductForm" Type="varchar" MaxLength="255" />
-          <Property Name="PharmacologicalAction" Type="varchar" MaxLength="255" />
-          <Property Name="Storage" Type="varchar" MaxLength="255" />
-          <Property Name="Expiration" Type="varchar" MaxLength="255" />
-          <Property Name="Composition" Type="varchar" MaxLength="255" />
-          <Property Name="CreationDate" Type="datetime" Precision="0" />
-          <Property Name="Status" Type="int" />
-          <Property Name="ModificationDate" Type="datetime" Precision="0" />
-          <Property Name="ModificatorId" Type="uint" />
-          <Property Name="ProducerUserId" Type="uint" />
-          <Property Name="DrugFamilyId" Type="uint" />
-          <Property Name="MNNId" Type="uint" />
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Enabled" Type="bool" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="ControlPanelGroupToPermission">
+          <Key>
+            <PropertyRef Name="IdGroup" />
+            <PropertyRef Name="IdPermission" />
+          </Key>
+          <Property Name="IdGroup" Type="uint" Nullable="false" />
+          <Property Name="IdPermission" Type="uint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ControlPanelPermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ControllerAction" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ActionAttributes" Type="text" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
+          <Property Name="Enabled" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ControlPanelUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Appointment" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Enabled" Type="tinyint" Nullable="false" />
+          <Property Name="FullName" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ControlPanelUserToGroup">
+          <Key>
+            <PropertyRef Name="IdUser" />
+            <PropertyRef Name="IdGroup" />
+          </Key>
+          <Property Name="IdUser" Type="uint" Nullable="false" />
+          <Property Name="IdGroup" Type="uint" Nullable="false" />
         </EntityType>
         <EntityType Name="jobextend">
           <Key>
@@ -81,6 +101,17 @@
           <Property Name="PasswordUpdated" Type="datetime" Precision="0" />
           <Property Name="PasswordToUpdate" Type="tinyint" Nullable="false" />
           <Property Name="Enabled" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="profilenews">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Topic" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Text" Type="text" Nullable="false" />
+          <Property Name="ProducerId" Type="uint" />
+          <Property Name="EditedDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="promotions">
           <Key>
@@ -204,6 +235,32 @@
           <Property Name="IsPharmacie" Type="bool" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.controlpaneluserpermission" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="controlpaneluserpermission">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Appointment" />
+            <PropertyRef Name="Enabled" />
+            <PropertyRef Name="Enable_Permission" />
+          </Key>
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Appointment" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Enabled" Type="tinyint" Nullable="false" />
+          <Property Name="IdUser" Type="uint" />
+          <Property Name="IdGroup" Type="uint" />
+          <Property Name="GroupName" Type="varchar" MaxLength="50" />
+          <Property Name="IdPermission" Type="uint" />
+          <Property Name="ControllerAction" Type="varchar" MaxLength="50" />
+          <Property Name="ActionAttributes" Type="text" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
+          <Property Name="Enable_Group" Type="bool" />
+          <Property Name="Enable_Permission" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.drugdescription" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamily" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="drugfamily">
           <Key>
@@ -214,27 +271,65 @@
           <Property Name="FamilyId" Type="uint" Nullable="false" />
           <Property Name="FamilyName" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="ProducerId" Type="uint" Nullable="false" />
+          <Property Name="DescriptionId" Type="uint" />
+          <Property Name="MnnId" Type="uint" />
         </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.drugformproducer" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="drugformproducer">
+          <Key>
+            <PropertyRef Name="CatalogId" />
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="DrugFamilyId" />
+            <PropertyRef Name="VitallyImportant" />
+            <PropertyRef Name="MandatoryList" />
+            <PropertyRef Name="Monobrend" />
+            <PropertyRef Name="Narcotic" />
+            <PropertyRef Name="Toxic" />
+            <PropertyRef Name="Combined" />
+          </Key>
+          <Property Name="CatalogId" Type="uint" Nullable="false" />
+          <Property Name="ProducerId" Type="uint" Nullable="false" />
+          <Property Name="DrugFamilyId" Type="uint" Nullable="false" />
+          <Property Name="CatalogName" Type="varchar" MaxLength="255" />
+          <Property Name="VitallyImportant" Type="bool" Nullable="false" />
+          <Property Name="MandatoryList" Type="bool" Nullable="false" />
+          <Property Name="Monobrend" Type="bool" Nullable="false" />
+          <Property Name="Narcotic" Type="bool" Nullable="false" />
+          <Property Name="Toxic" Type="bool" Nullable="false" />
+          <Property Name="Combined" Type="bool" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.drugmnn" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.jobextendwithproducer" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="jobextendwithproducer">
           <Key>
-            <PropertyRef Name="JobName" />
-            <PropertyRef Name="CustomName" />
             <PropertyRef Name="SchedName" />
-            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="JobGroup" />
+            <PropertyRef Name="CustomName" />
             <PropertyRef Name="ReportType" />
-            <PropertyRef Name="Enable" />
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="Creator" />
             <PropertyRef Name="CreationDate" />
+            <PropertyRef Name="LastModified" />
+            <PropertyRef Name="DisplayStatus" />
+            <PropertyRef Name="Enable" />
           </Key>
-          <Property Name="JobName" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="CustomName" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="SchedName" Type="varchar" MaxLength="120" Nullable="false" />
-          <Property Name="ProducerId" Type="bigint" Nullable="false" />
+          <Property Name="JobName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="JobGroup" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="CustomName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Scheduler" Type="varchar" MaxLength="250" />
           <Property Name="ReportType" Type="int" Nullable="false" />
+          <Property Name="ProducerId" Type="bigint" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="LastModified" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="DisplayStatus" Type="int" Nullable="false" />
           <Property Name="LastRun" Type="datetime" Precision="0" />
           <Property Name="Enable" Type="bool" Nullable="false" />
-          <Property Name="CreationDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="ProducerName" Type="varchar" MaxLength="255" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
@@ -270,6 +365,25 @@
           </Key>
           <Property Name="ProducerId" Type="uint" Nullable="false" />
           <Property Name="ProducerName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.produceruserpermission" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="produceruserpermission">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Enabled" />
+          </Key>
+          <Property Name="userId" Type="uint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Enabled" Type="tinyint" Nullable="false" />
+          <Property Name="PasswordUpdated" Type="datetime" Precision="0" />
+          <Property Name="ProducerId" Type="uint" />
+          <Property Name="UserPermissionId" Type="uint" />
+          <Property Name="roleId" Type="uint" />
+          <Property Name="roleName" Type="varchar" MaxLength="255" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6005: Тип данных "udecimal" в настоящее время не поддерживается для целевой версии платформы Entity Framework; столбец "Cost" в таблице "def.producerinterface.ratingreportorderitems" был исключен.
@@ -330,15 +444,15 @@
           <Property Name="ProducerId" Type="uint" Nullable="false" />
           <Property Name="ProducerName" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
-        <Association Name="DrugDescriptionRemark_ProducerUserId">
-          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="0..1" />
-          <End Role="DrugDescriptionRemark" Type="Self.DrugDescriptionRemark" Multiplicity="*" />
+        <Association Name="FK_profile_news_producers">
+          <End Role="producers" Type="Self.producers" Multiplicity="0..1" />
+          <End Role="profilenews" Type="Self.profilenews" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ProducerUser">
+            <Principal Role="producers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="DrugDescriptionRemark">
-              <PropertyRef Name="ProducerUserId" />
+            <Dependent Role="profilenews">
+              <PropertyRef Name="ProducerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -363,6 +477,62 @@
             </Principal>
             <Dependent Role="promotions">
               <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_to_Group_controlpanel">
+          <End Role="ControlPanelGroup" Type="Self.ControlPanelGroup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ControlPanelGroupToPermission" Type="Self.ControlPanelGroupToPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlPanelGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ControlPanelGroupToPermission">
+              <PropertyRef Name="IdGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_to_Group_to__controlpanel">
+          <End Role="ControlPanelGroup" Type="Self.ControlPanelGroup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ControlPanelUserToGroup" Type="Self.ControlPanelUserToGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlPanelGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ControlPanelUserToGroup">
+              <PropertyRef Name="IdGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_to_Permission_controlpanel">
+          <End Role="ControlPanelPermission" Type="Self.ControlPanelPermission" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ControlPanelGroupToPermission" Type="Self.ControlPanelGroupToPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlPanelPermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ControlPanelGroupToPermission">
+              <PropertyRef Name="IdPermission" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_to_User_to_controlpanel">
+          <End Role="ControlPanelUser" Type="Self.ControlPanelUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ControlPanelUserToGroup" Type="Self.ControlPanelUserToGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlPanelUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ControlPanelUserToGroup">
+              <PropertyRef Name="IdUser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -438,12 +608,65 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="promotions_ProducerUserId">
+          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="1" />
+          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProducerUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_logs_ProducerUserId">
+          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="0..1" />
+          <End Role="user_logs" Type="Self.user_logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProducerUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="user_logs">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usertouserrole_ProducerUserId">
+          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProducerUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="usertouserrole_UserPermissionId">
+          <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="0..1" />
+          <End Role="usertouserrole" Type="Self.usertouserrole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserPermission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="usertouserrole">
+              <PropertyRef Name="UserPermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="Хранилище producerinterface_ModelContainer">
-          <EntitySet Name="DrugDescriptionRemark" EntityType="Self.DrugDescriptionRemark" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ControlPanelGroup" EntityType="Self.ControlPanelGroup" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ControlPanelGroupToPermission" EntityType="Self.ControlPanelGroupToPermission" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ControlPanelPermission" EntityType="Self.ControlPanelPermission" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ControlPanelUser" EntityType="Self.ControlPanelUser" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ControlPanelUserToGroup" EntityType="Self.ControlPanelUserToGroup" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="jobextend" EntityType="Self.jobextend" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="mailform" EntityType="Self.mailform" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="producers" EntityType="Self.producers" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="ProducerUser" EntityType="Self.ProducerUser" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="profilenews" EntityType="Self.profilenews" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotions" EntityType="Self.promotions" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotionToDrug" EntityType="Self.promotionToDrug" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
@@ -473,23 +696,61 @@ FROM `assortment` AS `assortment`</DefiningQuery>
 `catalognames`.`IsPharmacie`
 FROM `catalognames` AS `catalognames`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="controlpaneluserpermission" EntityType="Self.controlpaneluserpermission" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`controlpaneluserpermission`.`Name`, 
+`controlpaneluserpermission`.`Email`, 
+`controlpaneluserpermission`.`Appointment`, 
+`controlpaneluserpermission`.`Enabled`, 
+`controlpaneluserpermission`.`IdUser`, 
+`controlpaneluserpermission`.`IdGroup`, 
+`controlpaneluserpermission`.`GroupName`, 
+`controlpaneluserpermission`.`IdPermission`, 
+`controlpaneluserpermission`.`ControllerAction`, 
+`controlpaneluserpermission`.`ActionAttributes`, 
+`controlpaneluserpermission`.`Description`, 
+`controlpaneluserpermission`.`Enable_Group`, 
+`controlpaneluserpermission`.`Enable_Permission`
+FROM `controlpaneluserpermission` AS `controlpaneluserpermission`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="drugfamily" EntityType="Self.drugfamily" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `drugfamily`.`FamilyId`, 
 `drugfamily`.`FamilyName`, 
-`drugfamily`.`ProducerId`
+`drugfamily`.`ProducerId`, 
+`drugfamily`.`DescriptionId`, 
+`drugfamily`.`MnnId`
 FROM `drugfamily` AS `drugfamily`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="drugformproducer" EntityType="Self.drugformproducer" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`drugformproducer`.`CatalogId`, 
+`drugformproducer`.`ProducerId`, 
+`drugformproducer`.`DrugFamilyId`, 
+`drugformproducer`.`CatalogName`, 
+`drugformproducer`.`VitallyImportant`, 
+`drugformproducer`.`MandatoryList`, 
+`drugformproducer`.`Monobrend`, 
+`drugformproducer`.`Narcotic`, 
+`drugformproducer`.`Toxic`, 
+`drugformproducer`.`Combined`
+FROM `drugformproducer` AS `drugformproducer`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="jobextendwithproducer" EntityType="Self.jobextendwithproducer" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
-`jobextendwithproducer`.`JobName`, 
-`jobextendwithproducer`.`CustomName`, 
 `jobextendwithproducer`.`SchedName`, 
-`jobextendwithproducer`.`ProducerId`, 
+`jobextendwithproducer`.`JobName`, 
+`jobextendwithproducer`.`JobGroup`, 
+`jobextendwithproducer`.`CustomName`, 
+`jobextendwithproducer`.`Scheduler`, 
 `jobextendwithproducer`.`ReportType`, 
+`jobextendwithproducer`.`ProducerId`, 
+`jobextendwithproducer`.`Creator`, 
+`jobextendwithproducer`.`CreationDate`, 
+`jobextendwithproducer`.`LastModified`, 
+`jobextendwithproducer`.`DisplayStatus`, 
 `jobextendwithproducer`.`LastRun`, 
 `jobextendwithproducer`.`Enable`, 
-`jobextendwithproducer`.`CreationDate`, 
 `jobextendwithproducer`.`ProducerName`
 FROM `jobextendwithproducer` AS `jobextendwithproducer`</DefiningQuery>
           </EntitySet>
@@ -514,6 +775,19 @@ FROM `pharmacynames` AS `pharmacynames`</DefiningQuery>
 `producernames`.`ProducerId`, 
 `producernames`.`ProducerName`
 FROM `producernames` AS `producernames`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="produceruserpermission" EntityType="Self.produceruserpermission" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`produceruserpermission`.`userId`, 
+`produceruserpermission`.`Name`, 
+`produceruserpermission`.`Email`, 
+`produceruserpermission`.`Enabled`, 
+`produceruserpermission`.`PasswordUpdated`, 
+`produceruserpermission`.`ProducerId`, 
+`produceruserpermission`.`UserPermissionId`, 
+`produceruserpermission`.`roleId`, 
+`produceruserpermission`.`roleName`
+FROM `produceruserpermission` AS `produceruserpermission`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ratingreportorderitems" EntityType="Self.ratingreportorderitems" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -551,9 +825,9 @@ FROM `suppliernames` AS `suppliernames`</DefiningQuery>
 `usernames`.`ProducerName`
 FROM `usernames` AS `usernames`</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="Self.DrugDescriptionRemark_ProducerUserId">
-            <End Role="ProducerUser" EntitySet="ProducerUser" />
-            <End Role="DrugDescriptionRemark" EntitySet="DrugDescriptionRemark" />
+          <AssociationSet Name="FK_profile_news_producers" Association="Self.FK_profile_news_producers">
+            <End Role="producers" EntitySet="producers" />
+            <End Role="profilenews" EntitySet="profilenews" />
           </AssociationSet>
           <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="Self.FK_promotioncatalogs_supplierpromotions">
             <End Role="promotions" EntitySet="promotions" />
@@ -562,6 +836,22 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="FK_promotions_produceruser" Association="Self.FK_promotions_produceruser">
             <End Role="ProducerUser" EntitySet="ProducerUser" />
             <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_to_Group_controlpanel" Association="Self.FK_to_Group_controlpanel">
+            <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
+            <End Role="ControlPanelGroupToPermission" EntitySet="ControlPanelGroupToPermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_to_Group_to__controlpanel" Association="Self.FK_to_Group_to__controlpanel">
+            <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
+            <End Role="ControlPanelUserToGroup" EntitySet="ControlPanelUserToGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_to_Permission_controlpanel" Association="Self.FK_to_Permission_controlpanel">
+            <End Role="ControlPanelPermission" EntitySet="ControlPanelPermission" />
+            <End Role="ControlPanelGroupToPermission" EntitySet="ControlPanelGroupToPermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_to_User_to_controlpanel" Association="Self.FK_to_User_to_controlpanel">
+            <End Role="ControlPanelUser" EntitySet="ControlPanelUser" />
+            <End Role="ControlPanelUserToGroup" EntitySet="ControlPanelUserToGroup" />
           </AssociationSet>
           <AssociationSet Name="FK_user_logs_users" Association="Self.FK_user_logs_users">
             <End Role="ProducerUser" EntitySet="ProducerUser" />
@@ -587,38 +877,27 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="ProducerUser" EntitySet="ProducerUser" />
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
+          <AssociationSet Name="promotions_ProducerUserId" Association="Self.promotions_ProducerUserId">
+            <End Role="ProducerUser" EntitySet="ProducerUser" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="user_logs_ProducerUserId" Association="Self.user_logs_ProducerUserId">
+            <End Role="ProducerUser" EntitySet="ProducerUser" />
+            <End Role="user_logs" EntitySet="user_logs" />
+          </AssociationSet>
+          <AssociationSet Name="usertouserrole_ProducerUserId" Association="Self.usertouserrole_ProducerUserId">
+            <End Role="ProducerUser" EntitySet="ProducerUser" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <AssociationSet Name="usertouserrole_UserPermissionId" Association="Self.usertouserrole_UserPermissionId">
+            <End Role="UserPermission" EntitySet="UserPermission" />
+            <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="producerinterface_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="DrugDescriptionRemark">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="EnglishName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Interaction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="SideEffect" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="IndicationsForUse" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Dosing" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Warnings" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="ProductForm" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="PharmacologicalAction" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Storage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Expiration" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Composition" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="CreationDate" Type="DateTime" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="ModificationDate" Type="DateTime" />
-          <Property Name="ModificatorId" Type="Int64" />
-          <Property Name="ProducerUserId" Type="Int64" />
-          <Property Name="DrugFamilyId" Type="Int64" />
-          <Property Name="MNNId" Type="Int64" />
-          <NavigationProperty Name="ProducerUser" Relationship="Self.DrugDescriptionRemark_ProducerUserId" FromRole="DrugDescriptionRemark" ToRole="ProducerUser" />
-        </EntityType>
         <EntityType Name="jobextend">
           <Key>
             <PropertyRef Name="SchedName" />
@@ -655,6 +934,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="profilenews" Relationship="producerinterface_Model.FK_profile_news_producers" FromRole="producers" ToRole="profilenews" />
         </EntityType>
         <EntityType Name="ProducerUser">
           <Key>
@@ -669,7 +949,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="PasswordUpdated" Type="DateTime" />
           <Property Name="PasswordToUpdate" Type="SByte" Nullable="false" />
           <Property Name="Enabled" Type="SByte" Nullable="false" />
-          <NavigationProperty Name="DrugDescriptionRemark" Relationship="Self.DrugDescriptionRemark_ProducerUserId" FromRole="ProducerUser" ToRole="DrugDescriptionRemark" />
           <NavigationProperty Name="promotions" Relationship="Self.FK_promotions_produceruser" FromRole="ProducerUser" ToRole="promotions" />
           <NavigationProperty Name="user_logs" Relationship="Self.FK_user_logs_users" FromRole="ProducerUser" ToRole="user_logs" />
           <NavigationProperty Name="usertouserrole" Relationship="Self.FK_user_role_users" FromRole="ProducerUser" ToRole="usertouserrole" />
@@ -819,6 +1098,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="FamilyId" Type="Int64" Nullable="false" />
           <Property Name="FamilyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="DescriptionId" Type="Int64" />
+          <Property Name="MnnId" Type="Int64" />
         </EntityType>
         <EntityType Name="mailformwithfooter">
           <Key>
@@ -898,18 +1179,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="ProducerId" Type="Int64" Nullable="false" />
           <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <Association Name="DrugDescriptionRemark_ProducerUserId">
-          <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="0..1" />
-          <End Role="DrugDescriptionRemark" Type="Self.DrugDescriptionRemark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProducerUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DrugDescriptionRemark">
-              <PropertyRef Name="ProducerUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_promotions_produceruser">
           <End Role="ProducerUser" Type="Self.ProducerUser" Multiplicity="1" />
           <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
@@ -1055,7 +1324,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="producerinterface_Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="DrugDescriptionRemark" EntityType="Self.DrugDescriptionRemark" />
           <EntitySet Name="jobextend" EntityType="Self.jobextend" />
           <EntitySet Name="mailform" EntityType="Self.mailform" />
           <EntitySet Name="producers" EntityType="Self.producers" />
@@ -1079,10 +1347,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="regionnames" EntityType="Self.regionnames" />
           <EntitySet Name="suppliernames" EntityType="Self.suppliernames" />
           <EntitySet Name="usernames" EntityType="Self.usernames" />
-          <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="Self.DrugDescriptionRemark_ProducerUserId">
-            <End Role="ProducerUser" EntitySet="ProducerUser" />
-            <End Role="DrugDescriptionRemark" EntitySet="DrugDescriptionRemark" />
-          </AssociationSet>
           <AssociationSet Name="FK_promotions_produceruser" Association="Self.FK_promotions_produceruser">
             <End Role="ProducerUser" EntitySet="ProducerUser" />
             <End Role="promotions" EntitySet="promotions" />
@@ -1132,6 +1396,25 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
           <EntitySet Name="jobextendwithproducer" EntityType="producerinterface_Model.jobextendwithproducer" />
+          <EntitySet Name="profilenews" EntityType="producerinterface_Model.profilenews" />
+          <AssociationSet Name="FK_profile_news_producers" Association="producerinterface_Model.FK_profile_news_producers">
+            <End Role="producers" EntitySet="producers" />
+            <End Role="profilenews" EntitySet="profilenews" />
+          </AssociationSet>
+          <EntitySet Name="ControlPanelGroup" EntityType="producerinterface_Model.ControlPanelGroup" />
+          <EntitySet Name="ControlPanelPermission" EntityType="producerinterface_Model.ControlPanelPermission" />
+          <EntitySet Name="ControlPanelUser" EntityType="producerinterface_Model.ControlPanelUser" />
+          <AssociationSet Name="ControlPanelGroupToPermission" Association="producerinterface_Model.ControlPanelGroupToPermission">
+            <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
+            <End Role="ControlPanelPermission" EntitySet="ControlPanelPermission" />
+          </AssociationSet>
+          <AssociationSet Name="ControlPanelUserToGroup" Association="producerinterface_Model.ControlPanelUserToGroup">
+            <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
+            <End Role="ControlPanelUser" EntitySet="ControlPanelUser" />
+          </AssociationSet>
+          <EntitySet Name="controlpaneluserpermission" EntityType="producerinterface_Model.controlpaneluserpermission" />
+          <EntitySet Name="produceruserpermission" EntityType="producerinterface_Model.produceruserpermission" />
+          <EntitySet Name="drugformproducer" EntityType="producerinterface_Model.drugformproducer" />
         </EntityContainer>
         <EntityType Name="jobextendwithproducer">
           <Key>
@@ -1142,6 +1425,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <PropertyRef Name="ReportType" />
             <PropertyRef Name="Enable" />
             <PropertyRef Name="CreationDate" />
+            <PropertyRef Name="JobGroup" />
+            <PropertyRef Name="Creator" />
+            <PropertyRef Name="LastModified" />
+            <PropertyRef Name="DisplayStatus" />
           </Key>
           <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CustomName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
@@ -1152,6 +1439,139 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Enable" Type="Boolean" Nullable="false" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" />
           <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="JobGroup" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Scheduler" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="LastModified" Type="DateTime" Nullable="false" />
+          <Property Name="DisplayStatus" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="profilenews">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Topic" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ProducerId" Type="Int64" />
+          <Property Name="EditedDate" Type="DateTime" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <NavigationProperty Name="producers" Relationship="producerinterface_Model.FK_profile_news_producers" FromRole="profilenews" ToRole="producers" />
+        </EntityType>
+        <Association Name="FK_profile_news_producers">
+          <End Type="producerinterface_Model.producers" Role="producers" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.profilenews" Role="profilenews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="profilenews">
+              <PropertyRef Name="ProducerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ControlPanelGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ControlPanelPermission" Relationship="producerinterface_Model.ControlPanelGroupToPermission" FromRole="ControlPanelGroup" ToRole="ControlPanelPermission" />
+          <NavigationProperty Name="ControlPanelUser" Relationship="producerinterface_Model.ControlPanelUserToGroup" FromRole="ControlPanelGroup" ToRole="ControlPanelUser" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ControlPanelPermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ControllerAction" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ActionAttributes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ControlPanelGroup" Relationship="producerinterface_Model.ControlPanelGroupToPermission" FromRole="ControlPanelPermission" ToRole="ControlPanelGroup" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ControlPanelUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Appointment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="ControlPanelGroup" Relationship="producerinterface_Model.ControlPanelUserToGroup" FromRole="ControlPanelUser" ToRole="ControlPanelGroup" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="ControlPanelGroupToPermission">
+          <End Type="producerinterface_Model.ControlPanelGroup" Role="ControlPanelGroup" Multiplicity="*" />
+          <End Type="producerinterface_Model.ControlPanelPermission" Role="ControlPanelPermission" Multiplicity="*" />
+        </Association>
+        <Association Name="ControlPanelUserToGroup">
+          <End Type="producerinterface_Model.ControlPanelGroup" Role="ControlPanelGroup" Multiplicity="*" />
+          <End Type="producerinterface_Model.ControlPanelUser" Role="ControlPanelUser" Multiplicity="*" />
+        </Association>
+        <EntityType Name="controlpaneluserpermission">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Appointment" />
+            <PropertyRef Name="Enabled" />
+            <PropertyRef Name="Enable_Permission" />
+          </Key>
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Appointment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="SByte" Nullable="false" />
+          <Property Name="IdUser" Type="Int64" />
+          <Property Name="IdGroup" Type="Int64" />
+          <Property Name="GroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdPermission" Type="Int64" />
+          <Property Name="ControllerAction" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ActionAttributes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enable_Group" Type="Boolean" />
+          <Property Name="Enable_Permission" Type="SByte" Nullable="false" />
+        </EntityType>
+        <EntityType Name="produceruserpermission">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Enabled" />
+          </Key>
+          <Property Name="userId" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="SByte" Nullable="false" />
+          <Property Name="PasswordUpdated" Type="DateTime" />
+          <Property Name="ProducerId" Type="Int64" />
+          <Property Name="UserPermissionId" Type="Int64" />
+          <Property Name="roleId" Type="Int64" />
+          <Property Name="roleName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="drugformproducer">
+          <Key>
+            <PropertyRef Name="CatalogId" />
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="DrugFamilyId" />
+            <PropertyRef Name="VitallyImportant" />
+            <PropertyRef Name="MandatoryList" />
+            <PropertyRef Name="Monobrend" />
+            <PropertyRef Name="Narcotic" />
+            <PropertyRef Name="Toxic" />
+            <PropertyRef Name="Combined" />
+          </Key>
+          <Property Name="CatalogId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="DrugFamilyId" Type="Int64" Nullable="false" />
+          <Property Name="CatalogName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="VitallyImportant" Type="Boolean" Nullable="false" />
+          <Property Name="MandatoryList" Type="Boolean" Nullable="false" />
+          <Property Name="Monobrend" Type="Boolean" Nullable="false" />
+          <Property Name="Narcotic" Type="Boolean" Nullable="false" />
+          <Property Name="Toxic" Type="Boolean" Nullable="false" />
+          <Property Name="Combined" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1159,33 +1579,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище producerinterface_ModelContainer" CdmEntityContainer="producerinterface_Entities">
-          <EntitySetMapping Name="DrugDescriptionRemark">
-            <EntityTypeMapping TypeName="producerinterface_Model.DrugDescriptionRemark">
-              <MappingFragment StoreEntitySet="DrugDescriptionRemark">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="EnglishName" ColumnName="EnglishName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Interaction" ColumnName="Interaction" />
-                <ScalarProperty Name="SideEffect" ColumnName="SideEffect" />
-                <ScalarProperty Name="IndicationsForUse" ColumnName="IndicationsForUse" />
-                <ScalarProperty Name="Dosing" ColumnName="Dosing" />
-                <ScalarProperty Name="Warnings" ColumnName="Warnings" />
-                <ScalarProperty Name="ProductForm" ColumnName="ProductForm" />
-                <ScalarProperty Name="PharmacologicalAction" ColumnName="PharmacologicalAction" />
-                <ScalarProperty Name="Storage" ColumnName="Storage" />
-                <ScalarProperty Name="Expiration" ColumnName="Expiration" />
-                <ScalarProperty Name="Composition" ColumnName="Composition" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModificationDate" ColumnName="ModificationDate" />
-                <ScalarProperty Name="ModificatorId" ColumnName="ModificatorId" />
-                <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
-                <ScalarProperty Name="DrugFamilyId" ColumnName="DrugFamilyId" />
-                <ScalarProperty Name="MNNId" ColumnName="MNNId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="jobextend">
             <EntityTypeMapping TypeName="producerinterface_Model.jobextend">
               <MappingFragment StoreEntitySet="jobextend">
@@ -1362,6 +1755,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="drugfamily">
             <EntityTypeMapping TypeName="producerinterface_Model.drugfamily">
               <MappingFragment StoreEntitySet="drugfamily">
+                <ScalarProperty Name="MnnId" ColumnName="MnnId" />
+                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
                 <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
                 <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
                 <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
@@ -1443,6 +1838,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="jobextendwithproducer">
             <EntityTypeMapping TypeName="producerinterface_Model.jobextendwithproducer">
               <MappingFragment StoreEntitySet="jobextendwithproducer">
+                <ScalarProperty Name="DisplayStatus" ColumnName="DisplayStatus" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="Scheduler" ColumnName="Scheduler" />
+                <ScalarProperty Name="JobGroup" ColumnName="JobGroup" />
                 <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="Enable" ColumnName="Enable" />
@@ -1452,6 +1852,117 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="SchedName" ColumnName="SchedName" />
                 <ScalarProperty Name="CustomName" ColumnName="CustomName" />
                 <ScalarProperty Name="JobName" ColumnName="JobName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="profilenews">
+            <EntityTypeMapping TypeName="producerinterface_Model.profilenews">
+              <MappingFragment StoreEntitySet="profilenews">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EditedDate" ColumnName="EditedDate" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Topic" ColumnName="Topic" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPanelGroup">
+            <EntityTypeMapping TypeName="producerinterface_Model.ControlPanelGroup">
+              <MappingFragment StoreEntitySet="ControlPanelGroup">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPanelPermission">
+            <EntityTypeMapping TypeName="producerinterface_Model.ControlPanelPermission">
+              <MappingFragment StoreEntitySet="ControlPanelPermission">
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionAttributes" ColumnName="ActionAttributes" />
+                <ScalarProperty Name="ControllerAction" ColumnName="ControllerAction" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPanelUser">
+            <EntityTypeMapping TypeName="producerinterface_Model.ControlPanelUser">
+              <MappingFragment StoreEntitySet="ControlPanelUser">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Appointment" ColumnName="Appointment" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ControlPanelGroupToPermission" TypeName="producerinterface_Model.ControlPanelGroupToPermission" StoreEntitySet="ControlPanelGroupToPermission">
+            <EndProperty Name="ControlPanelPermission">
+              <ScalarProperty Name="Id" ColumnName="IdPermission" />
+            </EndProperty>
+            <EndProperty Name="ControlPanelGroup">
+              <ScalarProperty Name="Id" ColumnName="IdGroup" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ControlPanelUserToGroup" TypeName="producerinterface_Model.ControlPanelUserToGroup" StoreEntitySet="ControlPanelUserToGroup">
+            <EndProperty Name="ControlPanelUser">
+              <ScalarProperty Name="Id" ColumnName="IdUser" />
+            </EndProperty>
+            <EndProperty Name="ControlPanelGroup">
+              <ScalarProperty Name="Id" ColumnName="IdGroup" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="controlpaneluserpermission">
+            <EntityTypeMapping TypeName="producerinterface_Model.controlpaneluserpermission">
+              <MappingFragment StoreEntitySet="controlpaneluserpermission">
+                <ScalarProperty Name="Enable_Permission" ColumnName="Enable_Permission" />
+                <ScalarProperty Name="Enable_Group" ColumnName="Enable_Group" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionAttributes" ColumnName="ActionAttributes" />
+                <ScalarProperty Name="ControllerAction" ColumnName="ControllerAction" />
+                <ScalarProperty Name="IdPermission" ColumnName="IdPermission" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="IdGroup" ColumnName="IdGroup" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Appointment" ColumnName="Appointment" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="produceruserpermission">
+            <EntityTypeMapping TypeName="producerinterface_Model.produceruserpermission">
+              <MappingFragment StoreEntitySet="produceruserpermission">
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="UserPermissionId" ColumnName="UserPermissionId" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="PasswordUpdated" ColumnName="PasswordUpdated" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="drugformproducer">
+            <EntityTypeMapping TypeName="producerinterface_Model.drugformproducer">
+              <MappingFragment StoreEntitySet="drugformproducer">
+                <ScalarProperty Name="Combined" ColumnName="Combined" />
+                <ScalarProperty Name="Toxic" ColumnName="Toxic" />
+                <ScalarProperty Name="Narcotic" ColumnName="Narcotic" />
+                <ScalarProperty Name="Monobrend" ColumnName="Monobrend" />
+                <ScalarProperty Name="MandatoryList" ColumnName="MandatoryList" />
+                <ScalarProperty Name="VitallyImportant" ColumnName="VitallyImportant" />
+                <ScalarProperty Name="CatalogName" ColumnName="CatalogName" />
+                <ScalarProperty Name="DrugFamilyId" ColumnName="DrugFamilyId" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
