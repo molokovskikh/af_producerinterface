@@ -19,7 +19,7 @@ namespace ProducerInterface.Controllers
 
         public ActionResult Index()
         {
-            var ListUser = _BD_.produceruser.Where(xxx => xxx.Enabled == 1 && xxx.ProducerId == AutorizedUser.ProducerId).ToList();
+            var ListUser = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.ProducerId == AutorizedUser.ProducerId).ToList();
 
             if (ListUser.Count() > 0)
             {
@@ -31,7 +31,7 @@ namespace ProducerInterface.Controllers
         public ActionResult Change(long? ID)
         {
 
-            ViewBag.SelectUser = _BD_.produceruser.Where(xxx => xxx.Id == ID).First();
+            ViewBag.SelectUser = cntx_.ProducerUser.Where(xxx => xxx.Id == ID).First();
 
             return View();
         }

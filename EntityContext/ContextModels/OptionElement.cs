@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     public class OptionElement
     {

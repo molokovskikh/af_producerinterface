@@ -12,6 +12,7 @@ using Quartz.Job.Models;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Data.Entity;
+using EntityContext.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -27,7 +28,7 @@ namespace ProducerInterface.Controllers
 
             var currentUser = GetCurrentUser();
             //var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
-            IEnumerable<Models.promotions> list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId).ToList();
+            IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId).ToList();
             return View(list);
         }
 
@@ -48,10 +49,10 @@ namespace ProducerInterface.Controllers
             {
                 //ViewBag.CurrentPromotion = DbSession.Query<Promotion>().FirstOrDefault(s => s.Id == id);
                 // редактирование существующей
-                ViewPromotion = _BD_.promotions.Where(xxx => xxx.Id == id).ToList().Select(xxx => new PromotionValidation { Id = xxx.Id, Name = xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, Status = xxx.Status }).FirstOrDefault();
+                ViewPromotion = cntx_.promotions.Where(xxx => xxx.Id == id).ToList().Select(xxx => new PromotionValidation { Id = xxx.Id, Name = xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, Status = xxx.Status }).FirstOrDefault();
 
                 //ViewPromotion = _BD_.promotions.Where(xxx=>xxx.Id == id).ToList().Select(xxx=> new PromotionValidation {Id=xxx.Id, Name= xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, DrugList = xxx.DrugList, Status = xxx.Status}).FirstOrDefault();
-                ViewPromotion.DrugList = _BD_.promotionToDrug.Where(xxx => xxx.PromotionId == id).ToList().Select(xxx => xxx.DrugId).ToList();
+                ViewPromotion.DrugList = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == id).ToList().Select(xxx => xxx.DrugId).ToList();
             }
             else {
                 // Создание новой акции нужное значение уже присвоено
@@ -64,11 +65,11 @@ namespace ProducerInterface.Controllers
         public ActionResult Manage(PromotionValidation PromoAction)
         {
 
-            var ListGRUGSSS = _BD_.promotionToDrug.Where(xxx => xxx.PromotionId == 13).ToList();
+            var ListGRUGSSS = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == 13).ToList();
 
             if (ModelState.IsValid)
             {
-                produceruser user_ = GetCurrentUser();
+                ProducerUser user_ = GetCurrentUser();
                 promotions NewPromotion = new promotions();
 
                 NewPromotion.UpdateTime = SystemTime.Now();
@@ -86,18 +87,18 @@ namespace ProducerInterface.Controllers
                 {
                     PromoAction.Id = default(long);
                     NewPromotion.Id = default(long);
-                    _BD_.Entry(NewPromotion).State = System.Data.Entity.EntityState.Added;
-                    _BD_.SaveChanges();
+                    cntx_.Entry(NewPromotion).State = System.Data.Entity.EntityState.Added;
+                    cntx_.SaveChanges();
 
                     SuccessMessage("Акция добавлена, в списке отобразится после подтверждения");
                 }
                 else
                 {
                     NewPromotion.Id = PromoAction.Id;
-                    _BD_.Entry(NewPromotion).State = EntityState.Modified;
+                    cntx_.Entry(NewPromotion).State = EntityState.Modified;
                     long XXX = PromoAction.Id;                  
-                    _BD_.promotionToDrug.RemoveRange(_BD_.promotionToDrug.Where(xxx => xxx.PromotionId == XXX).ToList());               
-                    _BD_.SaveChanges();
+                    cntx_.promotionToDrug.RemoveRange(cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == XXX).ToList());               
+                    cntx_.SaveChanges();
                     SuccessMessage("Акция изменена, в списке отобразится после подтверждения");
                 }
 
@@ -105,12 +106,12 @@ namespace ProducerInterface.Controllers
                 foreach (var X in PromoAction.DrugList)
                 {
                     var DrugInPromotion = new promotionToDrug() { DrugId = X, PromotionId = ID_Promotion };                    
-                    _BD_.promotionToDrug.Add(DrugInPromotion);      
+                    cntx_.promotionToDrug.Add(DrugInPromotion);      
                     
                     // привязка лекарств к акции           
                 }
 
-                _BD_.SaveChanges();
+                cntx_.SaveChanges();
              
                 return RedirectToAction("Index");
             }
@@ -139,10 +140,10 @@ namespace ProducerInterface.Controllers
 
             ViewData["DrugList"] = h.GetCatalogList();
 
-            ViewPromotion = _BD_.promotions.Where(xxx => xxx.Id == Id).ToList().Select(xxx => new PromotionValidation { Id = xxx.Id, Name = xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, Status = xxx.Status }).FirstOrDefault();
+            ViewPromotion = cntx_.promotions.Where(xxx => xxx.Id == Id).ToList().Select(xxx => new PromotionValidation { Id = xxx.Id, Name = xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, Status = xxx.Status }).FirstOrDefault();
 
             //ViewPromotion = _BD_.promotions.Where(xxx=>xxx.Id == id).ToList().Select(xxx=> new PromotionValidation {Id=xxx.Id, Name= xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, DrugList = xxx.DrugList, Status = xxx.Status}).FirstOrDefault();
-            ViewPromotion.DrugList = _BD_.promotionToDrug.Where(xxx => xxx.PromotionId == Id).ToList().Select(xxx => xxx.DrugId).ToList();
+            ViewPromotion.DrugList = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == Id).ToList().Select(xxx => xxx.DrugId).ToList();
 
             return View(ViewPromotion);
         }
@@ -150,9 +151,9 @@ namespace ProducerInterface.Controllers
         [HttpPost]
         public ActionResult Delete(PromotionValidation PromoAction)
         {
-            _BD_.promotionToDrug.RemoveRange(_BD_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id));
-            _BD_.promotions.Remove(_BD_.promotions.Where(xxx=>xxx.Id == PromoAction.Id).First());
-            _BD_.SaveChanges();
+            cntx_.promotionToDrug.RemoveRange(cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id));
+            cntx_.promotions.Remove(cntx_.promotions.Where(xxx=>xxx.Id == PromoAction.Id).First());
+            cntx_.SaveChanges();
             SuccessMessage("Акция " + PromoAction.Name + " успешно удалена.");
             return RedirectToAction("Index");
         }

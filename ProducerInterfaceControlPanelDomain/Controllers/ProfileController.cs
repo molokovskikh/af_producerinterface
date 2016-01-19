@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EntityContext.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -16,7 +17,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveProfile(Models.ControlPanelUser UserModel)
+        public ActionResult SaveProfile(ControlPanelUser UserModel)
         {
             if (!ModelState.IsValid)
             {

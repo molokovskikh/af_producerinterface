@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ProducerInterface.Models;
 using System.Web.Security;
+using EntityContext.ContextModels;
 
 namespace ProducerInterface.Controllers.pruducercontroller
 {
@@ -29,9 +30,9 @@ namespace ProducerInterface.Controllers.pruducercontroller
             CheckPermission(filterContext, CurrentUser);
         }
         
-        public produceruser GetUser(Controller currentController)
+        public ProducerUser GetUser(Controller currentController)
         {
-            var currentUser = new produceruser();
+            var currentUser = new ProducerUser();
 
             string cookiesName = GetCoockieName;
 
@@ -59,7 +60,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
             return currentUser;
         }
 
-        public void CheckPermission(ActionExecutingContext filterContext, produceruser user_)
+        public void CheckPermission(ActionExecutingContext filterContext, ProducerUser user_)
         {
             var actionName = filterContext.RouteData.Values["action"].ToString();
             var controllerName = filterContext.Controller.GetType().Name.Replace("Controller", "");
@@ -84,7 +85,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
                 else
                 {                   
 
-                    var PermissionsUser = _BD_.userpermission.FirstOrDefault(x => x.Name.ToLower() == currentPermissionName);
+                    var PermissionsUser = cntx_.UserPermission.FirstOrDefault(x => x.Name.ToLower() == currentPermissionName);
                     
                     if (CurrentUser != null && currentPermissionName != null && !CheckPermission(PermissionsUser))
                     {
@@ -113,14 +114,14 @@ namespace ProducerInterface.Controllers.pruducercontroller
             }
         }
 
-        public bool CheckPermission(userpermission permission)
+        public bool CheckPermission(UserPermission permission)
         {
             if (permission == null)
             {
                 return false;
             }
 
-           bool X = GetUserPermissions().Any(s => s.userpermission.Name.ToLower() == permission.Name.ToLower());
+           bool X = GetUserPermissions().Any(s => s.UserPermission.Name.ToLower() == permission.Name.ToLower());
            return X;
         }
 
@@ -223,7 +224,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
             if (NotFoundPermission)
             {
 
-                var listPermission = _BD_.userpermission
+                var listPermission = cntx_.UserPermission
                     .Where(xxx => xxx.Name == PermissionName)
                     .Select(xx => xx.Name.ToLower()).ToList();
 
@@ -233,24 +234,24 @@ namespace ProducerInterface.Controllers.pruducercontroller
                 {
                     // если в БД не найден пермишн, нам надо его добавить
 
-                    var permishion = new userpermission();
+                    var permishion = new UserPermission();
                     var url = this.Url.Action(actionName, controllerName);
                     permishion.Description = "Доступ к странице <a href='" + url + "'>" + PermissionName + "</a>";
                     permishion.Name = PermissionName;
 
-                    _BD_.Entry(permishion).State = System.Data.Entity.EntityState.Added;
-                    _BD_.SaveChanges();
+                    cntx_.Entry(permishion).State = System.Data.Entity.EntityState.Added;
+                    cntx_.SaveChanges();
                     //  и дать доступ всем пользователям (которые первыми зарегистрировались и подтвердили регистрацию от каждого Производителя.)
                     // у данных пользователей есть пермишн, Admin_Admin (он может быть не только у первых зарегистрированных а так же у пользователей, которым дали данный доступ)
 
-                    List<produceruser> UsersProducerUser = _BD_.produceruser.Where(xxx => xxx.Enabled == 1).ToList();
+                    List<ProducerUser> UsersProducerUser = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1).ToList();
 
-                    List<produceruser> AdminPermission = new List<produceruser>();
+                    List<ProducerUser> AdminPermission = new List<ProducerUser>();
                     foreach (var x in UsersProducerUser)
                     {
                         string AdminPermissonName = System.Configuration.ConfigurationManager.AppSettings["AdminActionName"].ToString();
-                        long AdminPermissionId = _BD_.userpermission.Where(xxx => xxx.Name.ToLower().Contains(AdminPermissonName.ToLower())).Select(xxx => xxx.Id).First();
-                        bool PermissionAdmin = _BD_.usertouserrole.Any(xxx => xxx.Id == AdminPermissionId && xxx.ProducerUserId == x.Id);
+                        long AdminPermissionId = cntx_.UserPermission.Where(xxx => xxx.Name.ToLower().Contains(AdminPermissonName.ToLower())).Select(xxx => xxx.Id).First();
+                        bool PermissionAdmin = cntx_.usertouserrole.Any(xxx => xxx.Id == AdminPermissionId && xxx.ProducerUserId == x.Id);
 
                         if (PermissionAdmin)
                         {
@@ -261,7 +262,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
 
                        // .GroupBy(xxx => xxx.ProducerId).Select(xxx => xxx.OrderByDescending(p => p.ProducerId).FirstOrDefault()).ToList();
 
-                    long idPermission = _BD_.userpermission.Where(xxx => xxx.Name == PermissionName).First().Id;
+                    long idPermission = cntx_.UserPermission.Where(xxx => xxx.Name == PermissionName).First().Id;
 
 
                     foreach (var User in AdminPermission)
@@ -270,15 +271,15 @@ namespace ProducerInterface.Controllers.pruducercontroller
                         usertouserrole NewRole = new usertouserrole();
                         NewRole.UserPermissionId = idPermission;
                         NewRole.ProducerUserId = User.Id;
-                        _BD_.usertouserrole.Add(NewRole);
+                        cntx_.usertouserrole.Add(NewRole);
                     }
 
-                    _BD_.SaveChanges();
+                    cntx_.SaveChanges();
                 }
             }
         }
 
-        public produceruser GetCurrentUser(bool getFormSession = true)
+        public ProducerUser GetCurrentUser(bool getFormSession = true)
         {
             if (AutorizedUser == null || (AutorizedUser.Name == String.Empty))
             {
@@ -288,7 +289,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
             if (getFormSession && (CurrentUser == null || CurrentUser.Name != CurrentUser.Email))
             {
                 //  string Name = 
-                CurrentUser = _BD_.produceruser.FirstOrDefault(e => e.Email == AutorizedUser.Name);
+                CurrentUser = cntx_.ProducerUser.FirstOrDefault(e => e.Email == AutorizedUser.Name);
             }
             return CurrentUser;
 

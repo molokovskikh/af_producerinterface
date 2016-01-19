@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EntityContext.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -11,7 +12,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         // GET: Promotion
         public ActionResult Index(bool EnabledPromotion = false, long ProducerId = 0)
         {
-            var ListPromotion = new  List<Models.promotions>();          
+            var ListPromotion = new  List<promotions>();          
             var UserId = cntx_.ControlPanelUser.Where(xxx => xxx.Name == currentUser).First();
          
             if (ProducerId == 0)
@@ -35,24 +36,24 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpGet]
         public ActionResult Search()
         {
-            var ViewModel =new Models.SearchPromotion();
-            var ProducerList = new List<Models.OptionElement>() { new Models.OptionElement { Text = "", Value = "" } };
+            var ViewModel =new SearchPromotion();
+            var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
             ProducerList.AddRange(cntx_.producernames.ToList().Select(xxx =>
-                                   new Models.OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList());
+                                   new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList());
             ViewBag.ProducerList = ProducerList;            
             return View(ViewModel);
         }
         [HttpPost]
-        public ActionResult Search(Models.SearchPromotion IdProducers)
+        public ActionResult Search(SearchPromotion IdProducers)
         {
             if (!ModelState.IsValid)
             {
-                var ProducerList = new List<Models.OptionElement>() { new Models.OptionElement { Text = "", Value = "" }};             
+                var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "" }};             
                 ProducerList.AddRange(cntx_.producernames.ToList().Select(xxx =>
-                                       new Models.OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList());
+                                       new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList());
                 ViewBag.ProducerList = ProducerList;
 
-                var ViewModel = new Models.SearchPromotion();
+                var ViewModel = new SearchPromotion();
                 
                 return View("Search", ViewModel);
             }
@@ -69,7 +70,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             ViewBag.ProducerList = cntx_.producernames.Where(xxx => xxx.ProducerId == PromoActionModel.ProducerId).First();
             return View(PromoActionModel);
         }
-        public ActionResult Edit(Models.promotions PromotionSuccess)
+        public ActionResult Edit(promotions PromotionSuccess)
         {
             var promotionUpdate = cntx_.promotions.Where(xxx => xxx.Id == PromotionSuccess.Id).First();
             var ContolUserName = GetUserName();

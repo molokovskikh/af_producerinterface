@@ -8,9 +8,9 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 
-namespace EntityContext
+namespace EntityContext.ContextModels
 {
-    public class ContextEF : EntityContext.ContextModels.producerinterface_Entities
+    public partial class producerinterface_Entities
     {
         public override int SaveChanges()
         {

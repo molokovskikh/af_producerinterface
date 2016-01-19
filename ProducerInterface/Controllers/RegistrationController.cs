@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using ProducerInterface.Models;
 using System.Web.Security;
+using EntityContext.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -27,14 +28,14 @@ namespace ProducerInterface.Controllers
         // GET: Registration
         public ActionResult Index()
         {
-            var ModelView = new Models.LoginValidation();
+            var ModelView = new LoginValidation();
             return View(ModelView);
         }
 
         [HttpGet]
         public ActionResult Registration()
         {
-            var ModelView = new Models.RegistrerValidation();            
+            var ModelView = new RegistrerValidation();            
             Quartz.Job.NamesHelper h;            
             h = new Quartz.Job.NamesHelper(cntx, 0);                     
             ViewBag.ProducerList = h.GetProducerList(); 
@@ -43,18 +44,18 @@ namespace ProducerInterface.Controllers
         }
         
         [HttpPost]
-        public ActionResult Registration(Models.RegistrerValidation NewAccount = null)
+        public ActionResult Registration(RegistrerValidation NewAccount = null)
         {         
 
             if (ModelState.IsValid)
             {
                 // проверка на существование eMail в БД
 
-                var YesNouMail = _BD_.produceruser.Where(xxx => xxx.Email == NewAccount.login).FirstOrDefault();
+                var YesNouMail = cntx_.ProducerUser.Where(xxx => xxx.Email == NewAccount.login).FirstOrDefault();
 
                 if (YesNouMail == null && NewAccount.login != "")
                 {
-                    Models.produceruser New_User = new Models.produceruser();
+                    ProducerUser New_User = new ProducerUser();
                     New_User.Email = NewAccount.login;
                     New_User.Name = NewAccount.Name;
                     New_User.Enabled = 0;
@@ -63,12 +64,12 @@ namespace ProducerInterface.Controllers
                     New_User.Password = Md5HashHelper.GetHash(Password);
                     New_User.ProducerId = NewAccount.Producers;
                     New_User.PasswordUpdated = SystemTime.GetDefaultDate();
-                    _BD_.Entry(New_User).State = System.Data.Entity.EntityState.Added;
-                    _BD_.SaveChanges();
+                    cntx_.Entry(New_User).State = System.Data.Entity.EntityState.Added;
+                    cntx_.SaveChanges();
 
                     string eMail = New_User.Email;
 
-                    New_User = _BD_.produceruser.Where(xxx => xxx.Email == eMail).First();
+                    New_User = cntx_.ProducerUser.Where(xxx => xxx.Email == eMail).First();
                     
                     Quartz.Job.EmailSender.SendRegistrationMessage(cntx, New_User.Id, Password, Request.UserHostAddress.ToString());
 
@@ -103,7 +104,7 @@ namespace ProducerInterface.Controllers
                
         public ActionResult PasswordRecovery(string eMail = "")
         {
-            var Login = new Models.PasswordUpdate();
+            var Login = new PasswordUpdate();
             Login.login = eMail;        
             return View();
         }
@@ -118,7 +119,7 @@ namespace ProducerInterface.Controllers
             }
             else
             {
-                var User = _BD_.produceruser.Where(xxx => xxx.Email == login).FirstOrDefault();
+                var User = cntx_.ProducerUser.Where(xxx => xxx.Email == login).FirstOrDefault();
 
                 if (User != null && User.Email != "")
                 {
@@ -131,8 +132,8 @@ namespace ProducerInterface.Controllers
 
                         string Password = GetRandomPassword();
                         User.Password = Md5HashHelper.GetHash(Password);
-                        _BD_.Entry(User).State = System.Data.Entity.EntityState.Modified;
-                        _BD_.SaveChanges();
+                        cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
+                        cntx_.SaveChanges();
 
                         Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
 
@@ -145,8 +146,8 @@ namespace ProducerInterface.Controllers
                         {
                             string Password = GetRandomPassword();
                             User.Password = Md5HashHelper.GetHash(Password);
-                            _BD_.Entry(User).State = System.Data.Entity.EntityState.Modified;
-                            _BD_.SaveChanges();
+                            cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
+                            cntx_.SaveChanges();
 
                             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
 
@@ -176,12 +177,12 @@ namespace ProducerInterface.Controllers
              
         public ActionResult ChangePassword()
         {
-            var User = _BD_.produceruser.Where(xxx => xxx.Email == CurrentUser.Email).FirstOrDefault();
+            var User = cntx_.ProducerUser.Where(xxx => xxx.Email == CurrentUser.Email).FirstOrDefault();
             string password = GetRandomPassword();
             User.Password = Md5HashHelper.GetHash(password);
 
-            _BD_.Entry(User).State = System.Data.Entity.EntityState.Modified;
-            _BD_.SaveChanges();
+            cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
+            cntx_.SaveChanges();
 
             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Email);
 
@@ -191,7 +192,7 @@ namespace ProducerInterface.Controllers
         }
         
         [HttpPost]
-        public ActionResult UserAuthentication(Models.LoginValidation User_)
+        public ActionResult UserAuthentication(LoginValidation User_)
         {
 
             if (String.IsNullOrEmpty(User_.login) && String.IsNullOrEmpty(User_.password))
@@ -203,7 +204,7 @@ namespace ProducerInterface.Controllers
 
             // валидация
 
-            var ThisUser = _BD_.produceruser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower()).FirstOrDefault();
+            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower()).FirstOrDefault();
 
             if (ThisUser == null || ThisUser.Email == "")
             {
@@ -236,7 +237,7 @@ namespace ProducerInterface.Controllers
          
                 //CurrentUser = ThisUser;
                 //ViewBag.CurrentUser = ThisUser as produceruser;
-                AutorizedUser = ThisUser as produceruser;
+                AutorizedUser = ThisUser as ProducerUser;
                 return Autentificate(this, shouldRemember: true);
             }
                  
@@ -244,9 +245,9 @@ namespace ProducerInterface.Controllers
             if (ThisUser.Enabled == 0 && (ThisUser.PasswordUpdated.Value == SystemTime.GetDefaultDate())) // логинится впервые
             { 
                 
-                var ListUser = _BD_.produceruser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1).ToList();
+                var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1).ToList();
 
-                List<Models.userpermission> LST = _BD_.userpermission.ToList();
+                List<UserPermission> LST = cntx_.UserPermission.ToList();
 
                 if (ListUser == null || ListUser.Count() == 0)
                 {
@@ -254,10 +255,10 @@ namespace ProducerInterface.Controllers
 
                     foreach (var X in LST)
                     {
-                        var AddOnePermission = new Models.usertouserrole();
+                        var AddOnePermission = new usertouserrole();
                         AddOnePermission.ProducerUserId = ThisUser.Id;
                         AddOnePermission.UserPermissionId = X.Id;
-                        _BD_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
+                        cntx_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
                     }
 
                 }
@@ -266,21 +267,21 @@ namespace ProducerInterface.Controllers
 
                     // Даём ему права для входа в ЛК
 
-                    var AddOnePermission = new Models.usertouserrole();
+                    var AddOnePermission = new usertouserrole();
                     AddOnePermission.ProducerUserId = ThisUser.Id;
 
 
                     
                     AddOnePermission.UserPermissionId = LST.Where(xxx => xxx.Name.ToLower() == ("Profile_Index").ToLower()).First().Id;
-                    _BD_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
+                    cntx_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
                 }
                 SuccessMessage("Вы успешно подтвердили свою регистрацию на сайте");
 
                 ThisUser.PasswordUpdated = SystemTime.Now();
                 ThisUser.Enabled = 1;                
-                _BD_.Entry(ThisUser).State = System.Data.Entity.EntityState.Modified;
+                cntx_.Entry(ThisUser).State = System.Data.Entity.EntityState.Modified;
 
-                _BD_.SaveChanges();
+                cntx_.SaveChanges();
 
                  //CurrentUser = ThisUser;
                  //ViewBag.CurrentUser = ThisUser;
@@ -296,8 +297,8 @@ namespace ProducerInterface.Controllers
 
                     ThisUser.Enabled = 1;
                     ThisUser.PasswordUpdated = SystemTime.Now();
-                    _BD_.Entry(ThisUser).State = System.Data.Entity.EntityState.Modified;
-                    _BD_.SaveChanges();
+                    cntx_.Entry(ThisUser).State = System.Data.Entity.EntityState.Modified;
+                    cntx_.SaveChanges();
 
                     //CurrentUser = ThisUser;
                     //ViewBag.CurrentUser = ThisUser;

@@ -97,6 +97,7 @@
     <Compile Include="ContextModels\drugmnn.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\EmailSender.cs" />
     <Compile Include="ContextModels\jobextend.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
@@ -109,9 +110,11 @@
     <Compile Include="ContextModels\mailformwithfooter.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\MyModelView.cs" />
     <Compile Include="ContextModels\pharmacynames.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\Producer.cs" />
     <Compile Include="ContextModels\ProducerInterface_Entity.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -160,6 +163,7 @@
     <Compile Include="ContextModels\reportxml.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\SecuredControllerAttribute.cs" />
     <Compile Include="ContextModels\suppliernames.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
@@ -181,6 +185,8 @@
     <Compile Include="ContextModels\user_logs.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\OptionElement.cs" />
+    <Compile Include="ContextModels\ValidationView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +196,9 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ContextModels\ProducerInterface_Entity.edmx.diagram">
       <DependentUpon>ProducerInterface_Entity.edmx</DependentUpon>
     </None>
@@ -210,6 +218,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Quartz.Job\Quartz.Job.csproj">
+      <Project>{3876c785-bca7-4d82-8876-284ffaada5c6}</Project>
+      <Name>Quartz.Job</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

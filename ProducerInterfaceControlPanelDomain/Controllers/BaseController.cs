@@ -6,14 +6,16 @@ using System.Web.Mvc;
 using System.DirectoryServices;
 using System.Web.Security;
 using System.Text;
+using EntityContext.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
     public class BaseController : Controller
     {
         // GET: Base
+        public EntityContext.ContextModels.producerinterface_Entities cntx_ = new EntityContext.ContextModels.producerinterface_Entities();
 
-        public Models.producerinterface_Entities cntx_ = new Models.producerinterface_Entities();
+     //   public EntityContext.ContextModels.producerinterface_Entities cntx_ = new EntityContext.ContextModels.producerinterface_Entities();
         private string controllerAcctributes;
         private string controllerName;
         private string actionName;
@@ -24,7 +26,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             base.OnActionExecuting(filterContext);
             currentUser = GetUserName();
-            //string currentUser = User.Identity.Name;          
+            //string currentUser = User.Identity.Name;     
 
             controllerName = filterContext.Controller.GetType().Name.Replace("Controller", "").ToLower();
             actionName = filterContext.RouteData.Values["action"].ToString();
@@ -44,7 +46,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                     //  Response.AddHeader("Status Code", "204");
                     filterContext.Result = RedirectToAction("Index", "Home");
                 }
-
+               
             }
             else
             {               
@@ -54,7 +56,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                     filterContext.Result = RedirectToAction("Index", "Registration");
                 }
                 // Не авторизован, уже заходит на страницу авторизции
-            }      
+            }     
+            
+             
         }
 
         public void CheckGlobalPermission()
@@ -86,7 +90,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             {
                 // в базе не найдн пермишен для данного экшена
 
-                var NewPermittion = new Models.ControlPanelPermission();
+                var NewPermittion = new ControlPanelPermission();
                 NewPermittion.ActionAttributes = controllerAcctributes;
                 NewPermittion.ControllerAction = permissionName;
                 NewPermittion.Enabled = true;
@@ -105,7 +109,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 }
                 else
                 {
-                    var NewAdminGroup = new Models.ControlPanelGroup();
+                    var NewAdminGroup = new ControlPanelGroup();
                     NewAdminGroup.Enabled = true;
                     NewAdminGroup.Name = AdminGroupname;
                     cntx_.ControlPanelGroup.Add(NewAdminGroup);

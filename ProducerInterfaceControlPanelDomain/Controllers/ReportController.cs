@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ProducerInterfaceControlPanelDomain.Models;
+using EntityContext.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -24,7 +24,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {           
             ViewBag.ProducerList = GetProducerList();
 
-            var Model = new Models.SearchProducerReportsModel();
+            var Model = new SearchProducerReportsModel();
 
             return View(Model);
         }
@@ -32,7 +32,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
     
 
         [HttpPost]
-        public ActionResult SearchReports(Models.SearchProducerReportsModel Models_id_Producer)
+        public ActionResult SearchReports(SearchProducerReportsModel Models_id_Producer)
         {
             ViewBag.Searh = "Search";          
 

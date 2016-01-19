@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EntityContext.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -12,7 +13,7 @@ namespace ProducerInterface.Controllers
         public ActionResult Index()
         {
             var User = GetCurrentUser();
-            var ListUser = _BD_.produceruser.Where(xxx => xxx.ProducerId == User.ProducerId).ToList();
+            var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == User.ProducerId).ToList();
 
             return View(ListUser);
         }
@@ -21,7 +22,7 @@ namespace ProducerInterface.Controllers
         public ActionResult Edit(long Id)
         {
             var User = GetCurrentUser();
-            var EditUser = _BD_.produceruser.Where(xxx => xxx.Id == Id).First();
+            var EditUser = cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First();
 
             // проверяем верные ли Id продюсера
 
@@ -30,17 +31,17 @@ namespace ProducerInterface.Controllers
                 ErrorMessage("У вас нет прав редактирования доступов для данного пользователя");
                 return RedirectToAction("Index");
             }
-            EditUser.UserPermission = _BD_.usertouserrole.Where(xxx => xxx.ProducerUserId == EditUser.Id).ToList().Select(yyy =>(long) yyy.UserPermissionId).ToList();
-            ViewBag.ListPermission = _BD_.userpermission.ToList().Select(xxx => new Models.OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+            EditUser.UserPermission = cntx_.usertouserrole.Where(xxx => xxx.ProducerUserId == EditUser.Id).ToList().Select(yyy =>(long) yyy.UserPermissionId).ToList();
+            ViewBag.ListPermission = cntx_.UserPermission.ToList().Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
 
             return View(EditUser);
         }
         [HttpPost]
-        public ActionResult Edit(Models.produceruser ChangeUser)
+        public ActionResult Edit(ProducerUser ChangeUser)
         {
 
             var User = GetCurrentUser();
-            var EditUser = _BD_.produceruser.Where(xxx => xxx.Id == ChangeUser.Id).First();
+            var EditUser = cntx_.ProducerUser.Where(xxx => xxx.Id == ChangeUser.Id).First();
 
             if (User.ProducerId != EditUser.ProducerId)
             {
@@ -48,7 +49,7 @@ namespace ProducerInterface.Controllers
                 return RedirectToAction("Index");
             }
 
-            var PermissionOld = _BD_.usertouserrole.Where(xxx => xxx.ProducerUserId == EditUser.Id).ToList().Select(yyy => (long)yyy.UserPermissionId).ToList();
+            var PermissionOld = cntx_.usertouserrole.Where(xxx => xxx.ProducerUserId == EditUser.Id).ToList().Select(yyy => (long)yyy.UserPermissionId).ToList();
 
             // удаляем пермишены
             foreach (var PermissionItem in PermissionOld)
@@ -60,11 +61,11 @@ namespace ProducerInterface.Controllers
                     // если отсутствует пермишен
                     // удаляем в БД
 
-                    var PermissionDelete = _BD_.usertouserrole.Where(xxx => xxx.UserPermissionId == PermissionItem && xxx.ProducerUserId == EditUser.Id).First();
-                    _BD_.Entry(PermissionDelete).State = System.Data.Entity.EntityState.Deleted;
+                    var PermissionDelete = cntx_.usertouserrole.Where(xxx => xxx.UserPermissionId == PermissionItem && xxx.ProducerUserId == EditUser.Id).First();
+                    cntx_.Entry(PermissionDelete).State = System.Data.Entity.EntityState.Deleted;
                 }
             }
-            _BD_.SaveChanges();
+            cntx_.SaveChanges();
 
             // Добавляем пермишены
             foreach (var PermissionItem in ChangeUser.UserPermission)
@@ -74,13 +75,13 @@ namespace ProducerInterface.Controllers
                 if (!IfElsePermission)
                 {
                     // если в БД нет пермишена, добавляем
-                    var NewPermission = new Models.usertouserrole();
+                    var NewPermission = new usertouserrole();
                     NewPermission.ProducerUserId = EditUser.Id;
                     NewPermission.UserPermissionId = PermissionItem;
-                    _BD_.Entry(NewPermission).State = System.Data.Entity.EntityState.Added;                    
+                    cntx_.Entry(NewPermission).State = System.Data.Entity.EntityState.Added;                    
                 }
             }
-            _BD_.SaveChanges();
+            cntx_.SaveChanges();
 
             SuccessMessage("Права пользователя " + EditUser.Name + " успешно изменены");
             return RedirectToAction("Index");

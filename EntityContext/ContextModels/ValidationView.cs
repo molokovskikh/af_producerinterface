@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using Quartz.Job.Models;
 
-namespace ProducerInterface.Models
+namespace EntityContext.ContextModels
 {
     public class ValidationView
     {
     }
 
-    public partial class produceruser
+    public partial class ProducerUser
     {
         [Display(Name="Списко прав")]
         [UIHint("LongList")]
@@ -113,18 +110,5 @@ namespace ProducerInterface.Models
         [Required(ErrorMessage = "Введите E-mail")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Введите корректый E-mail")]
         public string login { get; set; }
-    }
-
-    public class OptionElement
-    {
-        public string Value { get; set; }
-
-        public string Text { get; set; }
-    }
-    public class OptionElement2
-    {
-        public long Value { get; set; }
-
-        public string Text { get; set; }
-    }
+    }  
 }

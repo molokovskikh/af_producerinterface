@@ -186,74 +186,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\drugdescription.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DrugDescriptionRemark.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DrugDescriptionRemarkMetaData.cs" />
-    <Compile Include="Models\drugfamily.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\EmailSender.cs" />
-    <Compile Include="Models\formsakacatalog.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Producer.cs" />
-    <Compile Include="Models\ProducerInterfaceAdoModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ProducerInterfaceAdoModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProducerInterfaceAdoModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProducerInterfaceAdoModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ProducerInterfaceAdoModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\producers.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\produceruser.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\produceruserpermission.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\profilenews.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\promotions.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\promotionToDrug.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\reporttemplate.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SecuredControllerAttribute.cs" />
-    <Compile Include="Models\userpermission.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\userpermissionrole.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\userrole.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\usertouserrole.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\user_logs.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ValidationView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -300,25 +232,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\ProducerInterfaceAdoModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ProducerInterfaceAdoModel.edmx</DependentUpon>
-      <LastGenOutput>ProducerInterfaceAdoModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\ProducerInterfaceAdoModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ProducerInterfaceAdoModel.edmx</DependentUpon>
-      <LastGenOutput>ProducerInterfaceAdoModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\ProducerInterfaceAdoModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ProducerInterfaceAdoModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\ProducerInterfaceAdoModel.edmx.diagram">
-      <DependentUpon>ProducerInterfaceAdoModel.edmx</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\TEST.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -430,6 +345,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
     <Folder Include="Views\Autorization\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Configuration\" />
@@ -453,6 +369,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EntityContext\EntityContext.csproj">
+      <Project>{f914e577-b266-4a6a-9675-9c384282fc06}</Project>
+      <Name>EntityContext</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Quartz.Job\Quartz.Job.csproj">
       <Project>{3876c785-bca7-4d82-8876-284ffaada5c6}</Project>
       <Name>Quartz.Job</Name>

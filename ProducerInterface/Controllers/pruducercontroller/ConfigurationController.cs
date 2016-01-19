@@ -6,15 +6,15 @@ using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using ProducerInterface.Models;
-
+using EntityContext.ContextModels;
 
 namespace ProducerInterface.Controllers.pruducercontroller
 {
     public class ConfigurationController : Controller
     {
-        public producerinterface_Entities _BD_ = new producerinterface_Entities();
-        public produceruser AutorizedUser {  get;  set; }
-        public produceruser CurrentUser { get; set; }
+        public EntityContext.ContextModels.producerinterface_Entities  cntx_ = new producerinterface_Entities();
+        public ProducerUser AutorizedUser {  get;  set; }
+        public ProducerUser CurrentUser { get; set; }
 
         public string GetCoockieName { get { return "ValidationUserCookie"; } }
         public string GetunAuthorizedUserRedirectUrl { get { return "Home/index"; }  }

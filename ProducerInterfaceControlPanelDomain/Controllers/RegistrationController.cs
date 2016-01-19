@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.DirectoryServices;
 using System.Web.Security;
+using EntityContext.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -32,13 +33,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 SetLoginCookie((object)login);    
                 return RedirectToAction("Index", "Home");                
             }
-            ErrorMessage("Неверные логин и пароль " + ErrorMessageString);
+            ErrorMessage(ErrorMessageString);
             return RedirectToAction("Index", "Registration");
         }
 
         public void AddUserInDB(string LogIn)
         {
-            Models.ControlPanelUser CPU = new Models.ControlPanelUser();
+            ControlPanelUser CPU = new ControlPanelUser();
 
             CPU.Name = LogIn;
             CPU.Enabled = 1;
@@ -61,7 +62,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             }
             else
             {
-                var Group = new Models.ControlPanelGroup();
+                var Group = new ControlPanelGroup();
                 Group.Name = AdminGroup;
                 Group.ControlPanelUser.Add(CPU);
             }
@@ -72,7 +73,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public void AddAdminUserInBD(string LogIn)
         {
-            Models.ControlPanelUser CPU = new Models.ControlPanelUser();
+            ControlPanelUser CPU = new ControlPanelUser();
 
             // CPU - ControlPanelUser
 
@@ -101,7 +102,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             }
             else
             {
-                var Group = new Models.ControlPanelGroup();
+                var Group = new ControlPanelGroup();
                 Group.Name = AdminGroup;
                 Group.Enabled = true;                
                 cntx_.ControlPanelGroup.Add(Group);

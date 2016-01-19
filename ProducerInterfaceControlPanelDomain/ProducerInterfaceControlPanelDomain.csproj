@@ -157,117 +157,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AdoModelData.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdoModelData.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AdoModelData.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AdoModelData.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdoModelData.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\assortment.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\catalognames.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ControlPanelGroup.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ControlPanelPermission.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ControlPanelUser.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\controlpaneluserpermission.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\drugfamily.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\drugformproducer.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\jobextend.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\jobextendwithproducer.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\mailform.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\mailformwithfooter.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MyViewModels.cs" />
-    <Compile Include="Models\OptionElement.cs" />
-    <Compile Include="Models\pharmacynames.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\producernames.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\producers.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProducerUser.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\produceruserpermission.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\profilenews.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\promotions.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\promotionToDrug.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ratingreportorderitems.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\regionnames.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\reporttemplate.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\reportxml.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SearchProducerReportsModel.cs" />
-    <Compile Include="Models\suppliernames.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\usernames.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserPermission.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\userpermissionrole.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\userrole.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\usertouserrole.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\user_logs.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -301,26 +190,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\AdoModelData.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AdoModelData.edmx</DependentUpon>
-      <LastGenOutput>AdoModelData.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\AdoModelData.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AdoModelData.edmx</DependentUpon>
-      <LastGenOutput>AdoModelData.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\Analit.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\AdoModelData.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AdoModelData.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\AdoModelData.edmx.diagram">
-      <DependentUpon>AdoModelData.edmx</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\File System TEST Server.pubxml" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -348,8 +220,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Shared\MenuPartial.cshtml" />
@@ -378,6 +248,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Chozen\" />
+    <Folder Include="Models\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
@@ -392,6 +263,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EntityContext\EntityContext.csproj">
+      <Project>{f914e577-b266-4a6a-9675-9c384282fc06}</Project>
+      <Name>EntityContext</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Quartz.Job\Quartz.Job.csproj">
       <Project>{3876c785-bca7-4d82-8876-284ffaada5c6}</Project>
       <Name>Quartz.Job</Name>

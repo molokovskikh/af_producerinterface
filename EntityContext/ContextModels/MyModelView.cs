@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     public class ListGroupView
     {
@@ -12,7 +13,7 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public string NameGroup { get; set; }
         public string Description { get; set; }
         public int CountUser { get; set; }
-        public string[] Users { get; set; }     
+        public string[] Users { get; set; }
         public string[] Permissions { get; set; }
     }
     public class ListUserView
@@ -27,7 +28,7 @@ namespace ProducerInterfaceControlPanelDomain.Models
 
     public class SearchPromotion
     {
-        [Required(ErrorMessage ="Не выбран производитель")]
+        [Required(ErrorMessage = "Не выбран производитель")]
         public long IdProducer { get; set; }
     }
 
@@ -44,7 +45,7 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public List<long> ListSelectedPermission { get; set; }
     }
 
-    [MetadataType(typeof(promotionsMetaData))]
+   [MetadataType(typeof(promotionsMetaData))]
     public partial class promotions
     {
 
@@ -63,7 +64,7 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public string Name { get; set; }
         public decimal RegionMask { get; set; }
 
-       
+
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> Begin { get; set; }
 
@@ -87,12 +88,20 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public List<long> ListUser { get; set; }
 
         [UIHint("LongListPermission")]
-        public List<long> ListPermission{ get; set; }     
+        public List<long> ListPermission { get; set; }
     }
 
     public class promotionsGroupMetaData
     {
-        
-          
+
+
+    }
+
+    public class SearchProducerReportsModel
+    {
+        [UIHint("EditorProducer")]
+        [Required(ErrorMessage = "Выберите компанию")]
+        [Display(Name = "Название компании производителя: ")]
+        public long Producers { get; set; }
     }
 }

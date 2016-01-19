@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using EntityContext.ContextModels;
 
-namespace ProducerInterface.Models
+namespace EntityContext.ContextModels
 {
     public class Producer
     {
         public virtual string Name { get; set; }
-        public virtual IList<produceruser> Users { get; set; }
+        public virtual IList<ProducerUser> Users { get; set; }
         public virtual List<Drug> Drugs { get; set; }
     }
 

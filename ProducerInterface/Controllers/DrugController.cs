@@ -34,7 +34,7 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Index()
 		{
-			var model = _BD_.drugfamily
+			var model = cntx_.drugfamily
 				.Where(x => x.ProducerId == producerId)
 				.OrderBy(x => x.FamilyName)
 				.ToList();

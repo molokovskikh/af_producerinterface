@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EntityContext.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -12,7 +13,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpGet]
         public ActionResult Index(long Id=0)
         {
-            var UserList = new List<Models.ProducerUser>();
+            var UserList = new List<ProducerUser>();
             if (Id == 0)
             {
                 UserList = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1).ToList();
@@ -28,7 +29,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         public ActionResult EditUserPermission(long Id)
         {
             var UserModel = cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First();
-            ViewBag.PermissionList = cntx_.UserPermission.ToList().Select(xxx => new Models.OptionElement { Text=xxx.Name, Value= xxx.Id.ToString() }).ToList();
+            ViewBag.PermissionList = cntx_.UserPermission.ToList().Select(xxx => new OptionElement { Text=xxx.Name, Value= xxx.Id.ToString() }).ToList();
             UserModel.ListSelectedPermission = (List<long>) cntx_.usertouserrole.Where(xxx => xxx.ProducerUserId == UserModel.Id).Select(xxx =>(long) xxx.UserPermissionId).ToList();
 
 
@@ -36,7 +37,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditUserPermission(Models.ProducerUser ChangeUser)
+        public ActionResult EditUserPermission(ProducerUser ChangeUser)
         {
             // список пермишенов в Базе
             var UselPermissionOldList = cntx_.usertouserrole.Where(xxx => xxx.ProducerUserId == ChangeUser.Id).Select(xxx =>(long) xxx.UserPermissionId).ToList();
@@ -72,7 +73,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 if(!SelectNotSelectPermission)
                 {
                     // В бд нет данного пермишена
-                    var PermissionAdd = new Models.usertouserrole();
+                    var PermissionAdd = new usertouserrole();
                     PermissionAdd.ProducerUserId = ChangeUser.Id;
                     PermissionAdd.UserPermissionId = NewItemPermission;
                     cntx_.usertouserrole.Add(PermissionAdd);
@@ -102,7 +103,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return View(PermissionItem);
         }
         [HttpPost]
-        public ActionResult EditPermission(Models.UserPermission ChangePermission)
+        public ActionResult EditPermission(UserPermission ChangePermission)
         {
             var PermissionChange = cntx_.UserPermission.Where(xxx => xxx.Id == ChangePermission.Id).First();
 
