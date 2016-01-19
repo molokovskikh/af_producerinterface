@@ -7,17 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class drugmnn
+    public partial class regionnames
     {
-        public long DrugFamilyId { get; set; }
-        public string DrugFamilyName { get; set; }
-        public Nullable<long> MnnId { get; set; }
-        public string Mnn { get; set; }
-        public string RussianMnn { get; set; }
+        public decimal RegionCode { get; set; }
+        public string RegionName { get; set; }
     }
 }

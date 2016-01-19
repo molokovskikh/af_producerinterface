@@ -23,7 +23,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             else
             {
                 // Акции производителя
-                ViewBag.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ProducerId).First().ProducerName;
+               // ViewBag.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ProducerId).First().ProducerName;
                 ListPromotion = cntx_.promotions.Where(xxx => xxx.Enabled == EnabledPromotion).Where(xxx=>xxx.ProducerId==ProducerId).ToList();
             }
 
@@ -84,6 +84,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             SuccessMessage("Акция " + promotionUpdate.Name + " подтверждена");        
             return RedirectToAction("Index", new { EnabledPromotion=true });
+        }
+
+        public ActionResult Active()
+        {
+            var ListPromotion = cntx_.promotions.Where(xxx => xxx.End > DateTime.Now && xxx.Begin < DateTime.Now && xxx.Status == true && xxx.Enabled ==true).ToList();
+            ViewBag.ListDrugs = cntx_.catalognames.ToList();
+            ViewBag.ProducerList = cntx_.producernames.ToList();
+            return View("Index",ListPromotion);
         }
 
     }

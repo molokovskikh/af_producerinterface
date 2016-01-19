@@ -74,10 +74,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             Models.ControlPanelUser CPU = new Models.ControlPanelUser();
 
+            // CPU - ControlPanelUser
+
             CPU.Name = LogIn;            
             CPU.Enabled = 1;
             CPU.Email = "";
             CPU.Appointment = "";
+
+            if (_filterAttribute != null && _filterAttribute != "" && _filterAttribute.Length > 10)
+            {
+                CPU.FullName = _filterAttribute;
+            }
 
             cntx_.ControlPanelUser.Add(CPU);
 
@@ -96,7 +103,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             {
                 var Group = new Models.ControlPanelGroup();
                 Group.Name = AdminGroup;
-                Group.Enabled = true;
+                Group.Enabled = true;                
                 cntx_.ControlPanelGroup.Add(Group);
                 cntx_.SaveChanges();
                 Group.ControlPanelUser.Add(CPU);             
@@ -109,8 +116,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         private DirectoryEntry entryAu;
         private string _path;
         private string _filterAttribute;
-        public string ErrorMessageString;
-
+        public string ErrorMessageString;        
         //"LDAP://OU=Клиенты,DC=adc,DC=analit,DC=net"
 
         public bool IsAuthenticated(string username, string pwd)
@@ -133,10 +139,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 var search = new DirectorySearcher(entryAu);
                 search.Filter = "(SAMAccountName=" + username + ")";
                 search.PropertiesToLoad.Add("cn");
+          
                 SearchResult result = search.FindOne();
                 // Update the new path to the user in the directory
                 _path = result.Path;
-                _filterAttribute = (String)result.Properties["cn"][0];
+                _filterAttribute = (String)result.Properties["cn"][0];              
             }
             catch (Exception ex)
             {

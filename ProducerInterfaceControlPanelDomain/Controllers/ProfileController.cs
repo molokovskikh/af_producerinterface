@@ -30,7 +30,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             {
                 CurrentUser.Email = UserModel.Email;
                 CurrentUser.Appointment = UserModel.Appointment;
-                
+                CurrentUser.FullName = UserModel.FullName;
                 cntx_.Entry(CurrentUser).State = System.Data.Entity.EntityState.Modified;
                 cntx_.SaveChanges();
 

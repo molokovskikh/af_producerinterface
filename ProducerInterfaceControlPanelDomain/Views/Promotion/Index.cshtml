@@ -43,12 +43,22 @@
             <td>@PromotionItem.ProducerUser.Name</td>
             <td>
 
-                @foreach (var DrugItem in PromotionItem.promotionToDrug)
-                {
-                    <p>@DrugListItems.Where(xxx => xxx.CatalogId == DrugItem.DrugId).First().CatalogName</p>
-                   
-                }
-
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapseDrus_@PromotionItem.Id" style="text-decoration:none;"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp;  Лекаства (@PromotionItem.promotionToDrug.Count() шт.)</a>
+                        </h4>
+                    </div>
+                    <div id="collapseDrus_@PromotionItem.Id" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <hr />
+                            @foreach (var DrugItem_ in PromotionItem.promotionToDrug)
+                            {
+                                @DrugListItems.Where(xxx => xxx.CatalogId == DrugItem_.DrugId).First().CatalogName
+                            }
+                        </div>
+                    </div>
+                </div>                  
             </td>
 
             <th><a href="~/Promotion/Edit/@PromotionItem.Id" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp; Подробно</a></th>

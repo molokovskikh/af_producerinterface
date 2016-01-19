@@ -8,7 +8,19 @@
 
 <h2>Промо Акция '@Model.Name'</h2>
 <h3>Производитель '@ProducersList.ProducerName'</h3>
+<h4>
+    <strong>Статус </strong>
+    @if (Model.Status == false)
+    {
+        <span>Не подтверждена</span>
+    }
+    else
+    {
+        <span>Подтверждена</span>
+    }
+</h4>
 <hr/>
+
 
 @using (Html.BeginForm(FormMethod.Post))
 {
@@ -32,7 +44,7 @@
 
         <div class="form-group">         
           
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" href="#collapseDrus" style="text-decoration:none;"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp;  Лекаства (@Model.promotionToDrug.Count() шт.)</a>
@@ -44,19 +56,24 @@
                         @foreach (var DrugItem_ in Model.promotionToDrug)
                         {
                             @DrugListItems.Where(xxx => xxx.CatalogId == DrugItem_.DrugId).First().CatalogName
-
                         }
                     </div>
                 </div>
             </div>  
-
-     
-        </div>    
-
-        <div class="form-group">
-            <input type="submit" value="Подтвердить" class="btn btn-primary" />
+                 
         </div>
 
-
-
+    if (Model.Status == false)
+    {
+        <div class="form-group">
+            <input type="submit" value="Подтвердить" class="btn btn-primary" />
+            <a class="btn btn-primary" href="~/Promotion/Index">Назад к списку</a>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+           <a class="btn btn-primary" href="~/Promotion/Index">Назад к списку</a>
+        </div>
+    }
 }

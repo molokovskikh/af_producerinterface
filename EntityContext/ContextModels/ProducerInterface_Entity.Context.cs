@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     using System;
     using System.Data.Entity;
@@ -25,10 +25,15 @@ namespace ProducerInterfaceControlPanelDomain.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
+        public DbSet<ControlPanelUser> ControlPanelUser { get; set; }
+        public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<mailform> mailform { get; set; }
         public DbSet<producers> producers { get; set; }
         public DbSet<ProducerUser> ProducerUser { get; set; }
+        public DbSet<profilenews> profilenews { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<promotionToDrug> promotionToDrug { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
@@ -40,21 +45,19 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public DbSet<userpermissionrole> userpermissionrole { get; set; }
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
+        public DbSet<controlpaneluserpermission> controlpaneluserpermission { get; set; }
+        public DbSet<drugdescription> drugdescription { get; set; }
         public DbSet<drugfamily> drugfamily { get; set; }
+        public DbSet<drugformproducer> drugformproducer { get; set; }
+        public DbSet<drugmnn> drugmnn { get; set; }
+        public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
         public DbSet<pharmacynames> pharmacynames { get; set; }
         public DbSet<producernames> producernames { get; set; }
+        public DbSet<produceruserpermission> produceruserpermission { get; set; }
         public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
         public DbSet<regionnames> regionnames { get; set; }
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<usernames> usernames { get; set; }
-        public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
-        public DbSet<profilenews> profilenews { get; set; }
-        public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
-        public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
-        public DbSet<ControlPanelUser> ControlPanelUser { get; set; }
-        public DbSet<controlpaneluserpermission> controlpaneluserpermission { get; set; }
-        public DbSet<produceruserpermission> produceruserpermission { get; set; }
-        public DbSet<drugformproducer> drugformproducer { get; set; }
     }
 }

@@ -7,17 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class drugdescription
+    public partial class DrugDescriptionRemark
     {
-        public long DrugFamilyId { get; set; }
-        public string DrugFamilyName { get; set; }
-        public Nullable<long> DescriptionId { get; set; }
-        public string DescriptionName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public string EnglishName { get; set; }
         public string Description { get; set; }
         public string Interaction { get; set; }
@@ -30,5 +28,14 @@ namespace ProducerInterfaceControlPanelDomain.Models
         public string Storage { get; set; }
         public string Expiration { get; set; }
         public string Composition { get; set; }
+        public Nullable<System.DateTime> CreationDate { get; set; }
+        public Nullable<int> Status { get; set; }
+        public Nullable<System.DateTime> ModificationDate { get; set; }
+        public Nullable<long> ModificatorId { get; set; }
+        public Nullable<long> ProducerUserId { get; set; }
+        public Nullable<long> DrugFamilyId { get; set; }
+        public Nullable<long> MNNId { get; set; }
+    
+        public virtual ProducerUser ProducerUser { get; set; }
     }
 }

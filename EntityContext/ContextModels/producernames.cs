@@ -7,25 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlPanelUser
+    public partial class producernames
     {
-        public ControlPanelUser()
-        {
-            this.ControlPanelGroup = new HashSet<ControlPanelGroup>();
-        }
-    
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Appointment { get; set; }
-        public sbyte Enabled { get; set; }
-        public string FullName { get; set; }
-    
-        public virtual ICollection<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public long ProducerId { get; set; }
+        public string ProducerName { get; set; }
     }
 }

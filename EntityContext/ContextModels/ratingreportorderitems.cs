@@ -7,25 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlPanelUser
+    public partial class ratingreportorderitems
     {
-        public ControlPanelUser()
-        {
-            this.ControlPanelGroup = new HashSet<ControlPanelGroup>();
-        }
-    
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Appointment { get; set; }
-        public sbyte Enabled { get; set; }
-        public string FullName { get; set; }
-    
-        public virtual ICollection<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public long CatalogId { get; set; }
+        public decimal RegionCode { get; set; }
+        public long SupplierId { get; set; }
+        public long ProducerId { get; set; }
+        public Nullable<long> PharmacyId { get; set; }
+        public Nullable<long> Quantity { get; set; }
+        public long OrderId { get; set; }
+        public Nullable<long> AddressId { get; set; }
+        public bool IsLocal { get; set; }
+        public System.DateTime WriteTime { get; set; }
     }
 }

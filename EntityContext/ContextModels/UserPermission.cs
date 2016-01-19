@@ -7,38 +7,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProducerInterfaceControlPanelDomain.Models
+namespace EntityContext.ContextModels
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ProducerUser
+    public partial class UserPermission
     {
-        public ProducerUser()
+        public UserPermission()
         {
-            this.promotions = new HashSet<promotions>();
-            this.user_logs = new HashSet<user_logs>();
+            this.userpermissionrole = new HashSet<userpermissionrole>();
             this.usertouserrole = new HashSet<usertouserrole>();
-            this.promotions1 = new HashSet<promotions>();
-            this.user_logs1 = new HashSet<user_logs>();
             this.usertouserrole1 = new HashSet<usertouserrole>();
         }
     
         public long Id { get; set; }
         public string Name { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public string Appointment { get; set; }
-        public Nullable<long> ProducerId { get; set; }
-        public Nullable<System.DateTime> PasswordUpdated { get; set; }
-        public sbyte PasswordToUpdate { get; set; }
-        public sbyte Enabled { get; set; }
+        public string Description { get; set; }
     
-        public virtual ICollection<promotions> promotions { get; set; }
-        public virtual ICollection<user_logs> user_logs { get; set; }
+        public virtual ICollection<userpermissionrole> userpermissionrole { get; set; }
         public virtual ICollection<usertouserrole> usertouserrole { get; set; }
-        public virtual ICollection<promotions> promotions1 { get; set; }
-        public virtual ICollection<user_logs> user_logs1 { get; set; }
         public virtual ICollection<usertouserrole> usertouserrole1 { get; set; }
     }
 }

@@ -190,19 +190,10 @@
     <Compile Include="Models\controlpaneluserpermission.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\drugdescription.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DrugDescriptionRemark.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\drugfamily.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\drugformproducer.cs">
-      <DependentUpon>AdoModelData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\drugmnn.cs">
       <DependentUpon>AdoModelData.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\jobextend.cs">
