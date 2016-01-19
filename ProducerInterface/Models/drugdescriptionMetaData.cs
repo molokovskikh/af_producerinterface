@@ -1,29 +1,23 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace ProducerInterface.Models
 {
-	[MetadataType(typeof(DrugDescriptionRemarkMetaData))]
-	public partial class DrugDescriptionRemark
+	[MetadataType(typeof(drugdescriptionMetaData))]
+	public partial class drugdescription
 	{
-		[HiddenInput(DisplayValue = false)]
-		public int DescriptionId
-		{
-			get { return Id; }
-		}
 	}
 
-	public class DrugDescriptionRemarkMetaData
+	public class drugdescriptionMetaData
 	{
 		[ScaffoldColumn(false)]
-		public int Id { get; set; }
+		public long? DescriptionId { get; set; }
 
 		[Display(Name = "Наименование", Order = 10)]
 		[UIHint("TextBox")]
 		[StringLength(255, ErrorMessage = "Наименование препарата должно быть не длиннее 255 символов")]
 		[Required(ErrorMessage = "Не указано наименование препарата")]
-		public string Name { get; set; }
+		public string DescriptionName { get; set; }
 
 		[Display(Name = "Английское наименование", Order = 20)]
 		[UIHint("TextBox")]
@@ -73,30 +67,5 @@ namespace ProducerInterface.Models
 		[Display(Name = "Дополнительно", Order = 130)]
 		[UIHint("TextArea")]
 		public string Description { get; set; }
-
-		[ScaffoldColumn(false)]
-		public DateTime? CreationDate { get; set; }
-
-		[ScaffoldColumn(false)]
-		public int? Status { get; set; }
-
-		[ScaffoldColumn(false)]
-		public DateTime? ModificationDate { get; set; }
-
-		[ScaffoldColumn(false)]
-		public long? ModificatorId { get; set; }
-
-		[HiddenInput(DisplayValue = false)]
-		public long? ProducerUserId { get; set; }
-
-		[HiddenInput(DisplayValue = false)]
-		public long? DrugFamilyId { get; set; }
-
-		[ScaffoldColumn(false)]
-		public long? MNNId { get; set; }
-
-		[ScaffoldColumn(false)]
-		public virtual produceruser produceruser { get; set; }
 	}
 }
-								

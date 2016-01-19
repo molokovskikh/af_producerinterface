@@ -185,20 +185,26 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DescriptionComposit.cs" />
     <Compile Include="Models\drugdescription.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\drugformproducer.cs">
+      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\drugmnn.cs">
+      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\drugmnnMetaData.cs" />
     <Compile Include="Models\DrugDescriptionRemark.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DrugDescriptionRemarkMetaData.cs" />
+    <Compile Include="Models\drugformproducerMetaData.cs" />
+    <Compile Include="Models\drugdescriptionMetaData.cs" />
     <Compile Include="Models\drugfamily.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmailSender.cs" />
-    <Compile Include="Models\formsakacatalog.cs">
-      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Producer.cs" />
     <Compile Include="Models\ProducerInterfaceAdoModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -214,6 +220,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ProducerInterfaceAdoModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\producernames.cs">
+      <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\producers.cs">
       <DependentUpon>ProducerInterfaceAdoModel.tt</DependentUpon>
@@ -423,6 +432,9 @@
     <Content Include="Views\Promotion\Delete.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\TextBox.cshtml" />
+    <Content Include="Views\Drug\EditForms.cshtml" />
+    <Content Include="Views\Drug\DisplayForms.cshtml" />
+    <Content Include="Views\Drug\EditMnn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

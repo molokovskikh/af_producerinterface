@@ -1,0 +1,121 @@
+﻿@using ProducerInterface.Models
+@model IEnumerable<drugformproducer>
+
+@{
+    var title = $"Лекарственные формы {ViewData["familyName"]}";
+    ViewBag.Title = title;
+}
+<div class="row">
+    <div class="col-md-12">
+        <h4>@title</h4>
+    </div>
+</div>
+
+@if (Model != null && Model.Any()) {
+    using (Html.BeginForm("EditForms", "Drug")) {
+        @Html.Hidden("familyId", ViewData["familyId"])
+         <div class="row">
+             <div class="col-md-12">
+                 <table class="table table-striped table-bordered">
+                     <thead>
+                     <tr>
+                         <th>
+                             @Html.DisplayNameFor(m => m.CatalogName)
+                         </th>
+                         <th>
+                             @Html.DisplayNameFor(m => m.VitallyImportant)
+                         </th>
+                         <th>
+                             @Html.DisplayNameFor(m => m.MandatoryList)
+                         </th>
+                         <th>
+                             @Html.DisplayNameFor(m => m.Narcotic)
+                         </th>
+                         <th>
+                             @Html.DisplayNameFor(m => m.Toxic)
+                         </th>
+                         <th>
+                             @Html.DisplayNameFor(m => m.Combined)
+                         </th>
+                         <th>
+                             @Html.DisplayNameFor(m => m.Monobrend)
+                         </th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     @foreach (var item in Model) {
+                         <tr>
+                             <td>
+                                 @Html.DisplayFor(m => item.CatalogName)
+                             </td>
+                             <td>
+                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.VitallyImportant)}", item.VitallyImportant)
+                             </td>
+                             <td>
+                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.MandatoryList)}", item.MandatoryList)
+                             </td>
+                             <td>
+                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Narcotic)}", item.Narcotic)
+                             </td>
+                             <td>
+                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Toxic)}", item.Toxic)
+                             </td>
+                             <td>
+                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Combined)}", item.Combined)
+                             </td>
+                             <td>
+                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Monobrend)}", item.Monobrend)
+                             </td>
+                         </tr>
+                     }
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-md-6">
+                 <a href="@Url.Action("DisplayForms", new { id = ViewData["familyId"] })"><span class="glyphicon glyphicon-chevron-left"></span> К списку лек. форм</a>
+             </div>
+             <div class="col-md-6" style="text-align:right">
+                 <input type="submit" value="Сохранить" class="btn btn-primary" />
+             </div>
+         </div>
+     }
+}
+else {
+    <div class="row">
+        <b>@string.Format("Лекарственные формы {0} не найдены", ViewData["familyName"])</b>
+    </div>
+    <div class="row">
+        @Html.ActionLink("К списку лек. форм", "DisplayForms", new { id = ViewData["familyId"] })
+    </div>
+}
+
+
+@section JavaScript {
+    <script>
+        //function getArray() {
+
+        //    $("[name='checkboxArray']]")
+
+        //        .val("");
+        //    var raw = $("table input[type='checkbox']:checked");
+        //    var strArray = "";
+        //    for (i = 0; i < raw.length; i++) {
+        //        if (i == 0) {
+        //            strArray += raw[i].attr("name");
+        //        } else {
+        //            strArray += "," + raw[i].attr("name");
+        //        }
+        //    }
+        //    $("[name='checkboxArray']").val(strArray);
+        //}
+
+        //$(function() {
+        //    $("table input[type='checkbox']").checked(function() {
+        //        getArray();
+        //    });
+        //});
+    </script>
+
+}

@@ -1,0 +1,88 @@
+﻿@using ProducerInterface.Models
+@model IEnumerable<drugformproducer>
+
+@{
+    var title = $"Лекарственные формы {ViewData["familyName"]}";
+    ViewBag.Title = title;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>@title</h4>
+    </div>
+</div>
+
+@if (Model != null && Model.Any()) {
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(m => m.CatalogName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.VitallyImportant)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.MandatoryList)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Narcotic)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Toxic)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Combined)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Monobrend)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CatalogName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VitallyImportant)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MandatoryList)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Narcotic)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Toxic)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Combined)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Monobrend)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="text-align: right">
+            <a href="@Url.Action("DisplayForms", new {id = ViewData["familyId"], edit = true})" class="btn btn-primary">Редактировать</a>
+        </div>
+    </div>
+}
+else {
+    <div class="row">
+        <b>@string.Format("Лекарственные формы {0} не найдены", ViewData["familyName"])</b>
+    </div>
+}
+
+
+@section JavaScript {
+}

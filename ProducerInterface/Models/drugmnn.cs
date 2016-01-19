@@ -12,16 +12,10 @@ namespace ProducerInterface.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class formsakacatalog
+    public partial class drugmnn
     {
-        public long CatalogId { get; set; }
-        public long DrugFamilyId { get; set; }
-        public string CatalogName { get; set; }
-        public bool VitallyImportant { get; set; }
-        public bool MandatoryList { get; set; }
-        public bool Monobrend { get; set; }
-        public bool Narcotic { get; set; }
-        public bool Toxic { get; set; }
-        public bool Combined { get; set; }
+        public long MnnId { get; set; }
+        public string Mnn { get; set; }
+        public string RussianMnn { get; set; }
     }
 }

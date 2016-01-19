@@ -12,21 +12,9 @@ namespace ProducerInterface.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class drugdescription
+    public partial class producernames
     {
-        public long DescriptionId { get; set; }
-        public string DescriptionName { get; set; }
-        public string EnglishName { get; set; }
-        public string Description { get; set; }
-        public string Interaction { get; set; }
-        public string SideEffect { get; set; }
-        public string IndicationsForUse { get; set; }
-        public string Dosing { get; set; }
-        public string Warnings { get; set; }
-        public string ProductForm { get; set; }
-        public string PharmacologicalAction { get; set; }
-        public string Storage { get; set; }
-        public string Expiration { get; set; }
-        public string Composition { get; set; }
+        public long ProducerId { get; set; }
+        public string ProducerName { get; set; }
     }
 }

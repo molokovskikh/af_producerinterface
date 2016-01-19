@@ -37,9 +37,11 @@ namespace ProducerInterface.Models
         public DbSet<drugfamily> drugfamily { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<promotionToDrug> promotionToDrug { get; set; }
-        public DbSet<drugdescription> drugdescription { get; set; }
-        public DbSet<formsakacatalog> formsakacatalog { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
         public DbSet<produceruserpermission> produceruserpermission { get; set; }
+        public DbSet<drugformproducer> drugformproducer { get; set; }
+        public DbSet<producernames> producernames { get; set; }
+        public DbSet<drugdescription> drugdescription { get; set; }
+        public DbSet<drugmnn> drugmnn { get; set; }
     }
 }
