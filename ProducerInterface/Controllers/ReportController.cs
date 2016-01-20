@@ -16,6 +16,7 @@ using Quartz.Job.EDM;
 using System.Data;
 using System.IO;
 
+
 namespace ProducerInterface.Controllers
 {
     public class ReportController : pruducercontroller.BaseController
@@ -23,7 +24,7 @@ namespace ProducerInterface.Controllers
         //
         // GET: /Report/
 
-        protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
+        protected static readonly Common.Logging.ILog logger = LogManager.GetLogger(typeof(ReportController));
 
         protected reportData cntx;
         protected NamesHelper h;

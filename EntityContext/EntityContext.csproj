@@ -97,7 +97,6 @@
     <Compile Include="ContextModels\drugmnn.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\EmailSender.cs" />
     <Compile Include="ContextModels\jobextend.cs">
       <DependentUpon>ProducerInterface_Entity.tt</DependentUpon>
     </Compile>

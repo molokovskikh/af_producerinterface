@@ -4049,6 +4049,11 @@
             </para>
             </remarks>
         </member>
+        <member name="M:log4net.Appender.FileAppender.OnClose">
+            <summary>
+            Close this appender instance. The underlying stream or writer is also closed.
+            </summary>
+        </member>
         <member name="M:log4net.Appender.FileAppender.PrepareWriter">
             <summary>
             Called to initialize the file writer
@@ -4436,6 +4441,16 @@
             </para>
             </remarks>
         </member>
+        <member name="M:log4net.Appender.FileAppender.LockingModelBase.ActivateOptions">
+            <summary>
+            Initializes all resources used by this locking model.
+            </summary>
+        </member>
+        <member name="M:log4net.Appender.FileAppender.LockingModelBase.OnClose">
+            <summary>
+            Disposes all resources that were initialized by this locking model.
+            </summary>
+        </member>
         <member name="M:log4net.Appender.FileAppender.LockingModelBase.AcquireLock">
             <summary>
             Acquire the lock on the file
@@ -4566,6 +4581,16 @@
             </para>
             </remarks>
         </member>
+        <member name="M:log4net.Appender.FileAppender.ExclusiveLock.ActivateOptions">
+            <summary>
+            Initializes all resources used by this locking model.
+            </summary>
+        </member>
+        <member name="M:log4net.Appender.FileAppender.ExclusiveLock.OnClose">
+            <summary>
+            Disposes all resources that were initialized by this locking model.
+            </summary>
+        </member>
         <member name="T:log4net.Appender.FileAppender.MinimalLock">
             <summary>
             Acquires the file lock for each write
@@ -4629,6 +4654,16 @@
             </para>
             </remarks>
         </member>
+        <member name="M:log4net.Appender.FileAppender.MinimalLock.ActivateOptions">
+            <summary>
+            Initializes all resources used by this locking model.
+            </summary>
+        </member>
+        <member name="M:log4net.Appender.FileAppender.MinimalLock.OnClose">
+            <summary>
+            Disposes all resources that were initialized by this locking model.
+            </summary>
+        </member>
         <member name="T:log4net.Appender.FileAppender.InterProcessLock">
             <summary>
             Provides cross-process file locking.
@@ -4676,6 +4711,16 @@
         <member name="M:log4net.Appender.FileAppender.InterProcessLock.ReleaseLock">
             <summary>
             Releases the lock and allows others to acquire a lock.
+            </summary>
+        </member>
+        <member name="M:log4net.Appender.FileAppender.InterProcessLock.ActivateOptions">
+            <summary>
+            Initializes all resources used by this locking model.
+            </summary>
+        </member>
+        <member name="M:log4net.Appender.FileAppender.InterProcessLock.OnClose">
+            <summary>
+            Disposes all resources that were initialized by this locking model.
             </summary>
         </member>
         <member name="T:log4net.Appender.ForwardingAppender">
