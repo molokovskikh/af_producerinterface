@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ProducerInterface.Models;
 using System.Web.Security;
 using EntityContext.ContextModels;
 
@@ -95,7 +94,6 @@ namespace ProducerInterface.Controllers.pruducercontroller
                         //filterContext.Result = RedirectToAction(actionName_, controllerName_);
                         // доступ есть!
                         string url = GetredirectAfterAuthentication;
-
 
                     }
                     else
@@ -212,7 +210,16 @@ namespace ProducerInterface.Controllers.pruducercontroller
         public void CheckForExsistenceOfUserPermission()
         {
             bool NotFoundPermission = true;
-            string[] IgnoreAction = System.Configuration.ConfigurationManager.AppSettings["IgnoreAction"].ToString().ToLower().Split(new char[] { ',' });
+
+            string[] IgnoreAction;
+            try
+            {
+                IgnoreAction = System.Configuration.ConfigurationManager.AppSettings["IgnoreAction"].ToString().ToLower().Split(new char[] { ',' });
+            }
+            catch {
+                IgnoreAction = null;
+            }
+
             string controllerName = this.GetType().Name.Replace("Controller", "").ToLower().ToString();
             string actionName = this.Request.RequestContext.RouteData.GetRequiredString("action").ToLower().ToString();
             string PermissionName = controllerName + "_" + actionName;
@@ -244,7 +251,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
                     //  и дать доступ всем пользователям (которые первыми зарегистрировались и подтвердили регистрацию от каждого Производителя.)
                     // у данных пользователей есть пермишн, Admin_Admin (он может быть не только у первых зарегистрированных а так же у пользователей, которым дали данный доступ)
 
-                    List<ProducerUser> UsersProducerUser = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1).ToList();
+                    List<ProducerUser> UsersProducerUser = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1).ToList().Where(xxx=>xxx.Login == null).ToList();
 
                     List<ProducerUser> AdminPermission = new List<ProducerUser>();
                     foreach (var x in UsersProducerUser)
@@ -289,7 +296,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
             if (getFormSession && (CurrentUser == null || CurrentUser.Name != CurrentUser.Email))
             {
                 //  string Name = 
-                CurrentUser = cntx_.ProducerUser.FirstOrDefault(e => e.Email == AutorizedUser.Name);
+                CurrentUser = cntx_.ProducerUser.FirstOrDefault(e => e.Email == AutorizedUser.Name && e.Login == null);
             }
             return CurrentUser;
 

@@ -156,11 +156,16 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             // если аттрибуты запроса пусты / нет в запросе передаваемых параметров
             if (controllerAcctributes == null)
             {
-                return cntx_.controlpaneluserpermission.Any(xxx => xxx.Name == currentUser && xxx.ControllerAction == permissionName);
+                return cntx_.ControlPanelPermission.Where(vvv => vvv.ControllerAction == permissionName)
+                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser)));              
             }
 
             // в запросе есть передаваемые параметры
-            return cntx_.controlpaneluserpermission.Any(xxx => xxx.Name == currentUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
+
+            
+
+            return cntx_.ControlPanelPermission.ToList().Where(vvv=>vvv.ControllerAction == permissionName && vvv.ActionAttributes.Contains(controllerAcctributes))
+                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser)));       
 
         }
 

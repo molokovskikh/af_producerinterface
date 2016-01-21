@@ -20,9 +20,7 @@ namespace EntityContext.ContextModels
         public long Id { get; set; }
     
         public virtual ProducerUser ProducerUser { get; set; }
-        public virtual ProducerUser ProducerUser1 { get; set; }
         public virtual UserPermission UserPermission { get; set; }
-        public virtual UserPermission UserPermission1 { get; set; }
         public virtual userrole userrole { get; set; }
     }
 }

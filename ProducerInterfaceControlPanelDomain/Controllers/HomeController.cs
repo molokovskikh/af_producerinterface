@@ -21,7 +21,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             //IEnumerable<string> X = Groups().ToList();
             //ViewBag.ListGroup = X;
 
-            var ListActionInProducers = cntx_.promotions.Where(xxx => xxx.Begin < DateTime.Now && xxx.End > DateTime.Now && xxx.Enabled == true).ToList();
+            var ListActionInProducers = cntx_.promotions.Where(xxx => xxx.Begin < DateTime.Now && xxx.End > DateTime.Now && xxx.Status == true).ToList();
                     
             return View(ListActionInProducers);
 

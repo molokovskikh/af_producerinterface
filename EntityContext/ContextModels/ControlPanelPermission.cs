@@ -19,7 +19,7 @@ namespace EntityContext.ContextModels
             this.ControlPanelGroup = new HashSet<ControlPanelGroup>();
         }
     
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string ControllerAction { get; set; }
         public string ActionAttributes { get; set; }
         public string Description { get; set; }

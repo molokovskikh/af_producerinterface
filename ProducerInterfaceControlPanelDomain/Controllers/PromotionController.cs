@@ -13,19 +13,19 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         public ActionResult Index(bool EnabledPromotion = false, long ProducerId = 0)
         {
             var ListPromotion = new  List<promotions>();          
-            var UserId = cntx_.ControlPanelUser.Where(xxx => xxx.Name == currentUser).First();
+            var UserId = cntx_.ProducerUser.Where(xxx => xxx.Login == currentUser).First();
          
             if (ProducerId == 0)
             {
                 // Глобальный список акций (по умолчанию, не подтверждённых)
                 ViewBag.EnabledPromotion = EnabledPromotion;
-                ListPromotion = cntx_.promotions.Where(xxx => xxx.Enabled == EnabledPromotion).ToList();                                 
+                ListPromotion = cntx_.promotions.Where(xxx => xxx.Status == EnabledPromotion).ToList();                                 
             }
             else
             {
                 // Акции производителя
                // ViewBag.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ProducerId).First().ProducerName;
-                ListPromotion = cntx_.promotions.Where(xxx => xxx.Enabled == EnabledPromotion).Where(xxx=>xxx.ProducerId==ProducerId).ToList();
+                ListPromotion = cntx_.promotions.Where(xxx => xxx.Status == EnabledPromotion).Where(xxx=>xxx.ProducerId==ProducerId).ToList();
             }
 
             ViewBag.ListDrugs = cntx_.catalognames.ToList();
@@ -74,9 +74,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var promotionUpdate = cntx_.promotions.Where(xxx => xxx.Id == PromotionSuccess.Id).First();
             var ContolUserName = GetUserName();
-            var ControlUser = cntx_.ControlPanelUser.Where(xxx => xxx.Name == ContolUserName).First().Id;
+            var ControlUser = cntx_.ProducerUser.Where(xxx => xxx.Login == ContolUserName).First().Id;
 
-            promotionUpdate.Enabled = true;
+            promotionUpdate.Status = true;
             promotionUpdate.AdminId = ControlUser;
             promotionUpdate.Status = true;
 
@@ -89,7 +89,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public ActionResult Active()
         {
-            var ListPromotion = cntx_.promotions.Where(xxx => xxx.End > DateTime.Now && xxx.Begin < DateTime.Now && xxx.Status == true && xxx.Enabled ==true).ToList();
+            var ListPromotion = cntx_.promotions.Where(xxx => xxx.End > DateTime.Now && xxx.Begin < DateTime.Now && xxx.Status == true && xxx.Status ==true).ToList();
             ViewBag.ListDrugs = cntx_.catalognames.ToList();
             ViewBag.ProducerList = cntx_.producernames.ToList();
             return View("Index",ListPromotion);

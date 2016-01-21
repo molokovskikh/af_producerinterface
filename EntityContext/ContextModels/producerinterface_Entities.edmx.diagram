@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5a6501554ad741428f74ceb65064d7fb" Name="Diagram1">
+        <EntityTypeShape EntityType="producerinterface_Model.ControlPanelGroup" Width="1.5" PointX="0.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.ControlPanelPermission" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.DrugDescriptionRemark" Width="1.5" PointX="5.25" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.jobextend" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.mailform" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.producers" Width="1.5" PointX="8.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.ProducerUser" Width="1.5" PointX="3" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.profilenews" Width="1.5" PointX="11" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.promotions" Width="1.5" PointX="5.25" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.promotionToDrug" Width="1.5" PointX="7.5" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.reporttemplate" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.reportxml" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.user_logs" Width="1.5" PointX="5.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.UserPermission" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.userrole" Width="1.5" PointX="6" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.usertouserrole" Width="1.5" PointX="8.25" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.userpermissionrole" Width="1.5" PointX="10.25" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.assortment" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.catalognames" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.drugdescription" Width="1.5" PointX="10.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.drugfamily" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.drugformproducer" Width="1.5" PointX="12.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.drugmnn" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.jobextendwithproducer" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.mailformwithfooter" Width="1.5" PointX="14.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.pharmacynames" Width="1.5" PointX="14.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.producernames" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.ratingreportorderitems" Width="1.5" PointX="12.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.regionnames" Width="1.5" PointX="14.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.suppliernames" Width="1.5" PointX="15.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.usernames" Width="1.5" PointX="0.75" PointY="15.75" IsExpanded="true" />
+        <AssociationConnector Association="producerinterface_Model.DrugDescriptionRemark_ProducerUserId" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_profile_news_producers" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotions_produceruser" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_user_logs_users" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_user_role_users" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_user_permission_role_user_permissions" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_user_role_user_permissions" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_user_permission_role_user_roleslist" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.FK_user_role_user_roleslist" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.ControlPanelGroupToPermission" ManuallyRouted="false" />
+        <AssociationConnector Association="producerinterface_Model.ControlPanelUserToGroup" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

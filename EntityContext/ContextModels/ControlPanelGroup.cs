@@ -17,15 +17,15 @@ namespace EntityContext.ContextModels
         public ControlPanelGroup()
         {
             this.ControlPanelPermission = new HashSet<ControlPanelPermission>();
-            this.ControlPanelUser = new HashSet<ControlPanelUser>();
+            this.ProducerUser = new HashSet<ProducerUser>();
         }
     
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public bool Enabled { get; set; }
         public string Description { get; set; }
     
         public virtual ICollection<ControlPanelPermission> ControlPanelPermission { get; set; }
-        public virtual ICollection<ControlPanelUser> ControlPanelUser { get; set; }
+        public virtual ICollection<ProducerUser> ProducerUser { get; set; }
     }
 }

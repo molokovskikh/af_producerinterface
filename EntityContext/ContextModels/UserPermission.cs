@@ -18,7 +18,6 @@ namespace EntityContext.ContextModels
         {
             this.userpermissionrole = new HashSet<userpermissionrole>();
             this.usertouserrole = new HashSet<usertouserrole>();
-            this.usertouserrole1 = new HashSet<usertouserrole>();
         }
     
         public long Id { get; set; }
@@ -27,6 +26,5 @@ namespace EntityContext.ContextModels
     
         public virtual ICollection<userpermissionrole> userpermissionrole { get; set; }
         public virtual ICollection<usertouserrole> usertouserrole { get; set; }
-        public virtual ICollection<usertouserrole> usertouserrole1 { get; set; }
     }
 }

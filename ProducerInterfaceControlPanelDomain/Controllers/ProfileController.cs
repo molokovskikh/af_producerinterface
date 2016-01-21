@@ -12,26 +12,26 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         // GET: Profile
         public ActionResult Index()
         {
-            var UserModel = cntx_.ControlPanelUser.Where(xxx => xxx.Name == currentUser).First();
+            var UserModel = cntx_.ProducerUser.Where(xxx => xxx.Login == currentUser).First();
             return View(UserModel);
         }
 
         [HttpPost]
-        public ActionResult SaveProfile(ControlPanelUser UserModel)
+        public ActionResult SaveProfile(ProducerUser UserModel)
         {
             if (!ModelState.IsValid)
             {
                 return View("Index",UserModel);
             }
 
-            var CurrentUser = cntx_.ControlPanelUser.Where(xxx => xxx.Name == currentUser).First();
+            var CurrentUser = cntx_.ProducerUser.Where(xxx => xxx.Login == currentUser).First();
 
             // если Id авторизованного пользователя и Id возвращаемое со страницы совпадают сохраняем в БД
             if (CurrentUser.Id == UserModel.Id)
             {
                 CurrentUser.Email = UserModel.Email;
                 CurrentUser.Appointment = UserModel.Appointment;
-                CurrentUser.FullName = UserModel.FullName;
+                CurrentUser.Name = UserModel.Name;
                 cntx_.Entry(CurrentUser).State = System.Data.Entity.EntityState.Modified;
                 cntx_.SaveChanges();
 

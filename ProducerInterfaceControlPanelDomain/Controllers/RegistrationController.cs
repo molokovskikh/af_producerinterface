@@ -22,7 +22,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             if (IsAuthenticated(login, password))
             {
-                var X = cntx_.ControlPanelUser.Where(xxx => xxx.Name == login).FirstOrDefault();
+                var X = cntx_.ProducerUser.Where(xxx => xxx.Login == login).First();
 
                 if(X == null)
                 {
@@ -39,14 +39,19 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public void AddUserInDB(string LogIn)
         {
-            ControlPanelUser CPU = new ControlPanelUser();
+            ProducerUser CPU = new ProducerUser();
 
-            CPU.Name = LogIn;
+            CPU.Login = LogIn;
             CPU.Enabled = 1;
             CPU.Email = "";
             CPU.Appointment = "";
-            
-            cntx_.ControlPanelUser.Add(CPU);
+
+            if (_filterAttribute != null && _filterAttribute != "" && _filterAttribute.Length > 10)
+            {
+                CPU.Name = _filterAttribute;
+            }
+
+            cntx_.ProducerUser.Add(CPU);
 
             cntx_.SaveChanges();
 
@@ -57,14 +62,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             if (IdGroup > 0)
             {
                 var Group = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == IdGroup).First();
-                Group.ControlPanelUser.Add(CPU);
+                Group.ProducerUser.Add(CPU);
                 cntx_.SaveChanges();
             }
             else
             {
                 var Group = new ControlPanelGroup();
                 Group.Name = AdminGroup;
-                Group.ControlPanelUser.Add(CPU);
+                Group.ProducerUser.Add(CPU);
             }
 
             cntx_.SaveChanges();
@@ -73,21 +78,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public void AddAdminUserInBD(string LogIn)
         {
-            ControlPanelUser CPU = new ControlPanelUser();
+            ProducerUser CPU = new ProducerUser();
 
             // CPU - ControlPanelUser
 
-            CPU.Name = LogIn;            
+            CPU.Login = LogIn;            
             CPU.Enabled = 1;
             CPU.Email = "";
             CPU.Appointment = "";
 
             if (_filterAttribute != null && _filterAttribute != "" && _filterAttribute.Length > 10)
             {
-                CPU.FullName = _filterAttribute;
+                CPU.Name = _filterAttribute;
             }
 
-            cntx_.ControlPanelUser.Add(CPU);
+            cntx_.ProducerUser.Add(CPU);
 
             cntx_.SaveChanges();
 
@@ -98,7 +103,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             if (GroupExsist)
             {
                 var Group = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroup).First();
-                Group.ControlPanelUser.Add(CPU);             
+                Group.ProducerUser.Add(CPU);             
             }
             else
             {
@@ -107,7 +112,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 Group.Enabled = true;                
                 cntx_.ControlPanelGroup.Add(Group);
                 cntx_.SaveChanges();
-                Group.ControlPanelUser.Add(CPU);             
+                Group.ProducerUser.Add(CPU);             
             }
 
             cntx_.SaveChanges();

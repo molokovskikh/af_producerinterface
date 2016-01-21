@@ -14,19 +14,14 @@ namespace EntityContext.ContextModels
     
     public partial class jobextendwithproducer
     {
-        public string SchedName { get; set; }
         public string JobName { get; set; }
-        public string JobGroup { get; set; }
         public string CustomName { get; set; }
-        public string Scheduler { get; set; }
-        public int ReportType { get; set; }
+        public string SchedName { get; set; }
         public long ProducerId { get; set; }
-        public string Creator { get; set; }
-        public System.DateTime CreationDate { get; set; }
-        public System.DateTime LastModified { get; set; }
-        public int DisplayStatus { get; set; }
+        public int ReportType { get; set; }
         public Nullable<System.DateTime> LastRun { get; set; }
         public bool Enable { get; set; }
+        public System.DateTime CreationDate { get; set; }
         public string ProducerName { get; set; }
     }
 }

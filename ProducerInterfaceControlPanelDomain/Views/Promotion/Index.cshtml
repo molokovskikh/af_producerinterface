@@ -2,8 +2,8 @@
 @{
     ViewBag.Title = "Список Акций";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var DrugListItems = ViewBag.ListDrugs as IEnumerable<ProducerInterfaceControlPanelDomain.Models.catalognames>;
-    var ProducersList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceControlPanelDomain.Models.producernames>;
+    var DrugListItems = ViewBag.ListDrugs as IEnumerable<EntityContext.ContextModels.catalognames>;
+    var ProducersList = ViewBag.ProducerList as IEnumerable<EntityContext.ContextModels.producernames>;
 }
 
 <h2>

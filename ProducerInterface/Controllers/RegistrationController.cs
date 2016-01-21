@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using ProducerInterface.Models;
 using System.Web.Security;
 using EntityContext.ContextModels;
 
@@ -51,7 +50,7 @@ namespace ProducerInterface.Controllers
             {
                 // проверка на существование eMail в БД
 
-                var YesNouMail = cntx_.ProducerUser.Where(xxx => xxx.Email == NewAccount.login).FirstOrDefault();
+                var YesNouMail = cntx_.ProducerUser.Where(xxx => xxx.Email == NewAccount.login && xxx.Login == null).FirstOrDefault();
 
                 if (YesNouMail == null && NewAccount.login != "")
                 {
@@ -69,7 +68,7 @@ namespace ProducerInterface.Controllers
 
                     string eMail = New_User.Email;
 
-                    New_User = cntx_.ProducerUser.Where(xxx => xxx.Email == eMail).First();
+                    New_User = cntx_.ProducerUser.Where(xxx => xxx.Email == eMail && xxx.Login == null).First();
                     
                     Quartz.Job.EmailSender.SendRegistrationMessage(cntx, New_User.Id, Password, Request.UserHostAddress.ToString());
 
@@ -119,7 +118,16 @@ namespace ProducerInterface.Controllers
             }
             else
             {
-                var User = cntx_.ProducerUser.Where(xxx => xxx.Email == login).FirstOrDefault();
+                var User = new EntityContext.ContextModels.ProducerUser();
+
+                try
+                {
+                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login).ToList().Where(xxx=>xxx.Login == null).FirstOrDefault();
+                }
+                catch
+                {
+                    User = null;
+                }
 
                 if (User != null && User.Email != "")
                 {
@@ -154,7 +162,7 @@ namespace ProducerInterface.Controllers
                             Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
 
                             return RedirectToAction("Index", "Home");
-                            // отсылаем новвый пароль на поччту
+                            // отсылаем новвый пароль на почту
                         }
                         else
                         {
@@ -177,7 +185,7 @@ namespace ProducerInterface.Controllers
              
         public ActionResult ChangePassword()
         {
-            var User = cntx_.ProducerUser.Where(xxx => xxx.Email == CurrentUser.Email).FirstOrDefault();
+            var User = cntx_.ProducerUser.Where(xxx => xxx.Email == CurrentUser.Email && xxx.Login == null).FirstOrDefault();
             string password = GetRandomPassword();
             User.Password = Md5HashHelper.GetHash(password);
 
@@ -204,7 +212,7 @@ namespace ProducerInterface.Controllers
 
             // валидация
 
-            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower()).FirstOrDefault();
+            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower() && xxx.Login == null).FirstOrDefault();
 
             if (ThisUser == null || ThisUser.Email == "")
             {

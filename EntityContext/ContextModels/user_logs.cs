@@ -23,6 +23,5 @@ namespace EntityContext.ContextModels
         public string Message { get; set; }
     
         public virtual ProducerUser ProducerUser { get; set; }
-        public virtual ProducerUser ProducerUser1 { get; set; }
     }
 }

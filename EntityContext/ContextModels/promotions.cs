@@ -21,7 +21,6 @@ namespace EntityContext.ContextModels
     
         public long Id { get; set; }
         public System.DateTime UpdateTime { get; set; }
-        public bool Enabled { get; set; }
         public Nullable<long> AdminId { get; set; }
         public long ProducerId { get; set; }
         public long ProducerUserId { get; set; }
@@ -35,7 +34,6 @@ namespace EntityContext.ContextModels
         public bool Status { get; set; }
     
         public virtual ProducerUser ProducerUser { get; set; }
-        public virtual ProducerUser ProducerUser1 { get; set; }
         public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
     }
 }

@@ -29,7 +29,7 @@
                     </h4>
                 </div>
                 <div id="collapsePermissionList_@UserPermissionItem.Id" class="panel-collapse collapse">
-                    @foreach (var PermissionItem in (UserPermissionItem.usertouserrole.Where(xxx=>xxx.ProducerUserId == UserPermissionItem.Id).ToList().Select(xxx => new ProducerInterfaceControlPanelDomain.Models.OptionElement { Text = xxx.UserPermission.Name, Value = xxx.UserPermission.Name.ToString() }).ToList()))
+                    @foreach (var PermissionItem in (UserPermissionItem.usertouserrole.Where(xxx=>xxx.ProducerUserId == UserPermissionItem.Id).ToList().Select(xxx => new EntityContext.ContextModels.OptionElement { Text = xxx.UserPermission.Name, Value = xxx.UserPermission.Name.ToString() }).ToList()))
 
                     {
                         <p>@PermissionItem.Text</p>

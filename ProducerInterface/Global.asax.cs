@@ -32,7 +32,7 @@ namespace ProducerInterface
 
                 log4net.Config.XmlConfigurator.Configure();
 
-                ILog _logger = LogManager.GetLogger(typeof(MvcApplication));
+                ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
 
                 _logger.Error(ex.Message.ToString());
 
@@ -40,7 +40,6 @@ namespace ProducerInterface
                 {
 
                 }
-
 
             }
         }
