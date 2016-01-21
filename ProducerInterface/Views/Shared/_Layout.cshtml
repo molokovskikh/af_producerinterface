@@ -19,10 +19,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body name="main_container" class="main_container" id="main_container">
-
-    @*<div class="container col-sm-12 col-lg-12 col-md-12" style="height:1000em;position:absolute; background-color:white;">
-    </div>*@
-
+      
     <div class="server-message" style="font-size:1.5em; text-align:center;"></div>
 
     <div class="navbar navbar-fixed-top navbar-default">
@@ -84,9 +81,9 @@
         </div>
     </div>
     <div class="container body-content">
-        <div class="content">
+      
             @RenderBody()
-        </div>
+      
         <footer class="panel-footer navbar-fixed-bottom">
             <center>             
                 <p>&copy; @DateTime.Now.Year – Аналит Фармация | Телефон:8-800-555-46-88</p>

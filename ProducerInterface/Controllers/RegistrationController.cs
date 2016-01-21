@@ -122,7 +122,7 @@ namespace ProducerInterface.Controllers
 
                 try
                 {
-                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login).ToList().Where(xxx=>xxx.Login == null).FirstOrDefault();
+                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login).ToList().FirstOrDefault();
                 }
                 catch
                 {

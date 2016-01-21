@@ -23,6 +23,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual MNN MNN { get; set; }
         public virtual DateTime UpdateTime { get; set; }
     }
+
     public class MNN
     {
         public virtual string Value { get; set; }
@@ -75,11 +76,13 @@ namespace ProducerInterfaceCommon.ContextModels
         public string[] Users { get; set; }
         public string[] Permissions { get; set; }
     }
+
     public class SearchPromotion
     {
         [Required(ErrorMessage = "Не выбран производитель")]
         public long IdProducer { get; set; }
     }
+
     public class ListUserView
     {
         public long Id { get; set; }
@@ -89,19 +92,19 @@ namespace ProducerInterfaceCommon.ContextModels
         public int CountPermissions { get; set; }
         public string[] ListPermission { get; set; }
     }
+
     public class LoginValidation
     {
         [UIHint("EditorMail")]
         [Display(Name = "E-mail")]
         [Required(ErrorMessage = "введите E-mail")]
-        [EmailAddress(ErrorMessage = "Введите корректынй E-mail")]
+        [EmailAddress(ErrorMessage = "Введите корректный E-mail")]
         public string login { get; set; }
 
         [UIHint("Editor_Password")]
         [Display(Name = "Пароль")]
         [Required(ErrorMessage = "Введите пароль")]
         public string password { get; set; }
-
     }
 
     public class RegistrerValidation
@@ -154,6 +157,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Text { get; set; }
         public string Value { get; set; }
     }
+
     public class SecuredControllerAttribute : Attribute
     {
 

@@ -211,3 +211,78 @@ MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'bd.s
 21.01.2016 17:06:44.619 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
 21.01.2016 17:07:49.605 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
 21.01.2016 17:13:38.976 [34] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:25:49.692 [18] INFO  Quartz.Util.DBConnectionManager - Registering datasource 'default' with db provider: 'Quartz.Impl.AdoJobStore.Common.DbProvider'
+21.01.2016 17:25:49.738 [18] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for object serializer
+21.01.2016 17:25:49.753 [18] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for ThreadExecutor
+21.01.2016 17:25:49.781 [18] INFO  Quartz.Core.SchedulerSignalerImpl - Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+21.01.2016 17:25:49.796 [18] INFO  Quartz.Core.QuartzScheduler - Quartz Scheduler v.2.3.3.0 created.
+21.01.2016 17:25:49.811 [18] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Using thread monitor-based data access locking (synchronization).
+21.01.2016 17:25:49.827 [18] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - JobStoreTX initialized.
+21.01.2016 17:25:49.846 [18] INFO  Quartz.Core.QuartzScheduler - Scheduler meta-data: Quartz Scheduler (v2.3.3.0) 'TestScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'Quartz.Core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'Quartz.Simpl.SimpleThreadPool' - with 3 threads.
+  Using job-store 'Quartz.Impl.AdoJobStore.JobStoreTX' - which supports persistence. and is not clustered.
+
+21.01.2016 17:25:49.860 [18] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler 'TestScheduler' initialized
+21.01.2016 17:25:49.874 [18] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler version: 2.3.3.0
+21.01.2016 17:25:49.898 [18] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is desired by: 
+21.01.2016 17:25:49.915 [18] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is being obtained: 
+21.01.2016 17:25:49.928 [18] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' given to: 
+21.01.2016 17:25:50.140 [18] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.SimpleTriggerPersistenceDelegate
+21.01.2016 17:25:50.156 [18] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CronTriggerPersistenceDelegate
+21.01.2016 17:25:50.170 [18] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CalendarIntervalTriggerPersistenceDelegate
+21.01.2016 17:25:50.184 [18] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.DailyTimeIntervalTriggerPersistenceDelegate
+21.01.2016 17:25:50.229 [18] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Freed 0 triggers from 'acquired' / 'blocked' state.
+21.01.2016 17:25:50.259 [18] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:25:50.289 [18] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Recovering 0 jobs that were in-progress at the time of the last shut-down.
+21.01.2016 17:25:50.302 [18] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Recovery complete.
+21.01.2016 17:25:50.330 [18] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Removed 0 'complete' triggers.
+21.01.2016 17:25:50.357 [18] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Removed 0 stale fired job entries.
+21.01.2016 17:25:50.384 [18] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' returned by: 
+21.01.2016 17:25:50.404 [18] INFO  Quartz.Core.QuartzScheduler - Scheduler TestScheduler_$_NON_CLUSTERED started.
+21.01.2016 17:25:50.405 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:25:50.484 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:25:50.986 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:26:14.055 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:26:43.301 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:26:50.405 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:26:50.478 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:27:06.697 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:27:35.437 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:27:50.404 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:27:50.478 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:27:59.985 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:28:25.332 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:28:50.404 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:28:50.479 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:28:51.417 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:29:17.293 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:29:42.781 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:29:50.404 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:29:50.484 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:30:09.941 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:30:39.446 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:30:50.404 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:30:50.479 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:31:05.500 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:31:29.441 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:31:50.403 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:31:50.477 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:31:55.813 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:32:21.091 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:32:50.400 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:32:50.473 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:32:50.613 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:33:20.648 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:33:49.667 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:33:50.397 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:33:50.478 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 17:34:16.931 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:34:46.235 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 17:34:50.393 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
+21.01.2016 17:34:50.467 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
+21.01.2016 18:53:20.572 [7] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Home\Index.cshtml(30): error CS0103: The name 'user' does not exist in the current context
+21.01.2016 18:53:51.609 [19] ERROR MySqlAdoNetAppender - Не удается запросить файл "~/Views/Home/Index.cshtml" напрямую, так как он вызывает метод "RenderSection".
