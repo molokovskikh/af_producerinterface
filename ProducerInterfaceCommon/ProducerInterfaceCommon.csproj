@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{01558158-99B8-4F25-98E7-B2EDEADB987A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProducerInterfaceCommon</RootNamespace>
+    <AssemblyName>ProducerInterfaceCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net1213, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.WebHelpers.3.2.3\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data.Entity, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StringFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StringFormat.1.0.0\lib\StringFormat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ContextEF.cs" />
+    <Compile Include="ContextModels\AddParametersInModelContext.cs" />
+    <Compile Include="ContextModels\assortment.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\catalognames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\ControlPanelGroup.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\ControlPanelPermission.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\drugdescription.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\DrugDescriptionRemark.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\drugfamily.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\drugformproducer.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\drugmnn.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\jobextend.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\jobextendwithproducer.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\mailform.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\mailformwithfooter.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\pharmacynames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\producerinterface_Entities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>producerinterface_Entities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\producerinterface_Entities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\producerinterface_Entities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>producerinterface_Entities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\producernames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\producers.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\ProducerUser.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\profilenews.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\promotions.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\promotionToDrug.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\ratingreportorderitems.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\regionnames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\reporttemplate.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\reportxml.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\suppliernames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\usernames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\UserPermission.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\userpermissionrole.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\userrole.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\usertouserrole.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\user_logs.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Heap\AutoMapper.cs" />
+    <Compile Include="Heap\EmailSender.cs" />
+    <Compile Include="Heap\ExcelCreator.cs" />
+    <Compile Include="Heap\HeaderHelper.cs" />
+    <Compile Include="Heap\NamesHelper.cs" />
+    <Compile Include="Heap\ObjectShredder.cs" />
+    <Compile Include="Heap\Processor.cs" />
+    <Compile Include="Heap\ReportJob.cs" />
+    <Compile Include="Heap\SqlBuilder.cs" />
+    <Compile Include="Models\CronIntervalParam.cs" />
+    <Compile Include="Models\CronParam.cs" />
+    <Compile Include="Models\ErrorMessage.cs" />
+    <Compile Include="Models\FormatAttribute.cs" />
+    <Compile Include="Models\HiddenAttribute.cs" />
+    <Compile Include="Models\IInterval.cs" />
+    <Compile Include="Models\IntervalReport.cs" />
+    <Compile Include="Models\MailTypeEnum.cs" />
+    <Compile Include="Models\NotMinDateAttribute.cs" />
+    <Compile Include="Models\PastDateAttribute.cs" />
+    <Compile Include="Models\PharmacyRating\PharmacyRatingReport.cs" />
+    <Compile Include="Models\PharmacyRating\PharmacyRatingReportRow.cs" />
+    <Compile Include="Models\ProductRating\ProductRatingReport.cs" />
+    <Compile Include="Models\ProductRating\ProductRatingReportRow.cs" />
+    <Compile Include="Models\RatingReportRow.cs" />
+    <Compile Include="Models\Report.cs" />
+    <Compile Include="Models\ReportRow.cs" />
+    <Compile Include="Models\RoundAttribute.cs" />
+    <Compile Include="Models\RunNowIntervalParam.cs" />
+    <Compile Include="Models\RunNowParam.cs" />
+    <Compile Include="Models\SupplierRating\SupplierRatingReport.cs" />
+    <Compile Include="Models\SupplierRating\SupplierRatingReportRow.cs" />
+    <Compile Include="Models\TriggerParam.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="ContextModels\producerinterface_Entities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>producerinterface_Entities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="ContextModels\producerinterface_Entities.edmx.diagram">
+      <DependentUpon>producerinterface_Entities.edmx</DependentUpon>
+    </None>
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\Report.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ContextModels\producerinterface_Entities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>producerinterface_Entities.edmx</DependentUpon>
+      <LastGenOutput>producerinterface_Entities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ContextModels\producerinterface_Entities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>producerinterface_Entities.edmx</DependentUpon>
+      <LastGenOutput>producerinterface_Entities.cs</LastGenOutput>
+    </Content>
+    <Content Include="TextFile1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

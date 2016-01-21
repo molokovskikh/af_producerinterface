@@ -6,18 +6,18 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using EntityContext.ContextModels;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
     public class RegistrationController : pruducercontroller.BaseController
     {
-        private Quartz.Job.EDM.reportData cntx;
+        private ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            cntx = new Quartz.Job.EDM.reportData();
+            cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
             if (filterContext == null)
             {
                 throw new ArgumentNullException("filterContext");
@@ -35,8 +35,8 @@ namespace ProducerInterface.Controllers
         public ActionResult Registration()
         {
             var ModelView = new RegistrerValidation();            
-            Quartz.Job.NamesHelper h;            
-            h = new Quartz.Job.NamesHelper(cntx, 0);                     
+            ProducerInterfaceCommon.Heap.NamesHelper h;            
+            h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, 0);                     
             ViewBag.ProducerList = h.GetProducerList(); 
 
             return View();
@@ -70,7 +70,7 @@ namespace ProducerInterface.Controllers
 
                     New_User = cntx_.ProducerUser.Where(xxx => xxx.Email == eMail && xxx.Login == null).First();
                     
-                    Quartz.Job.EmailSender.SendRegistrationMessage(cntx, New_User.Id, Password, Request.UserHostAddress.ToString());
+                    ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx, New_User.Id, Password, Request.UserHostAddress.ToString());
 
                     SuccessMessage("Регистрация прошла успешно! Пароль для входа выслан на вашу почту " + NewAccount.login);
 
@@ -92,8 +92,8 @@ namespace ProducerInterface.Controllers
             {
                 string Errorstr = "Некорректно заполнены поля формы / или не все";
                 ErrorMessage(Errorstr);
-                Quartz.Job.NamesHelper h;
-                h = new Quartz.Job.NamesHelper(cntx, 0);
+                ProducerInterfaceCommon.Heap.NamesHelper h;
+                h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, 0);
                 ViewBag.ProducerList = h.GetProducerList();
                 return View(NewAccount);
 
@@ -118,7 +118,7 @@ namespace ProducerInterface.Controllers
             }
             else
             {
-                var User = new EntityContext.ContextModels.ProducerUser();
+                var User = new ProducerInterfaceCommon.ContextModels.ProducerUser();
 
                 try
                 {
@@ -143,7 +143,7 @@ namespace ProducerInterface.Controllers
                         cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
                         cntx_.SaveChanges();
 
-                        Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
+                        ProducerInterfaceCommon.Heap.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
 
                         SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
                         return RedirectToAction("Index", "Home");
@@ -159,7 +159,7 @@ namespace ProducerInterface.Controllers
 
                             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
 
-                            Quartz.Job.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
+                            ProducerInterfaceCommon.Heap.EmailSender.SendPasswordRecoveryMessage(cntx, User.Id, Password, Request.UserHostAddress.ToString());
 
                             return RedirectToAction("Index", "Home");
                             // отсылаем новвый пароль на почту
@@ -194,7 +194,7 @@ namespace ProducerInterface.Controllers
 
             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Email);
 
-						Quartz.Job.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress);
+						ProducerInterfaceCommon.Heap.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress);
 
             return RedirectToAction("Index", "Profile");
         }

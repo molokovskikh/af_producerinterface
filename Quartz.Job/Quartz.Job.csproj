@@ -119,25 +119,10 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EDM\jobextend.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\mailformwithfooter.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\reportxml.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\usernames.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\jobextendMetaData.cs" />
     <Compile Include="Models\MailTypeEnum.cs" />
     <Compile Include="Models\IInterval.cs" />
     <Compile Include="Models\CronIntervalParam.cs" />
     <Compile Include="Models\NotMinDateAttribute.cs" />
-    <Compile Include="Models\DisplayStatusEnum.cs" />
-    <Compile Include="Models\ReportsEnum.cs" />
     <Compile Include="Models\CronParam.cs" />
     <Compile Include="Models\IntervalReport.cs" />
     <Compile Include="Models\TriggerParam.cs" />
@@ -151,45 +136,11 @@
     <Compile Include="Models\ReportRow.cs" />
     <Compile Include="NamesHelper.cs" />
     <Compile Include="Processor.cs" />
-    <Compile Include="EDM\assortment.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\catalognames.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\pharmacynames.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\producernames.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\regionnames.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\ReportData.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ReportData.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\ReportData.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\ReportData.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ReportData.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="EDM\suppliernames.cs">
-      <DependentUpon>ReportData.tt</DependentUpon>
-    </Compile>
     <Compile Include="EmailSender.cs" />
     <Compile Include="AutoMapper.cs" />
     <Compile Include="ExcelCreator.cs" />
     <Compile Include="Models\FormatAttribute.cs" />
     <Compile Include="Models\HiddenAttribute.cs" />
-    <Compile Include="Models\OptionElement.cs" />
     <Compile Include="Models\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="Models\RatingReportRow.cs" />
     <Compile Include="Models\PharmacyRating\PharmacyRatingReportRow.cs" />
@@ -206,13 +157,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <EntityDeploy Include="EDM\ReportData.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ReportData.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="EDM\ReportData.edmx.diagram">
-      <DependentUpon>ReportData.edmx</DependentUpon>
-    </None>
     <None Include="Models\Report.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -221,19 +165,13 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="EDM\ReportData.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ReportData.edmx</DependentUpon>
-      <LastGenOutput>ReportData.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="EDM\ReportData.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ReportData.edmx</DependentUpon>
-      <LastGenOutput>ReportData.cs</LastGenOutput>
-    </Content>
+    <ProjectReference Include="..\ProducerInterfaceCommon\ProducerInterfaceCommon.csproj">
+      <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>
+      <Name>ProducerInterfaceCommon</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

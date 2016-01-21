@@ -98,15 +98,17 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="App.Test.config" />
+    <None Include="App.Test.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Quartz.Job\Quartz.Job.csproj">
-      <Project>{3876c785-bca7-4d82-8876-284ffaada5c6}</Project>
-      <Name>Quartz.Job</Name>
+    <ProjectReference Include="..\ProducerInterfaceCommon\ProducerInterfaceCommon.csproj">
+      <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>
+      <Name>ProducerInterfaceCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,12 +6,12 @@ using System.Web.Mvc;
 
 using Quartz;
 using Quartz.Impl;
-using Quartz.Job;
-using Quartz.Job.Models;
+using ProducerInterfaceCommon.Heap;
 
 using System.Configuration;
 using Common.Logging;
-using Quartz.Job.EDM;
+using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Models;
 
 using System.Data;
 using System.IO;
@@ -26,7 +26,7 @@ namespace ProducerInterface.Controllers
 
         protected static readonly Common.Logging.ILog logger = LogManager.GetLogger(typeof(ReportController));
 
-        protected reportData cntx;
+        protected ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
         protected NamesHelper h;
         protected long userId;
         protected long producerId;
@@ -37,7 +37,7 @@ namespace ProducerInterface.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            cntx = new reportData();
+            cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
             //  TODO: берётся у юзера            
             try
             {
@@ -444,7 +444,7 @@ namespace ProducerInterface.Controllers
         protected Type GetModelType(int id)
         {
             var typeName = ((Reports)id).ToString();
-            var type = Type.GetType($"Quartz.Job.Models.{typeName}, {typeof(Report).Assembly.FullName}");
+            var type = Type.GetType($"ProducerInterfaceCommon.Models.{typeName}, {typeof(Report).Assembly.FullName}");
             if (type == null)
                 throw new NotSupportedException($"Не удалось создать тип {typeName} по идентификатору {id}");
             return type;

@@ -1,12 +1,11 @@
-﻿using Quartz.Job;
-using Quartz.Job.EDM;
+﻿using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceCommon.ContextModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
-using EntityContext.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -44,7 +43,7 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult EditDescription(long id)
 		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == id);
+			var df = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId);
 			ViewData["familyName"] = df.FamilyName;
 			ViewData["familyId"] = id;
 			ViewData["add"] = false;
@@ -58,7 +57,7 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult EditMnn(long id)
 		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == id);
+			var df = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId);
 			ViewData["familyName"] = df.FamilyName;
 			ViewData["familyId"] = id;
 			ViewData["add"] = false;
@@ -72,7 +71,7 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
-			var familyName = cntx_.drugfamily.Single(x => x.FamilyId == id).FamilyName;
+			var familyName = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId).FamilyName;
 			ViewData["familyName"] = familyName;
 			ViewData["familyId"] = id;
 			// формы данного лек.средства из ассортимента данного производителя
@@ -85,7 +84,7 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult EditForms(long familyId)
 		{
-			var familyName = cntx_.drugfamily.Single(x => x.FamilyId == familyId).FamilyName;
+			var familyName = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId).FamilyName;
 			ViewData["familyName"] = familyName;
 			ViewData["familyId"] = familyId;
 			// формы данного лек.средства из ассортимента данного производителя
@@ -115,7 +114,7 @@ namespace ProducerInterface.Controllers
 
 		public JsonResult EditDescriptionField(long familyId, string field, string value)
 		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId);
+			var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId);
 			drugdescription model;
       if (df.DescriptionId == null) {
 				model = new drugdescription();
@@ -136,7 +135,7 @@ namespace ProducerInterface.Controllers
 
 		public JsonResult EditMnnField(long familyId, string field, string value)
 		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId);
+			var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId);
 			drugmnn model;
 			if (df.MnnId == null)
 			{

@@ -1,4 +1,4 @@
-﻿using Quartz.Job.EDM;
+﻿using ProducerInterfaceCommon.ContextModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +8,11 @@ namespace Quartz.Job
 	public class HeaderHelper
 	{
 		
-		private reportData _cntx;
+		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
 
-		public HeaderHelper(reportData cntx)
+		public HeaderHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx)
 		{
-			_cntx = new reportData();
+            _cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
 		}
 
 		public string GetDateHeader(DateTime dateFrom, DateTime dateTo)

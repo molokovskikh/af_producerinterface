@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Quartz.Job.EDM;
+using ProducerInterfaceCommon.ContextModels;
 using Quartz;
 using Quartz.Impl;
-using Quartz.Job;
-using Quartz.Job.Models;
+using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceCommon.Models;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Data.Entity;
-using EntityContext.ContextModels;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -38,10 +38,10 @@ namespace ProducerInterface.Controllers
             var currentUser = GetCurrentUser();
 
             var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
-            Quartz.Job.EDM.reportData cntx;
-            Quartz.Job.NamesHelper h;
-            cntx = new Quartz.Job.EDM.reportData();
-            h = new Quartz.Job.NamesHelper(cntx, CurrentUser.Id);
+            ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
+            ProducerInterfaceCommon.Heap.NamesHelper h;
+            cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+            h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, CurrentUser.Id);
 
             ViewData["DrugList"] = h.GetCatalogList();
             if (id.HasValue)
@@ -64,7 +64,7 @@ namespace ProducerInterface.Controllers
         public ActionResult Manage(PromotionValidation PromoAction)
         {
 
-            var ListGRUGSSS = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == 13).ToList();
+            //var ListGRUGSSS = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
 
             if (ModelState.IsValid)
             {
@@ -82,6 +82,8 @@ namespace ProducerInterface.Controllers
                 NewPromotion.End = PromoAction.End;
                 NewPromotion.RegionMask = 1;
 
+                var ListOldDrugInPromotion = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
+
                 if (PromoAction.Id == 0)
                 {
                     PromoAction.Id = default(long);
@@ -92,34 +94,49 @@ namespace ProducerInterface.Controllers
                     SuccessMessage("Акция добавлена, в списке отобразится после подтверждения");
                 }
                 else
-                {
-                    NewPromotion.Id = PromoAction.Id;
-                    cntx_.Entry(NewPromotion).State = EntityState.Modified;
-                    long XXX = PromoAction.Id;                  
-                    cntx_.promotionToDrug.RemoveRange(cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == XXX).ToList());               
-                    cntx_.SaveChanges();
+                {                
+
+                    // удаляем из БД привязку удалённых из акции лекарст
+
+                    foreach (var OneDrugItem in ListOldDrugInPromotion)
+                    {
+                        // проверяем осталось ли в моделе лекарство, которое пришло из БД
+                        bool DrugOstalsyz = PromoAction.DrugList.Any(xxx => xxx == OneDrugItem.DrugId);
+
+                        if (!DrugOstalsyz) // если нет в списке, удаляем из БД
+                        {
+                            cntx_.promotionToDrug.Remove(OneDrugItem);
+                        }
+                    }
+
+                    cntx_.SaveChanges(); // сохраняем изменения, удаление лекарств                        
+              
                     SuccessMessage("Акция изменена, в списке отобразится после подтверждения");
                 }
-
-                var ID_Promotion = NewPromotion.Id;
-                foreach (var X in PromoAction.DrugList)
+                              
+                foreach (var GrugItem in PromoAction.DrugList)
                 {
-                    var DrugInPromotion = new promotionToDrug() { DrugId = X, PromotionId = ID_Promotion };                    
-                    cntx_.promotionToDrug.Add(DrugInPromotion);      
-                    
+
+                    bool OneDrugIf = ListOldDrugInPromotion.Any(xxx => xxx.DrugId == GrugItem);
+
+                    if (!OneDrugIf) // для данного лекарства нет записи в БД
+                    {
+                        var DrugInPromotion = new promotionToDrug() { DrugId = GrugItem, PromotionId = PromoAction.Id };
+                        cntx_.promotionToDrug.Add(DrugInPromotion);
+                    }                    
                     // привязка лекарств к акции           
                 }
 
-                cntx_.SaveChanges();
+                cntx_.SaveChanges(); // сохраняем изменения в БД.
              
                 return RedirectToAction("Index");
             }
             else
             {
-                Quartz.Job.EDM.reportData cntx;
-                Quartz.Job.NamesHelper h;
-                cntx = new Quartz.Job.EDM.reportData();
-                h = new Quartz.Job.NamesHelper(cntx, CurrentUser.Id);
+                ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
+                ProducerInterfaceCommon.Heap.NamesHelper h;
+                cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+                h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, CurrentUser.Id);
                 ViewData["DrugList"] = h.GetCatalogList();
                 return View(PromoAction);
             }
@@ -132,10 +149,10 @@ namespace ProducerInterface.Controllers
             PromotionValidation ViewPromotion = new PromotionValidation();
             var currentUser = GetCurrentUser();
             var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
-            Quartz.Job.EDM.reportData cntx;
-            Quartz.Job.NamesHelper h;
-            cntx = new Quartz.Job.EDM.reportData();
-            h = new Quartz.Job.NamesHelper(cntx, CurrentUser.Id);
+            ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
+            ProducerInterfaceCommon.Heap.NamesHelper h;
+            cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+            h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, CurrentUser.Id);
 
             ViewData["DrugList"] = h.GetCatalogList();
 

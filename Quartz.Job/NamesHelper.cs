@@ -1,5 +1,4 @@
-﻿using Quartz.Job.EDM;
-using Quartz.Job.Models;
+﻿using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,13 +7,13 @@ namespace Quartz.Job
 	public class NamesHelper
 	{
 		
-		private reportData _cntx;
+		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
 
 		private long _userId;
 
-		public NamesHelper(reportData cntx, long userId)
+		public NamesHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId)
 		{
-			_cntx = new reportData();
+			_cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
 			_userId = userId;
 		}
 

@@ -6,16 +6,16 @@ using System.Web.Mvc;
 using System.DirectoryServices;
 using System.Web.Security;
 using System.Text;
-using EntityContext.ContextModels;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
     public class BaseController : Controller
     {
         // GET: Base
-        public EntityContext.ContextModels.producerinterface_Entities cntx_ = new EntityContext.ContextModels.producerinterface_Entities();
+        public ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
 
-     //   public EntityContext.ContextModels.producerinterface_Entities cntx_ = new EntityContext.ContextModels.producerinterface_Entities();
+     //   public ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
         private string controllerAcctributes;
         private string controllerName;
         private string actionName;

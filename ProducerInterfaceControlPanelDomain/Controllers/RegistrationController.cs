@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.DirectoryServices;
 using System.Web.Security;
-using EntityContext.ContextModels;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {

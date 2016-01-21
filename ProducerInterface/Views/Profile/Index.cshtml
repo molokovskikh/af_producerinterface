@@ -1,9 +1,9 @@
-﻿@*@using Quartz.Job.Models
-@model List<Quartz.Job.EDM.jobextend>*@
+﻿@*@using ProducerInterfaceCommon.Models
+    @model List<ProducerInterfaceCommon.ContextModels.jobextend>*@
 
 
 @{
-    var currentUser = ViewBag.CurrentUser as EntityContext.ContextModels.ProducerUser;
+    var currentUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.ProducerUser;
     ViewBag.Title = "Кабинет производителя";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -19,62 +19,62 @@
 
 
 
-@*@{Quartz.Job.EDM.jobextend dummyModel = null;}
+@*@{ProducerInterfaceCommon.ContextModels.jobextend dummyModel = null;}
 
-@if (Model != null && Model.Count > 0)
-{
-    <section id="main">
-        <header>
+    @if (Model != null && Model.Count > 0)
+    {
+        <section id="main">
+            <header>
+                <div class="container">
+                    <h3>Список отчетов</h3>
+                </div>
+            </header>
             <div class="container">
-                <h3>Список отчетов</h3>
-            </div>
-        </header>
-        <div class="container">
-            <div class="row">
-                <div class="content blog col-sm-12 col-md-12">
+                <div class="row">
+                    <div class="content blog col-sm-12 col-md-12">
 
-                    <table style="width:100%;" class="table-bordered table-striped">
-                        <tr class="first last">
-                            <th>
-                                @Html.DisplayNameFor(model => dummyModel.CustomName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => dummyModel.Scheduler)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => dummyModel.ReportTypeEnum)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => dummyModel.Creator)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => dummyModel.LastModified)
-                            </th>
-                        </tr>
-                        @foreach (var item in Model)
-                        {
-
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CustomName)       
-                                </td>
-                                <td>
-                                    @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ReportTypeEnum)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Creator)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.LastModified)
-                                </td>
+                        <table style="width:100%;" class="table-bordered table-striped">
+                            <tr class="first last">
+                                <th>
+                                    @Html.DisplayNameFor(model => dummyModel.CustomName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => dummyModel.Scheduler)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => dummyModel.ReportTypeEnum)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => dummyModel.Creator)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => dummyModel.LastModified)
+                                </th>
                             </tr>
-                        }
-                    </table>
+                            @foreach (var item in Model)
+                            {
+
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CustomName)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ReportTypeEnum)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Creator)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LastModified)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-}*@
+        </section>
+    }*@

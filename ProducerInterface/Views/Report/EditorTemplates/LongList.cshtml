@@ -4,7 +4,7 @@
   // имя свойства
   var propName = ViewData.ModelMetadata.PropertyName;
   // лист всех вариантов для построения селекта
-  var propList = (List<Quartz.Job.Models.OptionElement>)ViewData[propName];
+  var propList = (List<ProducerInterfaceCommon.ContextModels.OptionElement>)ViewData[propName];
   // класс для ошибки валидации, если есть
   var errorClass = "";
   var state = ViewData.ModelState[propName];

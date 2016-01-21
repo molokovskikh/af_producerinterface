@@ -5,13 +5,13 @@ using System.Web;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using EntityContext.ContextModels;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers.pruducercontroller
 {
     public class ConfigurationController : Controller
     {
-        public EntityContext.ContextModels.producerinterface_Entities  cntx_ = new producerinterface_Entities();
+        public ProducerInterfaceCommon.ContextModels.producerinterface_Entities  cntx_ = new producerinterface_Entities();
         public ProducerUser AutorizedUser {  get;  set; }
         public ProducerUser CurrentUser { get; set; }
 

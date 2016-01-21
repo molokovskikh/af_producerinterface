@@ -1,7 +1,7 @@
 ﻿using Quartz.Job.Models;
 using Common.Logging;
 using System;
-using Quartz.Job.EDM;
+using ProducerInterfaceCommon.ContextModels;
 using System.Linq;
 
 namespace Quartz.Job
@@ -37,7 +37,7 @@ namespace Quartz.Job
 			catch (Exception e) {
 				logger.Error($"Job {key.Group} {key.Name} run failed:" + e.Message, e);
 
-				var cntx = new reportData();
+				var cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
 				SetErrorStatus(cntx, key);
 				EmailSender.SendReportErrorMessage(cntx, tparam.UserId, jparam.CastomName, key.Name, e.Message);
 
@@ -46,7 +46,7 @@ namespace Quartz.Job
 			logger.Info($"Job {key.Group} {key.Name} run finished");
 		}
 
-		private void SetErrorStatus(reportData cntx, JobKey key)
+		private void SetErrorStatus(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, JobKey key)
 		{
 				// вытащили расширенные параметры задачи
 				var jext = cntx.jobextend.Single(x => x.JobName == key.Name

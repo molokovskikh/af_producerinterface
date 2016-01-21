@@ -1,4 +1,4 @@
-﻿using Quartz.Job.EDM;
+﻿using ProducerInterfaceCommon.ContextModels;
 using Quartz.Job.Models;
 using StringFormat;
 using System;
@@ -44,7 +44,7 @@ namespace Quartz.Job
 			}
 		}
 
-		public static void SendReportErrorMessage(reportData cntx, long userId, string reportName, string jobName, string errorMessage)
+		public static void SendReportErrorMessage(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, string reportName, string jobName, string errorMessage)
 		{
 			// TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
 			var user = cntx.usernames.Single(x => x.UserId == userId);
@@ -59,22 +59,22 @@ namespace Quartz.Job
 			EmailSender.SendEmail(mailError, subject, bodyExtended, null);
 		}
 
-		public static void SendRegistrationMessage(reportData cntx, Int64 userId, string password, string ip)
+		public static void SendRegistrationMessage(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, Int64 userId, string password, string ip)
 		{
 			SendPasswordMessage(cntx, userId, password, MailType.Registration, ip);
 		}
 
-		public static void SendPasswordChangeMessage(reportData cntx, Int64 userId, string password, string ip)
+		public static void SendPasswordChangeMessage(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, Int64 userId, string password, string ip)
 		{
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordChange, ip);
 		}
 
-		public static void SendPasswordRecoveryMessage(reportData cntx, Int64 userId, string password, string ip)
+		public static void SendPasswordRecoveryMessage(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, Int64 userId, string password, string ip)
 		{
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
 		}
 
-		private static void SendPasswordMessage(reportData cntx, long userId, string password, MailType type, string ip)
+		private static void SendPasswordMessage(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
 		{
 			// TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
 			var user = cntx.usernames.Single(x => x.UserId == userId);

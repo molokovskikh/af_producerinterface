@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using Quartz.Job.Models;
 using System.IO;
-using Quartz.Job.EDM;
+using ProducerInterfaceCommon.ContextModels;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -14,15 +14,15 @@ namespace Quartz.Job
 	{
 		private Type _type;
 
-		private reportData _cntx;
+		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
 
 		private HeaderHelper _helper;
 
 		public Processor()
 		{
 			_type = typeof(T);
-			_cntx = new reportData();
-			_helper = new HeaderHelper(_cntx);
+            _cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+            _helper = new HeaderHelper(_cntx);
 		}
 
 		public void Process(JobKey key, Report jparam, TriggerParam tparam)

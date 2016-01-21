@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using EntityContext.ContextModels;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -74,7 +74,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 return RedirectToAction("Group", "Permission");
             }
 
-            ViewBag.UserList = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.Login != null).Select(xxx => new EntityContext.ContextModels.OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+            ViewBag.UserList = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.Login != null).Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
 
             ViewBag.PermissionList = cntx_.ControlPanelPermission.Where(xxx => xxx.Enabled == true).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
                

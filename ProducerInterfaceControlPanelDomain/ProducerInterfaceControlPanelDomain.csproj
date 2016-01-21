@@ -279,13 +279,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EntityContext\EntityContext.csproj">
+    <ProjectReference Include="..\ProducerInterfaceCommon\ProducerInterfaceCommon.csproj">
       <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>
-      <Name>EntityContext</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quartz.Job\Quartz.Job.csproj">
-      <Project>{3876c785-bca7-4d82-8876-284ffaada5c6}</Project>
-      <Name>Quartz.Job</Name>
+      <Name>ProducerInterfaceCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

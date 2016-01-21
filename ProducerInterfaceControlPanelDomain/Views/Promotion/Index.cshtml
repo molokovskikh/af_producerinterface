@@ -1,9 +1,9 @@
-﻿@model IEnumerable<EntityContext.ContextModels.promotions>
+﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.promotions>
 @{
     ViewBag.Title = "Список Акций";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var DrugListItems = ViewBag.ListDrugs as IEnumerable<EntityContext.ContextModels.catalognames>;
-    var ProducersList = ViewBag.ProducerList as IEnumerable<EntityContext.ContextModels.producernames>;
+    var DrugListItems = ViewBag.ListDrugs as IEnumerable<ProducerInterfaceCommon.ContextModels.catalognames>;
+    var ProducersList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.producernames>;
 }
 
 <h2>

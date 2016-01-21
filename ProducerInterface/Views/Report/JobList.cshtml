@@ -1,5 +1,5 @@
-﻿@using Quartz.Job.Models
-@model IEnumerable<Quartz.Job.EDM.jobextend>
+﻿@using ProducerInterfaceCommon.ContextModels
+@model IEnumerable<ProducerInterfaceCommon.ContextModels.jobextend>
 
 
     @using (Html.BeginForm("AddJob", "Report", FormMethod.Get))
@@ -77,13 +77,7 @@
                     else {
                     @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
 }
-                </td>
-                @*<td>
-                        @Html.ActionLink("Edit", "Edit", new { jobName = item.JobName, jobGroup = item.JobGroup }) |
-                        @Html.ActionLink("RunNow", "RunNow", new { jobName = item.JobName, jobGroup = item.JobGroup }) |
-                        @Html.ActionLink("Delete", "Delete", new { jobName = item.JobName, jobGroup = item.JobGroup })
-                        @Html.ActionLink("Restore", "Restore", new { jobName = item.JobName, jobGroup = item.JobGroup })
-                    </td>*@
+                </td>         
             </tr>}
 
         </table>
@@ -101,15 +95,7 @@ else {
     @section JavaScript {
         <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
         <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
-        <script src="~/Content/Chosen/js/initJobList.js"></script>
-        @*<script type="text/javascript">
-                $(function() {
-                    @foreach (var item in Model) {
-                        if (item.DisplayStatusEnum == DisplayStatus.Processed) {
-                        <text>setInterval(ajaxCall(@item.JobName,@item.JobGroup), 5000);</text>
-                        }
-                    });
-            <script>*@
+        <script src="~/Content/Chosen/js/initJobList.js"></script>      
     }
 
 
