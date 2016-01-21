@@ -33,7 +33,7 @@ namespace Quartz.Job
 																							&& x.Enable == true);
 
 			var querySort = new List<T>();
-			var connString = ConfigurationManager.ConnectionStrings["quartz"].ConnectionString;
+			var connString = ConfigurationManager.ConnectionStrings["producerinterface"].ConnectionString;
 			using (var conn = new MySqlConnection(connString)) {
 				using (var command = new MySqlCommand(jparam.GetSpName(), conn)) {
 					command.CommandType = CommandType.StoredProcedure;
