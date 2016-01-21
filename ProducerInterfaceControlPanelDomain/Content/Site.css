@@ -96,6 +96,22 @@ width:100%;
 #form-group-mial-list p{
     font-style:italic;
 }
-#Promo-Action {
-min-height:15em;
+#promoActionView {   
+      padding:0.5em; 
 }
+#Promo-Action {
+
+  
+   /* min-height:20em;   */
+}
+    #Promo-Action div {
+    background-color:#eeeeee;  
+    border:outset;
+    }
+
+    #Promo-Action hr {
+        background-color: green;
+        height:0.2em;
+        border-style:outset;
+        border-color:#3e534f;       
+    }
