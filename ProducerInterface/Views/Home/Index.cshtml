@@ -1,61 +1,150 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+    var user = ViewBag.CurrentUser;
+    Layout = null;
 }
+<html>
+<head>
+    <title>Аналит @ViewBag.Title</title>
 
-<div class="container-fluid">
-
-    <div id="myCarousel3" class="carousel slide container-fluid">
-        <!-- Индикаторы карусели 
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel3" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel3" data-slide-to="1"></li>
-            <li data-target="#myCarousel3" data-slide-to="2"></li>
-        </ol>
-       Слайды карусели -->
-
-
-        <div class="carousel-inner">
-            <!-- 1 слайд -->
-            <div class="item active">
-                <div class="container">
-
-                    <h2>здесь могла бы быть ваша реклама.</h2>
-
+    <link href="~/Content/Chosen/css/Site.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")  
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/MyStyle.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="navbar navbar-fixed-top navbar-default">
+        <div class="container">
+            <div class="container">
+                <div class="navbar-header navbar-left">
+                    <button type="button" class="navbar-toggle navbar-left" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="@Url.Action("Index","Home")" class="navbar-brand">
+                        <img class="image-brand" src="~/Content/Image/aflogo.png" />
+                    </a>
                 </div>
-            </div>
-            <!-- 2 слайд -->
-            <div class="item">
-                <div class="container">
 
-                    <h2>И тут тоже.</h2>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        @*<li><a href="@Url.Action("Index","Home")"><span class="glyphicon glyphicon-home"></span> Главная</a></li>*@
+                        @if (user != null)
+                        {
+                            <li><a href="~/Report/JobList/"><span class="glyphicon glyphicon-th-list"> </span> Отчеты</a></li>
+                            <li><a href="~/Promotion/"><span class="glyphicon glyphicon-star-empty"> </span> Акции</a></li>
+                            <li><a href="~/Drug/Index/"><span class="glyphicon glyphicon-align-justify"> </span> Описания препаратов</a></li>
+                        }
+                    </ul>
 
-                </div>
-            </div>
-            <!-- 3 слайд -->
-            <div class="item">
-                <div class="container">
-                    <h1><span class="glyphicon glyphicon-hdd"></span></h1>
-                    <h2><span class="glyphicon glyphicon-phone"></span></h2>
-                    <h3><span class="glyphicon glyphicon-tasks"></span></h3>
-                    <h4><span class="glyphicon glyphicon glyphicon-magnet"></span></h4>
-                    <h5><span class="glyphicon glyphicon-stats"></span></h5>
+                    @if (user != null)
+            {
+                        <ul class="nav navbar-nav navbar-right" role="navigation">
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Email</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="~/Profile/Index">Кабинет производителя</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="~/UserPermission/Index">Редактирование прав</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="@Url.Action("ChangePassword","Registration")">Сменить пароль</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="~/Registration/LogOut">Выход</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="nav navbar-nav navbar-right" role="navigation">
+
+                            <li><a href="@Url.Action("Registration", "Registration")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
+                            <li class="dropdown">
+
+                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
+                                </a>
+                                @Html.Partial("LoginPartialView")
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </div>
-        <!-- Система навигации для карусели, с помощью которой осуществляется переход на предыдущий и следующий слайд -->
-        <a class="carousel-control left" href="#myCarousel3"
-           data-slide="prev"><span class="glyphicon glyphicon-hand-left"></span></a>
-        <a class="carousel-control right" href="#myCarousel3"
-           data-slide="next"><span class="glyphicon glyphicon-hand-right"></span></a>
     </div>
-</div>
-
-@section JavaScript
-{
-    <script type="text/javascript">
-        $('#myCarousel3').carousel('cycle');
-    </script>
 
 
-    }
+            <div class="container-fluid" style="margin-top:0px; padding:0px;">
+                <div id="myCarousel3" class="carousel slide">
+
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel3" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel3" data-slide-to="1"></li>
+                        <li data-target="#myCarousel3" data-slide-to="2"></li>
+                    </ol>
+
+                    <div class="carousel-inner">
+                        <!-- 1 слайд -->
+                        <div class="item active">
+                            <div class="container">
+
+                                <h2>здесь могла бы быть ваша реклама.</h2>
+
+                            </div>
+                        </div>
+                        <!-- 2 слайд -->
+                        <div class="item">
+                            <div class="container">
+
+                                <h2>И тут тоже.</h2>
+
+                            </div>
+                        </div>
+                        <!-- 3 слайд -->
+                        <div class="item">
+                            <div class="container">
+                                <h1><span class="glyphicon glyphicon-hdd"></span></h1>
+                                <h2><span class="glyphicon glyphicon-phone"></span></h2>
+                                <h3><span class="glyphicon glyphicon-tasks"></span></h3>
+                                <h4><span class="glyphicon glyphicon glyphicon-magnet"></span></h4>
+                                <h5><span class="glyphicon glyphicon-stats"></span></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Система навигации для карусели, с помощью которой осуществляется переход на предыдущий и следующий слайд -->
+                    <h1 class="carousel-control left" href="#myCarousel3"
+                        data-slide="prev">
+                        <span class="glyphicon glyphicon-hand-left"></span>
+                    </h1>
+                    <h1 class="carousel-control right" href="#myCarousel3"
+                        data-slide="next">
+                        <span class="glyphicon glyphicon-hand-right"></span>
+                    </h1>
+                </div>
+            </div>
+
+            <footer class="panel-footer navbar-fixed-bottom">
+                <center>
+                    <p>&copy; @DateTime.Now.Year – Аналит Фармация | Телефон:8-800-555-46-88</p>
+                </center>
+            </footer>
+
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")
+
+            @Scripts.Render("~/bundles/jqueryval")
+
+            <script src="~/Scripts/WorkPlace/Analit.js"></script>
+            <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
+
+            <script type="text/javascript">
+                $('#myCarousel3').carousel('cycle');
+            </script>
+
+</body>
+
+</html>
+
+
 
