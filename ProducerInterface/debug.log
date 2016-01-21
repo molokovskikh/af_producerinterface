@@ -202,3 +202,12 @@ MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'bd.s
 21.01.2016 16:48:32.984 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
 21.01.2016 16:48:49.325 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
 21.01.2016 16:49:18.146 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+21.01.2016 16:57:03.950 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 16:59:26.904 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:03:11.370 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:03:46.783 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:05:20.224 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:06:06.130 [15] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:06:44.619 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:07:49.605 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+21.01.2016 17:13:38.976 [34] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.

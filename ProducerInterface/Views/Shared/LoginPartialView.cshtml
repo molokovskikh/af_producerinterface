@@ -1,24 +1,35 @@
 ﻿@model ProducerInterfaceCommon.ContextModels.LoginValidation
 
-<div class="dropdown-menu" style="width:300px; padding:10px; padding-bottom:0px;">
+<div class="dropdown-menu" id="autentificationForm">
     <form method="post" action="~/Registration/UserAuthentication">
         <div class="form-group-lg">
+            
             <div class="form-group">
-                @Html.TextBoxFor(model => model.login, null, new { @Name = "login", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12", @placeholder = "Логин" })
+
+                <div class="input-group">
+                    <i class="input-group-addon">Логин</i>                 
+                    @Html.TextBoxFor(model => model.login, null, new { @Name = "login", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12"})                 
+                </div>    
                 @Html.ValidationMessageFor(model => model.login)
-                <br />
-                @*<input class="form-control input-group-lg" type="text" id="login" Name="login" placeholder="Логин" />*@
+              
             </div>
+
             <div class="form-group">
-                @Html.TextBoxFor(model => model.password, null, new {@type="password", @Name = "password", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12", @placeholder = "Пароль" })
+                <div class="input-group">
+                    <i class="input-group-addon">Пароль</i>
+                    @Html.TextBoxFor(model => model.password, null, new { @type = "password", @Name = "password", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12"})
+
+                    @*<input class="form-control input-group-lg" type="password" id="password" Name="password" placeholder="Пароль" />*@
+                </div>
                 @Html.ValidationMessageFor(model => model.password)
-                <br />
-                @*<input class="form-control input-group-lg" type="password" id="password" Name="password" placeholder="Пароль" />*@
+            
             </div>
+
             <div class="form-group col-lg-12 col-sm-12 col-xs-12 col-md-12">
 
                 <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-xs-12 col-md-12" value="Войти" />
             </div>
+
             <div class="form-group">
                 <center>
                     <a href="~/Registration/PasswordRecovery">Забыли пароль?</a>
