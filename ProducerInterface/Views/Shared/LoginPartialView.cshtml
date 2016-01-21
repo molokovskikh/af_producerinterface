@@ -7,7 +7,7 @@
             <div class="form-group">
 
                 <div class="input-group">
-                    <i class="input-group-addon">Логин</i>                 
+                    <i class="input-group-addon" id="login-view">Логин</i>                 
                     @Html.TextBoxFor(model => model.login, null, new { @Name = "login", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12"})                 
                 </div>    
                 @Html.ValidationMessageFor(model => model.login)

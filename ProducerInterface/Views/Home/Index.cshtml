@@ -2,14 +2,60 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    
-    <p>здесь могла бы быть ваша реклама.</p>
+<div class="container-fluid">
 
-    <div class="col-lg-5"  style="background-image:url('~/Content/Image/logo_temp.jpg')">
+    <div id="myCarousel3" class="carousel slide container-fluid">
+        <!-- Индикаторы карусели 
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel3" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel3" data-slide-to="1"></li>
+            <li data-target="#myCarousel3" data-slide-to="2"></li>
+        </ol>
+       Слайды карусели -->
 
+
+        <div class="carousel-inner">
+            <!-- 1 слайд -->
+            <div class="item active">
+                <div class="container">
+
+                    <h2>здесь могла бы быть ваша реклама.</h2>
+
+                </div>
+            </div>
+            <!-- 2 слайд -->
+            <div class="item">
+                <div class="container">
+
+                    <h2>И тут тоже.</h2>
+
+                </div>
+            </div>
+            <!-- 3 слайд -->
+            <div class="item">
+                <div class="container">
+                    <h1><span class="glyphicon glyphicon-hdd"></span></h1>
+                    <h2><span class="glyphicon glyphicon-phone"></span></h2>
+                    <h3><span class="glyphicon glyphicon-tasks"></span></h3>
+                    <h4><span class="glyphicon glyphicon glyphicon-magnet"></span></h4>
+                    <h5><span class="glyphicon glyphicon-stats"></span></h5>
+                </div>
+            </div>
+        </div>
+        <!-- Система навигации для карусели, с помощью которой осуществляется переход на предыдущий и следующий слайд -->
+        <a class="carousel-control left" href="#myCarousel3"
+           data-slide="prev"><span class="glyphicon glyphicon-hand-left"></span></a>
+        <a class="carousel-control right" href="#myCarousel3"
+           data-slide="next"><span class="glyphicon glyphicon-hand-right"></span></a>
     </div>
-
-    @*<p><a href="#" class="btn btn-primary btn-lg">-=*=*=-</a></p>*@
 </div>
+
+@section JavaScript
+{
+    <script type="text/javascript">
+        $('#myCarousel3').carousel('cycle');
+    </script>
+
+
+    }
 

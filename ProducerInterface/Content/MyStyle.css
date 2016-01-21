@@ -155,5 +155,34 @@ margin-top:7px;
     padding:10px; 
     padding-bottom:0px;
 }
-
-
+    #autentificationForm #login-view {
+    min-width:75px;    
+    }
+      #autentificationForm #login {
+    min-width:205px;    
+    }
+.table-width-100prc {
+width:100%;
+}
+.field-validation-error {
+padding-top:3px;
+}
+#myCarousel3 
+{
+}
+    #myCarousel3 a {
+        text-decoration: none;
+    }
+    #myCarousel3 .item {
+    min-height:500px;
+    }
+    #myCarousel3 h2,h1,h3,h4,h5 {
+    text-align:center;
+    }
+    #myCarousel3 .carousel-control {     
+    background-color:transparent;         
+    }
+        #myCarousel3 .carousel-control span {
+        margin-top:248px;
+        background-color:transparent;
+        }
