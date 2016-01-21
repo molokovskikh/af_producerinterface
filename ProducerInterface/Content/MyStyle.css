@@ -169,9 +169,10 @@ padding-top:3px;
 }
 #myCarousel3 
 {
+    background-color:rgba(34, 0, 255, 0.49);
 }
     #myCarousel3 a {
-        text-decoration: none;
+        text-decoration: none;       
     }
     #myCarousel3 .item {
     min-height:500px;
@@ -180,10 +181,10 @@ padding-top:3px;
     text-align:center;
     }
     #myCarousel3 .carousel-control {     
-    background-color:transparent;         
+            background-color:transparent;
+            background-image:none;
     }
-        #myCarousel3 .carousel-control span {
-        margin-top:248px;
+        #myCarousel3 .carousel-control span {     
         background-color:transparent;
         font-size:3em;
         }
