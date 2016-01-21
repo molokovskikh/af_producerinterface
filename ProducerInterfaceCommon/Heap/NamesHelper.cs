@@ -24,10 +24,10 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			var results = new List<OptionElement>();
 
-			results.Add(new OptionElement() { Text = "g.maksimenko@analit.net", Value = "g.maksimenko@analit.net" });
-			results.Add(new OptionElement() { Text = "y.borisov@analit.net", Value = "y.borisov@analit.net" });
-			results.Add(new OptionElement() { Text = "michail@analit.net", Value = "michail@analit.net" });
-			results.Add(new OptionElement() { Text = "r.kvasov@analit.net", Value = "r.kvasov@analit.net" });
+			//results.Add(new OptionElement() { Text = "g.maksimenko@analit.net", Value = "g.maksimenko@analit.net" });
+			//results.Add(new OptionElement() { Text = "y.borisov@analit.net", Value = "y.borisov@analit.net" });
+			//results.Add(new OptionElement() { Text = "michail@analit.net", Value = "michail@analit.net" });
+			//results.Add(new OptionElement() { Text = "r.kvasov@analit.net", Value = "r.kvasov@analit.net" });
 
 			// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
 			var u =_cntx.usernames.SingleOrDefault(x => x.UserId == _userId);

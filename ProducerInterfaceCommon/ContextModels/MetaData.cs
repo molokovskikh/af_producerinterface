@@ -1,16 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
 
- 
 
-    [MetadataType(typeof(JobExtendMetaData))]
+	[MetadataType(typeof(drugdescriptionMetaData))]
+	public partial class drugdescription
+	{
+	}
+
+	public class drugdescriptionMetaData
+	{
+		[HiddenInput(DisplayValue = false)]
+		public long DescriptionId { get; set; }
+
+		[Display(Name = "Наименование", Order = 10)]
+		[UIHint("TextBox")]
+		[Required]
+		public string DescriptionName { get; set; }
+
+		[Display(Name = "Английское наименование", Order = 20)]
+		[UIHint("TextBox")]
+		public string EnglishName { get; set; }
+
+		[Display(Name = "Формакологическое действие", Order = 30)]
+		[UIHint("TextArea")]
+		public string PharmacologicalAction { get; set; }
+
+		[Display(Name = "Состав", Order = 40)]
+		[UIHint("TextArea")]
+		public string Composition { get; set; }
+
+		[Display(Name = "Показания к применению", Order = 50)]
+		[UIHint("TextArea")]
+		public string IndicationsForUse { get; set; }
+
+		[Display(Name = "Способ применения и дозы", Order = 60)]
+		[UIHint("TextArea")]
+		public string Dosing { get; set; }
+
+		[Display(Name = "Взаимодействие", Order = 70)]
+		[UIHint("TextArea")]
+		public string Interaction { get; set; }
+
+		[Display(Name = "Побочные эффекты", Order = 80)]
+		[UIHint("TextArea")]
+		public string SideEffect { get; set; }
+
+		[Display(Name = "Предостережения и противопоказания", Order = 90)]
+		[UIHint("TextArea")]
+		public string Warnings { get; set; }
+
+		[Display(Name = "Форма выпуска", Order = 100)]
+		[UIHint("TextArea")]
+		public string ProductForm { get; set; }
+
+		[Display(Name = "Условия хранения", Order = 110)]
+		[UIHint("TextArea")]
+		public string Storage { get; set; }
+
+		[Display(Name = "Срок годности", Order = 120)]
+		[UIHint("TextArea")]
+		public string Expiration { get; set; }
+
+		[Display(Name = "Дополнительно", Order = 130)]
+		[UIHint("TextArea")]
+		public string Description { get; set; }
+
+	}
+
+	[MetadataType(typeof(drugmnnMetaData))]
+	public partial class drugmnn
+	{
+	}
+
+	public class drugmnnMetaData
+	{
+		[HiddenInput(DisplayValue = false)]
+		public long MnnId { get; set; }
+
+		[Display(Name = "Международное непатентованное наименование")]
+		[UIHint("TextBox")]
+		[Required]
+		public string Mnn { get; set; }
+
+		[Display(Name = "Международное непатентованное наименование (рус.)")]
+		[UIHint("TextBox")]
+		public string RussianMnn { get; set; }
+	}
+
+	[MetadataType(typeof(JobExtendMetaData))]
     public partial class jobextend
     {
         public Reports ReportTypeEnum
@@ -47,7 +129,7 @@ namespace ProducerInterfaceCommon.ContextModels
         [ScaffoldColumn(false)]
         public int ReportType { get; set; }
 
-        [Display(Name = "Тип и Параметры")]
+        [Display(Name = "Тип и параметры")]
         public Reports ReportTypeEnum { get; }
 
         [ScaffoldColumn(false)]
@@ -83,7 +165,7 @@ namespace ProducerInterfaceCommon.ContextModels
 
     public partial class ProducerUser
     {
-        [Display(Name = "Списко прав")]
+        [Display(Name = "Список прав")]
         [UIHint("LongList")]
         public List<long> UserPermission { get; set; }
 
