@@ -56,5 +56,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<regionnames> regionnames { get; set; }
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<usernames> usernames { get; set; }
+        public DbSet<LogForNet> LogForNet { get; set; }
     }
 }

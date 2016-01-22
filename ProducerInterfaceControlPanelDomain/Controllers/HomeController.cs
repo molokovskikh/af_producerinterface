@@ -22,19 +22,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             //ViewBag.ListGroup = X;
 
             var ListActionInProducers = cntx_.promotions.Where(xxx => xxx.Begin < DateTime.Now && xxx.End > DateTime.Now && xxx.Status == true).ToList();
-                    
+            ViewBag.ProducerList = cntx_.producernames.ToList();          
+
             return View(ListActionInProducers);
 
         }
-
-
-
-
-
-
-
-
-
+        
         // возвращает список групп из АД для текущего пользователя. NTLM пользователя 
         public List<string> Groups()
         {

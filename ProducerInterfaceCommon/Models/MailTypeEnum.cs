@@ -4,7 +4,6 @@ namespace ProducerInterfaceCommon.Models
 {
 		public enum MailType
 		{
-
 			[Display(Name = "Регистрация в системе")]
 			Registration = 1,
 
@@ -15,6 +14,13 @@ namespace ProducerInterfaceCommon.Models
 			PasswordRecovery = 3,
 
 			[Display(Name = "Ошибка при формировании отчета")]
-			ReportError = 4
+			ReportError = 4,
+
+            [Display(Name = "Создание Промо-Акции")]
+            CreatePromotion = 5,
+
+            [Display(Name ="Изменение Промо-Акции")]
+            EditPromotion =6
+
 		}
 }

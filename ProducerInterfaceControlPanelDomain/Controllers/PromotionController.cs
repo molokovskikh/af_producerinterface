@@ -27,6 +27,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                // ViewBag.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ProducerId).First().ProducerName;
                 ListPromotion = cntx_.promotions.Where(xxx => xxx.Status == EnabledPromotion).Where(xxx=>xxx.ProducerId==ProducerId).ToList();
             }
+                   
 
             ViewBag.ListDrugs = cntx_.catalognames.ToList();
             ViewBag.ProducerList = cntx_.producernames.ToList();
@@ -66,7 +67,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var PromoActionModel = cntx_.promotions.Where(xxx => xxx.Id == Id).First();
             
-            ViewBag.ListDrugs = cntx_.catalognames.ToList();
+            ViewBag.ListDrugs = cntx_.catalognames.ToList();            
+
             ViewBag.ProducerList = cntx_.producernames.Where(xxx => xxx.ProducerId == PromoActionModel.ProducerId).First();
             return View(PromoActionModel);
         }
@@ -89,9 +91,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public ActionResult Active()
         {
-            var ListPromotion = cntx_.promotions.Where(xxx => xxx.End > DateTime.Now && xxx.Begin < DateTime.Now && xxx.Status == true && xxx.Status ==true).ToList();
+            var ListPromotion = cntx_.promotions.Where(xxx => xxx.End > DateTime.Now && xxx.Begin < DateTime.Now && xxx.Status ==true).ToList();
             ViewBag.ListDrugs = cntx_.catalognames.ToList();
             ViewBag.ProducerList = cntx_.producernames.ToList();
+            ViewBag.ActivePromo = "Подтвержденные и Активные на данный момент Промо-Акции";
             return View("Index",ListPromotion);
         }
 

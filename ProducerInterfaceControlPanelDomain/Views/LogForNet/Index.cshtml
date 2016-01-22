@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.LogForNet>
+@{
+    ViewBag.Title = "Логи ошибок";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Лог ошибок</h2>
+<hr />
+
+@if (ViewBag.Prev != null && ViewBag.Next != null)
+{
+    <a class="btn btn-primary" href="~/LogForNet/Index/@ViewBag.Prev">Предыдущие записи</a>
+    <a class="btn btn-primary" href="~/LogForNet/Index/@ViewBag.Next">Следующие записи</a>
+    <hr />
+}
+else
+{
+    if (ViewBag.Prev != null)
+    {
+        <a class="btn btn-primary" href="~/LogForNet/Index/@ViewBag.Prev">Предыдущие записи</a>
+        <hr />
+
+    }
+    if (ViewBag.Next != null)
+    {
+        <a class="btn btn-primary" href="~/LogForNet/Index/@ViewBag.Next">Следующие записи</a>
+        <hr />
+    }
+}
+
+
+<table class="table table-bordered table-striped table-width-100prc" id="ErrorLogTable">
+    <tr>
+        <th>Номер</th>
+        <th>Тип</th>
+        <th>Узел</th>   
+        <th>Сообщение</th>
+        <th>Дата</th>   
+    </tr>
+
+    @foreach (var ItemLog in Model)
+    {
+        <tr>
+            <td>@ItemLog.Id</td>
+            <td>@ItemLog.ErrorType</td>
+            <td>@ItemLog.Host</td>
+            <td>@ItemLog.Message</td>
+            <td>@ItemLog.DateAddLog.ToString("yyyy.MM.dd")</td>
+        
+        </tr>
+    }
+
+</table>

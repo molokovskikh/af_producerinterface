@@ -286,3 +286,5 @@ MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'bd.s
 21.01.2016 17:34:50.467 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
 21.01.2016 18:53:20.572 [7] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Home\Index.cshtml(30): error CS0103: The name 'user' does not exist in the current context
 21.01.2016 18:53:51.609 [19] ERROR MySqlAdoNetAppender - Не удается запросить файл "~/Views/Home/Index.cshtml" напрямую, так как он вызывает метод "RenderSection".
+22.01.2016 10:31:31.517 [42] ERROR MySqlAdoNetAppender - Контроллер для пути "/logfornet" не найден или не реализует интерфейс IController.
+22.01.2016 10:31:47.889 [44] ERROR MySqlAdoNetAppender - Контроллер для пути "/LogForNet/Index" не найден или не реализует интерфейс IController.

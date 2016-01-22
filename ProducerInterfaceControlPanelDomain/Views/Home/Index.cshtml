@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Домащняя страница";
+    var producers = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.producernames>;
 }
 
 <div class="jumbotron">
@@ -9,32 +10,23 @@
    <h2>Стартовая страница Администрирования Интерфейса Производителя</h2>
 </div>
 
-  <div class="jumbotron">
-    <h5>Список подтверждённых Промо-Акций производителей</h5>
+  <fieldset class="container" id="promoActionView">
+   
+      <legend>          Список подтверждённых Промо-Акций производителей      </legend>      
 
-      @foreach (var PromotionItem in Model)
+      @foreach (ProducerInterfaceCommon.ContextModels.promotions PromotionItem in Model)
       {
         <div class="col-sm-4" id="Promo-Action">
-            <h5><span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp;&nbsp; @PromotionItem.Name</h5>
-            <p>Описание: <br/> @PromotionItem.Annotation</p>     
-            <br/>      
-        </div>
+            <div class="col-sm-12">
+                <h3><span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp;&nbsp; @PromotionItem.Name</h3>
+                <h5>Описание: @PromotionItem.Annotation</h5>
+
+                <hr />
+                <h5>Производитель: @producers.Where(xxx => xxx.ProducerId == PromotionItem.ProducerId).First().ProducerName</h5>
+
+            </div>
+          </div>
       }   
-
-      @*<div class="row">@User.Identity.Name</div>
-
-      @foreach(var XXX in ViewBag.ListGroup)
-      {
-      <div class="row">
-            @Html.DisplayFor(itemModel => XXX)
-      </div>      
-      }
-
-      <a class="form-control">
-          @ViewBag.x
-      </a>*@
-
-     
-
-  </div>
+      
+  </fieldset>
 

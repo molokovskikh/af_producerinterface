@@ -7,18 +7,22 @@
 }
 
 <h2>
-    Список Промо-Акций  
+    
     @if (ViewBag.ProducerName != null)
-{ @ViewBag.ProducerName }
+    { <p>Список Промо-Акций</p> @ViewBag.ProducerName }
     else
     {
-        if (ViewBag.EnabledPromotion == true)
-        {
-            <span>Подтверждённых</span>
-        }
-        else
-        {
-            <span>Не подтверждённых</span>
+        if (ViewBag.ActivePromo != null)
+        { @ViewBag.ActivePromo }
+        else {
+            if (ViewBag.EnabledPromotion == true)
+            {
+                <span>Список подтвержденных Промо-Акций</span>
+            }
+            else
+            {
+                <span>Список не подтверждённых Промо-Акций</span>
+            }
         }
     }
 </h2>
@@ -55,6 +59,7 @@
                             @foreach (var DrugItem_ in PromotionItem.promotionToDrug)
                             {
                                 @DrugListItems.Where(xxx => xxx.CatalogId == DrugItem_.DrugId).First().CatalogName
+                                <br/>
                             }
                         </div>
                     </div>

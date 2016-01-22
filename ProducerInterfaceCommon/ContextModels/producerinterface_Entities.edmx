@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище producerinterface_Model" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище producerinterface_Model" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ControlPanelGroup">
           <Key>
             <PropertyRef Name="Id" />
@@ -85,6 +85,16 @@
           <Property Name="DisplayStatus" Type="int" Nullable="false" />
           <Property Name="LastRun" Type="datetime" Precision="0" />
           <Property Name="Enable" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LogForNet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="text" />
+          <Property Name="DateAddLog" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="ErrorType" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Host" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="mailform">
           <Key>
@@ -249,24 +259,6 @@
           <Property Name="CatalogName" Type="varchar" MaxLength="511" />
           <Property Name="IsPharmacie" Type="bool" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6013: Первичный ключ в таблице или представлении "def.producerinterface.controlpanelpermissionuser" не определен, его не удалось вывести. Эта таблица или представление исключены. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
-        <EntityType Name="controlpanelpermissionuser">
-          <Property Name="Login" Type="varchar" MaxLength="50" />
-          <Property Name="Name" Type="varchar" MaxLength="50" />
-          <Property Name="Email" Type="varchar" MaxLength="50" />
-          <Property Name="Appointment" Type="varchar" MaxLength="50" />
-          <Property Name="Enabled" Type="tinyint" />
-          <Property Name="IdUser" Type="uint" />
-          <Property Name="IdGroup" Type="int" />
-          <Property Name="GroupName" Type="varchar" MaxLength="50" />
-          <Property Name="IdPermission" Type="int" />
-          <Property Name="ControllerAction" Type="varchar" MaxLength="50" />
-          <Property Name="ActionAttributes" Type="text" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-          <Property Name="Enable_Group" Type="bool" />
-          <Property Name="Enable_Permission" Type="tinyint" />
-        </EntityType>-->
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugdescription" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="drugdescription">
@@ -635,6 +627,7 @@
           <EntitySet Name="ControlPanelUserToGroup" EntityType="Self.ControlPanelUserToGroup" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="DrugDescriptionRemark" EntityType="Self.DrugDescriptionRemark" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="jobextend" EntityType="Self.jobextend" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="LogForNet" EntityType="Self.LogForNet" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="mailform" EntityType="Self.mailform" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="producers" EntityType="Self.producers" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="ProducerUser" EntityType="Self.ProducerUser" Schema="producerinterface" store:Type="Tables" />
@@ -844,8 +837,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="producerinterface_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1463,7 +1455,18 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
             <End Role="ProducerUser" EntitySet="ProducerUser" />
           </AssociationSet>
+          <EntitySet Name="LogForNet" EntityType="producerinterface_Model.LogForNet" />
         </EntityContainer>
+        <EntityType Name="LogForNet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="DateAddLog" Type="DateTime" Nullable="false" />
+          <Property Name="ErrorType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Host" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1862,6 +1865,17 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="IdUser" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="LogForNet">
+            <EntityTypeMapping TypeName="producerinterface_Model.LogForNet">
+              <MappingFragment StoreEntitySet="LogForNet">
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="ErrorType" ColumnName="ErrorType" />
+                <ScalarProperty Name="DateAddLog" ColumnName="DateAddLog" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

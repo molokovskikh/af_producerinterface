@@ -90,7 +90,37 @@ namespace ProducerInterfaceCommon.Heap
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, bodyExtended, null);
 		}
-     
+
+        public static void SendNewPromotion(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, int PromotionId, string ip)
+        {
+            var User_ = cntx.usernames.Single(x => x.UserId == userId);
+            var siteName = ConfigurationManager.AppSettings["SiteName"];
+            var Promotion = cntx.promotions.Single(x => x.Id == PromotionId);
+            var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
+
+            MailType Type = MailType.CreatePromotion;
+
+            var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
+            var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
+
+       //     Промо Акция { PromotionName}
+       //     изменена { UserName}. Посмотреть статус и изменить промо - акцию { Http}
+
+            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name , Http = siteHttp + "/Promotion/Manage/" + Promotion.Id })}\r\n\r\n{mailForm.Footer}";
+            EmailSender.SendEmail(User_.Email, subject, body, null);
+
+            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
+            var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+            EmailSender.SendEmail(mailInfo, subject, bodyExtended, null);
+        }
+
+        public static void SendChangePromotion(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, int PromotionId, string ip)
+        {
+
+        }
+
+
+
         private static string GetEnumDisplayName(MailType type)
 		{
 			string displayName = null;

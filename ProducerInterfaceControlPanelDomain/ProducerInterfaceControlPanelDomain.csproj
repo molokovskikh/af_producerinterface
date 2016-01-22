@@ -163,6 +163,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogForNetController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProducerUserPermissionController.cs" />
@@ -260,6 +261,7 @@
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\Search.cshtml" />
     <Content Include="Views\Promotion\Edit.cshtml" />
+    <Content Include="Views\LogForNet\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
