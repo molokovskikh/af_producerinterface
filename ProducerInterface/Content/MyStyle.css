@@ -185,3 +185,19 @@ padding-top:3px;
         background-color:transparent;
         font-size:3em;
         }
+
+#promotionpanel {
+    background-color: #eeeeee;
+    margin: 1em;
+}
+    #promotionpanel #promotionpanel-btn {
+        padding: 1em;
+      
+    }
+#date-form-group {
+max-width:16em;
+}
+#label-time {
+min-width:10em;
+margin-left:1.5em;
+}

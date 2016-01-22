@@ -1,6 +1,6 @@
 ﻿@model Nullable<DateTime>
 <div class="form-group row">       
-        @Html.LabelFor(m => m, new { @class= "col-sm-3" })      
+        @Html.LabelFor(m => m, new { @class= "", @id="label-time" })      
     <div class="col-sm-9">
         @Html.TextBox("", String.Format("{0:dd/MM/yyyy}", Model), new { @readonly = "readonly" , @class="form-control"})     
     </div>

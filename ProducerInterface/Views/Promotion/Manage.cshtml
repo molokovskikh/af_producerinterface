@@ -16,10 +16,10 @@
     {
         @Html.HiddenFor(s => s.Id)
         @Html.ValidationSummary(true);
-        <div class="row" style="width:100%;">
+        <div class="row">
             <div class="form-group">
                 <label class="control-label">Заголовок:</label>
-                @Html.TextBoxFor(s => s.Name, new { @Class = "form-control form-control-mycontrol", @Placeholder = "Заголовок" })
+                @Html.TextBoxFor(s => s.Name, new { @Class = "form-control", @Placeholder = "Заголовок" })
                 @Html.ValidationMessageFor(s => s.Name)
             </div>
         </div>
@@ -27,24 +27,24 @@
         <div class="row">
             <div class="form-group">
                 <label class="control-label">Содержание:</label>
-                @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control width-default", @Rows = "7" })
+                @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7" })
                 @Html.ValidationMessageFor(s => s.Annotation)
             </div>
             
             <div class="form-group">
                 <label>Список лекарств, участвующих в акции: </label>
                 @Html.EditorFor(Model => Model.DrugList)
-            </div>
-        
-            @*@Html.ValidationMessageFor(s => s.DrugList)*@
+            </div>       
         </div>
 
         <div class="row">
-            <div class="form-group">
+            <div class="form-group" id="date-form-group">
                 @Html.EditorFor(m => m.Begin, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m=>m.Begin)
             </div>
-            <div class="form-group">
+            <div class="form-group" id="date-form-group">
                 @Html.EditorFor(m => m.End, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.End)
             </div>
         </div>
         <div class="row" style="margin-top:25px;">
