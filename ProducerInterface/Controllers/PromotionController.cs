@@ -11,7 +11,6 @@ using ProducerInterfaceCommon.Models;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Data.Entity;
-using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -24,7 +23,6 @@ namespace ProducerInterface.Controllers
         }
         public ActionResult Index()
         {
-
             var currentUser = GetCurrentUser();
             //var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
             IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId).ToList();

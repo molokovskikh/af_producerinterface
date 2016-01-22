@@ -50,7 +50,7 @@
             @foreach (var item in Model) {
             <tr>
                 <td>
-                    <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-ban-circle" title="Удалить отчет"></span></a>
+                    <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-trash" title="Удалить отчет"></span></a>
 
                     @Html.DisplayFor(modelItem => item.CustomName)
                 </td>

@@ -167,25 +167,33 @@ width:100%;
 .field-validation-error {
 padding-top:3px;
 }
-#myCarousel3 
-{
-    background-color:rgba(34, 0, 255, 0.49);
+#myCarousel3 {
+    background-color: rgba(34, 0, 255, 0.49);
+    min-height: 500px; 
 }
     #myCarousel3 a {
         text-decoration: none;       
     }
     #myCarousel3 .item {
-    min-height:500px;
-    }   
+    min-height:500px; 
+    }
+    #myCarousel3 p {
+    margin:5em;
+    }
     #myCarousel3 .carousel-control {     
             background-color:transparent;
             background-image:none;
     }
         #myCarousel3 .carousel-control span {     
         background-color:transparent;
-        font-size:3em;
+        font-size:1em;
         }
-
+    #myCarousel3 img {
+        max-width: 500px;
+        margin: 0 auto;
+        /*margin-left: 50%;
+        left: -150px;*/
+    }
 #promotionpanel {
     background-color: #eeeeee;
     margin: 1em;

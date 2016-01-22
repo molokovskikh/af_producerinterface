@@ -109,7 +109,7 @@ namespace ProducerInterfaceCommon.Heap
             //     Промо Акция { PromotionName}
             //     изменена { UserName}. Посмотреть статус и изменить промо - акцию { Http}
 
-            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = siteHttp + "/Promotion/Manage/" + Promotion.Id })}\r\n\r\n{mailForm.Footer}";
+            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'> ссылке </a>" })}\r\n\r\n{mailForm.Footer}";
             EmailSender.SendEmail(User_.Email, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
             var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
