@@ -96,7 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContextEF.cs" />
+    <Compile Include="ContextModels\ContextEF.cs" />
     <Compile Include="ContextModels\MetaData.cs" />
     <Compile Include="ContextModels\assortment.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>

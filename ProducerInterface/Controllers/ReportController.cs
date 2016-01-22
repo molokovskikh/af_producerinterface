@@ -31,8 +31,6 @@ namespace ProducerInterface.Controllers
         protected long userId;
         protected long producerId;
       
-        protected Quartz.IScheduler scheduler;
-             
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -49,19 +47,20 @@ namespace ProducerInterface.Controllers
                 // Ignore
             }
 
-            
-
             h = new NamesHelper(cntx, userId);
-            #if DEBUG
-            scheduler = GetDebagSheduler();
-            #else
-			scheduler = GetRemoteSheduler();
-            #endif
         }
-        
+
+				private IScheduler GetScheduler()
+				{
+#if DEBUG
+						return GetDebagSheduler();
+#else
+						return GetRemoteSheduler();
+#endif
+				}
 
 
-        public ActionResult AddJob(int Id)
+				public ActionResult AddJob(int Id)
         {
             // получили пустую модель нужного типа
             var type = GetModelType(Id);
@@ -90,7 +89,8 @@ namespace ProducerInterface.Controllers
                 return View(model);
             }
 
-            var key = new JobKey(Guid.NewGuid().ToString(), $"p{producerId}");
+						var scheduler = GetScheduler();
+						var key = new JobKey(Guid.NewGuid().ToString(), $"p{producerId}");
             var job = JobBuilder.Create<ReportJob>()
                 .WithIdentity(key)
                 .StoreDurably()
@@ -132,7 +132,8 @@ namespace ProducerInterface.Controllers
         public ActionResult Delete(string jobName, string jobGroup)
         {
             var key = new JobKey(jobName, jobGroup);
-            var job = scheduler.GetJobDetail(key);
+						var scheduler = GetScheduler();
+						var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
@@ -157,7 +158,8 @@ namespace ProducerInterface.Controllers
         public ActionResult Restore(string jobName, string jobGroup)
         {
             var key = new JobKey(jobName, jobGroup);
-            var job = scheduler.GetJobDetail(key);
+						var scheduler = GetScheduler();
+						var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
@@ -182,7 +184,8 @@ namespace ProducerInterface.Controllers
         public ActionResult Edit(string jobName, string jobGroup)
         {
             var key = new JobKey(jobName, jobGroup);
-            var job = scheduler.GetJobDetail(key);
+						var scheduler = GetScheduler();
+						var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
@@ -243,7 +246,8 @@ namespace ProducerInterface.Controllers
 
         public ActionResult JobList()
         {
-            var jobList = cntx.jobextend.Where(x => x.ProducerId == producerId
+						var scheduler = GetScheduler();
+						var jobList = cntx.jobextend.Where(x => x.ProducerId == producerId
                                                                                             && x.SchedName == scheduler.SchedulerName
                                                                                             && x.Enable == true).ToList();
 
@@ -254,8 +258,9 @@ namespace ProducerInterface.Controllers
         public ActionResult RunNow(string jobName, string jobGroup)
         {
             var key = JobKey.Create(jobName, jobGroup);
-            // нашли задачу
-            var job = scheduler.GetJobDetail(key);
+						var scheduler = GetScheduler();
+						// нашли задачу
+						var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
@@ -324,8 +329,9 @@ namespace ProducerInterface.Controllers
         public ActionResult ScheduleJob(string jobName, string jobGroup)
         {
             var key = JobKey.Create(jobName, jobGroup);
-            // нашли задачу
-            var job = scheduler.GetJobDetail(key);
+						var scheduler = GetScheduler();
+						// нашли задачу
+						var job = scheduler.GetJobDetail(key);
             if (job == null)
                 return View("Error", (object)"Задача не найдена");
 
@@ -434,7 +440,8 @@ namespace ProducerInterface.Controllers
         // доп. инфа по джобу
         protected jobextend GetJobExtend(string jobName, string jobGroup)
         {
-            return cntx.jobextend.SingleOrDefault(x => x.SchedName == scheduler.SchedulerName
+						var scheduler = GetScheduler();
+						return cntx.jobextend.SingleOrDefault(x => x.SchedName == scheduler.SchedulerName
                                                                                                 && x.JobName == jobName
                                                                                                 && x.JobGroup == jobGroup
                                                                                                 && x.ProducerId == producerId
