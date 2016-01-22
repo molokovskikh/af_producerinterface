@@ -115,3 +115,7 @@ width:100%;
         border-style:outset;
         border-color:#3e534f;       
     }
+
+#ErrorLogTable tr td {
+min-width:6em;
+}

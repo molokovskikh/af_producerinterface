@@ -67,7 +67,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var PromoActionModel = cntx_.promotions.Where(xxx => xxx.Id == Id).First();
             
-            ViewBag.ListDrugs = cntx_.catalognames.ToList();
+            ViewBag.ListDrugs = cntx_.catalognames.ToList();            
+
             ViewBag.ProducerList = cntx_.producernames.Where(xxx => xxx.ProducerId == PromoActionModel.ProducerId).First();
             return View(PromoActionModel);
         }

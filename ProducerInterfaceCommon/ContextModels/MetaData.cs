@@ -204,6 +204,9 @@ namespace ProducerInterfaceCommon.ContextModels
 
     public partial class ProducerUser
     {
+        [Display(Name = "IP адресс")]
+        public string IP { get; set; }
+
         [Display(Name = "Список прав")]
         [UIHint("LongList")]
         public List<long> UserPermission { get; set; }
