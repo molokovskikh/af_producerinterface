@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<ProducerInterfaceCommon.LoggerModels.logchangeview>
-
+@using ProducerInterfaceCommon.LoggerModels;
 @{
     ViewBag.Title = "Логирование изменений базы данных";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -56,9 +56,13 @@ else
         <td>@LogChangeItem.UserName</td>
         <td>@LogChangeItem.Email</td>
         <td>@LogChangeItem.ProducerName</td>
-        <td>@LogChangeItem.EntityCommandEnum</td>
+        <td>                            
+            @LogChangeItem.EntityCommandEnum.GetDescription()
+        </td>
         <td>@LogChangeItem.TypeName</td>
-        <td><a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+        <td>    
+        <a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a>        
+        </td>
     </tr>
 }
 
