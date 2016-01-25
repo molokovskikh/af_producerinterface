@@ -41,7 +41,7 @@ namespace ProducerInterfaceCommon.ContextModels
         }
 
         [Display(Name = "Заголовок")]
-        [Required(ErrorMessage = " Название акции не заполнено")]
+        [Required(ErrorMessage = "Название акции не заполнено")]
         public string Name { get; set; }
 
         [Display(Name = "Содержание")]
@@ -49,12 +49,14 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Annotation { get; set; }
 
         [UIHint("Date")]
+        [Required(ErrorMessage = "Укажите дату начала Акции")]
         [Display(Name = "Дата начала акции")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
 
         public Nullable<System.DateTime> Begin { get; set; }
 
         [UIHint("Date")]
+        [Required(ErrorMessage = "Укажите дату окончания акции")]
         [Display(Name = "Дата окончания акции")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
 

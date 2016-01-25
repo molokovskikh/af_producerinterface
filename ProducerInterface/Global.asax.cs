@@ -40,9 +40,28 @@ namespace ProducerInterface
                 {
 
                 }
+                ErrorMessage("При выполнении запроса произошли непредвиденная ошибка");
 
+                Response.Redirect("/Home/Index");
             }
         }
+
+        public void ErrorMessage(string message)
+        {
+            SetCookie("ErrorMessage", message);
+        }
+        public void SetCookie(string name, string value)
+        {
+            if (value == null)
+            {
+                Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = Controllers.pruducercontroller.ConfigurationController.SystemTime.Now() });
+                return;
+            }
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
+            var text = Convert.ToBase64String(plainTextBytes);
+            Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
+        }
+
     }
 }
 

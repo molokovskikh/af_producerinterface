@@ -3,58 +3,64 @@
 @{
     ViewBag.Title = "Промо-акции";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string x = "text-info";
 }
 
-<section id="main">
-    <div class="container">
-        <div class="row">
-            <div class="content blog col-sm-9 col-md-9">
-                <h3 class="title">Промо-акции</h3>
-                <p>
-                    <a href="@Url.Action("Manage")" class="btn btn-primary">
-                        <i class="fa fa-pencil"></i>
-                        <span>Добавить акцию</span>
-                    </a>
-                </p>
-
+@*<section id="main">
+    <div class="container">*@     
+            @*<div class="content blog col-sm-12 col-md-12">*@
+                <div class="content panel-body">
+                    <h3 class="title col-sm-9 col-xs-12">Промо-акции</h3>
+                    <p>
+                        <a href="@Url.Action("Manage")" class="btn btn-primary col-sm-3 col-xs-12 pull-right">
+                            <i class="fa fa-pencil"></i>
+                            <span>Добавить акцию</span>
+                        </a>
+                    </p>
+                </div>
                 <hr />
 
                 @if (Model != null && Model.Count() > 0)
-            {
+                {
+                    foreach (var PromoItem in Model)
+                    {
 
-                    <div class="row">
-                        <table class="table-striped table-bordered">
-                            <tr>
-                                <th>Заголовок</th>
-                                <th>Содержание</th>
-                                <th>Добавлено/Изменено</th>
-                                <th>Последнее изменение вносилось</th>
-                                <th>Препараты</th>
-                                <th>Действия</th>
-                                <th>Статус</th>
-                            </tr>
+                        if (PromoItem.Status == false)
+                        {
+                            x = "text-info";
+                        }
+                        else
+                        {
+                            x = "text-warning";
+                        }
 
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.Name</td>
-                                        <td>@item.Annotation</td>
-                                        <td>@item.ProducerUser.Name</td>
-                                        <td>@item.UpdateTime.ToString("dd-MM-yyyy")</td>
-                                        <td>@* @item.promotiontodrug  *@</td>
-                                        <td>
-                                            <a href="@Url.Action("Manage", new { Id = item.Id })" title="Редактировать"><span class="glyphicon glyphicon-th-list"></span></a>
-                                            <a href="@Url.Action("Delete", new { Id = item.Id })" title="Удалить"><span class="glyphicon glyphicon-remove-circle"></span></a>
-                                        </td>
-                                        <td>
-                                            <p>@(item.Status == false ? "Не подтверждена" : "Подтверждена")</p>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            <div class="panel-body col-xs-12" id="promotionpanel">
+                                <div class="col-sm-10 col-xs-12">
+                                    <H3><span class="glyphicon glyphicon-star-empty @x"></span>&nbsp;&nbsp;&nbsp; @PromoItem.Name</H3>
+                                    <p><span>Дата начала: </span> @PromoItem.Begin.Value.ToString("yyyy.MM.dd")  </p>
+                                    <p>  <span> Дата Окончания: </span> @PromoItem.End.Value.ToString("yyyy.MM.dd")</p>
+                                    <div class="form-group">
+                                        <p>Описание: <span>@PromoItem.Annotation</span></p>    
+                                        <p>Создана: <span>@PromoItem.ProducerUser.Name</span></p>
+                                        <p class="@x">Статус: @(PromoItem.Status == false ? "Не подтверждена" : "Подтверждена")</p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-sm-2 col-xs-12 form-group" id="promotionpanel-btn">
+                                    <div class="btn-group-vertical btn-group-sm col-sm-12" role="group">
+                                        <a href="@Url.Action("Manage", new { Id = PromoItem.Id })" title="Редактировать" class="pull-right btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+
+                                        <a href="@Url.Action("Delete", new { Id = PromoItem.Id })" title="Удалить" class="pull-right btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>                                       
+                                    </div>                                  
+                                </div>     
+                           
+                            </div>
+
+                            <hr/>
+                       
+                    }
+                 
+
                 }
                 else
                 {
@@ -64,9 +70,8 @@
                         </div>
                     </div>
                 }
-            </div><!-- .content -->         
-        </div>
-    </div>
+            @*</div>   
+        </div> 
     <!-- .container -->
 </section>
-<!-- #main -->
+<!-- #main -->*@

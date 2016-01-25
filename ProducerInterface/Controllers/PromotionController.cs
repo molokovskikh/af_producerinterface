@@ -11,7 +11,6 @@ using ProducerInterfaceCommon.Models;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Data.Entity;
-using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -24,7 +23,6 @@ namespace ProducerInterface.Controllers
         }
         public ActionResult Index()
         {
-
             var currentUser = GetCurrentUser();
             //var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
             IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId).ToList();
@@ -62,76 +60,9 @@ namespace ProducerInterface.Controllers
 
         [HttpPost]
         public ActionResult Manage(PromotionValidation PromoAction)
-        {
+        {       
 
-            //var ListGRUGSSS = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
-
-            if (ModelState.IsValid)
-            {
-                ProducerUser user_ = GetCurrentUser();
-                promotions NewPromotion = new promotions();
-
-                NewPromotion.UpdateTime = SystemTime.Now();
-                NewPromotion.ProducerId = (long)user_.ProducerId;
-                NewPromotion.ProducerUserId = user_.Id;
-                NewPromotion.Status = false;
-
-                NewPromotion.Name = PromoAction.Name;
-                NewPromotion.Annotation = PromoAction.Annotation;
-                NewPromotion.Begin = PromoAction.Begin;
-                NewPromotion.End = PromoAction.End;
-                NewPromotion.RegionMask = 1;
-
-                var ListOldDrugInPromotion = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
-
-                if (PromoAction.Id == 0)
-                {
-                    PromoAction.Id = default(long);
-                    NewPromotion.Id = default(long);
-                    cntx_.Entry(NewPromotion).State = System.Data.Entity.EntityState.Added;
-                    cntx_.SaveChanges();
-
-                    SuccessMessage("Акция добавлена, в списке отобразится после подтверждения");
-                }
-                else
-                {                
-
-                    // удаляем из БД привязку удалённых из акции лекарст
-
-                    foreach (var OneDrugItem in ListOldDrugInPromotion)
-                    {
-                        // проверяем осталось ли в моделе лекарство, которое пришло из БД
-                        bool DrugOstalsyz = PromoAction.DrugList.Any(xxx => xxx == OneDrugItem.DrugId);
-
-                        if (!DrugOstalsyz) // если нет в списке, удаляем из БД
-                        {
-                            cntx_.promotionToDrug.Remove(OneDrugItem);
-                        }
-                    }
-
-                    cntx_.SaveChanges(); // сохраняем изменения, удаление лекарств                        
-              
-                    SuccessMessage("Акция изменена, в списке отобразится после подтверждения");
-                }
-                              
-                foreach (var GrugItem in PromoAction.DrugList)
-                {
-
-                    bool OneDrugIf = ListOldDrugInPromotion.Any(xxx => xxx.DrugId == GrugItem);
-
-                    if (!OneDrugIf) // для данного лекарства нет записи в БД
-                    {
-                        var DrugInPromotion = new promotionToDrug() { DrugId = GrugItem, PromotionId = PromoAction.Id };
-                        cntx_.promotionToDrug.Add(DrugInPromotion);
-                    }                    
-                    // привязка лекарств к акции           
-                }
-
-                cntx_.SaveChanges(); // сохраняем изменения в БД.
-             
-                return RedirectToAction("Index");
-            }
-            else
+            if (!ModelState.IsValid) 
             {
                 ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
                 ProducerInterfaceCommon.Heap.NamesHelper h;
@@ -140,7 +71,88 @@ namespace ProducerInterface.Controllers
                 ViewData["DrugList"] = h.GetCatalogList();
                 return View(PromoAction);
             }
-         
+                   
+            var PromotionSave = new ProducerInterfaceCommon.ContextModels.promotions();
+            bool PromotionNewOrOld = false; // старая акция или новая акция (true = старая / false = новая)
+
+            if (PromoAction.Id != 0)
+            {
+                PromotionNewOrOld = true; 
+                PromotionSave = cntx_.promotions.Where(xxx => xxx.Id == PromoAction.Id).First();
+                // получаем акцию из БД
+            }
+
+            bool validationChanges = (PromotionNewOrOld && ValidationChangesPromotion(PromotionSave, PromoAction));
+            // возвращает false в случае, если что то в акции изменилось, или если это новая акция // true - старая акция и ничего не изменилось
+
+            if (validationChanges)
+            {
+                SuccessMessage("Акция не изменена");
+                return RedirectToAction("Index");
+            }
+                        
+            PromotionSave.Name = PromoAction.Name;
+            PromotionSave.Status = false;
+            PromotionSave.Annotation = PromoAction.Annotation;
+            PromotionSave.Begin = PromoAction.Begin;
+            PromotionSave.End = PromoAction.End;
+            PromotionSave.ProducerId = (long)CurrentUser.ProducerId;
+          
+            var ListOldDrugInPromotion = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
+
+            if (PromoAction.Id != 0)
+            {           
+                foreach (var OneDrugItem in ListOldDrugInPromotion)
+                {
+                    // проверяем осталось ли в моделе лекарство, которое пришло из БД
+                    bool DrugOstalsyz = PromoAction.DrugList.Any(xxx => xxx == OneDrugItem.DrugId);
+
+                    if (!DrugOstalsyz) // если нет в списке, удаляем из БД
+                    {                        
+                        cntx_.promotionToDrug.Remove(OneDrugItem);
+                    }
+                }
+                cntx_.Entry(PromotionSave).State = EntityState.Modified;
+                cntx_.SaveChanges(); // сохраняем в БД удалённые лекарства
+            }
+
+            if (PromotionSave.Id == 0) {
+                PromotionSave.ProducerUserId = CurrentUser.Id; // в новую акцию добавляем Id пользователя
+                cntx_.Entry(PromotionSave).State = EntityState.Added;
+                cntx_.SaveChanges();   
+            }
+
+            foreach (var GrugItem in PromoAction.DrugList)
+            {
+                
+                bool OneDrugIf = ListOldDrugInPromotion.Any(xxx => xxx.DrugId == GrugItem);
+
+                if (!OneDrugIf) // для данного лекарства нет записи в БД
+                {
+                    var DrugInPromotion = new promotionToDrug() { DrugId = GrugItem, PromotionId = PromotionSave.Id };
+                    cntx_.promotionToDrug.Add(DrugInPromotion);
+                }
+                // привязка лекарств к акции           
+            }
+            cntx_.SaveChanges();
+ 
+
+            // отправляем ссобщение пользователю об добавлении или изменении акции
+
+            if (PromotionNewOrOld)
+            {
+                // старая изменена
+                SuccessMessage("Акция изменена, в списке отобразится после подтверждения");
+                ProducerInterfaceCommon.Heap.EmailSender.SendChangePromotion(cntx_, CurrentUser.Id, PromoAction.Id, CurrentUser.IP);
+            }
+            else
+            {
+                // новая акция добавлена
+                SuccessMessage("Акция добавлена, в списке отобразится после подтверждения");
+                ProducerInterfaceCommon.Heap.EmailSender.SendNewPromotion(cntx_, PromotionSave.ProducerUserId, PromotionSave.Id, CurrentUser.IP);
+            }
+            
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -172,6 +184,25 @@ namespace ProducerInterface.Controllers
             cntx_.SaveChanges();
             SuccessMessage("Акция " + PromoAction.Name + " успешно удалена.");
             return RedirectToAction("Index");
+        }
+
+        private bool ValidationChangesPromotion(ProducerInterfaceCommon.ContextModels.promotions OldPromotion,PromotionValidation NewPromotion)
+        {
+            if (NewPromotion.Id == 0)
+            {
+                return false;
+            }
+
+            bool Name = OldPromotion.Name.Equals(NewPromotion.Name);
+            bool Annotation = OldPromotion.Annotation.Equals(NewPromotion.Annotation);
+            bool DataBegin = OldPromotion.Begin.Value.Equals(NewPromotion.Begin.Value);
+            bool DataEnd = OldPromotion.End.Value.Equals(NewPromotion.End.Value);
+
+            List<long> OldDrugList = OldPromotion.promotionToDrug.ToList().Select(xxx => xxx.DrugId).ToList();
+            
+            bool ListDrugsInPromotion = OldDrugList.Any(x => !NewPromotion.DrugList.Contains(x));
+
+            return (Name && Annotation && DataBegin && DataEnd && !ListDrugsInPromotion);
         }
 
 
