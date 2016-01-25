@@ -79,9 +79,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             var ControlUser = cntx_.ProducerUser.Where(xxx => xxx.Login == ContolUserName).First().Id;
 
             promotionUpdate.Status = true;
-            promotionUpdate.AdminId = ControlUser;
-            promotionUpdate.Status = true;
-
+        //    promotionUpdate.AdminId = ControlUser;      
+                   
             cntx_.Entry(promotionUpdate).State = System.Data.Entity.EntityState.Modified;
             cntx_.SaveChanges();
 

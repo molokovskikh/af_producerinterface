@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.LoggerModels.logchangeview>
+
+@{
+    ViewBag.Title = "Логирование изменений базы данных";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Лог изменений базы данных</h2>
+<hr />
+
+@*
+    ViewBag.Prev = Id + 1;  // ссылка на предыдущие N записей в базе
+    ViewBag.Next = Id - 1;  // ссылка на следующие N записей в базе
+*@
+
+@if (ViewBag.Prev != null && ViewBag.Next != null)
+{
+    <!--   Выводим обе кнопки на страницу  -->
+    <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Prev"> Предыдущие @ViewBag.Pager</a>
+    <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Next"> Следующие @ViewBag.Pager</a>
+  
+    <hr />
+}
+else
+{
+    if (ViewBag.Prev != null)
+    {
+        <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Prev"> Предыдущие @ViewBag.Pager</a>
+        <hr />
+    }
+    if (ViewBag.Next != null)
+    {
+        <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Next"> Следующие @ViewBag.Pager</a>
+        <hr />
+    }
+}
+
+<table class="table-bordered table-striped" id="Table-LogUserChange">
+
+    <tr>
+        <th>Id</th>
+        <th>Дата изменения</th>
+        <th>ФИО пользователя</th>
+        <th>eMail пользователя</th>
+        <th>Наименование производителя</th>
+        <th>Тип действия</th>
+        <th>Наименование модели (class C# (имя Entity))</th>
+        <th>Подробнее</th>
+    </tr>
+
+@foreach (var LogChangeItem in Model)
+{
+    <tr>
+        <td>@LogChangeItem.ChangeSetId</td>
+        <td>@LogChangeItem.Timestamp.ToString("yyyy.MM.dd")</td>
+        <td>@LogChangeItem.UserName</td>
+        <td>@LogChangeItem.Email</td>
+        <td>@LogChangeItem.ProducerName</td>
+        <td>@LogChangeItem.EntityCommandEnum</td>
+        <td>@LogChangeItem.TypeName</td>
+        <td><a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+    </tr>
+}
+
+</table>

@@ -221,6 +221,7 @@
     <Compile Include="Heap\Processor.cs" />
     <Compile Include="Heap\ReportJob.cs" />
     <Compile Include="Heap\SqlBuilder.cs" />
+    <Compile Include="LoggerModels\Enums.cs" />
     <Compile Include="LoggerModels\LogChangeSet.cs">
       <DependentUpon>Logger.tt</DependentUpon>
     </Compile>
@@ -251,6 +252,7 @@
     <Compile Include="LoggerModels\propertychangeview.cs">
       <DependentUpon>Logger.tt</DependentUpon>
     </Compile>
+    <Compile Include="LoggerModels\MetaData.cs" />
     <Compile Include="Models\CronIntervalParam.cs" />
     <Compile Include="Models\CronParam.cs" />
     <Compile Include="Models\ErrorMessage.cs" />

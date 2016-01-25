@@ -2,8 +2,8 @@
 @{
     ViewBag.Title = "Редактирование Промо-Акции";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var DrugListItems = ViewBag.ListDrugs as List<ProducerInterfaceControlPanelDomain.Models.catalognames>;
-    var ProducersList = ViewBag.ProducerList as ProducerInterfaceControlPanelDomain.Models.producernames;
+    var DrugListItems = ViewBag.ListDrugs as List<ProducerInterfaceCommon.ContextModels.catalognames>;
+    var ProducersList = ViewBag.ProducerList as ProducerInterfaceCommon.ContextModels.producernames;
 }
 
 <h2>Промо Акция '@Model.Name'</h2>
@@ -34,12 +34,12 @@
 
         <div class="form-group">
             <label>Дата начала</label> <br />
-            <p>@Model.Begin.Value.ToString("0:dd/MM/yyyy")</p>
+            <p>@Model.Begin.Value.ToString("dd/MM/yyyy")</p>
         </div>
 
         <div class="form-group">
             <label>Дата Окончания</label> <br />
-            <p>@Model.Begin.Value.ToString("0:dd/MM/yyyy")</p>
+            <p>@Model.Begin.Value.ToString("dd/MM/yyyy")</p>
         </div>
 
         <div class="form-group">         

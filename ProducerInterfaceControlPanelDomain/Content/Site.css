@@ -119,3 +119,9 @@ width:100%;
 #ErrorLogTable tr td {
 min-width:6em;
 }
+#Table-LogUserChange {
+min-width:100%;
+}
+#Table-LogUserChange th {
+    text-align:center;
+}

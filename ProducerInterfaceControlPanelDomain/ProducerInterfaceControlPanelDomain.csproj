@@ -164,6 +164,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogForNetController.cs" />
+    <Compile Include="Controllers\LogUserChangeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProducerUserPermissionController.cs" />
@@ -262,6 +263,8 @@
     <Content Include="Views\Promotion\Search.cshtml" />
     <Content Include="Views\Promotion\Edit.cshtml" />
     <Content Include="Views\LogForNet\Index.cshtml" />
+    <Content Include="Views\LogUserChange\Index.cshtml" />
+    <Content Include="Views\LogUserChange\ReadMore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -300,7 +303,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53367</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
