@@ -46,9 +46,11 @@ namespace ProducerInterfaceCommon.LoggerModels
 				var obj = new LogObjectChange() { Action = (int)entry.State, ObjectReference = entry.State == EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry), TypeName = entityType.FullName };
 				set.LogObjectChange.Add(obj);
 
-				var propCollection = entry.OriginalValues.PropertyNames;
+				IEnumerable<string> propCollection;
 				if (entry.State == EntityState.Added)
 					propCollection = entry.CurrentValues.PropertyNames;
+				else
+					propCollection = entry.OriginalValues.PropertyNames;
 
 				foreach (var propName in propCollection)
 				{
