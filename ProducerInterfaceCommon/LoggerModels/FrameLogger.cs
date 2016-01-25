@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using ProducerInterfaceCommon.ContextModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -8,7 +9,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 
-namespace ProducerInterfaceCommon.ContextModels
+namespace ProducerInterfaceCommon.LoggerModels
 {
 	public class FrameLogger
 	{
@@ -31,16 +32,66 @@ namespace ProducerInterfaceCommon.ContextModels
 			return String.Join("_", objectStateEntry.EntityKey.EntityKeyValues.Select(x => x.Value));
 		}
 
-	//	public int asdf ()
-	//	{
-	//		`UpdateLogObjectChange`(
-	//IN ObjectReferenceNew varchar(250),
-	//IN ObjectReferenceOld varchar(250), IN LogChangeSetId int(10))
-	//	}
+		public void LogThis2(IEnumerable<DbEntityEntry> entries)
+		{
+
+			var set = new LogChangeSet() { UserId = _user.Id, Ip = _user.IP, Timestamp = DateTime.Now };
+			foreach (var entry in entries)
+			{
+				// вытащили имя сущности = имя таблицы
+				var entityType = entry.Entity.GetType();
+				if (entityType.BaseType != null && entityType.Namespace == "System.Data.Entity.DynamicProxies")
+					entityType = entityType.BaseType;
+
+				var obj = new LogObjectChange() { Action = (int)entry.State, ObjectReference = entry.State == EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry), TypeName = entityType.FullName };
+				set.LogObjectChange.Add(obj);
+
+				var propCollection = entry.OriginalValues.PropertyNames;
+				if (entry.State == EntityState.Added)
+					propCollection = entry.CurrentValues.PropertyNames;
+
+				foreach (var propName in propCollection)
+				{
+					var prop = new LogPropertyChange() { PropertyName = propName };
+					switch (entry.State)
+					{
+						case EntityState.Added:
+							var currentValue = entry.CurrentValues[propName];
+							if (currentValue == null)
+								continue;
+							prop.ValueNew = currentValue.ToString();
+							obj.LogPropertyChange.Add(prop);
+							break;
+
+						case EntityState.Deleted:
+							var originalValue = entry.OriginalValues[propName];
+							// если свойство было null - пропускаем
+							if (originalValue == null)
+								continue;
+							prop.ValueOld = originalValue.ToString();
+							obj.LogPropertyChange.Add(prop);
+							break;
+
+						case EntityState.Modified:
+							var orValue = entry.OriginalValues[propName];
+							var curValue = entry.CurrentValues[propName];
+							// если свойство не изменилось - пропускаем
+							if (object.Equals(curValue, orValue))
+								continue;
+							prop.ValueOld = orValue != null ? orValue.ToString() : null;
+							prop.ValueNew = curValue != null ? curValue.ToString() : null;
+							break;
+					}
+				}
+			}
+			var lcntx = new Logger_Entities();
+			lcntx.LogChangeSet.Add(set);
+			lcntx.SaveChanges();
+		}
 
 		public int LogThis(IEnumerable<DbEntityEntry> entries)
 		{
-			
+
 			int logChangeSetId = 0;
 
 			using (var conn = new MySqlConnection(_connString))
@@ -57,7 +108,7 @@ namespace ProducerInterfaceCommon.ContextModels
 					conn.Open();
 					comUser.ExecuteNonQuery();
 					logChangeSetId = (int)comUser.Parameters["@LogChangeSetId"].Value;
-          using (var comObject = new MySqlCommand("InsertLogObjectChange", conn))
+					using (var comObject = new MySqlCommand("InsertLogObjectChange", conn))
 					{
 						// объявление параметров объекта
 						comObject.CommandType = CommandType.StoredProcedure;
@@ -148,6 +199,6 @@ namespace ProducerInterfaceCommon.ContextModels
 				}
 			}
 			return logChangeSetId;
-    }
+		}
 	}
 }

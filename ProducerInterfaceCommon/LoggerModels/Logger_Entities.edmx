@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Logger" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище LoggerModels" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="LogChangeSet">
           <Key>
             <PropertyRef Name="Id" />
@@ -98,7 +98,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Хранилище LoggerContainer">
+        <EntityContainer Name="Хранилище LoggerModelsContainer">
           <EntitySet Name="LogChangeSet" EntityType="Self.LogChangeSet" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="LogObjectChange" EntityType="Self.LogObjectChange" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="LogPropertyChange" EntityType="Self.LogPropertyChange" Schema="producerinterface" store:Type="Tables" />
@@ -139,7 +139,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Logger" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="LoggerModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="LogChangeSet">
           <Key>
             <PropertyRef Name="Id" />
@@ -233,7 +233,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Logger_Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="LogChangeSet" EntityType="Self.LogChangeSet" />
           <EntitySet Name="LogObjectChange" EntityType="Self.LogObjectChange" />
           <EntitySet Name="LogPropertyChange" EntityType="Self.LogPropertyChange" />
@@ -253,9 +253,9 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище LoggerContainer" CdmEntityContainer="Entities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище LoggerModelsContainer" CdmEntityContainer="Logger_Entities">
           <EntitySetMapping Name="LogChangeSet">
-            <EntityTypeMapping TypeName="Logger.LogChangeSet">
+            <EntityTypeMapping TypeName="LoggerModels.LogChangeSet">
               <MappingFragment StoreEntitySet="LogChangeSet">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
@@ -265,7 +265,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LogObjectChange">
-            <EntityTypeMapping TypeName="Logger.LogObjectChange">
+            <EntityTypeMapping TypeName="LoggerModels.LogObjectChange">
               <MappingFragment StoreEntitySet="LogObjectChange">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
@@ -276,7 +276,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LogPropertyChange">
-            <EntityTypeMapping TypeName="Logger.LogPropertyChange">
+            <EntityTypeMapping TypeName="LoggerModels.LogPropertyChange">
               <MappingFragment StoreEntitySet="LogPropertyChange">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
@@ -287,7 +287,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="logchangeview">
-            <EntityTypeMapping TypeName="Logger.logchangeview">
+            <EntityTypeMapping TypeName="LoggerModels.logchangeview">
               <MappingFragment StoreEntitySet="logchangeview">
                 <ScalarProperty Name="ChangeSetId" ColumnName="ChangeSetId" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
@@ -304,7 +304,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="propertychangeview">
-            <EntityTypeMapping TypeName="Logger.propertychangeview">
+            <EntityTypeMapping TypeName="LoggerModels.propertychangeview">
               <MappingFragment StoreEntitySet="propertychangeview">
                 <ScalarProperty Name="ChangePropertyId" ColumnName="ChangePropertyId" />
                 <ScalarProperty Name="ChangeObjectId" ColumnName="ChangeObjectId" />

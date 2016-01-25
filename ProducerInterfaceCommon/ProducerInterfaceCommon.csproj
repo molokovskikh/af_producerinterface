@@ -97,7 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContextModels\ContextEF.cs" />
-    <Compile Include="ContextModels\FrameLogger.cs" />
+    <Compile Include="LoggerModels\FrameLogger.cs" />
     <Compile Include="ContextModels\LogForNet.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -223,36 +223,36 @@
     <Compile Include="Heap\SqlBuilder.cs" />
     <Compile Include="LoggerModels\Enums.cs" />
     <Compile Include="LoggerModels\LogChangeSet.cs">
-      <DependentUpon>Logger.tt</DependentUpon>
+      <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="LoggerModels\logchangeview.cs">
-      <DependentUpon>Logger.tt</DependentUpon>
+      <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="LoggerModels\Logger.Context.cs">
+    <Compile Include="LoggerModels\Logger_Entities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Logger.Context.tt</DependentUpon>
+      <DependentUpon>Logger_Entities.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="LoggerModels\Logger.cs">
+    <Compile Include="LoggerModels\Logger_Entities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Logger.tt</DependentUpon>
+      <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="LoggerModels\Logger.Designer.cs">
+    <Compile Include="LoggerModels\Logger_Entities.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Logger.edmx</DependentUpon>
+      <DependentUpon>Logger_Entities.edmx</DependentUpon>
     </Compile>
     <Compile Include="LoggerModels\LogObjectChange.cs">
-      <DependentUpon>Logger.tt</DependentUpon>
+      <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="LoggerModels\LogPropertyChange.cs">
-      <DependentUpon>Logger.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LoggerModels\propertychangeview.cs">
-      <DependentUpon>Logger.tt</DependentUpon>
+      <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="LoggerModels\MetaData.cs" />
+    <Compile Include="LoggerModels\propertychangeview.cs">
+      <DependentUpon>Logger_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CronIntervalParam.cs" />
     <Compile Include="Models\CronParam.cs" />
     <Compile Include="Models\ErrorMessage.cs" />
@@ -292,12 +292,12 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <EntityDeploy Include="LoggerModels\Logger.edmx">
+    <EntityDeploy Include="LoggerModels\Logger_Entities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Logger.Designer.cs</LastGenOutput>
+      <LastGenOutput>Logger_Entities.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="LoggerModels\Logger.edmx.diagram">
-      <DependentUpon>Logger.edmx</DependentUpon>
+    <None Include="LoggerModels\Logger_Entities.edmx.diagram">
+      <DependentUpon>Logger_Entities.edmx</DependentUpon>
     </None>
     <None Include="Models\Report.cd" />
     <None Include="packages.config" />
@@ -313,15 +313,15 @@
       <DependentUpon>producerinterface_Entities.edmx</DependentUpon>
       <LastGenOutput>producerinterface_Entities.cs</LastGenOutput>
     </Content>
-    <Content Include="LoggerModels\Logger.Context.tt">
+    <Content Include="LoggerModels\Logger_Entities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Logger.edmx</DependentUpon>
-      <LastGenOutput>Logger.Context.cs</LastGenOutput>
+      <DependentUpon>Logger_Entities.edmx</DependentUpon>
+      <LastGenOutput>Logger_Entities.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="LoggerModels\Logger.tt">
+    <Content Include="LoggerModels\Logger_Entities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Logger.edmx</DependentUpon>
-      <LastGenOutput>Logger.cs</LastGenOutput>
+      <DependentUpon>Logger_Entities.edmx</DependentUpon>
+      <LastGenOutput>Logger_Entities.cs</LastGenOutput>
     </Content>
     <Content Include="TextFile1.txt" />
   </ItemGroup>

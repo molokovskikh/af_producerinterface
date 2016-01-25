@@ -10,7 +10,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
     public class LogUserChangeController : BaseController
     {
 
-        public ProducerInterfaceCommon.LoggerModels.Entities cntx__ = new Entities();
+        public ProducerInterfaceCommon.LoggerModels.Logger_Entities cntx__ = new Logger_Entities();
         
         // GET: LogUserChange
         public ActionResult Index(int Id = 0)
