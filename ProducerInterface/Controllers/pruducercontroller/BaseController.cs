@@ -297,7 +297,7 @@ namespace ProducerInterface.Controllers.pruducercontroller
             {
                 //  string Name = 
                 CurrentUser = cntx_.ProducerUser.FirstOrDefault(e => e.Email == AutorizedUser.Name && e.Login == null);
-                CurrentUser.IP = Request.UserHostAddress.ToString();
+                //CurrentUser.IP = Request.UserHostAddress.ToString();
             }
             
             return CurrentUser;

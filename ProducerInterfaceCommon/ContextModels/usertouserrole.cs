@@ -19,8 +19,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<long> UserPermissionId { get; set; }
         public long Id { get; set; }
     
-        public virtual ProducerUser ProducerUser { get; set; }
         public virtual UserPermission UserPermission { get; set; }
         public virtual userrole userrole { get; set; }
+        public virtual ProducerUser ProducerUser { get; set; }
     }
 }

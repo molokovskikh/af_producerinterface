@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Logger" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="LogChangeSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="UserId" Type="uint" Nullable="false" />
+          <Property Name="Ip" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="LogObjectChange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="ObjectReference" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Action" Type="int" Nullable="false" />
+          <Property Name="LogChangeSetId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LogPropertyChange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PropertyName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="ValueOld" Type="text" />
+          <Property Name="ValueNew" Type="text" />
+          <Property Name="LogObjectChangeId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.logchangeview" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="logchangeview">
+          <Key>
+            <PropertyRef Name="ChangeSetId" />
+            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="ProducerName" />
+          </Key>
+          <Property Name="ChangeSetId" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Ip" Type="varchar" MaxLength="50" />
+          <Property Name="UserId" Type="uint" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="ProducerId" Type="uint" Nullable="false" />
+          <Property Name="ProducerName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ChangeObjectId" Type="int" />
+          <Property Name="Action" Type="int" />
+          <Property Name="TypeName" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.propertychangeview" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="propertychangeview">
+          <Key>
+            <PropertyRef Name="ChangePropertyId" />
+            <PropertyRef Name="ChangeObjectId" />
+            <PropertyRef Name="PropertyName" />
+          </Key>
+          <Property Name="ChangePropertyId" Type="int" Nullable="false" />
+          <Property Name="ChangeObjectId" Type="int" Nullable="false" />
+          <Property Name="PropertyName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="ValueOld" Type="text" />
+          <Property Name="ValueNew" Type="text" />
+        </EntityType>
+        <Association Name="LogObjectChange_LogChangeSet">
+          <End Role="LogChangeSet" Type="Self.LogChangeSet" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LogObjectChange" Type="Self.LogObjectChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogChangeSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogObjectChange">
+              <PropertyRef Name="LogChangeSetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="LogPropertyChange_LogObjectChange">
+          <End Role="LogObjectChange" Type="Self.LogObjectChange" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LogPropertyChange" Type="Self.LogPropertyChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogObjectChange">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogPropertyChange">
+              <PropertyRef Name="LogObjectChangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище LoggerContainer">
+          <EntitySet Name="LogChangeSet" EntityType="Self.LogChangeSet" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="LogObjectChange" EntityType="Self.LogObjectChange" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="LogPropertyChange" EntityType="Self.LogPropertyChange" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="logchangeview" EntityType="Self.logchangeview" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`logchangeview`.`ChangeSetId`, 
+`logchangeview`.`Timestamp`, 
+`logchangeview`.`Ip`, 
+`logchangeview`.`UserId`, 
+`logchangeview`.`UserName`, 
+`logchangeview`.`Email`, 
+`logchangeview`.`ProducerId`, 
+`logchangeview`.`ProducerName`, 
+`logchangeview`.`ChangeObjectId`, 
+`logchangeview`.`Action`, 
+`logchangeview`.`TypeName`
+FROM `logchangeview` AS `logchangeview`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="propertychangeview" EntityType="Self.propertychangeview" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`propertychangeview`.`ChangePropertyId`, 
+`propertychangeview`.`ChangeObjectId`, 
+`propertychangeview`.`PropertyName`, 
+`propertychangeview`.`ValueOld`, 
+`propertychangeview`.`ValueNew`
+FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="LogObjectChange_LogChangeSet" Association="Self.LogObjectChange_LogChangeSet">
+            <End Role="LogChangeSet" EntitySet="LogChangeSet" />
+            <End Role="LogObjectChange" EntitySet="LogObjectChange" />
+          </AssociationSet>
+          <AssociationSet Name="LogPropertyChange_LogObjectChange" Association="Self.LogPropertyChange_LogObjectChange">
+            <End Role="LogObjectChange" EntitySet="LogObjectChange" />
+            <End Role="LogPropertyChange" EntitySet="LogPropertyChange" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Logger" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="LogChangeSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="LogObjectChange" Relationship="Self.LogObjectChange_LogChangeSet" FromRole="LogChangeSet" ToRole="LogObjectChange" />
+        </EntityType>
+        <EntityType Name="LogObjectChange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ObjectReference" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Action" Type="Int32" Nullable="false" />
+          <Property Name="LogChangeSetId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LogChangeSet" Relationship="Self.LogObjectChange_LogChangeSet" FromRole="LogObjectChange" ToRole="LogChangeSet" />
+          <NavigationProperty Name="LogPropertyChange" Relationship="Self.LogPropertyChange_LogObjectChange" FromRole="LogObjectChange" ToRole="LogPropertyChange" />
+        </EntityType>
+        <EntityType Name="LogPropertyChange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PropertyName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ValueOld" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ValueNew" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="LogObjectChangeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LogObjectChange" Relationship="Self.LogPropertyChange_LogObjectChange" FromRole="LogPropertyChange" ToRole="LogObjectChange" />
+        </EntityType>
+        <EntityType Name="logchangeview">
+          <Key>
+            <PropertyRef Name="ChangeSetId" />
+            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="ProducerName" />
+          </Key>
+          <Property Name="ChangeSetId" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ChangeObjectId" Type="Int32" />
+          <Property Name="Action" Type="Int32" />
+          <Property Name="TypeName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="propertychangeview">
+          <Key>
+            <PropertyRef Name="ChangePropertyId" />
+            <PropertyRef Name="ChangeObjectId" />
+            <PropertyRef Name="PropertyName" />
+          </Key>
+          <Property Name="ChangePropertyId" Type="Int32" Nullable="false" />
+          <Property Name="ChangeObjectId" Type="Int32" Nullable="false" />
+          <Property Name="PropertyName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ValueOld" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ValueNew" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="LogObjectChange_LogChangeSet">
+          <End Role="LogChangeSet" Type="Self.LogChangeSet" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LogObjectChange" Type="Self.LogObjectChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogChangeSet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogObjectChange">
+              <PropertyRef Name="LogChangeSetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="LogPropertyChange_LogObjectChange">
+          <End Role="LogObjectChange" Type="Self.LogObjectChange" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LogPropertyChange" Type="Self.LogPropertyChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogObjectChange">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogPropertyChange">
+              <PropertyRef Name="LogObjectChangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="LogChangeSet" EntityType="Self.LogChangeSet" />
+          <EntitySet Name="LogObjectChange" EntityType="Self.LogObjectChange" />
+          <EntitySet Name="LogPropertyChange" EntityType="Self.LogPropertyChange" />
+          <EntitySet Name="logchangeview" EntityType="Self.logchangeview" />
+          <EntitySet Name="propertychangeview" EntityType="Self.propertychangeview" />
+          <AssociationSet Name="LogObjectChange_LogChangeSet" Association="Self.LogObjectChange_LogChangeSet">
+            <End Role="LogChangeSet" EntitySet="LogChangeSet" />
+            <End Role="LogObjectChange" EntitySet="LogObjectChange" />
+          </AssociationSet>
+          <AssociationSet Name="LogPropertyChange_LogObjectChange" Association="Self.LogPropertyChange_LogObjectChange">
+            <End Role="LogObjectChange" EntitySet="LogObjectChange" />
+            <End Role="LogPropertyChange" EntitySet="LogPropertyChange" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище LoggerContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="LogChangeSet">
+            <EntityTypeMapping TypeName="Logger.LogChangeSet">
+              <MappingFragment StoreEntitySet="LogChangeSet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Ip" ColumnName="Ip" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogObjectChange">
+            <EntityTypeMapping TypeName="Logger.LogObjectChange">
+              <MappingFragment StoreEntitySet="LogObjectChange">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="LogChangeSetId" ColumnName="LogChangeSetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogPropertyChange">
+            <EntityTypeMapping TypeName="Logger.LogPropertyChange">
+              <MappingFragment StoreEntitySet="LogPropertyChange">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="ValueOld" ColumnName="ValueOld" />
+                <ScalarProperty Name="ValueNew" ColumnName="ValueNew" />
+                <ScalarProperty Name="LogObjectChangeId" ColumnName="LogObjectChangeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logchangeview">
+            <EntityTypeMapping TypeName="Logger.logchangeview">
+              <MappingFragment StoreEntitySet="logchangeview">
+                <ScalarProperty Name="ChangeSetId" ColumnName="ChangeSetId" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Ip" ColumnName="Ip" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
+                <ScalarProperty Name="ChangeObjectId" ColumnName="ChangeObjectId" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="propertychangeview">
+            <EntityTypeMapping TypeName="Logger.propertychangeview">
+              <MappingFragment StoreEntitySet="propertychangeview">
+                <ScalarProperty Name="ChangePropertyId" ColumnName="ChangePropertyId" />
+                <ScalarProperty Name="ChangeObjectId" ColumnName="ChangeObjectId" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="ValueOld" ColumnName="ValueOld" />
+                <ScalarProperty Name="ValueNew" ColumnName="ValueNew" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
