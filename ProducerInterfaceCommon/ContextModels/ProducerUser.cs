@@ -33,6 +33,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<sbyte> PasswordToUpdate { get; set; }
         public Nullable<sbyte> Enabled { get; set; }
         public string Login { get; set; }
+        public sbyte TypeUser { get; set; }
     
         public virtual ICollection<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public virtual ICollection<promotions> promotions { get; set; }

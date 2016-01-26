@@ -127,6 +127,7 @@
           <Property Name="PasswordToUpdate" Type="tinyint" />
           <Property Name="Enabled" Type="tinyint" />
           <Property Name="Login" Type="varchar" MaxLength="50" />
+          <Property Name="TypeUser" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="profilenews">
           <Key>
@@ -259,24 +260,6 @@
           <Property Name="CatalogName" Type="varchar" MaxLength="511" />
           <Property Name="IsPharmacie" Type="bool" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6013: Первичный ключ в таблице или представлении "def.producerinterface.controlpanelpermissionuser" не определен, его не удалось вывести. Эта таблица или представление исключены. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
-        <EntityType Name="controlpanelpermissionuser">
-          <Property Name="Login" Type="varchar" MaxLength="50" />
-          <Property Name="Name" Type="varchar" MaxLength="50" />
-          <Property Name="Email" Type="varchar" MaxLength="50" />
-          <Property Name="Appointment" Type="varchar" MaxLength="50" />
-          <Property Name="Enabled" Type="tinyint" />
-          <Property Name="IdUser" Type="uint" />
-          <Property Name="IdGroup" Type="int" />
-          <Property Name="GroupName" Type="varchar" MaxLength="50" />
-          <Property Name="IdPermission" Type="int" />
-          <Property Name="ControllerAction" Type="varchar" MaxLength="50" />
-          <Property Name="ActionAttributes" Type="text" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-          <Property Name="Enable_Group" Type="bool" />
-          <Property Name="Enable_Permission" Type="tinyint" />
-        </EntityType>-->
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugdescription" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="drugdescription">
@@ -1432,6 +1415,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="user_logs" Relationship="producerinterface_Model.FK_user_logs_users" FromRole="ProducerUser" ToRole="user_logs" />
           <NavigationProperty Name="usertouserrole" Relationship="producerinterface_Model.FK_user_role_users" FromRole="ProducerUser" ToRole="usertouserrole" />
           <NavigationProperty Name="ControlPanelGroup" Relationship="producerinterface_Model.ControlPanelUserToGroup" FromRole="ProducerUser" ToRole="ControlPanelGroup" />
+          <Property Name="TypeUser" Type="SByte" Nullable="false" />
         </EntityType>
         <Association Name="DrugDescriptionRemark_ProducerUserId">
           <End Type="producerinterface_Model.ProducerUser" Role="ProducerUser" Multiplicity="0..1" />
@@ -1873,6 +1857,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="ProducerUser">
             <EntityTypeMapping TypeName="producerinterface_Model.ProducerUser">
               <MappingFragment StoreEntitySet="ProducerUser">
+                <ScalarProperty Name="TypeUser" ColumnName="TypeUser" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="PasswordToUpdate" ColumnName="PasswordToUpdate" />

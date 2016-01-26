@@ -157,7 +157,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             if (controllerAcctributes == null)
             {
                 return cntx_.ControlPanelPermission.Where(vvv => vvv.ControllerAction == permissionName)
-                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser)));              
+                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser && zzz.TypeUser == 1)));              
             }
 
             // в запросе есть передаваемые параметры
@@ -165,7 +165,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             
 
             return cntx_.ControlPanelPermission.ToList().Where(vvv=>vvv.ControllerAction == permissionName && vvv.ActionAttributes.Contains(controllerAcctributes))
-                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser)));       
+                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser & zzz.TypeUser ==1)));       
 
         }
 

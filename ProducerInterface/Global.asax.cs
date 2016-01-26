@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -42,7 +41,7 @@ namespace ProducerInterface
                 }
                 ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
 
-              //  Response.Redirect("~/Home/Index");
+                Response.Redirect("~/Home/Index");
             }
         }
 
