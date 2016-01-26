@@ -49,8 +49,9 @@ namespace ProducerInterface.Controllers
             if (ModelState.IsValid)
             {
                 // проверка на существование eMail в БД
+                         
 
-                var YesNouMail = cntx_.ProducerUser.Where(xxx => xxx.Email == NewAccount.login && xxx.Login == null).FirstOrDefault();
+                var YesNouMail = cntx_.ProducerUser.Where(xxx => xxx.Email == NewAccount.login && xxx.TypeUser == 0).FirstOrDefault();
 
                 if (YesNouMail == null && NewAccount.login != "")
                 {
@@ -62,13 +63,14 @@ namespace ProducerInterface.Controllers
                     string Password = GetRandomPassword();
                     New_User.Password = Md5HashHelper.GetHash(Password);
                     New_User.ProducerId = NewAccount.Producers;
+                    New_User.UserType = TypeUsers.ControlPanelUser;                   
                     New_User.PasswordUpdated = SystemTime.GetDefaultDate();
                     cntx_.Entry(New_User).State = System.Data.Entity.EntityState.Added;
                     cntx_.SaveChanges();
 
                     string eMail = New_User.Email;
 
-                    New_User = cntx_.ProducerUser.Where(xxx => xxx.Email == eMail && xxx.Login == null).First();
+                    New_User = cntx_.ProducerUser.Where(xxx => xxx.Email == eMail && xxx.TypeUser == 0).First();
                     
                     ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx, New_User.Id, Password, Request.UserHostAddress.ToString());
 
@@ -122,7 +124,7 @@ namespace ProducerInterface.Controllers
 
                 try
                 {
-                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login).ToList().FirstOrDefault();
+                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login && xxx.UserType == 0).ToList().FirstOrDefault();
                 }
                 catch
                 {
@@ -185,7 +187,7 @@ namespace ProducerInterface.Controllers
              
         public ActionResult ChangePassword()
         {
-            var User = cntx_.ProducerUser.Where(xxx => xxx.Email == CurrentUser.Email && xxx.Login == null).FirstOrDefault();
+            var User = cntx_.ProducerUser.Where(xxx => xxx.Email == CurrentUser.Email && xxx.UserType == 0).FirstOrDefault();
             string password = GetRandomPassword();
             User.Password = Md5HashHelper.GetHash(password);
 
@@ -212,7 +214,7 @@ namespace ProducerInterface.Controllers
 
             // валидация
 
-            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower() && xxx.Login == null).FirstOrDefault();
+            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower() && xxx.UserType == 0).FirstOrDefault();
 
             if (ThisUser == null || ThisUser.Email == "")
             {
@@ -253,7 +255,7 @@ namespace ProducerInterface.Controllers
             if (ThisUser.Enabled == 0 && (ThisUser.PasswordUpdated.Value == SystemTime.GetDefaultDate())) // логинится впервые
             { 
                 
-                var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1).ToList();
+                var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1 && xxx.UserType == 0).ToList();
 
                 List<UserPermission> LST = cntx_.UserPermission.ToList();
 

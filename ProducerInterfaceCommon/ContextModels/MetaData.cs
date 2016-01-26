@@ -197,11 +197,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public bool Enable { get; set; }
     }
 
-   
-
-
- 
-
     public partial class ProducerUser
     {
         [Display(Name = "IP адресс")]
@@ -215,6 +210,13 @@ namespace ProducerInterfaceCommon.ContextModels
 
         [UIHint("LongListPermission")]
         public List<long> ListSelectedPermission { get; set; }
+             
+        public TypeUsers UserType
+        {
+            get { return (TypeUsers)TypeUser; }
+            set { TypeUser = (SByte)value; }
+        }
+
     }
     public partial class ControlPanelGroup
     {

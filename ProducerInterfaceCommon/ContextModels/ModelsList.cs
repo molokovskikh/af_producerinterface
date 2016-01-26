@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+    public class SortingPagingInfo
+    {   
+        public int PageCount { get; set; }
+        public int CurrentPageIndex { get; set; }
+    }
 
     public class Producer
     {

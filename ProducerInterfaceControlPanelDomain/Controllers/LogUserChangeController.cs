@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.LoggerModels;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -18,6 +19,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             var MaxLogCount = cntx__.logchangeview.Count();
             var pagerCount = Convert.ToInt32(GetWebConfigParameters("LogCountPage"));
 
+            ProducerInterfaceCommon.ContextModels.SortingPagingInfo Info = new SortingPagingInfo();
+            Info.CurrentPageIndex = Id;
+            Info.PageCount = ((MaxLogCount / pagerCount) + 1);          
+            ViewBag.Info = Info;
+            ViewBag.InfoUrl = @"/LogUserChange/Index";
 
             if (Id > (MaxLogCount / pagerCount))
             {

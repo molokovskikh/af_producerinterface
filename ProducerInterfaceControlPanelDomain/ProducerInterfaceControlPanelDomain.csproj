@@ -265,6 +265,7 @@
     <Content Include="Views\LogForNet\Index.cshtml" />
     <Content Include="Views\LogUserChange\Index.cshtml" />
     <Content Include="Views\LogUserChange\ReadMore.cshtml" />
+    <Content Include="Views\Shared\PagerPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

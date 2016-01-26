@@ -4,7 +4,7 @@ using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -15,13 +15,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public ActionResult Index(int Id = 0)
         {
-
-           // cntx_.log
-
             var MaxCountLogs = cntx_.LogForNet.Count();
             var PagerCount = Convert.ToInt32(GetWebConfigParameters("ErrorCountPage"));
 
             int Max_Vozmozhniy_ID = MaxCountLogs / PagerCount;
+
+            if (Max_Vozmozhniy_ID < Id && Id != 0)
+            {
+                RedirectToAction("Index");
+            }
+
+            SortingPagingInfo Info = new SortingPagingInfo();
+            Info.CurrentPageIndex = Id;
+            Info.PageCount = Max_Vozmozhniy_ID +1;          
+            ViewBag.Info = Info;
+            ViewBag.InfoUrl = @"/LogForNet/Index";
 
             var ModelView = new List<ProducerInterfaceCommon.ContextModels.LogForNet>();
 

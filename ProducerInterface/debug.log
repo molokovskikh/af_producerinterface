@@ -503,3 +503,4 @@ MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'bd.s
 22.01.2016 21:24:32.902 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
 22.01.2016 21:33:17.535 [43] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
 25.01.2016 19:11:20.274 [7] ERROR MySqlAdoNetAppender - При обновлении записей возникла ошибка. Дополнительные сведения приведены во внутреннем исключении.
+26.01.2016 14:45:20.217 [671] ERROR MySqlAdoNetAppender - Почтовый ящик недоступен. Отклик сервера: test@analit.net unknown user account

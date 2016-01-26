@@ -22,7 +22,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             if (IsAuthenticated(login, password))
             {
-                var X = cntx_.ProducerUser.Where(xxx => xxx.Login == login).FirstOrDefault();
+                var X = cntx_.ProducerUser.Where(xxx => xxx.Login == login && xxx.TypeUser ==1).FirstOrDefault();
 
                 if(X == null)
                 {
@@ -44,6 +44,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             CPU.Login = LogIn;
             CPU.Enabled = 1;
             CPU.Email = "";
+            CPU.UserType = TypeUsers.ControlPanelUser;
             CPU.Appointment = "";
 
             if (_filterAttribute != null && _filterAttribute != "" && _filterAttribute.Length > 10)
@@ -84,6 +85,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             CPU.Login = LogIn;            
             CPU.Enabled = 1;
+            CPU.UserType = TypeUsers.ControlPanelUser;
             CPU.Email = "";
             CPU.Appointment = "";
 

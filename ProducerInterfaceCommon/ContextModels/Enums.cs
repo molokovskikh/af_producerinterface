@@ -37,4 +37,17 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Рейтинг поставщиков")]
         SupplierRatingReport = 3
     }
+
+    public enum TypeUsers
+    {
+        [Display(Name = "Пользователь из Интерфейса производителя")]
+        ProducerUser =0,
+        [Display(Name = "Пользователь из Панели управления")]
+        ControlPanelUser =1,
+        [Display(Name = "Пользователь из Из интерфейса отчетов")]
+        ReportUser =2,
+        [Display(Name = "Для тестов")]
+        UserRazrab =10
+    }
+
 }

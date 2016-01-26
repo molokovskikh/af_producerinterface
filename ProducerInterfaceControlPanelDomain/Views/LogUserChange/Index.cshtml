@@ -8,32 +8,7 @@
 <h2>Лог изменений базы данных</h2>
 <hr />
 
-@*
-    ViewBag.Prev = Id + 1;  // ссылка на предыдущие N записей в базе
-    ViewBag.Next = Id - 1;  // ссылка на следующие N записей в базе
-*@
-
-@if (ViewBag.Prev != null && ViewBag.Next != null)
-{
-    <!--   Выводим обе кнопки на страницу  -->
-    <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Prev"> Предыдущие @ViewBag.Pager</a>
-    <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Next"> Следующие @ViewBag.Pager</a>
-  
-    <hr />
-}
-else
-{
-    if (ViewBag.Prev != null)
-    {
-        <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Prev"> Предыдущие @ViewBag.Pager</a>
-        <hr />
-    }
-    if (ViewBag.Next != null)
-    {
-        <a class="btn btn-primary" href="~/LogUserChange/Index/@ViewBag.Next"> Следующие @ViewBag.Pager</a>
-        <hr />
-    }
-}
+@Html.Partial("PagerPArtial")
 
 @if (Model != null && Model.Count() > 0)
 {
