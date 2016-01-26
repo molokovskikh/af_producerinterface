@@ -504,3 +504,14 @@ MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'bd.s
 22.01.2016 21:33:17.535 [43] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
 25.01.2016 19:11:20.274 [7] ERROR MySqlAdoNetAppender - При обновлении записей возникла ошибка. Дополнительные сведения приведены во внутреннем исключении.
 26.01.2016 14:45:20.217 [671] ERROR MySqlAdoNetAppender - Почтовый ящик недоступен. Отклик сервера: test@analit.net unknown user account
+26.01.2016 20:38:20.708 [98] ERROR MySqlAdoNetAppender - Контроллер для пути "/kkj/123" не найден или не реализует интерфейс IController.
+26.01.2016 20:42:41.408 [112] ERROR MySqlAdoNetAppender - Контроллер для пути "/dsasdasda/asdasd" не найден или не реализует интерфейс IController.
+26.01.2016 20:43:56.945 [107] ERROR MySqlAdoNetAppender - Контроллер для пути "/Hasd/asssssssssssssssssssssssssssssss" не найден или не реализует интерфейс IController.
+26.01.2016 20:46:06.700 [5] ERROR MySqlAdoNetAppender - Контроллер для пути "/asddddddddddddddddd/dddddddddddddd" не найден или не реализует интерфейс IController.
+26.01.2016 21:05:08.656 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
+26.01.2016 21:05:35.713 [27] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
+26.01.2016 21:06:05.330 [27] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
+26.01.2016 21:06:20.246 [29] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
+26.01.2016 21:06:36.736 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
+26.01.2016 21:06:47.035 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
+26.01.2016 21:07:01.273 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.

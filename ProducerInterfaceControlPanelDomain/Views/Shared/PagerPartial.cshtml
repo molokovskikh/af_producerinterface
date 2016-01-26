@@ -22,7 +22,7 @@ else
     if(I3 > info.CurrentPageIndex && I2 < info.CurrentPageIndex)
     {
         <li>
-            <a href="@ViewBag.InfoUrl/@i" data-pageindex="@i">@(i + 1)</a>
+            <a href="~@ViewBag.InfoUrl/@i" data-pageindex="@i">@(i + 1)</a>
         </li>
     }
 
@@ -38,7 +38,7 @@ else
       if(I3 == info.CurrentPageIndex)
     {
 <li>
-    <a href="@ViewBag.InfoUrl/@i" data-pageindex="@i">Предыдущая</a>
+    <a href="~@ViewBag.InfoUrl/@i" data-pageindex="@i">Предыдущая</a>
 </li>
     }
 

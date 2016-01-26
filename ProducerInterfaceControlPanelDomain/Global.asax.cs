@@ -32,7 +32,7 @@ namespace ProducerInterfaceControlPanelDomain
                 {
 
                 }
-                ErrorMessage("При выполнении запроса произошли непредвиденная ошибка");
+                ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
                 Response.Redirect("~/Home/Index");
             }
         }

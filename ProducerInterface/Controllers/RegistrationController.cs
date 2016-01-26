@@ -63,7 +63,7 @@ namespace ProducerInterface.Controllers
                     string Password = GetRandomPassword();
                     New_User.Password = Md5HashHelper.GetHash(Password);
                     New_User.ProducerId = NewAccount.Producers;
-                    New_User.UserType = TypeUsers.ControlPanelUser;                   
+                    New_User.UserType = TypeUsers.ProducerUser;                   
                     New_User.PasswordUpdated = SystemTime.GetDefaultDate();
                     cntx_.Entry(New_User).State = System.Data.Entity.EntityState.Added;
                     cntx_.SaveChanges();
@@ -124,7 +124,7 @@ namespace ProducerInterface.Controllers
 
                 try
                 {
-                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login && xxx.UserType == 0).ToList().FirstOrDefault();
+                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login && xxx.TypeUser == 0).ToList().FirstOrDefault();
                 }
                 catch
                 {

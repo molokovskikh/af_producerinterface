@@ -38,6 +38,10 @@ namespace ProducerInterfaceCommon.Heap
                 {
                     message.IsBodyHtml = HtmlBody;
                 }
+                else
+                {
+                    message.IsBodyHtml = false;
+                }
               
                 if (!String.IsNullOrEmpty(path))
                 {
