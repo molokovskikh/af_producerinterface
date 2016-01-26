@@ -35,6 +35,9 @@ else
     }
 }
 
+@if (Model != null && Model.Count() > 0)
+{
+
 <table class="table-bordered table-striped" id="Table-LogUserChange">
 
     <tr>
@@ -48,6 +51,8 @@ else
         <th>Подробнее</th>
     </tr>
 
+
+
 @foreach (var LogChangeItem in Model)
 {
     <tr>
@@ -56,9 +61,7 @@ else
         <td>@LogChangeItem.UserName</td>
         <td>@LogChangeItem.Email</td>
         <td>@LogChangeItem.ProducerName</td>
-        <td>                            
-            @LogChangeItem.EntityCommandEnum.GetDescription()
-        </td>
+        <td>@(LogChangeItem.Action == null ? "" : LogChangeItem.EntityCommandEnum.GetDescription())</td>
         <td>@LogChangeItem.TypeName</td>
         <td>    
         <a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a>        
@@ -67,3 +70,8 @@ else
 }
 
 </table>
+}
+else
+{
+<h4>Список логов пуст</h4>
+}

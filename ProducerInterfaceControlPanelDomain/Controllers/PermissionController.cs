@@ -36,31 +36,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public ActionResult Users()
         {
+            var ModelListUserView = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.Login != null).ToList()
+                .Select(vvv => new ListUserView {
+                    Id = vvv.Id,
+                    Name = vvv.Name,
+                    Groups = cntx_.ControlPanelGroup.ToList().Where(zzz => zzz.ProducerUser.Any(zzzz =>zzzz.Id == vvv.Id)).ToList().Select(z => z.Name).ToArray(),
+                    ListPermission = cntx_.ControlPanelPermission.ToList().Where(zzz => zzz.ControlPanelGroup.Any(ccc => ccc.ProducerUser.Any(v=>v.Id == vvv.Id))).ToList().Select(vv=>vv.ControllerAction + "   " + vv.ActionAttributes).ToArray()
+                }).ToList();
 
-            var ModelListUserView = new List<ListUserView>();
+            foreach (var ItemModel in ModelListUserView)
+            {
+                ItemModel.CountGroup = ItemModel.Groups.Length;
+                ItemModel.CountPermissions = ItemModel.ListPermission.Length;
+            }
 
-            //var ListUserViewModel = cntx_.controlpaneluserpermission.ToList()
-            //    .GroupBy(xxx=>xxx.IdUser).Select(xxx=>xxx.First())         
-            //    .Select(
-            //    xxx => new ListUserView
-            //    {
-            //        Id = (long)xxx.IdUser,
-            //        Name = xxx.Name,
-            //        Groups = cntx_.controlpaneluserpermission.Where(yyy => yyy.IdUser == xxx.IdUser)
-            //                .Select(eee => eee.GroupName).Distinct()
-            //                .ToArray(),
-
-            //        CountGroup = cntx_.controlpaneluserpermission.Where(yyy => yyy.IdUser == xxx.IdUser)
-            //                .Select(eee => eee.GroupName).Distinct()
-            //                .Count(),
-
-            //        CountPermissions = cntx_.controlpaneluserpermission.Where(yyy => yyy.IdUser == xxx.IdUser)
-            //                .Select(yyy => yyy.ControllerAction + "  " + yyy.ActionAttributes).Distinct().Count(),
-
-            //        ListPermission = cntx_.controlpaneluserpermission.Where(yyy => yyy.IdUser == xxx.IdUser)
-            //                .Select(yyy => yyy.ControllerAction + "  " + yyy.ActionAttributes).Distinct().ToArray()
-            //    }
-            //    ).ToList();
             return View(ModelListUserView);
         }
 

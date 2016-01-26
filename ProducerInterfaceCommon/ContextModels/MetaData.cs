@@ -218,7 +218,9 @@ namespace ProducerInterfaceCommon.ContextModels
     }
     public partial class ControlPanelGroup
     {
+        [UIHint("LongListPermission")]
         public List<int> ListPermission { get; set; }
+        [UIHint("LongListUser")]
         public List<long> ListUser { get; set; }
     }
        

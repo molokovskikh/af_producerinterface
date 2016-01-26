@@ -97,7 +97,8 @@ namespace ProducerInterface.Controllers
             PromotionSave.Begin = PromoAction.Begin;
             PromotionSave.End = PromoAction.End;
             PromotionSave.ProducerId = (long)CurrentUser.ProducerId;
-          
+        //    PromotionSave.UpdateTime = DateTime.Now;
+
             var ListOldDrugInPromotion = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
 
             if (PromoAction.Id != 0)
@@ -113,13 +114,13 @@ namespace ProducerInterface.Controllers
                     }
                 }
                 cntx_.Entry(PromotionSave).State = EntityState.Modified;
-                cntx_.SaveChanges(); // сохраняем в БД удалённые лекарства
+                cntx_.SaveChanges(CurrentUser); // сохраняем в БД удалённые лекарства
             }
 
             if (PromotionSave.Id == 0) {
                 PromotionSave.ProducerUserId = CurrentUser.Id; // в новую акцию добавляем Id пользователя
                 cntx_.Entry(PromotionSave).State = EntityState.Added;
-                cntx_.SaveChanges();   
+                cntx_.SaveChanges(CurrentUser);   
             }
 
             foreach (var GrugItem in PromoAction.DrugList)
@@ -134,7 +135,7 @@ namespace ProducerInterface.Controllers
                 }
                 // привязка лекарств к акции           
             }
-            cntx_.SaveChanges();
+            cntx_.SaveChanges(CurrentUser);
  
 
             // отправляем ссобщение пользователю об добавлении или изменении акции
@@ -181,7 +182,7 @@ namespace ProducerInterface.Controllers
         {
             cntx_.promotionToDrug.RemoveRange(cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id));
             cntx_.promotions.Remove(cntx_.promotions.Where(xxx=>xxx.Id == PromoAction.Id).First());
-            cntx_.SaveChanges();
+            cntx_.SaveChanges(CurrentUser);
             SuccessMessage("Акция " + PromoAction.Name + " успешно удалена.");
             return RedirectToAction("Index");
         }

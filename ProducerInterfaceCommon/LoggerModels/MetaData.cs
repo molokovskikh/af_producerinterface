@@ -14,7 +14,9 @@ namespace ProducerInterfaceCommon.LoggerModels
     {
         public EntityCommand EntityCommandEnum
         {
-            get { return (EntityCommand)Action; }
+            get {             
+                return (EntityCommand)Action;
+            }
             set { Action = (int)value; }
         }
           

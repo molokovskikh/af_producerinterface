@@ -39,10 +39,26 @@
                 }                     
             </td>
             <td>
-                @for (int i = 0; i < GroupItem.Permissions.Length; i++)
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#table-width-100prc" href="#ListUsercollapseOne_@GroupItem.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>Раскрыть</a>
+                        </h4>
+                    </div>
+                    <div id="ListUsercollapseOne_@GroupItem.Id" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            @for (int i = 0; i < GroupItem.Permissions.Length; i++)
                 {
-                    <p>@GroupItem.Permissions[i]</p>
+                                <p>@GroupItem.Permissions[i]</p> <br/>
                 }
+                        </div>
+                    </div>
+                </div>    
+
+
+
+              
             </td>
         </tr>
     }

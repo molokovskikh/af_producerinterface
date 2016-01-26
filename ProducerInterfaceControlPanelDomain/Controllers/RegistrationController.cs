@@ -22,7 +22,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             if (IsAuthenticated(login, password))
             {
-                var X = cntx_.ProducerUser.Where(xxx => xxx.Login == login).First();
+                var X = cntx_.ProducerUser.Where(xxx => xxx.Login == login).FirstOrDefault();
 
                 if(X == null)
                 {

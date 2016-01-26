@@ -34,7 +34,11 @@ namespace ProducerInterfaceCommon.Heap
                 message.Body = body;
                 message.BodyEncoding = System.Text.Encoding.UTF8;
 
-                message.IsBodyHtml = HtmlBody;
+                if (HtmlBody)
+                {
+                    message.IsBodyHtml = HtmlBody;
+                }
+              
                 if (!String.IsNullOrEmpty(path))
                 {
                     var a = new Attachment(path);
@@ -109,7 +113,7 @@ namespace ProducerInterfaceCommon.Heap
             //     Промо Акция { PromotionName}
             //     изменена { UserName}. Посмотреть статус и изменить промо - акцию { Http}
 
-            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'> ссылке </a>" })}\r\n\r\n{mailForm.Footer}";
+            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
             EmailSender.SendEmail(User_.Email, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
             var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
@@ -134,7 +138,7 @@ namespace ProducerInterfaceCommon.Heap
             var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
             var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 
-            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = SendEmailOnCreateUserPromotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'> ссылке </a>" })}\r\n\r\n{mailForm.Footer}";
+            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = SendEmailOnCreateUserPromotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
             EmailSender.SendEmail(SendEmailOnCreateUserPromotion.Email, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
             var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
@@ -159,7 +163,7 @@ namespace ProducerInterfaceCommon.Heap
             if (Promotion.Status) { StatusPromotion = "Подтверждена"; }
 
 
-            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'> ссылке </a>" })}\r\n\r\n{mailForm.Footer}";
+            var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
             EmailSender.SendEmail(SendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
             var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";

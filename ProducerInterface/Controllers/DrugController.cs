@@ -34,12 +34,12 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Index()
 		{
-			var asdf = cntx_.DrugDescriptionRemark.Single(x => x.Id == 3);
-			asdf.Description = "Правка11NEW";
+			//var asdf = cntx_.DrugDescriptionRemark.Single(x => x.Id == 3);
+			//asdf.Description = "Правка11NEW";
 			//var asdf = new DrugDescriptionRemark() { Description = "Правка 6" };
 			//cntx_.DrugDescriptionRemark.Add(asdf);
 			////cntx_.DrugDescriptionRemark.Remove(asdf);
-			cntx_.SaveChanges(CurrentUser);
+			//cntx_.SaveChanges(CurrentUser);
 			//var asdf = cntx_.DrugDescriptionRemark.Single(x => x.Id == 2);
 			//asdf.Description = "Правка6";
 			//var asdf = new DrugDescriptionRemark() { Description = "Правка 5" };
