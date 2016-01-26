@@ -17,13 +17,14 @@ namespace ProducerInterfaceCommon.LoggerModels
         public int ChangeSetId { get; set; }
         public System.DateTime Timestamp { get; set; }
         public string Ip { get; set; }
+        public string Description { get; set; }
         public long UserId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public long ProducerId { get; set; }
         public string ProducerName { get; set; }
-        public Nullable<int> ChangeObjectId { get; set; }
-        public Nullable<int> Action { get; set; }
+        public int ChangeObjectId { get; set; }
+        public int Action { get; set; }
         public string TypeName { get; set; }
     }
 }

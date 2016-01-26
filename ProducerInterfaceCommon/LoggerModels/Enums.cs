@@ -13,13 +13,13 @@ namespace ProducerInterfaceCommon.LoggerModels
 
     public enum EntityCommand
     {
-        [Display(Name ="Добавлена запись")]
+        [Display(Name ="Добавлено")]
         Added = 4,
 
-        [Display(Name = "Удалена запись")]
+        [Display(Name = "Удалено")]
         Deleted = 8,
 
-        [Display(Name = "Изменена запись")]
+        [Display(Name = "Изменено")]
         Modified = 16
     }
 

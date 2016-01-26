@@ -43,11 +43,10 @@ else
     <tr>
         <th>Id</th>
         <th>Дата изменения</th>
-        <th>ФИО пользователя</th>
-        <th>eMail пользователя</th>
-        <th>Наименование производителя</th>
-        <th>Тип действия</th>
-        <th>Наименование модели (class C# (имя Entity))</th>
+        <th>Пользователь</th>
+        <th>Производитель</th>
+        <th>Действие</th>
+        <th>Объект</th>
         <th>Подробнее</th>
     </tr>
 
@@ -57,12 +56,11 @@ else
 {
     <tr>
         <td>@LogChangeItem.ChangeSetId</td>
-        <td>@LogChangeItem.Timestamp.ToString("yyyy.MM.dd")</td>
-        <td>@LogChangeItem.UserName</td>
-        <td>@LogChangeItem.Email</td>
+        <td>@LogChangeItem.Timestamp</td>
+        <td>@LogChangeItem.UserName (@LogChangeItem.Email)</td>
         <td>@LogChangeItem.ProducerName</td>
         <td>@(LogChangeItem.Action == null ? "" : LogChangeItem.EntityCommandEnum.GetDescription())</td>
-        <td>@LogChangeItem.TypeName</td>
+        <td>@LogChangeItem.TypeDisplayName</td>
         <td>    
         <a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a>        
         </td>

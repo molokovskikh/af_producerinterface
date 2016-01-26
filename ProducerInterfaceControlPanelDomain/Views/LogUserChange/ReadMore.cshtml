@@ -10,15 +10,15 @@
 
 <table class="table-bordered table-striped" id="Table-LogUserChange">
   <tr>
-      <th>Название свойства</th>
+      <th>Свойство</th>
       <th>Старое значение</th>
-      <th>Новое значени</th>    
+      <th>Новое значение</th>    
   </tr>
 
     @foreach (var ModelItem in Model)
     {
         <tr>
-            <td>@ModelItem.PropertyName</td>
+            <td>@ModelItem.PropertyDisplayName</td>
             <td>@ModelItem.ValueOld</td>
             <td>@ModelItem.ValueNew</td>
         </tr>

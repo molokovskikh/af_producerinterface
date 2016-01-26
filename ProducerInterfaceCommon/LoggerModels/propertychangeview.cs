@@ -19,5 +19,6 @@ namespace ProducerInterfaceCommon.LoggerModels
         public string PropertyName { get; set; }
         public string ValueOld { get; set; }
         public string ValueNew { get; set; }
+        public string TypeName { get; set; }
     }
 }

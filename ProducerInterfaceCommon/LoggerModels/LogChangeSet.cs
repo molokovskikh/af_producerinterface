@@ -24,6 +24,7 @@ namespace ProducerInterfaceCommon.LoggerModels
         public System.DateTime Timestamp { get; set; }
         public long UserId { get; set; }
         public string Ip { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LogObjectChange> LogObjectChange { get; set; }

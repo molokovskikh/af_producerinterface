@@ -25,9 +25,9 @@ namespace ProducerInterfaceCommon.LoggerModels
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<LogChangeSet> LogChangeSet { get; set; }
         public virtual DbSet<LogObjectChange> LogObjectChange { get; set; }
         public virtual DbSet<LogPropertyChange> LogPropertyChange { get; set; }
+        public virtual DbSet<LogChangeSet> LogChangeSet { get; set; }
         public virtual DbSet<logchangeview> logchangeview { get; set; }
         public virtual DbSet<propertychangeview> propertychangeview { get; set; }
     }

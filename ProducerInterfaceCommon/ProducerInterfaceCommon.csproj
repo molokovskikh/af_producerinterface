@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContextModels\ContextEF.cs" />
+    <Compile Include="Heap\AttributeHelper.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
     <Compile Include="ContextModels\LogForNet.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
