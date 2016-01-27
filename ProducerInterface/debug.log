@@ -522,3 +522,30 @@ MySql.Data.MySqlClient.MySqlException (0x80004005): Authentication to host 'bd.s
 26.01.2016 21:23:32.083 [8] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
 26.01.2016 21:23:39.768 [8] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
 26.01.2016 21:23:55.533 [12] ERROR MySqlAdoNetAppender - Произошла ошибка при попытке создать контроллер типа "ProducerInterface.Controllers.ReportController". Убедитесь в том, что контроллер имеет общедоступный конструктор без параметров.
+27.01.2016 16:31:19.801 [14] ERROR MySqlAdoNetAppender - Текущий запрос для действия "Index" на контроллере типа "TestPemrissionControllerController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult Index() на типе ProducerInterface.Controllers.TestPemrissionControllerController
+System.Web.Mvc.ActionResult Index() на типе ProducerInterface.Controllers.MasterBaseController
+27.01.2016 16:31:53.590 [14] ERROR MySqlAdoNetAppender - Текущий запрос для действия "Index" на контроллере типа "TestPemrissionControllerController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult Index() на типе ProducerInterface.Controllers.TestPemrissionControllerController
+System.Web.Mvc.ActionResult Index() на типе ProducerInterface.Controllers.MasterBaseController
+27.01.2016 16:33:08.637 [14] ERROR MySqlAdoNetAppender - Текущий запрос для действия "Index" на контроллере типа "TestPemrissionControllerController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult Index() на типе ProducerInterface.Controllers.TestPemrissionControllerController
+System.Web.Mvc.ActionResult Index() на типе ProducerInterface.Controllers.MasterBaseController
+27.01.2016 16:46:21.040 [17] ERROR MySqlAdoNetAppender - Не удалось найти представление "Index" или его образец, либо ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/testPemrissionController/Index.aspx
+~/Views/testPemrissionController/Index.ascx
+~/Views/Shared/Index.aspx
+~/Views/Shared/Index.ascx
+~/Views/testPemrissionController/Index.cshtml
+~/Views/testPemrissionController/Index.vbhtml
+~/Views/Shared/Index.cshtml
+~/Views/Shared/Index.vbhtml
+27.01.2016 16:46:54.594 [14] ERROR MySqlAdoNetAppender - Не удалось найти представление "Index" или его образец, либо ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/TestPemrissionController/Index.aspx
+~/Views/TestPemrissionController/Index.ascx
+~/Views/Shared/Index.aspx
+~/Views/Shared/Index.ascx
+~/Views/TestPemrissionController/Index.cshtml
+~/Views/TestPemrissionController/Index.vbhtml
+~/Views/Shared/Index.cshtml
+~/Views/Shared/Index.vbhtml

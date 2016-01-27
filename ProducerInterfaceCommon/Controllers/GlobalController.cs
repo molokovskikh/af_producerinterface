@@ -33,14 +33,14 @@ namespace ProducerInterfaceCommon.Controllers
         protected string controllerName;
         protected string actionName;
         protected string controllerAcctributes;
-      
-        private string permissionName { get { return (controllerName + "_" + actionName).ToLower(); } }
+
+        protected string permissionName { get { return (controllerName + "_" + actionName).ToLower(); } }
 
         public string GetUserCookiesName()
         {
             var currentUser = "";
 
-            string cookiesName = GetWebConfigParameters("");
+            string cookiesName = GetWebConfigParameters("CookiesName");
 
             try
             {

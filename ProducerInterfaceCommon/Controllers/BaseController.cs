@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Linq;
 using ProducerInterfaceCommon.ContextModels;
-
+using System.Collections.Generic;
 
 namespace ProducerInterfaceCommon.Controllers
 {
@@ -18,69 +18,103 @@ namespace ProducerInterfaceCommon.Controllers
                 ViewBag.CurrentUser = CurrentUser;
             }
 
-            CheckGlobalPermission();
-            CheckUserPermission();
+            CheckGlobalPermission(); // проверка наличия пермишена для данного экшена в БД
+            
+            CheckUserPermission(filterContext); // проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)
+                        
         }
 
         #region /*проверка наличия пермишена в БД или в игнорируемых*/
 
         public void CheckGlobalPermission()
-        {
-            if (TypeLoginUser == TypeUsers.ProducerUser)
-            {
-                // пермишены производителей
+        {          
+                //protected string controllerName; - определены ранее
+                //protected string actionName; - определены ранее
 
-                // PermissionType = 0
+                bool PermissionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.Enabled == true && xxx.TypePermission == SbyteTypeUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
+            
+                
+                if (!PermissionExsist)
+                {
+                    // если пермишена в БД нет, то добавим данный пермишен к группе администраторов
 
-                throw new Exception();
+                    // проверим наличие группы администраторы
 
+                    var AdminGroupName = GetWebConfigParameters("AdminGroupName");
 
+                    bool GroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser);
 
+                    var GroupAddPermission = new ControlPanelGroup();
 
-            }
-            if (TypeLoginUser == TypeUsers.ControlPanelUser)
-            {
-                // пермишены панели управления
+                    if (!GroupExsist)
+                    {
+                        GroupAddPermission = new ControlPanelGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+                        cntx_.ControlPanelGroup.Add(GroupAddPermission);                      
+                    }
+                    else
+                    {
+                        GroupAddPermission = cntx_.ControlPanelGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
+                    }
 
-                // PermissionType = 1
+                    var NewPermission = new ControlPanelPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled=true, Description ="новый пермишен" };
+                    cntx_.ControlPanelPermission.Add(NewPermission);
+                    cntx_.SaveChanges();
+                    //сохраняем группу и новый пермишен
 
-
-                throw new Exception();
-
-
-            }
-
+                    GroupAddPermission.ControlPanelPermission.Add(NewPermission);
+                    // добавляем пермишен к группе
+                    cntx_.SaveChanges();
+                }     
+                    
+                // пермишен есть в БД, добавлять ничего не требуется                  
         }
 
         #endregion
 
         #region /*Проверка прав пользователя*/
 
-        public void CheckUserPermission()
+        public void CheckUserPermission(ActionExecutingContext filterContext)
         {
-            if (TypeLoginUser == TypeUsers.ProducerUser)
+            var PermissionExsist = false;
+            // проверяем список игнорируемых маршрутов
+
+            PermissionExsist = IgnoreRoutePermission(permissionName);
+
+            if (!PermissionExsist) 
             {
-                // пермишены производителей
+                // проверяем в БД доступ для текущего пользователя
+                var ListPermission = cntx_.ControlPanelPermission.ToList().Where(xx => xx.ControlPanelGroup.Any(xxx => xxx.ProducerUser.Any(x=>x.Id == CurrentUser.Id)))
+                    .ToList()
+                    .Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.ControllerAction })
+                    .ToList();
 
-                // PermissionType = 0
+                PermissionExsist = ListPermission.Any(xxx => xxx.Text == (permissionName + " " + controllerAcctributes));
 
-                throw new Exception();
-
-
-
-
+                if (!PermissionExsist) // если нет доступа, редиректим на стартовую страницу
+                {
+                    ErrorMessage("У вас нет прав доступа к запрашиваемой странице. Или для изменения данных");
+                    filterContext.Result = RedirectToAction("Index", "Home");
+                }
             }
-            if (TypeLoginUser == TypeUsers.ControlPanelUser)
+        }
+
+        private bool IgnoreRoutePermission(string ThisRoute)
+        {
+            try
             {
-                // пермишены панели управления
-
-                // PermissionType = 1
-
-
-                throw new Exception();
-
-
+                return IgnoreRouteForPermission().Any(xxx => xxx == ThisRoute);
             }
+            catch { return false; }
+        }
+
+        public List<string> IgnoreRouteForPermission()
+        {
+            // список игнорируемый маршрутов  (хранится в веб конфиге, через запятую в формате Controller_Action)
+            try
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["IgnoreAction"].ToString().ToLower().Split(new char[] { ',' }).ToList();
+            }
+            catch { return null; }
         }
 
         #endregion

@@ -16,12 +16,6 @@ namespace ProducerInterface.Controllers
 
         }
 
-        // GET: MasterBase
-        public ActionResult Index()
-        {
-            return View();
-        }
-
 
 
 

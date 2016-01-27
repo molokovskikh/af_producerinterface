@@ -330,6 +330,7 @@
     <Content Include="Views\Drug\EditForms.cshtml" />
     <Content Include="Views\Drug\DisplayForms.cshtml" />
     <Content Include="Views\Drug\EditMnn.cshtml" />
+    <Content Include="Views\TestPemrissionController\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -279,6 +279,7 @@
     <Content Include="Views\LogUserChange\Index.cshtml" />
     <Content Include="Views\LogUserChange\ReadMore.cshtml" />
     <Content Include="Views\Shared\PagerPartial.cshtml" />
+    <Content Include="Views\TestPemrissionController\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

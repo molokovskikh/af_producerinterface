@@ -25,8 +25,6 @@ namespace ProducerInterfaceCommon.ContextModels
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
-        public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<mailform> mailform { get; set; }
@@ -57,5 +55,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<usernames> usernames { get; set; }
         public DbSet<LogForNet> LogForNet { get; set; }
         public DbSet<ProducerUser> ProducerUser { get; set; }
+        public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
     }
 }
