@@ -8,7 +8,7 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class LogUserChangeController : BaseController
+    public class LogUserChangeController : MasterBaseController
     {
 
         public ProducerInterfaceCommon.LoggerModels.Logger_Entities cntx__ = new Logger_Entities();

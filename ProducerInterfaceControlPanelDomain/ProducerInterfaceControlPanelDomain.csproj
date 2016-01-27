@@ -180,6 +180,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\MasterBaseController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
+    <Compile Include="Controllers\PermissionUserController.cs" />
     <Compile Include="Controllers\ProducerUserPermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
@@ -280,6 +281,13 @@
     <Content Include="Views\LogUserChange\ReadMore.cshtml" />
     <Content Include="Views\Shared\PagerPartial.cshtml" />
     <Content Include="Views\TestPemrissionController\Index.cshtml" />
+    <Content Include="Views\PermissionUser\EditorTemplates\LongListPermission.cshtml" />
+    <Content Include="Views\PermissionUser\EditorTemplates\LongListUser.cshtml" />
+    <Content Include="Views\PermissionUser\ChangeGroupParameters.cshtml" />
+    <Content Include="Views\PermissionUser\CreateGroup.cshtml" />
+    <Content Include="Views\PermissionUser\Group.cshtml" />
+    <Content Include="Views\PermissionUser\Index.cshtml" />
+    <Content Include="Views\PermissionUser\Users.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

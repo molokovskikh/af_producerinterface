@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace ProducerInterface.Controllers
 {
-	public class DrugController : pruducercontroller.BaseController
+	public class DrugController : MasterBaseController
 	{
 		//protected reportData cntx;
 		protected NamesHelper h;

@@ -7,26 +7,23 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
-    public class UserPermissionController : pruducercontroller.BaseController
+    public class UserPermissionController : MasterBaseController
     {
         // GET: UserPermission
         public ActionResult Index()
-        {
-            var User = GetCurrentUser();
-            var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == User.ProducerId).ToList();
-
+        {         
+            var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == CurrentUser.ProducerId && xxx.TypeUser == SbyteTypeUser).ToList();
             return View(ListUser);
         }
 
         [HttpGet]
         public ActionResult Edit(long Id)
-        {
-            var User = GetCurrentUser();
+        {          
             var EditUser = cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First();
 
             // проверяем верные ли Id продюсера
 
-            if (User.ProducerId != EditUser.ProducerId)
+            if (CurrentUser.ProducerId != EditUser.ProducerId)
             {
                 ErrorMessage("У вас нет прав редактирования доступов для данного пользователя");
                 return RedirectToAction("Index");
@@ -39,11 +36,10 @@ namespace ProducerInterface.Controllers
         [HttpPost]
         public ActionResult Edit(ProducerUser ChangeUser)
         {
-
-            var User = GetCurrentUser();
+                     
             var EditUser = cntx_.ProducerUser.Where(xxx => xxx.Id == ChangeUser.Id).First();
 
-            if (User.ProducerId != EditUser.ProducerId)
+            if (CurrentUser.ProducerId != EditUser.ProducerId)
             {
                 ErrorMessage("У вас нет прав редактирования доступов для данного пользователя");
                 return RedirectToAction("Index");

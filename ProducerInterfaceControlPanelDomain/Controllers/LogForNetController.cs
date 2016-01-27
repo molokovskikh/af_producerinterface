@@ -8,7 +8,7 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class LogForNetController : BaseController
+    public class LogForNetController : MasterBaseController
     {
         // GET: LogForNet
         public string Log { get; set; }

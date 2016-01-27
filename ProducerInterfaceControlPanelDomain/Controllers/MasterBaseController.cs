@@ -11,15 +11,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             TypeLoginUser = ProducerInterfaceCommon.ContextModels.TypeUsers.ControlPanelUser;          
-            base.OnActionExecuting(filterContext);
-
-            
-
-
+            base.OnActionExecuting(filterContext);    
         }
-
-
-
+        
+        public string DebugShedulerName()
+        {
+            string Name = "ServerScheduler";
+#if DEBUG
+            Name = "TestScheduler";
+#endif
+            return Name;
+        }
 
 
 

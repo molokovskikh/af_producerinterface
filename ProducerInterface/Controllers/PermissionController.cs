@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ProducerInterface.Controllers
 {
-    public class PermissionController : pruducercontroller.BaseController
+    public class PermissionController : MasterBaseController
     {
         // GET: Permission
 
@@ -19,7 +19,7 @@ namespace ProducerInterface.Controllers
 
         public ActionResult Index()
         {
-            var ListUser = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.ProducerId == AutorizedUser.ProducerId).ToList();
+            var ListUser = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.ProducerId == CurrentUser.ProducerId && xxx.TypeUser == (SByte) SbyteTypeUser).ToList();
 
             if (ListUser.Count() > 0)
             {

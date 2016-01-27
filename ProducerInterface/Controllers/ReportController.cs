@@ -19,7 +19,7 @@ using System.IO;
 
 namespace ProducerInterface.Controllers
 {
-    public class ReportController : pruducercontroller.BaseController
+    public class ReportController : MasterBaseController
     {
         //
         // GET: /Report/

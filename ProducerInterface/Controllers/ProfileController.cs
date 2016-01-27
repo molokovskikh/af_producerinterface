@@ -12,7 +12,7 @@ using System.Collections.Specialized;
 
 namespace ProducerInterface.Controllers
 {
-    public class ProfileController : pruducercontroller.BaseController
+    public class ProfileController : MasterBaseController
     {
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {

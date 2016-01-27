@@ -12,6 +12,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 {
     public class BaseController : Controller
     {
+      
+        /*
         // GET: Base
         public ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
 
@@ -287,6 +289,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return Name;
         }
 
+    */
      
     }
 

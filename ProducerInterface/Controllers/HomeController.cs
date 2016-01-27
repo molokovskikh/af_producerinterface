@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ProducerInterface.Controllers
 {
-    public class HomeController : pruducercontroller.BaseController
+    public class HomeController : MasterBaseController
     {
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

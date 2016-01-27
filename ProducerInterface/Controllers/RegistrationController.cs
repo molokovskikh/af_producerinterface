@@ -10,7 +10,7 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
-    public class RegistrationController : pruducercontroller.BaseController
+    public class RegistrationController : MasterBaseController
     {
         private ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
 
@@ -196,7 +196,7 @@ namespace ProducerInterface.Controllers
 
             SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Email);
 
-						ProducerInterfaceCommon.Heap.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress);
+			ProducerInterfaceCommon.Heap.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress);
 
             return RedirectToAction("Index", "Profile");
         }
@@ -247,7 +247,7 @@ namespace ProducerInterface.Controllers
          
                 //CurrentUser = ThisUser;
                 //ViewBag.CurrentUser = ThisUser as produceruser;
-                AutorizedUser = ThisUser as ProducerUser;
+                CurrentUser = ThisUser as ProducerUser;
                 return Autentificate(this, shouldRemember: true);
             }
                  
@@ -295,7 +295,7 @@ namespace ProducerInterface.Controllers
 
                  //CurrentUser = ThisUser;
                  //ViewBag.CurrentUser = ThisUser;
-                 AutorizedUser = ThisUser;
+                 CurrentUser = ThisUser;
                 return Autentificate(this, shouldRemember: true);
             }
 
@@ -312,7 +312,7 @@ namespace ProducerInterface.Controllers
 
                     //CurrentUser = ThisUser;
                     //ViewBag.CurrentUser = ThisUser;
-                    AutorizedUser = ThisUser;
+                    CurrentUser = ThisUser;
                     return Autentificate(this, shouldRemember: true);
                 }
                 else
@@ -322,7 +322,7 @@ namespace ProducerInterface.Controllers
                     ErrorMessage("Аккаунт заблокирован");
                     //CurrentUser = null;
                     //ViewBag.CurrentUser = null;
-                    AutorizedUser = null;
+                    CurrentUser = null;
                     ErrorMessage("Аккаунт заблокирован");
                     return RedirectToAction("Index", "Home");
                 }            
@@ -337,7 +337,7 @@ namespace ProducerInterface.Controllers
 
         public ActionResult Autentificate(Controller currentController, bool shouldRemember, string userData = "")
         {
-            string autorizeddd = Autentificates(this, AutorizedUser.Email, shouldRemember, userData);
+            string autorizeddd = Autentificates(this, CurrentUser.Email, shouldRemember, userData);
             string controllerName = (autorizeddd.Split(new Char[] { '/' }))[0];
             string actionName = (autorizeddd.Split(new Char[] { '/' }))[1];
             return RedirectToAction(actionName, controllerName);
@@ -345,16 +345,16 @@ namespace ProducerInterface.Controllers
 
         public string Autentificates(Controller CRT, string username, bool shouldRemember, string userData = "")
         {
-            string CoockieName = GetCoockieName;
+            string CoockieName = GetWebConfigParameters("CookiesName");
 
-            var redirectAfterAuthentication = GetredirectAfterAuthentication;
+            var redirectAfterAuthentication = "Home/Index";
             string[] url = redirectAfterAuthentication.Split('/');
             var controller = url[0];
             var action = url.Length > 1 ? url[1] : "Index";
 
             var ticket = new FormsAuthenticationTicket(
                 1,
-                this.AutorizedUser.Email,
+                this.CurrentUser.Email,
                 SystemTime.Now(),
                 SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
                 shouldRemember,
@@ -368,10 +368,10 @@ namespace ProducerInterface.Controllers
             {
                 cookie.Expires = SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
             }
-            FormsAuthentication.SetAuthCookie(AutorizedUser.Name, false);
+            FormsAuthentication.SetAuthCookie(CurrentUser.Name, false);
             Response.Cookies.Set(cookie);
 
-            return GetredirectAfterAuthentication;
+            return "Profile/index";
         }
 
         public ActionResult LogOut()

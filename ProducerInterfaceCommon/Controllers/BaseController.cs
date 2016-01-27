@@ -15,6 +15,7 @@ namespace ProducerInterfaceCommon.Controllers
 
             if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
             {
+                CurrentUser.IP = Request.UserHostAddress.ToString();
                 ViewBag.CurrentUser = CurrentUser;
             }
 
@@ -27,45 +28,48 @@ namespace ProducerInterfaceCommon.Controllers
         #region /*проверка наличия пермишена в БД или в игнорируемых*/
 
         public void CheckGlobalPermission()
-        {          
-                //protected string controllerName; - определены ранее
-                //protected string actionName; - определены ранее
+        {
+            //protected string controllerName; - определены ранее
+            //protected string actionName; - определены ранее
 
-                bool PermissionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.Enabled == true && xxx.TypePermission == SbyteTypeUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
-            
-                
-                if (!PermissionExsist)
+            if (IgnoreRoutePermission(permissionName))
+            {
+                return; // найден в игнорируемых
+            }
+
+            bool PermissionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.Enabled == true && xxx.TypePermission == SbyteTypeUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
+
+            if (!PermissionExsist)
+            {
+                // если пермишена в БД нет, то добавим данный пермишен к группе администраторов
+
+                // проверим наличие группы администраторы
+
+                var AdminGroupName = GetWebConfigParameters("AdminGroupName");
+
+                bool GroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser);
+
+                var GroupAddPermission = new ControlPanelGroup();
+
+                if (!GroupExsist)
                 {
-                    // если пермишена в БД нет, то добавим данный пермишен к группе администраторов
+                    GroupAddPermission = new ControlPanelGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+                    cntx_.ControlPanelGroup.Add(GroupAddPermission);
+                }
+                else
+                {
+                    GroupAddPermission = cntx_.ControlPanelGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
+                }
 
-                    // проверим наличие группы администраторы
+                var NewPermission = new ControlPanelPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
+                cntx_.ControlPanelPermission.Add(NewPermission);
+                cntx_.SaveChanges();
+                //сохраняем группу и новый пермишен
 
-                    var AdminGroupName = GetWebConfigParameters("AdminGroupName");
-
-                    bool GroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser);
-
-                    var GroupAddPermission = new ControlPanelGroup();
-
-                    if (!GroupExsist)
-                    {
-                        GroupAddPermission = new ControlPanelGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-                        cntx_.ControlPanelGroup.Add(GroupAddPermission);                      
-                    }
-                    else
-                    {
-                        GroupAddPermission = cntx_.ControlPanelGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
-                    }
-
-                    var NewPermission = new ControlPanelPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled=true, Description ="новый пермишен" };
-                    cntx_.ControlPanelPermission.Add(NewPermission);
-                    cntx_.SaveChanges();
-                    //сохраняем группу и новый пермишен
-
-                    GroupAddPermission.ControlPanelPermission.Add(NewPermission);
-                    // добавляем пермишен к группе
-                    cntx_.SaveChanges();
-                }     
-                    
+                GroupAddPermission.ControlPanelPermission.Add(NewPermission);
+                // добавляем пермишен к группе
+                cntx_.SaveChanges();
+            }                    
                 // пермишен есть в БД, добавлять ничего не требуется                  
         }
 
@@ -80,20 +84,45 @@ namespace ProducerInterfaceCommon.Controllers
 
             PermissionExsist = IgnoreRoutePermission(permissionName);
 
-            if (!PermissionExsist) 
+            if (CurrentUser == null)
             {
-                // проверяем в БД доступ для текущего пользователя
-                var ListPermission = cntx_.ControlPanelPermission.ToList().Where(xx => xx.ControlPanelGroup.Any(xxx => xxx.ProducerUser.Any(x=>x.Id == CurrentUser.Id)))
-                    .ToList()
-                    .Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.ControllerAction })
-                    .ToList();
-
-                PermissionExsist = ListPermission.Any(xxx => xxx.Text == (permissionName + " " + controllerAcctributes));
-
-                if (!PermissionExsist) // если нет доступа, редиректим на стартовую страницу
+                if (TypeLoginUser == TypeUsers.ProducerUser)
                 {
-                    ErrorMessage("У вас нет прав доступа к запрашиваемой странице. Или для изменения данных");
-                    filterContext.Result = RedirectToAction("Index", "Home");
+                    if (!PermissionExsist)
+                    {
+                        filterContext.Result = RedirectToAction("Index", "Home");
+                    }
+                }
+                if (TypeLoginUser == TypeUsers.ControlPanelUser)
+                {
+                    if (!PermissionExsist)
+                    {
+                        filterContext.Result = RedirectToAction("Index", "Registration");
+                    }
+                }
+            }
+            else
+            {
+                if (!PermissionExsist)
+                {
+                    // проверяем в БД доступ для текущего пользователя
+                    var ListPermission = cntx_.ControlPanelPermission.ToList().Where(xx => xx.ControlPanelGroup.Any(xxx => xxx.ProducerUser.Any(x => x.Id == CurrentUser.Id)))
+                        .ToList()
+                        .Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.ControllerAction })
+                        .ToList();
+
+                    PermissionExsist = ListPermission.Any(xxx => xxx.Text == (permissionName + " " + controllerAcctributes));
+
+                    if (!PermissionExsist) // если нет доступа, редиректим на стартовую страницу
+                    {
+                        ErrorMessage("У вас нет прав доступа к запрашиваемой странице. Или для изменения данных");
+                        filterContext.Result = RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    //   ErrorMessage("У вас нет прав доступа к запрашиваемой странице. Или для изменения данных");
+                    //   filterContext.Result = RedirectToAction("Index", "Registration");
                 }
             }
         }
@@ -112,7 +141,7 @@ namespace ProducerInterfaceCommon.Controllers
             // список игнорируемый маршрутов  (хранится в веб конфиге, через запятую в формате Controller_Action)
             try
             {
-                return System.Configuration.ConfigurationManager.AppSettings["IgnoreAction"].ToString().ToLower().Split(new char[] { ',' }).ToList();
+                return GetWebConfigParameters("IgnoreRoute").ToString().ToLower().Split(new char[] { ',' }).ToList();
             }
             catch { return null; }
         }

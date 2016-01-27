@@ -5,3 +5,42 @@
 27.01.2016 16:21:55.640 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при подготовке определения команды. Дополнительные сведения приведены во внутреннем исключении.
 27.01.2016 16:23:15.448 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при подготовке определения команды. Дополнительные сведения приведены во внутреннем исключении.
 27.01.2016 16:26:30.455 [8] ERROR MySqlAdoNetAppender - Не удалось создать константу с типом "ProducerInterfaceCommon.ContextModels.ProducerUser". В этом контексте поддерживаются только типы-примитивы и типы перечисления.
+27.01.2016 17:07:03.341 [41] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+27.01.2016 18:02:45.957 [6] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+27.01.2016 18:14:59.633 [8] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 18:15:06.741 [8] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 18:15:25.433 [7] ERROR MySqlAdoNetAppender - Не удалось найти представление "Index" или его образец, либо ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/PermissionUser/Index.aspx
+~/Views/PermissionUser/Index.ascx
+~/Views/Shared/Index.aspx
+~/Views/Shared/Index.ascx
+~/Views/PermissionUser/Index.cshtml
+~/Views/PermissionUser/Index.vbhtml
+~/Views/Shared/Index.cshtml
+~/Views/Shared/Index.vbhtml
+27.01.2016 18:15:48.693 [7] ERROR MySqlAdoNetAppender - Не удалось найти представление "Index" или его образец, либо ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/PermissionUser/Index.aspx
+~/Views/PermissionUser/Index.ascx
+~/Views/Shared/Index.aspx
+~/Views/Shared/Index.ascx
+~/Views/PermissionUser/Index.cshtml
+~/Views/PermissionUser/Index.vbhtml
+~/Views/Shared/Index.cshtml
+~/Views/Shared/Index.vbhtml
+27.01.2016 18:16:37.699 [7] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 18:17:50.667 [7] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 19:26:51.818 [50] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(38): error CS1061: 'ListGroupView' does not contain a definition for 'User' and no extension method 'User' accepting a first argument of type 'ListGroupView' could be found (are you missing a using directive or an assembly reference?)
+27.01.2016 19:26:57.441 [50] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(38): error CS1061: 'ListGroupView' does not contain a definition for 'User' and no extension method 'User' accepting a first argument of type 'ListGroupView' could be found (are you missing a using directive or an assembly reference?)
+27.01.2016 19:46:58.467 [45] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(38): error CS1977: Cannot use a lambda expression as an argument to a dynamically dispatched operation without first casting it to a delegate or expression tree type.
+27.01.2016 19:48:23.478 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:49:58.713 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:50:27.781 [24] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:50:47.114 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:51:06.143 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:52:02.921 [45] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(6): error CS1646: Keyword, identifier, or string expected after verbatim specifier: @
+27.01.2016 19:52:13.497 [28] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(41): error CS1977: Cannot use a lambda expression as an argument to a dynamically dispatched operation without first casting it to a delegate or expression tree type.
