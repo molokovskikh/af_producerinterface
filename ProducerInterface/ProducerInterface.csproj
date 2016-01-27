@@ -176,6 +176,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DrugController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MasterBaseController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
@@ -336,6 +337,7 @@
     <Folder Include="Views\Autorization\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Configuration\" />
+    <Folder Include="Views\MasterBase\" />
     <Folder Include="Views\OldProfile\" />
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,6 @@ ProducerInterfaceCommon.ContextModels.SortingPagingInfo info = ViewBag.Info;
 
 <ul class="pagination">
      
-
     @for(var i=0;i<info.PageCount;i++)
 {
 if(i==info.CurrentPageIndex)
@@ -22,7 +21,8 @@ else
     if(I3 > info.CurrentPageIndex && I2 < info.CurrentPageIndex)
     {
         <li>
-            <a href="~@ViewBag.InfoUrl/@i" data-pageindex="@i">@(i + 1)</a>
+          
+            <a href="@Url.Action("Index", new { id = i })">@(i + 1)</a>
         </li>
     }
 
@@ -30,7 +30,7 @@ else
        if(I2 == info.CurrentPageIndex)
     {
 <li>
-    <a href="@ViewBag.InfoUrl/@i" data-pageindex="@i">Следующая</a>
+    <a href="@Url.Action("Index", new { id = i })">Следующая</a>
 </li>
     }
    
@@ -38,7 +38,7 @@ else
       if(I3 == info.CurrentPageIndex)
     {
 <li>
-    <a href="~@ViewBag.InfoUrl/@i" data-pageindex="@i">Предыдущая</a>
+    <a href="@Url.Action("Index", new { id = i })">Предыдущая</a>
 </li>
     }
 
