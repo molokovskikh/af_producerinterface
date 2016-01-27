@@ -52,11 +52,11 @@ namespace ProducerInterface.Controllers
 
 				private IScheduler GetScheduler()
 				{
-//#if DEBUG
-//			return GetDebagSheduler();
-//#else
+#if DEBUG
+			return GetDebagSheduler();
+#else
 						return GetRemoteSheduler();
-//#endif
+#endif
 				}
 
 

@@ -338,7 +338,6 @@ namespace ProducerInterface.Controllers
         public ActionResult Autentificate(Controller currentController, bool shouldRemember, string userData = "")
         {
             string autorizeddd = Autentificates(this, AutorizedUser.Email, shouldRemember, userData);
-
             string controllerName = (autorizeddd.Split(new Char[] { '/' }))[0];
             string actionName = (autorizeddd.Split(new Char[] { '/' }))[1];
             return RedirectToAction(actionName, controllerName);

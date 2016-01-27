@@ -178,6 +178,7 @@
     <Compile Include="Controllers\LogForNetController.cs" />
     <Compile Include="Controllers\LogUserChangeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
+    <Compile Include="Controllers\MasterBaseController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProducerUserPermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -284,6 +285,7 @@
     <Folder Include="Content\Chozen\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\MasterBase\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

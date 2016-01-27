@@ -23,7 +23,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             Info.CurrentPageIndex = Id;
             Info.PageCount = ((MaxLogCount / pagerCount) + 1);          
             ViewBag.Info = Info;
-            ViewBag.InfoUrl = @"/LogUserChange/Index";
 
             if (Id > (MaxLogCount / pagerCount))
             {

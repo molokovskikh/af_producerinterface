@@ -29,8 +29,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             Info.CurrentPageIndex = Id;
             Info.PageCount = Max_Vozmozhniy_ID +1;          
             ViewBag.Info = Info;
-            ViewBag.InfoUrl = @"/LogForNet/Index";
-
+           
             var ModelView = new List<ProducerInterfaceCommon.ContextModels.LogForNet>();
 
 
