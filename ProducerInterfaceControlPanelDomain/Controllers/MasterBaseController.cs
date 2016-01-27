@@ -10,10 +10,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
     {
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            TypeLoginUser = ProducerInterfaceCommon.ContextModels.TypeUsers.ControlPanelUser;          
             base.OnActionExecuting(filterContext);
 
-            CurrentUser = GetCurrentUser(ProducerInterfaceCommon.ContextModels.TypeUsers.ControlPanelUser);
-
+            
 
 
         }

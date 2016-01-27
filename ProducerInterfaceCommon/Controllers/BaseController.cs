@@ -11,7 +11,79 @@ namespace ProducerInterfaceCommon.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+            CurrentUser = GetCurrentUser(TypeLoginUser);
+
+            if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
+            {
+                ViewBag.CurrentUser = CurrentUser;
+            }
+
+            CheckGlobalPermission();
+            CheckUserPermission();
         }
+
+        #region /*проверка наличия пермишена в БД или в игнорируемых*/
+
+        public void CheckGlobalPermission()
+        {
+            if (TypeLoginUser == TypeUsers.ProducerUser)
+            {
+                // пермишены производителей
+
+                // PermissionType = 0
+
+                throw new Exception();
+
+
+
+
+            }
+            if (TypeLoginUser == TypeUsers.ControlPanelUser)
+            {
+                // пермишены панели управления
+
+                // PermissionType = 1
+
+
+                throw new Exception();
+
+
+            }
+
+        }
+
+        #endregion
+
+        #region /*Проверка прав пользователя*/
+
+        public void CheckUserPermission()
+        {
+            if (TypeLoginUser == TypeUsers.ProducerUser)
+            {
+                // пермишены производителей
+
+                // PermissionType = 0
+
+                throw new Exception();
+
+
+
+
+            }
+            if (TypeLoginUser == TypeUsers.ControlPanelUser)
+            {
+                // пермишены панели управления
+
+                // PermissionType = 1
+
+
+                throw new Exception();
+
+
+            }
+        }
+
+        #endregion
 
         #region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
 
@@ -58,7 +130,8 @@ namespace ProducerInterfaceCommon.Controllers
 
         #endregion
 
-        #region /*Пользователь авторизовался (добавляем кукисы)*/
+        #region /*Аторизация*/
+        
         protected void AutorizeCurrentUser(ProducerUser thisUser, TypeUsers TypeUser_)
         {
             var UserLoginName = "";
@@ -78,10 +151,6 @@ namespace ProducerInterfaceCommon.Controllers
 
                 RedirectToAction("Index", "Home");
             }
-
-          
-
-            
         }
         #endregion
 

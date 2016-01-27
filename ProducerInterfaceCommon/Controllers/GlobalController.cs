@@ -7,9 +7,20 @@ namespace ProducerInterfaceCommon.Controllers
 {
     public class GlobalController : Controller
     {
-        // глобальные переменные и функции
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            //protected string controllerName;
+            //protected string actionName;
+            //protected string controllerAcctributes;
+            controllerName = this.GetType().Name.Replace("Controller", "").ToLower().ToString();
+            actionName = this.Request.RequestContext.RouteData.GetRequiredString("action").ToLower().ToString();
+            controllerAcctributes = this.Request.HttpMethod.ToString().ToLower();            
+        }
 
+        // глобальные переменные и функции
         // тип текущего пользователя SByte - хранится в ProducerUser таблице, параметр TypeUser
+
         protected ContextModels.TypeUsers TypeLoginUser { get { return (ContextModels.TypeUsers)SbyteTypeUser; } set { SbyteTypeUser = (SByte)value; } }
         protected SByte SbyteTypeUser { get; set; }
 
@@ -19,9 +30,9 @@ namespace ProducerInterfaceCommon.Controllers
         // Context DataBase       
         protected ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
         
-        private string controllerName;
-        private string actionName;
-        private string controllerAcctributes;
+        protected string controllerName;
+        protected string actionName;
+        protected string controllerAcctributes;
       
         private string permissionName { get { return (controllerName + "_" + actionName).ToLower(); } }
 
@@ -54,7 +65,8 @@ namespace ProducerInterfaceCommon.Controllers
 
             return currentUser;
         }
-
+                
+        #region COOKIES
         public void SetUserCookiesName(string UserLoginOrEmail, bool shouldRemember = true, string userData= "")
         {
             var CoockieName = GetWebConfigParameters("CookiesName");
@@ -139,9 +151,9 @@ namespace ProducerInterfaceCommon.Controllers
             return System.Configuration.ConfigurationManager.AppSettings[ParamKey].ToString();
         }
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-        }
+        #endregion
+
+
+     
     }
 }
