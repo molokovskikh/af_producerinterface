@@ -32,10 +32,10 @@ namespace ProducerInterfaceCommon.LoggerModels
 			return String.Join("_", objectStateEntry.EntityKey.EntityKeyValues.Select(x => x.Value));
 		}
 
-		public void LogThis2(IEnumerable<DbEntityEntry> entries)
+		public void Write(IEnumerable<DbEntityEntry> entries, string description)
 		{
 
-			var set = new LogChangeSet() { UserId = _user.Id, Ip = _user.IP, Timestamp = DateTime.Now };
+			var set = new LogChangeSet() { UserId = _user.Id, Ip = _user.IP, Timestamp = DateTime.Now, Description = description };
 			foreach (var entry in entries)
 			{
 				// вытащили имя сущности = имя таблицы
@@ -43,7 +43,9 @@ namespace ProducerInterfaceCommon.LoggerModels
 				if (entityType.BaseType != null && entityType.Namespace == "System.Data.Entity.DynamicProxies")
 					entityType = entityType.BaseType;
 
-				var obj = new LogObjectChange() { Action = (int)entry.State, ObjectReference = entry.State == EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry), TypeName = entityType.FullName };
+				var obj = new LogObjectChange() { Action = (int)entry.State,
+																					ObjectReference = entry.State == EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry),
+																					TypeName = entityType.FullName };
 				set.LogObjectChange.Add(obj);
 
 				IEnumerable<string> propCollection;

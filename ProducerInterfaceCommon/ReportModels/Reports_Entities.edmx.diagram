@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="62c769b4774a4905930f5e444f3c093b" Name="Diagram1">
+        <EntityTypeShape EntityType="ReportModels.enum_values" Width="1.5" PointX="11.125" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportModels.general_reports" Width="1.5" PointX="0.625" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportModels.property_enums" Width="1.5" PointX="9.25" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportModels.report_properties" Width="1.5" PointX="5" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportModels.report_property_values" Width="1.5" PointX="7" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportModels.report_type_properties" Width="1.5" PointX="7.25" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportModels.reports" Width="1.5" PointX="2.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportModels.reporttypes" Width="1.5" PointX="5.25" PointY="7.375" IsExpanded="true" />
+        <AssociationConnector Association="ReportModels.EnumID" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportModels.GeneralReportCode" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportModels.PropertyEnumID" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportModels.FK_RP_PropertyID" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportModels.FK_RPV_ReportPropertyID" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportModels.ReportCode" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportModels.report_type_properties_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportModels.ReportTypeCode" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

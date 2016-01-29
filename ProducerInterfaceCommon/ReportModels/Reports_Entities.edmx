@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ReportModels" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="enum_values">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PropertyEnumID" Type="ubigint" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="DisplayValue" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="general_reports">
+          <Key>
+            <PropertyRef Name="GeneralReportCode" />
+          </Key>
+          <Property Name="GeneralReportCode" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirmCode" Type="uint" />
+          <Property Name="Allow" Type="bool" Nullable="false" />
+          <Property Name="EMailSubject" Type="varchar" MaxLength="255" />
+          <Property Name="ReportFileName" Type="varchar" MaxLength="255" />
+          <Property Name="ReportArchName" Type="varchar" MaxLength="255" />
+          <Property Name="ContactGroupId" Type="uint" />
+          <Property Name="Temporary" Type="bool" Nullable="false" />
+          <Property Name="TemporaryCreationDate" Type="datetime" Precision="0" />
+          <Property Name="Comment" Type="varchar" MaxLength="255" />
+          <Property Name="PayerID" Type="uint" />
+          <Property Name="Format" Type="enum" Nullable="false" />
+          <Property Name="NoArchive" Type="bool" />
+          <Property Name="OwnedByUser" Type="uint" />
+          <Property Name="SendDescriptionFile" Type="bool" Nullable="false" />
+          <Property Name="Public" Type="bool" Nullable="false" />
+          <Property Name="LastSuccess" Type="datetime" Precision="0" />
+          <Property Name="PublicSubscriptionsId" Type="uint" />
+          <Property Name="MailPerFile" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="property_enums">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EnumName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="report_properties">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportCode" Type="ubigint" Nullable="false" />
+          <Property Name="PropertyID" Type="ubigint" Nullable="false" />
+          <Property Name="PropertyValue" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="report_property_values">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportPropertyID" Type="ubigint" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="report_type_properties">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportTypeCode" Type="ubigint" Nullable="false" />
+          <Property Name="PropertyName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="DisplayName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="PropertyType" Type="enum" Nullable="false" />
+          <Property Name="Optional" Type="bit" Nullable="false" />
+          <Property Name="PropertyEnumID" Type="ubigint" />
+          <Property Name="SelectStoredProcedure" Type="varchar" MaxLength="255" />
+          <Property Name="DefaultValue" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="reports">
+          <Key>
+            <PropertyRef Name="ReportCode" />
+          </Key>
+          <Property Name="ReportCode" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeneralReportCode" Type="ubigint" Nullable="false" />
+          <Property Name="ReportCaption" Type="varchar" MaxLength="26" Nullable="false" />
+          <Property Name="ReportTypeCode" Type="ubigint" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reporttypes">
+          <Key>
+            <PropertyRef Name="ReportTypeCode" />
+          </Key>
+          <Property Name="ReportTypeCode" Type="ubigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportTypeName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ReportTypeFilePrefix" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="AlternateSubject" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ReportClassName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="EnumID">
+          <End Role="property_enums" Type="Self.property_enums" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="enum_values" Type="Self.enum_values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="property_enums">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="enum_values">
+              <PropertyRef Name="PropertyEnumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RP_PropertyID">
+          <End Role="report_type_properties" Type="Self.report_type_properties" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_properties" Type="Self.report_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="report_type_properties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_properties">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RPV_ReportPropertyID">
+          <End Role="report_properties" Type="Self.report_properties" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_property_values" Type="Self.report_property_values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="report_properties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_property_values">
+              <PropertyRef Name="ReportPropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GeneralReportCode">
+          <End Role="general_reports" Type="Self.general_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="general_reports">
+              <PropertyRef Name="GeneralReportCode" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="GeneralReportCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PropertyEnumID">
+          <End Role="property_enums" Type="Self.property_enums" Multiplicity="0..1" />
+          <End Role="report_type_properties" Type="Self.report_type_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="property_enums">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_type_properties">
+              <PropertyRef Name="PropertyEnumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_type_properties_ibfk_1">
+          <End Role="reporttypes" Type="Self.reporttypes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_type_properties" Type="Self.report_type_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reporttypes">
+              <PropertyRef Name="ReportTypeCode" />
+            </Principal>
+            <Dependent Role="report_type_properties">
+              <PropertyRef Name="ReportTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReportCode">
+          <End Role="reports" Type="Self.reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_properties" Type="Self.report_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ReportCode" />
+            </Principal>
+            <Dependent Role="report_properties">
+              <PropertyRef Name="ReportCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReportTypeCode">
+          <End Role="reporttypes" Type="Self.reporttypes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reporttypes">
+              <PropertyRef Name="ReportTypeCode" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="ReportTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ReportModelsContainer">
+          <EntitySet Name="enum_values" EntityType="Self.enum_values" Schema="reports" store:Type="Tables" />
+          <EntitySet Name="general_reports" EntityType="Self.general_reports" Schema="reports" store:Type="Tables" />
+          <EntitySet Name="property_enums" EntityType="Self.property_enums" Schema="reports" store:Type="Tables" />
+          <EntitySet Name="report_properties" EntityType="Self.report_properties" Schema="reports" store:Type="Tables" />
+          <EntitySet Name="report_property_values" EntityType="Self.report_property_values" Schema="reports" store:Type="Tables" />
+          <EntitySet Name="report_type_properties" EntityType="Self.report_type_properties" Schema="reports" store:Type="Tables" />
+          <EntitySet Name="reports" EntityType="Self.reports" Schema="reports" store:Type="Tables" />
+          <EntitySet Name="reporttypes" EntityType="Self.reporttypes" Schema="reports" store:Type="Tables" />
+          <AssociationSet Name="EnumID" Association="Self.EnumID">
+            <End Role="property_enums" EntitySet="property_enums" />
+            <End Role="enum_values" EntitySet="enum_values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RP_PropertyID" Association="Self.FK_RP_PropertyID">
+            <End Role="report_type_properties" EntitySet="report_type_properties" />
+            <End Role="report_properties" EntitySet="report_properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RPV_ReportPropertyID" Association="Self.FK_RPV_ReportPropertyID">
+            <End Role="report_properties" EntitySet="report_properties" />
+            <End Role="report_property_values" EntitySet="report_property_values" />
+          </AssociationSet>
+          <AssociationSet Name="GeneralReportCode" Association="Self.GeneralReportCode">
+            <End Role="general_reports" EntitySet="general_reports" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+          <AssociationSet Name="PropertyEnumID" Association="Self.PropertyEnumID">
+            <End Role="property_enums" EntitySet="property_enums" />
+            <End Role="report_type_properties" EntitySet="report_type_properties" />
+          </AssociationSet>
+          <AssociationSet Name="report_type_properties_ibfk_1" Association="Self.report_type_properties_ibfk_1">
+            <End Role="reporttypes" EntitySet="reporttypes" />
+            <End Role="report_type_properties" EntitySet="report_type_properties" />
+          </AssociationSet>
+          <AssociationSet Name="ReportCode" Association="Self.ReportCode">
+            <End Role="reports" EntitySet="reports" />
+            <End Role="report_properties" EntitySet="report_properties" />
+          </AssociationSet>
+          <AssociationSet Name="ReportTypeCode" Association="Self.ReportTypeCode">
+            <End Role="reporttypes" EntitySet="reporttypes" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReportModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="enum_values">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PropertyEnumID" Type="Decimal" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="DisplayValue" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="property_enums" Relationship="Self.EnumID" FromRole="enum_values" ToRole="property_enums" />
+        </EntityType>
+        <EntityType Name="general_reports">
+          <Key>
+            <PropertyRef Name="GeneralReportCode" />
+          </Key>
+          <Property Name="GeneralReportCode" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirmCode" Type="Int64" />
+          <Property Name="Allow" Type="Boolean" Nullable="false" />
+          <Property Name="EMailSubject" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ReportFileName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ReportArchName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ContactGroupId" Type="Int64" />
+          <Property Name="Temporary" Type="Boolean" Nullable="false" />
+          <Property Name="TemporaryCreationDate" Type="DateTime" />
+          <Property Name="Comment" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PayerID" Type="Int64" />
+          <Property Name="Format" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NoArchive" Type="Boolean" />
+          <Property Name="OwnedByUser" Type="Int64" />
+          <Property Name="SendDescriptionFile" Type="Boolean" Nullable="false" />
+          <Property Name="Public" Type="Boolean" Nullable="false" />
+          <Property Name="LastSuccess" Type="DateTime" />
+          <Property Name="PublicSubscriptionsId" Type="Int64" />
+          <Property Name="MailPerFile" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="reports" Relationship="Self.GeneralReportCode" FromRole="general_reports" ToRole="reports" />
+        </EntityType>
+        <EntityType Name="property_enums">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EnumName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="enum_values" Relationship="Self.EnumID" FromRole="property_enums" ToRole="enum_values" />
+          <NavigationProperty Name="report_type_properties" Relationship="Self.PropertyEnumID" FromRole="property_enums" ToRole="report_type_properties" />
+        </EntityType>
+        <EntityType Name="report_properties">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportCode" Type="Decimal" Nullable="false" />
+          <Property Name="PropertyID" Type="Decimal" Nullable="false" />
+          <Property Name="PropertyValue" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="report_type_properties" Relationship="Self.FK_RP_PropertyID" FromRole="report_properties" ToRole="report_type_properties" />
+          <NavigationProperty Name="report_property_values" Relationship="Self.FK_RPV_ReportPropertyID" FromRole="report_properties" ToRole="report_property_values" />
+          <NavigationProperty Name="reports" Relationship="Self.ReportCode" FromRole="report_properties" ToRole="reports" />
+        </EntityType>
+        <EntityType Name="report_property_values">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportPropertyID" Type="Decimal" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="report_properties" Relationship="Self.FK_RPV_ReportPropertyID" FromRole="report_property_values" ToRole="report_properties" />
+        </EntityType>
+        <EntityType Name="report_type_properties">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportTypeCode" Type="Decimal" Nullable="false" />
+          <Property Name="PropertyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DisplayName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PropertyType" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Optional" Type="Boolean" Nullable="false" />
+          <Property Name="PropertyEnumID" Type="Decimal" />
+          <Property Name="SelectStoredProcedure" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DefaultValue" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="property_enums" Relationship="Self.PropertyEnumID" FromRole="report_type_properties" ToRole="property_enums" />
+          <NavigationProperty Name="report_properties" Relationship="Self.FK_RP_PropertyID" FromRole="report_type_properties" ToRole="report_properties" />
+          <NavigationProperty Name="reporttypes" Relationship="Self.report_type_properties_ibfk_1" FromRole="report_type_properties" ToRole="reporttypes" />
+        </EntityType>
+        <EntityType Name="reports">
+          <Key>
+            <PropertyRef Name="ReportCode" />
+          </Key>
+          <Property Name="ReportCode" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeneralReportCode" Type="Decimal" Nullable="false" />
+          <Property Name="ReportCaption" Type="String" MaxLength="26" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ReportTypeCode" Type="Decimal" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="general_reports" Relationship="Self.GeneralReportCode" FromRole="reports" ToRole="general_reports" />
+          <NavigationProperty Name="report_properties" Relationship="Self.ReportCode" FromRole="reports" ToRole="report_properties" />
+          <NavigationProperty Name="reporttypes" Relationship="Self.ReportTypeCode" FromRole="reports" ToRole="reporttypes" />
+        </EntityType>
+        <EntityType Name="reporttypes">
+          <Key>
+            <PropertyRef Name="ReportTypeCode" />
+          </Key>
+          <Property Name="ReportTypeCode" Type="Decimal" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportTypeName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ReportTypeFilePrefix" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AlternateSubject" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ReportClassName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="report_type_properties" Relationship="Self.report_type_properties_ibfk_1" FromRole="reporttypes" ToRole="report_type_properties" />
+          <NavigationProperty Name="reports" Relationship="Self.ReportTypeCode" FromRole="reporttypes" ToRole="reports" />
+        </EntityType>
+        <Association Name="EnumID">
+          <End Role="property_enums" Type="Self.property_enums" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="enum_values" Type="Self.enum_values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="property_enums">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="enum_values">
+              <PropertyRef Name="PropertyEnumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GeneralReportCode">
+          <End Role="general_reports" Type="Self.general_reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="general_reports">
+              <PropertyRef Name="GeneralReportCode" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="GeneralReportCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PropertyEnumID">
+          <End Role="property_enums" Type="Self.property_enums" Multiplicity="0..1" />
+          <End Role="report_type_properties" Type="Self.report_type_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="property_enums">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_type_properties">
+              <PropertyRef Name="PropertyEnumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RP_PropertyID">
+          <End Role="report_type_properties" Type="Self.report_type_properties" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_properties" Type="Self.report_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="report_type_properties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_properties">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RPV_ReportPropertyID">
+          <End Role="report_properties" Type="Self.report_properties" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_property_values" Type="Self.report_property_values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="report_properties">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="report_property_values">
+              <PropertyRef Name="ReportPropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReportCode">
+          <End Role="reports" Type="Self.reports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_properties" Type="Self.report_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reports">
+              <PropertyRef Name="ReportCode" />
+            </Principal>
+            <Dependent Role="report_properties">
+              <PropertyRef Name="ReportCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="report_type_properties_ibfk_1">
+          <End Role="reporttypes" Type="Self.reporttypes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="report_type_properties" Type="Self.report_type_properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reporttypes">
+              <PropertyRef Name="ReportTypeCode" />
+            </Principal>
+            <Dependent Role="report_type_properties">
+              <PropertyRef Name="ReportTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReportTypeCode">
+          <End Role="reporttypes" Type="Self.reporttypes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="reports" Type="Self.reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reporttypes">
+              <PropertyRef Name="ReportTypeCode" />
+            </Principal>
+            <Dependent Role="reports">
+              <PropertyRef Name="ReportTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="reportsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="enum_values" EntityType="Self.enum_values" />
+          <EntitySet Name="general_reports" EntityType="Self.general_reports" />
+          <EntitySet Name="property_enums" EntityType="Self.property_enums" />
+          <EntitySet Name="report_properties" EntityType="Self.report_properties" />
+          <EntitySet Name="report_property_values" EntityType="Self.report_property_values" />
+          <EntitySet Name="report_type_properties" EntityType="Self.report_type_properties" />
+          <EntitySet Name="reports" EntityType="Self.reports" />
+          <EntitySet Name="reporttypes" EntityType="Self.reporttypes" />
+          <AssociationSet Name="EnumID" Association="Self.EnumID">
+            <End Role="property_enums" EntitySet="property_enums" />
+            <End Role="enum_values" EntitySet="enum_values" />
+          </AssociationSet>
+          <AssociationSet Name="GeneralReportCode" Association="Self.GeneralReportCode">
+            <End Role="general_reports" EntitySet="general_reports" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+          <AssociationSet Name="PropertyEnumID" Association="Self.PropertyEnumID">
+            <End Role="property_enums" EntitySet="property_enums" />
+            <End Role="report_type_properties" EntitySet="report_type_properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RP_PropertyID" Association="Self.FK_RP_PropertyID">
+            <End Role="report_type_properties" EntitySet="report_type_properties" />
+            <End Role="report_properties" EntitySet="report_properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RPV_ReportPropertyID" Association="Self.FK_RPV_ReportPropertyID">
+            <End Role="report_properties" EntitySet="report_properties" />
+            <End Role="report_property_values" EntitySet="report_property_values" />
+          </AssociationSet>
+          <AssociationSet Name="ReportCode" Association="Self.ReportCode">
+            <End Role="reports" EntitySet="reports" />
+            <End Role="report_properties" EntitySet="report_properties" />
+          </AssociationSet>
+          <AssociationSet Name="report_type_properties_ibfk_1" Association="Self.report_type_properties_ibfk_1">
+            <End Role="reporttypes" EntitySet="reporttypes" />
+            <End Role="report_type_properties" EntitySet="report_type_properties" />
+          </AssociationSet>
+          <AssociationSet Name="ReportTypeCode" Association="Self.ReportTypeCode">
+            <End Role="reporttypes" EntitySet="reporttypes" />
+            <End Role="reports" EntitySet="reports" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ReportModelsContainer" CdmEntityContainer="reportsEntities">
+          <EntitySetMapping Name="enum_values">
+            <EntityTypeMapping TypeName="ReportModels.enum_values">
+              <MappingFragment StoreEntitySet="enum_values">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PropertyEnumID" ColumnName="PropertyEnumID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="DisplayValue" ColumnName="DisplayValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="general_reports">
+            <EntityTypeMapping TypeName="ReportModels.general_reports">
+              <MappingFragment StoreEntitySet="general_reports">
+                <ScalarProperty Name="GeneralReportCode" ColumnName="GeneralReportCode" />
+                <ScalarProperty Name="FirmCode" ColumnName="FirmCode" />
+                <ScalarProperty Name="Allow" ColumnName="Allow" />
+                <ScalarProperty Name="EMailSubject" ColumnName="EMailSubject" />
+                <ScalarProperty Name="ReportFileName" ColumnName="ReportFileName" />
+                <ScalarProperty Name="ReportArchName" ColumnName="ReportArchName" />
+                <ScalarProperty Name="ContactGroupId" ColumnName="ContactGroupId" />
+                <ScalarProperty Name="Temporary" ColumnName="Temporary" />
+                <ScalarProperty Name="TemporaryCreationDate" ColumnName="TemporaryCreationDate" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="PayerID" ColumnName="PayerID" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="NoArchive" ColumnName="NoArchive" />
+                <ScalarProperty Name="OwnedByUser" ColumnName="OwnedByUser" />
+                <ScalarProperty Name="SendDescriptionFile" ColumnName="SendDescriptionFile" />
+                <ScalarProperty Name="Public" ColumnName="Public" />
+                <ScalarProperty Name="LastSuccess" ColumnName="LastSuccess" />
+                <ScalarProperty Name="PublicSubscriptionsId" ColumnName="PublicSubscriptionsId" />
+                <ScalarProperty Name="MailPerFile" ColumnName="MailPerFile" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="property_enums">
+            <EntityTypeMapping TypeName="ReportModels.property_enums">
+              <MappingFragment StoreEntitySet="property_enums">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EnumName" ColumnName="EnumName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="report_properties">
+            <EntityTypeMapping TypeName="ReportModels.report_properties">
+              <MappingFragment StoreEntitySet="report_properties">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="report_property_values">
+            <EntityTypeMapping TypeName="ReportModels.report_property_values">
+              <MappingFragment StoreEntitySet="report_property_values">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ReportPropertyID" ColumnName="ReportPropertyID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="report_type_properties">
+            <EntityTypeMapping TypeName="ReportModels.report_type_properties">
+              <MappingFragment StoreEntitySet="report_type_properties">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ReportTypeCode" ColumnName="ReportTypeCode" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="PropertyType" ColumnName="PropertyType" />
+                <ScalarProperty Name="Optional" ColumnName="Optional" />
+                <ScalarProperty Name="PropertyEnumID" ColumnName="PropertyEnumID" />
+                <ScalarProperty Name="SelectStoredProcedure" ColumnName="SelectStoredProcedure" />
+                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reports">
+            <EntityTypeMapping TypeName="ReportModels.reports">
+              <MappingFragment StoreEntitySet="reports">
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="GeneralReportCode" ColumnName="GeneralReportCode" />
+                <ScalarProperty Name="ReportCaption" ColumnName="ReportCaption" />
+                <ScalarProperty Name="ReportTypeCode" ColumnName="ReportTypeCode" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reporttypes">
+            <EntityTypeMapping TypeName="ReportModels.reporttypes">
+              <MappingFragment StoreEntitySet="reporttypes">
+                <ScalarProperty Name="ReportTypeCode" ColumnName="ReportTypeCode" />
+                <ScalarProperty Name="ReportTypeName" ColumnName="ReportTypeName" />
+                <ScalarProperty Name="ReportTypeFilePrefix" ColumnName="ReportTypeFilePrefix" />
+                <ScalarProperty Name="AlternateSubject" ColumnName="AlternateSubject" />
+                <ScalarProperty Name="ReportClassName" ColumnName="ReportClassName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

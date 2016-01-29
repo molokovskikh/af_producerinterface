@@ -175,6 +175,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DrugController.cs" />
+    <Compile Include="Controllers\general_reportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterBaseController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
@@ -330,6 +331,9 @@
     <Content Include="Views\Drug\EditForms.cshtml" />
     <Content Include="Views\Drug\DisplayForms.cshtml" />
     <Content Include="Views\Drug\EditMnn.cshtml" />
+    <Content Include="Views\general_reports\Details.cshtml" />
+    <Content Include="Views\general_reports\Index.cshtml" />
+    <Content Include="Views\general_reports\ReportDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

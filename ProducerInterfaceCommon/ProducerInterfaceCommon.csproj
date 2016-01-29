@@ -281,6 +281,45 @@
     <Compile Include="Models\SupplierRating\SupplierRatingReportRow.cs" />
     <Compile Include="Models\TriggerParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportModels\enum_values.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\general_reports.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\property_enums.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\reports.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\Reports_Entities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports_Entities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\Reports_Entities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\Reports_Entities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports_Entities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\reporttypes.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\report_properties.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\report_property_values.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportModels\report_type_properties.cs">
+      <DependentUpon>Reports_Entities.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="ContextModels\producerinterface_Entities.edmx">
@@ -305,6 +344,13 @@
     </None>
     <None Include="Models\Report.cd" />
     <None Include="packages.config" />
+    <EntityDeploy Include="ReportModels\Reports_Entities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Reports_Entities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="ReportModels\Reports_Entities.edmx.diagram">
+      <DependentUpon>Reports_Entities.edmx</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ContextModels\producerinterface_Entities.Context.tt">
@@ -326,6 +372,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Logger_Entities.edmx</DependentUpon>
       <LastGenOutput>Logger_Entities.cs</LastGenOutput>
+    </Content>
+    <Content Include="ReportModels\Reports_Entities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Reports_Entities.edmx</DependentUpon>
+      <LastGenOutput>Reports_Entities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ReportModels\Reports_Entities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Reports_Entities.edmx</DependentUpon>
+      <LastGenOutput>Reports_Entities.cs</LastGenOutput>
     </Content>
     <Content Include="TextFile1.txt" />
   </ItemGroup>

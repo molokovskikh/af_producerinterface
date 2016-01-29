@@ -16,11 +16,12 @@
 <table class="table-bordered table-striped" id="Table-LogUserChange">
 
     <tr>
-        <th>Id</th>
+        @*<th>Id</th>*@
         <th>Дата изменения</th>
         <th>Пользователь</th>
         <th>Производитель</th>
         <th>Действие</th>
+        <th>Операция</th>
         <th>Объект</th>
         <th>Подробнее</th>
     </tr>
@@ -30,11 +31,12 @@
 @foreach (var LogChangeItem in Model)
 {
     <tr>
-        <td>@LogChangeItem.ChangeSetId</td>
+        @*<td>@LogChangeItem.ChangeSetId</td>*@
         <td>@LogChangeItem.Timestamp</td>
         <td>@LogChangeItem.UserName (@LogChangeItem.Email)</td>
         <td>@LogChangeItem.ProducerName</td>
-        <td>@(LogChangeItem.Action == null ? "" : LogChangeItem.EntityCommandEnum.GetDescription())</td>
+        <td>@LogChangeItem.Description</td>
+       <td>@LogChangeItem.EntityCommandEnum.GetDescription()</td>
         <td>@LogChangeItem.TypeDisplayName</td>
         <td>    
         <a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a>        
