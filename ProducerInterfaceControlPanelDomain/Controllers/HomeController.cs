@@ -9,7 +9,7 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : MasterBaseController
     {
        
         /// <summary>
@@ -27,20 +27,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return View(ListActionInProducers);
 
         }
-        
-        // возвращает список групп из АД для текущего пользователя. NTLM пользователя 
-        public List<string> Groups()
-        {
-            List<string> groups = new List<string>();
-
-            foreach (IdentityReference group in System.Web.HttpContext.Current.Request.LogonUserIdentity.Groups)
-            {
-                groups.Add(group.Translate(typeof(NTAccount)).ToString().Replace("\\", ""));
-            }
-
-            return groups;
-        }
-
 
     }
 }

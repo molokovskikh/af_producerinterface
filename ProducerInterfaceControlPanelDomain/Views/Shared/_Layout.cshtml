@@ -19,6 +19,15 @@
         @RenderBody()
         <hr />
       
+        @if (ViewBag.CurrentUser != null)
+        {
+        <div class="navbar-fixed-bottom navbar-inverse">
+            <center>
+                <p>Панель управления | Добро пожаловать @ViewBag.CurrentUser.Name | ваш IP @ViewBag.CurrentUser.IP</p>
+            </center>           
+        </div>
+        }
+
     </div>  
    
     @Scripts.Render("~/bundles/jquery")

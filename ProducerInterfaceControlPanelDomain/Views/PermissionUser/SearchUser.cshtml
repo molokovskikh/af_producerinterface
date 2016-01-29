@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Поиск пользователя";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+
+
+    @using (Html.BeginForm("SearchUser", "PermissionUser", FormMethod.Post))
+    {
+      
+            <h4>Поиск по ФИО</h4>
+            <div class="form-group">
+                <input type="search" name="TextSearch" id="TextSearch" placeholder="Введите Фамилию или Имя, eMail" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Поиск" class="btn btn-primary" />
+            </div>
+       
+    }
+
+    <hr/>
+
+    @using (Html.BeginForm("SearchUserCompany", "PermissionUser", FormMethod.Post))
+    {            
+        
+                <h4>Поиск по названию организации</h4>
+                <div class="form-group">
+                    <input type="search" name="TextSearch" id="TextSearch" placeholder="Введите название компании" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Поиск" class="btn btn-primary" />
+                </div>
+           
+    }
+

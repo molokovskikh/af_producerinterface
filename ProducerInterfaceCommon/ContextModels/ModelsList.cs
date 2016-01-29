@@ -81,7 +81,17 @@ namespace ProducerInterfaceCommon.ContextModels
         public string NameGroup { get; set; }
 
         public string[] Users { get; set; }
+
         public string[] Permissions { get; set; }
+        public List<UsersViewInChange> ListUsersInGroup {get;set;}
+
+    }
+
+    public class UsersViewInChange
+    {
+        public string Name { get; set; }
+        public string eMail { get; set; }
+        public string ProducerName { get; set; }
     }
 
     public class SearchPromotion

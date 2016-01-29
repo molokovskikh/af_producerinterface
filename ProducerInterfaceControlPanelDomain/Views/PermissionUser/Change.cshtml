@@ -1,0 +1,33 @@
+﻿@model ProducerInterfaceCommon.ContextModels.ProducerUser
+
+@{
+    ViewBag.Title = "Изменение прав пользователя";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Изменение групп пользователя</h3>
+
+<hr />
+
+    <h4>@Model.Name</h4>
+    <hr />
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.Id)
+
+        <div clsss="from-group">
+            @Html.EditorFor(m => m.ListPermissionTwo)
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
+        </div>
+    }
+
+
+@section scripts
+{
+    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+    <script src="~/Content/Chosen/js/InitPermission.js"></script>
+}

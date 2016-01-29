@@ -7,7 +7,7 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class ReportController : BaseController
+    public class ReportController : MasterBaseController
     {        // GET: Report
        
         private string shedName_ = ""; // DebugShedulerName(); 

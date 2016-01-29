@@ -14,7 +14,7 @@ using System.Data.Entity;
 
 namespace ProducerInterface.Controllers
 {
-    public class PromotionController : pruducercontroller.BaseController
+    public class PromotionController : MasterBaseController
     {
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -22,10 +22,9 @@ namespace ProducerInterface.Controllers
             base.OnActionExecuting(filterContext);
         }
         public ActionResult Index()
-        {
-            var currentUser = GetCurrentUser();
+        {          
             //var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
-            IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId).ToList();
+            IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == CurrentUser.ProducerId).ToList();
             return View(list);
         }
 
@@ -33,8 +32,7 @@ namespace ProducerInterface.Controllers
         public ActionResult Manage(long? id)
         {
             PromotionValidation ViewPromotion = new PromotionValidation();
-            var currentUser = GetCurrentUser();
-
+            
             var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
             ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
             ProducerInterfaceCommon.Heap.NamesHelper h;
@@ -159,8 +157,7 @@ namespace ProducerInterface.Controllers
         [HttpGet]
         public ActionResult Delete(long? Id)
         {
-            PromotionValidation ViewPromotion = new PromotionValidation();
-            var currentUser = GetCurrentUser();
+            PromotionValidation ViewPromotion = new PromotionValidation();         
             var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
             ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
             ProducerInterfaceCommon.Heap.NamesHelper h;

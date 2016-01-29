@@ -1,1 +1,121 @@
 26.01.2016 20:31:48.538 [20] ERROR MySqlAdoNetAppender - Контроллер для пути "/dasd/asdasd" не найден или не реализует интерфейс IController.
+27.01.2016 16:17:23.630 [5] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+27.01.2016 16:18:43.652 [5] ERROR MySqlAdoNetAppender - Контроллер для пути "/TestPermission" не найден или не реализует интерфейс IController.
+27.01.2016 16:18:57.704 [5] ERROR MySqlAdoNetAppender - Контроллер для пути "/TestPermissionController/index" не найден или не реализует интерфейс IController.
+27.01.2016 16:21:55.640 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при подготовке определения команды. Дополнительные сведения приведены во внутреннем исключении.
+27.01.2016 16:23:15.448 [5] ERROR MySqlAdoNetAppender - Произошла ошибка при подготовке определения команды. Дополнительные сведения приведены во внутреннем исключении.
+27.01.2016 16:26:30.455 [8] ERROR MySqlAdoNetAppender - Не удалось создать константу с типом "ProducerInterfaceCommon.ContextModels.ProducerUser". В этом контексте поддерживаются только типы-примитивы и типы перечисления.
+27.01.2016 17:07:03.341 [41] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+27.01.2016 18:02:45.957 [6] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+27.01.2016 18:14:59.633 [8] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 18:15:06.741 [8] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 18:15:25.433 [7] ERROR MySqlAdoNetAppender - Не удалось найти представление "Index" или его образец, либо ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/PermissionUser/Index.aspx
+~/Views/PermissionUser/Index.ascx
+~/Views/Shared/Index.aspx
+~/Views/Shared/Index.ascx
+~/Views/PermissionUser/Index.cshtml
+~/Views/PermissionUser/Index.vbhtml
+~/Views/Shared/Index.cshtml
+~/Views/Shared/Index.vbhtml
+27.01.2016 18:15:48.693 [7] ERROR MySqlAdoNetAppender - Не удалось найти представление "Index" или его образец, либо ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/PermissionUser/Index.aspx
+~/Views/PermissionUser/Index.ascx
+~/Views/Shared/Index.aspx
+~/Views/Shared/Index.ascx
+~/Views/PermissionUser/Index.cshtml
+~/Views/PermissionUser/Index.vbhtml
+~/Views/Shared/Index.cshtml
+~/Views/Shared/Index.vbhtml
+27.01.2016 18:16:37.699 [7] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 18:17:50.667 [7] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+27.01.2016 19:26:51.818 [50] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(38): error CS1061: 'ListGroupView' does not contain a definition for 'User' and no extension method 'User' accepting a first argument of type 'ListGroupView' could be found (are you missing a using directive or an assembly reference?)
+27.01.2016 19:26:57.441 [50] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(38): error CS1061: 'ListGroupView' does not contain a definition for 'User' and no extension method 'User' accepting a first argument of type 'ListGroupView' could be found (are you missing a using directive or an assembly reference?)
+27.01.2016 19:46:58.467 [45] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(38): error CS1977: Cannot use a lambda expression as an argument to a dynamically dispatched operation without first casting it to a delegate or expression tree type.
+27.01.2016 19:48:23.478 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:49:58.713 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:50:27.781 [24] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:50:47.114 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:51:06.143 [45] ERROR MySqlAdoNetAppender - В блоке код отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+27.01.2016 19:52:02.921 [45] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(6): error CS1646: Keyword, identifier, or string expected after verbatim specifier: @
+27.01.2016 19:52:13.497 [28] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Group.cshtml(41): error CS1977: Cannot use a lambda expression as an argument to a dynamically dispatched operation without first casting it to a delegate or expression tree type.
+28.01.2016 13:24:49.023 [66] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "SearchUserCompany" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 13:24:54.916 [55] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "SearchUser" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 13:36:09.113 [49] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Result.cshtml(32): error CS1061: 'IPrincipal' does not contain a definition for 'Id' and no extension method 'Id' accepting a first argument of type 'IPrincipal' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 13:39:09.814 [52] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Result.cshtml(32): error CS1061: 'IPrincipal' does not contain a definition for 'Id' and no extension method 'Id' accepting a first argument of type 'IPrincipal' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 13:40:58.159 [52] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Result.cshtml(32): error CS1061: 'IPrincipal' does not contain a definition for 'Id' and no extension method 'Id' accepting a first argument of type 'IPrincipal' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 13:44:10.172 [52] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Result.cshtml(31): error CS1061: 'IPrincipal' does not contain a definition for 'Id' and no extension method 'Id' accepting a first argument of type 'IPrincipal' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 13:45:43.572 [52] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Change" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 13:53:57.749 [10] ERROR MySqlAdoNetAppender - Элемент модели, переданный в словарь, имеет тип "System.Collections.Generic.List`1[System.Int64]", но для этого словаря требуется элемент модели типа "System.Collections.Generic.List`1[System.Int32]".
+28.01.2016 13:55:56.022 [10] ERROR MySqlAdoNetAppender - Путь '/Views/PermissionUser/EditorTemplates/LongListPermission.cshtml' не найден.
+28.01.2016 13:56:43.140 [10] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: items
+28.01.2016 13:57:30.368 [10] ERROR MySqlAdoNetAppender - Следующие разделы были определены, но не были обработаны для страницы макета "~/Views/Shared/_Layout.cshtml": "JavaScript".
+28.01.2016 13:59:19.271 [10] ERROR MySqlAdoNetAppender - Следующие разделы были определены, но не были обработаны для страницы макета "~/Views/Shared/_Layout.cshtml": "JavaScript".
+28.01.2016 14:00:11.599 [26] ERROR MySqlAdoNetAppender - Следующие разделы были определены, но не были обработаны для страницы макета "~/Views/Shared/_Layout.cshtml": "JavaScript".
+28.01.2016 14:01:38.475 [26] ERROR MySqlAdoNetAppender - Следующие разделы были определены, но не были обработаны для страницы макета "~/Views/Shared/_Layout.cshtml": "JavaScript".
+28.01.2016 14:02:42.010 [12] ERROR MySqlAdoNetAppender - Следующие разделы были определены, но не были обработаны для страницы макета "~/Views/Shared/_Layout.cshtml": "JavaScript".
+28.01.2016 14:03:36.483 [12] ERROR MySqlAdoNetAppender - Следующие разделы были определены, но не были обработаны для страницы макета "~/Views/Shared/_Layout.cshtml": "JavaScript".
+28.01.2016 14:11:41.266 [7] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+28.01.2016 14:13:28.503 [6] ERROR MySqlAdoNetAppender - Элемент модели, переданный в словарь, имеет тип "System.Collections.Generic.List`1[System.Int32]", но для этого словаря требуется элемент модели типа "System.Collections.Generic.List`1[System.Int64]".
+28.01.2016 14:20:22.007 [14] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: items
+28.01.2016 14:20:40.715 [14] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: items
+28.01.2016 14:21:42.728 [14] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: items
+28.01.2016 14:22:13.615 [14] ERROR MySqlAdoNetAppender - Путь '/Views/PermissionUser/EditorTemplates/LongListPermission.cshtml' не найден.
+28.01.2016 14:22:47.259 [14] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: items
+28.01.2016 14:23:25.232 [14] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+28.01.2016 14:23:54.536 [14] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Change.cshtml(19): error CS1061: 'ProducerUser' does not contain a definition for 'ListSelectedPermissionTwo' and no extension method 'ListSelectedPermissionTwo' accepting a first argument of type 'ProducerUser' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 14:27:09.357 [14] ERROR MySqlAdoNetAppender - Путь '/Views/PermissionUser/EditorTemplates/LongListPermissionTwo.cshtml' не найден.
+28.01.2016 14:27:44.180 [14] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Change.cshtml(19): error CS1061: 'ProducerUser' does not contain a definition for 'ListSelectedPermissionTwo' and no extension method 'ListSelectedPermissionTwo' accepting a first argument of type 'ProducerUser' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 14:27:54.093 [14] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Change.cshtml(19): error CS1061: 'ProducerUser' does not contain a definition for 'ListSelectedPermissionTwo' and no extension method 'ListSelectedPermissionTwo' accepting a first argument of type 'ProducerUser' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 14:29:25.659 [20] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Change.cshtml(19): error CS1061: 'ProducerUser' does not contain a definition for 'ListSelectedPermissionTwo' and no extension method 'ListSelectedPermissionTwo' accepting a first argument of type 'ProducerUser' could be found (are you missing a using directive or an assembly reference?)
+28.01.2016 14:32:11.368 [27] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+28.01.2016 14:33:42.643 [26] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: source
+28.01.2016 15:19:50.256 [11] ERROR MySqlAdoNetAppender - Метод "First" можно использовать только как завершающую операцию запроса. Вместо этого в данном экземпляре можно использовать метод "FirstOrDefault".
+28.01.2016 15:22:04.304 [11] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Result" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 15:23:27.241 [11] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Result" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 15:24:22.577 [11] ERROR MySqlAdoNetAppender - Обнаружено потенциально опасное значение Request.Path, полученное от клиента (>).
+28.01.2016 15:26:47.271 [11] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Result" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 15:29:40.612 [41] ERROR MySqlAdoNetAppender - Обнаружено потенциально опасное значение Request.Path, полученное от клиента (>).
+28.01.2016 15:30:27.434 [11] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Result" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 15:31:10.683 [11] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Result" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 16:49:23.805 [66] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+28.01.2016 16:50:05.950 [66] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "ListPermission" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionController".
+28.01.2016 16:52:52.665 [66] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 16:53:52.645 [70] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 16:56:11.431 [66] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "ListPermission" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 16:56:26.454 [66] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:00:02.521 [66] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "ListPermission" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 17:04:03.006 [66] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+28.01.2016 17:06:20.460 [74] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:07:04.776 [66] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:07:54.821 [66] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "EditPermission" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionUserController".
+28.01.2016 17:09:17.340 [38] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:11:57.964 [66] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:12:20.846 [66] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:12:38.806 [66] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:14:16.005 [66] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ListPermission.cshtml(1): error CS0246: The type or namespace name 'ProdicerInterfaceCommon' could not be found (are you missing a using directive or an assembly reference?)
+28.01.2016 17:31:07.944 [5] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+28.01.2016 17:32:11.665 [5] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+28.01.2016 17:45:06.341 [12] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+28.01.2016 18:01:22.832 [12] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+28.01.2016 18:02:56.279 [12] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+28.01.2016 18:04:31.081 [8] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+28.01.2016 18:05:53.742 [12] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+28.01.2016 19:09:49.319 [6] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+28.01.2016 19:10:37.919 [6] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartial" не найден или не реализует интерфейс IController.
+28.01.2016 19:17:37.385 [16] ERROR MySqlAdoNetAppender - Не удается выполнить привязки исполняющей среды по нулевой ссылке
+28.01.2016 19:17:39.891 [19] ERROR MySqlAdoNetAppender - Не удается выполнить привязки исполняющей среды по нулевой ссылке
+28.01.2016 19:17:41.159 [6] ERROR MySqlAdoNetAppender - Не удается выполнить привязки исполняющей среды по нулевой ссылке
+29.01.2016 10:13:57.010 [19] ERROR MySqlAdoNetAppender - Не удается выполнить привязки исполняющей среды по нулевой ссылке
+29.01.2016 10:32:14.647 [6] ERROR MySqlAdoNetAppender - Не удается выполнить привязки исполняющей среды по нулевой ссылке

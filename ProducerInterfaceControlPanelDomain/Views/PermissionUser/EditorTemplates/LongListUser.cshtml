@@ -14,12 +14,9 @@
     }
 }
 <div class="row margin5">
-    <div class="form-group form-group-otstup">                  
+    <div class="form-group form-group-otstup">        
         <div class="@("feditor col-md-8" + errorClass)">
-            <div class="form-group">
-                <label>Права пользователя</label>
-            </div> 
-            @Html.ListBoxFor(m => m, new MultiSelectList(ViewBag.PermissionList, "Value", "Text", Model), new { style = "display: none;" })
+            @Html.ListBoxFor(m => m, new MultiSelectList(ViewBag.UserList, "Value", "Text", Model), new { style = "display: none;" })
             @Html.ValidationMessageFor(m => m)
         </div>
     </div>

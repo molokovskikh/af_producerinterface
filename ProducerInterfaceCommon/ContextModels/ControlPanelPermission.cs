@@ -24,6 +24,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string ActionAttributes { get; set; }
         public string Description { get; set; }
         public bool Enabled { get; set; }
+        public sbyte TypePermission { get; set; }
     
         public virtual ICollection<ControlPanelGroup> ControlPanelGroup { get; set; }
     }

@@ -9,7 +9,7 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class RegistrationController : BaseController
+    public class RegistrationController : MasterBaseController
     {
         // GET: Registration
         public ActionResult Index()

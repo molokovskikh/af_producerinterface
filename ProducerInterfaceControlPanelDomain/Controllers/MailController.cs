@@ -7,7 +7,7 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class MailController : BaseController
+    public class MailController : MasterBaseController
     {
         // GET: Mail
         /// <summary>

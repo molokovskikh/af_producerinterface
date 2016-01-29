@@ -13,6 +13,7 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Enabled" Type="bool" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="250" />
+          <Property Name="TypeGroup" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="ControlPanelGroupToPermission">
           <Key>
@@ -31,6 +32,7 @@
           <Property Name="ActionAttributes" Type="text" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
           <Property Name="Enabled" Type="bool" Nullable="false" />
+          <Property Name="TypePermission" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="ControlPanelUserToGroup">
           <Key>
@@ -842,28 +844,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="producerinterface_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="ControlPanelGroup">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ControlPanelPermission" Relationship="Self.ControlPanelGroupToPermission" FromRole="ControlPanelGroup" ToRole="ControlPanelPermission" />
-          <NavigationProperty Name="ProducerUser" Relationship="producerinterface_Model.ControlPanelUserToGroup" FromRole="ControlPanelGroup" ToRole="ProducerUser" />
-        </EntityType>
-        <EntityType Name="ControlPanelPermission">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ControllerAction" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ActionAttributes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="ControlPanelGroup" Relationship="Self.ControlPanelGroupToPermission" FromRole="ControlPanelPermission" ToRole="ControlPanelGroup" />
-        </EntityType>
         <EntityType Name="DrugDescriptionRemark">
           <Key>
             <PropertyRef Name="Id" />
@@ -1300,13 +1280,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ControlPanelGroupToPermission">
-          <End Role="ControlPanelGroup" Type="Self.ControlPanelGroup" Multiplicity="*" />
-          <End Role="ControlPanelPermission" Type="Self.ControlPanelPermission" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="producerinterface_Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="ControlPanelGroup" EntityType="Self.ControlPanelGroup" />
-          <EntitySet Name="ControlPanelPermission" EntityType="Self.ControlPanelPermission" />
           <EntitySet Name="DrugDescriptionRemark" EntityType="Self.DrugDescriptionRemark" />
           <EntitySet Name="jobextend" EntityType="Self.jobextend" />
           <EntitySet Name="mailform" EntityType="Self.mailform" />
@@ -1359,10 +1333,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="userrole" EntitySet="userrole" />
             <End Role="usertouserrole" EntitySet="usertouserrole" />
           </AssociationSet>
-          <AssociationSet Name="ControlPanelGroupToPermission" Association="Self.ControlPanelGroupToPermission">
-            <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
-            <End Role="ControlPanelPermission" EntitySet="ControlPanelPermission" />
-          </AssociationSet>
           <EntitySet Name="LogForNet" EntityType="producerinterface_Model.LogForNet" />
           <EntitySet Name="ProducerUser" EntityType="producerinterface_Model.ProducerUser" />
           <AssociationSet Name="DrugDescriptionRemark_ProducerUserId" Association="producerinterface_Model.DrugDescriptionRemark_ProducerUserId">
@@ -1380,6 +1350,12 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="FK_user_role_users" Association="producerinterface_Model.FK_user_role_users">
             <End Role="ProducerUser" EntitySet="ProducerUser" />
             <End Role="usertouserrole" EntitySet="usertouserrole" />
+          </AssociationSet>
+          <EntitySet Name="ControlPanelGroup" EntityType="producerinterface_Model.ControlPanelGroup" />
+          <EntitySet Name="ControlPanelPermission" EntityType="producerinterface_Model.ControlPanelPermission" />
+          <AssociationSet Name="ControlPanelGroupToPermission" Association="producerinterface_Model.ControlPanelGroupToPermission">
+            <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
+            <End Role="ControlPanelPermission" EntitySet="ControlPanelPermission" />
           </AssociationSet>
           <AssociationSet Name="ControlPanelUserToGroup" Association="producerinterface_Model.ControlPanelUserToGroup">
             <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
@@ -1414,8 +1390,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_produceruser" FromRole="ProducerUser" ToRole="promotions" />
           <NavigationProperty Name="user_logs" Relationship="producerinterface_Model.FK_user_logs_users" FromRole="ProducerUser" ToRole="user_logs" />
           <NavigationProperty Name="usertouserrole" Relationship="producerinterface_Model.FK_user_role_users" FromRole="ProducerUser" ToRole="usertouserrole" />
-          <NavigationProperty Name="ControlPanelGroup" Relationship="producerinterface_Model.ControlPanelUserToGroup" FromRole="ProducerUser" ToRole="ControlPanelGroup" />
           <Property Name="TypeUser" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="ControlPanelGroup" Relationship="producerinterface_Model.ControlPanelUserToGroup" FromRole="ProducerUser" ToRole="ControlPanelGroup" />
         </EntityType>
         <Association Name="DrugDescriptionRemark_ProducerUserId">
           <End Type="producerinterface_Model.ProducerUser" Role="ProducerUser" Multiplicity="0..1" />
@@ -1465,6 +1441,34 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ControlPanelGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="TypeGroup" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="ControlPanelPermission" Relationship="producerinterface_Model.ControlPanelGroupToPermission" FromRole="ControlPanelGroup" ToRole="ControlPanelPermission" />
+          <NavigationProperty Name="ProducerUser" Relationship="producerinterface_Model.ControlPanelUserToGroup" FromRole="ControlPanelGroup" ToRole="ProducerUser" />
+        </EntityType>
+        <EntityType Name="ControlPanelPermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ControllerAction" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ActionAttributes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="TypePermission" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="ControlPanelGroup" Relationship="producerinterface_Model.ControlPanelGroupToPermission" FromRole="ControlPanelPermission" ToRole="ControlPanelGroup" />
+        </EntityType>
+        <Association Name="ControlPanelGroupToPermission">
+          <End Type="producerinterface_Model.ControlPanelGroup" Role="ControlPanelGroup" Multiplicity="*" />
+          <End Type="producerinterface_Model.ControlPanelPermission" Role="ControlPanelPermission" Multiplicity="*" />
+        </Association>
         <Association Name="ControlPanelUserToGroup">
           <End Type="producerinterface_Model.ControlPanelGroup" Role="ControlPanelGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.ProducerUser" Role="ProducerUser" Multiplicity="*" />
@@ -1475,27 +1479,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище producerinterface_ModelContainer" CdmEntityContainer="producerinterface_Entities">
-          <EntitySetMapping Name="ControlPanelGroup">
-            <EntityTypeMapping TypeName="producerinterface_Model.ControlPanelGroup">
-              <MappingFragment StoreEntitySet="ControlPanelGroup">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ControlPanelPermission">
-            <EntityTypeMapping TypeName="producerinterface_Model.ControlPanelPermission">
-              <MappingFragment StoreEntitySet="ControlPanelPermission">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ControllerAction" ColumnName="ControllerAction" />
-                <ScalarProperty Name="ActionAttributes" ColumnName="ActionAttributes" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DrugDescriptionRemark">
             <EntityTypeMapping TypeName="producerinterface_Model.DrugDescriptionRemark">
               <MappingFragment StoreEntitySet="DrugDescriptionRemark">
@@ -1835,14 +1818,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="ControlPanelGroupToPermission" TypeName="producerinterface_Model.ControlPanelGroupToPermission" StoreEntitySet="ControlPanelGroupToPermission">
-            <EndProperty Name="ControlPanelGroup">
-              <ScalarProperty Name="Id" ColumnName="IdGroup" />
-            </EndProperty>
-            <EndProperty Name="ControlPanelPermission">
-              <ScalarProperty Name="Id" ColumnName="IdPermission" />
-            </EndProperty>
-          </AssociationSetMapping>
           <EntitySetMapping Name="LogForNet">
             <EntityTypeMapping TypeName="producerinterface_Model.LogForNet">
               <MappingFragment StoreEntitySet="LogForNet">
@@ -1871,6 +1846,37 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ControlPanelGroup">
+            <EntityTypeMapping TypeName="producerinterface_Model.ControlPanelGroup">
+              <MappingFragment StoreEntitySet="ControlPanelGroup">
+                <ScalarProperty Name="TypeGroup" ColumnName="TypeGroup" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPanelPermission">
+            <EntityTypeMapping TypeName="producerinterface_Model.ControlPanelPermission">
+              <MappingFragment StoreEntitySet="ControlPanelPermission">
+                <ScalarProperty Name="TypePermission" ColumnName="TypePermission" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionAttributes" ColumnName="ActionAttributes" />
+                <ScalarProperty Name="ControllerAction" ColumnName="ControllerAction" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ControlPanelGroupToPermission" TypeName="producerinterface_Model.ControlPanelGroupToPermission" StoreEntitySet="ControlPanelGroupToPermission">
+            <EndProperty Name="ControlPanelPermission">
+              <ScalarProperty Name="Id" ColumnName="IdPermission" />
+            </EndProperty>
+            <EndProperty Name="ControlPanelGroup">
+              <ScalarProperty Name="Id" ColumnName="IdGroup" />
+            </EndProperty>
+          </AssociationSetMapping>
           <AssociationSetMapping Name="ControlPanelUserToGroup" TypeName="producerinterface_Model.ControlPanelUserToGroup" StoreEntitySet="ControlPanelUserToGroup">
             <EndProperty Name="ProducerUser">
               <ScalarProperty Name="Id" ColumnName="IdUser" />

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -7,9 +9,20 @@ namespace ProducerInterfaceCommon.Controllers
 {
     public class GlobalController : Controller
     {
-        // глобальные переменные и функции
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            //protected string controllerName;
+            //protected string actionName;
+            //protected string controllerAcctributes;
+            controllerName = this.GetType().Name.Replace("Controller", "").ToLower().ToString();
+            actionName = this.Request.RequestContext.RouteData.GetRequiredString("action").ToLower().ToString();
+            controllerAcctributes = this.Request.HttpMethod.ToString().ToLower();            
+        }
 
+        // глобальные переменные и функции
         // тип текущего пользователя SByte - хранится в ProducerUser таблице, параметр TypeUser
+
         protected ContextModels.TypeUsers TypeLoginUser { get { return (ContextModels.TypeUsers)SbyteTypeUser; } set { SbyteTypeUser = (SByte)value; } }
         protected SByte SbyteTypeUser { get; set; }
 
@@ -19,17 +32,72 @@ namespace ProducerInterfaceCommon.Controllers
         // Context DataBase       
         protected ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
         
-        private string controllerName;
-        private string actionName;
-        private string controllerAcctributes;
-      
-        private string permissionName { get { return (controllerName + "_" + actionName).ToLower(); } }
+        protected string controllerName;
+        protected string actionName;
+        protected string controllerAcctributes;
+
+        protected string permissionName { get { return (controllerName + "_" + actionName).ToLower(); } }
+
+        public string GetRandomPassword()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "").ToLower().Substring(8, MaxPasswordLeight);
+        }
+
+        public class Md5HashHelper
+        {
+            /// <summary>
+            /// Получение хэша строки
+            /// </summary>
+            /// <param name="text"></param>
+            /// <returns></returns>
+            public static string GetHash(string text)
+            {
+                using (MD5 md5Hash = MD5.Create()) return GetMd5Hash(md5Hash, text);
+            }
+
+            /// <summary>
+            /// получение хэша строки
+            /// </summary>
+            /// <param name="md5Hash">Объект MD5</param>
+            /// <param name="text">Хэшируемая строка</param>
+            /// <returns>Хыш строки</returns>
+            public static string GetMd5Hash(MD5 md5Hash, string text)
+            {
+                // Конвертация байтового массива в хэш
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(text));
+                // создание строки
+                StringBuilder sBuilder = new StringBuilder();
+                // проходит по каждому байту хэша и форматирует его в 16 string
+                for (int i = 0; i < data.Length; i++) sBuilder.Append(data[i].ToString("x2"));
+                return sBuilder.ToString();
+            }
+
+        }
+        
+        private int MaxPasswordLeight
+        {
+            get { return 6; }
+        }
+
+        public class SystemTime
+        {
+            public static DateTime Now()
+            {
+                return DateTime.Now;
+            }
+            public static DateTime GetDefaultDate()
+            {
+                return default(DateTime);
+
+            }
+
+        }
 
         public string GetUserCookiesName()
         {
             var currentUser = "";
 
-            string cookiesName = GetWebConfigParameters("");
+            string cookiesName = GetWebConfigParameters("CookiesName");
 
             try
             {
@@ -54,7 +122,8 @@ namespace ProducerInterfaceCommon.Controllers
 
             return currentUser;
         }
-
+                
+        #region COOKIES
         public void SetUserCookiesName(string UserLoginOrEmail, bool shouldRemember = true, string userData= "")
         {
             var CoockieName = GetWebConfigParameters("CookiesName");
@@ -139,9 +208,9 @@ namespace ProducerInterfaceCommon.Controllers
             return System.Configuration.ConfigurationManager.AppSettings[ParamKey].ToString();
         }
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-        }
+        #endregion
+
+
+     
     }
 }
