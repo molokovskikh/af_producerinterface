@@ -1,0 +1,38 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+
+@model IEnumerable<ControlPanelPermission>
+
+@{
+    ViewBag.Title = "Список пермишенов Панели управления";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ListPermission = Model;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<hr />
+@if (Model != null || Model.Count() > 0)
+{
+    foreach (ControlPanelPermission PermissionItem in ListPermission)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 data-toggle="collapse" class="panel-title" href="#collapse_@PermissionItem.Id"><span class="glyphicon glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp; @PermissionItem.ControllerAction</h4>
+            </div>
+            <div class="panel-collapse collapse" id="collapse_@PermissionItem.Id">
+                <div class="panel-body">
+                    <div class="form-group">
+
+                        <p>Тип запроса ' @PermissionItem.ActionAttributes '</p>
+                        <p>Описание ' @PermissionItem.Description '</p>
+                        <p>Статус ' @PermissionItem.Enabled '</p>
+                    </div>
+                    <div class="form-group">
+                        <a href="@Url.Action("EditPermission", new { Id = PermissionItem.Id })" class="btn btn-primary">Редактировать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+    }
+}

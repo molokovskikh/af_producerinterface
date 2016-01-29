@@ -37,18 +37,6 @@
     <div class="panel panel-primary">       
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseTwo"><span class="glyphicon glyphicon-user"></span>Права пользователей</a>
-            </h4>
-        </div>
-        <div id="collapseTwo" class="panel-collapse collapse in">           
-            <div class="panel-body">
-                <a href="~/PermissionUser/Group" class="btn btn-primary">Список Групп</a>            
-            </div>
-        </div>
-    </div>  
-    <div class="panel panel-primary">       
-        <div class="panel-heading">
-            <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseThree"><span class="glyphicon glyphicon-th-list"></span>Описание препаратов</a>
             </h4>
         </div>
@@ -79,14 +67,34 @@
                 <br />
                 <a href="~/Permission/Group" class="btn btn-primary">Список групп</a>
                 <br />
-                <a class="btn btn-primary" href="~/Permission/CreateGroupPermission">Создать новую группу</a>
+                <a class="btn btn-primary" href="~/Permission/CreateGroupPermission">Создание новой группы</a>
+                <br />
+                <a class="btn btn-primary" href="~/Permission/ListPermission">Список прав доступа</a>
             </div>
         </div>
     </div>
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseSix"><span class="glyphicon glyphicon-user"></span>Промо Акции</a>
+                <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseTwo"><span class="glyphicon glyphicon-user"></span>Права пользователей</a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <a href="~/PermissionUser/Group" class="btn btn-primary">Список Групп</a>
+                <br/>                  
+                <a href="~/PermissionUser/CreateGroupPermission" class="btn btn-primary">Создание новой группы</a>
+                <br />
+                <a href="~/PermissionUser/SearchUser" class="btn btn-primary">Поиск пользователя</a>
+                <br />
+                <a class="btn btn-primary" href="~/PermissionUser/ListPermission">Список прав доступа</a>        
+            </div>
+        </div>
+    </div>  
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseSix"><span class="glyphicon glyphicon-star-empty"></span>Промо Акции</a>
             </h4>
         </div>
         <div id="collapseSix" class="panel-collapse collapse in">

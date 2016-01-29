@@ -72,6 +72,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             ViewBag.ProducerList = cntx_.producernames.Where(xxx => xxx.ProducerId == PromoActionModel.ProducerId).First();
             return View(PromoActionModel);
         }
+
         public ActionResult Edit(promotions PromotionSuccess)
         {
             var promotionUpdate = cntx_.promotions.Where(xxx => xxx.Id == PromotionSuccess.Id).First();
@@ -96,6 +97,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             ViewBag.ActivePromo = "Подтвержденные и Активные на данный момент Промо-Акции";
             return View("Index",ListPromotion);
         }
-
+        
     }
 }

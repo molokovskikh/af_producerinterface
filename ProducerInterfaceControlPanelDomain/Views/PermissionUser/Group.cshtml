@@ -11,73 +11,58 @@
 
 <hr />
 
-<table class="table-bordered table-condensed table-striped" id="table-width-100prc">
-    <tr>
-        @*<th>Id группы</th>*@
-        <th>Название группы</th>
-        <th>Список пользователей</th>
-        <th>Список доступных Экшенов</th>
-    </tr>
-    @foreach (var GroupItem in Model)
-    {
-        <tr>     
-            <td>
-                <!--   Название группы   -->
-                <p>@GroupItem.NameGroup</p>
+@foreach (var GroupItem in Model)
+{
 
-                @if (GroupItem.Description == null || GroupItem.Description == "")
-                {
-                    <!--Описание у группы отсутствует -->
-                }
-                else
-                {
-                    <p>Описание <br />' @GroupItem.Description '</p>
-                }
-                <a class="btn btn-primary" href="~/PermissionUser/GetOneGroup/@GroupItem.Id">Редактировать группу</a>
-            </td>
-            <!--   Окончание первого столбика таблицы   -->
-            <td>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <H4 class="panel-title">
+                <p data-toggle="collapse" href="#collapse_@GroupItem.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp;@GroupItem.NameGroup</p>
+            </H4>
+        </div>
+        <div id="collapse_@GroupItem.Id" class="panel-collapse collapse">
+            <div class="panel-body">
+                <h4>Описание</h4> <p>' @GroupItem.Description '</p>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#table-width-100prc" href="#ListUsercollapseOne_a_@GroupItem.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp;Раскрыть</a>
-                        </h4>
+                        <h4 class="panel-title" data-toggle="collapse" href="#collapse_a_@GroupItem.Id"><span class="glyphicon glyphicon-user" style="color:green;"></span>&nbsp;&nbsp;&nbsp; Список пользователей</h4>
                     </div>
-                    <div id="ListUsercollapseOne_a_@GroupItem.Id" class="panel-collapse collapse">
+                    <div id="collapse_a_@GroupItem.Id" class="panel-collapse collapse">
                         <div class="panel-body">
                             @for (int i = 0; i < GroupItem.CountUser; i++)
                             {
                                 <!--   ФИО пользователя / eMail ссылка / Название организации -->
-                                <p>                                
+                                <p>
                                     @GroupItem.Users[i] <br />
                                     <a href="@("mailto:" + GroupItem.ListUsersInGroup[i].eMail)">@GroupItem.ListUsersInGroup[i].eMail</a> <br />
                                     Компания: @ProducerList.Where(xxx => xxx.Value == GroupItem.ListUsersInGroup[i].ProducerName).First().Text
                                 </p>
-                                <hr />                              
+
                             }
                         </div>
                     </div>
+
                 </div>
-            </td>
-            <!--   Окончание второго столбика таблицы   -->
-            <td>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#table-width-100prc" href="#ListUsercollapseOne_@GroupItem.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp;Раскрыть</a>
-                        </h4>
+                        <H4 class="panel-title" data-toggle="collapse" href="#collapse_a_a_@GroupItem.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt" style="color:green;"></span>&nbsp;&nbsp;&nbsp;Список доступов группы</H4>
                     </div>
-                    <div id="ListUsercollapseOne_@GroupItem.Id" class="panel-collapse collapse">
-                        <div class="panel-body">
+                    <div id="collapse_a_a_@GroupItem.Id" class="panel-collapse collapse">
+                        <div class="panel-body" >
                             @for (int i = 0; i < GroupItem.Permissions.Length; i++)
-                {
-                                <p>@GroupItem.Permissions[i]</p> <br />
+                            {
+                                <p>@GroupItem.Permissions[i]</p>
                             }
-                        </div>
+                        </div>                     
                     </div>
                 </div>
-            </td>
+                <div class="form-group">
+                    <a class="btn btn-primary" href="@Url.Action("GetOneGroup", new { id=GroupItem.Id})"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;&nbsp;Редактировать группу</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        </tr>
-    }
-</table>
+}

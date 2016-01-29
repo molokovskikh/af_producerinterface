@@ -5,7 +5,7 @@
     //$('#SupplierIdNonEqual').chosen({ width: '95%' });
     //$('#MailTo').chosen({ width: '95%' });
 
-    var DrugList = $('#ListSelectedPermission');
+    var DrugList = $('#ListPermissionTwo');
     DrugList.chosen({ width: '100%' });
 });
 //    // при чеке За предыдущий месяц гасим выбор интервала

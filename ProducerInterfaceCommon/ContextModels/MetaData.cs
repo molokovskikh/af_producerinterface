@@ -212,7 +212,10 @@ namespace ProducerInterfaceCommon.ContextModels
 
         [UIHint("LongListPermission")]
         public List<long> ListSelectedPermission { get; set; }
-             
+
+        [UIHint("LongListPermissionTwo")]
+        public List<long> ListPermissionTwo { get; set; }
+
         public TypeUsers UserType
         {
             get { return (TypeUsers)TypeUser; }
@@ -226,6 +229,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public List<int> ListPermission { get; set; }
         [UIHint("LongListUser")]
         public List<long> ListUser { get; set; }
+      
     }
        
     public partial class promotions

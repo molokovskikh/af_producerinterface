@@ -41,7 +41,7 @@ namespace ProducerInterface
                 }
                 ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
 
-                Response.Redirect("~/Home/Index");
+              //  Response.Redirect("~/Home/Index");
             }
         }
 
@@ -53,7 +53,7 @@ namespace ProducerInterface
         {
             if (value == null)
             {
-                Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = Controllers.pruducercontroller.ConfigurationController.SystemTime.Now() });
+                Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
                 return;
             }
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);

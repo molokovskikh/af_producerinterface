@@ -4,7 +4,7 @@
     // имя свойства
     var propName = ViewData.ModelMetadata.PropertyName;
     // лист всех вариантов для построения селекта
-    var propList = (List<ProducerInterfaceCommon.ContextModels.OptionElement>)ViewData[propName];
+    //var propList = (List<ProducerInterfaceCommon.ContextModels.OptionElement>)ViewData[propName];
     // класс для ошибки валидации, если есть
     var errorClass = "";
     var state = ViewData.ModelState[propName];
@@ -14,12 +14,12 @@
     }
 }
 <div class="row margin5">
-    <div class="form-group form-group-otstup">                  
+    <div class="form-group form-group-otstup">
+        <div class="flabel col-md-4">
+            <p>Список групп, в которых состоит пользователь</p>
+        </div>
         <div class="@("feditor col-md-8" + errorClass)">
-            <div class="form-group">
-                <label>Права пользователя</label>
-            </div> 
-            @Html.ListBoxFor(m => m, new MultiSelectList(ViewBag.PermissionList, "Value", "Text", Model), new { style = "display: none;" })
+            @Html.ListBoxFor(m => m, new MultiSelectList(ViewBag.GroupList, "Value", "Text", Model), new { style = "display: none;" })
             @Html.ValidationMessageFor(m => m)
         </div>
     </div>

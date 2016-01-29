@@ -1,25 +1,43 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
 
 @{
-    ViewBag.Title = "Добавление(удаление) прав";
+    ViewBag.Title = "Список пользователей из вашей компании";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <h3>Сотрудники</h3>
 
-@if(ViewBag.UserList != null)
-{
-    foreach(var User in ViewBag.UserList)
-{
-    <div class="row">
-        <p>@User.Name</p>
-        <a class="btn btn-primary"><span class="glyphicon glyphicon-cog" href="/Permission/Change/@User.Id"></span></a>
-    </div>
+    @foreach (var User in ViewBag.UserList)
+    {
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseTwo_@User.Id"><span class="glyphicon glyphicon-user"></span> @User.Name @User.Email</a>
+                </h4>
+            </div>
+            <div id="collapseTwo_@User.Id" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <p>Список групп, в которых состоит пользователь</p>
+                        @foreach (var GroupUser in User.ControlPanelGroup)
+                        {
+                            <p title="@GroupUser.Description">- @GroupUser.Name</p>
+                        }
+                    </div>
+                    <div class="form-group">
+                        @if (User.Id != ViewBag.CurrentUser.Id)
+                        {
+                            <a class="btn btn-primary" href="@Url.Action("Change", new { id= User.Id})"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;&nbsp; Редактировать</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+     
+
+    <hr/>
 }
 
-}
-else
-{
-<div class="row">
-    <h3>Других пользователей не зарегистрировано</h3>
-    <h4>Или они не подтвердили свою регистрацию</h4>
-</div>
-}
+
+

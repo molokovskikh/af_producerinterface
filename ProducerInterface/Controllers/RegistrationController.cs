@@ -214,7 +214,7 @@ namespace ProducerInterface.Controllers
 
             // валидация
 
-            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower() && xxx.UserType == 0).FirstOrDefault();
+            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower() && xxx.TypeUser == SbyteTypeUser).FirstOrDefault();
 
             if (ThisUser == null || ThisUser.Email == "")
             {
@@ -243,10 +243,8 @@ namespace ProducerInterface.Controllers
         
 
             if (ThisUser.Enabled == 1) // логинится не впервый раз и не заблокирован
-            {
-         
-                //CurrentUser = ThisUser;
-                //ViewBag.CurrentUser = ThisUser as produceruser;
+            {        
+            
                 CurrentUser = ThisUser as ProducerUser;
                 return Autentificate(this, shouldRemember: true);
             }
@@ -255,7 +253,7 @@ namespace ProducerInterface.Controllers
             if (ThisUser.Enabled == 0 && (ThisUser.PasswordUpdated.Value == SystemTime.GetDefaultDate())) // логинится впервые
             { 
                 
-                var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1 && xxx.UserType == 0).ToList();
+                var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == SbyteTypeUser).ToList();
 
                 List<UserPermission> LST = cntx_.UserPermission.ToList();
 
@@ -263,27 +261,55 @@ namespace ProducerInterface.Controllers
                 {
                     // данный пользователь зарегистрировался первым, даём ему все права
 
-                    foreach (var X in LST)
+                    // пользователь зарегистрировался первым, добавляем его в группу администраторов
+
+                    string AdminGroupName = GetWebConfigParameters("AdminGroupName");
+
+                    // проверяем наличие группы администраторов
+
+
+                    var AdminGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroupName).FirstOrDefault();
+
+                    if (String.IsNullOrEmpty(AdminGroup.Name))
                     {
-                        var AddOnePermission = new usertouserrole();
-                        AddOnePermission.ProducerUserId = ThisUser.Id;
-                        AddOnePermission.UserPermissionId = X.Id;
-                        cntx_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
+                        AdminGroup = new ControlPanelGroup();
+
+                        AdminGroup.Name = AdminGroupName;
+                        AdminGroup.Enabled = true;
+                        AdminGroup.Description = "Администраторы";
+                        AdminGroup.TypeGroup = SbyteTypeUser;
+                        cntx_.Entry(AdminGroup).State = System.Data.Entity.EntityState.Added;
+                        cntx_.SaveChanges();
                     }
 
+                    AdminGroup.ProducerUser.Add(ThisUser);
+                    cntx_.SaveChanges();   
                 }
                 else
                 {
 
                     // Даём ему права для входа в ЛК
+                    // LogonGroupAcess 
 
-                    var AddOnePermission = new usertouserrole();
-                    AddOnePermission.ProducerUserId = ThisUser.Id;
+                    var GroupName = GetWebConfigParameters("LogonGroupAcess");
+
+                    var OtherGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == GroupName).FirstOrDefault();
 
 
-                    
-                    AddOnePermission.UserPermissionId = LST.Where(xxx => xxx.Name.ToLower() == ("Profile_Index").ToLower()).First().Id;
-                    cntx_.Entry(AddOnePermission).State = System.Data.Entity.EntityState.Added;
+                    if (String.IsNullOrEmpty(OtherGroup.Name))
+                    {
+                        OtherGroup = new ControlPanelGroup();
+
+                        OtherGroup.Name = GroupName;
+                        OtherGroup.Enabled = true;
+                        OtherGroup.Description = "Администраторы";
+                        OtherGroup.TypeGroup = SbyteTypeUser;    
+                        cntx_.Entry(OtherGroup).State = System.Data.Entity.EntityState.Added;
+                        cntx_.SaveChanges();
+                    }
+
+                    OtherGroup.ProducerUser.Add(ThisUser);
+                    cntx_.SaveChanges();
                 }
                 SuccessMessage("Вы успешно подтвердили свою регистрацию на сайте");
 
