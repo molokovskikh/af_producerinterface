@@ -104,6 +104,9 @@
     <Compile Include="ContextModels\ControlPanelPermission.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\drugfamilynames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
@@ -269,6 +272,10 @@
     <Compile Include="Models\PastDateAttribute.cs" />
     <Compile Include="Models\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="Models\PharmacyRating\PharmacyRatingReportRow.cs" />
+    <Compile Include="Models\ProductConcurentRating\ProductConcurentRatingReport.cs" />
+    <Compile Include="Models\ProductConcurentRating\ProductConcurentRatingReportRow.cs" />
+    <Compile Include="Models\ProductPriceDynamics\ProductPriceDynamicsReport.cs" />
+    <Compile Include="Models\ProductPriceDynamics\ProductPriceDynamicsReportRow.cs" />
     <Compile Include="Models\ProductRating\ProductRatingReport.cs" />
     <Compile Include="Models\ProductRating\ProductRatingReportRow.cs" />
     <Compile Include="Models\RatingReportRow.cs" />

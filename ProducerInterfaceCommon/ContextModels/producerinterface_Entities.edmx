@@ -30,7 +30,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ControllerAction" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ActionAttributes" Type="text" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="varchar" MaxLength="250" />
           <Property Name="Enabled" Type="bool" Nullable="false" />
           <Property Name="TypePermission" Type="tinyint" Nullable="false" />
         </EntityType>
@@ -297,6 +297,16 @@
           <Property Name="ProducerId" Type="uint" Nullable="false" />
           <Property Name="DescriptionId" Type="uint" />
           <Property Name="MnnId" Type="uint" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamilynames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="drugfamilynames">
+          <Key>
+            <PropertyRef Name="FamilyId" />
+            <PropertyRef Name="FamilyName" />
+          </Key>
+          <Property Name="FamilyId" Type="uint" Nullable="false" />
+          <Property Name="FamilyName" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugformproducer" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -690,6 +700,12 @@ FROM `drugdescription` AS `drugdescription`</DefiningQuery>
 `drugfamily`.`DescriptionId`, 
 `drugfamily`.`MnnId`
 FROM `drugfamily` AS `drugfamily`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="drugfamilynames" EntityType="Self.drugfamilynames" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`drugfamilynames`.`FamilyId`, 
+`drugfamilynames`.`FamilyName`
+FROM `drugfamilynames` AS `drugfamilynames`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="drugformproducer" EntityType="Self.drugformproducer" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -1361,6 +1377,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="ControlPanelGroup" EntitySet="ControlPanelGroup" />
             <End Role="ProducerUser" EntitySet="ProducerUser" />
           </AssociationSet>
+          <EntitySet Name="drugfamilynames" EntityType="producerinterface_Model.drugfamilynames" />
         </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1473,6 +1490,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <End Type="producerinterface_Model.ControlPanelGroup" Role="ControlPanelGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.ProducerUser" Role="ProducerUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="drugfamilynames">
+          <Key>
+            <PropertyRef Name="FamilyId" />
+            <PropertyRef Name="FamilyName" />
+          </Key>
+          <Property Name="FamilyId" Type="Int64" Nullable="false" />
+          <Property Name="FamilyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1885,6 +1910,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="IdGroup" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="drugfamilynames">
+            <EntityTypeMapping TypeName="producerinterface_Model.drugfamilynames">
+              <MappingFragment StoreEntitySet="drugfamilynames">
+                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+                <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

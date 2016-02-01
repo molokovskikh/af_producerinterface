@@ -57,5 +57,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<ProducerUser> ProducerUser { get; set; }
         public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
         public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
+        public DbSet<drugfamilynames> drugfamilynames { get; set; }
     }
 }

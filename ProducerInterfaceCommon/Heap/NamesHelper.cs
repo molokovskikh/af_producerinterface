@@ -36,9 +36,9 @@ namespace ProducerInterfaceCommon.Heap
 
 			return results;
 		}
-
-		// для UI ???
-		public string GetMailOkReportSubject()
+     
+        // для UI ???
+        public string GetMailOkReportSubject()
 		{
 			// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
 			var result = "Отчет пользователя *** производителя *** (будет указано после переноса в ProducerInterface)";
@@ -70,8 +70,22 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
-		// для UI
-		public List<OptionElement> GetSupplierList(List<decimal> regionList)
+        public List<OptionElement> GetDrugList(List<int> SelectedDrugs)
+        {
+            var SelectedDrugsLong = SelectedDrugs.Select(x => (long)x).ToList();
+            var ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugsLong.Contains(x.FamilyId)).ToList();
+            var ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
+            return ListSelectGrugs;
+        }
+
+        public List<OptionElement> GetSearchCatalogFamalyName(string NameDrug)
+        {
+            var result = _cntx.drugfamilynames.Where(xxx => xxx.FamilyName.Contains(NameDrug)).Take(10).ToList().Select(xxx => new OptionElement { Value = xxx.FamilyId.ToString(), Text = xxx.FamilyName }).ToList();
+            return result;
+        }
+
+        // для UI
+        public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
 			// если регионы не указаны - возвращаем пустой лист
 			if (regionList == null)

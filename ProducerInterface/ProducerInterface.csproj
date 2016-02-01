@@ -212,6 +212,7 @@
     <Content Include="Content\Chosen\css\jqCron.css" />
     <Content Include="Content\Chosen\css\loading.gif" />
     <Content Include="Content\Chosen\css\Site.css" />
+    <Content Include="Content\Chosen\js\ajax-chosen.g.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
     <Content Include="Content\Chosen\js\chosen.jquery.js" />
@@ -330,6 +331,9 @@
     <Content Include="Views\general_reports\Details.cshtml" />
     <Content Include="Views\general_reports\Index.cshtml" />
     <Content Include="Views\general_reports\ReportDetails.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductConcurentRatingReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\IntList.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductPriceDynamicsReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

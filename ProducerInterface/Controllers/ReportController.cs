@@ -282,6 +282,8 @@ namespace ProducerInterface.Controllers
             return View(jobList);
         }
 
+
+
 		/// <summary>
 		/// Возвращает для заполнения форму установки параметров запуска отчёта, проверяет их, запускает отчёт
 		/// </summary>
@@ -510,11 +512,18 @@ namespace ProducerInterface.Controllers
                                                                                                 && x.Enable == true);
         }
 
-		/// <summary>
-		/// Возвращает тип отчёта по идентификатору типа отчёта
-		/// </summary>
-		/// <param name="id">Идентификатор типа отчёта</param>
-		/// <returns></returns>
+        public JsonResult GetCatalogDragFamalyNames(string term)
+        {
+            var ret = Json(h.GetSearchCatalogFamalyName(term).ToList().Select(x => new { value = x.Value, text = x.Text }), JsonRequestBehavior.AllowGet);
+            return ret;
+        }
+
+
+        /// <summary>
+        /// Возвращает тип отчёта по идентификатору типа отчёта
+        /// </summary>
+        /// <param name="id">Идентификатор типа отчёта</param>
+        /// <returns></returns>
         protected Type GetModelType(int id)
         {
             var typeName = ((Reports)id).ToString();

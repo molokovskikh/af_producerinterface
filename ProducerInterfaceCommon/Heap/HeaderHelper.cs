@@ -32,7 +32,15 @@ namespace ProducerInterfaceCommon.Heap
 			return $"В отчет включены следующие препараты: {String.Join(", ", products)}";
 		}
 
-		public string GetNotSupplierHeader(List<long> supplierIds)
+        public string GetDragFamalyNames(List<int> DrugFamalies)
+        {
+            var SelectedDrugsLong = DrugFamalies.Select(x => (long)x).ToList();
+            var ListGrugsNames = _cntx.drugfamilynames.Where(x => SelectedDrugsLong.Contains(x.FamilyId)).Select(xxx => xxx.FamilyName).ToList();
+            return  $"В отчет включены следующие препараты: {String.Join(", ", ListGrugsNames)}";
+        }
+
+
+        public string GetNotSupplierHeader(List<long> supplierIds)
 		{
 			var notSuppliers = _cntx.suppliernames.Where(x => supplierIds.Contains(x.SupplierId)).Select(x => x.SupplierName).OrderBy(x => x).ToList();
 			return $"Из отчета исключены следующие поставщики: {String.Join(", ", notSuppliers)}";

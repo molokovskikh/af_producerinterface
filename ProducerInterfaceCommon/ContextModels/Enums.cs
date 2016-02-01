@@ -35,7 +35,13 @@ namespace ProducerInterfaceCommon.ContextModels
         PharmacyRatingReport = 2,
 
         [Display(Name = "Рейтинг поставщиков")]
-        SupplierRatingReport = 3
+        SupplierRatingReport = 3,
+
+        [Display(Name = "Рейтинг товаров в конкурентной группе")]
+        ProductConcurentRatingReport = 4,
+
+        [Display(Name= "Динамика цен по товару за период")]
+        ProductPriceDynamicsReport = 5
     }
 
     public enum TypeUsers
