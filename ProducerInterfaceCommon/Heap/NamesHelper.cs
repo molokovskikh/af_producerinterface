@@ -73,16 +73,11 @@ namespace ProducerInterfaceCommon.Heap
         public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
         {
             if (SelectedDrugs == null || SelectedDrugs.Count() == 0)
-            {
-                var ListSelectGrugs = new List<OptionElement>();
-                return ListSelectGrugs;
-            }
-            else
-            {
-                var ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugs.Contains(x.FamilyId)).ToList();
-                var ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
-                return ListSelectGrugs;
-            }
+                return new List<OptionElement>();
+
+            var ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugs.Contains(x.FamilyId)).ToList();
+            var ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
+            return ListSelectGrugs;
         }
 
         public List<OptionElement> GetSearchCatalogFamalyName(string NameDrug)
