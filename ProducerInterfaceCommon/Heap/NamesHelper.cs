@@ -70,11 +70,16 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
-        public List<OptionElement> GetDrugList(List<int> SelectedDrugs)
+        public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
         {
-            var SelectedDrugsLong = SelectedDrugs.Select(x => (long)x).ToList();
-            var ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugsLong.Contains(x.FamilyId)).ToList();
-            var ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
+            var ListDrugsNoConvert = new List<ProducerInterfaceCommon.ContextModels.drugfamilynames>();
+            var ListSelectGrugs = new List<OptionElement>();
+            try
+            {
+                ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugs.Contains(x.FamilyId)).ToList();
+                ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
+            }
+            catch { }
             return ListSelectGrugs;
         }
 

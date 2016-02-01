@@ -19,8 +19,8 @@ namespace ProducerInterfaceCommon.Models
 
         [Display(Name = "Товар")]
         [Required(ErrorMessage = "Не выбраны товары")]
-        [UIHint("IntList")]
-        public List<int> CatalogNamesId { get; set; }
+        [UIHint("LongList")]
+        public List<long> CatalogNamesId { get; set; }
 
         public override string Name
         {         
