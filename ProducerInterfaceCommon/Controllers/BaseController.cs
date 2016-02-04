@@ -136,9 +136,12 @@ namespace ProducerInterfaceCommon.Controllers
 
         private bool IgnoreRoutePermission(string ThisRoute)
         {
+
+
             try
             {
-                return IgnoreRouteForPermission().Any(xxx => xxx == ThisRoute);
+                return true;
+                // return IgnoreRouteForPermission().Any(xxx => xxx == ThisRoute);
             }
             catch { return false; }
         }

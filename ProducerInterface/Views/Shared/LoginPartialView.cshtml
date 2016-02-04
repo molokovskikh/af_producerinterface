@@ -1,5 +1,7 @@
-﻿@model ProducerInterfaceCommon.ContextModels.LoginValidation
-
+﻿@{
+var user = new ProducerInterfaceCommon.ContextModels.LoginValidation();
+model = user;
+}
 <div class="dropdown-menu" id="autentificationForm">
     <form method="post" action="~/Registration/UserAuthentication">
         <div class="form-group-lg">
