@@ -12,33 +12,27 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class ProducerUser
+    public partial class Account
     {
-        public ProducerUser()
+        public Account()
         {
-            this.DrugDescriptionRemark = new HashSet<DrugDescriptionRemark>();
-            this.promotions = new HashSet<promotions>();
-            this.user_logs = new HashSet<user_logs>();
-            this.usertouserrole = new HashSet<usertouserrole>();
-            this.ControlPanelGroup = new HashSet<ControlPanelGroup>();
+            this.AccountEmail = new HashSet<AccountEmail>();
+            this.AccountGroup = new HashSet<AccountGroup>();
         }
     
         public long Id { get; set; }
-        public string Name { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public string Appointment { get; set; }
-        public Nullable<long> ProducerId { get; set; }
-        public Nullable<System.DateTime> PasswordUpdated { get; set; }
-        public Nullable<sbyte> PasswordToUpdate { get; set; }
-        public Nullable<sbyte> Enabled { get; set; }
         public string Login { get; set; }
         public sbyte TypeUser { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public string Appointment { get; set; }
+        public Nullable<long> CompanyId { get; set; }
+        public Nullable<System.DateTime> PasswordUpdated { get; set; }
+        public Nullable<sbyte> Enabled { get; set; }
+        public string Phone { get; set; }
     
-        public virtual ICollection<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
-        public virtual ICollection<promotions> promotions { get; set; }
-        public virtual ICollection<user_logs> user_logs { get; set; }
-        public virtual ICollection<usertouserrole> usertouserrole { get; set; }
-        public virtual ICollection<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public virtual AccountCompany AccountCompany { get; set; }
+        public virtual ICollection<AccountEmail> AccountEmail { get; set; }
+        public virtual ICollection<AccountGroup> AccountGroup { get; set; }
     }
 }

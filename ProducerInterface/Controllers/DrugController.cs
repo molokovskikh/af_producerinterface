@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
 			//  TODO: берётся у юзера            
 			try {
 				userId = CurrentUser.Id;
-				producerId = (long)CurrentUser.ProducerId;
+				producerId = (long)CurrentUser.CompanyId;
 			}
 			catch {
 				// Ignore

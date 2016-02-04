@@ -197,3 +197,7 @@
 01.02.2016 14:34:08.006 [TestScheduler_Worker-1] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' returned by: TestScheduler_Worker-1
 01.02.2016 14:34:17.797 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
 01.02.2016 14:34:47.783 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+02.02.2016 18:34:37.357 [7] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Shared\ModelSendErrorMessageForAminPartial.cshtml(6): error CS1503: Argument 3: cannot convert from 'string' to 'System.Web.Mvc.Ajax.AjaxOptions'
+02.02.2016 18:35:16.725 [5] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/ModelSendErrorMessageForAminPartial" не найден или не реализует интерфейс IController.
+02.02.2016 18:38:37.520 [8] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Shared\ModelSendErrorMessageForAminPartial.cshtml(6): error CS1503: Argument 3: cannot convert from 'string' to 'System.Web.Mvc.Ajax.AjaxOptions'
+02.02.2016 19:00:31.908 [34] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartialView" не найден или не реализует интерфейс IController.

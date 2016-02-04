@@ -60,14 +60,14 @@ namespace ProducerInterfaceCommon.Heap
         public static void SendReportErrorMessage(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, string reportName, string jobName, string errorMessage)
         {
             // TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
-            var user = cntx.usernames.Single(x => x.UserId == userId);
+            var user = cntx.Account.Single(x => x.Id == userId);
             var siteName = ConfigurationManager.AppSettings["SiteName"];
             var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ReportError);
             var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
             var body = $"{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
-            EmailSender.SendEmail(user.Email, subject, body, null);
+            EmailSender.SendEmail(user.Login, subject, body, null);
 
-            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.UserName} (id={user.UserId}, {user.Email}), изготовитель {user.ProducerName} (id={user.ProducerId}), время {DateTime.Now}, отчёт \"{reportName}\", задача {jobName}, сообщение об ошибке {errorMessage}";
+            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчёт \"{reportName}\", задача {jobName}, сообщение об ошибке {errorMessage}";
             var mailError = ConfigurationManager.AppSettings["MailError"];
             EmailSender.SendEmail(mailError, subject, bodyExtended, null);
         }
@@ -90,21 +90,21 @@ namespace ProducerInterfaceCommon.Heap
         private static void SendPasswordMessage(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
         {
             // TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
-            var user = cntx.usernames.Single(x => x.UserId == userId);
+            var user = cntx.Account.Single(x => x.Id == userId);
             var siteName = ConfigurationManager.AppSettings["SiteName"];
             var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)type);
             var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
             var body = $"{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
-            EmailSender.SendEmail(user.Email, subject, body, null, true);
+            EmailSender.SendEmail(user.Login, subject, body, null, true);
 
-            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.UserName} ({user.Email}), изготовитель {user.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
+            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
             var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
             EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, true);
         }
 
         public static void SendNewPromotion(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, long PromotionId, string ip)
         {
-            var User_ = cntx.usernames.Where(x => x.UserId == userId).First();
+            var User_ = cntx.Account.Where(x => x.Id == userId).First();
             var siteName = ConfigurationManager.AppSettings["SiteName"];
             var Promotion = cntx.promotions.Where(x => x.Id == PromotionId).First();
             var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
@@ -118,19 +118,19 @@ namespace ProducerInterfaceCommon.Heap
             //     изменена { UserName}. Посмотреть статус и изменить промо - акцию { Http}
 
             var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-            EmailSender.SendEmail(User_.Email, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
+            EmailSender.SendEmail(User_.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
-            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
+            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
             var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
             EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
         }
 
         public static void SendChangePromotion(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, long PromotionId, string ip)
         {
-            var User_ = cntx.usernames.Where(x => x.UserId == userId).First();
+            var User_ = cntx.Account.Where(x => x.Id == userId).First();
 
             long UserCreatePromotionID = cntx.promotions.Where(xxx => xxx.Id == PromotionId).First().ProducerUserId;
-            var SendEmailOnCreateUserPromotion = cntx.ProducerUser.Where(xxx => xxx.Id == UserCreatePromotionID).First();
+            var SendEmailOnCreateUserPromotion = cntx.Account.Where(xxx => xxx.Id == UserCreatePromotionID).First();
 
             var EmailCreateUser = cntx.promotions.Where(xxx => xxx.Id == PromotionId).Select(yyy => yyy.ProducerUserId);
             var siteName = ConfigurationManager.AppSettings["SiteName"];
@@ -143,21 +143,21 @@ namespace ProducerInterfaceCommon.Heap
             var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 
             var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = SendEmailOnCreateUserPromotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-            EmailSender.SendEmail(SendEmailOnCreateUserPromotion.Email, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
+            EmailSender.SendEmail(SendEmailOnCreateUserPromotion.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
-            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
+            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
             var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
             EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
         }
 
         public static void SendPromotionStatus(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, long PromotionId, string ip)
         {
-            var User_ = cntx.usernames.Where(x => x.UserId == userId).First();
+            var User_ = cntx.Account.Where(x => x.Id == userId).First();
 
             var siteName = ConfigurationManager.AppSettings["SiteName"];
             var Promotion = cntx.promotions.Where(x => x.Id == PromotionId).First();
             var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
-            var SendEmailOnCreateUserPromotion = cntx.ProducerUser.Where(xxx => xxx.ProducerId == cntx.promotions.Where(yyy => yyy.Id == PromotionId).First().ProducerUserId).Select(zzz => zzz.Email).First();
+            var SendEmailOnCreateUserPromotion = cntx.Account.Where(xxx => xxx.CompanyId == cntx.promotions.Where(yyy => yyy.Id == PromotionId).First().ProducerUserId).Select(zzz => zzz.Login).First();
 
             MailType Type = MailType.StatusPromotion;
             var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
@@ -170,7 +170,7 @@ namespace ProducerInterfaceCommon.Heap
             var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
             EmailSender.SendEmail(SendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
-            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.UserName} ({User_.Email}), изготовитель {User_.ProducerName}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
+            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
             var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
             EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
 
@@ -185,6 +185,19 @@ namespace ProducerInterfaceCommon.Heap
                     displayName = item.Text;
             }
             return displayName;
+        }
+
+        public static string GetCompanyname(long UserId, producerinterface_Entities cntx)
+        {
+            var X = cntx.Account.Where(xxx => xxx.Id == UserId).First().AccountCompany;
+            if (X.ProducerId == null || X.ProducerId == 0)
+            {
+                return X.Name;
+            }
+            else
+            {
+                return cntx.producernames.Where(xxx => xxx.ProducerId == X.ProducerId).First().ProducerName;
+            }
         }
     }
 }

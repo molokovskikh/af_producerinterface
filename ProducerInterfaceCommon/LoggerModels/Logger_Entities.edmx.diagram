@@ -5,12 +5,12 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="75ed2f2f9b824ad9a68b8b66abb3d36a" Name="Diagram1">
-        <EntityTypeShape EntityType="LoggerModels.LogObjectChange" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="LoggerModels.LogPropertyChange" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="LoggerModels.LogObjectChange" Width="2.625" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="LoggerModels.LogPropertyChange" Width="4.125" PointX="6.5" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="LoggerModels.LogPropertyChange_LogObjectChange" ManuallyRouted="false" />
         <EntityTypeShape EntityType="LoggerModels.LogChangeSet" Width="1.5" PointX="1.125" PointY="1.125" />
         <EntityTypeShape EntityType="LoggerModels.logchangeview" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="LoggerModels.propertychangeview" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="LoggerModels.propertychangeview" Width="2.875" PointX="2.75" PointY="4.75" />
         <AssociationConnector Association="LoggerModels.LogObjectChange_LogChangeSet" />
       </Diagram>
     </edmx:Diagrams>

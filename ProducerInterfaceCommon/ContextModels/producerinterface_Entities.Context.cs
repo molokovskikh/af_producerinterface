@@ -28,17 +28,12 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<mailform> mailform { get; set; }
-        public DbSet<producers> producers { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<promotionToDrug> promotionToDrug { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<reportxml> reportxml { get; set; }
         public DbSet<user_logs> user_logs { get; set; }
-        public DbSet<UserPermission> UserPermission { get; set; }
-        public DbSet<userrole> userrole { get; set; }
-        public DbSet<usertouserrole> usertouserrole { get; set; }
-        public DbSet<userpermissionrole> userpermissionrole { get; set; }
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
         public DbSet<drugdescription> drugdescription { get; set; }
@@ -52,11 +47,13 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
         public DbSet<regionnames> regionnames { get; set; }
         public DbSet<suppliernames> suppliernames { get; set; }
-        public DbSet<usernames> usernames { get; set; }
         public DbSet<LogForNet> LogForNet { get; set; }
-        public DbSet<ProducerUser> ProducerUser { get; set; }
-        public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
-        public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
         public DbSet<drugfamilynames> drugfamilynames { get; set; }
+        public DbSet<Account> Account { get; set; }
+        public DbSet<AccountCompany> AccountCompany { get; set; }
+        public DbSet<AccountEmail> AccountEmail { get; set; }
+        public DbSet<AccountGroup> AccountGroup { get; set; }
+        public DbSet<AccountPermission> AccountPermission { get; set; }
+        public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
     }
 }

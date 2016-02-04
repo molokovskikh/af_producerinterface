@@ -13,7 +13,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         public ActionResult Index(bool EnabledPromotion = false, long ProducerId = 0)
         {
             var ListPromotion = new  List<promotions>();          
-            var UserId = cntx_.ProducerUser.Where(xxx => xxx.Login == CurrentUser.Login).First();
+            var UserId = cntx_.Account.Where(xxx => xxx.Login == CurrentUser.Login).First();
          
             if (ProducerId == 0)
             {
@@ -77,7 +77,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var promotionUpdate = cntx_.promotions.Where(xxx => xxx.Id == PromotionSuccess.Id).First();
             var ContolUserName = CurrentUser.Login;
-            var ControlUser = cntx_.ProducerUser.Where(xxx => xxx.Login == ContolUserName && xxx.TypeUser == SbyteTypeUser).First().Id;
+            var ControlUser = cntx_.Account.Where(xxx => xxx.Login == ContolUserName && xxx.TypeUser == SbyteTypeUser).First().Id;
 
             promotionUpdate.Status = true;
         //    promotionUpdate.AdminId = ControlUser;      

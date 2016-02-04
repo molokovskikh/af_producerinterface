@@ -16,7 +16,7 @@ namespace ProducerInterfaceCommon.ContextModels
     public class Producer
     {
         public virtual string Name { get; set; }
-        public virtual IList<ProducerUser> Users { get; set; }
+        public virtual IList<Account> Users { get; set; }
         public virtual List<Drug> Drugs { get; set; }
     }
 
@@ -124,6 +124,14 @@ namespace ProducerInterfaceCommon.ContextModels
         public string password { get; set; }
     }
 
+    public class RegistrationAccountValidation
+    {
+        [UIHint("EditorProducer")]
+        [Required(ErrorMessage = "Выберите компанию")]
+        [Display(Name = "Выберите вашу компанию: ")]
+        public long Producers { get; set; }
+    }
+
     public class RegistrerValidation
     {
 
@@ -144,12 +152,10 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Должность: ")]
         [Required(ErrorMessage = "Введите должность")]
         public string Appointment { get; set; }
-
-
-        [UIHint("EditorProducer")]
-        [Required(ErrorMessage = "Выберите компанию")]
-        [Display(Name = "Выберите вашу компанию: ")]
+             
         public long Producers { get; set; }
+        public string ProducerName { get; set; }
+
     }
 
     public class SearchProducerReportsModel

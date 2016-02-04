@@ -30,18 +30,25 @@
       
         <footer class="panel-footer navbar-fixed-bottom">
             <center>             
-                <p>&copy; @DateTime.Now.Year – Аналит Фармация | Телефон:8-800-555-46-88</p>
+                <p>&copy; @DateTime.Now.Year – Аналит Фармация | E-mail: <a href="mailto:marketing@analit.net">marketing@analit.net</a></p>
             </center>
         </footer>
     </div>
   
+  
+    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-  
+
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
     @if (user == null)
     {
         @Scripts.Render("~/bundles/jqueryval")
     }
+
+    @Html.Partial("ModelSendErrorMessageForAminPartial")
 
     <script src="~/Scripts/WorkPlace/Analit.js"></script>
     <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>

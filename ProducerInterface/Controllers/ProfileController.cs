@@ -25,5 +25,12 @@ namespace ProducerInterface.Controllers
             return View();
         }
 
+        public ActionResult Account()
+        {
+            SuccessMessage("В разработке");
+            return RedirectToAction("Index");
+        }
+        
+
     }
 }

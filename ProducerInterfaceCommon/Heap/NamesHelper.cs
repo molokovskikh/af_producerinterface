@@ -30,9 +30,9 @@ namespace ProducerInterfaceCommon.Heap
 			//results.Add(new OptionElement() { Text = "r.kvasov@analit.net", Value = "r.kvasov@analit.net" });
 
 			// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
-			var u =_cntx.usernames.SingleOrDefault(x => x.UserId == _userId);
+			var u =_cntx.Account.SingleOrDefault(x => x.Id == _userId);
 			if (u != null)
-				results.Add(new OptionElement() { Text = u.Email, Value = u.Email });
+				results.Add(new OptionElement() { Text = u.Login, Value = u.Login });
 
 			return results;
 		}
@@ -42,9 +42,17 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
 			var result = "Отчет пользователя *** производителя *** (будет указано после переноса в ProducerInterface)";
-			var u =_cntx.usernames.SingleOrDefault(x => x.UserId == _userId);
-			if (u != null)
-				result = $"Отчет пользователя {u.UserName} {u.Email} производителя {u.ProducerName}";
+			var u =_cntx.Account.SingleOrDefault(x => x.Id == _userId);
+            if (u != null)
+            {
+                var X = _cntx.producernames.Where(xxx => xxx.ProducerId == u.AccountCompany.ProducerId).FirstOrDefault();
+                string companyName = "";
+                if (X != null && X.ProducerId != 0) { companyName = X.ProducerName; }
+                else { companyName = u.AccountCompany.Name; }
+
+                
+                result = $"Отчет пользователя {u.Name} {u.Login} производителя {companyName}";
+            }
 			return result;
 		}
 
@@ -61,7 +69,7 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetCatalogList()
 		{
-			var producerId = _cntx.usernames.Single(x => x.UserId == _userId).ProducerId;
+			var producerId = _cntx.Account.Single(x => x.Id == _userId).AccountCompany.ProducerId;
 			var results = _cntx.assortment
 				.Where(x => x.ProducerId == producerId)
 				.OrderBy(x => x.CatalogName)

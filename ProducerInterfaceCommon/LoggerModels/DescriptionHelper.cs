@@ -1,28 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProducerInterfaceCommon.LoggerModels
 {
 
     // EntityState.Added || p.State == EntityState.Deleted || p.State == EntityState.Modified);
     // 4 8 16
-
-    public enum EntityCommand
-    {
-        [Display(Name ="Добавлено")]
-        Added = 4,
-
-        [Display(Name = "Удалено")]
-        Deleted = 8,
-
-        [Display(Name = "Изменено")]
-        Modified = 16
-    }
-
+     
     public static class DescriptionHelper
     {
         // Получение значения атребута "Description"

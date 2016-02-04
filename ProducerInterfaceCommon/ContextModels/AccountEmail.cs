@@ -12,21 +12,12 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlPanelGroup
+    public partial class AccountEmail
     {
-        public ControlPanelGroup()
-        {
-            this.ControlPanelPermission = new HashSet<ControlPanelPermission>();
-            this.ProducerUser = new HashSet<ProducerUser>();
-        }
+        public long Id { get; set; }
+        public string eMail { get; set; }
+        public Nullable<long> AccountId { get; set; }
     
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public bool Enabled { get; set; }
-        public string Description { get; set; }
-        public sbyte TypeGroup { get; set; }
-    
-        public virtual ICollection<ControlPanelPermission> ControlPanelPermission { get; set; }
-        public virtual ICollection<ProducerUser> ProducerUser { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

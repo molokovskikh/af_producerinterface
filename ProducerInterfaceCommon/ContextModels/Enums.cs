@@ -50,10 +50,20 @@ namespace ProducerInterfaceCommon.ContextModels
         ProducerUser =0,
         [Display(Name = "Пользователь из Панели управления")]
         ControlPanelUser =1,
-        [Display(Name = "Пользователь из Из интерфейса отчетов")]
-        ReportUser =2,
-        [Display(Name = "Для тестов")]
-        UserRazrab =10
+        [Display(Name = "Пользователь из интерфейса производителя, без Id производителя")]
+        UserNotProducer =2    
+    }
+
+    public enum EntityCommand
+    {
+        [Display(Name = "Добавлено")]
+        Added = 4,
+
+        [Display(Name = "Удалено")]
+        Deleted = 8,
+
+        [Display(Name = "Изменено")]
+        Modified = 16
     }
 
 }

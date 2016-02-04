@@ -32,21 +32,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             string AdministrationGroupname = GetWebConfigParameters("AdminGroupName");
 
-            var ListAdministrators = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdministrationGroupname).First().ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).ToList();
+            var ListAdministrators = cntx_.AccountGroup.Where(xxx => xxx.Name == AdministrationGroupname).First().Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).ToList();
             return View(ListAdministrators);
         }
         
         public ActionResult Group()
         {
-            var ListGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.TypeGroup == FilterSbyte).ToList()
+            var ListGroup = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == FilterSbyte).ToList()
                 .Select(xxx => new ListGroupView
                 {
                     Id = xxx.Id,
-                    CountUser = xxx.ProducerUser.Where(eee => eee.Enabled == 1 && eee.Login != null).Count(),
+                    CountUser = xxx.Account.Where(eee => eee.Enabled == 1 && eee.Login != null).Count(),
                     NameGroup = xxx.Name,
                     Description = xxx.Description,
-                    Users = xxx.ProducerUser.Where(zzz => zzz.TypeUser == FilterSbyte && zzz.Enabled == 1 && zzz.Login != null).Select(zzz => zzz.Login).ToArray(),
-                    Permissions = xxx.ControlPanelPermission.Where(zzz => zzz.Enabled == true && zzz.TypePermission == FilterSbyte).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes).ToArray()
+                    Users = xxx.Account.Where(zzz => zzz.TypeUser == FilterSbyte && zzz.Enabled == 1 && zzz.TypeUser == FilterSbyte).Select(zzz => zzz.Login).ToArray(),
+                    Permissions = xxx.AccountPermission.Where(zzz => zzz.Enabled == true && zzz.TypePermission == FilterSbyte).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes).ToArray()
                 });
 
             return View(ListGroup);
@@ -54,13 +54,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 
         public ActionResult Users()
         {
-            var ModelListUserView = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.Login != null).ToList()
+            var ModelListUserView = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == SbyteTypeUser).ToList()
                 .Select(vvv => new ListUserView
                 {
                     Id = vvv.Id,
                     Name = vvv.Name,
-                    Groups = cntx_.ControlPanelGroup.ToList().Where(zzz => zzz.ProducerUser.Any(zzzz => zzzz.Id == vvv.Id && zzzz.TypeUser == FilterSbyte)).ToList().Select(z => z.Name).ToArray(),
-                    ListPermission = cntx_.ControlPanelPermission.ToList().Where(zzz => zzz.ControlPanelGroup.Any(ccc => ccc.ProducerUser.Any(v => v.Id == vvv.Id && v.TypeUser == FilterSbyte))).ToList().Select(vv => vv.ControllerAction + "   " + vv.ActionAttributes).ToArray()
+                    Groups = cntx_.AccountGroup.ToList().Where(zzz => zzz.Account.Any(zzzz => zzzz.Id == vvv.Id && zzzz.TypeUser == FilterSbyte)).ToList().Select(z => z.Name).ToArray(),
+                    ListPermission = cntx_.AccountPermission.ToList().Where(zzz => zzz.AccountGroup.Any(ccc => ccc.Account.Any(v => v.Id == vvv.Id && v.TypeUser == FilterSbyte))).ToList().Select(vv => vv.ControllerAction + "   " + vv.ActionAttributes).ToArray()
                 }).ToList();
 
             foreach (var ItemModel in ModelListUserView)
@@ -75,7 +75,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         public ActionResult GetOneGroup(long Id)
         {
 
-            var GroupPermitionModel = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == Id).First();
+            var GroupPermitionModel = cntx_.AccountGroup.Where(xxx => xxx.Id == Id).First();
 
             if (!GroupPermitionModel.Enabled)
             {
@@ -83,32 +83,32 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 return RedirectToAction("Group", "Permission");
             }
 
-            ViewBag.UserList = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+            ViewBag.UserList = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
 
-            ViewBag.PermissionList = cntx_.ControlPanelPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
+            ViewBag.PermissionList = cntx_.AccountPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
 
 
-            GroupPermitionModel.ListPermission = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == Id && xxx.TypeGroup == FilterSbyte).First().ControlPanelPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => xxx.Id).ToList();
-            GroupPermitionModel.ListUser = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == Id && xxx.TypeGroup == FilterSbyte).First().ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).Select(xxx => xxx.Id).ToList();
+            GroupPermitionModel.ListPermission = cntx_.AccountGroup.Where(xxx => xxx.Id == Id && xxx.TypeGroup == FilterSbyte).First().AccountPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => xxx.Id).ToList();
+            GroupPermitionModel.ListUser = cntx_.AccountGroup.Where(xxx => xxx.Id == Id && xxx.TypeGroup == FilterSbyte).First().Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).Select(xxx => xxx.Id).ToList();
 
             return View("ChangeGroupParameters", GroupPermitionModel);
         }
 
         [HttpPost]
-        public ActionResult GroupChangeSave(ControlPanelGroup ChangedGroup)
+        public ActionResult GroupChangeSave(AccountGroup ChangedGroup)
         {
             if (ChangedGroup == null || ChangedGroup.Name == null || ChangedGroup.Name == "")
             {
                 ErrorMessage("Не указано название группы");
-                ViewBag.UserList = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.Login != null && xxx.TypeUser == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
-                ViewBag.PermissionList = cntx_.ControlPanelPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
+                ViewBag.UserList = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.Login != null && xxx.TypeUser == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+                ViewBag.PermissionList = cntx_.AccountPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
                 return View("ChangeGroupParameters", ChangedGroup);
             }
 
             if (ChangedGroup.Id != 0)
             {
                 // старая группа
-                var GroupInDB = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == ChangedGroup.Id).First();
+                var GroupInDB = cntx_.AccountGroup.Where(xxx => xxx.Id == ChangedGroup.Id).First();
 
                 GroupInDB.Name = ChangedGroup.Name;
                 GroupInDB.Description = ChangedGroup.Description;
@@ -117,47 +117,47 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 
                 // очищаем список пермишенов для данной группы
-                var ListPermissionInDataBase = GroupInDB.ControlPanelPermission.ToList();
+                var ListPermissionInDataBase = GroupInDB.AccountPermission.ToList();
 
                 foreach (var ListPermissionInDataBaseItem in ListPermissionInDataBase)
                 {
-                    GroupInDB.ControlPanelPermission.Remove(ListPermissionInDataBaseItem);
+                    GroupInDB.AccountPermission.Remove(ListPermissionInDataBaseItem);
                 }
                 cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
 
                 // заполняем список пермишенов для данной группы  
-                var NewListPermission = new List<ControlPanelPermission>();
+                var NewListPermission = new List<AccountPermission>();
 
                 if (ChangedGroup.ListPermission != null) // если список не пуст, заполняем пермишены
                 {
                     foreach (var OnePermisson in ChangedGroup.ListPermission)
                     {
-                        NewListPermission.Add(cntx_.ControlPanelPermission.Where(xxx => xxx.Id == OnePermisson).First());
+                        NewListPermission.Add(cntx_.AccountPermission.Where(xxx => xxx.Id == OnePermisson).First());
                     }
                     // вставляем в список пермишенов в группу
-                    GroupInDB.ControlPanelPermission = NewListPermission;
+                    GroupInDB.AccountPermission = NewListPermission;
                 }
 
                 //Очищаем список пользователей
-                var ListUserInDateBase = GroupInDB.ProducerUser.ToList();
+                var ListUserInDateBase = GroupInDB.Account.ToList();
 
                 foreach (var ListUserInDateBaseItem in ListUserInDateBase)
                 {
-                    GroupInDB.ProducerUser.Remove(ListUserInDateBaseItem);
+                    GroupInDB.Account.Remove(ListUserInDateBaseItem);
                 }
                 cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
 
                 // заполняем список пользователей
-                var NewListUsers = new List<ProducerUser>();
+                var NewListUsers = new List<Account>();
                 if (ChangedGroup.ListUser != null)  // если список не пуст, заполняем пользователей
                 {
                     foreach (var OnePermisson in ChangedGroup.ListUser)
                     {
-                        NewListUsers.Add(cntx_.ProducerUser.Where(xxx => xxx.Id == OnePermisson).First());
+                        NewListUsers.Add(cntx_.Account.Where(xxx => xxx.Id == OnePermisson).First());
                     }
 
                     // вставляем список пользователей
-                    GroupInDB.ProducerUser = NewListUsers;
+                    GroupInDB.Account = NewListUsers;
                 }
 
                 // сообщаем контексту об изменениях
@@ -169,7 +169,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             else
             {
                 // новая группа
-                var GroupInDB = new ControlPanelGroup();
+                var GroupInDB = new AccountGroup();
                 GroupInDB.Enabled = true;
 
                 cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Added;
@@ -179,29 +179,29 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 cntx_.SaveChanges(); // сохраняем, что бы присвоился Id
 
                 // заполняем список пермишенов для данной группы
-                var NewListPermission = new List<ControlPanelPermission>();
+                var NewListPermission = new List<AccountPermission>();
 
                 if (ChangedGroup.ListPermission != null) // если список не пуст, заполняем пермишены
                 {
                     foreach (var OnePermisson in ChangedGroup.ListPermission)
                     {
-                        NewListPermission.Add(cntx_.ControlPanelPermission.Where(xxx => xxx.Id == OnePermisson).First());
+                        NewListPermission.Add(cntx_.AccountPermission.Where(xxx => xxx.Id == OnePermisson).First());
                     }
                     // вставляем в список пермишенов в группу
-                    GroupInDB.ControlPanelPermission = NewListPermission;
+                    GroupInDB.AccountPermission = NewListPermission;
                 }
 
                 // заполняем список пользователей
-                var NewListUsers = new List<ProducerUser>();
+                var NewListUsers = new List<Account>();
                 if (ChangedGroup.ListUser != null)  // если список не пуст, заполняем пользователей
                 {
                     foreach (var OnePermisson in ChangedGroup.ListUser)
                     {
-                        NewListUsers.Add(cntx_.ProducerUser.Where(xxx => xxx.Id == OnePermisson).First());
+                        NewListUsers.Add(cntx_.Account.Where(xxx => xxx.Id == OnePermisson).First());
                     }
 
                     // вставляем список пользователей
-                    GroupInDB.ProducerUser = NewListUsers;
+                    GroupInDB.Account = NewListUsers;
                 }
 
                 // сообщаем контексту об изменениях
@@ -229,10 +229,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             {
                 ViewBag.CreateName = Id;
 
-                var GroupPermitionModel = new ControlPanelGroup();
+                var GroupPermitionModel = new AccountGroup();
                 GroupPermitionModel.Name = Id;
-                ViewBag.UserList = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.Login != null && xxx.TypeUser == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
-                ViewBag.PermissionList = cntx_.ControlPanelPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
+                ViewBag.UserList = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.Login != null && xxx.TypeUser == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+                ViewBag.PermissionList = cntx_.AccountPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
                 GroupPermitionModel.ListPermission = new List<int>(); // cntx_.ControlPanelGroup.Where(xxx => xxx.Id == 0).First().ControlPanelPermission.Where(xxx => xxx.Enabled == true).Select(xxx => xxx.Id).ToList();
                 GroupPermitionModel.ListUser = new List<long>(); // cntx_.ControlPanelGroup.Where(xxx => xxx.Id == 0).First().ControlPanelUser.Where(xxx => xxx.Enabled == 1).Select(xxx => xxx.Id).ToList();
 
@@ -245,23 +245,23 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpGet]
         public ActionResult ListPermission()
         {
-            var ListPermission = cntx_.ControlPanelPermission.Where(xxx => xxx.TypePermission == FilterSbyte).ToList();
+            var ListPermission = cntx_.AccountPermission.Where(xxx => xxx.TypePermission == FilterSbyte).ToList();
             return View(ListPermission);
         }
 
         [HttpGet]
         public ActionResult EditPermission(int Id = 0)
         {
-            var ListPermission = cntx_.ControlPanelPermission.Where(xxx => xxx.Id == Id).First();
+            var ListPermission = cntx_.AccountPermission.Where(xxx => xxx.Id == Id).First();
 
             return View(ListPermission);
         }
 
         [HttpPost]
-        public ActionResult EditPermission(ControlPanelPermission CPP_)
+        public ActionResult EditPermission(AccountPermission CPP_)
         {
 
-            var PermissionItem = cntx_.ControlPanelPermission.Where(xxx => xxx.Id == CPP_.Id).First();
+            var PermissionItem = cntx_.AccountPermission.Where(xxx => xxx.Id == CPP_.Id).First();
 
             PermissionItem.Description = CPP_.Description;
             cntx_.Entry(PermissionItem).State = System.Data.Entity.EntityState.Modified;
