@@ -19,5 +19,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public long ProducerId { get; set; }
         public Nullable<long> DescriptionId { get; set; }
         public Nullable<long> MnnId { get; set; }
+        public System.DateTime UpdateTime { get; set; }
     }
 }

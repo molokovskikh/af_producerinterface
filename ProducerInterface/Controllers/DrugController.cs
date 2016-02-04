@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
+using ProducerInterfaceCommon.CatalogModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -15,10 +16,13 @@ namespace ProducerInterface.Controllers
 		protected NamesHelper h;
 		protected long userId;
 		protected long producerId;
+		protected catalogsEntities ccntx;
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
+
+			ccntx = new catalogsEntities();
 
 			//cntx = new reportData();
 			//  TODO: берётся у юзера            
@@ -34,20 +38,9 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Index()
 		{
-			//var asdf = cntx_.DrugDescriptionRemark.Single(x => x.Id == 3);
-			//asdf.Description = "Правка11NEW";
-			//var asdf = new DrugDescriptionRemark() { Description = "Правка 6" };
-			//cntx_.DrugDescriptionRemark.Add(asdf);
-			////cntx_.DrugDescriptionRemark.Remove(asdf);
-			//cntx_.SaveChanges(CurrentUser);
-			//var asdf = cntx_.DrugDescriptionRemark.Single(x => x.Id == 2);
-			//asdf.Description = "Правка6";
-			//var asdf = new DrugDescriptionRemark() { Description = "Правка 5" };
-			//cntx_.DrugDescriptionRemark.Add(asdf);
-			//cntx_.SaveChanges();
-
 			ViewData["producerName"] = cntx_.producernames.Single(x => x.ProducerId == producerId).ProducerName;
-      var model = cntx_.drugfamily
+
+			var model = cntx_.drugfamily
 				.Where(x => x.ProducerId == producerId)
 				.OrderBy(x => x.FamilyName)
 				.ToList();
@@ -84,10 +77,16 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
-			var familyName = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId).FamilyName;
-			ViewData["familyName"] = familyName;
+			var drugfamily = cntx_.drugfamily.SingleOrDefault(x => x.FamilyId == id && x.ProducerId == producerId);
+			if (drugfamily == null)
+				return View();
+
+			var familyName = drugfamily.FamilyName;
+      ViewData["familyName"] = familyName;
 			ViewData["familyId"] = id;
 			// формы данного лек.средства из ассортимента данного производителя
+			var asd = ccntx.Catalog.Where(x => x.NameId == id && x.assortment.Any(y => y.ProducerId == producerId)).ToList();
+
 			var model = cntx_.drugformproducer.Where(x => x.DrugFamilyId == id && x.ProducerId == producerId).OrderBy(x => x.CatalogName).ToList();
 			if (edit)
 				return View("EditForms", model);

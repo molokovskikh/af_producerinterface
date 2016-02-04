@@ -97,11 +97,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CatalogModels\assortment.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\Catalog.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\catalogforms.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\catalognames.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\CatalogsEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CatalogsEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\CatalogsEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\CatalogsEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CatalogsEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\Descriptions.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\LoggerContext.cs" />
+    <Compile Include="CatalogModels\mnn.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\ContextEF.cs" />
     <Compile Include="ContextModels\ControlPanelGroup.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\ControlPanelPermission.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\drugfamily.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\drugfamilynames.cs">
@@ -125,9 +162,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\DrugDescriptionRemark.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\drugfamily.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\drugformproducer.cs">
@@ -336,6 +370,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
+    <EntityDeploy Include="CatalogModels\CatalogsEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CatalogsEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="CatalogModels\CatalogsEntities.edmx.diagram">
+      <DependentUpon>CatalogsEntities.edmx</DependentUpon>
+    </None>
     <None Include="ContextModels\producerinterface_Entities.edmx.diagram">
       <DependentUpon>producerinterface_Entities.edmx</DependentUpon>
     </None>
@@ -360,6 +401,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CatalogModels\CatalogsEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CatalogsEntities.edmx</DependentUpon>
+      <LastGenOutput>CatalogsEntities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="CatalogModels\CatalogsEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CatalogsEntities.edmx</DependentUpon>
+      <LastGenOutput>CatalogsEntities.cs</LastGenOutput>
+    </Content>
     <Content Include="ContextModels\producerinterface_Entities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>producerinterface_Entities.edmx</DependentUpon>

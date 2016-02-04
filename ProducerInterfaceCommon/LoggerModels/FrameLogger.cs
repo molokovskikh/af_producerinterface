@@ -35,6 +35,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 		public void Write(IEnumerable<DbEntityEntry> entries, string description)
 		{
 
+			// кто
 			var set = new LogChangeSet() { UserId = _user.Id, Ip = _user.IP, Timestamp = DateTime.Now, Description = description };
 			foreach (var entry in entries)
 			{
@@ -43,6 +44,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 				if (entityType.BaseType != null && entityType.Namespace == "System.Data.Entity.DynamicProxies")
 					entityType = entityType.BaseType;
 
+				// какие объекты БД
 				var obj = new LogObjectChange() { Action = (int)entry.State,
 																					ObjectReference = entry.State == EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry),
 																					TypeName = entityType.FullName };
@@ -56,6 +58,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 
 				foreach (var propName in propCollection)
 				{
+					// какие свойства объектов
 					var prop = new LogPropertyChange() { PropertyName = propName };
 					switch (entry.State)
 					{

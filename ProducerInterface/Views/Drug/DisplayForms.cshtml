@@ -2,7 +2,7 @@
 @model IEnumerable<drugformproducer>
 
 @{
-    var title = $"Лекарственные формы {ViewData["familyName"]}";
+    var title = $"Формы выпуска и дозировки препарата {ViewData["familyName"]} в классификации АналитФармация";
     ViewBag.Title = title;
 }
 
@@ -44,7 +44,7 @@
                 <tbody>
                     @foreach (var item in Model) {
                         <tr>
-                            <td>
+                            <td style="white-space:nowrap">
                                 @Html.DisplayFor(modelItem => item.CatalogName)
                             </td>
                             <td>
@@ -72,7 +72,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12" style="text-align: right">
+        <div class="col-md-6">
+            <a href="@Url.Action("Index")"><span class="glyphicon glyphicon-chevron-left"></span> К списку препаратов</a>
+        </div>
+        <div class="col-md-6" style="text-align: right">
             <a href="@Url.Action("DisplayForms", new {id = ViewData["familyId"], edit = true})" class="btn btn-primary">Редактировать</a>
         </div>
     </div>

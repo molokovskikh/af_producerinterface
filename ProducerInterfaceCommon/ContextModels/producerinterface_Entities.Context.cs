@@ -42,7 +42,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
         public DbSet<drugdescription> drugdescription { get; set; }
-        public DbSet<drugfamily> drugfamily { get; set; }
         public DbSet<drugformproducer> drugformproducer { get; set; }
         public DbSet<drugmnn> drugmnn { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
@@ -58,5 +57,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<ControlPanelGroup> ControlPanelGroup { get; set; }
         public DbSet<ControlPanelPermission> ControlPanelPermission { get; set; }
         public DbSet<drugfamilynames> drugfamilynames { get; set; }
+        public DbSet<drugfamily> drugfamily { get; set; }
     }
 }

@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище catalogsModel" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="assortment">
+          <Key>
+            <PropertyRef Name="CatalogId" />
+            <PropertyRef Name="ProducerId" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CatalogId" Type="uint" Nullable="false" />
+          <Property Name="ProducerId" Type="uint" Nullable="false" />
+          <Property Name="Checked" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Catalog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FormId" Type="uint" Nullable="false" />
+          <Property Name="NameId" Type="uint" Nullable="false" />
+          <Property Name="VitallyImportant" Type="bool" Nullable="false" />
+          <Property Name="MandatoryList" Type="bool" Nullable="false" />
+          <Property Name="NeedCold" Type="bool" Nullable="false" />
+          <Property Name="Fragile" Type="bool" Nullable="false" />
+          <Property Name="Pharmacie" Type="bool" Nullable="false" />
+          <Property Name="Hidden" Type="bool" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Monobrend" Type="bool" Nullable="false" />
+          <Property Name="Narcotic" Type="bool" Nullable="false" />
+          <Property Name="Toxic" Type="bool" Nullable="false" />
+          <Property Name="Combined" Type="bool" Nullable="false" />
+          <Property Name="Other" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="catalogforms">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Form" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="catalognames">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="DescriptionId" Type="uint" />
+          <Property Name="MnnId" Type="uint" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Descriptions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="EnglishName" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="mediumtext" />
+          <Property Name="Interaction" Type="mediumtext" />
+          <Property Name="SideEffect" Type="mediumtext" />
+          <Property Name="IndicationsForUse" Type="mediumtext" />
+          <Property Name="Dosing" Type="mediumtext" />
+          <Property Name="Warnings" Type="mediumtext" />
+          <Property Name="ProductForm" Type="mediumtext" />
+          <Property Name="PharmacologicalAction" Type="mediumtext" />
+          <Property Name="Storage" Type="mediumtext" />
+          <Property Name="Expiration" Type="mediumtext" />
+          <Property Name="Composition" Type="mediumtext" />
+          <Property Name="NeedCorrect" Type="bool" Nullable="false" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mnn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Mnn" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RussianMnn" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK_Assortment_CatalogId">
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="assortment" Type="Self.assortment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="assortment">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_catalog_1">
+          <End Role="catalogforms" Type="Self.catalogforms" Multiplicity="1" />
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogforms">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Catalog">
+              <PropertyRef Name="FormId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_catalog_2">
+          <End Role="catalognames" Type="Self.catalognames" Multiplicity="1" />
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalognames">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Catalog">
+              <PropertyRef Name="NameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище catalogsModelContainer">
+          <EntitySet Name="assortment" EntityType="Self.assortment" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="Catalog" EntityType="Self.Catalog" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="catalogforms" EntityType="Self.catalogforms" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="catalognames" EntityType="Self.catalognames" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="Descriptions" EntityType="Self.Descriptions" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="mnn" EntityType="Self.mnn" Schema="catalogs" store:Type="Tables" />
+          <AssociationSet Name="FK_Assortment_CatalogId" Association="Self.FK_Assortment_CatalogId">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="assortment" EntitySet="assortment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_catalog_1" Association="Self.FK_catalog_1">
+            <End Role="catalogforms" EntitySet="catalogforms" />
+            <End Role="Catalog" EntitySet="Catalog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_catalog_2" Association="Self.FK_catalog_2">
+            <End Role="catalognames" EntitySet="catalognames" />
+            <End Role="Catalog" EntitySet="Catalog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="catalogsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Catalog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FormId" Type="Int64" Nullable="false" />
+          <Property Name="NameId" Type="Int64" Nullable="false" />
+          <Property Name="VitallyImportant" Type="Boolean" Nullable="false" />
+          <Property Name="MandatoryList" Type="Boolean" Nullable="false" />
+          <Property Name="NeedCold" Type="Boolean" Nullable="false" />
+          <Property Name="Fragile" Type="Boolean" Nullable="false" />
+          <Property Name="Pharmacie" Type="Boolean" Nullable="false" />
+          <Property Name="Hidden" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Monobrend" Type="Boolean" Nullable="false" />
+          <Property Name="Narcotic" Type="Boolean" Nullable="false" />
+          <Property Name="Toxic" Type="Boolean" Nullable="false" />
+          <Property Name="Combined" Type="Boolean" Nullable="false" />
+          <Property Name="Other" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="catalogforms" Relationship="Self.FK_catalog_1" FromRole="Catalog" ToRole="catalogforms" />
+          <NavigationProperty Name="catalognames" Relationship="Self.FK_catalog_2" FromRole="Catalog" ToRole="catalognames" />
+          <NavigationProperty Name="assortment" Relationship="catalogsModel.FK_Assortment_CatalogId" FromRole="Catalog" ToRole="assortment" />
+        </EntityType>
+        <EntityType Name="catalogforms">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Form" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Catalog" Relationship="Self.FK_catalog_1" FromRole="catalogforms" ToRole="Catalog" />
+        </EntityType>
+        <EntityType Name="catalognames">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DescriptionId" Type="Int64" />
+          <Property Name="MnnId" Type="Int64" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Catalog" Relationship="Self.FK_catalog_2" FromRole="catalognames" ToRole="Catalog" />
+        </EntityType>
+        <EntityType Name="Descriptions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EnglishName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Interaction" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="SideEffect" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="IndicationsForUse" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Dosing" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Warnings" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="ProductForm" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="PharmacologicalAction" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Storage" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Expiration" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Composition" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="NeedCorrect" Type="Boolean" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="mnn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Mnn1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RussianMnn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_catalog_1">
+          <End Role="catalogforms" Type="Self.catalogforms" Multiplicity="1" />
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogforms">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Catalog">
+              <PropertyRef Name="FormId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_catalog_2">
+          <End Role="catalognames" Type="Self.catalognames" Multiplicity="1" />
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalognames">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Catalog">
+              <PropertyRef Name="NameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="catalogsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Catalog" EntityType="Self.Catalog" />
+          <EntitySet Name="catalogforms" EntityType="Self.catalogforms" />
+          <EntitySet Name="catalognames" EntityType="Self.catalognames" />
+          <EntitySet Name="Descriptions" EntityType="Self.Descriptions" />
+          <EntitySet Name="mnn" EntityType="Self.mnn" />
+          <AssociationSet Name="FK_catalog_1" Association="Self.FK_catalog_1">
+            <End Role="catalogforms" EntitySet="catalogforms" />
+            <End Role="Catalog" EntitySet="Catalog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_catalog_2" Association="Self.FK_catalog_2">
+            <End Role="catalognames" EntitySet="catalognames" />
+            <End Role="Catalog" EntitySet="Catalog" />
+          </AssociationSet>
+          <EntitySet Name="assortment" EntityType="catalogsModel.assortment" />
+          <AssociationSet Name="FK_Assortment_CatalogId" Association="catalogsModel.FK_Assortment_CatalogId">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="assortment" EntitySet="assortment" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="assortment">
+          <Key>
+            <PropertyRef Name="CatalogId" />
+            <PropertyRef Name="ProducerId" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CatalogId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="Checked" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Catalog" Relationship="catalogsModel.FK_Assortment_CatalogId" FromRole="assortment" ToRole="Catalog" />
+        </EntityType>
+        <Association Name="FK_Assortment_CatalogId">
+          <End Type="catalogsModel.Catalog" Role="Catalog" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="catalogsModel.assortment" Role="assortment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="assortment">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище catalogsModelContainer" CdmEntityContainer="catalogsEntities">
+          <EntitySetMapping Name="Catalog">
+            <EntityTypeMapping TypeName="catalogsModel.Catalog">
+              <MappingFragment StoreEntitySet="Catalog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="NameId" ColumnName="NameId" />
+                <ScalarProperty Name="VitallyImportant" ColumnName="VitallyImportant" />
+                <ScalarProperty Name="MandatoryList" ColumnName="MandatoryList" />
+                <ScalarProperty Name="NeedCold" ColumnName="NeedCold" />
+                <ScalarProperty Name="Fragile" ColumnName="Fragile" />
+                <ScalarProperty Name="Pharmacie" ColumnName="Pharmacie" />
+                <ScalarProperty Name="Hidden" ColumnName="Hidden" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Monobrend" ColumnName="Monobrend" />
+                <ScalarProperty Name="Narcotic" ColumnName="Narcotic" />
+                <ScalarProperty Name="Toxic" ColumnName="Toxic" />
+                <ScalarProperty Name="Combined" ColumnName="Combined" />
+                <ScalarProperty Name="Other" ColumnName="Other" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogforms">
+            <EntityTypeMapping TypeName="catalogsModel.catalogforms">
+              <MappingFragment StoreEntitySet="catalogforms">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Form" ColumnName="Form" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalognames">
+            <EntityTypeMapping TypeName="catalogsModel.catalognames">
+              <MappingFragment StoreEntitySet="catalognames">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
+                <ScalarProperty Name="MnnId" ColumnName="MnnId" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Descriptions">
+            <EntityTypeMapping TypeName="catalogsModel.Descriptions">
+              <MappingFragment StoreEntitySet="Descriptions">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EnglishName" ColumnName="EnglishName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Interaction" ColumnName="Interaction" />
+                <ScalarProperty Name="SideEffect" ColumnName="SideEffect" />
+                <ScalarProperty Name="IndicationsForUse" ColumnName="IndicationsForUse" />
+                <ScalarProperty Name="Dosing" ColumnName="Dosing" />
+                <ScalarProperty Name="Warnings" ColumnName="Warnings" />
+                <ScalarProperty Name="ProductForm" ColumnName="ProductForm" />
+                <ScalarProperty Name="PharmacologicalAction" ColumnName="PharmacologicalAction" />
+                <ScalarProperty Name="Storage" ColumnName="Storage" />
+                <ScalarProperty Name="Expiration" ColumnName="Expiration" />
+                <ScalarProperty Name="Composition" ColumnName="Composition" />
+                <ScalarProperty Name="NeedCorrect" ColumnName="NeedCorrect" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mnn">
+            <EntityTypeMapping TypeName="catalogsModel.mnn">
+              <MappingFragment StoreEntitySet="mnn">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Mnn1" ColumnName="Mnn" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="RussianMnn" ColumnName="RussianMnn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="assortment">
+            <EntityTypeMapping TypeName="catalogsModel.assortment">
+              <MappingFragment StoreEntitySet="assortment">
+                <ScalarProperty Name="Checked" ColumnName="Checked" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

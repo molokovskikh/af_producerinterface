@@ -197,3 +197,5 @@
 01.02.2016 14:34:08.006 [TestScheduler_Worker-1] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' returned by: TestScheduler_Worker-1
 01.02.2016 14:34:17.797 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
 01.02.2016 14:34:47.783 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+01.02.2016 20:28:37.575 [9] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\Index.cshtml(41): error CS0411: The type arguments for method 'DisplayTextExtensions.DisplayTextFor<TModel, TResult>(HtmlHelper<TModel>, Expression<Func<TModel, TResult>>)' cannot be inferred from the usage. Try specifying the type arguments explicitly.
+02.02.2016 17:13:51.514 [34] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов

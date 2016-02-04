@@ -15,6 +15,14 @@
     <div class="row">
         <div class="col-md-12">
             <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Описание</th>
+                        <th>Формы выпуска и дозировка</th>
+                        <th>Время последней корректировки</th>
+                    </tr>
+                </thead>
                 <tbody>
                 @foreach (var item in Model) {
                     <tr>
@@ -28,16 +36,17 @@
                             }
                         </td>
                         <td>
-                            @Html.ActionLink("Формы", "DisplayForms", new { id = item.FamilyId })
+                            @Html.ActionLink("Формы выпуска и дозировка", "DisplayForms", new { id = item.FamilyId })
                         </td>
-                        <td>
+                        @*<td>
                             @if (item.MnnId.HasValue) {
                                 @Html.ActionLink("МНН", "EditMnn", new { id = item.FamilyId })
                             }
                             else {
                                 <a style="color: red" href="@Url.Action("EditMnn", new { id = item.FamilyId })">Добавить МНН</a>
                             }
-                        </td>
+                        </td>*@
+                        <td>@Html.DisplayTextFor(m => item.UpdateTime)</td>
                     </tr>
                 }
                 </tbody>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8eb6df8870c44b6aad88b81c135af78a" Name="Diagram1">
+        <EntityTypeShape EntityType="catalogsModel.Catalog" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="catalogsModel.catalogforms" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="catalogsModel.catalognames" Width="1.5" PointX="5.875" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="catalogsModel.Descriptions" Width="1.5" PointX="8.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="catalogsModel.mnn" Width="1.5" PointX="8.75" PointY="6.875" IsExpanded="true" />
+        <AssociationConnector Association="catalogsModel.FK_catalog_1" ManuallyRouted="false" />
+        <AssociationConnector Association="catalogsModel.FK_catalog_2" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="catalogsModel.assortment" Width="1.5" PointX="5.25" PointY="6" />
+        <AssociationConnector Association="catalogsModel.FK_Assortment_CatalogId" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

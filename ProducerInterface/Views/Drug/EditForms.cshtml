@@ -2,7 +2,7 @@
 @model IEnumerable<drugformproducer>
 
 @{
-    var title = $"Лекарственные формы {ViewData["familyName"]}";
+    var title = $"Формы выпуска и дозировки препарата {ViewData["familyName"]} в классификации АналитФармация";
     ViewBag.Title = title;
 }
 <div class="row">
@@ -74,7 +74,7 @@
          </div>
          <div class="row">
              <div class="col-md-6">
-                 <a href="@Url.Action("DisplayForms", new { id = ViewData["familyId"] })"><span class="glyphicon glyphicon-chevron-left"></span> К списку лек. форм</a>
+                 <a class="btn btn-primary" href="@Url.Action("DisplayForms", new { id = ViewData["familyId"] })">Отменить</a>
              </div>
              <div class="col-md-6" style="text-align:right">
                  <input type="submit" value="Сохранить" class="btn btn-primary" />
