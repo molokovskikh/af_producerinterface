@@ -8,7 +8,7 @@ namespace ProducerInterfaceCommon.CatalogModels
 {
 	public partial class catalogsEntities
 	{
-		public int SaveChanges(ProducerUser user, string description = null)
+		public int SaveChanges(Account user, string description = null)
 		{
 			var entries = this.ChangeTracker.Entries().Where(p => p.State == EntityState.Added || p.State == EntityState.Deleted || p.State == EntityState.Modified);
 			var logger = new FrameLogger(user, this);

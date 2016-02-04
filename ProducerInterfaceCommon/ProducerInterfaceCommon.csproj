@@ -131,7 +131,6 @@
     <Compile Include="CatalogModels\mnn.cs">
       <DependentUpon>CatalogsEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\ContextEF.cs" />
     <Compile Include="ContextModels\Account.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
