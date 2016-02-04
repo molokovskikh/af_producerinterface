@@ -3,13 +3,13 @@
 
 
 @{
-    var currentUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.ProducerUser;
+    var currentUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
     ViewBag.Title = "Кабинет производителя";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="jumbotron">
-    <h3>Идинтификационный номер производителя: @currentUser.ProducerId.</h3>
+    <h3>Идинтификационный номер производителя: @currentUser.AccountCompany.Name</h3>
 
     <hr/>
 

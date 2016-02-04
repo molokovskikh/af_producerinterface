@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
         public ActionResult Index()
         {          
             //var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
-            IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == CurrentUser.CompanyId).ToList();
+            IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).ToList();
             return View(list);
         }
 
@@ -94,7 +94,7 @@ namespace ProducerInterface.Controllers
             PromotionSave.Annotation = PromoAction.Annotation;
             PromotionSave.Begin = PromoAction.Begin;
             PromotionSave.End = PromoAction.End;
-            PromotionSave.ProducerId = (long)CurrentUser.CompanyId;
+            PromotionSave.ProducerId = (long)CurrentUser.AccountCompany.ProducerId;
         //    PromotionSave.UpdateTime = DateTime.Now;
 
             var ListOldDrugInPromotion = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
@@ -224,7 +224,7 @@ namespace ProducerInterface.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (ModelPromoAction.ProducerId != CurrentUser.CompanyId)
+            if (ModelPromoAction.ProducerId != CurrentUser.AccountCompany.ProducerId)
             {
                 ErrorMessage("У вас нет прав копировать промо-акцию другого производителя");
                 return RedirectToAction("Index");

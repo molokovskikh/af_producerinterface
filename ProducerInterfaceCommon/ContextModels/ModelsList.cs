@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.ModelBinding;
+using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
@@ -136,7 +139,7 @@ namespace ProducerInterfaceCommon.ContextModels
     {
 
         [UIHint("EditorString")]
-        [Display(Name = "ФИО:")]
+        [Display(Name = "ФИО")]
         [Required(ErrorMessage = "Введите ФИО")]
         public string Name { get; set; }
 
@@ -149,15 +152,21 @@ namespace ProducerInterfaceCommon.ContextModels
 
 
         [UIHint("EditorStringPosition")]
-        [Display(Name = "Должность: ")]
+        [Display(Name = "Должность")]
         [Required(ErrorMessage = "Введите должность")]
         public string Appointment { get; set; }
-             
+
+        [UIHint("EditorPhone")]
+        [Display(Name = "Номер телефона")]
+        [StringLength(13, MinimumLength = 10)]
+        [Phone(ErrorMessage ="Некорректно введён номер")]     
+        public string PhoneNumber { get; set; }
+
         public long Producers { get; set; }
         public string ProducerName { get; set; }
 
     }
-
+    
     public class SearchProducerReportsModel
     {
         [UIHint("EditorProducer")]

@@ -13,7 +13,7 @@
           <Property Name="Login" Type="varchar" MaxLength="50" />
           <Property Name="TypeUser" Type="tinyint" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
-          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="Phone" Type="varchar" MaxLength="15" />
           <Property Name="Password" Type="varchar" MaxLength="50" />
           <Property Name="Appointment" Type="varchar" MaxLength="50" />
           <Property Name="CompanyId" Type="uint" />
@@ -25,7 +25,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
           <Property Name="ProducerId" Type="uint" />
         </EntityType>
         <EntityType Name="AccountEmail">

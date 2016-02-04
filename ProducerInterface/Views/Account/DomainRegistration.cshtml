@@ -1,12 +1,12 @@
 ﻿@model ProducerInterfaceCommon.ContextModels.RegistrerValidation
 @{
     ViewBag.Title = "Регистрация";
-    Layout = "~/Views/Shared/_Layout.cshtml";    
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Регистрация</h2>
 
-<hr/>
+<hr />
 
 
 @using (Html.BeginForm("Registration", "Account", FormMethod.Post))
@@ -16,16 +16,26 @@
     @Html.HiddenFor(m => m.Producers)
     <h3>Компания : @Model.ProducerName</h3>
     <hr />
-    @Html.HiddenFor(m=>m.ProducerName)
+
+<div class="input-group">
+    <input type="text" class="form-control" aria-label="">
+    <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right">
+            @Html.DropDownList("DomainName",new SelectList(ViewBag.DomainName,"Value","Text"))
+        </ul>
+    </div><!-- /btn-group -->
+</div><!-- /input-group -->
+
+    @Html.EditorFor(m => m.login)
 
     @Html.EditorFor(m => m.Name)
-    @Html.EditorFor(m => m.login)
 
     @Html.EditorFor(m => m.PhoneNumber)
     @Html.EditorFor(m => m.Appointment)
-    
 
-  
+
+
     <br />
 
     <div class="form-group">
