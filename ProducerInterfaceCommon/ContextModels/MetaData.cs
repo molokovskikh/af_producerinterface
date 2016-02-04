@@ -265,9 +265,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<System.DateTime> End { get; set; }
 
         public bool Status { get; set; }
-
-        public virtual Account ProducerUser { get; set; }
-
+     
         public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
 
     } 

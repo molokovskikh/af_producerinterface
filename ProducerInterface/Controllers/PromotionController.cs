@@ -116,7 +116,8 @@ namespace ProducerInterface.Controllers
             }
 
             if (PromotionSave.Id == 0) {
-                PromotionSave.ProducerUserId = CurrentUser.Id; // в новую акцию добавляем Id пользователя
+                // PromotionSave.ProducerUserId = CurrentUser.Id;  в новую акцию добавляем Id пользователя
+                PromotionSave.Account = CurrentUser;
                 cntx_.Entry(PromotionSave).State = EntityState.Added;
                 cntx_.SaveChanges(CurrentUser);   
             }

@@ -21,6 +21,7 @@ namespace ProducerInterfaceCommon.ContextModels
     
         public long Id { get; set; }
         public System.DateTime UpdateTime { get; set; }
+        public bool Enabled { get; set; }
         public Nullable<long> AdminId { get; set; }
         public long ProducerId { get; set; }
         public long ProducerUserId { get; set; }
@@ -32,8 +33,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<System.DateTime> Begin { get; set; }
         public Nullable<System.DateTime> End { get; set; }
         public bool Status { get; set; }
-        public bool Enabled { get; set; }
     
+        public virtual Account Account { get; set; }
         public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
     }
 }

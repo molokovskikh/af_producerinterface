@@ -29,7 +29,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<mailform> mailform { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
-        public DbSet<promotions> promotions { get; set; }
         public DbSet<promotionToDrug> promotionToDrug { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<reportxml> reportxml { get; set; }
@@ -56,5 +55,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
+        public DbSet<promotions> promotions { get; set; }
     }
 }

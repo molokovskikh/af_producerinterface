@@ -45,7 +45,7 @@
                 <p>  <span> Дата Окончания: </span> @PromoItem.End.Value.ToString("yyyy.MM.dd")</p>
                 <div class="form-group">
                     <p>Аннотация: <span>@PromoItem.Annotation</span></p>
-                    <p>Создана: <span>@PromoItem.ProducerUser.Name</span></p>
+                    <p>Создана: <span>@PromoItem.Account.Name</span></p>
                     <p class="@x">Статус: @(PromoItem.Status == false ? "Не подтверждена" : "Подтверждена")</p>
                 </div>
 
