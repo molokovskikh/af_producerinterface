@@ -40,7 +40,7 @@ namespace ProducerInterface.Controllers
             try
             {
                 userId = CurrentUser.Id;    
-                producerId = (long)CurrentUser.ProducerId;
+                producerId = (long)CurrentUser.CompanyId;
             }
             catch
             {
@@ -112,7 +112,7 @@ namespace ProducerInterface.Controllers
                 return View("Error", (object)(e.Message));
             }
 
-            var userName = cntx.usernames.Single(x => x.UserId == userId).UserName;
+            var userName = cntx.Account.Single(x => x.Id == userId).Name;
             // иначе - успех
             var jext = new jobextend()
             {

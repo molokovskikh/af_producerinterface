@@ -21,7 +21,5 @@ namespace ProducerInterfaceCommon.ContextModels
         public System.DateTime Date { get; set; }
         public sbyte Type { get; set; }
         public string Message { get; set; }
-    
-        public virtual ProducerUser ProducerUser { get; set; }
     }
 }

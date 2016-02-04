@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
         public ActionResult Index()
         {          
             //var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
-            IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == CurrentUser.ProducerId).ToList();
+            IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == CurrentUser.CompanyId).ToList();
             return View(list);
         }
 
@@ -33,7 +33,7 @@ namespace ProducerInterface.Controllers
         {
             PromotionValidation ViewPromotion = new PromotionValidation();
             
-            var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
+         //   var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
             ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
             ProducerInterfaceCommon.Heap.NamesHelper h;
             cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
@@ -94,7 +94,7 @@ namespace ProducerInterface.Controllers
             PromotionSave.Annotation = PromoAction.Annotation;
             PromotionSave.Begin = PromoAction.Begin;
             PromotionSave.End = PromoAction.End;
-            PromotionSave.ProducerId = (long)CurrentUser.ProducerId;
+            PromotionSave.ProducerId = (long)CurrentUser.CompanyId;
         //    PromotionSave.UpdateTime = DateTime.Now;
 
             var ListOldDrugInPromotion = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
@@ -141,13 +141,13 @@ namespace ProducerInterface.Controllers
             if (PromotionNewOrOld)
             {
                 // старая изменена
-                SuccessMessage("Акция изменена, в списке отобразится после подтверждения");
+                SuccessMessage("Акция изменена");
                 ProducerInterfaceCommon.Heap.EmailSender.SendChangePromotion(cntx_, CurrentUser.Id, PromoAction.Id, CurrentUser.IP);
             }
             else
             {
                 // новая акция добавлена
-                SuccessMessage("Акция добавлена, в списке отобразится после подтверждения");
+                SuccessMessage("Акция добавлена");
                 ProducerInterfaceCommon.Heap.EmailSender.SendNewPromotion(cntx_, PromotionSave.ProducerUserId, PromotionSave.Id, CurrentUser.IP);
             }
             
@@ -203,6 +203,58 @@ namespace ProducerInterface.Controllers
             return (Name && Annotation && DataBegin && DataEnd && !ListDrugsInPromotion);
         }
 
+        public ActionResult DeletePromotion(long? Id)
+        {
+            SuccessMessage("Промо-Акция удалена");
+            return RedirectToAction("Index");          
+        }
+
+        public ActionResult CopyPaste(long? Id)
+        {
+            if (Id == null && Id == 0)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var ModelPromoAction = cntx_.promotions.Where(xxx => xxx.Id == Id).FirstOrDefault();
+
+            if (ModelPromoAction == null && ModelPromoAction.Id == 0)
+            {
+                ErrorMessage("Акция не найдена");
+                return RedirectToAction("Index");
+            }
+
+            if (ModelPromoAction.ProducerId != CurrentUser.CompanyId)
+            {
+                ErrorMessage("У вас нет прав копировать промо-акцию другого производителя");
+                return RedirectToAction("Index");
+            }
+
+            ModelPromoAction.Name += " Копия!";        
+
+            var ModelView = new PromotionValidation
+            {               
+                Name = ModelPromoAction.Name,
+                Annotation = ModelPromoAction.Annotation,
+                Begin = ModelPromoAction.Begin,
+                End = ModelPromoAction.End,
+                Status = ModelPromoAction.Status
+
+            };
+
+            ModelPromoAction = null;
+
+            ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
+            ProducerInterfaceCommon.Heap.NamesHelper h;
+            cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+            h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, CurrentUser.Id);
+
+            ViewData["DrugList"] = h.GetCatalogList();
+
+            ModelView.DrugList = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == Id).ToList().Select(xxx => xxx.DrugId).ToList();
+
+            return View("Manage", ModelView);
+        }
 
     }
 }

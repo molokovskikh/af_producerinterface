@@ -12,18 +12,19 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class userrole
+    public partial class AccountCompany
     {
-        public userrole()
+        public AccountCompany()
         {
-            this.usertouserrole = new HashSet<usertouserrole>();
+            this.Account = new HashSet<Account>();
+            this.CompanyDomainName = new HashSet<CompanyDomainName>();
         }
     
         public long Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public Nullable<long> ProducerId { get; set; }
     
-        public virtual userpermissionrole userpermissionrole { get; set; }
-        public virtual ICollection<usertouserrole> usertouserrole { get; set; }
+        public virtual ICollection<Account> Account { get; set; }
+        public virtual ICollection<CompanyDomainName> CompanyDomainName { get; set; }
     }
 }

@@ -35,6 +35,5 @@ namespace ProducerInterfaceCommon.ContextModels
         public bool Enabled { get; set; }
     
         public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
-        public virtual ProducerUser ProducerUser { get; set; }
     }
 }

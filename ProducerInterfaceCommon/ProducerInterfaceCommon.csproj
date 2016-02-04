@@ -132,16 +132,32 @@
       <DependentUpon>CatalogsEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\ContextEF.cs" />
-    <Compile Include="ContextModels\ControlPanelGroup.cs">
+    <Compile Include="ContextModels\Account.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\ControlPanelPermission.cs">
+    <Compile Include="ContextModels\AccountCompany.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\AccountEmail.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\AccountGroup.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\AccountPermission.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\CompanyDomainName.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\drugfamily.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\ContextEF.cs" />
     <Compile Include="ContextModels\drugfamilynames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\usernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\BaseController.cs" />
@@ -205,12 +221,6 @@
     <Compile Include="ContextModels\producernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\producers.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\ProducerUser.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\profilenews.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -235,21 +245,6 @@
     <Compile Include="ContextModels\suppliernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\usernames.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\UserPermission.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\userpermissionrole.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\userrole.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\usertouserrole.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\user_logs.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -262,7 +257,7 @@
     <Compile Include="Heap\Processor.cs" />
     <Compile Include="Heap\ReportJob.cs" />
     <Compile Include="Heap\SqlBuilder.cs" />
-    <Compile Include="LoggerModels\Enums.cs" />
+    <Compile Include="LoggerModels\DescriptionHelper.cs" />
     <Compile Include="LoggerModels\LogChangeSet.cs">
       <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
@@ -304,22 +299,22 @@
     <Compile Include="Models\MailTypeEnum.cs" />
     <Compile Include="Models\NotMinDateAttribute.cs" />
     <Compile Include="Models\PastDateAttribute.cs" />
-    <Compile Include="Models\PharmacyRating\PharmacyRatingReport.cs" />
-    <Compile Include="Models\PharmacyRating\PharmacyRatingReportRow.cs" />
-    <Compile Include="Models\ProductConcurentRating\ProductConcurentRatingReport.cs" />
-    <Compile Include="Models\ProductConcurentRating\ProductConcurentRatingReportRow.cs" />
-    <Compile Include="Models\ProductPriceDynamics\ProductPriceDynamicsReport.cs" />
-    <Compile Include="Models\ProductPriceDynamics\ProductPriceDynamicsReportRow.cs" />
-    <Compile Include="Models\ProductRating\ProductRatingReport.cs" />
-    <Compile Include="Models\ProductRating\ProductRatingReportRow.cs" />
+    <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />
+    <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReportRow.cs" />
+    <Compile Include="ReportModels\ProductConcurentRating\ProductConcurentRatingReport.cs" />
+    <Compile Include="ReportModels\ProductConcurentRating\ProductConcurentRatingReportRow.cs" />
+    <Compile Include="ReportModels\ProductPriceDynamics\ProductPriceDynamicsReport.cs" />
+    <Compile Include="ReportModels\ProductPriceDynamics\ProductPriceDynamicsReportRow.cs" />
+    <Compile Include="ReportModels\ProductRating\ProductRatingReport.cs" />
+    <Compile Include="ReportModels\ProductRating\ProductRatingReportRow.cs" />
     <Compile Include="Models\RatingReportRow.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\ReportRow.cs" />
     <Compile Include="Models\RoundAttribute.cs" />
     <Compile Include="Models\RunNowIntervalParam.cs" />
     <Compile Include="Models\RunNowParam.cs" />
-    <Compile Include="Models\SupplierRating\SupplierRatingReport.cs" />
-    <Compile Include="Models\SupplierRating\SupplierRatingReportRow.cs" />
+    <Compile Include="ReportModels\SupplierRating\SupplierRatingReport.cs" />
+    <Compile Include="ReportModels\SupplierRating\SupplierRatingReportRow.cs" />
     <Compile Include="Models\TriggerParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportModels\enum_values.cs">

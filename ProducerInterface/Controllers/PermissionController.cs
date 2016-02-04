@@ -20,7 +20,7 @@ namespace ProducerInterface.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var ListUser = cntx_.ProducerUser.Where(xxx => xxx.Enabled == 1 && xxx.ProducerId == CurrentUser.ProducerId && xxx.TypeUser == (SByte)SbyteTypeUser).ToList();
+            var ListUser = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.CompanyId == CurrentUser.CompanyId && xxx.TypeUser == (SByte)SbyteTypeUser).ToList();
 
             if (ListUser.Count() > 0)
             {
@@ -34,17 +34,17 @@ namespace ProducerInterface.Controllers
         public ActionResult Change(long? ID)
         {
 
-            var SelectUser = cntx_.ProducerUser.Where(xxx => xxx.Id == ID).First();
-            if (SelectUser.ProducerId != CurrentUser.ProducerId || SelectUser.Id == CurrentUser.Id)
+            var SelectUser = cntx_.Account.Where(xxx => xxx.Id == ID).First();
+            if (SelectUser.CompanyId != CurrentUser.CompanyId || SelectUser.Id == CurrentUser.Id)
             {
                 ErrorMessage("У вас нет прав редактировать группы данного пользователя");
                 return RedirectToAction("Index");
             }
-            SelectUser.ListSelectedPermission = cntx_.ControlPanelGroup
-                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser && xxx.ProducerUser.Any(zzz=>zzz.Id == ID))
+            SelectUser.ListSelectedPermission = cntx_.AccountGroup
+                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser && xxx.Account.Any(zzz=>zzz.Id == ID))
                 .ToList().Select(xxx =>(long) xxx.Id).ToList();
 
-            ViewBag.GroupList = cntx_.ControlPanelGroup.Where(xxx => xxx.TypeGroup == SbyteTypeUser && xxx.Enabled == true).ToList().Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
+            ViewBag.GroupList = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == SbyteTypeUser && xxx.Enabled == true).ToList().Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
                         
             return View(SelectUser);
         }
@@ -53,12 +53,12 @@ namespace ProducerInterface.Controllers
         public ActionResult Change(long? Id, List<long> ListSelectedPermission)
         {
 
-            var SelectUser = cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First();
-            if (SelectUser.ProducerId != CurrentUser.ProducerId || SelectUser.Id == CurrentUser.Id)
+            var SelectUser = cntx_.Account.Where(xxx => xxx.Id == Id).First();
+            if (SelectUser.CompanyId != CurrentUser.CompanyId || SelectUser.Id == CurrentUser.Id)
             {
                 ErrorMessage("У вас нет прав редактировать права данного пользователя");
             }
-            SelectUser.ListSelectedPermission = cntx_.ControlPanelGroup
+            SelectUser.ListSelectedPermission = cntx_.AccountGroup
                 .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser)
                 .ToList().Select(xxx => (long)xxx.Id).ToList();
                    
@@ -73,8 +73,8 @@ namespace ProducerInterface.Controllers
 
                 if (!GroupExsist) // если в входящем списке группы нет, удаляем из БД
                 {
-                    var GroupItem = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == GroupId).First();
-                    GroupItem.ProducerUser.Remove(cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First());
+                    var GroupItem = cntx_.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
+                    GroupItem.Account.Remove(cntx_.Account.Where(xxx => xxx.Id == Id).First());
                     cntx_.SaveChanges();
                 }
             }
@@ -85,12 +85,12 @@ namespace ProducerInterface.Controllers
             foreach (var ItemUserGroup in ListSelectedPermission)
             {
                 int GroupId =(int) ItemUserGroup;
-                bool GroupExsist = SelectUser.ControlPanelGroup.Any(xxx => xxx.Id == GroupId);
+                bool GroupExsist = SelectUser.AccountGroup.Any(xxx => xxx.Id == GroupId);
 
                 if (!GroupExsist)
                 {
-                    var GroupItem = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == GroupId).First();
-                    GroupItem.ProducerUser.Add(cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First());
+                    var GroupItem = cntx_.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
+                    GroupItem.Account.Add(cntx_.Account.Where(xxx => xxx.Id == Id).First());
                     cntx_.SaveChanges();
                 }
             }

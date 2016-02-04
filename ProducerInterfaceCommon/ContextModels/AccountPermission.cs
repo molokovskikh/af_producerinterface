@@ -12,11 +12,11 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlPanelPermission
+    public partial class AccountPermission
     {
-        public ControlPanelPermission()
+        public AccountPermission()
         {
-            this.ControlPanelGroup = new HashSet<ControlPanelGroup>();
+            this.AccountGroup = new HashSet<AccountGroup>();
         }
     
         public int Id { get; set; }
@@ -26,6 +26,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public bool Enabled { get; set; }
         public sbyte TypePermission { get; set; }
     
-        public virtual ICollection<ControlPanelGroup> ControlPanelGroup { get; set; }
+        public virtual ICollection<AccountGroup> AccountGroup { get; set; }
     }
 }

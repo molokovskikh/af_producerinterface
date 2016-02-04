@@ -22,7 +22,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             if (IsAuthenticated(login, password))
             {
-                var X = cntx_.ProducerUser.Where(xxx => xxx.Login == login && xxx.TypeUser ==1).FirstOrDefault();
+                var X = cntx_.Account.Where(xxx => xxx.Login == login && xxx.TypeUser ==1).FirstOrDefault();
 
                 if(X == null)
                 {
@@ -39,11 +39,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public void AddUserInDB(string LogIn)
         {
-            ProducerUser CPU = new ProducerUser();
+            Account CPU = new Account();
 
             CPU.Login = LogIn;
-            CPU.Enabled = 1;
-            CPU.Email = "";
+            CPU.Enabled = 1;          
             CPU.UserType = TypeUsers.ControlPanelUser;
             CPU.Appointment = "";
 
@@ -52,25 +51,25 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 CPU.Name = _filterAttribute;
             }
 
-            cntx_.ProducerUser.Add(CPU);
+            cntx_.Account.Add(CPU);
 
             cntx_.SaveChanges();
 
             string AdminGroup = GetWebConfigParameters("Все");
 
-            long IdGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroup).FirstOrDefault().Id;
+            long IdGroup = cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroup).FirstOrDefault().Id;
 
             if (IdGroup > 0)
             {
-                var Group = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == IdGroup).First();
-                Group.ProducerUser.Add(CPU);
+                var Group = cntx_.AccountGroup.Where(xxx => xxx.Id == IdGroup).First();
+                Group.Account.Add(CPU);
                 cntx_.SaveChanges();
             }
             else
             {
-                var Group = new ControlPanelGroup();
+                var Group = new AccountGroup();
                 Group.Name = AdminGroup;
-                Group.ProducerUser.Add(CPU);
+                Group.Account.Add(CPU);
             }
 
             cntx_.SaveChanges();
@@ -79,14 +78,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public void AddAdminUserInBD(string LogIn)
         {
-            ProducerUser CPU = new ProducerUser();
+            Account CPU = new Account();
 
             // CPU - ControlPanelUser
 
             CPU.Login = LogIn;            
             CPU.Enabled = 1;
-            CPU.UserType = TypeUsers.ControlPanelUser;
-            CPU.Email = "";
+            CPU.UserType = TypeUsers.ControlPanelUser;           
             CPU.Appointment = "";
 
             if (_filterAttribute != null && _filterAttribute != "" && _filterAttribute.Length > 10)
@@ -94,27 +92,27 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 CPU.Name = _filterAttribute;
             }
 
-            cntx_.ProducerUser.Add(CPU);
+            cntx_.Account.Add(CPU);
 
             cntx_.SaveChanges();
 
             string AdminGroup = GetWebConfigParameters("AdminGroupName");
 
-            var GroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Name == AdminGroup);
+            var GroupExsist = cntx_.AccountGroup.Any(xxx => xxx.Name == AdminGroup && xxx.TypeGroup == SbyteTypeUser);
 
             if (GroupExsist)
             {
-                var Group = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroup).First();
-                Group.ProducerUser.Add(CPU);             
+                var Group = cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroup && xxx.TypeGroup == SbyteTypeUser).First();
+                Group.Account.Add(CPU);             
             }
             else
             {
-                var Group = new ControlPanelGroup();
+                var Group = new AccountGroup();
                 Group.Name = AdminGroup;
                 Group.Enabled = true;                
-                cntx_.ControlPanelGroup.Add(Group);
+                cntx_.AccountGroup.Add(Group);
                 cntx_.SaveChanges();
-                Group.ProducerUser.Add(CPU);             
+                Group.Account.Add(CPU);             
             }
 
             cntx_.SaveChanges();

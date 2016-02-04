@@ -12,15 +12,12 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class usertouserrole
+    public partial class CompanyDomainName
     {
-        public Nullable<long> ProducerUserId { get; set; }
-        public Nullable<long> UserRoleId { get; set; }
-        public Nullable<long> UserPermissionId { get; set; }
-        public long Id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public Nullable<long> CompanyId { get; set; }
     
-        public virtual UserPermission UserPermission { get; set; }
-        public virtual userrole userrole { get; set; }
-        public virtual ProducerUser ProducerUser { get; set; }
+        public virtual AccountCompany AccountCompany { get; set; }
     }
 }

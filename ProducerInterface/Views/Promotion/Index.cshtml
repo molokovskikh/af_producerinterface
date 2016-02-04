@@ -16,11 +16,15 @@
                             <i class="fa fa-pencil"></i>
                             <span>Добавить акцию</span>
                         </a>
+
+
+
                     </p>
                 </div>
-                <hr />
 
-                @if (Model != null && Model.Count() > 0)
+    <hr />
+
+    @if (Model != null && Model.Count() > 0)
                 {
                     foreach (var PromoItem in Model)
                     {
@@ -34,44 +38,72 @@
                             x = "text-warning";
                         }
 
-                            <div class="panel-body col-xs-12" id="promotionpanel">
-                                <div class="col-sm-10 col-xs-12">
-                                    <H3><span class="glyphicon glyphicon-star-empty @x"></span>&nbsp;&nbsp;&nbsp; @PromoItem.Name</H3>
-                                    <p><span>Дата начала: </span> @PromoItem.Begin.Value.ToString("yyyy.MM.dd")  </p>
-                                    <p>  <span> Дата Окончания: </span> @PromoItem.End.Value.ToString("yyyy.MM.dd")</p>
-                                    <div class="form-group">
-                                        <p>Описание: <span>@PromoItem.Annotation</span></p>    
-                                        <p>Создана: <span>@PromoItem.ProducerUser.Name</span></p>
-                                        <p class="@x">Статус: @(PromoItem.Status == false ? "Не подтверждена" : "Подтверждена")</p>
-                                    </div>
-                                    
-                                </div>
-                                <div class="col-sm-2 col-xs-12 form-group" id="promotionpanel-btn">
-                                    <div class="btn-group-vertical btn-group-sm col-sm-12" role="group">
-                                        <a href="@Url.Action("Manage", new { Id = PromoItem.Id })" title="Редактировать" class="pull-right btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+        <div class="panel-body col-xs-12" id="promotionpanel">
+            <div class="col-sm-10 col-xs-12">
+                <H3><span class="glyphicon glyphicon-star-empty @x"></span>&nbsp;&nbsp;&nbsp; @PromoItem.Name</H3>
+                <p><span>Дата начала: </span> @PromoItem.Begin.Value.ToString("yyyy.MM.dd")  </p>
+                <p>  <span> Дата Окончания: </span> @PromoItem.End.Value.ToString("yyyy.MM.dd")</p>
+                <div class="form-group">
+                    <p>Аннотация: <span>@PromoItem.Annotation</span></p>
+                    <p>Создана: <span>@PromoItem.ProducerUser.Name</span></p>
+                    <p class="@x">Статус: @(PromoItem.Status == false ? "Не подтверждена" : "Подтверждена")</p>
+                </div>
 
-                                        <a href="@Url.Action("Delete", new { Id = PromoItem.Id })" title="Удалить" class="pull-right btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>                                       
-                                    </div>                                  
-                                </div>     
-                           
-                            </div>
+            </div>
 
-                            <hr/>
-                       
+            @*
+                В зависимости от статуса акции, её можно редактировать или нельзя
+                если акция подтверждена, её можно отключить /
+            *@
+
+            @if(PromoItem.Status == false)
+                                {
+
+                <div class="col-sm-2 col-xs-12 form-group" id="promotionpanel-btn">
+                    <div class="btn-group-vertical btn-group-sm col-sm-12" role="group">
+                        <a href="@Url.Action("Manage", new { Id = PromoItem.Id })" title="Редактировать" class="pull-right btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+
+                        <a href="#" title="Активировать" class="pull-right btn btn-default"><span class="glyphicon glyphicon-eye-close"></span></a>
+
+                        <a href="@Url.Action("CopyPaste", new { Id = PromoItem.Id })" title="Создать копию акции" class="pull-right btn btn-default"><span class="glyphicon glyphicon-transfer"></span></a>
+                        <a href="@Url.Action("DeletePromotion", new { Id = PromoItem.Id })" onclick="return confirm('Вы действительно хотите удлить данную Промо-Акцию ?');" title="Удалить" class="pull-right btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                </div>
+                                }
+                                else
+                                {
+
+                <div class="col-sm-2 col-xs-12 form-group" id="promotionpanel-btn">
+                    <div class="btn-group-vertical btn-group-sm col-sm-12" role="group">
+
+                        <a href="#" title="Деактивировать" class="pull-right btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
+
+                        <a href="@Url.Action("CopyPaste", new { Id = PromoItem.Id })" title="Создать копию акции" class="pull-right btn btn-default"><span class="glyphicon glyphicon-transfer"></span></a>
+
+                         <a href="@Url.Action("DeletePromotion", new { Id = PromoItem.Id })" onclick="return confirm('Вы действительно хотите удлить данную Промо-Акцию ?');" title="Удалить" class="pull-right btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                </div>
+                                }
+
+
+        </div>
+
+        <hr />
+
                     }
-                 
+
 
                 }
                 else
                 {
-                    <div class="row">
-                        <div class="content blog col-sm-9 col-md-9">
-                            <h4>Акций не зарегистрировано</h4>
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="content blog col-sm-9 col-md-9">
+                <h4>Акций не зарегистрировано</h4>
+            </div>
+        </div>
                 }
-            @*</div>   
-        </div> 
-    <!-- .container -->
-</section>
-<!-- #main -->*@
+    @*</div>
+                </div>
+            <!-- .container -->
+        </section>
+        <!-- #main -->*@

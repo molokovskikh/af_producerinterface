@@ -37,7 +37,7 @@ namespace ProducerInterfaceCommon.Controllers
                 return; // найден в игнорируемых
             }
 
-            bool PermissionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.Enabled == true && xxx.TypePermission == SbyteTypeUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
+            bool PermissionExsist = cntx_.AccountPermission.Any(xxx => xxx.Enabled == true && xxx.TypePermission == SbyteTypeUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
 
             if (!PermissionExsist)
             {
@@ -47,26 +47,26 @@ namespace ProducerInterfaceCommon.Controllers
 
                 var AdminGroupName = GetWebConfigParameters("AdminGroupName");
 
-                bool GroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser);
+                bool GroupExsist = cntx_.AccountGroup.Any(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser);
 
-                var GroupAddPermission = new ControlPanelGroup();
+                var GroupAddPermission = new AccountGroup();
 
                 if (!GroupExsist)
                 {
-                    GroupAddPermission = new ControlPanelGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-                    cntx_.ControlPanelGroup.Add(GroupAddPermission);
+                    GroupAddPermission = new AccountGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+                    cntx_.AccountGroup.Add(GroupAddPermission);
                 }
                 else
                 {
-                    GroupAddPermission = cntx_.ControlPanelGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
+                    GroupAddPermission = cntx_.AccountGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
                 }
 
-                var NewPermission = new ControlPanelPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
-                cntx_.ControlPanelPermission.Add(NewPermission);
+                var NewPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
+                cntx_.AccountPermission.Add(NewPermission);
                 cntx_.SaveChanges();
                 //сохраняем группу и новый пермишен
 
-                GroupAddPermission.ControlPanelPermission.Add(NewPermission);
+                GroupAddPermission.AccountPermission.Add(NewPermission);
                 // добавляем пермишен к группе
                 cntx_.SaveChanges();
             }                    
@@ -100,13 +100,20 @@ namespace ProducerInterfaceCommon.Controllers
                         filterContext.Result = RedirectToAction("Index", "Registration");
                     }
                 }
+                if (TypeLoginUser == TypeUsers.UserNotProducer)
+                {
+                    if (!PermissionExsist)
+                    {
+                        filterContext.Result = RedirectToAction("Index", "Home");
+                    }
+                }
             }
             else
             {
                 if (!PermissionExsist)
                 {
                     // проверяем в БД доступ для текущего пользователя
-                    var ListPermission = cntx_.ControlPanelPermission.ToList().Where(xx => xx.ControlPanelGroup.Any(xxx => xxx.ProducerUser.Any(x => x.Id == CurrentUser.Id)))
+                    var ListPermission = cntx_.AccountPermission.ToList().Where(xx => xx.AccountGroup.Any(xxx => xxx.Account.Any(x => x.Id == CurrentUser.Id)))
                         .ToList()
                         .Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.ControllerAction })
                         .ToList();
@@ -150,9 +157,9 @@ namespace ProducerInterfaceCommon.Controllers
 
         #region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
 
-        protected ProducerUser GetCurrentUser(TypeUsers TypeUser_)
+        protected Account GetCurrentUser(TypeUsers TypeUser_)
         {
-            var retUser = new ProducerUser();
+            var retUser = new Account();
             TypeLoginUser = TypeUser_;
             
             if (TypeUser_ == TypeUsers.ProducerUser)
@@ -164,9 +171,9 @@ namespace ProducerInterfaceCommon.Controllers
                     return null;
                 }
 
-                retUser = cntx_.ProducerUser.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Email == EmailUser && xxx.Enabled == 1).FirstOrDefault();
+                retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == EmailUser && xxx.Enabled == 1).FirstOrDefault();
 
-                if (String.IsNullOrEmpty(retUser.Email))
+                if (String.IsNullOrEmpty(retUser.Login))
                 {
                     retUser = null;
                 }                
@@ -181,9 +188,26 @@ namespace ProducerInterfaceCommon.Controllers
                     return null;
                 }
 
-                retUser = cntx_.ProducerUser.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == LoginUser && xxx.Enabled == 1).FirstOrDefault();
+                retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == LoginUser && xxx.Enabled == 1).FirstOrDefault();
 
-                if (String.IsNullOrEmpty(retUser.Email))
+                if (String.IsNullOrEmpty(retUser.Login))
+                {
+                    retUser = null;
+                }
+            }
+
+            if (TypeUser_ == TypeUsers.UserNotProducer)
+            {
+                var EmailUser = GetUserCookiesName();
+
+                if (String.IsNullOrEmpty(EmailUser))
+                {
+                    return null;
+                }
+
+                retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == EmailUser && xxx.Enabled == 1).FirstOrDefault();
+
+                if (String.IsNullOrEmpty(retUser.Login))
                 {
                     retUser = null;
                 }
@@ -195,13 +219,13 @@ namespace ProducerInterfaceCommon.Controllers
 
         #region /*Аторизация*/
         
-        protected void AutorizeCurrentUser(ProducerUser thisUser, TypeUsers TypeUser_)
+        protected void AutorizeCurrentUser(Account thisUser, TypeUsers TypeUser_)
         {
             var UserLoginName = "";
 
             if (TypeUser_ == TypeUsers.ProducerUser)
             {
-                UserLoginName = thisUser.Email;
+                UserLoginName = thisUser.Login;
                 SetUserCookiesName(UserLoginName);
 
                 RedirectToAction("Index", "Profile");
@@ -214,6 +238,14 @@ namespace ProducerInterfaceCommon.Controllers
 
                 RedirectToAction("Index", "Home");
             }
+            if (TypeUser_ == TypeUsers.UserNotProducer)
+            {
+                UserLoginName = thisUser.Login;
+                SetUserCookiesName(UserLoginName);
+
+                RedirectToAction("Index", "Home");
+            }
+
         }
         #endregion
 

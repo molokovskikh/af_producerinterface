@@ -1,0 +1,35 @@
+﻿@model ProducerInterfaceCommon.ContextModels.RegistrerValidation
+@{
+    ViewBag.Title = "Регистрация";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Регистрация</h2>
+
+<hr/>
+
+
+@using (Html.BeginForm("Registration", "Registration", FormMethod.Post))
+            {
+    @Html.ValidationSummary(true, "")
+
+    @Html.LabelFor(m=>m.ProducerName)
+
+    @Html.EditorFor(m => m.Name)
+    @Html.EditorFor(m => m.login)
+    @Html.EditorFor(m => m.Appointment)
+
+    @Html.HiddenFor(m=>m.producers) 
+  
+    <br />
+
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация" />
+    </div>
+    <div class="form-group">
+        <a href="~/Registration/Index" class="">Я уже регистрировался</a>
+    </div>
+    <div class="form-group">
+        <a href="~/Registration/PasswordRecovery" class="">Забыли пароль?</a>
+    </div>
+    }

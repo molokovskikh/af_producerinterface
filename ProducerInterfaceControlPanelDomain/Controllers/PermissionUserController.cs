@@ -32,20 +32,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 return RedirectToAction("SearchUser");
             }
 
-            ViewBag.ListUser_ProducerUser = cntx_.ProducerUser.Where(xxx => xxx.TypeUser == SbyteTypeUser_ && (xxx.Name.Contains(TextSearch) || xxx.Email.Contains(TextSearch))).ToList();
+            ViewBag.ListUser_ProducerUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser_ && (xxx.Name.Contains(TextSearch) || xxx.Login.Contains(TextSearch))).ToList();
             
             return View("Result");
         }
         [HttpGet]
         public ActionResult Change(long? Id)
         {
-            var SelectUser = cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First();
+            var SelectUser = cntx_.Account.Where(xxx => xxx.Id == Id).First();
          
-            SelectUser.ListPermissionTwo = cntx_.ControlPanelGroup
-                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser_ && xxx.ProducerUser.Any(zzz => zzz.Id == Id))
+            SelectUser.ListPermissionTwo = cntx_.AccountGroup
+                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser_ && xxx.Account.Any(zzz => zzz.Id == Id))
                 .ToList().Select(xxx => (long)xxx.Id).ToList();
 
-            ViewBag.GroupList = cntx_.ControlPanelGroup.Where(xxx => xxx.TypeGroup == SbyteTypeUser_ && xxx.Enabled == true).ToList().Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
+            ViewBag.GroupList = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == SbyteTypeUser_ && xxx.Enabled == true).ToList().Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
 
             return View(SelectUser);       
         }
@@ -54,9 +54,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         public ActionResult Change(long? Id, List<long> ListPermissionTwo)
         {
 
-            var SelectUser = cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First();
+            var SelectUser = cntx_.Account.Where(xxx => xxx.Id == Id).First();
                      
-            SelectUser.ListPermissionTwo = cntx_.ControlPanelGroup
+            SelectUser.ListPermissionTwo = cntx_.AccountGroup
                 .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser_)
                 .ToList().Select(xxx => (long)xxx.Id).ToList();
 
@@ -71,8 +71,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
                 if (!GroupExsist) // если в входящем списке группы нет, удаляем из БД
                 {
-                    var GroupItem = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == GroupId).First();
-                    GroupItem.ProducerUser.Remove(cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First());
+                    var GroupItem = cntx_.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
+                    GroupItem.Account.Remove(cntx_.Account.Where(xxx => xxx.Id == Id).First());
                     cntx_.SaveChanges();
                 }
             }
@@ -83,12 +83,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             foreach (var ItemUserGroup in ListPermissionTwo)
             {
                 int GroupId = (int)ItemUserGroup;
-                bool GroupExsist = SelectUser.ControlPanelGroup.Any(xxx => xxx.Id == GroupId);
+                bool GroupExsist = SelectUser.AccountGroup.Any(xxx => xxx.Id == GroupId);
 
                 if (!GroupExsist)
                 {
-                    var GroupItem = cntx_.ControlPanelGroup.Where(xxx => xxx.Id == GroupId).First();
-                    GroupItem.ProducerUser.Add(cntx_.ProducerUser.Where(xxx => xxx.Id == Id).First());
+                    var GroupItem = cntx_.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
+                    GroupItem.Account.Add(cntx_.Account.Where(xxx => xxx.Id == Id).First());
                     cntx_.SaveChanges();
                 }
             }
@@ -108,7 +108,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             var X = cntx_.producernames.Where(zzz => zzz.ProducerName.Contains(TextSearch)).Select(zzz => zzz.ProducerId).FirstOrDefault();
             
-            ViewBag.ListUser_ProducerUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == X).ToList();
+            ViewBag.ListUser_ProducerUser = cntx_.Account.Where(xxx => xxx.CompanyId == X).ToList();
             
             return View("Result");
         }

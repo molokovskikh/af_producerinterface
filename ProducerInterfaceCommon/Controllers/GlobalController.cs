@@ -27,7 +27,7 @@ namespace ProducerInterfaceCommon.Controllers
         protected SByte SbyteTypeUser { get; set; }
 
         // сюда попадёт авторизованный пользователь
-        protected ContextModels.ProducerUser CurrentUser { get; set; }
+        protected ContextModels.Account CurrentUser { get; set; }
 
         // Context DataBase       
         protected ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();

@@ -35,7 +35,5 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<long> ProducerUserId { get; set; }
         public Nullable<long> DrugFamilyId { get; set; }
         public Nullable<long> MNNId { get; set; }
-    
-        public virtual ProducerUser ProducerUser { get; set; }
     }
 }

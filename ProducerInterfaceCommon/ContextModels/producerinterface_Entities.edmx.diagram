@@ -4,24 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5a6501554ad741428f74ceb65064d7fb" Name="Diagram1">
-        <EntityTypeShape EntityType="producerinterface_Model.DrugDescriptionRemark" Width="1.5" PointX="5.25" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.jobextend" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
+      <Diagram DiagramId="5a6501554ad741428f74ceb65064d7fb" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="producerinterface_Model.DrugDescriptionRemark" Width="1.5" PointX="2.875" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.jobextend" Width="1.5" PointX="8.875" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.mailform" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.producers" Width="1.5" PointX="8.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.profilenews" Width="1.5" PointX="11" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.promotions" Width="1.5" PointX="5.25" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.promotionToDrug" Width="1.5" PointX="7.5" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.promotionToDrug" Width="1.5" PointX="7.375" PointY="12.25" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.reporttemplate" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.reportxml" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.user_logs" Width="1.5" PointX="5.25" PointY="16.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.UserPermission" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.userrole" Width="1.5" PointX="6" PointY="20.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.usertouserrole" Width="1.5" PointX="8.25" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.userpermissionrole" Width="1.5" PointX="10.25" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.user_logs" Width="1.5" PointX="3.375" PointY="12.25" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.assortment" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.catalognames" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.drugdescription" Width="1.5" PointX="10.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.drugfamily" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.drugformproducer" Width="1.5" PointX="12.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.drugmnn" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.jobextendwithproducer" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
@@ -31,25 +27,21 @@
         <EntityTypeShape EntityType="producerinterface_Model.ratingreportorderitems" Width="1.5" PointX="12.75" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.regionnames" Width="1.5" PointX="14.75" PointY="13.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.suppliernames" Width="1.5" PointX="15.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.usernames" Width="1.5" PointX="0.75" PointY="15.75" IsExpanded="true" />
-        <AssociationConnector Association="producerinterface_Model.FK_profile_news_producers" ManuallyRouted="false" />
         <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" ManuallyRouted="false" />
-        <AssociationConnector Association="producerinterface_Model.FK_user_permission_role_user_permissions" ManuallyRouted="false" />
-        <AssociationConnector Association="producerinterface_Model.FK_user_role_user_permissions" ManuallyRouted="false" />
-        <AssociationConnector Association="producerinterface_Model.FK_user_permission_role_user_roleslist" ManuallyRouted="false" />
-        <AssociationConnector Association="producerinterface_Model.FK_user_role_user_roleslist" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="producerinterface_Model.LogForNet" Width="1.5" PointX="7.375" PointY="15.75" />
-        <EntityTypeShape EntityType="producerinterface_Model.ProducerUser" Width="1.5" PointX="3" PointY="9.5" />
-        <AssociationConnector Association="producerinterface_Model.DrugDescriptionRemark_ProducerUserId" />
-        <AssociationConnector Association="producerinterface_Model.FK_promotions_produceruser" />
-        <AssociationConnector Association="producerinterface_Model.FK_user_logs_users" />
-        <AssociationConnector Association="producerinterface_Model.FK_user_role_users" />
-        <EntityTypeShape EntityType="producerinterface_Model.ControlPanelGroup" Width="2.5" PointX="0.5" PointY="10.125" />
-        <EntityTypeShape EntityType="producerinterface_Model.ControlPanelPermission" Width="2.125" PointX="0.5" PointY="12.75" />
-        <AssociationConnector Association="producerinterface_Model.ControlPanelGroupToPermission" />
-        <AssociationConnector Association="producerinterface_Model.ControlPanelUserToGroup" />
+        <EntityTypeShape EntityType="producerinterface_Model.LogForNet" Width="1.5" PointX="9.125" PointY="12.25" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamilynames" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="producerinterface_Model.drugfamily" Width="1.5" PointX="9.375" PointY="15.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.Account" Width="1.5" PointX="6.25" PointY="18.5" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountCompany" Width="3.875" PointX="2.25" PointY="18.5" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountEmail" Width="2.25" PointX="8.5" PointY="18.5" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountGroup" Width="1.5" PointX="8.5" PointY="20.5" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountPermission" Width="1.5" PointX="10.375" PointY="20.5" />
+        <EntityTypeShape EntityType="producerinterface_Model.CompanyDomainName" Width="1.5" PointX="0.625" PointY="18.5" />
+        <AssociationConnector Association="producerinterface_Model.Account_CompanyId" />
+        <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
+        <AssociationConnector Association="producerinterface_Model.CompanyId_AccountCompanyId" />
+        <AssociationConnector Association="producerinterface_Model.AccountGroupToPermission" />
+        <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
+        <EntityTypeShape EntityType="producerinterface_Model.usernames" Width="1.5" PointX="5.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

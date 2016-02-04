@@ -199,7 +199,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public bool Enable { get; set; }
     }
 
-    public partial class ProducerUser
+    public partial class Account
     {
         [Display(Name = "IP адресс")]
         public string IP { get; set; }
@@ -221,9 +221,9 @@ namespace ProducerInterfaceCommon.ContextModels
             get { return (TypeUsers)TypeUser; }
             set { TypeUser = (SByte)value; }
         }
-
     }
-    public partial class ControlPanelGroup
+    
+    public partial class AccountGroup
     {
         [UIHint("LongListPermission")]
         public List<int> ListPermission { get; set; }
@@ -266,7 +266,7 @@ namespace ProducerInterfaceCommon.ContextModels
 
         public bool Status { get; set; }
 
-        public virtual ProducerUser ProducerUser { get; set; }
+        public virtual Account ProducerUser { get; set; }
 
         public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
 

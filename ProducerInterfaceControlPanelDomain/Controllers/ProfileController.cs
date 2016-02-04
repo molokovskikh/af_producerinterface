@@ -13,7 +13,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveProfile(ProducerUser UserModel)
+        public ActionResult SaveProfile(Account UserModel)
         {
             if (!ModelState.IsValid)
             {
@@ -25,10 +25,16 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             // если Id авторизованного пользователя и Id возвращаемое со страницы совпадают сохраняем в БД
             if (CurrentUser.Id == UserModel.Id)
             {
-                CurrentUser.Email = UserModel.Email;
+                //  CurrentUser.Login = UserModel.Login;
+
+                var BdEmailAddress = cntx_.AccountEmail.Where(xxx => xxx.AccountId == UserModel.Id).FirstOrDefault();
+
+
+
+
                 CurrentUser.Appointment = UserModel.Appointment;
                 CurrentUser.Name = UserModel.Name;
-                cntx_.Entry((ProducerUser)CurrentUser).State = System.Data.Entity.EntityState.Modified;
+                cntx_.Entry((Account)CurrentUser).State = System.Data.Entity.EntityState.Modified;
                 cntx_.SaveChanges();
 
                 SuccessMessage("Ваш профиль успешно сохранен");

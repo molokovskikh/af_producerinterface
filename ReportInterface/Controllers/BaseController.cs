@@ -73,11 +73,11 @@ namespace ReportInterface.Controllers
 
             if (controllerAcctributes != "")
             {
-                PermitionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes.Contains(controllerAcctributes));
+                PermitionExsist = cntx_.AccountPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes.Contains(controllerAcctributes));
             }
             else
             {
-                PermitionExsist = cntx_.ControlPanelPermission.Any(xxx => xxx.ControllerAction == permissionName);
+                PermitionExsist = cntx_.AccountPermission.Any(xxx => xxx.ControllerAction == permissionName);
                 controllerAcctributes = null;
             }
             
@@ -86,31 +86,31 @@ namespace ReportInterface.Controllers
             {
                 // в базе не найдн пермишен для данного экшена
 
-                var NewPermittion = new ControlPanelPermission();
+                var NewPermittion = new AccountPermission();
                 NewPermittion.ActionAttributes = controllerAcctributes;
                 NewPermittion.ControllerAction = permissionName;
                 NewPermittion.Enabled = true;
                 
-                cntx_.ControlPanelPermission.Add(NewPermittion);
+                cntx_.AccountPermission.Add(NewPermittion);
                 cntx_.SaveChanges();
 
                 string AdminGroupname = GetWebConfigParameters("AdminGroupName");
-                bool AdminGroupExsist = cntx_.ControlPanelGroup.Any(xxx => xxx.Name == AdminGroupname);
+                bool AdminGroupExsist = cntx_.AccountGroup.Any(xxx => xxx.Name == AdminGroupname);
 
                 if (AdminGroupExsist)
                 {
-                    var AdminGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroupname).First();
-                    AdminGroup.ControlPanelPermission.Add(NewPermittion);
+                    var AdminGroup = cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroupname).First();
+                    AdminGroup.AccountPermission.Add(NewPermittion);
                     cntx_.SaveChanges();
                 }
                 else
                 {
-                    var NewAdminGroup = new ControlPanelGroup();
+                    var NewAdminGroup = new AccountGroup();
                     NewAdminGroup.Enabled = true;
                     NewAdminGroup.Name = AdminGroupname;
-                    cntx_.ControlPanelGroup.Add(NewAdminGroup);
+                    cntx_.AccountGroup.Add(NewAdminGroup);
                     cntx_.SaveChanges();
-                    NewAdminGroup.ControlPanelPermission.Add(NewPermittion);
+                    NewAdminGroup.AccountPermission.Add(NewPermittion);
                     cntx_.SaveChanges();
                 }
             }
@@ -152,16 +152,16 @@ namespace ReportInterface.Controllers
             // если аттрибуты запроса пусты / нет в запросе передаваемых параметров
             if (controllerAcctributes == null)
             {
-                return cntx_.ControlPanelPermission.Where(vvv => vvv.ControllerAction == permissionName)
-                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser)));              
+                return cntx_.AccountPermission.Where(vvv => vvv.ControllerAction == permissionName)
+                .Any(xxx => xxx.AccountGroup.Any(yyy => yyy.Account.Any(zzz => zzz.Login == currentUser)));              
             }
 
             // в запросе есть передаваемые параметры
 
-            
 
-            return cntx_.ControlPanelPermission.ToList().Where(vvv=>vvv.ControllerAction == permissionName && vvv.ActionAttributes.Contains(controllerAcctributes))
-                .Any(xxx => xxx.ControlPanelGroup.Any(yyy => yyy.ProducerUser.Any(zzz => zzz.Login == currentUser)));       
+
+            return cntx_.AccountPermission.ToList().Where(vvv=>vvv.ControllerAction == permissionName && vvv.ActionAttributes.Contains(controllerAcctributes))
+                .Any(xxx => xxx.AccountGroup.Any(yyy => yyy.Account.Any(zzz => zzz.Login == currentUser)));       
 
         }
 

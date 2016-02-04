@@ -17,7 +17,7 @@ namespace ProducerInterface.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+            cntx = new producerinterface_Entities();
             if (filterContext == null)
             {
                 throw new ArgumentNullException("filterContext");
@@ -34,14 +34,34 @@ namespace ProducerInterface.Controllers
         [HttpGet]
         public ActionResult Registration()
         {
-            var ModelView = new RegistrerValidation();            
+            var ModelView = new RegistrationAccountValidation();            
             ProducerInterfaceCommon.Heap.NamesHelper h;            
             h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, 0);                     
             ViewBag.ProducerList = h.GetProducerList(); 
 
             return View();
         }
-        
+
+        [HttpPost]
+        public ActionResult Registration(RegistrationAccountValidation AccountProducer)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return View("Registration", AccountProducer);
+            //}
+
+            //if (AccountProducer.Producers == 0 && AccountProducer.CustomNameCompany == "")
+            //{
+            //    ErrorMessage("Не выбрана компания. Если не нашли свою компанию в списке, выберите пунки указать название");
+            //    return View("Registration", AccountProducer);
+            //}
+            // feedback
+            // true eMail  false Phone
+
+            return View();
+        }
+
+
         [HttpPost]
         public ActionResult Registration(RegistrerValidation NewAccount = null)
         {         
@@ -51,26 +71,26 @@ namespace ProducerInterface.Controllers
                 // проверка на существование eMail в БД
                          
 
-                var YesNouMail = cntx_.ProducerUser.Where(xxx => xxx.Email == NewAccount.login && xxx.TypeUser == 0).FirstOrDefault();
+                var YesNouMail = cntx_.Account.Where(xxx => xxx.Login == NewAccount.login && xxx.TypeUser == SbyteTypeUser).FirstOrDefault();
 
                 if (YesNouMail == null && NewAccount.login != "")
                 {
-                    ProducerUser New_User = new ProducerUser();
-                    New_User.Email = NewAccount.login;
+                    Account New_User = new Account();
+                    New_User.Login = NewAccount.login;
                     New_User.Name = NewAccount.Name;
                     New_User.Enabled = 0;
                     New_User.Appointment = NewAccount.Appointment;
                     string Password = GetRandomPassword();
                     New_User.Password = Md5HashHelper.GetHash(Password);
-                    New_User.ProducerId = NewAccount.Producers;
+                    New_User.CompanyId = NewAccount.Producers;
                     New_User.UserType = TypeUsers.ProducerUser;                   
                     New_User.PasswordUpdated = SystemTime.GetDefaultDate();
                     cntx_.Entry(New_User).State = System.Data.Entity.EntityState.Added;
                     cntx_.SaveChanges();
 
-                    string eMail = New_User.Email;
+                    string eMail = New_User.Login;
 
-                    New_User = cntx_.ProducerUser.Where(xxx => xxx.Email == eMail && xxx.TypeUser == 0).First();
+                    New_User = cntx_.Account.Where(xxx => xxx.Login == eMail && xxx.TypeUser == SbyteTypeUser).First();
                     
                     ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx, New_User.Id, Password, Request.UserHostAddress.ToString());
 
@@ -120,18 +140,18 @@ namespace ProducerInterface.Controllers
             }
             else
             {
-                var User = new ProducerInterfaceCommon.ContextModels.ProducerUser();
+                var User = new ProducerInterfaceCommon.ContextModels.Account();
 
                 try
                 {
-                    User = cntx_.ProducerUser.Where(xxx => xxx.Email == login && xxx.TypeUser == 0).ToList().FirstOrDefault();
+                    User = cntx_.Account.Where(xxx => xxx.Login == login && xxx.TypeUser == 0).ToList().FirstOrDefault();
                 }
                 catch
                 {
                     User = null;
                 }
 
-                if (User != null && User.Email != "")
+                if (User != null && User.Login != "")
                 {
 
                     // проверка не заблокирован ли пользователь
@@ -187,14 +207,14 @@ namespace ProducerInterface.Controllers
              
         public ActionResult ChangePassword()
         {
-            var User = cntx_.ProducerUser.Where(xxx => xxx.Email == CurrentUser.Email && xxx.UserType == 0).FirstOrDefault();
+            var User = cntx_.Account.Where(xxx => xxx.Login == CurrentUser.Login && xxx.UserType == 0).FirstOrDefault();
             string password = GetRandomPassword();
             User.Password = Md5HashHelper.GetHash(password);
 
             cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
             cntx_.SaveChanges();
 
-            SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Email);
+            SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Login);
 
 			ProducerInterfaceCommon.Heap.EmailSender.SendPasswordChangeMessage(cntx: cntx, userId: User.Id, password: password, ip: Request.UserHostAddress);
 
@@ -214,9 +234,9 @@ namespace ProducerInterface.Controllers
 
             // валидация
 
-            var ThisUser = cntx_.ProducerUser.ToList().Where(xxx => xxx.Email.ToLower() == User_.login.ToLower() && xxx.TypeUser == SbyteTypeUser).FirstOrDefault();
+            var ThisUser = cntx_.Account.ToList().Where(xxx => xxx.Login.ToLower() == User_.login.ToLower() && xxx.TypeUser == SbyteTypeUser).FirstOrDefault();
 
-            if (ThisUser == null || ThisUser.Email == "")
+            if (ThisUser == null || ThisUser.Login == "")
             {
                 ErrorMessage("Пользователь с данным Логином не существует.");
                 ViewBag.CurrentUser = null;
@@ -245,7 +265,7 @@ namespace ProducerInterface.Controllers
             if (ThisUser.Enabled == 1) // логинится не впервый раз и не заблокирован
             {        
             
-                CurrentUser = ThisUser as ProducerUser;
+                CurrentUser = ThisUser as Account;
                 return Autentificate(this, shouldRemember: true);
             }
                  
@@ -253,9 +273,9 @@ namespace ProducerInterface.Controllers
             if (ThisUser.Enabled == 0 && (ThisUser.PasswordUpdated.Value == SystemTime.GetDefaultDate())) // логинится впервые
             { 
                 
-                var ListUser = cntx_.ProducerUser.Where(xxx => xxx.ProducerId == ThisUser.ProducerId.Value).Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == SbyteTypeUser).ToList();
+                var ListUser = cntx_.Account.Where(xxx => xxx.CompanyId == ThisUser.CompanyId.Value).Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == SbyteTypeUser).ToList();
 
-                List<UserPermission> LST = cntx_.UserPermission.ToList();
+                List<AccountPermission> LST = cntx_.AccountPermission.ToList();
 
                 if (ListUser == null || ListUser.Count() == 0)
                 {
@@ -268,11 +288,11 @@ namespace ProducerInterface.Controllers
                     // проверяем наличие группы администраторов
 
 
-                    var AdminGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == AdminGroupName).FirstOrDefault();
+                    var AdminGroup = cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroupName).FirstOrDefault();
 
                     if (String.IsNullOrEmpty(AdminGroup.Name))
                     {
-                        AdminGroup = new ControlPanelGroup();
+                        AdminGroup = new AccountGroup();
 
                         AdminGroup.Name = AdminGroupName;
                         AdminGroup.Enabled = true;
@@ -282,7 +302,7 @@ namespace ProducerInterface.Controllers
                         cntx_.SaveChanges();
                     }
 
-                    AdminGroup.ProducerUser.Add(ThisUser);
+                    AdminGroup.Account.Add(ThisUser);
                     cntx_.SaveChanges();   
                 }
                 else
@@ -293,12 +313,12 @@ namespace ProducerInterface.Controllers
 
                     var GroupName = GetWebConfigParameters("LogonGroupAcess");
 
-                    var OtherGroup = cntx_.ControlPanelGroup.Where(xxx => xxx.Name == GroupName).FirstOrDefault();
+                    var OtherGroup = cntx_.AccountGroup.Where(xxx => xxx.Name == GroupName && xxx.TypeGroup == SbyteTypeUser).FirstOrDefault();
 
 
                     if (String.IsNullOrEmpty(OtherGroup.Name))
                     {
-                        OtherGroup = new ControlPanelGroup();
+                        OtherGroup = new AccountGroup();
 
                         OtherGroup.Name = GroupName;
                         OtherGroup.Enabled = true;
@@ -308,7 +328,7 @@ namespace ProducerInterface.Controllers
                         cntx_.SaveChanges();
                     }
 
-                    OtherGroup.ProducerUser.Add(ThisUser);
+                    OtherGroup.Account.Add(ThisUser);
                     cntx_.SaveChanges();
                 }
                 SuccessMessage("Вы успешно подтвердили свою регистрацию на сайте");
@@ -363,7 +383,7 @@ namespace ProducerInterface.Controllers
 
         public ActionResult Autentificate(Controller currentController, bool shouldRemember, string userData = "")
         {
-            string autorizeddd = Autentificates(this, CurrentUser.Email, shouldRemember, userData);
+            string autorizeddd = Autentificates(this, CurrentUser.Login, shouldRemember, userData);
             string controllerName = (autorizeddd.Split(new Char[] { '/' }))[0];
             string actionName = (autorizeddd.Split(new Char[] { '/' }))[1];
             return RedirectToAction(actionName, controllerName);
@@ -380,7 +400,7 @@ namespace ProducerInterface.Controllers
 
             var ticket = new FormsAuthenticationTicket(
                 1,
-                this.CurrentUser.Email,
+                this.CurrentUser.Login,
                 SystemTime.Now(),
                 SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
                 shouldRemember,

@@ -1,4 +1,4 @@
-﻿@model ProducerInterfaceCommon.ContextModels.RegistrerValidation
+﻿@model ProducerInterfaceCommon.ContextModels.RegistrationAccountValidation
 
 @{
     ViewBag.Title = "Регистрация";
@@ -18,7 +18,13 @@
             @Html.EditorFor(m => m.Name)
             @Html.EditorFor(m => m.login)
             @Html.EditorFor(m => m.Appointment)
+
+            @Html.EditorFor(m=>m.Phone)
+            @Html.CheckBoxFor(m=>m.FeedBackType)
+        
             @Html.EditorFor(m => m.Producers)
+
+            @Html.TextBoxFor(m=>m.CustomNameCompany)
 
             <br />
 

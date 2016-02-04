@@ -20,7 +20,5 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<long> ProducerId { get; set; }
         public System.DateTime EditedDate { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-    
-        public virtual producers producers { get; set; }
     }
 }

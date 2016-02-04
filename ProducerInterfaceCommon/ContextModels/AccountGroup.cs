@@ -12,12 +12,21 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class userpermissionrole
+    public partial class AccountGroup
     {
-        public Nullable<long> UserPermissionId { get; set; }
-        public long UserRoleId { get; set; }
+        public AccountGroup()
+        {
+            this.AccountPermission = new HashSet<AccountPermission>();
+            this.Account = new HashSet<Account>();
+        }
     
-        public virtual UserPermission UserPermission { get; set; }
-        public virtual userrole userrole { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public bool Enabled { get; set; }
+        public string Description { get; set; }
+        public sbyte TypeGroup { get; set; }
+    
+        public virtual ICollection<AccountPermission> AccountPermission { get; set; }
+        public virtual ICollection<Account> Account { get; set; }
     }
 }

@@ -15,11 +15,11 @@ namespace ProducerInterfaceCommon.LoggerModels
 	{
 
 		private DbContext _context;
-		private ProducerUser _user;
+		private Account _user;
 		private string _connString = ConfigurationManager.ConnectionStrings["producerinterface"].ConnectionString;
 		private ObjectStateManager _objectStateManager;
 
-		public FrameLogger(ProducerUser user, DbContext context)
+		public FrameLogger(Account user, DbContext context)
 		{
 			_context = context;
 			_user = user;

@@ -14,11 +14,19 @@
     <br />
     @using (Html.BeginForm("Manage", "Promotion", FormMethod.Post))
     {
-        @Html.HiddenFor(s => s.Id)
+        if (Model.Id != 0)
+        {
+            @Html.HiddenFor(s => s.Id)
+        }
+        else
+        {
+            <input type="hidden" name="Id" id="Id" value="0" />         
+        }
+
         @Html.ValidationSummary(true);
         <div class="row">
             <div class="form-group">
-                <label class="control-label">Заголовок:</label>
+                <label class="control-label">Наименование промо-акции:</label>
                 @Html.TextBoxFor(s => s.Name, new { @Class = "form-control", @Placeholder = "Заголовок" })
                 @Html.ValidationMessageFor(s => s.Name)
             </div>
@@ -26,7 +34,7 @@
 
         <div class="row">
             <div class="form-group">
-                <label class="control-label">Содержание:</label>
+                <label class="control-label">Аннотация:</label>
                 @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7" })
                 @Html.ValidationMessageFor(s => s.Annotation)
             </div>
