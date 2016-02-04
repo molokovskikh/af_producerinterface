@@ -201,3 +201,43 @@
 02.02.2016 18:35:16.725 [5] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/ModelSendErrorMessageForAminPartial" не найден или не реализует интерфейс IController.
 02.02.2016 18:38:37.520 [8] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Shared\ModelSendErrorMessageForAminPartial.cshtml(6): error CS1503: Argument 3: cannot convert from 'string' to 'System.Web.Mvc.Ajax.AjaxOptions'
 02.02.2016 19:00:31.908 [34] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/MenuPartialView" не найден или не реализует интерфейс IController.
+04.02.2016 16:24:42.788 [7] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Registration\Registration.cshtml(18): error CS1061: 'RegistrationAccountValidation' does not contain a definition for 'Name' and no extension method 'Name' accepting a first argument of type 'RegistrationAccountValidation' could be found (are you missing a using directive or an assembly reference?)
+04.02.2016 16:33:42.344 [9] ERROR MySqlAdoNetAppender - Элемент модели, переданный в словарь, имеет тип "ProducerInterfaceCommon.ContextModels.RegistrationAccountValidation", но для этого словаря требуется элемент модели типа "ProducerInterfaceCommon.ContextModels.LoginValidation".
+04.02.2016 16:33:48.299 [8] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Account\Index.cshtml(12): error CS1061: 'RegistrationAccountValidation' does not contain a definition for 'producers' and no extension method 'producers' accepting a first argument of type 'RegistrationAccountValidation' could be found (are you missing a using directive or an assembly reference?)
+04.02.2016 16:43:46.933 [7] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Account\Registration.cshtml(22): error CS1061: 'RegistrerValidation' does not contain a definition for 'producers' and no extension method 'producers' accepting a first argument of type 'RegistrerValidation' could be found (are you missing a using directive or an assembly reference?)
+04.02.2016 16:46:10.147 [11] ERROR MySqlAdoNetAppender - Контроллер для пути "/Shared/LoginPartialView" не найден или не реализует интерфейс IController.
+04.02.2016 16:47:56.656 [13] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+04.02.2016 16:54:24.799 [13] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: value
+04.02.2016 16:54:45.884 [26] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: value
+04.02.2016 16:56:39.994 [26] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Account\Index.cshtml(12): error CS0103: The name 'HttpMethod' does not exist in the current context
+04.02.2016 17:01:31.730 [7] ERROR MySqlAdoNetAppender - Текущий запрос для действия "Registration" на контроллере типа "RegistrationController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult Registration(ProducerInterfaceCommon.ContextModels.RegistrationAccountValidation) на типе ProducerInterface.Controllers.RegistrationController
+System.Web.Mvc.ActionResult Registration(ProducerInterfaceCommon.ContextModels.RegistrerValidation) на типе ProducerInterface.Controllers.RegistrationController
+04.02.2016 17:03:36.160 [19] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+04.02.2016 17:35:12.532 [11] ERROR MySqlAdoNetAppender - Путь '/Views/Account/EditorTemplates/EditorPhone.cshtml' не найден.
+04.02.2016 17:36:03.930 [12] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Account\Registration.cshtml(5): error CS0246: The type or namespace name 'InputMaskAttribute' could not be found (are you missing a using directive or an assembly reference?)
+04.02.2016 17:37:41.183 [7] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+04.02.2016 17:41:25.791 [11] ERROR MySqlAdoNetAppender - Путь '/Views/Account/EditorTemplates/EditorPhone.cshtml' не найден.
+04.02.2016 17:43:45.442 [21] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:04:34.002 [24] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:21:02.689 [13] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:24:33.773 [13] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:29:21.267 [6] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:31:22.096 [12] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:33:14.364 [9] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:37:05.877 [16] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:48:07.433 [6] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:55:50.576 [6] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 18:58:01.458 [6] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 19:01:28.863 [9] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 19:06:01.996 [13] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 19:10:34.688 [9] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+04.02.2016 19:12:15.611 [9] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.String GetWebConfigParameters(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+04.02.2016 19:16:37.172 [12] ERROR MySqlAdoNetAppender - Элемент модели, переданный в словарь, имеет тип "ProducerInterfaceCommon.ContextModels.RegistrationAccountValidation", но для этого словаря требуется элемент модели типа "ProducerInterfaceCommon.ContextModels.LoginValidation".
+04.02.2016 19:20:15.983 [24] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Profile\Index.cshtml(6): error CS0234: The type or namespace name 'ProducerUser' does not exist in the namespace 'ProducerInterfaceCommon.ContextModels' (are you missing an assembly reference?)
+04.02.2016 19:23:15.691 [24] ERROR MySqlAdoNetAppender - "System.Data.Entity.DynamicProxies.Account_47172235E3C9B8BE7CB9FE6DB6D61F728BF5811DF7FF158368A351E72F996C6C" не содержит определения для "Email"
+04.02.2016 19:23:43.491 [11] ERROR MySqlAdoNetAppender - "System.Data.Entity.DynamicProxies.Account_47172235E3C9B8BE7CB9FE6DB6D61F728BF5811DF7FF158368A351E72F996C6C" не содержит определения для "Email"
+04.02.2016 19:24:02.643 [24] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Promotion\Index.cshtml(48): error CS1061: 'promotions' does not contain a definition for 'ProducerUser' and no extension method 'ProducerUser' accepting a first argument of type 'promotions' could be found (are you missing a using directive or an assembly reference?)
+04.02.2016 19:24:31.382 [29] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Profile\Index.cshtml(12): error CS1061: 'Account' does not contain a definition for 'ProducerId' and no extension method 'ProducerId' accepting a first argument of type 'Account' could be found (are you missing a using directive or an assembly reference?)

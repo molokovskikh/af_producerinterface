@@ -348,6 +348,8 @@
     <Content Include="Views\Account\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorString.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorStringPosition.cshtml" />
+    <Content Include="Views\Account\EditorTemplates\EditorPhone.cshtml" />
+    <Content Include="Views\Account\DomainRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -32,7 +32,7 @@
             {
                 <ul class="nav navbar-nav navbar-right" role="navigation">
                     <li class="dropdown">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Email</a>
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Login</a>
                         <ul class="dropdown-menu">
                             <li><a href="~/Profile/Account">Мой профиль</a></li>
                             <li class="divider"></li>
@@ -52,6 +52,7 @@
                 <ul class="nav navbar-nav navbar-right" role="navigation">
 
                     <li><a href="@Url.Action("Registration", "Registration")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
+               
                     <li class="dropdown">
 
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -59,6 +60,7 @@
                         </a>
                         @Html.Partial("LoginPartialView")
                     </li>
+
                 </ul>
             }
         </div>

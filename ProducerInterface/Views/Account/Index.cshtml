@@ -9,4 +9,24 @@
 
 <hr/>
 
+@using(Html.BeginForm("Registration", "Account", FormMethod.Get))
+{
 
+<div class="form-group">
+    <label>Выберите вашу компанию</label>
+    @Html.EditorFor(m=>m.Producers)
+</div>
+
+<div class="form-group">    
+    <input type="submit" class="btn btn-primary" value="Принять" />
+    <a class="btn btn-warning" href="#">Компания в списке отсутствует</a>
+</div>
+}
+
+@section JavaScript
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+    <script src="~/Content/Chosen/js/InitRegistrationChosen.js"></script>
+}
