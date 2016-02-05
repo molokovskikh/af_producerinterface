@@ -396,20 +396,6 @@
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.propertychangeview" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <EntityType Name="propertychangeview">
-          <Key>
-            <PropertyRef Name="ChangePropertyId" />
-            <PropertyRef Name="ChangeObjectId" />
-            <PropertyRef Name="PropertyName" />
-            <PropertyRef Name="TypeName" />
-          </Key>
-          <Property Name="ChangePropertyId" Type="int" Nullable="false" />
-          <Property Name="ChangeObjectId" Type="int" Nullable="false" />
-          <Property Name="PropertyName" Type="varchar" MaxLength="250" Nullable="false" />
-          <Property Name="ValueOld" Type="text" />
-          <Property Name="ValueNew" Type="text" />
-          <Property Name="TypeName" Type="varchar" MaxLength="250" Nullable="false" />
-        </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6005: Тип данных "udecimal" в настоящее время не поддерживается для целевой версии платформы Entity Framework; столбец "Cost" в таблице "def.producerinterface.ratingreportorderitems" был исключен.
 предупреждение 6002: В таблице или представлении "def.producerinterface.ratingreportorderitems" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -713,16 +699,6 @@ FROM `pharmacynames` AS `pharmacynames`</DefiningQuery>
 `producernames`.`ProducerId`, 
 `producernames`.`ProducerName`
 FROM `producernames` AS `producernames`</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="propertychangeview" EntityType="Self.propertychangeview" store:Type="Views" store:Schema="producerinterface">
-            <DefiningQuery>SELECT
-`propertychangeview`.`ChangePropertyId`, 
-`propertychangeview`.`ChangeObjectId`, 
-`propertychangeview`.`PropertyName`, 
-`propertychangeview`.`ValueOld`, 
-`propertychangeview`.`ValueNew`, 
-`propertychangeview`.`TypeName`
-FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ratingreportorderitems" EntityType="Self.ratingreportorderitems" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -1152,7 +1128,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="promotions" EntitySet="promotions" />
             <End Role="promotionToDrug" EntitySet="promotionToDrug" />
           </AssociationSet>
-          <EntitySet Name="propertychangeview" EntityType="producerinterface_Model.propertychangeview" />
         </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1346,20 +1321,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="propertychangeview">
-          <Key>
-            <PropertyRef Name="ChangePropertyId" />
-            <PropertyRef Name="ChangeObjectId" />
-            <PropertyRef Name="PropertyName" />
-            <PropertyRef Name="TypeName" />
-          </Key>
-          <Property Name="ChangePropertyId" Type="Int32" Nullable="false" />
-          <Property Name="ChangeObjectId" Type="Int32" Nullable="false" />
-          <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="ValueOld" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="ValueNew" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="TypeName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1766,18 +1727,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="propertychangeview">
-            <EntityTypeMapping TypeName="producerinterface_Model.propertychangeview">
-              <MappingFragment StoreEntitySet="propertychangeview">
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="ValueNew" ColumnName="ValueNew" />
-                <ScalarProperty Name="ValueOld" ColumnName="ValueOld" />
-                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
-                <ScalarProperty Name="ChangeObjectId" ColumnName="ChangeObjectId" />
-                <ScalarProperty Name="ChangePropertyId" ColumnName="ChangePropertyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

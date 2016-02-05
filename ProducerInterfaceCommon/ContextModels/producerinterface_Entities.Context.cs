@@ -56,6 +56,5 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
         public DbSet<promotions> promotions { get; set; }
-        public DbSet<propertychangeview> propertychangeview { get; set; }
     }
 }

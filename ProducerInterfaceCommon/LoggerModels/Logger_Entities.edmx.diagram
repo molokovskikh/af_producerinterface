@@ -9,9 +9,9 @@
         <EntityTypeShape EntityType="LoggerModels.LogPropertyChange" Width="4.125" PointX="6.5" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="LoggerModels.LogPropertyChange_LogObjectChange" ManuallyRouted="false" />
         <EntityTypeShape EntityType="LoggerModels.LogChangeSet" Width="1.5" PointX="1.125" PointY="1.125" />
-        <EntityTypeShape EntityType="LoggerModels.logchangeview" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="LoggerModels.propertychangeview" Width="2.875" PointX="2.75" PointY="4.75" />
         <AssociationConnector Association="LoggerModels.LogObjectChange_LogChangeSet" />
+        <EntityTypeShape EntityType="LoggerModels.logchangeview" Width="1.5" PointX="6.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

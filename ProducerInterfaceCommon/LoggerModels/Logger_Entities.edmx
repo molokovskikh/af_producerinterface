@@ -193,12 +193,12 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
             <End Role="LogPropertyChange" EntitySet="LogPropertyChange" />
           </AssociationSet>
           <EntitySet Name="LogChangeSet" EntityType="LoggerModels.LogChangeSet" />
-          <EntitySet Name="logchangeview" EntityType="LoggerModels.logchangeview" />
           <EntitySet Name="propertychangeview" EntityType="LoggerModels.propertychangeview" />
           <AssociationSet Name="LogObjectChange_LogChangeSet" Association="LoggerModels.LogObjectChange_LogChangeSet">
             <End Role="LogChangeSet" EntitySet="LogChangeSet" />
             <End Role="LogObjectChange" EntitySet="LogObjectChange" />
           </AssociationSet>
+          <EntitySet Name="logchangeview" EntityType="LoggerModels.logchangeview" />
         </EntityContainer>
         <EntityType Name="LogChangeSet">
           <Key>
@@ -210,30 +210,6 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
           <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="LogObjectChange" Relationship="LoggerModels.LogObjectChange_LogChangeSet" FromRole="LogChangeSet" ToRole="LogObjectChange" />
-        </EntityType>
-        <EntityType Name="logchangeview">
-          <Key>
-            <PropertyRef Name="ChangeSetId" />
-            <PropertyRef Name="Timestamp" />
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="ProducerId" />
-            <PropertyRef Name="ProducerName" />
-            <PropertyRef Name="ChangeObjectId" />
-            <PropertyRef Name="Action" />
-            <PropertyRef Name="TypeName" />
-          </Key>
-          <Property Name="ChangeSetId" Type="Int32" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
-          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="Int64" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ProducerId" Type="Int64" Nullable="false" />
-          <Property Name="ProducerName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="ChangeObjectId" Type="Int32" Nullable="false" />
-          <Property Name="Action" Type="Int32" Nullable="false" />
-          <Property Name="TypeName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="propertychangeview">
           <Key>
@@ -263,6 +239,30 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="logchangeview">
+          <Key>
+            <PropertyRef Name="ChangeSetId" />
+            <PropertyRef Name="Timestamp" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="ProducerName" />
+            <PropertyRef Name="ChangeObjectId" />
+            <PropertyRef Name="Action" />
+            <PropertyRef Name="TypeName" />
+          </Key>
+          <Property Name="ChangeSetId" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ChangeObjectId" Type="Int32" Nullable="false" />
+          <Property Name="Action" Type="Int32" Nullable="false" />
+          <Property Name="TypeName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -302,6 +302,18 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="propertychangeview">
+            <EntityTypeMapping TypeName="LoggerModels.propertychangeview">
+              <MappingFragment StoreEntitySet="propertychangeview">
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ValueNew" ColumnName="ValueNew" />
+                <ScalarProperty Name="ValueOld" ColumnName="ValueOld" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="ChangeObjectId" ColumnName="ChangeObjectId" />
+                <ScalarProperty Name="ChangePropertyId" ColumnName="ChangePropertyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="logchangeview">
             <EntityTypeMapping TypeName="LoggerModels.logchangeview">
               <MappingFragment StoreEntitySet="logchangeview">
@@ -317,18 +329,6 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
                 <ScalarProperty Name="Ip" ColumnName="Ip" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="ChangeSetId" ColumnName="ChangeSetId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="propertychangeview">
-            <EntityTypeMapping TypeName="LoggerModels.propertychangeview">
-              <MappingFragment StoreEntitySet="propertychangeview">
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="ValueNew" ColumnName="ValueNew" />
-                <ScalarProperty Name="ValueOld" ColumnName="ValueOld" />
-                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
-                <ScalarProperty Name="ChangeObjectId" ColumnName="ChangeObjectId" />
-                <ScalarProperty Name="ChangePropertyId" ColumnName="ChangePropertyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
