@@ -43,6 +43,7 @@
         <EntityTypeShape EntityType="producerinterface_Model.promotions" Width="1.5" PointX="5.5" PointY="12.125" />
         <AssociationConnector Association="producerinterface_Model.promotions_ProducerUserId" />
         <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
+        <EntityTypeShape EntityType="producerinterface_Model.propertychangeview" Width="1.5" PointX="5.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

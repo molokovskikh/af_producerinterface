@@ -32,20 +32,38 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 return RedirectToAction("SearchUser");
             }
 
-            ViewBag.ListUser_ProducerUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser_ && (xxx.Name.Contains(TextSearch) || xxx.Login.Contains(TextSearch))).ToList();
+            ViewBag.ListUser_ProducerUser = cntx_.Account.Where(xxx => xxx.TypeUser == FilterSbyte && (xxx.Name.Contains(TextSearch) || xxx.Login.Contains(TextSearch))).ToList();
             
             return View("Result");
         }
+
+        public ActionResult Group()
+        {
+            var ListGroup = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == SbyteTypeUser_).ToList()
+                .Select(xxx => new ListGroupView
+                {
+                    Id = xxx.Id,
+                    ListUsersInGroup = cntx_.Account.Where(zzz => zzz.AccountGroup.Any(vvv => vvv.Id == xxx.Id)).ToList().Select(d => new UsersViewInChange { eMail = d.Login, Name = d.Name, ProducerName = d.AccountCompany.Name }).ToList(),
+                    CountUser = xxx.Account.Where(eee => eee.Enabled == 1 && eee.TypeUser == FilterSbyte).Count(),
+                    NameGroup = xxx.Name,
+                    Description = xxx.Description,
+                    Users = xxx.Account.Where(zzz => zzz.TypeUser == SbyteTypeUser_ && zzz.Enabled == 1 && zzz.TypeUser == FilterSbyte).Select(zzz => zzz.Name).ToArray(),
+                    Permissions = xxx.AccountPermission.Where(zzz => zzz.Enabled == true && zzz.TypePermission == FilterSbyte).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes).ToArray()
+                });
+
+            return View(ListGroup);
+        }
+
         [HttpGet]
         public ActionResult Change(long? Id)
         {
             var SelectUser = cntx_.Account.Where(xxx => xxx.Id == Id).First();
          
             SelectUser.ListPermissionTwo = cntx_.AccountGroup
-                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser_ && xxx.Account.Any(zzz => zzz.Id == Id))
+                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == FilterSbyte && xxx.Account.Any(zzz => zzz.Id == Id))
                 .ToList().Select(xxx => (long)xxx.Id).ToList();
 
-            ViewBag.GroupList = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == SbyteTypeUser_ && xxx.Enabled == true).ToList().Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
+            ViewBag.GroupList = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == FilterSbyte && xxx.Enabled == true).ToList().Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
 
             return View(SelectUser);       
         }
@@ -57,7 +75,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             var SelectUser = cntx_.Account.Where(xxx => xxx.Id == Id).First();
                      
             SelectUser.ListPermissionTwo = cntx_.AccountGroup
-                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser_)
+                .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == FilterSbyte)
                 .ToList().Select(xxx => (long)xxx.Id).ToList();
 
             //ListSelectedPermission - список групп в которых состоит пользователь, по мнению БД
@@ -108,7 +126,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             var X = cntx_.producernames.Where(zzz => zzz.ProducerName.Contains(TextSearch)).Select(zzz => zzz.ProducerId).FirstOrDefault();
             
-            ViewBag.ListUser_ProducerUser = cntx_.Account.Where(xxx => xxx.CompanyId == X).ToList();
+            ViewBag.ListUser_ProducerUser = cntx_.Account.Where(xxx => xxx.AccountCompany.ProducerId == X).ToList();
             
             return View("Result");
         }

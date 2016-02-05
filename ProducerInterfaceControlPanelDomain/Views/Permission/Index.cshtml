@@ -17,7 +17,12 @@
     {
         <tr>
             <td>@Administrator.Name</td>
-            <td><a href="mailto:@Administrator.Email">@Administrator.Email </a></td>
+            <td>
+                @foreach(var eMailItem in Administrator.AccountEmail)
+            {
+                    <a href="mailto:@eMailItem.eMail">@eMailItem.eMail</a>
+            }
+            </td>
         </tr>
     }
 </table>

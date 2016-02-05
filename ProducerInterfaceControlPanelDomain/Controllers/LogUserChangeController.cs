@@ -11,7 +11,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
     public class LogUserChangeController : MasterBaseController
     {
 
-        public ProducerInterfaceCommon.LoggerModels.Logger_Entities cntx__ = new Logger_Entities();
+        private ProducerInterfaceCommon.LoggerModels.Logger_Entities cntx__ = new Logger_Entities();
         
         // GET: LogUserChange
         public ActionResult Index(int Id = 0)

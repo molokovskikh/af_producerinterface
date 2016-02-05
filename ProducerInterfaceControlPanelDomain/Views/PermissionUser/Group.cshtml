@@ -7,7 +7,7 @@
 
 
 }
-<h2>Группы созданные на сайте</h2>
+<h2>Группы Интерфейса производителя</h2>
 
 <hr />
 
@@ -30,16 +30,35 @@
                     </div>
                     <div id="collapse_a_@GroupItem.Id" class="panel-collapse collapse">
                         <div class="panel-body">
-                            @for (int i = 0; i < GroupItem.CountUser; i++)
-                            {
-                                <!--   ФИО пользователя / eMail ссылка / Название организации -->
-                                <p>
-                                    @GroupItem.Users[i] <br />
-                                    <a href="@("mailto:" + GroupItem.ListUsersInGroup[i].eMail)">@GroupItem.ListUsersInGroup[i].eMail</a> <br />
-                                    Компания: @ProducerList.Where(xxx => xxx.Value == GroupItem.ListUsersInGroup[i].ProducerName).First().Text
+
+@foreach (var AccountItem in GroupItem.ListUsersInGroup)
+{
+    <p>
+    <p>e-Mail: <a href="@("mailto:"+AccountItem.eMail)">@AccountItem.eMail</a></p>
+    <p>ФИО: @AccountItem.Name</p>
+    <p>Компания: @AccountItem.ProducerName</p>
+    </p>
+
+
+}
+@*
+                               @for (int i = 0; i < GroupItem.CountUser; i++)
+                               {
+                                   <!--   ФИО пользователя / eMail ссылка / Название организации -->
+                                   <p>
+
+
+    @GroupItem.Users[i] <br />
+
+       <a href="@("mailto:" + GroupItem.ListUsersInGroup[i].eMail)">@GroupItem.ListUsersInGroup[i].eMail</a> <br />
+       Компания: @ProducerList.Where(xxx => xxx.Value == GroupItem.ListUsersInGroup[i].ProducerName).First().Text
+
+
+
                                 </p>
 
                             }
+*@
                         </div>
                     </div>
 

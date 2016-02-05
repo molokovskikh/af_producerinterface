@@ -26,7 +26,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             }
         }
 
-        private SByte FilterSbyte { get; set; }
+        protected SByte FilterSbyte { get; set; }
 
         public ActionResult Index()
         {
@@ -36,25 +36,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return View(ListAdministrators);
         }
         
-        public ActionResult Group()
-        {
-            var ListGroup = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == FilterSbyte).ToList()
-                .Select(xxx => new ListGroupView
-                {
-                    Id = xxx.Id,
-                    CountUser = xxx.Account.Where(eee => eee.Enabled == 1 && eee.Login != null).Count(),
-                    NameGroup = xxx.Name,
-                    Description = xxx.Description,
-                    Users = xxx.Account.Where(zzz => zzz.TypeUser == FilterSbyte && zzz.Enabled == 1 && zzz.TypeUser == FilterSbyte).Select(zzz => zzz.Login).ToArray(),
-                    Permissions = xxx.AccountPermission.Where(zzz => zzz.Enabled == true && zzz.TypePermission == FilterSbyte).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes).ToArray()
-                });
-
-            return View(ListGroup);
-        }
-                
+                 
         public ActionResult Users()
         {
-            var ModelListUserView = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == SbyteTypeUser).ToList()
+            var ModelListUserView = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).ToList()
                 .Select(vvv => new ListUserView
                 {
                     Id = vvv.Id,

@@ -1,6 +1,6 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
 
-@model IEnumerable<ControlPanelPermission>
+@model IEnumerable<AccountPermission>
 
 @{
     ViewBag.Title = "Список пермишенов Интерфейс Производителя";
@@ -13,7 +13,7 @@
 <hr />
 @if (Model != null || Model.Count() > 0)
 {
-    foreach (ControlPanelPermission PermissionItem in ListPermission)
+    foreach (AccountPermission PermissionItem in ListPermission)
     {
         <div class="panel panel-default">
             <div class="panel-heading">

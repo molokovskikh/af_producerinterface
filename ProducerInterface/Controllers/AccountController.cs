@@ -123,7 +123,7 @@ namespace ProducerInterface.Controllers
 
             string AdminGroupName = GetWebConfigParameters("AdminGroupName");
 
-            NewAccount.AccountGroup.Add(cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroupName).First());
+            NewAccount.AccountGroup.Add(cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First());
             cntx_.SaveChanges();
 
             ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx_, NewAccount.Id, Password, NewAccount.IP);

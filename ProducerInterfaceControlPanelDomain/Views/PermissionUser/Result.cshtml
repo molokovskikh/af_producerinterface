@@ -17,14 +17,14 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <p data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseTwo_@UserItem.Id"><span class="glyphicon glyphicon-user"></span> @UserItem.Name @UserItem.Email</p>
+                <p data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseTwo_@UserItem.Id"><span class="glyphicon glyphicon-user"></span> @UserItem.Name @UserItem.Login</p>
             </h4>
         </div>
         <div id="collapseTwo_@UserItem.Id" class="panel-collapse collapse">
             <div class="panel-body">
                 <div class="form-group">
                     <p>Список групп, в которых состоит пользователь</p>
-                    @foreach (var GroupUser in UserItem.ControlPanelGroup)
+                    @foreach (var GroupUser in UserItem.AccountGroup)
                     {
                         <p title="@GroupUser.Description">- @GroupUser.Name</p>
                     }
