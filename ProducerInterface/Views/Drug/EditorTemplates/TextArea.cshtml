@@ -1,14 +1,14 @@
 ﻿@model string
 
 @{
-    // имя свойства
-    var field = ViewData.ModelMetadata.PropertyName;
-    var fieldTxt = field + "Txt";
-    var fieldEditor = field + "Editor";
-    var title = "Редактировать";
-    if ((bool)ViewData["add"]) {
-        title = "Добавить";
-    }
+  // имя свойства
+  var field = ViewData.ModelMetadata.PropertyName;
+  var fieldTxt = field + "Txt";
+  var fieldEditor = field + "Editor";
+  var title = "Изменить";
+  //if ((bool)ViewData["add"]) {
+  //    title = "Добавить";
+  //}
 }
 
 <div id="@fieldTxt">

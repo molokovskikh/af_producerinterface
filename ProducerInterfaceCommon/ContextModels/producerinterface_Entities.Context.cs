@@ -25,7 +25,6 @@ namespace ProducerInterfaceCommon.ContextModels
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<mailform> mailform { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
@@ -35,9 +34,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<user_logs> user_logs { get; set; }
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
-        public DbSet<drugdescription> drugdescription { get; set; }
         public DbSet<drugfamily> drugfamily { get; set; }
-        public DbSet<drugformproducer> drugformproducer { get; set; }
         public DbSet<drugmnn> drugmnn { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }

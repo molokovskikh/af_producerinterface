@@ -31,5 +31,7 @@ namespace ProducerInterfaceCommon.CatalogModels
         public virtual DbSet<Descriptions> Descriptions { get; set; }
         public virtual DbSet<mnn> mnn { get; set; }
         public virtual DbSet<assortment> assortment { get; set; }
+        public virtual DbSet<Producers> Producers { get; set; }
+        public virtual DbSet<Products> Products { get; set; }
     }
 }

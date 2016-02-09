@@ -1,5 +1,5 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model drugdescription
+﻿@using ProducerInterfaceCommon.Models
+@model MnnDescrComposite
 
 @{
     var title = $"Описание препарата \"{ViewData["familyName"]}\"";
@@ -12,13 +12,14 @@
     </div>
 </div>
 
+
 <div class="row">
     <div class="col-md-12">
         @using (Html.BeginForm()) {
         <fieldset>
             @Html.ValidationSummary(true)
             @Html.Hidden("familyId", ViewData["familyId"])
-            @Html.EditorForModel()
+            @Html.EditorFor(m => m.Descriptions)
             <div class="row margin5">
                 <div class="flabel col-md-4">
                     @Html.ActionLink("К списку препаратов", "Index")

@@ -83,6 +83,40 @@
           <Property Name="UpdateTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RussianMnn" Type="varchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="Producers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Checked" Type="bool" Nullable="false" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CatalogId" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CatalogId" Type="uint" Nullable="false" />
+          <Property Name="Hidden" Type="bool" Nullable="false" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Properties" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK_Assortment_2">
+          <End Role="Producers" Type="Self.Producers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="assortment" Type="Self.assortment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="assortment">
+              <PropertyRef Name="ProducerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Assortment_CatalogId">
           <End Role="Catalog" Type="Self.Catalog" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -121,6 +155,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_products_1">
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="Хранилище catalogsModelContainer">
           <EntitySet Name="assortment" EntityType="Self.assortment" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="Catalog" EntityType="Self.Catalog" Schema="catalogs" store:Type="Tables" />
@@ -128,6 +174,12 @@
           <EntitySet Name="catalognames" EntityType="Self.catalognames" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="Descriptions" EntityType="Self.Descriptions" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="mnn" EntityType="Self.mnn" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="Producers" EntityType="Self.Producers" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="catalogs" store:Type="Tables" />
+          <AssociationSet Name="FK_Assortment_2" Association="Self.FK_Assortment_2">
+            <End Role="Producers" EntitySet="Producers" />
+            <End Role="assortment" EntitySet="assortment" />
+          </AssociationSet>
           <AssociationSet Name="FK_Assortment_CatalogId" Association="Self.FK_Assortment_CatalogId">
             <End Role="Catalog" EntitySet="Catalog" />
             <End Role="assortment" EntitySet="assortment" />
@@ -139,6 +191,10 @@
           <AssociationSet Name="FK_catalog_2" Association="Self.FK_catalog_2">
             <End Role="catalognames" EntitySet="catalognames" />
             <End Role="Catalog" EntitySet="Catalog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_products_1" Association="Self.FK_products_1">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="Products" EntitySet="Products" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -168,6 +224,7 @@
           <NavigationProperty Name="catalogforms" Relationship="Self.FK_catalog_1" FromRole="Catalog" ToRole="catalogforms" />
           <NavigationProperty Name="catalognames" Relationship="Self.FK_catalog_2" FromRole="Catalog" ToRole="catalognames" />
           <NavigationProperty Name="assortment" Relationship="catalogsModel.FK_Assortment_CatalogId" FromRole="Catalog" ToRole="assortment" />
+          <NavigationProperty Name="Products" Relationship="catalogsModel.FK_products_1" FromRole="Catalog" ToRole="Products" />
         </EntityType>
         <EntityType Name="catalogforms">
           <Key>
@@ -261,6 +318,16 @@
             <End Role="Catalog" EntitySet="Catalog" />
             <End Role="assortment" EntitySet="assortment" />
           </AssociationSet>
+          <EntitySet Name="Producers" EntityType="catalogsModel.Producers" />
+          <AssociationSet Name="FK_Assortment_2" Association="catalogsModel.FK_Assortment_2">
+            <End Role="Producers" EntitySet="Producers" />
+            <End Role="assortment" EntitySet="assortment" />
+          </AssociationSet>
+          <EntitySet Name="Products" EntityType="catalogsModel.Products" />
+          <AssociationSet Name="FK_products_1" Association="catalogsModel.FK_products_1">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="assortment">
           <Key>
@@ -272,6 +339,7 @@
           <Property Name="ProducerId" Type="Int64" Nullable="false" />
           <Property Name="Checked" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Catalog" Relationship="catalogsModel.FK_Assortment_CatalogId" FromRole="assortment" ToRole="Catalog" />
+          <NavigationProperty Name="Producers" Relationship="catalogsModel.FK_Assortment_2" FromRole="assortment" ToRole="Producers" />
         </EntityType>
         <Association Name="FK_Assortment_CatalogId">
           <End Type="catalogsModel.Catalog" Role="Catalog" Multiplicity="1">
@@ -283,6 +351,54 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="assortment">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Producers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Checked" Type="Boolean" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="assortment" Relationship="catalogsModel.FK_Assortment_2" FromRole="Producers" ToRole="assortment" />
+        </EntityType>
+        <Association Name="FK_Assortment_2">
+          <End Type="catalogsModel.Producers" Role="Producers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="catalogsModel.assortment" Role="assortment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="assortment">
+              <PropertyRef Name="ProducerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CatalogId" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CatalogId" Type="Int64" Nullable="false" />
+          <Property Name="Hidden" Type="Boolean" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Properties" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Catalog" Relationship="catalogsModel.FK_products_1" FromRole="Products" ToRole="Catalog" />
+        </EntityType>
+        <Association Name="FK_products_1">
+          <End Type="catalogsModel.Catalog" Role="Catalog" Multiplicity="1" />
+          <End Type="catalogsModel.Products" Role="Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products">
               <PropertyRef Name="CatalogId" />
             </Dependent>
           </ReferentialConstraint>
@@ -371,6 +487,27 @@
               <MappingFragment StoreEntitySet="assortment">
                 <ScalarProperty Name="Checked" ColumnName="Checked" />
                 <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Producers">
+            <EntityTypeMapping TypeName="catalogsModel.Producers">
+              <MappingFragment StoreEntitySet="Producers">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Checked" ColumnName="Checked" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="catalogsModel.Products">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="Properties" ColumnName="Properties" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Hidden" ColumnName="Hidden" />
                 <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

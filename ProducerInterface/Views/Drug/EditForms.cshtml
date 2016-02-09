@@ -1,5 +1,5 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model IEnumerable<drugformproducer>
+﻿@using ProducerInterfaceCommon.CatalogModels
+@model IEnumerable<Catalog>
 
 @{
     var title = $"Формы выпуска и дозировки препарата {ViewData["familyName"]} в классификации АналитФармация";
@@ -20,51 +20,72 @@
                      <thead>
                      <tr>
                          <th>
-                             @Html.DisplayNameFor(m => m.CatalogName)
+                             @Html.DisplayNameFor(m => m.Name)
                          </th>
                          <th>
-                             @Html.DisplayNameFor(m => m.VitallyImportant)
+                             @Html.DisplayNameFor(m => m.VitallyImportant)<br />
+                             @Html.CheckBox("VitallyImportant", false, new { @onchange = "$('.VitallyImportant').prop('checked', $(this).prop('checked'))" })
                          </th>
                          <th>
-                             @Html.DisplayNameFor(m => m.MandatoryList)
+                             @Html.DisplayNameFor(m => m.MandatoryList)<br />
+                             @Html.CheckBox("MandatoryList", false, new { @onchange = "$('.MandatoryList').prop('checked', $(this).prop('checked'))" })
                          </th>
                          <th>
-                             @Html.DisplayNameFor(m => m.Narcotic)
+                             @Html.DisplayNameFor(m => m.Narcotic)<br />
+                             @Html.CheckBox("Narcotic", false, new { @onchange = "$('.Narcotic').prop('checked', $(this).prop('checked'))" })
+                        </th>
+                         <th>
+                             @Html.DisplayNameFor(m => m.Toxic)<br />
+                             @Html.CheckBox("Toxic", false, new { @onchange = "$('.Toxic').prop('checked', $(this).prop('checked'))" })
                          </th>
                          <th>
-                             @Html.DisplayNameFor(m => m.Toxic)
+                             @Html.DisplayNameFor(m => m.Other)<br/>
+                             @Html.CheckBox("Other", false, new { @onchange = "$('.Other').prop('checked', $(this).prop('checked'))" })
                          </th>
                          <th>
-                             @Html.DisplayNameFor(m => m.Combined)
+                             @Html.DisplayNameFor(m => m.Combined)<br />
+                             @Html.CheckBox("Combined", false, new { @onchange = "$('.Combined').prop('checked', $(this).prop('checked'))" })
                          </th>
                          <th>
-                             @Html.DisplayNameFor(m => m.Monobrend)
-                         </th>
+                             @Html.DisplayNameFor(m => m.Monobrend) 
+                             @ViewData["producerName"]<br />
+                             @Html.CheckBox("Monobrend", false, new { @onchange = "$('.Monobrend').prop('checked', $(this).prop('checked'))" })
+                        </th>
+                         <th>Свойства</th>
                      </tr>
                      </thead>
                      <tbody>
                      @foreach (var item in Model) {
                          <tr>
-                             <td>
-                                 @Html.DisplayFor(m => item.CatalogName)
+                             <td style="white-space:nowrap">
+                                 @Html.DisplayFor(m => item.Name)
                              </td>
                              <td>
-                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.VitallyImportant)}", item.VitallyImportant)
+                                 @Html.CheckBox($"{item.Id}_VitallyImportant", item.VitallyImportant, new {@class = "VitallyImportant" })
                              </td>
                              <td>
-                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.MandatoryList)}", item.MandatoryList)
+                                 @Html.CheckBox($"{item.Id}_MandatoryList", item.MandatoryList, new {@class = "MandatoryList" })
                              </td>
                              <td>
-                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Narcotic)}", item.Narcotic)
+                                 @Html.CheckBox($"{item.Id}_Narcotic", item.Narcotic, new {@class = "Narcotic" })
                              </td>
                              <td>
-                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Toxic)}", item.Toxic)
+                                 @Html.CheckBox($"{item.Id}_Toxic", item.Toxic, new {@class = "Toxic" })
                              </td>
                              <td>
-                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Combined)}", item.Combined)
+                                 @Html.CheckBox($"{item.Id}_Other", item.Other, new {@class = "Other" })
                              </td>
                              <td>
-                                 @Html.CheckBox($"{item.CatalogId}_{nameof(item.Monobrend)}", item.Monobrend)
+                                 @Html.CheckBox($"{item.Id}_Combined", item.Combined, new {@class = "Combined" })
+                             </td>
+                             <td>
+                                 @Html.CheckBox($"{item.Id}_Monobrend", item.Monobrend, new {@class = "Monobrend" })
+                             </td>
+                             <td>
+                                 @foreach (var p in item.Products)
+                                {
+                                     <div>@p.Properties</div>
+                                }
                              </td>
                          </tr>
                      }

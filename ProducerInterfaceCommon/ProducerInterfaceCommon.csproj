@@ -128,7 +128,14 @@
       <DependentUpon>CatalogsEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="CatalogModels\LoggerContext.cs" />
+    <Compile Include="CatalogModels\MetaData.cs" />
     <Compile Include="CatalogModels\mnn.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\Producers.cs">
+      <DependentUpon>CatalogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CatalogModels\Products.cs">
       <DependentUpon>CatalogsEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\Account.cs">
@@ -171,15 +178,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\catalognames.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\drugdescription.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\DrugDescriptionRemark.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\drugformproducer.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\drugmnn.cs">
@@ -296,6 +294,7 @@
     <Compile Include="Models\IInterval.cs" />
     <Compile Include="Models\IntervalReport.cs" />
     <Compile Include="Models\MailTypeEnum.cs" />
+    <Compile Include="Models\MnnDescrComposite.cs" />
     <Compile Include="Models\NotMinDateAttribute.cs" />
     <Compile Include="Models\PastDateAttribute.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />

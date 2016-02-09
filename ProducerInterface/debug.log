@@ -452,3 +452,10 @@ System.Web.Mvc.ActionResult Registration(ProducerInterfaceCommon.ContextModels.R
 04.02.2016 21:41:41.548 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - MisfireHandler: scanning for misfires...
 04.02.2016 21:41:41.630 [QuartzScheduler_TestScheduler-NON_CLUSTERED_MisfireHandler] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Found 0 triggers that missed their scheduled fire-time.
 04.02.2016 21:42:05.598 [TestScheduler_QuartzSchedulerThread] DEBUG Quartz.Core.QuartzSchedulerThread - Batch acquisition of 0 triggers
+05.02.2016 15:42:20.635 [9] ERROR MySqlAdoNetAppender - Произошла ошибка при подготовке определения команды. Дополнительные сведения приведены во внутреннем исключении.
+05.02.2016 15:49:55.974 [8] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\EditForms.cshtml(55): error CS1061: 'Catalog' does not contain a definition for 'CatalogId' and no extension method 'CatalogId' accepting a first argument of type 'Catalog' could be found (are you missing a using directive or an assembly reference?)
+05.02.2016 18:29:12.407 [9] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\EditForms.cshtml(66): error CS1513: } expected
+05.02.2016 18:31:31.678 [10] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\EditForms.cshtml(66): error CS0746: Invalid anonymous type member declarator. Anonymous type members must be declared with a member assignment, simple name or member access.
+05.02.2016 18:32:32.842 [10] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\EditForms.cshtml(66): error CS0746: Invalid anonymous type member declarator. Anonymous type members must be declared with a member assignment, simple name or member access.
+05.02.2016 19:35:41.597 [9] ERROR MySqlAdoNetAppender - Значение не может быть равно NULL или быть пустым.
+Имя параметра: name

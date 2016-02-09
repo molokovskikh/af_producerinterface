@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using ProducerInterfaceCommon.CatalogModels;
+using ProducerInterfaceCommon.Models;
 
 namespace ProducerInterface.Controllers
 {
@@ -49,15 +50,18 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult EditDescription(long id)
 		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId);
-			ViewData["familyName"] = df.FamilyName;
+			var drugfamily = cntx_.drugfamily.SingleOrDefault(x => x.FamilyId == id && x.ProducerId == producerId);
+			if (drugfamily == null)
+				return View();
+
+			ViewData["familyName"] = drugfamily.FamilyName;
 			ViewData["familyId"] = id;
-			ViewData["add"] = false;
-			var model = cntx_.drugdescription.SingleOrDefault(x => x.DescriptionId == df.DescriptionId);
-			if (model == null) {
-				ViewData["add"] = true;
-				model = new drugdescription();
-			}
+			var model = new MnnDescrComposite();
+
+			var d = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
+			if (d == null)
+				d = new Descriptions();
+			var m = ccntx.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
 			return View(model);
 		}
 
@@ -66,10 +70,8 @@ namespace ProducerInterface.Controllers
 			var df = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId);
 			ViewData["familyName"] = df.FamilyName;
 			ViewData["familyId"] = id;
-			ViewData["add"] = false;
 			var model = cntx_.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
 			if (model == null) {
-				ViewData["add"] = true;
 				model = new drugmnn();
 			}
 			return View(model);
@@ -77,17 +79,18 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
+			// есть ли данное семейство у данного производителя
 			var drugfamily = cntx_.drugfamily.SingleOrDefault(x => x.FamilyId == id && x.ProducerId == producerId);
 			if (drugfamily == null)
 				return View();
 
-			var familyName = drugfamily.FamilyName;
-      ViewData["familyName"] = familyName;
+      ViewData["familyName"] = drugfamily.FamilyName;
 			ViewData["familyId"] = id;
+			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 			// формы данного лек.средства из ассортимента данного производителя
-			var asd = ccntx.Catalog.Where(x => x.NameId == id && x.assortment.Any(y => y.ProducerId == producerId)).ToList();
+			var model = ccntx.Catalog.Where(x => x.NameId == id && !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).ToList().OrderBy(x => x.Name);
 
-			var model = cntx_.drugformproducer.Where(x => x.DrugFamilyId == id && x.ProducerId == producerId).OrderBy(x => x.CatalogName).ToList();
+			//var model = cntx_.drugformproducer.Where(x => x.DrugFamilyId == id && x.ProducerId == producerId).OrderBy(x => x.CatalogName).ToList();
 			if (edit)
 				return View("EditForms", model);
 			return View(model);
@@ -96,11 +99,17 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult EditForms(long familyId)
 		{
-			var familyName = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId).FamilyName;
-			ViewData["familyName"] = familyName;
+			// есть ли данное семейство у данного производителя
+			var drugfamily = cntx_.drugfamily.SingleOrDefault(x => x.FamilyId == familyId && x.ProducerId == producerId);
+			if (drugfamily == null)
+				return View();
+
+			ViewData["familyName"] = drugfamily.FamilyName;
 			ViewData["familyId"] = familyId;
+			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
+
 			// формы данного лек.средства из ассортимента данного производителя
-			var model = cntx_.drugformproducer.Where(x => x.DrugFamilyId == familyId && x.ProducerId == producerId).OrderBy(x => x.CatalogName).ToList();
+			var model = ccntx.Catalog.Where(x => x.NameId == familyId && !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).ToList().OrderBy(x => x.Name);
 
 			var regex = new Regex(@"(?<catalogId>\d+)_(?<field>\w+)", RegexOptions.IgnoreCase);
 			// форма возвращает значения для всех элементов. Ищем, что изменилось
@@ -110,14 +119,15 @@ namespace ProducerInterface.Controllers
 	        var catalogId = long.Parse(regex.Match(name).Groups["catalogId"].Value);
 					var field = regex.Match(name).Groups["field"].Value;
 	        var newValue = bool.Parse(Request.Form.GetValues(i)[0]);
-	        var row = model.Single(x => x.CatalogId == catalogId);
+	        var row = model.Single(x => x.Id == catalogId);
 					var propertyInfo = row.GetType().GetProperty(field);
 	        var oldValue = (bool)propertyInfo.GetValue(row);
 					// если изменилось TODO где-то сохранять
 					if (newValue != oldValue) {
 						propertyInfo.SetValue(row, newValue);
-						var value = newValue;
-	        }
+						ccntx.SaveChanges(CurrentUser, "Редактирование лек. форм");
+						//var value = newValue;
+					}
         }
 			}
 			return View(model);
@@ -127,16 +137,16 @@ namespace ProducerInterface.Controllers
 		public JsonResult EditDescriptionField(long familyId, string field, string value)
 		{
 			var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId);
-			drugdescription model;
+			Descriptions model;
       if (df.DescriptionId == null) {
-				model = new drugdescription();
-	      cntx_.drugdescription.Add(model);
+				model = new Descriptions();
+	      ccntx.Descriptions.Add(model);
 				//cntx_.SaveChanges();
-	      df.DescriptionId = model.DescriptionId;
+	      df.DescriptionId = model.Id;
 				//cntx_.SaveChanges();
 			}
 			else
-				model = cntx_.drugdescription.Single(x => x.DescriptionId == df.DescriptionId);
+				model = ccntx.Descriptions.Single(x => x.Id == df.DescriptionId);
 
 			var propertyInfo = model.GetType().GetProperty(field);
 			propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
@@ -166,26 +176,5 @@ namespace ProducerInterface.Controllers
 			//cntx_.SaveChanges();
 			return Json(new { field = field, value = value });
 		}
-
-
-		//[HttpPost]
-		//public ActionResult CreateDrugDescriptionRemark(int id, [EntityBinder] DrugDescriptionRemark drugDescriptionRemark)
-		//{
-		//    var user = GetCurrentUser();
-		//    var family = DbSession.Query<DrugFamily>().First(i => i.Id == id);
-		//    drugDescriptionRemark.ProducerUser = user;
-		//    drugDescriptionRemark.DrugFamily = family;
-		//    var errors = ValidationRunner.Validate(drugDescriptionRemark);
-		//    if (errors.Length == 0)
-		//    {
-		//        DbSession.Save(drugDescriptionRemark);
-		//        SuccessMessage("Запрос на изменение описания отправлен модератору.");
-		//        return Redirect(GetIndexActionUrl());
-		//    }
-		//    ErrorMessage("Произошла ошибка.");
-		//    CreateDrugDescriptionRemark(id);
-		//    ViewBag.DrugDescriptionRemark = drugDescriptionRemark;
-		//    return View("CreateDrugDescriptionRemark");
-		//}
 	}
 }

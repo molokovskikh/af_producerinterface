@@ -12,37 +12,20 @@ namespace ProducerInterfaceCommon.CatalogModels
     using System;
     using System.Collections.Generic;
     
-    public partial class Catalog
+    public partial class Producers
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Catalog()
+        public Producers()
         {
             this.assortment = new HashSet<assortment>();
-            this.Products = new HashSet<Products>();
         }
     
         public long Id { get; set; }
-        public long FormId { get; set; }
-        public long NameId { get; set; }
-        public bool VitallyImportant { get; set; }
-        public bool MandatoryList { get; set; }
-        public bool NeedCold { get; set; }
-        public bool Fragile { get; set; }
-        public bool Pharmacie { get; set; }
-        public bool Hidden { get; set; }
         public string Name { get; set; }
+        public bool Checked { get; set; }
         public System.DateTime UpdateTime { get; set; }
-        public bool Monobrend { get; set; }
-        public bool Narcotic { get; set; }
-        public bool Toxic { get; set; }
-        public bool Combined { get; set; }
-        public bool Other { get; set; }
     
-        public virtual catalogforms catalogforms { get; set; }
-        public virtual catalognames catalognames { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<assortment> assortment { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Products> Products { get; set; }
     }
 }

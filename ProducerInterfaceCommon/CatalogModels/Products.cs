@@ -12,14 +12,14 @@ namespace ProducerInterfaceCommon.CatalogModels
     using System;
     using System.Collections.Generic;
     
-    public partial class assortment
+    public partial class Products
     {
         public long Id { get; set; }
         public long CatalogId { get; set; }
-        public long ProducerId { get; set; }
-        public bool Checked { get; set; }
+        public bool Hidden { get; set; }
+        public System.DateTime UpdateTime { get; set; }
+        public string Properties { get; set; }
     
         public virtual Catalog Catalog { get; set; }
-        public virtual Producers Producers { get; set; }
     }
 }
