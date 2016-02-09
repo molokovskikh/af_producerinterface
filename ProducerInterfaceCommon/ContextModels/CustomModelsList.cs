@@ -38,7 +38,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual string RussianValue { get; set; }
         public virtual DateTime UpdateTime { get; set; }
     }
-
+      
     public class PromotionValidation
     {
         public long Id { get; set; }
@@ -135,6 +135,39 @@ namespace ProducerInterfaceCommon.ContextModels
         public long Producers { get; set; }
     }
 
+    public class ProfileValidation
+    {
+        [UIHint("EditorString")]
+        [Display(Name = "ФИО")]
+        [Required(ErrorMessage = "Введите ФИО")]
+        public string Name { get; set; }
+
+        [UIHint("EditorString")]
+        [Display(Name = "Название компании")]
+        public string CompanyName { get; set; }
+
+        [Display(Name = "E-mail")]
+        [UIHint("EditorStringMail")]
+        [Required(ErrorMessage = "Запоните e-Mail")]
+        public string Mailname { get; set; }
+
+        [Display(Name = "Доменное имя")]
+        [UIHint("IntMailDomain")]
+        [Required(ErrorMessage = "Укажите домен")]
+        public int EmailDomain { get; set; }
+
+        [Display(Name = "Должность")]
+        [UIHint("IntApointment")]
+        [Required(ErrorMessage = "Должность")]
+        public int AppointmentId { get; set; }
+
+        [UIHint("EditorPhone")]
+        [Display(Name = "Номер телефона")]       
+        [Phone(ErrorMessage = "Некорректно введён номер")]
+          [StringLength(15,MinimumLength = 15, ErrorMessage ="Корректно заполните номер телефона")]
+        public string PhoneNumber { get; set; }
+    }
+
     public class RegistrerValidation
     {
 
@@ -151,6 +184,85 @@ namespace ProducerInterfaceCommon.ContextModels
         public string login { get; set; }
 
 
+        [Display(Name = "Должность")]
+        [UIHint("IntApointment")]
+        [Required(ErrorMessage = "Должность")]
+        public int AppointmentId { get; set; }
+
+        [UIHint("EditorStringPosition")]
+        [Display(Name = "Должность")]
+        public string Appointment { get; set; }
+
+        [UIHint("EditorPhone")]
+        [Display(Name = "Номер телефона")]      
+        [Phone(ErrorMessage ="Некорректно введён номер")]
+        [StringLength(15, MinimumLength = 15, ErrorMessage = "Корректно заполните номер телефона")]
+        public string PhoneNumber { get; set; }
+
+        public long Producers { get; set; }
+        public string ProducerName { get; set; }
+
+    }
+
+    public class RegisterDomainValidation
+    {
+        public long Producers { get; set; }
+        public string ProducerName { get; set; }
+
+        [UIHint("EditorString")]
+        [Display(Name = "ФИО")]
+        [Required(ErrorMessage = "Введите ФИО")]
+        public string Name { get; set; }
+
+        [UIHint("EditorString")]
+        [Display(Name = "Название компании")]      
+        public string CompanyName { get; set; }
+
+        [Display(Name = "E-mail")]
+        [UIHint("EditorStringMail")]
+        [Required(ErrorMessage = "Запоните e-Mail")]
+        public string Mailname { get; set; }
+
+        [Display(Name = "Доменное имя")]
+        [UIHint("IntMailDomain")]
+        [Required(ErrorMessage = "Укажите домен")]
+        public int EmailDomain { get; set; }
+
+        [Display(Name = "Должность")]
+        [UIHint("IntApointment")]
+        [Required(ErrorMessage = "Должность")]
+        public int AppointmentId { get; set; }
+
+        [UIHint("EditorStringPosition")]
+        [Display(Name = "Должность")]       
+        public string Appointment { get; set; }
+
+        [UIHint("EditorPhone")]
+        [Display(Name = "Номер телефона")]      
+        [Phone(ErrorMessage = "Некорректно введён номер")]
+        [StringLength(15, MinimumLength = 15, ErrorMessage = "Корректно заполните номер телефона")]
+        public string PhoneNumber { get; set; }
+    }
+
+    public class RegisterCustomValidation
+    {
+
+        [UIHint("EditorString")]
+        [Display(Name = "ФИО")]
+        [Required(ErrorMessage = "Введите ФИО")]
+        public string Name { get; set; }
+
+        [UIHint("EditorString")]
+        [Display(Name = "Название компании")]
+        [Required(ErrorMessage = "Укажите название вашей компании")]
+        public string CompanyName { get; set; }
+
+        [UIHint("EditorMailReg")]
+        [Display(Name = "E-mail")]
+        [Required(ErrorMessage = "Введите E-mail")]
+        [EmailAddress(ErrorMessage = "Введите корректый E-mail")]
+        public string login { get; set; }
+
         [UIHint("EditorStringPosition")]
         [Display(Name = "Должность")]
         [Required(ErrorMessage = "Введите должность")]
@@ -158,15 +270,14 @@ namespace ProducerInterfaceCommon.ContextModels
 
         [UIHint("EditorPhone")]
         [Display(Name = "Номер телефона")]
-        [StringLength(13, MinimumLength = 10)]
-        [Phone(ErrorMessage ="Некорректно введён номер")]     
+        [StringLength(15,MinimumLength = 15, ErrorMessage ="Корректно заполните номер телефона")]
+        [Phone(ErrorMessage = "Некорректно введён номер")]
         public string PhoneNumber { get; set; }
 
-        public long Producers { get; set; }
-        public string ProducerName { get; set; }
-
     }
-    
+
+
+
     public class SearchProducerReportsModel
     {
         [UIHint("EditorProducer")]

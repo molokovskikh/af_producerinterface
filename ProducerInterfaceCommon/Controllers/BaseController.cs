@@ -67,6 +67,7 @@ namespace ProducerInterfaceCommon.Controllers
                 //сохраняем группу и новый пермишен
 
                 GroupAddPermission.AccountPermission.Add(NewPermission);
+                cntx_.Entry(GroupAddPermission).State = System.Data.Entity.EntityState.Modified;
                 // добавляем пермишен к группе
                 cntx_.SaveChanges();
             }                    
@@ -140,8 +141,8 @@ namespace ProducerInterfaceCommon.Controllers
 
             try
             {
-                return true;
-                // return IgnoreRouteForPermission().Any(xxx => xxx == ThisRoute);
+                //return true;
+                 return IgnoreRouteForPermission().Any(xxx => xxx == ThisRoute);
             }
             catch { return false; }
         }
@@ -176,7 +177,7 @@ namespace ProducerInterfaceCommon.Controllers
 
                 retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == EmailUser && xxx.Enabled == 1).FirstOrDefault();
 
-                if (String.IsNullOrEmpty(retUser.Login))
+                if (retUser == null || String.IsNullOrEmpty(retUser.Login))
                 {
                     retUser = null;
                 }                

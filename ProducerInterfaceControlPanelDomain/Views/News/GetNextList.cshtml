@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>
+
+@if (Model != null && Model.Count() > 0)
+{
+
+    foreach (var NewsItem in Model)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div>Тема @NewsItem.Name
+                    <div class="pull-right">Дата изменения @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")</div>
+                </div>                
+            </div>
+            <div class="panel-body">
+                <p><h4>Сообщение</h4>@NewsItem.Description</p>
+            </div>
+
+            @*<div class="panel-heading">@NewsItem.Name</div>
+            <div class="panel-body">
+                <div class="col-sm-7">
+                    <p><h4>Сообщение</h4>@NewsItem.Description</p>
+                </div>           
+                <div class="pull-right">
+                    <p>
+                       @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")
+                    </p>
+                </div>              
+            </div>*@
+        </div>
+    }
+    <div id="@("LoadingListDiv" + ViewBag.Pager)">
+
+    </div>
+
+    <div id=@("Delete_Id" + ViewBag.Pager)>
+        @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "News",
+       new { Pager = ViewBag.Pager },
+       new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
+       new { @class = "btn btn-primary" }
+       )
+    </div>
+}
+else
+{
+    <h3>Все новости уже отображены на странице</h3>
+}

@@ -4,38 +4,44 @@
     Layout = "~/Views/Shared/_Layout.cshtml";    
 }
 
-<h2>Регистрация</h2>
+<div class="container body-content">
 
-<hr/>
+    <h2>Регистрация</h2>
+
+    <hr/>
 
 
-@using (Html.BeginForm("Registration", "Account", FormMethod.Post))
-            {
-    @Html.ValidationSummary(true, "")
+    @using (Html.BeginForm("Registration", "Account", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true, "")
 
-    @Html.HiddenFor(m => m.Producers)
-    <h3>Компания : @Model.ProducerName</h3>
-    <hr />
-    @Html.HiddenFor(m=>m.ProducerName)
+        @Html.HiddenFor(m => m.Producers)
+        <h3>Компания : @Model.ProducerName</h3>
+        <hr/>
+        @Html.HiddenFor(m => m.ProducerName)
 
-    @Html.EditorFor(m => m.Name)
-    @Html.EditorFor(m => m.login)
+        @Html.EditorFor(m => m.Name)
+        @Html.EditorFor(m => m.login)
 
-    @Html.EditorFor(m => m.PhoneNumber)
-    @Html.EditorFor(m => m.Appointment)
-    
+        @Html.EditorFor(m => m.PhoneNumber)   
+        @Html.EditorFor(m => m.AppointmentId)
 
-  
-    <br />
+        <br/>
 
-    <div class="form-group">
-        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация" />
-    </div>
-    <div class="form-group">
-        <a href="~/Registration/Index" class="">Я уже регистрировался</a>
-    </div>
-    <div class="form-group">
-        <a href="~/Registration/PasswordRecovery" class="">Забыли пароль?</a>
-    </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация"/>
+        </div>
+        <div class="form-group">
+            <a href="~/Account/Auth" class="">Я уже регистрировался</a>
+        </div>
+        <div class="form-group">
+            <a href="~/Account/PasswordRecovery" class="">Забыли пароль?</a>
+        </div>
 
     }
+</div>
+
+@section JavaScript{
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
+}

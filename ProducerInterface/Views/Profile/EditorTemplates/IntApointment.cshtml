@@ -1,0 +1,20 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+@model int?
+    <div class="form-group">        
+            @Html.LabelFor(m => m)             
+            @Html.DropDownListFor(m => m, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m)       
+		
+		<br/>
+				<div class="form-group">
+		<label>Отсутствует? добавьте свой вариант</label>
+
+        <div class="input-group">
+	        <input type="text" id="newAppountName" placeholder="Свой вариант должности" class="form-control" />
+	        <div class="input-group-btn" style="min-width: 175px;">
+				<a class="btn btn-primary" onclick="AddAppointment()">Добавить в список</a>
+	        </div>
+        </div>		
+		</div>	
+
+    </div>

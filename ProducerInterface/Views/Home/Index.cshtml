@@ -1,23 +1,7 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Стартовая страница";
     var user = ViewBag.CurrentUser;
-    Layout = null;
 }
-<html>
-<head>
-    <title>Аналит @ViewBag.Title</title>
-
-    <link href="~/Content/Chosen/css/Site.css" rel="stylesheet" />
-    @Styles.Render("~/Content/css")  
-    @Scripts.Render("~/bundles/modernizr")
-    <link href="~/Content/MyStyle.css" rel="stylesheet" />
-</head>
-<body>
-
-    <div class="server-message" style="font-size:1.5em; text-align:center;"></div>
-
- @Html.Partial("MenuPartialView")
-
 
             <div class="container-fluid" style="margin-top:0px; padding:0px;">
                 <div id="myCarousel3" class="carousel slide">
@@ -109,48 +93,24 @@
                 </div>
             </div>
 
-    <div class="body-content container">
-        <div class="row">
-            <div class="jumbotron">
+    <div class="row">
+        <div class="jumbotron">
 
-                <h3 class="text-center">Лозартан</h3>
-                <hr />
-                <p>
-                    Антигипертензивное средство. Является непептидным блокатором рецепторов ангиотензина II.
-                    Обладает высокой селективностью и аффинитетом к рецепторам типа AT1 (при участии которых реализуются основные эффекты ангиотензина II).
-                    Блокируя указанные рецепторы, лозартан предупреждает и устраняет сосудосуживающее действие ангиотензина II,
-                    его стимулирующее влияние на секрецию альдостерона надпочечниками и некоторые другие эффекты ангиотензина II. Характеризуется длительным действием (24 ч и более),
-                    что обусловлено образованием его активного метаболита.
-                </p>
-                <hr />
-
-
-            </div>
-        </div>
+            <h3 class="text-center">Лозартан</h3>
+            <hr/>
+            <p>
+                Антигипертензивное средство. Является непептидным блокатором рецепторов ангиотензина II.
+                Обладает высокой селективностью и аффинитетом к рецепторам типа AT1 (при участии которых реализуются основные эффекты ангиотензина II).
+                Блокируя указанные рецепторы, лозартан предупреждает и устраняет сосудосуживающее действие ангиотензина II,
+                его стимулирующее влияние на секрецию альдостерона надпочечниками и некоторые другие эффекты ангиотензина II. Характеризуется длительным действием (24 ч и более),
+                что обусловлено образованием его активного метаболита.
+            </p>
+            <hr/>
+            
     </div>
-
-
-            <footer class="panel-footer navbar-fixed-bottom">
-                <center>
-                    <p>&copy; @DateTime.Now.Year – Аналит Фармация | Телефон:8-800-555-46-88</p>
-                </center>
-            </footer>
-
-            @Scripts.Render("~/bundles/jquery")
-            @Scripts.Render("~/bundles/bootstrap")
-
-            @Scripts.Render("~/bundles/jqueryval")
-
-            <script src="~/Scripts/WorkPlace/Analit.js"></script>
-            <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
-
-            <script type="text/javascript">
-                $('#myCarousel3').carousel('cycle');
-            </script>
-
-</body>
-
-</html>
-
-
-
+</div>
+@section JavaScript {
+    <script type="text/javascript">
+        $('#myCarousel3').carousel('cycle');
+    </script>
+}

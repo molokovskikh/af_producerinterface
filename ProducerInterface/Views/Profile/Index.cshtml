@@ -8,73 +8,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="jumbotron">
-    <h3>Идинтификационный номер производителя: @currentUser.AccountCompany.Name</h3>
-
-    <hr/>
-
-    <p class="lead">Вы вошли как @currentUser.Name.</p>
-    <h3>Здесь могла бы быть ваша реклама</h3>
+<div class="form-group">    
+    <p class="lead">Здраствуйте, @currentUser.Name.</p>	
 </div>
 
+<hr/> 
 
+<div class="form-group" id="NewsListDiv">
+	
+	<h2>Новости</h2>
+	<hr/>
 
-@*@{ProducerInterfaceCommon.ContextModels.jobextend dummyModel = null;}
+	@if(ViewBag.News != null && ViewBag.News.Count > 0)
+	{
+		foreach(var NewsItem in ViewBag.News)
+		{
+			<div class="jumbotron">
+				<h3>@NewsItem.Name</h3>
+				<hr/>
 
-    @if (Model != null && Model.Count > 0)
-    {
-        <section id="main">
-            <header>
-                <div class="container">
-                    <h3>Список отчетов</h3>
-                </div>
-            </header>
-            <div class="container">
-                <div class="row">
-                    <div class="content blog col-sm-12 col-md-12">
+				<p>@NewsItem.Description</p>
 
-                        <table style="width:100%;" class="table-bordered table-striped">
-                            <tr class="first last">
-                                <th>
-                                    @Html.DisplayNameFor(model => dummyModel.CustomName)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => dummyModel.Scheduler)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => dummyModel.ReportTypeEnum)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => dummyModel.Creator)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => dummyModel.LastModified)
-                                </th>
-                            </tr>
-                            @foreach (var item in Model)
-                            {
+				<strong class="pull-right">Дата публикации @NewsItem.DatePublication</strong>
+			</div>		
+		}	
+	}
+	else
+	{
+	<p>Новостей не зарегистрировано</p>
+	}
 
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.CustomName)
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ReportTypeEnum)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Creator)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.LastModified)
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-    }*@
+</div>

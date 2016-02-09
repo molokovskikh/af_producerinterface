@@ -33,14 +33,11 @@ namespace ProducerInterfaceCommon.Heap
                 message.SubjectEncoding = System.Text.Encoding.UTF8;
                 message.Body = body;
                 message.BodyEncoding = System.Text.Encoding.UTF8;
+                message.IsBodyHtml = false;
 
                 if (HtmlBody)
                 {
                     message.IsBodyHtml = HtmlBody;
-                }
-                else
-                {
-                    message.IsBodyHtml = false;
                 }
               
                 if (!String.IsNullOrEmpty(path))

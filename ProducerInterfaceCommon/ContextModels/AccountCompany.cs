@@ -16,15 +16,15 @@ namespace ProducerInterfaceCommon.ContextModels
     {
         public AccountCompany()
         {
-            this.Account = new HashSet<Account>();
             this.CompanyDomainName = new HashSet<CompanyDomainName>();
+            this.Account = new HashSet<Account>();
         }
     
         public long Id { get; set; }
         public string Name { get; set; }
         public Nullable<long> ProducerId { get; set; }
     
-        public virtual ICollection<Account> Account { get; set; }
         public virtual ICollection<CompanyDomainName> CompanyDomainName { get; set; }
+        public virtual ICollection<Account> Account { get; set; }
     }
 }

@@ -7,6 +7,28 @@ using System.Web.Mvc;
 namespace ProducerInterfaceCommon.ContextModels
 {
 
+    [MetadataType(typeof(NotificationToProducersMetaData))]
+    public partial class NotificationToProducers
+    {
+
+    }
+
+    public class NotificationToProducersMetaData
+    {
+        [Display(Name = "Оглавление")]
+        [MaxLength(50)]
+        [Required(ErrorMessage ="Заполните поле Оглавление")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Заполните поле Новость")]
+        [MaxLength(500)]
+        [Display(Name = "Новость")]
+        public string Description { get; set; }
+
+        [Display(Name = "Дата публикации")]
+        public Nullable<System.DateTime> DatePublication { get; set; }
+    }
+
 	[MetadataType(typeof(drugmnnMetaData))]
 	public partial class drugmnn
 	{

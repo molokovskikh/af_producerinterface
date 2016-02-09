@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>
+
+@{
+    ViewBag.Title = "Список новостей";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Список новостей</h2>
+
+<hr />
+
+@if (Model != null && Model.Count() > 0)
+{
+    foreach (var NewsItem in Model)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div>
+                    Тема @NewsItem.Name
+                    <div class="pull-right">Дата изменения @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")</div>
+                </div>  
+            </div>
+            <div class="panel-body">              
+                    <p><h4>Сообщение</h4>@NewsItem.Description</p>                            
+            </div>
+        </div>
+    }
+
+    <div id="@("LoadingListDiv" + ViewBag.Pager)">
+
+    </div>
+
+    <div id=@("Delete_Id" + ViewBag.Pager)>
+        @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "News",
+       new { Pager = ViewBag.Pager },
+       new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
+       new { @class = "btn btn-primary" }
+       )
+    </div>
+}
+else
+{
+    <h3>Список новостей пуст</h3>
+}
+
+<script type="text/javascript">
+    function newsisloadcomplete(data_int)
+    {
+        var ElementId = "#Delete_Id" + data_int;
+        $(ElementId).css("display", "none");
+    }
+</script>

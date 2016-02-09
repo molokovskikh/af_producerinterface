@@ -12,13 +12,17 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class propertychangeview
+    public partial class AccountAppointment
     {
-        public int ChangePropertyId { get; set; }
-        public int ChangeObjectId { get; set; }
-        public string PropertyName { get; set; }
-        public string ValueOld { get; set; }
-        public string ValueNew { get; set; }
-        public string TypeName { get; set; }
+        public AccountAppointment()
+        {
+            this.Account = new HashSet<Account>();
+        }
+    
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public Nullable<sbyte> GlobalEnabled { get; set; }
+    
+        public virtual ICollection<Account> Account { get; set; }
     }
 }

@@ -12,7 +12,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseTwo_@User.Id"><span class="glyphicon glyphicon-user"></span> @User.Name @User.Email</a>
+                    <a data-toggle="collapse" data-parent="#accordion-menu2" href="#collapseTwo_@User.Id"><span class="glyphicon glyphicon-user"></span> @User.Name @User.Login</a>
                 </h4>
             </div>
             <div id="collapseTwo_@User.Id" class="panel-collapse collapse">
@@ -41,7 +41,7 @@
                         }
                         </p>
 
-                        @foreach (var GroupUser in User.ControlPanelGroup)
+                        @foreach (var GroupUser in User.AccountGroup)
                         {
                             <p>- @GroupUser.Name (@GroupUser.Description)</p>
                         }

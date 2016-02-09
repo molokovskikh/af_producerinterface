@@ -61,7 +61,7 @@ namespace ProducerInterface.Controllers
 			var d = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
 			if (d == null)
 				d = new Descriptions();
-			var m = ccntx.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
+			//var m = ccntx.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
 			return View(model);
 		}
 
