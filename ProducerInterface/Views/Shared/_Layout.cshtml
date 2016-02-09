@@ -21,11 +21,11 @@
 </head>
 <body name="main_container" class="main_container" id="main_container">
       
-    <div class="server-message" style="font-size:1.5em; text-align:center;"></div>
+    <div class="server-message" style="font-size:1.5em; text-align:center; margin-top:50px;"></div>
 
      @Html.Partial("MenuPartialView")
 
-    <div class="container body-content">
+    <div class="content" id="page_content">
       
             @RenderBody()
       
@@ -40,8 +40,7 @@
     
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-
-
+	
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
     @if (user == null)
@@ -53,6 +52,9 @@
 
     <script src="~/Scripts/WorkPlace/Analit.js"></script>
     <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
+	 <script src="~/Scripts/WorkPlace/ModalView.js"></script>
     @RenderSection("JavaScript", required: false)
+
+	
 </body>
 </html>

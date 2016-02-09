@@ -5,23 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Регистрация</h2>
+<div class="container body-content">
+    <h2>Регистрация</h2>
 
-<hr/>
+    <hr/>
 
-@using(Html.BeginForm("Registration", "Account", FormMethod.Get))
-{
+    @using (Html.BeginForm("Registration", "Account", FormMethod.Get))
+    {
 
-<div class="form-group">
-    <label>Выберите вашу компанию</label>
-    @Html.EditorFor(m=>m.Producers)
+        <div class="form-group">
+            <label>Выберите вашу компанию</label>
+            @Html.EditorFor(m => m.Producers)
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Принять"/>
+            <a class="btn btn-warning" href="~/Account/CustomRegistration">Компания в списке отсутствует</a>
+        </div>
+
+    }
 </div>
-
-<div class="form-group">    
-    <input type="submit" class="btn btn-primary" value="Принять" />
-    <a class="btn btn-warning" href="#">Компания в списке отсутствует</a>
-</div>
-}
 
 @section JavaScript
 {

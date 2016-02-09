@@ -1,0 +1,38 @@
+﻿@model ProducerInterfaceCommon.ContextModels.ProfileValidation
+@{
+   ViewBag.Title = "Мой профиль";
+}
+<div class="container body-content">
+  @using(Html.BeginForm("Account", "Profile", FormMethod.Post)){
+        <h3>Компания : @Model.CompanyName</h3>
+        <hr/>
+		  
+		<div class="form-group">
+		<label>Почтовый адресс (введите имя и выберите доменное имя)</label>
+        <div class="input-group">
+	         @Html.EditorFor(m => m.Mailname)
+	        <div class="input-group-btn" style="min-width: 175px;">
+		       @Html.EditorFor(m => m.EmailDomain)
+	        </div>
+        </div>
+		  @Html.ValidationMessageFor(model => model.Mailname)
+		  @Html.ValidationMessageFor(model => model.EmailDomain)
+		</div>
+	        @Html.EditorFor(m => m.Name)
+
+	        @Html.EditorFor(m => m.PhoneNumber)
+	        @Html.EditorFor(m => m.AppointmentId)
+
+	        <br/>
+
+	        <div class="form-group">
+		        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Сохранить изменения"/>
+	        </div>
+	      
+}
+   </div>
+
+@section JavaScript{
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
+}

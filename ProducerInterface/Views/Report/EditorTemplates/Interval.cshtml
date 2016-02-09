@@ -16,13 +16,14 @@
   }
 }
 <div class="row margin5">
-    <div class="form-group form-group-otstup">
-        <div class="flabel col-md-4">
-            @Html.LabelFor(m => m)
-        </div>
-        <div class="@("feditor col-md-8" + errorClass)">
-            @Html.DropDownListFor(m => m, new SelectList(propList, "Value", "Text", Model), new { style = "display: none;" })
-            @Html.ValidationMessageFor(m => m)
-        </div>
-    </div>
+	<div class="form-group form-group-otstup">
+		<div class="flabel col-md-4">
+			@Html.LabelFor(m => m)
+		</div>
+		<div class="@("feditor col-md-8" + errorClass)">
+			@Html.DropDownListFor(m => m, new SelectList(propList, "Value", "Text", Model), new {style = "display: none;"})
+			@Html.ValidationMessageFor(m => m)
+		</div>
+	</div>
 </div>
+

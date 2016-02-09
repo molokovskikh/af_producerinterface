@@ -1,51 +1,55 @@
-﻿@model ProducerInterfaceCommon.ContextModels.RegistrerValidation
+﻿@model ProducerInterfaceCommon.ContextModels.RegisterDomainValidation
 @{
     ViewBag.Title = "Регистрация";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Регистрация</h2>
+<div class="container body-content">
 
-<hr />
+    <h2>Регистрация</h2>
 
+    <hr/>
 
-@using (Html.BeginForm("Registration", "Account", FormMethod.Post))
-            {
-    @Html.ValidationSummary(true, "")
+@using(Html.BeginForm("DomainRegistration", "Account", FormMethod.Post))
+{
+        @Html.ValidationSummary(true, "")
 
-    @Html.HiddenFor(m => m.Producers)
-    <h3>Компания : @Model.ProducerName</h3>
-    <hr />
+        @Html.HiddenFor(m => m.Producers)
+        <h3>Компания : @Model.ProducerName</h3>
+        <hr/>
+		  
+		<div class="form-group">
+		<label>Почтовый адресс (введите имя и выберите доменное имя)</label>
+        <div class="input-group">
+	         @Html.EditorFor(m => m.Mailname)
+	        <div class="input-group-btn" style="min-width: 175px;">
+		       @Html.EditorFor(m => m.EmailDomain)
+	        </div>
+        </div>
+		  @Html.ValidationMessageFor(model => model.Mailname)
+		  @Html.ValidationMessageFor(model => model.EmailDomain)
+		</div>
+	        @Html.EditorFor(m => m.Name)
 
-<div class="input-group">
-    <input type="text" class="form-control" aria-label="">
-    <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
-        <ul class="dropdown-menu dropdown-menu-right">
-            @Html.DropDownList("DomainName",new SelectList(ViewBag.DomainName,"Value","Text"))
-        </ul>
-    </div><!-- /btn-group -->
-</div><!-- /input-group -->
+	        @Html.EditorFor(m => m.PhoneNumber)
+	        @Html.EditorFor(m => m.AppointmentId)
 
-    @Html.EditorFor(m => m.login)
+	        <br/>
 
-    @Html.EditorFor(m => m.Name)
+	        <div class="form-group">
+		        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация"/>
+	        </div>
+	        <div class="form-group">
+		        <a href="~/Registration/Index" class="">Я уже регистрировался</a>
+	        </div>
+	        <div class="form-group">
+		        <a href="~/Registration/PasswordRecovery" class="">Забыли пароль?</a>
+	        </div>
 
-    @Html.EditorFor(m => m.PhoneNumber)
-    @Html.EditorFor(m => m.Appointment)
+}
+</div>
 
-
-
-    <br />
-
-    <div class="form-group">
-        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация" />
-    </div>
-    <div class="form-group">
-        <a href="~/Registration/Index" class="">Я уже регистрировался</a>
-    </div>
-    <div class="form-group">
-        <a href="~/Registration/PasswordRecovery" class="">Забыли пароль?</a>
-    </div>
-
-    }
+@section JavaScript{
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
+}

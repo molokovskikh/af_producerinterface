@@ -12,7 +12,29 @@ namespace ProducerInterfaceCommon.ContextModels
 	{
 	}
 
-	public class drugformproducerMetaData
+    [MetadataType(typeof(NotificationToProducersMetaData))]
+    public partial class NotificationToProducers
+    {
+
+    }
+
+    public class NotificationToProducersMetaData
+    {
+        [Display(Name = "Оглавление")]
+        [MaxLength(50)]
+        [Required(ErrorMessage ="Заполните поле Оглавление")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Заполните поле Новость")]
+        [MaxLength(500)]
+        [Display(Name = "Новость")]
+        public string Description { get; set; }
+
+        [Display(Name = "Дата публикации")]
+        public Nullable<System.DateTime> DatePublication { get; set; }
+    }
+
+    public class drugformproducerMetaData
 	{
 
 		[ScaffoldColumn(false)]

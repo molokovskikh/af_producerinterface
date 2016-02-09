@@ -48,13 +48,16 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<LogForNet> LogForNet { get; set; }
         public DbSet<drugfamilynames> drugfamilynames { get; set; }
-        public DbSet<Account> Account { get; set; }
         public DbSet<AccountCompany> AccountCompany { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }
-        public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
         public DbSet<promotions> promotions { get; set; }
+        public DbSet<AccountAppointment> AccountAppointment { get; set; }
+        public DbSet<Account> Account { get; set; }
+        public DbSet<AccountGroup> AccountGroup { get; set; }
+        public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
+        public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
     }
 }
