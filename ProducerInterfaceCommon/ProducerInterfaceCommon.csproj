@@ -172,12 +172,16 @@
     <Compile Include="ContextModels\NotificationToProducers.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\promotionsimage.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\usernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
+    <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
     <Compile Include="ContextModels\LogForNet.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>

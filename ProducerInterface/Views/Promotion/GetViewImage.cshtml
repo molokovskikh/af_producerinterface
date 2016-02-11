@@ -1,0 +1,7 @@
+﻿
+<div id="@("imageid" + ViewBag.Id_File)">
+    <a onclick="closeimage(@ViewBag.Id_File)">Скрыть изображение</a> <br/>    
+    <img class="promotion-image img-responsive img-thumbnail" src="@Url.Action("GetImage", "promotion", new { id = ViewBag.Id_File })" alt="Изображение" />
+</div>
+
+<a id="@("httpViewId"+ ViewBag.Id_File)" onclick="openimage(@ViewBag.Id_File)" style="display:none;">Отобразить изображение</a>

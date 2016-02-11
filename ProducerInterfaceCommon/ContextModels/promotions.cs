@@ -27,6 +27,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public long ProducerUserId { get; set; }
         public string Annotation { get; set; }
         public string PromoFile { get; set; }
+        public Nullable<int> PromoFileId { get; set; }
         public bool AgencyDisabled { get; set; }
         public string Name { get; set; }
         public decimal RegionMask { get; set; }
@@ -34,7 +35,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<System.DateTime> End { get; set; }
         public bool Status { get; set; }
     
-        public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
         public virtual Account Account { get; set; }
+        public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
+        public virtual promotionsimage promotionsimage { get; set; }
     }
 }

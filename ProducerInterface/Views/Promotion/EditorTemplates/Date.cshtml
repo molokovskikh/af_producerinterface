@@ -2,7 +2,7 @@
 <div class="form-group row">       
         @Html.LabelFor(m => m, new { @class= "", @id="label-time" })      
     <div class="col-sm-9">
-        @Html.TextBox("", String.Format("{0:dd/MM/yyyy}", Model), new { @readonly = "readonly" , @class="form-control"})     
+        @Html.TextBox("", String.Format("{0:dd/MM/yyyy}", Model), new { @readonly = "readonly" , @class= "form-control", @style="max-width:175px;" })     
     </div>
 </div>
 
