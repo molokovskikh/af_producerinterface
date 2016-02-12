@@ -34,7 +34,7 @@
     </div>
 
     <div id=@("Delete_Id" + ViewBag.Pager)>
-        @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "News",
+        @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
        new { Pager = ViewBag.Pager },
        new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
        new { @class = "btn btn-primary" }

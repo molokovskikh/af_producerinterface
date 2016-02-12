@@ -37,24 +37,25 @@
                 </div>
             </div>
           
-            <div class="row">
+            <div class="row" >
                 <div class="form-group">
-                    <label class="control-label">Аннотация:</label>
-                    @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7" })
+                    <label class="control-label">Аннотация</label>
+                    @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7", @onkeyup = "UpKey()" })
                     @Html.ValidationMessageFor(s => s.Annotation)
+                   <p>Количество оставшихся для ввода знаков <span id="counter"></span></p>
                 </div>
             </div>
           
             <div class="row">
                 <div class="form-group">
-                    <label>Список лекарств, участвующих в акции: </label>
+                    <label>Список лекарств, участвующих в акции </label>
                     @Html.EditorFor(Model => Model.DrugList)
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group">
-                    <label>Список регионов: </label>
+                    <label>Список регионов </label>
                     @Html.EditorFor(Model => Model.RegionList)
                     <span>По умолчанию выбран пунк, все регионы. Можете удалить и выбрать нужные из списка</span>
                 </div>
@@ -113,5 +114,7 @@
             <script src="~/Scripts/WorkPlace/DatePicker.js"></script>
      
             <script src="~/Scripts/WorkPlace/FileUpLoad.js"></script>  
+                      
+
         }
 
