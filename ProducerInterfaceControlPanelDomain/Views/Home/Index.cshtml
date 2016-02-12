@@ -1,33 +1,55 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.promotions>
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<AccountCompany>
 
 @{
     ViewBag.Title = "Домащняя страница";
-    var producers = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.producernames>;
+    var producers = ViewBag.ProducerList as IEnumerable<producernames>;
+    var promotionList = ViewBag.ListPromotions as IEnumerable<promotions>;
 }
 
+<br/>
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Зарегистрировались из <strong>@Model.Where(xxx=>xxx.ProducerId != null).Count()</strong> компаний производителей</h3>
+        <hr/>   
+        <h3>Подано заявок для подтверждения использования данного продукта <strong>@Model.Where(xxx => xxx.ProducerId == null).Count()</strong> заявка</h3>
+        <hr />   
+        <h3>Создано Промо-Акций <strong> @promotionList.Count()</strong> Подтверждены <string> @promotionList.Where(xxx => xxx.Status == true).Count() </string>
+            Активны на данный момент <strong> @promotionList.Where(xxx => xxx.Status == true && xxx.Enabled == true && xxx.Begin <= System.DateTime.Now && xxx.End > System.DateTime.Now).Count() </strong>
+        </h3>
+        <hr />
+        
+        <fieldset>
+            <legend>Промо Акции</legend>
+
+            @foreach (var CompanyItem in Model)
+            {
+                foreach (var AccountItem in CompanyItem.Account)
+                {
+
+                    foreach (var PromotionItem in AccountItem.promotions)
+                    {
+                        <p>@PromotionItem.Name  <strong>Производитель @producers.Where(xxx => xxx.ProducerId == PromotionItem.Account.AccountCompany.ProducerId).First().ProducerName</strong></p>
+                    }
+
+                }
+            }
+        </fieldset>   
+        <hr />  
 
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-   <h2>Стартовая страница Администрирования Интерфейса Производителя</h2>
+
+
+    </div>
 </div>
 
+
   <fieldset class="container" id="promoActionView">
-   
-      <legend>          Список подтверждённых Промо-Акций производителей      </legend>      
-
-      @foreach (ProducerInterfaceCommon.ContextModels.promotions PromotionItem in Model)
+        
+      @foreach ( var CompanyItem in Model)
       {
-        <div class="col-sm-4" id="Promo-Action">
-            <div class="col-sm-12">
-                <h3><span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp;&nbsp; @PromotionItem.Name</h3>
-                <h5>Аннотация: @PromotionItem.Annotation</h5>
-
-                <hr />
-                <h5>Производитель: @producers.Where(xxx => xxx.ProducerId == PromotionItem.ProducerId).First().ProducerName</h5>
-
-            </div>
-          </div>
+     
       }   
       
   </fieldset>

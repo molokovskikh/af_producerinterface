@@ -4,12 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var DrugListItems = ViewBag.ListDrugs as IEnumerable<ProducerInterfaceCommon.ContextModels.catalognames>;
     var ProducersList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.producernames>;
+    var RegionList = ViewBag.RegionList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
 }
 
-<h2>
-    
+<h2 class="panel-title">
+
     @if (ViewBag.ProducerName != null)
-    { <p>Список Промо-Акций</p> @ViewBag.ProducerName }
+    { <span>Список Промо-Акций @ViewBag.ProducerName</span> }
     else
     {
         if (ViewBag.ActivePromo != null)
@@ -27,49 +28,136 @@
     }
 </h2>
 
-<hr/>
+<hr />
 
-<table class="table table-bordered table-striped">
-    <tr>
-        <th>Название Промо Акции</th>
-        <th>Приозводитель</th>
-        <th>ФИО автора</th>
-        <th>Список лекарств</th>
-        <th>Подробнее</th>
-    </tr>
+<div class="col-xs-12">
+    <div class="row">
+        <div class="panel-group">
+            @foreach (var PromoItem in Model)
+            {
+                <div class="panel panel-info">
 
-    @foreach (var PromotionItem in Model)
-    {
-        <tr>
-            <td>@PromotionItem.Name</td>
-
-            <td>@ProducersList.Where(xxx => xxx.ProducerId == PromotionItem.ProducerId).First().ProducerName</td>
-            <td>@PromotionItem.Account.Name</td>
-            <td>
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#collapseDrus_@PromotionItem.Id" style="text-decoration:none;"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp;  Лекаства (@PromotionItem.promotionToDrug.Count() шт.)</a>
-                        </h4>
+                    <div class="panel-heading col-lg-12" style="min-height:42px;">
+                        <a data-toggle="collapse" href="#collaps__@PromoItem.Id" class="panel-title">
+                            <p class="col-lg-6"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp; @PromoItem.Name</p>
+                            <p class="col-xs-offset-1 col-lg-6">@ProducersList.Where(xxx => xxx.ProducerId == PromoItem.ProducerId).First().ProducerName</p>
+                        </a>
                     </div>
-                    <div id="collapseDrus_@PromotionItem.Id" class="panel-collapse collapse">
+
+                    <div id="collaps__@PromoItem.Id" class="panel-collapse collapse">
+
                         <div class="panel-body">
-                            <hr />
-                            @foreach (var DrugItem_ in PromotionItem.promotionToDrug)
-                            {
-                                @DrugListItems.Where(xxx => xxx.CatalogId == DrugItem_.DrugId).First().CatalogName
-                                <br/>
-                            }
+                            <div class="col-md-12">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Кем создана</label>
+                                    <p>@PromoItem.Account.Name</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Дата последнего изменения</label>
+                                    <p>@PromoItem.UpdateTime.ToString("dd.MM.yyy")</p>
+                                </div>
+
+                                <!-- Прикрепленный файл -->
+
+                                <div class="form-group">
+                                    <label>Прикреплен файл</label>
+                                    @if (PromoItem.PromoFileId != null)
+                                    {
+                                        <a target="_blank" href="@Url.Action("GetFile", new { Id = PromoItem.PromoFileId })">@PromoItem.promotionsimage.ImageName (скачать)</a> <br />
+                                    }
+                                    else
+                                    {
+                                        <p>Файл к данной промо акции не прикреплён</p>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label>Аннотация</label>
+                                    <p>@PromoItem.Annotation</p>
+                                </div>
+                            </div>
+                            </div>
                         </div>
+                        <!-- Список Препаратов-->
+
+                        <div class="form-group col-xs-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <a class="panel-title" data-toggle="collapse" href="#collapse__@PromoItem.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список препаратов <p class="pull-right">@PromoItem.promotionToDrug.Count()</p></a>
+                                </div>
+                                <div id="collapse__@PromoItem.Id" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        @foreach (var DrugItem_ in PromoItem.promotionToDrug)
+                                        {
+                                            <p>@DrugListItems.Where(xxx => xxx.CatalogId == DrugItem_.DrugId).First().CatalogName</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Список регионов-->
+
+                        <div class="form-group  col-xs-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <a class="panel-title" data-toggle="collapse" href="#collaps___@PromoItem.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список регионов <p class="pull-right">0</p></a>
+                                </div>
+                                <div id="collaps___@PromoItem.Id" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        @foreach (var RegionItem in PromoItem.RegionList)
+                                        {
+                                            <p>@RegionList.Where(xxx=>xxx.Value == RegionItem.ToString()).First().Text</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Контактные данные-->
+
+                        <div class="form-group col-xs-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <a class="panel-title" data-toggle="collapse" href="#collapse_i_@PromoItem.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Контакты производителя <p class="pull-right"></p></a>
+                                </div>
+                                <div id="collapse_i_@PromoItem.Id" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                    
+                                        @foreach (var ProducerUserItem in PromoItem.Account.AccountCompany.Account)
+                                        {
+                                            <div class="form-group">
+                                                <p>ФИО : @ProducerUserItem.Name</p>
+                                                <p>e-Mail : <a href="@("mailto:" + ProducerUserItem.Login)">@ProducerUserItem.Login</a></p>
+                                                <p>Телефон : @ProducerUserItem.Phone</p>
+                                            </div>
+                                            if (PromoItem.Account.AccountCompany.Account.Count() > 1)
+                                            { <hr/> }
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Экшен линки -->
+
+                        <hr />
+
+                        <div class="form-group col-xs-12">
+                                @Html.ActionLink("Подтвердить промо-акцию", "Succuss", "Promotion", new { Id = PromoItem.Id }, new { @class = "btn btn-primary", @title = "Подтверждение промо-акции" } )                                  
+                        </div>
+
                     </div>
-                </div>                  
-            </td>
+                </div>
 
-            <th><a href="~/Promotion/Edit/@PromotionItem.Id" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp; Подробно</a></th>
-
-        </tr>
-
-    }
-</table>
+            }
+        </div>
+    </div>
+</div>
 

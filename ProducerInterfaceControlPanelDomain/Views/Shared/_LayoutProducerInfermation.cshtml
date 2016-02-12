@@ -1,0 +1,26 @@
+﻿
+@using ProducerInterfaceCommon.ContextModels;
+@{
+    var CompanyInformation = ViewBag.CompanyInformation as AccountCompany;
+    ViewBag.Title = "Производитель";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        @Html.Partial("Partial/SubMenu")
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="text-center">Производитель @ViewBag.ProducerNames</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12" id="ResultView">
+
+    </div>
+</div>
+

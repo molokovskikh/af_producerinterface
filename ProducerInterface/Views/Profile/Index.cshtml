@@ -16,26 +16,50 @@
 
 <div class="form-group" id="NewsListDiv">
 	
-	<h2>Новости</h2>
+	<h2>Новости</h2> <string>Список новостей практически пуст, при попытке получить ещё новости, вернёт тот же список</string>
 	<hr/>
 
-	@if(ViewBag.News != null && ViewBag.News.Count > 0)
-	{
-		foreach(var NewsItem in ViewBag.News)
-		{
-			<div class="jumbotron">
-				<h3>@NewsItem.Name</h3>
-				<hr/>
+    @if (ViewBag.News != null && ViewBag.News.Count > 0)
+    {
+        foreach (var NewsItem in ViewBag.News)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div>
+                        Тема @NewsItem.Name
+                        <div class="pull-right">Дата публикации @NewsItem.DatePublication.ToString("dd-MM-yyyy")</div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <p><h4>Сообщение</h4>@NewsItem.Description</p>
+                </div>
+            </div>
+        }
 
-				<p>@NewsItem.Description</p>
+        <div id="@("LoadingListDiv" + ViewBag.Pager)">
 
-				<strong class="pull-right">Дата публикации @NewsItem.DatePublication</strong>
-			</div>		
-		}	
-	}
-	else
-	{
-	<p>Новостей не зарегистрировано</p>
-	}
+        </div>
+
+        <div id=@("Delete_Id" + ViewBag.Pager)>
+            @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "News",
+       new { Pager = ViewBag.Pager },
+       new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
+       new { @class = "btn btn-primary" }
+       )
+        </div>
+    }
+    else
+    {
+        <h3>Список новостей пуст</h3>
+    }
+
 
 </div>
+
+<script type="text/javascript">
+    function newsisloadcomplete(data_int)
+    {
+        var ElementId = "#Delete_Id" + data_int;
+        $(ElementId).css("display", "none");
+    }
+</script>

@@ -172,6 +172,9 @@
     <Compile Include="ContextModels\NotificationToProducers.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\promotions.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\promotionsimage.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -232,9 +235,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\profilenews.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\promotions.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\promotionToDrug.cs">

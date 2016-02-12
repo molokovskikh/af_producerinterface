@@ -25,7 +25,7 @@
 input,
 select,
 textarea {
-    max-width: 450px;
+    max-width: 650px;
 }
 
 #accordion-menu {
@@ -124,4 +124,13 @@ min-width:100%;
 }
 #Table-LogUserChange th {
     text-align:center;
+}
+
+#SubMenuProducerInformation ul a {
+font-size:16px;
+color:#e5c6c6;
+}
+#SubMenuProducerInformation .dropdown ul a {
+font-size:16px;
+color:#000000;
 }

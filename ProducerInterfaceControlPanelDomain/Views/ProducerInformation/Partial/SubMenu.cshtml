@@ -1,0 +1,46 @@
+﻿<div class="navbar navbar-inverse" id="SubMenuProducerInformation" style="font-size:14px;">
+    <div class="container">      
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-tasks"></span>&nbsp; Отчеты</a>
+                    <ul class="dropdown-menu">
+                        <li>@Ajax.ActionLink("Список отчетов", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>
+                        <li class="divider"></li>
+                        <li>@Ajax.ActionLink("История запуска отчетов", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>
+                        <li class="divider"></li>
+                        <li>@Ajax.ActionLink("История создания и удаления отчетов", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>     
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-star-empty"></span>&nbsp; Промо-Акции</a>
+                    <ul class="dropdown-menu">
+                        <li>@Ajax.ActionLink("Список промо-акций", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>
+                        <li class="divider"></li>
+                        <li>@Ajax.ActionLink("Список неподтвержденных промо-акций", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>
+                        <li class="divider"></li>
+                        <li>@Ajax.ActionLink("Список подтвержденных промо-акций", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; Сотрудники</a>
+                    <ul class="dropdown-menu">
+                        <li>@Ajax.ActionLink("Список активных", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>
+                        <li class="divider"></li>
+                        <li>@Ajax.ActionLink("Список заблокированных", "GetPromotion", "ProducerInformation", new AjaxOptions { UpdateTargetId = "ResultView" })</li>                      
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class="text-center">Производитель @ViewBag.ProducerNames</a></li>
+            </ul>
+</div>
+    </div>
+</div>

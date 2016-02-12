@@ -17,9 +17,9 @@ namespace ProducerInterface.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            ViewBag.BreadCrumb = "Профиль пользователя";            
+            ViewBag.BreadCrumb = "Профиль пользователя";
         }
-    
+
         public ActionResult Index()
         {
             ViewBag.News = cntx_.NotificationToProducers.Take(10).ToList();
@@ -29,18 +29,18 @@ namespace ProducerInterface.Controllers
         [HttpGet]
         public ActionResult Account()
         {
-        
+
             var ThisUser = cntx_.Account.Where(xxx => xxx.Id == CurrentUser.Id).First();
 
             var ModelView = new ProducerInterfaceCommon.ContextModels.ProfileValidation();
-            
+
             ModelView.AppointmentId = ThisUser.AccountAppointment.Id;
             ModelView.CompanyName = cntx_.producernames.Where(xxx => xxx.ProducerId == ThisUser.AccountCompany.ProducerId).First().ProducerName;
             ModelView.EmailDomain = ThisUser.AccountCompany.CompanyDomainName.Where(xxx => ThisUser.Login.Contains(xxx.Name)).First().Id;
             ModelView.Mailname = ThisUser.Login.Split(new Char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0].ToString();
             ModelView.Name = ThisUser.Name;
             ModelView.PhoneNumber = ThisUser.Phone;
-          
+
             var AppointmentList =
              cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
                  .ToList()
@@ -56,8 +56,8 @@ namespace ProducerInterface.Controllers
 
             ViewBag.AppointmentList = AppointmentList;
             ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
-            
-            return View(ModelView);          
+
+            return View(ModelView);
         }
 
         [HttpPost]
@@ -102,9 +102,17 @@ namespace ProducerInterface.Controllers
 
         public ActionResult GetOldNews(int Pages)
         {
-            var News = cntx_.NotificationToProducers.Skip(Pages*10).Take(10).ToList();            
+            var News = cntx_.NotificationToProducers.Skip(Pages * 10).Take(10).ToList();
             return PartialView(News);
+        }
+
+        public ActionResult GetNextList(int Pager)
+        {
+            ViewBag.Pager = Pager + 1;
+            var ListNews10 = cntx_.NotificationToProducers.OrderBy(xxx => xxx.Id).Take(10).ToList();
+            return PartialView("GetNextList", ListNews10);
         }
 
     }
 }
+

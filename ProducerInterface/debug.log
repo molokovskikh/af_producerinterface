@@ -340,3 +340,6 @@ System.Web.Mvc.ActionResult Account(ProducerInterfaceCommon.ContextModels.Profil
 11.02.2016 16:38:19.105 [75] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' returned by: 
 11.02.2016 16:38:22.669 [75] ERROR MySqlAdoNetAppender - Failure occurred during job recovery.
 11.02.2016 17:11:33.224 [6] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+12.02.2016 15:40:08.792 [42] ERROR MySqlAdoNetAppender - Невызываемый член "System.Collections.Generic.List<ProducerInterfaceCommon.ContextModels.NotificationToProducers>.Count" не может использоваться как метод.
+12.02.2016 15:40:37.079 [42] ERROR MySqlAdoNetAppender - "System.DateTime" не содержит определения для "Value"
+12.02.2016 15:41:42.045 [42] ERROR MySqlAdoNetAppender - Контроллер для пути "/News/GetNextList" не найден или не реализует интерфейс IController.

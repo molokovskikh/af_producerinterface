@@ -174,6 +174,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BasePermissionController.cs" />
+    <Compile Include="Controllers\GlobalAccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogForNetController.cs" />
     <Compile Include="Controllers\LogUserChangeController.cs" />
@@ -298,6 +299,14 @@
     <Content Include="Views\News\Create.cshtml" />
     <Content Include="Views\News\List.cshtml" />
     <Content Include="Views\News\GetNextList.cshtml" />
+    <Content Include="Views\ProducerInformation\Index.cshtml" />
+    <Content Include="Views\ProducerInformation\Partial\AccountList.cshtml" />
+    <Content Include="Views\ProducerInformation\PromotionPartial.cshtml" />
+    <Content Include="Views\ProducerInformation\Promotion.cshtml" />
+    <Content Include="Views\ProducerInformation\Partial\SubMenu.cshtml" />
+    <Content Include="Views\Shared\_LayoutProducerInfermation.cshtml" />
+    <Content Include="Views\GlobalAccount\Index.cshtml" />
+    <Content Include="Views\GlobalAccount\SuccessAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -306,7 +315,6 @@
     <Folder Include="Views\BasePermission\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\MasterBase\" />
-    <Folder Include="Views\ProducerInformation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

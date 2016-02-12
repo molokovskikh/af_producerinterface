@@ -18,14 +18,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         /// <returns>Стартовая страница сайта, которая будет доступна после авторизации</returns>
         public ActionResult Index()
         {
-            //IEnumerable<string> X = Groups().ToList();
-            //ViewBag.ListGroup = X;
+            var CompanyList = cntx_.AccountCompany.ToList();
+            var producerLongList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId != null).ToList().Select(xxx => xxx.ProducerId).ToList();
+            ViewBag.ProducerList = cntx_.producernames.Where(xxx=> producerLongList.Contains(xxx.ProducerId)).ToList();
+            ViewBag.ListPromotions = cntx_.promotions.ToList();
 
-            var ListActionInProducers = cntx_.promotions.Where(xxx => xxx.Begin < DateTime.Now && xxx.End > DateTime.Now && xxx.Status == true).ToList();
-            ViewBag.ProducerList = cntx_.producernames.ToList();          
-
-            return View(ListActionInProducers);
-
+            return View(CompanyList);
         }
 
     }

@@ -27,9 +27,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             var Model = new SearchProducerReportsModel();
 
             return View(Model);
-        }
-
-    
+        }    
 
         [HttpPost]
         public ActionResult SearchReports(SearchProducerReportsModel Models_id_Producer)

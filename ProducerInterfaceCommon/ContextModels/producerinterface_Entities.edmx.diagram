@@ -42,10 +42,11 @@
         <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="1.5" PointX="5.375" PointY="6.75" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="4" PointX="0.5" PointY="22.875" />
         <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
-        <EntityTypeShape EntityType="producerinterface_Model.promotions" Width="1.875" PointX="7.875" PointY="19" />
-        <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
-        <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
         <EntityTypeShape EntityType="producerinterface_Model.promotionsimage" Width="2.5" PointX="12.75" PointY="16.375" />
+        <EntityTypeShape EntityType="producerinterface_Model.promotions" Width="1.5" PointX="16" PointY="17" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" />
         </Diagram>
     </edmx:Diagrams>

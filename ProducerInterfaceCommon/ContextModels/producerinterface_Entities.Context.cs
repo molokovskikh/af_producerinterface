@@ -55,7 +55,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
-        public DbSet<promotions> promotions { get; set; }
         public DbSet<promotionsimage> promotionsimage { get; set; }
+        public DbSet<promotions> promotions { get; set; }
     }
 }
