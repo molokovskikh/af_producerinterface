@@ -60,7 +60,7 @@ namespace ProducerInterfaceCommon.ContextModels
         [Required(ErrorMessage = "Укажите дату начала Акции")]
         [Display(Name = "Дата начала акции")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-
+                           
         public Nullable<System.DateTime> Begin { get; set; }
 
         [UIHint("Date")]
@@ -71,9 +71,33 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<System.DateTime> End { get; set; }
         public bool Status { get; set; }
 
+        [UIHint("FileUpLoad")]
+        public HttpPostedFileBase File { get; set; }
+
         [UIHint("LongList")]
         [Required(ErrorMessage = "Добавьте лекарства участвующие в акции")]
-        public virtual List<long> DrugList { get; set; }     
+        public virtual List<long> DrugList { get; set; }
+
+        [UIHint("LongList")]
+        [Required(ErrorMessage = "Выберите регион")]
+        public List<long> RegionList { get; set; }
+        
+        public int? PromotionFileId { get; set; }
+        public string PromotionFileName { get; set; }
+
+        public byte[] ImageFile { get; set; }
+    }
+
+    public partial class promotions
+    {
+        public List<long> RegionList { get; set; }
+    }
+
+    public class PromotionFile
+    {
+        public long Id { get; set; }
+        public int FileId { get; set; }
+        public string ImageFile { get; set; }      
     }
 
     public class ListGroupView

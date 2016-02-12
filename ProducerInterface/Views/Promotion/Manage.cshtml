@@ -8,96 +8,110 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row" style="width:100%;">
+<div class="container body-content">
 
-    <h3>@(Model != null && Model.Id != 0 ? Model.Name : "Новая акция")</h3>
-    <br />
-    @using (Html.BeginForm("Manage", "Promotion", FormMethod.Post))
-    {
+    <div class="row">
+        <div class="form-group">
+            <h3>@(Model != null && Model.Id != 0 ? Model.Name : "Новая акция")</h3>
+        </div>
+    </div>
+
+    <hr/>
+    <!-- Форма для отправка на сервер -->
+    <div class="col-xs-12">
+        @using (Html.BeginForm("Manage", "Promotion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @* некорректно отрабатывает при копирывании акции, поэтому тег формариется ручками если Id==0 *@
+
         if (Model.Id != 0)
-        {
-            @Html.HiddenFor(s => s.Id)
-        }
-        else
-        {
-            <input type="hidden" name="Id" id="Id" value="0" />         
-        }
+        {@Html.HiddenFor(s => s.Id)}
+        else {<input type="hidden" name="Id" id="Id" value="0" />}
 
         @Html.ValidationSummary(true);
-        <div class="row">
-            <div class="form-group">
-                <label class="control-label">Наименование промо-акции:</label>
-                @Html.TextBoxFor(s => s.Name, new { @Class = "form-control", @Placeholder = "Заголовок" })
-                @Html.ValidationMessageFor(s => s.Name)
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="form-group">
-                <label class="control-label">Аннотация:</label>
-                @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7" })
-                @Html.ValidationMessageFor(s => s.Annotation)
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">Наименование промо-акции:</label>
+                    @Html.TextBoxFor(s => s.Name, new { @Class = "form-control", @Placeholder = "Заголовок" })
+                    @Html.ValidationMessageFor(s => s.Name)
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label>Список лекарств, участвующих в акции: </label>
-                @Html.EditorFor(Model => Model.DrugList)
-            </div>       
-        </div>
+          
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">Аннотация:</label>
+                    @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7" })
+                    @Html.ValidationMessageFor(s => s.Annotation)
+                </div>
+            </div>
+          
+            <div class="row">
+                <div class="form-group">
+                    <label>Список лекарств, участвующих в акции: </label>
+                    @Html.EditorFor(Model => Model.DrugList)
+                </div>
+            </div>
 
-        <div class="row">
-            <div class="form-group" id="date-form-group">
-                @Html.EditorFor(m => m.Begin, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m=>m.Begin)
+            <div class="row">
+                <div class="form-group">
+                    <label>Список регионов: </label>
+                    @Html.EditorFor(Model => Model.RegionList)
+                    <span>По умолчанию выбран пунк, все регионы. Можете удалить и выбрать нужные из списка</span>
+                </div>
             </div>
-            <div class="form-group" id="date-form-group">
-                @Html.EditorFor(m => m.End, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.End)
+
+         @*id="date-form-group"*@
+            <div class="row">
+                <div class="form-group">
+                    <div class="form-group col-xs-6">
+                        @Html.EditorFor(m => m.Begin, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Begin)
+                    </div>
+                    <div class="form-group col-xs-6">
+                        @Html.EditorFor(m => m.End, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.End)
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row" style="margin-top:25px;">
-            <div class="col-xs-12 col-sm-6 col-md-6 box">
-                <a href="@Url.Action("Index")" class="btn btn-primary">Назад</a>
-                <button type="submit" class="btn btn-primary filter-buttons active-form">@(Model != null && Model.Id != 0 ? "Обновить акцию" : "Добавить Акцию")</button>
+            <hr />
+            <div class="row">
+                <div class="form-group">
+                    @if (Model.PromotionFileId > 0)
+                {
+                        <label>Прикреплённый файл</label>
+                        <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />
+                    }
+
+                    @Html.Partial("Partial/FileUpload")
+                </div>
             </div>
-        </div>
-    }
+           <br/>
+            <div class="row">
+                <div class="form-group">
+                    <a href="@Url.Action("Index")" class="btn btn-primary">Назад</a>
+                    <button type="submit" class="btn btn-primary filter-buttons active-form">@(Model != null && Model.Id != 0 ? "Обновить акцию" : "Добавить Акцию")</button>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+    
+        @section styles
+        {
+            <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+            <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+            <link href="~/Content/FileUpload.css" rel="stylesheet" />
+        }
 
-@section JavaScript
-{
-    <script src="~/Content/Chosen/js/bootstrap-datepicker.js"></script>
-    <script src="~/Content/Chosen/js/bootstrap-datepicker.ru.min.js"></script>
-    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
-    <script src="~/Content/Chosen/js/InitPromotionGrugList.js"></script>
-    <link href="~/Content/Chosen/css/datepicker.css" rel="stylesheet" />
-    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+        @section JavaScript
+        {         
+            <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+            <script src="~/Content/Chosen/js/InitPromotion.js"></script> 
+      
+            <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+            <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
+            <script src="~/Scripts/WorkPlace/DatePicker.js"></script>
+     
+            <script src="~/Scripts/WorkPlace/FileUpLoad.js"></script>  
+        }
 
-    <script>
-    $(function () {
-        // http://www.eyecon.ro/bootstrap-datepicker/
-        var dateFrom = $('#Begin').datepicker({
-            format: 'dd/mm/yyyy',
-            weekStart: 1,
-            autoclose: true,
-            onRender: function (date) {
-                return date.valueOf() > Date.now() ? 'disabled' : '';
-            }
-        }).on('changeDate', function (ev) {
-            //$('#DateToUI')[0].focus();
-        }).data('datepicker');
-
-        var dateTo = $('#End').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            weekStart: 1,
-            onRender: function (date) {
-                //return date.valueOf() <= dateFrom.date.valueOf() ? 'disabled' : '';
-                return date.valueOf() > Date.now() ? 'disabled' : '';
-            }
-        }).data('datepicker');
-    });
-
-    </script>
-
-}

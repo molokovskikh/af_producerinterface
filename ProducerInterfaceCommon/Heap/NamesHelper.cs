@@ -78,6 +78,18 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
+        public List<OptionElement> GetCatalogListPromotion()
+        {
+            var producerId = _cntx.Account.Single(x => x.Id == _userId).AccountCompany.ProducerId;
+            var NewListDrug = _cntx.promotionToDrug.Where(xxx => _cntx.promotions.Where(xx => xx.ProducerId == producerId)              
+                .Select(xx => xx.Id).ToList().Contains(xxx.PromotionId)).Select(x=>x.DrugId).ToList();      
+            var results = _cntx.assortment.Where(xxx => NewListDrug.Contains(xxx.CatalogId))
+                .GroupBy(x => x.CatalogId).Select(x => x.FirstOrDefault())
+                .Select(xxx => new OptionElement { Text = xxx.CatalogName, Value = xxx.CatalogId.ToString() })               
+                .ToList();         
+            return results;
+        }
+
         public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
         {
             if (SelectedDrugs == null || SelectedDrugs.Count() == 0)
@@ -109,6 +121,22 @@ namespace ProducerInterfaceCommon.Heap
 				.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName }).ToList();
 			return results;
 		}
+        public List<long> GetPromotionRegions(ulong ?RegionMask)
+        {
+            if (RegionMask == null)
+            {
+                return new List<long>();
+            }      
+
+            var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();
+
+            var results = LisrRegions
+            .Where(x =>    
+            ((ulong)x.RegionCode & RegionMask) > 0)
+            .OrderBy(x => x.RegionCode)
+            .Select(x => (long) x.RegionCode).ToList();
+            return results;
+        }
 
         public List<OptionElement> GetProducerList()
         {

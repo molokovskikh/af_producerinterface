@@ -150,5 +150,193 @@ System.Web.Mvc.ActionResult Account(ProducerInterfaceCommon.ContextModels.Profil
 
 08.02.2016 20:47:57.135 [78] ERROR MySqlAdoNetAppender - Найден конечный тег "div" без соответствующего начального тега. Начальные и конечные теги сбалансированы нужным образом?
 
-09.02.2016 16:42:36.355 [14] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
-09.02.2016 20:01:09.955 [8] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\Index.cshtml(29): error CS1061: 'catalognames' does not contain a definition for 'FamilyName' and no extension method 'FamilyName' accepting a first argument of type 'catalognames' could be found (are you missing a using directive or an assembly reference?)
+09.02.2016 16:40:18.538 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/Promotions/SaveImage" не найден или не реализует интерфейс IController.
+09.02.2016 16:46:52.296 [11] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+09.02.2016 16:47:49.985 [10] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+09.02.2016 16:51:34.071 [7] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+09.02.2016 17:00:45.999 [21] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+09.02.2016 17:02:55.864 [19] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+09.02.2016 17:08:12.714 [18] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Promotion\Manage.cshtml(71): error CS0117: 'AjaxOptions' does not contain a definition for 'enctype'
+09.02.2016 17:59:13.197 [39] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+09.02.2016 18:03:23.849 [52] ERROR MySqlAdoNetAppender - Входные данные не являются действительной строкой Base-64, поскольку содержат символ в кодировке, отличной от Base 64, больше двух символов заполнения или недопустимый символ среди символов заполнения. 
+09.02.2016 18:06:26.774 [50] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Promotion\AddFile.cshtml(11): error CS1929: 'HtmlHelper<PromotionFile>' does not contain a definition for 'BeginForm' and the best extension method overload 'AjaxExtensions.BeginForm(AjaxHelper, string, AjaxOptions)' requires a receiver of type 'AjaxHelper'
+09.02.2016 18:07:17.428 [24] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Promotion\AddFile.cshtml(17): error CS1660: Cannot convert lambda expression to type 'string' because it is not a delegate type
+09.02.2016 18:10:39.890 [53] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Promotion\AddFile.cshtml(17): error CS1660: Cannot convert lambda expression to type 'string' because it is not a delegate type
+09.02.2016 18:32:11.696 [21] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Файл прикреплен к промо-акции" на контроллере "ProducerInterface.Controllers.PromotionController".
+09.02.2016 18:42:37.963 [42] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+09.02.2016 18:52:53.620 [42] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult GetViewImage(Int32)" в "ProducerInterface.Controllers.PromotionController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+09.02.2016 18:53:04.231 [38] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "GitViewImage" на контроллере "ProducerInterface.Controllers.PromotionController".
+09.02.2016 20:06:04.673 [26] ERROR MySqlAdoNetAppender - В блоке if отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+09.02.2016 20:06:19.227 [31] ERROR MySqlAdoNetAppender - В блоке if отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+09.02.2016 20:25:33.975 [33] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+09.02.2016 20:28:49.479 [28] ERROR MySqlAdoNetAppender - Контроллер для пути "/__browserLink/requestData/06fc92bd11194166b0cc30b0118e45d1" не найден или не реализует интерфейс IController.
+10.02.2016 10:52:05.609 [541] ERROR MySqlAdoNetAppender - Нулевой объект должен иметь значение.
+10.02.2016 10:54:41.833 [17] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+10.02.2016 11:25:22.445 [9] INFO  Quartz.Util.DBConnectionManager - Registering datasource 'default' with db provider: 'Quartz.Impl.AdoJobStore.Common.DbProvider'
+10.02.2016 11:25:22.488 [9] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for object serializer
+10.02.2016 11:25:22.504 [9] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for ThreadExecutor
+10.02.2016 11:25:22.531 [9] INFO  Quartz.Core.SchedulerSignalerImpl - Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+10.02.2016 11:25:22.545 [9] INFO  Quartz.Core.QuartzScheduler - Quartz Scheduler v.2.3.3.0 created.
+10.02.2016 11:25:22.562 [9] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Using thread monitor-based data access locking (synchronization).
+10.02.2016 11:25:22.577 [9] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - JobStoreTX initialized.
+10.02.2016 11:25:22.594 [9] INFO  Quartz.Core.QuartzScheduler - Scheduler meta-data: Quartz Scheduler (v2.3.3.0) 'TestScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'Quartz.Core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'Quartz.Simpl.SimpleThreadPool' - with 3 threads.
+  Using job-store 'Quartz.Impl.AdoJobStore.JobStoreTX' - which supports persistence. and is not clustered.
+
+10.02.2016 11:25:22.608 [9] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler 'TestScheduler' initialized
+10.02.2016 11:25:22.621 [9] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler version: 2.3.3.0
+10.02.2016 11:25:22.640 [9] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is desired by: 
+10.02.2016 11:25:22.655 [9] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is being obtained: 
+10.02.2016 11:25:22.668 [9] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' given to: 
+10.02.2016 11:25:22.874 [9] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.SimpleTriggerPersistenceDelegate
+10.02.2016 11:25:22.888 [9] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CronTriggerPersistenceDelegate
+10.02.2016 11:25:22.902 [9] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CalendarIntervalTriggerPersistenceDelegate
+10.02.2016 11:25:22.916 [9] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.DailyTimeIntervalTriggerPersistenceDelegate
+10.02.2016 11:25:22.961 [9] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Freed 0 triggers from 'acquired' / 'blocked' state.
+10.02.2016 11:25:22.989 [9] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Handling 6 trigger(s) that missed their scheduled fire-time.
+10.02.2016 11:25:23.458 [9] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' returned by: 
+10.02.2016 11:25:35.075 [9] ERROR MySqlAdoNetAppender - Failure occurred during job recovery.
+10.02.2016 11:48:20.341 [519] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "~/View/Promotion/PartialView/PromotionItem.cshtml" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/View/Promotion/PartialView/PromotionItem.cshtml
+10.02.2016 11:49:18.041 [517] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "PromotionItem" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/Promotion/PromotionItem.aspx
+~/Views/Promotion/PromotionItem.ascx
+~/Views/Shared/PromotionItem.aspx
+~/Views/Shared/PromotionItem.ascx
+~/Views/Promotion/PromotionItem.cshtml
+~/Views/Promotion/PromotionItem.vbhtml
+~/Views/Shared/PromotionItem.cshtml
+~/Views/Shared/PromotionItem.vbhtml
+10.02.2016 12:02:58.503 [18] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 12:42:46.703 [515] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 12:46:27.509 [515] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterface\Views\Promotion\Index.cshtml(22): error CS0103: The name 'PromoItem' does not exist in the current context
+10.02.2016 12:57:02.573 [515] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 13:47:01.839 [512] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 13:52:19.676 [527] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 14:07:07.857 [504] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItemHeading.cshtml' не найден.
+10.02.2016 14:18:09.651 [508] ERROR MySqlAdoNetAppender - Непредвиденное ключевое слово "if" после символа "@". В блоке кода не требуется указывать перед конструкциями, такими как "if", префикс "@".
+
+10.02.2016 14:24:41.936 [510] ERROR MySqlAdoNetAppender - Метод "First" можно использовать только как завершающую операцию запроса. Вместо этого в данном экземпляре можно использовать метод "FirstOrDefault".
+10.02.2016 14:46:17.775 [6] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItemHeading.cshtml' не найден.
+10.02.2016 14:47:33.966 [6] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 14:48:43.357 [6] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 15:09:22.576 [25] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 15:22:56.876 [36] ERROR MySqlAdoNetAppender - Значение не может быть равно NULL или быть пустым.
+Имя параметра: partialViewName
+10.02.2016 16:00:53.312 [16] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/FileUpLoad.cshtml' не найден.
+10.02.2016 16:04:40.145 [16] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/FileUpLoad.cshtml' не найден.
+10.02.2016 16:39:35.733 [6] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/FileUpLoadChange.cshtml' не найден.
+10.02.2016 16:41:39.451 [6] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "ChangeFile" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/promotion/ChangeFile.aspx
+~/Views/promotion/ChangeFile.ascx
+~/Views/Shared/ChangeFile.aspx
+~/Views/Shared/ChangeFile.ascx
+~/Views/promotion/ChangeFile.cshtml
+~/Views/promotion/ChangeFile.vbhtml
+~/Views/Shared/ChangeFile.cshtml
+~/Views/Shared/ChangeFile.vbhtml
+~/Views/promotion/Partial/ChangeFile.cshtml
+10.02.2016 16:42:03.847 [6] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "ChangeFile" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/promotion/ChangeFile.aspx
+~/Views/promotion/ChangeFile.ascx
+~/Views/Shared/ChangeFile.aspx
+~/Views/Shared/ChangeFile.ascx
+~/Views/promotion/ChangeFile.cshtml
+~/Views/promotion/ChangeFile.vbhtml
+~/Views/Shared/ChangeFile.cshtml
+~/Views/Shared/ChangeFile.vbhtml
+~/Views/promotion/Partial/ChangeFile.cshtml
+10.02.2016 16:42:04.022 [34] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "ChangeFile" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/promotion/ChangeFile.aspx
+~/Views/promotion/ChangeFile.ascx
+~/Views/Shared/ChangeFile.aspx
+~/Views/Shared/ChangeFile.ascx
+~/Views/promotion/ChangeFile.cshtml
+~/Views/promotion/ChangeFile.vbhtml
+~/Views/Shared/ChangeFile.cshtml
+~/Views/Shared/ChangeFile.vbhtml
+~/Views/promotion/Partial/ChangeFile.cshtml
+10.02.2016 16:48:03.317 [34] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/FileUpLoadChange.cshtml' не найден.
+10.02.2016 16:57:34.998 [22] ERROR MySqlAdoNetAppender - Значение не может быть равно NULL или быть пустым.
+Имя параметра: linkText
+10.02.2016 16:57:45.911 [22] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItemActionLink.cshtml' не найден.
+10.02.2016 17:02:11.687 [22] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItemActionLink.cshtml' не найден.
+10.02.2016 17:04:25.598 [22] ERROR MySqlAdoNetAppender - C:\Users\alegusov\AppData\Local\Temp\Temporary ASP.NET Files\vs\ff01cb5b\3f079ee4\App_Web_promotionitem.cshtml.1ec43759.y4mw2p4i.0.cs(273): error CS1513: } expected
+10.02.2016 17:07:18.473 [22] ERROR MySqlAdoNetAppender - C:\Users\alegusov\AppData\Local\Temp\Temporary ASP.NET Files\vs\ff01cb5b\3f079ee4\App_Web_promotionitem.cshtml.1ec43759.ldwavax8.0.cs(273): error CS1513: } expected
+10.02.2016 17:07:30.451 [22] ERROR MySqlAdoNetAppender - C:\Users\alegusov\AppData\Local\Temp\Temporary ASP.NET Files\vs\ff01cb5b\3f079ee4\App_Web_promotionitem.cshtml.1ec43759.fcyn7sui.0.cs(273): error CS1513: } expected
+10.02.2016 17:10:10.285 [22] ERROR MySqlAdoNetAppender - C:\Users\alegusov\AppData\Local\Temp\Temporary ASP.NET Files\vs\ff01cb5b\3f079ee4\App_Web_promotionitem.cshtml.1ec43759.dbilzswa.0.cs(273): error CS1513: } expected
+10.02.2016 17:11:19.869 [22] ERROR MySqlAdoNetAppender - C:\Users\alegusov\AppData\Local\Temp\Temporary ASP.NET Files\vs\ff01cb5b\3f079ee4\App_Web_promotionitem.cshtml.1ec43759.ndnqjx0i.0.cs(273): error CS1513: } expected
+10.02.2016 17:12:18.801 [22] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItem.cshtml' не найден.
+10.02.2016 17:13:04.598 [22] ERROR MySqlAdoNetAppender - C:\Users\alegusov\AppData\Local\Temp\Temporary ASP.NET Files\vs\ff01cb5b\3f079ee4\App_Web_promotionitem.cshtml.1ec43759.xhcy3nwv.0.cs(273): error CS1513: } expected
+10.02.2016 17:14:49.691 [22] ERROR MySqlAdoNetAppender - C:\Users\alegusov\AppData\Local\Temp\Temporary ASP.NET Files\vs\ff01cb5b\3f079ee4\App_Web_promotionitem.cshtml.1ec43759.q2l_uxbq.0.cs(273): error CS1513: } expected
+10.02.2016 17:30:11.486 [7] ERROR MySqlAdoNetAppender - Контроллер для пути "/16" не найден или не реализует интерфейс IController.
+10.02.2016 18:54:17.318 [22] ERROR MySqlAdoNetAppender - Путь '/Views/Promotion/Partial/PromotionItemActionLink.cshtml' не найден.
+10.02.2016 19:47:01.918 [20] ERROR MySqlAdoNetAppender - Нулевой объект должен иметь значение.
+11.02.2016 11:24:17.052 [33] INFO  Quartz.Util.DBConnectionManager - Registering datasource 'default' with db provider: 'Quartz.Impl.AdoJobStore.Common.DbProvider'
+11.02.2016 11:24:17.130 [33] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for object serializer
+11.02.2016 11:24:17.146 [33] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for ThreadExecutor
+11.02.2016 11:24:17.177 [33] INFO  Quartz.Core.SchedulerSignalerImpl - Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+11.02.2016 11:24:17.177 [33] INFO  Quartz.Core.QuartzScheduler - Quartz Scheduler v.2.3.3.0 created.
+11.02.2016 11:24:17.193 [33] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Using thread monitor-based data access locking (synchronization).
+11.02.2016 11:24:17.208 [33] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - JobStoreTX initialized.
+11.02.2016 11:24:17.224 [33] INFO  Quartz.Core.QuartzScheduler - Scheduler meta-data: Quartz Scheduler (v2.3.3.0) 'TestScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'Quartz.Core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'Quartz.Simpl.SimpleThreadPool' - with 3 threads.
+  Using job-store 'Quartz.Impl.AdoJobStore.JobStoreTX' - which supports persistence. and is not clustered.
+
+11.02.2016 11:24:17.239 [33] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler 'TestScheduler' initialized
+11.02.2016 11:24:17.239 [33] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler version: 2.3.3.0
+11.02.2016 11:24:17.271 [33] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is desired by: 
+11.02.2016 11:24:17.286 [33] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is being obtained: 
+11.02.2016 11:24:17.286 [33] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' given to: 
+11.02.2016 11:24:17.489 [33] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.SimpleTriggerPersistenceDelegate
+11.02.2016 11:24:17.505 [33] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CronTriggerPersistenceDelegate
+11.02.2016 11:24:17.521 [33] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CalendarIntervalTriggerPersistenceDelegate
+11.02.2016 11:24:17.536 [33] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.DailyTimeIntervalTriggerPersistenceDelegate
+11.02.2016 11:24:17.583 [33] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Freed 0 triggers from 'acquired' / 'blocked' state.
+11.02.2016 11:24:17.614 [33] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Handling 6 trigger(s) that missed their scheduled fire-time.
+11.02.2016 11:24:18.036 [33] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' returned by: 
+11.02.2016 11:24:25.990 [33] ERROR MySqlAdoNetAppender - Failure occurred during job recovery.
+11.02.2016 13:27:06.734 [9] ERROR MySqlAdoNetAppender - Значение не может быть неопределенным.
+Имя параметра: items
+11.02.2016 13:59:21.418 [6] ERROR MySqlAdoNetAppender - При обновлении записей возникла ошибка. Дополнительные сведения приведены во внутреннем исключении.
+11.02.2016 14:25:46.110 [9] ERROR MySqlAdoNetAppender - При обновлении записей возникла ошибка. Дополнительные сведения приведены во внутреннем исключении.
+11.02.2016 16:38:18.224 [75] INFO  Quartz.Util.DBConnectionManager - Registering datasource 'default' with db provider: 'Quartz.Impl.AdoJobStore.Common.DbProvider'
+11.02.2016 16:38:18.264 [75] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for object serializer
+11.02.2016 16:38:18.278 [75] INFO  Quartz.Impl.StdSchedulerFactory - Using default implementation for ThreadExecutor
+11.02.2016 16:38:18.303 [75] INFO  Quartz.Core.SchedulerSignalerImpl - Initialized Scheduler Signaller of type: Quartz.Core.SchedulerSignalerImpl
+11.02.2016 16:38:18.315 [75] INFO  Quartz.Core.QuartzScheduler - Quartz Scheduler v.2.3.3.0 created.
+11.02.2016 16:38:18.329 [75] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Using thread monitor-based data access locking (synchronization).
+11.02.2016 16:38:18.340 [75] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - JobStoreTX initialized.
+11.02.2016 16:38:18.355 [75] INFO  Quartz.Core.QuartzScheduler - Scheduler meta-data: Quartz Scheduler (v2.3.3.0) 'TestScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'Quartz.Core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'Quartz.Simpl.SimpleThreadPool' - with 3 threads.
+  Using job-store 'Quartz.Impl.AdoJobStore.JobStoreTX' - which supports persistence. and is not clustered.
+
+11.02.2016 16:38:18.366 [75] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler 'TestScheduler' initialized
+11.02.2016 16:38:18.377 [75] INFO  Quartz.Impl.StdSchedulerFactory - Quartz scheduler version: 2.3.3.0
+11.02.2016 16:38:18.397 [75] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is desired by: 
+11.02.2016 16:38:18.410 [75] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' is being obtained: 
+11.02.2016 16:38:18.420 [75] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' given to: 
+11.02.2016 16:38:18.597 [75] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.SimpleTriggerPersistenceDelegate
+11.02.2016 16:38:18.612 [75] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CronTriggerPersistenceDelegate
+11.02.2016 16:38:18.625 [75] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.CalendarIntervalTriggerPersistenceDelegate
+11.02.2016 16:38:18.638 [75] DEBUG Quartz.Impl.AdoJobStore.JobStoreTX - Adding TriggerPersistenceDelegate of type: Quartz.Impl.AdoJobStore.DailyTimeIntervalTriggerPersistenceDelegate
+11.02.2016 16:38:18.679 [75] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Freed 0 triggers from 'acquired' / 'blocked' state.
+11.02.2016 16:38:18.706 [75] INFO  Quartz.Impl.AdoJobStore.JobStoreTX - Handling 6 trigger(s) that missed their scheduled fire-time.
+11.02.2016 16:38:19.105 [75] DEBUG Quartz.Impl.AdoJobStore.SimpleSemaphore - Lock 'TRIGGER_ACCESS' returned by: 
+11.02.2016 16:38:22.669 [75] ERROR MySqlAdoNetAppender - Failure occurred during job recovery.
+11.02.2016 17:11:33.224 [6] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов

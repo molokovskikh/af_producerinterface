@@ -1,0 +1,23 @@
+﻿@model long?
+@using(Html.BeginForm("ChangeFile","promotion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        { Html.Hidden("Id", Model);
+
+    <h4>Заменить / Добавить файл</h4>
+
+    <div class="input-group">
+        <div class="fileupload fileupload-new" data-provides="fileupload" style="max-width:250px;">
+            <span class="form-control btn btn-default btn-secondary btn-file">
+                <span class="fileupload-new">Выбрать Файл</span>
+                <span class="fileupload-exists">Файл выбран / Выбрать другой</span>
+                <input type="file" id="file" name="file" hidden="hidden" />
+            </span>
+            <span class="fileupload-preview"></span>
+            <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Отправить выбранный файл на сервер" />
+
+    </div>
+
+
+}
+

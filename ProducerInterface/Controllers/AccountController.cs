@@ -291,7 +291,7 @@ namespace ProducerInterface.Controllers
             SuccessMessage("Ваша заявка принята.   eMail пока не отправляется, в панеле управления можно посмотреть список заявок на регистрацию");
             return View();
 
-        }
-           
+        }          
+
     }
 }

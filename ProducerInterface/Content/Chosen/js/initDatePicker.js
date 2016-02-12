@@ -1,7 +1,8 @@
 ﻿$(function () {
   // http://www.eyecon.ro/bootstrap-datepicker/
 	var dateFrom = $('#DateFrom').datepicker({
-		format: 'dd.mm.yyyy',
+	    format: 'dd.mm.yyyy',
+	    language: 'ru',
 		weekStart: 1,
 		autoclose: true,
 		onRender: function (date) {
@@ -12,7 +13,8 @@
 	}).data('datepicker');
 
 	var dateTo = $('#DateToUi').datepicker({
-		format: 'dd.mm.yyyy',
+	    format: 'dd.mm.yyyy',
+	    language: 'ru',
 		autoclose: true,
 	  weekStart: 1,
 	  onRender: function (date) {

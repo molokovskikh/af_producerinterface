@@ -1,0 +1,75 @@
+﻿@model ProducerInterfaceCommon.ContextModels.PromotionFile
+@{
+    ViewBag.Title = "Добавление файла к промо-акции";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container body-content">
+    @if (Model != null)
+    {
+        <h2>Изменение файла промо-акции</h2>
+        <hr />
+    }
+    else
+    {
+        <h2>Добавление файла к промо-акции</h2>
+        <hr />
+    }
+    
+    @if (Model != null && Model.FileId >0)
+    {
+        <h4>Название файла @Html.DisplayTextFor(m => m.ImageFile)</h4>
+
+        <div id="@("Image" + Model.FileId)">
+            <div id="@("iamgeloading__" + Model.FileId)">
+                @Ajax.ActionLink("Посмотреть прикрепленный файл", "GetViewImage", "promotion", new { Id = Model.FileId }, new AjaxOptions { UpdateTargetId = ("Image" + Model.FileId), OnBegin = "beginLoadImage(" + Model.FileId + ")" })
+            </div>
+            <div id="@("iamgeloading_" + Model.FileId)" style="display:none;">
+                <p><span class='glyphicon glyphicon-refresh'></span>&nbsp;&nbsp;&nbsp; Ожидайте, загрузка фотографии</p>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("AddFile", "promotion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ImageFile)
+        @Html.HiddenFor(m => m.FileId)
+
+        <br />        <br />        <br />
+        <div class="form-group">
+            <label>Выбор файла для промо-акции</label>
+
+            <div class="">               
+                <input id="image" type="file" name="image" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-primary" />
+            <a href="@Url.Action("Index")" class="btn btn-primary">К списку промо-акций</a>
+        </div>
+    }
+
+
+</div>
+
+<script type="text/javascript">
+    function closeimage(dataid)
+    {
+        //httpViewId imageid
+        $("#imageid" + dataid).css("display", "none");
+        $("#httpViewId" + dataid).css("display", "block");
+    }
+    function openimage(dataid)
+    {
+        $("#imageid" + dataid).css("display", "block");
+        $("#httpViewId" + dataid).css("display", "none");
+    }
+    function beginLoadImage(dataid)
+    {
+        var E = "#iamgeloading__" + dataid;
+        $(E).css("display", "none");
+        E = "#iamgeloading_" + dataid;
+        $(E).css("display", "block");
+    }
+</script>

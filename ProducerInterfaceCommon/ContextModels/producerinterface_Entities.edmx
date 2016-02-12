@@ -179,6 +179,17 @@
           <Property Name="Begin" Type="datetime" Precision="0" />
           <Property Name="End" Type="datetime" Precision="0" />
           <Property Name="Status" Type="bool" Nullable="false" />
+          <Property Name="ProducerAdminId" Type="uint" />
+        </EntityType>
+        <EntityType Name="promotionsimage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ImageName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ImageFile" Type="longblob" Nullable="false" />
+          <Property Name="ImageType" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="ImageSize" Type="varchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="promotionToDrug">
           <Key>
@@ -510,6 +521,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_promotions_AdminId_To_ProducerId">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerAdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_promotions_to_fileid">
+          <End Role="promotionsimage" Type="Self.promotionsimage" Multiplicity="0..1" />
+          <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotionsimage">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="PromoFileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_to_Group_controlpanel">
           <End Role="AccountGroup" Type="Self.AccountGroup" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -555,6 +590,7 @@
           <EntitySet Name="NotificationToProducers" EntityType="Self.NotificationToProducers" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="profilenews" EntityType="Self.profilenews" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotions" EntityType="Self.promotions" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="promotionsimage" EntityType="Self.promotionsimage" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotionToDrug" EntityType="Self.promotionToDrug" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reportxml" EntityType="Self.reportxml" Schema="producerinterface" store:Type="Tables" />
@@ -700,6 +736,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </AssociationSet>
           <AssociationSet Name="FK_promotions_AccountId" Association="Self.FK_promotions_AccountId">
             <End Role="Account" EntitySet="Account" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_promotions_AdminId_To_ProducerId" Association="Self.FK_promotions_AdminId_To_ProducerId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="fk_promotions_to_fileid" Association="Self.fk_promotions_to_fileid">
+            <End Role="promotionsimage" EntitySet="promotionsimage" />
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           <AssociationSet Name="FK_to_Group_controlpanel" Association="Self.FK_to_Group_controlpanel">
@@ -957,11 +1001,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="CompanyDomainName" EntitySet="CompanyDomainName" />
           </AssociationSet>
           <EntitySet Name="usernames" EntityType="producerinterface_Model.usernames" />
-          <EntitySet Name="promotions" EntityType="producerinterface_Model.promotions" />
-          <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions">
-            <End Role="promotions" EntitySet="promotions" />
-            <End Role="promotionToDrug" EntitySet="promotionToDrug" />
-          </AssociationSet>
           <EntitySet Name="AccountAppointment" EntityType="producerinterface_Model.AccountAppointment" />
           <EntitySet Name="Account" EntityType="producerinterface_Model.Account" />
           <EntitySet Name="AccountGroup" EntityType="producerinterface_Model.AccountGroup" />
@@ -977,10 +1016,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountEmail" EntitySet="AccountEmail" />
           </AssociationSet>
-          <AssociationSet Name="FK_promotions_AccountId" Association="producerinterface_Model.FK_promotions_AccountId">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="promotions" EntitySet="promotions" />
-          </AssociationSet>
           <AssociationSet Name="AccountGroupToPermission" Association="producerinterface_Model.AccountGroupToPermission">
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="AccountPermission" EntitySet="AccountPermission" />
@@ -994,6 +1029,24 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+          </AssociationSet>
+          <EntitySet Name="promotionsimage" EntityType="producerinterface_Model.promotionsimage" />
+          <EntitySet Name="promotions" EntityType="producerinterface_Model.promotions" />
+          <AssociationSet Name="FK_promotions_AccountId" Association="producerinterface_Model.FK_promotions_AccountId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_promotions_AdminId_To_ProducerId" Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions">
+            <End Role="promotions" EntitySet="promotions" />
+            <End Role="promotionToDrug" EntitySet="promotionToDrug" />
+          </AssociationSet>
+          <AssociationSet Name="fk_promotions_to_fileid" Association="producerinterface_Model.fk_promotions_to_fileid">
+            <End Role="promotionsimage" EntitySet="promotionsimage" />
+            <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="LogForNet">
@@ -1078,42 +1131,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="ProducerId" Type="Int64" Nullable="false" />
           <Property Name="ProducerName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="promotions">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <Property Name="AdminId" Type="Int64" />
-          <Property Name="ProducerId" Type="Int64" Nullable="false" />
-          <Property Name="ProducerUserId" Type="Int64" Nullable="false" />
-          <Property Name="Annotation" Type="String" Nullable="false" MaxLength="16777215" FixedLength="false" Unicode="false" />
-          <Property Name="PromoFile" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="AgencyDisabled" Type="Boolean" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="RegionMask" Type="Decimal" Nullable="false" />
-          <Property Name="Begin" Type="DateTime" />
-          <Property Name="End" Type="DateTime" />
-          <Property Name="Status" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="promotionToDrug" Relationship="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" FromRole="promotions" ToRole="promotionToDrug" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="promotions" ToRole="Account" />
-          <Property Name="PromoFileId" Type="Int32" />
-        </EntityType>
-        <Association Name="FK_promotioncatalogs_supplierpromotions">
-          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="producerinterface_Model.promotionToDrug" Role="promotionToDrug" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="promotions">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="promotionToDrug">
-              <PropertyRef Name="PromotionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="AccountAppointment">
           <Key>
             <PropertyRef Name="Id" />
@@ -1141,9 +1158,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountCompany" Relationship="producerinterface_Model.Account_CompanyId" FromRole="Account" ToRole="AccountCompany" />
           <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
-          <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
           <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
+          <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
+          <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
         </EntityType>
         <EntityType Name="AccountGroup">
           <Key>
@@ -1193,18 +1211,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_promotions_AccountId">
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
-          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="promotions">
-              <PropertyRef Name="ProducerUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="AccountGroupToPermission">
           <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.AccountPermission" Role="AccountPermission" Multiplicity="*" />
@@ -1242,6 +1248,92 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Principal>
             <Dependent Role="AccountFeedBack">
               <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="promotionsimage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImageFile" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ImageType" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="ImageSize" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="promotions" Relationship="producerinterface_Model.fk_promotions_to_fileid" FromRole="promotionsimage" ToRole="promotions" />
+        </EntityType>
+        <EntityType Name="promotions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="AdminId" Type="Int64" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerUserId" Type="Int64" Nullable="false" />
+          <Property Name="Annotation" Type="String" Nullable="false" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="PromoFile" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PromoFileId" Type="Int32" />
+          <Property Name="AgencyDisabled" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="RegionMask" Type="Decimal" Nullable="false" />
+          <Property Name="Begin" Type="DateTime" />
+          <Property Name="End" Type="DateTime" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="ProducerAdminId" Type="Int64" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="promotions" ToRole="Account" />
+          <NavigationProperty Name="Account1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="promotions" ToRole="Account" />
+          <NavigationProperty Name="promotionToDrug" Relationship="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" FromRole="promotions" ToRole="promotionToDrug" />
+          <NavigationProperty Name="promotionsimage" Relationship="producerinterface_Model.fk_promotions_to_fileid" FromRole="promotions" ToRole="promotionsimage" />
+        </EntityType>
+        <Association Name="FK_promotions_AccountId">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
+          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_promotions_AdminId_To_ProducerId">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="ProducerAdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_promotioncatalogs_supplierpromotions">
+          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="producerinterface_Model.promotionToDrug" Role="promotionToDrug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotionToDrug">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_promotions_to_fileid">
+          <End Type="producerinterface_Model.promotionsimage" Role="promotionsimage" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="promotionsimage">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="PromoFileId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1519,27 +1611,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="promotions">
-            <EntityTypeMapping TypeName="producerinterface_Model.promotions">
-              <MappingFragment StoreEntitySet="promotions">
-                <ScalarProperty Name="PromoFileId" ColumnName="PromoFileId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="End" ColumnName="End" />
-                <ScalarProperty Name="Begin" ColumnName="Begin" />
-                <ScalarProperty Name="RegionMask" ColumnName="RegionMask" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="AgencyDisabled" ColumnName="AgencyDisabled" />
-                <ScalarProperty Name="PromoFile" ColumnName="PromoFile" />
-                <ScalarProperty Name="Annotation" ColumnName="Annotation" />
-                <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
-                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
-                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AccountAppointment">
             <EntityTypeMapping TypeName="producerinterface_Model.AccountAppointment">
               <MappingFragment StoreEntitySet="AccountAppointment">
@@ -1610,6 +1681,39 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="promotionsimage">
+            <EntityTypeMapping TypeName="producerinterface_Model.promotionsimage">
+              <MappingFragment StoreEntitySet="promotionsimage">
+                <ScalarProperty Name="ImageSize" ColumnName="ImageSize" />
+                <ScalarProperty Name="ImageType" ColumnName="ImageType" />
+                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="promotions">
+            <EntityTypeMapping TypeName="producerinterface_Model.promotions">
+              <MappingFragment StoreEntitySet="promotions">
+                <ScalarProperty Name="ProducerAdminId" ColumnName="ProducerAdminId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Begin" ColumnName="Begin" />
+                <ScalarProperty Name="RegionMask" ColumnName="RegionMask" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AgencyDisabled" ColumnName="AgencyDisabled" />
+                <ScalarProperty Name="PromoFileId" ColumnName="PromoFileId" />
+                <ScalarProperty Name="PromoFile" ColumnName="PromoFile" />
+                <ScalarProperty Name="Annotation" ColumnName="Annotation" />
+                <ScalarProperty Name="ProducerUserId" ColumnName="ProducerUserId" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
