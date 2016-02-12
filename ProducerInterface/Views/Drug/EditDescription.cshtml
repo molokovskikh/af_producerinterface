@@ -1,9 +1,11 @@
-﻿@using ProducerInterfaceCommon.Models
-@model MnnDescrComposite
+﻿@using ProducerInterfaceCommon.CatalogModels
+@using ProducerInterfaceCommon.ContextModels
+@model Descriptions
 
 @{
-    var title = $"Описание препарата \"{ViewData["familyName"]}\"";
-    ViewBag.Title = title;
+  var title = $"Описание препарата \"{ViewData["familyName"]}\"";
+  ViewBag.Title = title;
+  var mnn = (mnn)ViewData["mnn"];
 }
 
 <div class="row">
@@ -12,24 +14,47 @@
     </div>
 </div>
 
+<hr />
+@if (mnn != null)
+{
+
+
+@*<div>
+    @Html.ListBoxFor(m => mnn.Mnn1, new SelectList(new List<OptionElement>() { new OptionElement() {Text = mnn.Mnn1, Value = mnn.Id.ToString() } }, "Value", "Text", mnn.Id))
+</div>*@
+
+
+<div>@Html.LabelFor(m => mnn.Mnn1)</div>
+<div>@Html.DisplayTextFor(m => mnn.Mnn1)</div>
+<hr />
+<div>@Html.LabelFor(m => mnn.RussianMnn)</div>
+<div>@Html.DisplayTextFor(m => mnn.RussianMnn)</div>
+}
+else
+{
+
+}
+<hr/>
 
 <div class="row">
     <div class="col-md-12">
         @using (Html.BeginForm()) {
-        <fieldset>
-            @Html.ValidationSummary(true)
-            @Html.Hidden("familyId", ViewData["familyId"])
-            @Html.EditorFor(m => m.Descriptions)
-            <div class="row margin5">
-                <div class="flabel col-md-4">
-                    @Html.ActionLink("К списку препаратов", "Index")
-                </div>
-            </div>
-            @Html.Hidden("url", Url.Action("EditDescriptionField", "Drug"))
-        </fieldset>
+            <fieldset>
+                @Html.ValidationSummary(true)
+                @Html.Hidden("familyId", ViewData["familyId"])
+                @Html.EditorFor(m => m)
+                @Html.Hidden("url", Url.Action("EditDescriptionField", "Drug"))
+            </fieldset>
         }
     </div>
 </div>
+
+<div class="row margin5">
+    <div class="flabel col-md-12">
+        @Html.ActionLink("К списку препаратов", "Index")
+    </div>
+</div>
+
 
 @section JavaScript {
 <script src="~/Content/Chosen/js/initDrug.js"></script>

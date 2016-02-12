@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using ProducerInterfaceCommon.CatalogModels;
 using ProducerInterfaceCommon.Models;
+using System.Diagnostics;
 
 namespace ProducerInterface.Controllers
 {
@@ -39,12 +40,17 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Index()
 		{
-			ViewData["producerName"] = cntx_.producernames.Single(x => x.ProducerId == producerId).ProducerName;
+			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 
-			var model = cntx_.drugfamily
-				.Where(x => x.ProducerId == producerId)
-				.OrderBy(x => x.FamilyName)
-				.ToList();
+			var catalogIds = ccntx.assortment.Where(x => x.ProducerId == producerId).Select(x => x.CatalogId).ToList();
+			var model = ccntx.catalognames.Where(x => x.Catalog.Any(y => catalogIds.Contains(y.Id))).OrderBy(x => x.Name).ToList();
+
+
+			//var model = cntx_.drugfamily
+			//	.Where(x => x.ProducerId == producerId)
+			//	.OrderBy(x => x.FamilyName)
+			//	.ToList();
+
 			return View(model);
 		}
 
@@ -56,26 +62,29 @@ namespace ProducerInterface.Controllers
 
 			ViewData["familyName"] = drugfamily.FamilyName;
 			ViewData["familyId"] = id;
-			var model = new MnnDescrComposite();
+			ViewData["mnn"] = ccntx.mnn.SingleOrDefault(x => x.Id == drugfamily.MnnId);
 
-			var d = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
-			if (d == null)
-				d = new Descriptions();
-			//var m = ccntx.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
-			return View(model);
+			//var model = new MnnDescrComposite();
+
+			var model = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
+			if (model == null)
+				model = new Descriptions();
+			//model.Descriptions = d;
+			//model.Mnn = m;
+      return View(model);
 		}
 
-		public ActionResult EditMnn(long id)
-		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId);
-			ViewData["familyName"] = df.FamilyName;
-			ViewData["familyId"] = id;
-			var model = cntx_.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
-			if (model == null) {
-				model = new drugmnn();
-			}
-			return View(model);
-		}
+		//public ActionResult EditMnn(long id)
+		//{
+		//	var df = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId);
+		//	ViewData["familyName"] = df.FamilyName;
+		//	ViewData["familyId"] = id;
+		//	var model = cntx_.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
+		//	if (model == null) {
+		//		model = new drugmnn();
+		//	}
+		//	return View(model);
+		//}
 
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
@@ -136,45 +145,53 @@ namespace ProducerInterface.Controllers
 
 		public JsonResult EditDescriptionField(long familyId, string field, string value)
 		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId);
+			var df = ccntx.catalognames.Single(x => x.Id == familyId);
 			Descriptions model;
       if (df.DescriptionId == null) {
 				model = new Descriptions();
 	      ccntx.Descriptions.Add(model);
-				//cntx_.SaveChanges();
+				ccntx.SaveChanges(CurrentUser, "Добавление нового описания препарата");
 	      df.DescriptionId = model.Id;
-				//cntx_.SaveChanges();
+				ccntx.SaveChanges(CurrentUser, "Добавление ссылки на описание препарата");
 			}
 			else
 				model = ccntx.Descriptions.Single(x => x.Id == df.DescriptionId);
 
 			var propertyInfo = model.GetType().GetProperty(field);
+			var before = (string)propertyInfo.GetValue(model);
 			propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
 			// TODO где-то сохранять
-			//cntx_.SaveChanges();
-			return Json(new { field = field, value = value });
+			ccntx.SaveChanges(CurrentUser, "Изменение описания препарата");
+			EmailSender.SendCatalogChangeMessage(cntx_, CurrentUser, propertyInfo.Name, df.DescriptionId, before, value);
+      return Json(new { field = field, value = value });
 		}
 
-		public JsonResult EditMnnField(long familyId, string field, string value)
+		public JsonResult GetMnn(string term)
 		{
-			var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId);
-			drugmnn model;
-			if (df.MnnId == null)
-			{
-				model = new drugmnn();
-				cntx_.drugmnn.Add(model);
-				//cntx_.SaveChanges();
-				df.MnnId = model.MnnId;
-				//cntx_.SaveChanges();
-			}
-			else
-				model = cntx_.drugmnn.Single(x => x.MnnId == df.MnnId);
-			
-			var propertyInfo = model.GetType().GetProperty(field);
-			propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
-			// TODO где-то сохранять
-			//cntx_.SaveChanges();
-			return Json(new { field = field, value = value });
+			var ret = Json(ccntx.mnn.Where(x => x.Mnn1.Contains(term)).Take(10).ToList().Select(x => new { value = x.Id, text = x.Mnn1 }), JsonRequestBehavior.AllowGet);
+			return ret;
 		}
+
+		//public JsonResult EditMnnField(long familyId, string field, string value)
+		//{
+		//	var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId);
+		//	drugmnn model;
+		//	if (df.MnnId == null)
+		//	{
+		//		model = new drugmnn();
+		//		cntx_.drugmnn.Add(model);
+		//		//cntx_.SaveChanges();
+		//		df.MnnId = model.MnnId;
+		//		//cntx_.SaveChanges();
+		//	}
+		//	else
+		//		model = cntx_.drugmnn.Single(x => x.MnnId == df.MnnId);
+
+		//	var propertyInfo = model.GetType().GetProperty(field);
+		//	propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
+		//	// TODO где-то сохранять
+		//	//cntx_.SaveChanges();
+		//	return Json(new { field = field, value = value });
+		//}
 	}
 }

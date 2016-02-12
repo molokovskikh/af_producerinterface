@@ -15,14 +15,13 @@
         <EntityTypeShape EntityType="producerinterface_Model.assortment" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.catalognames" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamily" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.drugmnn" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.jobextendwithproducer" Width="3.5" PointX="10.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.jobextendwithproducer" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.mailformwithfooter" Width="1.5" PointX="14.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.pharmacynames" Width="1.5" PointX="14.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.producernames" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.ratingreportorderitems" Width="2.125" PointX="8.75" PointY="7.875" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.regionnames" Width="1.5" PointX="14.75" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.suppliernames" Width="4" PointX="14.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.suppliernames" Width="1.625" PointX="9.75" PointY="0.625" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.LogForNet" Width="1.5" PointX="10.5" PointY="12.125" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamilynames" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountCompany" Width="3.875" PointX="0.5" PointY="13.125" />
@@ -48,7 +47,7 @@
         <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
         <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" />
-        </Diagram>
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

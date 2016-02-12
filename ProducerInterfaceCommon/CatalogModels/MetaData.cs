@@ -5,6 +5,31 @@ using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.CatalogModels
 {
+	[MetadataType(typeof(mnnMetaData))]
+	[DisplayName("МНН")]
+	public partial class mnn
+	{
+		
+	}
+
+	public class mnnMetaData
+	{
+		[HiddenInput(DisplayValue = false)]
+		public long Id { get; set; }
+
+		[Display(Name = "Международное непатентованное наименование")]
+		public string Mnn1 { get; set; }
+
+		[Display(Name = "Международное непатентованное наименование (рус.)")]
+		public string RussianMnn { get; set; }
+
+		[ScaffoldColumn(false)]
+		public DateTime UpdateTime { get; set; }
+
+	}
+
+
+
 	[MetadataType(typeof(CatalogMetaData))]
 	[DisplayName("Каталог")]
 	public partial class Catalog

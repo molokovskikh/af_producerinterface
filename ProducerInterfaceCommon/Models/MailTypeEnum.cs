@@ -24,5 +24,6 @@ namespace ProducerInterfaceCommon.Models
 
         [Display(Name = "Подтверждение Промо-Акции")]
         StatusPromotion = 7
-    }
+
+	}
 }
