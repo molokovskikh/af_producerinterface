@@ -172,6 +172,7 @@
           <Property Name="ProducerUserId" Type="uint" Nullable="false" />
           <Property Name="Annotation" Type="mediumtext" Nullable="false" />
           <Property Name="PromoFile" Type="varchar" MaxLength="255" />
+          <Property Name="PromoFileId" Type="int" />
           <Property Name="AgencyDisabled" Type="bool" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="RegionMask" Type="ubigint" Nullable="false" />
@@ -248,8 +249,6 @@
           <Property Name="IsPharmacie" Type="bool" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "def.producerinterface.drugdescription" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamily" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="drugfamily">
           <Key>
@@ -274,17 +273,6 @@
           </Key>
           <Property Name="FamilyId" Type="uint" Nullable="false" />
           <Property Name="FamilyName" Type="varchar" MaxLength="255" Nullable="false" />
-        </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "def.producerinterface.drugmnn" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <EntityType Name="drugmnn">
-          <Key>
-            <PropertyRef Name="MnnId" />
-            <PropertyRef Name="Mnn" />
-          </Key>
-          <Property Name="MnnId" Type="uint" Nullable="false" />
-          <Property Name="Mnn" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="RussianMnn" Type="varchar" MaxLength="255" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.jobextendwithproducer" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -602,13 +590,6 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
 `drugfamilynames`.`FamilyName`
 FROM `drugfamilynames` AS `drugfamilynames`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="drugmnn" EntityType="Self.drugmnn" store:Type="Views" store:Schema="producerinterface">
-            <DefiningQuery>SELECT
-`drugmnn`.`MnnId`, 
-`drugmnn`.`Mnn`, 
-`drugmnn`.`RussianMnn`
-FROM `drugmnn` AS `drugmnn`</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="jobextendwithproducer" EntityType="Self.jobextendwithproducer" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `jobextendwithproducer`.`SchedName`, 
@@ -854,15 +835,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="MnnId" Type="Int64" />
           <Property Name="UpdateTime" Type="DateTime" Nullable="false" />
         </EntityType>
-        <EntityType Name="drugmnn">
-          <Key>
-            <PropertyRef Name="MnnId" />
-            <PropertyRef Name="Mnn" />
-          </Key>
-          <Property Name="MnnId" Type="Int64" Nullable="false" />
-          <Property Name="Mnn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RussianMnn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="jobextendwithproducer">
           <Key>
             <PropertyRef Name="JobName" />
@@ -967,7 +939,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="assortment" EntityType="Self.assortment" />
           <EntitySet Name="catalognames" EntityType="Self.catalognames" />
           <EntitySet Name="drugfamily" EntityType="Self.drugfamily" />
-          <EntitySet Name="drugmnn" EntityType="Self.drugmnn" />
           <EntitySet Name="jobextendwithproducer" EntityType="Self.jobextendwithproducer" />
           <EntitySet Name="mailformwithfooter" EntityType="Self.mailformwithfooter" />
           <EntitySet Name="pharmacynames" EntityType="Self.pharmacynames" />
@@ -1127,6 +1098,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Status" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="promotionToDrug" Relationship="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" FromRole="promotions" ToRole="promotionToDrug" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="promotions" ToRole="Account" />
+          <Property Name="PromoFileId" Type="Int32" />
         </EntityType>
         <Association Name="FK_promotioncatalogs_supplierpromotions">
           <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="1">
@@ -1397,15 +1369,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="drugmnn">
-            <EntityTypeMapping TypeName="producerinterface_Model.drugmnn">
-              <MappingFragment StoreEntitySet="drugmnn">
-                <ScalarProperty Name="MnnId" ColumnName="MnnId" />
-                <ScalarProperty Name="Mnn" ColumnName="Mnn" />
-                <ScalarProperty Name="RussianMnn" ColumnName="RussianMnn" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="jobextendwithproducer">
             <EntityTypeMapping TypeName="producerinterface_Model.jobextendwithproducer">
               <MappingFragment StoreEntitySet="jobextendwithproducer">
@@ -1559,6 +1522,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="promotions">
             <EntityTypeMapping TypeName="producerinterface_Model.promotions">
               <MappingFragment StoreEntitySet="promotions">
+                <ScalarProperty Name="PromoFileId" ColumnName="PromoFileId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="End" ColumnName="End" />
                 <ScalarProperty Name="Begin" ColumnName="Begin" />

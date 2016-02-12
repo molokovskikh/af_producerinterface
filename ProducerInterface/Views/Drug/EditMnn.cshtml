@@ -1,5 +1,5 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model drugmnn
+﻿@using ProducerInterfaceCommon.CatalogModels
+@model mnn
 
 @{
     var title = $"МНН препарата \"{ViewData["familyName"]}\"";
@@ -24,7 +24,7 @@
                     @Html.ActionLink("К списку препаратов", "Index")
                 </div>
             </div>
-            @Html.Hidden("url", Url.Action("EditMnnField", "Drug"))
+            @*@Html.Hidden("url", Url.Action("EditMnnField", "Drug"))*@
         </fieldset>
         }
     </div>

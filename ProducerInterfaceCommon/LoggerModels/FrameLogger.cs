@@ -87,8 +87,8 @@ namespace ProducerInterfaceCommon.LoggerModels
 								continue;
 							prop.ValueOld = orValue != null ? orValue.ToString() : null;
 							prop.ValueNew = curValue != null ? curValue.ToString() : null;
-                            obj.LogPropertyChange.Add(prop);
-                            break;
+              obj.LogPropertyChange.Add(prop);
+              break;
 					}
 				}
 			}

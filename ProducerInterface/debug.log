@@ -150,3 +150,5 @@ System.Web.Mvc.ActionResult Account(ProducerInterfaceCommon.ContextModels.Profil
 
 08.02.2016 20:47:57.135 [78] ERROR MySqlAdoNetAppender - Найден конечный тег "div" без соответствующего начального тега. Начальные и конечные теги сбалансированы нужным образом?
 
+09.02.2016 16:42:36.355 [14] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+09.02.2016 20:01:09.955 [8] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\Index.cshtml(29): error CS1061: 'catalognames' does not contain a definition for 'FamilyName' and no extension method 'FamilyName' accepting a first argument of type 'catalognames' could be found (are you missing a using directive or an assembly reference?)

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.drugfamily>
+﻿@using ProducerInterfaceCommon.CatalogModels
+@model IEnumerable<catalognames>
 
 @{
     var title = $"Список препаратов производителя \"{ViewData["producerName"]}\"";
@@ -26,17 +27,17 @@
                 <tbody>
                 @foreach (var item in Model) {
                     <tr>
-                        <td>@item.FamilyName</td>
+                        <td>@item.Name</td>
                         <td>
                             @if (item.DescriptionId.HasValue) {
-                                @Html.ActionLink("Описание", "EditDescription", new { id = item.FamilyId })
+                                @Html.ActionLink("Описание", "EditDescription", new { id = item.Id })
                             }
                             else {
-                                <a style="color: red" href="@Url.Action("EditDescription", new { id = item.FamilyId })">Добавить описание</a>
+                                <a style="color: red" href="@Url.Action("EditDescription", new { id = item.Id })">Добавить описание</a>
                             }
                         </td>
                         <td>
-                            @Html.ActionLink("Формы выпуска и дозировка", "DisplayForms", new { id = item.FamilyId })
+                            @Html.ActionLink("Формы выпуска и дозировка", "DisplayForms", new { id = item.Id })
                         </td>
                         @*<td>
                             @if (item.MnnId.HasValue) {

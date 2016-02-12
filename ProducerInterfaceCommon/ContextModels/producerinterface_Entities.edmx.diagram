@@ -15,7 +15,6 @@
         <EntityTypeShape EntityType="producerinterface_Model.assortment" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.catalognames" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamily" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.drugmnn" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.jobextendwithproducer" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.mailformwithfooter" Width="1.5" PointX="14.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.pharmacynames" Width="1.5" PointX="14.75" PointY="7.75" IsExpanded="true" />

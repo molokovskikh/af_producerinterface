@@ -13,18 +13,17 @@
 
 <div id="@fieldTxt">
     <span style="white-space: pre-wrap;">@Html.DisplayTextFor(m => m)</span>
-    <div style="text-align: right">
-        <span class="glyphicon glyphicon-pencil" title="@title" onclick="EditToggle('@field')"></span>
+    <div>
+        <span class="glyphicon glyphicon-pencil pointer" title="@title" onclick="EditToggle('@field')"></span>
     </div>
 </div>
 <div style="display: none;" id="@fieldEditor">
-    @Html.TextBoxFor(m => m, new { style = "width: 100%;", rows = 10 })
+    @Html.TextBoxFor(m => m, new { style = "width: 100%;", rows = 10, @class = "form-control" })
     <div class="row" style="margin: 1em 0 1em 0">
-        <div class="col-md-6">
-            <a href="#" onclick="EditToggle('@field')">Отменить</a>
-        </div>
-        <div class="col-md-6" style="text-align: right">
-            <span class="btn btn-primary" onclick="EditEntity('@field')">Сохранить</span>
-        </div>
+        <a href="#" onclick="EditToggle('@field')">Отменить</a>
+        <span>&nbsp;</span>
+        <span class="btn btn-primary" onclick="EditEntity('@field')">Сохранить</span>
     </div>
 </div>
+<hr />
+

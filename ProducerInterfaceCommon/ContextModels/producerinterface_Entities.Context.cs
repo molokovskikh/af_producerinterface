@@ -35,7 +35,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
         public DbSet<drugfamily> drugfamily { get; set; }
-        public DbSet<drugmnn> drugmnn { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
         public DbSet<pharmacynames> pharmacynames { get; set; }

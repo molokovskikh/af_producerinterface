@@ -189,9 +189,6 @@
     <Compile Include="ContextModels\catalognames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\drugmnn.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\Enums.cs" />
     <Compile Include="ContextModels\jobextend.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
@@ -303,7 +300,6 @@
     <Compile Include="Models\IInterval.cs" />
     <Compile Include="Models\IntervalReport.cs" />
     <Compile Include="Models\MailTypeEnum.cs" />
-    <Compile Include="Models\MnnDescrComposite.cs" />
     <Compile Include="Models\NotMinDateAttribute.cs" />
     <Compile Include="Models\PastDateAttribute.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />

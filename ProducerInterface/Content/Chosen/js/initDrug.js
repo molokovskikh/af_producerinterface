@@ -26,3 +26,21 @@ function EditEntity(field) {
 	}, 'json');
 
 };
+
+$(function () {
+
+    // https://github.com/meltingice/ajax-chosen
+    $('#CatalogNamesId').ajaxChosen({
+        type: 'GET',
+        url: '/Drug/GetMnn',
+        dataType: 'json',
+        minTermLength: 2,
+        afterTypeDelay: 200,
+        keepTypingMsg: "Введите два или больше символов для поиска",
+        lookingForMsg: "Поиск"
+    }, function (data) {
+        return data;
+    },
+    { width: '95%' }
+  );
+});
