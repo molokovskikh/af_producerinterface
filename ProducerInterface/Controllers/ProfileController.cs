@@ -22,6 +22,7 @@ namespace ProducerInterface.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.Pager = 1;
             ViewBag.News = cntx_.NotificationToProducers.Take(10).ToList();
             return View();
         }

@@ -6,30 +6,33 @@
     <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>*@
 
-<div class="row">
-    <div class="col-md-12">
-        @using (Html.BeginForm()) {
-            <fieldset>
-                <legend>@ViewBag.Title</legend>
-                @Html.ValidationSummary(true)
-                @Html.EditorForModel()
-                <div class="row margin5">
-                    <div class="flabel col-md-4">
-                        @Html.ActionLink("К списку отчётов", "JobList", new { r = Guid.NewGuid() })
+<div class="container body-content">
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm())
+            {
+                <fieldset>
+                    <legend>@ViewBag.Title</legend>
+                    @Html.ValidationSummary(true)
+                    @Html.EditorForModel()
+                    <div class="row margin5">
+                        <div class="flabel col-md-4">
+                            @Html.ActionLink("К списку отчётов", "JobList", new { r = Guid.NewGuid() })
+                        </div>
+                        <div class="feditor col-md-8">
+                            <input id="btn" type="submit" value="Применить" />
+                        </div>
                     </div>
-                    <div class="feditor col-md-8">
-                        <input id="btn" type="submit" value="Применить"/>
-                    </div>
-                </div>
-            </fieldset>
-        }
+                </fieldset>
+            }
+        </div>
     </div>
 </div>
-@section JavaScript {
-<link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
-<script src="~/Content/Chosen/js/chosen.jquery.js"></script>
-<script src="~/Content/Chosen/js/initCron.js"></script>
-<script src="~/Content/Chosen/js/jqCron.js"></script>
-<script src="~/Content/Chosen/js/jqCron.ru.js"></script>
-<link href="~/Content/Chosen/css/jqCron.css" rel="stylesheet" /> 
-}
+    @section JavaScript {
+        <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+        <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+        <script src="~/Content/Chosen/js/initCron.js"></script>
+        <script src="~/Content/Chosen/js/jqCron.js"></script>
+        <script src="~/Content/Chosen/js/jqCron.ru.js"></script>
+        <link href="~/Content/Chosen/css/jqCron.css" rel="stylesheet" />
+    }

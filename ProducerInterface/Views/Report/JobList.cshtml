@@ -2,6 +2,8 @@
 @model IEnumerable<ProducerInterfaceCommon.ContextModels.jobextend>
 
 
+<div class="container body-content">
+
     @using (Html.BeginForm("AddJob", "Report", FormMethod.Get))
     {
         <div class="row">
@@ -10,87 +12,90 @@
                 @Html.DropDownList("id", EnumHelper.GetSelectList(typeof(Reports)), new { @class = "form-control" })
             </div>
             <div class="col-md-8">
-                <input id="btn" type="submit" value="Создать" class="btn btn-primary"/>
+                <input id="btn" type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </div>
         <div class="row">&nbsp;</div>
     }
 
-@if (Model != null && Model.Count() > 0) {
-<div class="row">
-    <div class="col-md-12">
-        <h4>Список отчетов</h4>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <table class="table table-striped table-bordered">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Scheduler)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReportTypeEnum)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Creator)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastRun)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DisplayStatusEnum)
-                </th>
+    @if (Model != null && Model.Count() > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Список отчетов</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CustomName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Scheduler)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReportTypeEnum)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Creator)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LastRun)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DisplayStatusEnum)
+                        </th>
 
-            </tr>
+                    </tr>
 
-            @foreach (var item in Model) {
-            <tr>
-                <td>
-                    <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-trash" title="Удалить отчет"></span></a>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-trash" title="Удалить отчет"></span></a>
 
-                    @Html.DisplayFor(modelItem => item.CustomName)
-                </td>
-                <td>
-                    @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
-                </td>
-                <td>
-                    <a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета"><span class="glyphicon glyphicon-th-list"></span></a>
-                    @Html.DisplayFor(modelItem => item.ReportTypeEnum)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Creator)
-                </td>
-                <td>
-                    <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-play" title="Разовое формирование отчета за истекшие периоды времени и даты"></span></a>
-                    @Html.DisplayFor(modelItem => item.LastRun)
-                </td>
-                <td class="@(item.DisplayStatusEnum == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup }))">
+                                @Html.DisplayFor(modelItem => item.CustomName)
+                            </td>
+                            <td>
+                                @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета"><span class="glyphicon glyphicon-th-list"></span></a>
+                                @Html.DisplayFor(modelItem => item.ReportTypeEnum)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Creator)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-play" title="Разовое формирование отчета за истекшие периоды времени и даты"></span></a>
+                                @Html.DisplayFor(modelItem => item.LastRun)
+                            </td>
+                            <td class="@(item.DisplayStatusEnum == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup }))">
 
-                    @if (item.DisplayStatusEnum == DisplayStatus.Ready) {
-                    <a href="@Url.Action("DisplayReport", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })">
-                        @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
-                    </a>}
+                                @if (item.DisplayStatusEnum == DisplayStatus.Ready)
+                                {
+                                    <a href="@Url.Action("DisplayReport", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })">
+                                        @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
+                                    </a>}
                     else {
-                    @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
-}
-                </td>         
-            </tr>}
+                                    @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
+                                }
+                            </td>
+                        </tr>}
 
-        </table>
-    </div>
-</div>
-}
-else {
-    <hr />
-    <div class="row">
-        <h4>Отсутствуют отчеты</h4>
-    </div>
+                </table>
+            </div>
+        </div>
     }
-
+    else {
+        <hr />
+        <div class="row">
+            <h4>Отсутствуют отчеты</h4>
+        </div>
+    }
+</div>
 
     @section JavaScript {
         <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />

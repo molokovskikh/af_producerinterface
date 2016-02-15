@@ -1,5 +1,8 @@
 ﻿$(function () {
-    // http://www.eyecon.ro/bootstrap-datepicker/
+  
+    var characters = 500;
+    $("#counter").append(characters);
+
     var dateFrom = $('#Begin').datepicker({
         format: 'dd.mm.yyyy',
         language: 'ru',
@@ -26,39 +29,31 @@
 
 function UpKey()
 {
-    var characters = 1000;
-    $("#counter").append(characters);
-    $("#annotation").keyup(function () {
-        if ($(this).val().length > characters) {
-            $(this).val($(this).val().substr(0, characters));
-        }
-        var remaining = characters - $(this).val().length;
-        document.getElementById('#annotation').innerHTML = remaining;
-     //   $("#counter").innerHTML = remaining.toString();     
-        if (remaining <= 999) {
-            $("#counter").css("color", "red");
-        }
-        else {
-            $("#counter").css("color", "black");
-        }
-    });
+  //  var element_ = $('#annotation');
+  //  var CountVal = element_.val().length;
+    
+
+
+    // counter
+
 }
 
-$(function () {
-    var characters = 1000;
-    $("#counter").append(characters);
-    $("#annotation").keyup(function () {
-        if ($(this).val().length > characters) {
-            $(this).val($(this).val().substr(0, characters));
-        }
-        var remaining = characters - $(this).val().length;
-        $("#counter").html(remaining);
-        alert(remaining);
-        if (remaining <= 999) {
-            $("#counter").css("color", "red");
-        }
-        else {
-            $("#counter").css("color", "black");
-        }
-    });
-});
+
+//    $("#annotation").keyup(function () {
+
+//        var element_ = document.getElementById('annotation');
+//        var CountVal = element_.val().trim();
+        
+//        var txt = $('#annotation').val().trim();
+//        var value = $(this).attr('value');
+//        var remaining = characters - $('#annotation').innerText.length;
+//        document.getElementById('#counter').append(remaining);
+//     //   $("#counter").innerHTML = remaining.toString();     
+//        if (remaining <= 999) {
+//            $("#counter").css("color", "red");
+//        }
+//        else {
+//            $("#counter").css("color", "black");
+//        }
+//    });
+//}

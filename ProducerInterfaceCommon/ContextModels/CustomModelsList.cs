@@ -75,7 +75,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public HttpPostedFileBase File { get; set; }
 
         [UIHint("LongList")]
-        [Required(ErrorMessage = "Добавьте лекарства участвующие в акции")]
+        [Required(ErrorMessage = "Список препаратов, участвующих в акции")]
         public virtual List<long> DrugList { get; set; }
 
         [UIHint("LongList")]
