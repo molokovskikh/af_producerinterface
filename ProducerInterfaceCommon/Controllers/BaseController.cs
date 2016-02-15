@@ -3,66 +3,31 @@ using System.Web.Mvc;
 using System.Linq;
 using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace ProducerInterfaceCommon.Controllers
 {
     public class BaseController : GlobalController
-    {
-
-        System.Diagnostics.Stopwatch STW = new System.Diagnostics.Stopwatch();
-
-        private List<STP> STW_List = new List<STP>();
-
-        private class STP
-        {
-            public string Key { get; set; }
-            public string Value { get; set; }
-        }
-        
+    {            
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            base.OnActionExecuted(filterContext);
-            STW.Stop();
-            STW_List.Add( new STP {Key= "Скорость отработки Экшена",Value= STW.ElapsedMilliseconds.ToString() });
+            base.OnActionExecuted(filterContext);          
         }
-
-        private void SaveTimerToDatabase(List<STP> Save)
-        {
-            var 
-
-        }
-
-
+        
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            STW.Start();
-            base.OnActionExecuting(filterContext);
-            STW.Stop();
-
-            STW_List.Add(new STP { Key = "Base Executing", Value = STW.ElapsedMilliseconds.ToString() });
-
-            STW.Start();
+         
+            base.OnActionExecuting(filterContext);   
             CurrentUser = GetCurrentUser(TypeLoginUser);
-            STW.Stop();
-            STW_List.Add(new STP { Key = "Получение модели пользователя из кукисов", Value = STW.ElapsedMilliseconds.ToString() });
-
-
+          
+              
             if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
             {
                 CurrentUser.IP = Request.UserHostAddress.ToString();
                 ViewBag.CurrentUser = CurrentUser;
-            }
-
-            STW.Start();
-            CheckGlobalPermission(); // проверка наличия пермишена для данного экшена в БД
-            STW.Stop();
-            STW_List.Add(new STP { Key = "Проверка наличия доступа", Value = STW.ElapsedMilliseconds.ToString() });
-
-         //   STW.Start();
-            CheckUserPermission(filterContext); // проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)
-         //   STW.Stop();
-         //   STW_List.Add(new STP { Key = "Проверка прав у пользователя", Value = STW.ElapsedMilliseconds.ToString() });
-         //   STW.Start();
+            }          
+            CheckGlobalPermission(); // проверка наличия пермишена для данного экшена в БД  
+            CheckUserPermission(filterContext); // проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)       
         }
 
         #region /*проверка наличия пермишена в БД или в игнорируемых*/
@@ -121,12 +86,7 @@ namespace ProducerInterfaceCommon.Controllers
         {
             var PermissionExsist = false;
             // проверяем список игнорируемых маршрутов
-
-
-            STW.Start();
-            PermissionExsist = IgnoreRoutePermission(permissionName);
-            STW.Stop();
-            STW_List.Add(new STP { Key = "Проверка списка игноррируемых", Value = STW.ElapsedMilliseconds.ToString() });
+            PermissionExsist = IgnoreRoutePermission(permissionName);         
             
             if (CurrentUser == null)
             {
@@ -156,17 +116,14 @@ namespace ProducerInterfaceCommon.Controllers
             {
                 if (!PermissionExsist)
                 {
-                    // проверяем в БД доступ для текущего пользователя
+                    // проверяем в БД доступ для текущего пользователя              
+                    //var ListPermission = cntx_.AccountPermission.Where(xxx=>xxx.TypePermission == SbyteTypeUser).ToList().Where(xx => xx.AccountGroup.Any(xxx => xxx.Account.Any(x => x.Id == CurrentUser.Id)))
+                    //    .ToList();
 
-                    STW.Start();            
-                    var ListPermission = cntx_.AccountPermission.Where(xxx=>xxx.TypePermission == SbyteTypeUser).ToList().Where(xx => xx.AccountGroup.Any(xxx => xxx.Account.Any(x => x.Id == CurrentUser.Id)))
-                        .ToList();
+                    //PermissionExsist = ListPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
 
-                    PermissionExsist = ListPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
-
-                    STW.Stop();
-                    STW_List.Add(new STP { Key = "Проверка в БД на наличие доступа", Value = STW.ElapsedMilliseconds.ToString() });
-
+                    PermissionExsist = PermissionUserExsist();
+              
                     if (!PermissionExsist) // если нет доступа, редиректим на стартовую страницу
                     {
                         ErrorMessage("У вас нет прав доступа к запрашиваемой странице. Или для изменения данных");
@@ -180,7 +137,6 @@ namespace ProducerInterfaceCommon.Controllers
                 }
             }
 
-            STW.Start();
         }
 
         private bool IgnoreRoutePermission(string ThisRoute)
@@ -209,9 +165,23 @@ namespace ProducerInterfaceCommon.Controllers
 
         public bool PermissionUserExsist()
         {
+            bool ret = false;
             
-
-            return false;
+            foreach (var Group in CurrentUser.AccountGroup)
+            {
+                if (ret == true)
+                { break; }
+                foreach (var Permission in Group.AccountPermission)
+                {
+                    if (Permission.ControllerAction == permissionName && Permission.ActionAttributes == controllerAcctributes)
+                    {
+                        ret = true;
+                        break;
+                    }
+                }
+            }
+            
+            return ret;
         }
 
 
