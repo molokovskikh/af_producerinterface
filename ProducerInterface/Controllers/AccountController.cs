@@ -31,17 +31,21 @@ namespace ProducerInterface.Controllers
             }
                         
             var CompanyExsist = cntx_.AccountCompany.Any(xxx => xxx.ProducerId == One.Producers);
-            ViewBag.AppointmentList =
-                 cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
-                     .ToList()
-                     .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
-                     .ToList();
+
+            var ListAppointment = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
+            ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
+                 .ToList()
+                 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
+                 .ToList());
+
+            ViewBag.AppointmentList = ListAppointment;
+                
             if (CompanyExsist)
             {
                 RegisterDomainValidation ModelView2 = new RegisterDomainValidation();
                 ModelView2.Producers = One.Producers;
                 ModelView2.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == One.Producers).First().ProducerName;
-
+              
                 ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == One.Producers).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
                 return View("DomainRegistration", ModelView2);
             }
@@ -126,6 +130,7 @@ namespace ProducerInterface.Controllers
 
             ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx_, NewAccount.Id, Password, NewAccount.IP);
 
+            SuccessMessage("Пароль отправлен на ваш почтовый адрес " + NewAccount.Login);
             return RedirectToAction("Index", "Home");
         }
         
@@ -137,10 +142,14 @@ namespace ProducerInterface.Controllers
             {
                 ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == modelAccount.Producers).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
 
-                ViewBag.AppointmentList = cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
+                var ListAppointment = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
+                ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
                      .ToList()
                      .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
-                     .ToList();
+                     .ToList());
+
+                ViewBag.AppointmentList = ListAppointment;
+
                 return View(modelAccount);
             }
 
@@ -219,6 +228,7 @@ namespace ProducerInterface.Controllers
 
             ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx_, NewAccount.Id, Password, HttpContext.Request.UserHostAddress.ToString());
 
+            SuccessMessage("Письмо с паролем отправлено на ваш почтовый адрес");
             return RedirectToAction("Index", "Home");
 
         }

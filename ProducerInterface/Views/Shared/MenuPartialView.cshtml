@@ -23,7 +23,7 @@
                         <li><a href="~/Promotion/"><span class="glyphicon glyphicon-star-empty"> </span> Акции</a></li>
                         <li><a href="~/Drug/Index/"><span class="glyphicon glyphicon-align-justify"> </span> Препараты</a></li>
                         <li>
-                            <a data-toggle="modal" data-target="#myModal"><span  class="glyphicon glyphicon-envelope"></span> Обратная связь</a> 
+                            <a data-toggle="modal" data-target="#myModal" class="pointer"><span  class="glyphicon glyphicon-envelope"></span> Обратная связь</a> 
                         </li>
                 }
             </ul>
@@ -50,7 +50,9 @@
             else
             {
                 <ul class="nav navbar-nav navbar-right" role="navigation">
-
+                    <li>
+                        <a data-toggle="modal" data-target="#myModal" class="pointer"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
+                    </li>
                     <li><a href="@Url.Action("Index", "Account")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
                
                     <li class="dropdown">

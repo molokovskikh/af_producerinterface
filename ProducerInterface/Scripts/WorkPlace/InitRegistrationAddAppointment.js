@@ -5,7 +5,7 @@
 
         $.ajax({
             type: "POST",
-            url: '/Account/DolznostAddNew',
+            url: '/ProducerInterface/Account/DolznostAddNew',
             data: SendString,
             success: function(result)
             {		

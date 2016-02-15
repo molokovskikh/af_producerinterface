@@ -297,7 +297,7 @@ namespace ProducerInterface.Controllers
 
         public ActionResult ChangePassword()
         {
-            var User = cntx_.Account.Where(xxx => xxx.Login == CurrentUser.Login && xxx.UserType == 0).FirstOrDefault();
+            var User = cntx_.Account.Where(xxx => xxx.Login == CurrentUser.Login && xxx.TypeUser == 0).FirstOrDefault();
             string password = GetRandomPassword();
             User.Password = Md5HashHelper.GetHash(password);
 

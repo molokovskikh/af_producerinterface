@@ -96,7 +96,7 @@ namespace ProducerInterfaceCommon.Heap
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, true);
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, false);
 		}
 
 		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string field, long? id, string before, string after)

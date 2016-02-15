@@ -7,11 +7,45 @@ using System.Collections.Generic;
 namespace ProducerInterfaceCommon.Controllers
 {
     public class BaseController : GlobalController
-    {      
+    {
+
+        System.Diagnostics.Stopwatch STW = new System.Diagnostics.Stopwatch();
+
+        private List<STP> STW_List = new List<STP>();
+
+        private class STP
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
+        }
+        
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+            STW.Stop();
+            STW_List.Add( new STP {Key= "Скорость отработки Экшена",Value= STW.ElapsedMilliseconds.ToString() });
+        }
+
+        private void SaveTimerToDatabase(List<STP> Save)
+        {
+            var 
+
+        }
+
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            STW.Start();
             base.OnActionExecuting(filterContext);
+            STW.Stop();
+
+            STW_List.Add(new STP { Key = "Base Executing", Value = STW.ElapsedMilliseconds.ToString() });
+
+            STW.Start();
             CurrentUser = GetCurrentUser(TypeLoginUser);
+            STW.Stop();
+            STW_List.Add(new STP { Key = "Получение модели пользователя из кукисов", Value = STW.ElapsedMilliseconds.ToString() });
+
 
             if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
             {
@@ -19,10 +53,16 @@ namespace ProducerInterfaceCommon.Controllers
                 ViewBag.CurrentUser = CurrentUser;
             }
 
+            STW.Start();
             CheckGlobalPermission(); // проверка наличия пермишена для данного экшена в БД
-            
+            STW.Stop();
+            STW_List.Add(new STP { Key = "Проверка наличия доступа", Value = STW.ElapsedMilliseconds.ToString() });
+
+         //   STW.Start();
             CheckUserPermission(filterContext); // проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)
-                        
+         //   STW.Stop();
+         //   STW_List.Add(new STP { Key = "Проверка прав у пользователя", Value = STW.ElapsedMilliseconds.ToString() });
+         //   STW.Start();
         }
 
         #region /*проверка наличия пермишена в БД или в игнорируемых*/
@@ -31,12 +71,11 @@ namespace ProducerInterfaceCommon.Controllers
         {
             //protected string controllerName; - определены ранее
             //protected string actionName; - определены ранее
-
+                     
             if (IgnoreRoutePermission(permissionName))
             {
                 return; // найден в игнорируемых
             }
-
             bool PermissionExsist = cntx_.AccountPermission.Any(xxx => xxx.Enabled == true && xxx.TypePermission == SbyteTypeUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
 
             if (!PermissionExsist)
@@ -83,8 +122,12 @@ namespace ProducerInterfaceCommon.Controllers
             var PermissionExsist = false;
             // проверяем список игнорируемых маршрутов
 
-            PermissionExsist = IgnoreRoutePermission(permissionName);
 
+            STW.Start();
+            PermissionExsist = IgnoreRoutePermission(permissionName);
+            STW.Stop();
+            STW_List.Add(new STP { Key = "Проверка списка игноррируемых", Value = STW.ElapsedMilliseconds.ToString() });
+            
             if (CurrentUser == null)
             {
                 if (TypeLoginUser == TypeUsers.ProducerUser)
@@ -114,12 +157,15 @@ namespace ProducerInterfaceCommon.Controllers
                 if (!PermissionExsist)
                 {
                     // проверяем в БД доступ для текущего пользователя
-                    var ListPermission = cntx_.AccountPermission.ToList().Where(xx => xx.AccountGroup.Any(xxx => xxx.Account.Any(x => x.Id == CurrentUser.Id)))
-                        .ToList()
-                        .Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.ControllerAction })
+
+                    STW.Start();            
+                    var ListPermission = cntx_.AccountPermission.Where(xxx=>xxx.TypePermission == SbyteTypeUser).ToList().Where(xx => xx.AccountGroup.Any(xxx => xxx.Account.Any(x => x.Id == CurrentUser.Id)))
                         .ToList();
 
-                    PermissionExsist = ListPermission.Any(xxx => xxx.Text == (permissionName + " " + controllerAcctributes));
+                    PermissionExsist = ListPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
+
+                    STW.Stop();
+                    STW_List.Add(new STP { Key = "Проверка в БД на наличие доступа", Value = STW.ElapsedMilliseconds.ToString() });
 
                     if (!PermissionExsist) // если нет доступа, редиректим на стартовую страницу
                     {
@@ -133,6 +179,8 @@ namespace ProducerInterfaceCommon.Controllers
                     //   filterContext.Result = RedirectToAction("Index", "Registration");
                 }
             }
+
+            STW.Start();
         }
 
         private bool IgnoreRoutePermission(string ThisRoute)
@@ -158,6 +206,14 @@ namespace ProducerInterfaceCommon.Controllers
         }
 
         #endregion
+
+        public bool PermissionUserExsist()
+        {
+            
+
+            return false;
+        }
+
 
         #region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
 

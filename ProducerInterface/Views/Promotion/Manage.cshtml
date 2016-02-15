@@ -42,7 +42,7 @@
                     <label class="control-label">Аннотация</label>
                     @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7", @onkeyup = "UpKey()" })
                     @Html.ValidationMessageFor(s => s.Annotation)
-                   <p>Количество оставшихся для ввода знаков <span id="counter"></span></p>
+                   <p>Количество оставшихся для ввода знаков <span id="counter">1000</span></p>
                 </div>
             </div>
           
@@ -90,7 +90,7 @@
             <div class="row">
                 <div class="form-group">
                     <a href="@Url.Action("Index")" class="btn btn-primary">Назад</a>
-                    <button type="submit" class="btn btn-primary filter-buttons active-form">@(Model != null && Model.Id != 0 ? "Обновить акцию" : "Добавить Акцию")</button>
+                    <button type="submit" class="btn btn-primary filter-buttons active-form">@(Model != null && Model.Id != 0 ? "Сохранить изменения и отправить запрос на ее проведение" : "Добавить Акцию")</button>
                 </div>
             </div>
         }
