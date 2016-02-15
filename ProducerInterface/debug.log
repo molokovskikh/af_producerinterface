@@ -344,3 +344,4 @@ System.Web.Mvc.ActionResult Account(ProducerInterfaceCommon.ContextModels.Profil
 12.02.2016 15:40:37.079 [42] ERROR MySqlAdoNetAppender - "System.DateTime" не содержит определения для "Value"
 12.02.2016 15:41:42.045 [42] ERROR MySqlAdoNetAppender - Контроллер для пути "/News/GetNextList" не найден или не реализует интерфейс IController.
 12.02.2016 16:02:27.207 [6] ERROR MySqlAdoNetAppender - Контроллер для пути "/News/GetNextList" не найден или не реализует интерфейс IController.
+12.02.2016 20:31:34.433 [10] ERROR MySqlAdoNetAppender - C:\Users\maksimenko\projects\producerinterface\ProducerInterface\Views\Drug\EditDescription.cshtml(22): error CS1513: } expected

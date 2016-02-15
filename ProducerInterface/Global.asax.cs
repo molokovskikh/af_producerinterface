@@ -26,24 +26,24 @@ namespace ProducerInterface
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            if (Server != null)
-            {
-                Exception ex = Server.GetLastError();
+            //if (Server != null)
+            //{
+            //    Exception ex = Server.GetLastError();
 
-                log4net.Config.XmlConfigurator.Configure();
+            //    log4net.Config.XmlConfigurator.Configure();
 
-                ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
+            //    ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
 
-                _logger.Error(ex.Message.ToString());
+            //    _logger.Error(ex.Message.ToString());
 
-                if (Response.StatusCode != 404)
-                {
+            //    if (Response.StatusCode != 404)
+            //    {
 
-                }
-                ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
+            //    }
+            //    ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
 
-                Response.Redirect("~/Home/Index");
-            }
+            //    Response.Redirect("~/Home/Index");
+            //}
         }
 
         public void ErrorMessage(string message)

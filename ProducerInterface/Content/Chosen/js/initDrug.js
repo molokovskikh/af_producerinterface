@@ -30,17 +30,15 @@ function EditEntity(field) {
 $(function () {
 
     // https://github.com/meltingice/ajax-chosen
-    $('#CatalogNamesId').ajaxChosen({
+    $('#mnn').ajaxChosen({
         type: 'GET',
         url: '/Drug/GetMnn',
         dataType: 'json',
         minTermLength: 2,
-        afterTypeDelay: 200,
+        afterTypeDelay: 300,
         keepTypingMsg: "Введите два или больше символов для поиска",
         lookingForMsg: "Поиск"
-    }, function (data) {
-        return data;
-    },
+    }, null,
     { width: '95%' }
   );
 });

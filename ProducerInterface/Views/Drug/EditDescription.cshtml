@@ -6,6 +6,7 @@
   var title = $"Описание препарата \"{ViewData["familyName"]}\"";
   ViewBag.Title = title;
   var mnn = (mnn)ViewData["mnn"];
+  var list = new List<SelectListItem>() { new SelectListItem() { Text = mnn.Mnn1, Value = mnn.Id.ToString(), Selected = true } };
 }
 
 <div class="row">
@@ -18,6 +19,10 @@
 @if (mnn != null)
 {
 
+
+<div>
+    @Html.DropDownList("mnn", list)
+</div>
 
 @*<div>
     @Html.ListBoxFor(m => mnn.Mnn1, new SelectList(new List<OptionElement>() { new OptionElement() {Text = mnn.Mnn1, Value = mnn.Id.ToString() } }, "Value", "Text", mnn.Id))
@@ -57,9 +62,14 @@ else
 
 
 @section JavaScript {
-<script src="~/Content/Chosen/js/initDrug.js"></script>
+    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+    <script src="~/Content/Chosen/js/ajax-chosen.g.js"></script>
+    <script src="~/Content/Chosen/js/initDrug.js"></script>
 }
 
+@section Styles {
+    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+}
 
 @*<div>У данного товара нет описания</div>*@
 
