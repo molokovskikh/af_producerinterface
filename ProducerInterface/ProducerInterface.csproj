@@ -423,6 +423,7 @@
     <Content Include="Views\Promotion\Partial\FileUpLoadChange.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\LongListRegion.cshtml" />
     <Content Include="Views\Profile\GetNextList.cshtml" />
+    <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

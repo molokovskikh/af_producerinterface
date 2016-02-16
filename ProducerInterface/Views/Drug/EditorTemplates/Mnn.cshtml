@@ -1,0 +1,40 @@
+﻿@using ProducerInterfaceCommon.CatalogModels
+@model mnn
+
+@{
+  // имя свойства
+  var field = "Mnn1";
+  var fieldTxt = field + "Txt";
+  var fieldEditor = field + "Editor";
+  var title = "Изменить";
+  var list = new List<SelectListItem>();
+  if (Model != null)
+  {
+      list.Add(new SelectListItem() { Text = Model.Mnn1, Value = Model.Id.ToString(), Selected = true });
+  }
+}
+
+<div class="editor-label">
+    @Html.LabelFor(m => m.Mnn1)
+</div>
+<div class="editor-field">
+    <div id="@fieldTxt">
+        <span style="white-space: pre-wrap;">@Html.DisplayTextFor(m => m.Mnn1)</span>
+        <div>
+            <span class="glyphicon glyphicon-pencil pointer" title="@title" onclick="EditToggle('@field')"></span>
+        </div>
+    </div>
+    <div style="display: none;" id="@fieldEditor">
+        @Html.DropDownListFor(m => m, list)
+        <div class="row" style="margin: 1em 0 1em 0">
+            <a href="#" onclick="EditToggle('@field')">Отменить</a>
+            <span>&nbsp;</span>
+            <span class="btn btn-primary" onclick="EditMnn()">Сохранить</span>
+        </div>
+    </div>
+    <hr />
+</div>
+
+
+
+

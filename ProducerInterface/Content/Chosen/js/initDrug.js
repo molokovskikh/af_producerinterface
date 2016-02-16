@@ -27,6 +27,18 @@ function EditEntity(field) {
 
 };
 
+function EditMnn() {
+    var param = 'familyId=' + $('#familyId').val() + '&mnnId=' + $('#mnn').val();
+    var url = $('#urlMnn').val();
+
+    $.post(url, param, function (data) {
+        var txt = $('#Mnn1Txt').find("span").first();
+        txt.text(data.value);
+        EditToggle('Mnn1');
+    }, 'json');
+
+};
+
 $(function () {
 
     // https://github.com/meltingice/ajax-chosen

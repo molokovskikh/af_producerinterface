@@ -109,6 +109,16 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(catalogChangeEmail, subject, bodyExtended, null, false);
 		}
 
+		public static void SendMnnChangeMessage(producerinterface_Entities cntx, Account user, string drugFamilyName, string mnnBefore, string mnnAfter)
+		{
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
+			var subject = $"Изменение МНН препарата на сайте {siteName}";
+			var body = $"Изменён МНН препарата {drugFamilyName}\r\n\r\nБыло:\r\n\r\n{mnnBefore}\r\n\r\nСтало:\r\n\r\n{mnnAfter}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {user.IP}";
+			EmailSender.SendEmail(catalogChangeEmail, subject, bodyExtended, null, false);
+		}
+
 		public static void SendNewPromotion(producerinterface_Entities cntx, long userId, long PromotionId, string ip)
 		{
 			var User_ = cntx.Account.Where(x => x.Id == userId).First();

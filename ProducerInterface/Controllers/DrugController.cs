@@ -172,26 +172,17 @@ namespace ProducerInterface.Controllers
 			return ret;
 		}
 
-		//public JsonResult EditMnnField(long familyId, string field, string value)
-		//{
-		//	var df = cntx_.drugfamily.Single(x => x.FamilyId == familyId && x.ProducerId == producerId);
-		//	drugmnn model;
-		//	if (df.MnnId == null)
-		//	{
-		//		model = new drugmnn();
-		//		cntx_.drugmnn.Add(model);
-		//		//cntx_.SaveChanges();
-		//		df.MnnId = model.MnnId;
-		//		//cntx_.SaveChanges();
-		//	}
-		//	else
-		//		model = cntx_.drugmnn.Single(x => x.MnnId == df.MnnId);
+		public JsonResult EditMnnField(long familyId, long mnnId)
+		{
+			var df = ccntx.catalognames.Single(x => x.Id == familyId);
+			var before = ccntx.mnn.SingleOrDefault(x => x.Id == df.MnnId);
+			var after = ccntx.mnn.Single(x => x.Id == mnnId);
 
-		//	var propertyInfo = model.GetType().GetProperty(field);
-		//	propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
-		//	// TODO где-то сохранять
-		//	//cntx_.SaveChanges();
-		//	return Json(new { field = field, value = value });
-		//}
+			df.MnnId = mnnId;
+      ccntx.SaveChanges(CurrentUser, "Изменение МНН");
+
+			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, df.Name, before != null ? before.Mnn1 : "", after.Mnn1);
+			return Json(new { field = "Mnn1", value = after.Mnn1 });
+		}
 	}
 }
