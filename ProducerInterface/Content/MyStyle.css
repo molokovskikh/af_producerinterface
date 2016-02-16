@@ -5,7 +5,9 @@
 .image-brand {
  height:30px;
 }
-
+.navbar-brand {
+    margin-left: 0px;
+}
 .otstup {
 height:35px;
 }
@@ -244,4 +246,8 @@ align-content:center;
 .promotion-image {
 max-width:500px;
 max-height:300px;
+}
+.news-date {
+font-size:14px;
+margin-top:1px;
 }

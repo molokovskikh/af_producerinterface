@@ -21,6 +21,7 @@ namespace ProducerInterfaceCommon.ContextModels
             this.AccountFeedBack = new HashSet<AccountFeedBack>();
             this.promotions = new HashSet<promotions>();
             this.promotions1 = new HashSet<promotions>();
+            this.NewsChange = new HashSet<NewsChange>();
         }
     
         public long Id { get; set; }
@@ -42,5 +43,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual ICollection<AccountFeedBack> AccountFeedBack { get; set; }
         public virtual ICollection<promotions> promotions { get; set; }
         public virtual ICollection<promotions> promotions1 { get; set; }
+        public virtual ICollection<NewsChange> NewsChange { get; set; }
     }
 }

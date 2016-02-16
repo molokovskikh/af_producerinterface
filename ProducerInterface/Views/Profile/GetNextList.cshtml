@@ -2,47 +2,51 @@
 
 @if (Model != null && Model.Count() > 0)
 {
-
     foreach (var NewsItem in Model)
     {
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div>
-                    Тема @NewsItem.Name
-                    <div class="pull-right">Дата публикации @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")</div>
+        <div class="panel panel-default pointer" onclick="window.location='@Url.Action("News", "Profile", new { Id = NewsItem.Id})'">
+            <div class="panel-heading" style="text-decoration:none;">
+                <span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right panel-title">@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span>
+                @*<h4 class="panel-title">
+                        <p data-toggle="collapse" data-parent="#accordion-menu2"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right panel-title">@NewsItem.DatePublication.ToString("dd.MM.yyyy")</span></p>
+                    </h4>*@
+            </div>
+            <div class="panel-collapse collapse in" style="text-decoration:none;">
+                <div class="panel-body" style="text-decoration:none; z-index:1;">
+
+                    @if (NewsItem.Description.Length > 150)
+                    {
+                        <p class="clip">@Html.Raw(NewsItem.Description.Substring(0, 150)) ...</p>
+                    }
+                    else
+                    {
+                        <p class="clip">@Html.Raw(NewsItem.Description) ...</p>
+                    }
+
                 </div>
             </div>
-            <div class="panel-body">
-                <p><h4>Сообщение</h4>@NewsItem.Description</p>
-            </div>
-
-            @*<div class="panel-heading">@NewsItem.Name</div>
-                <div class="panel-body">
-                    <div class="col-sm-7">
-                        <p><h4>Сообщение</h4>@NewsItem.Description</p>
-                    </div>
-                    <div class="pull-right">
-                        <p>
-                           @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")
-                        </p>
-                    </div>
-                </div>*@
         </div>
+
     }
-    <div id="@("LoadingListDiv" + ViewBag.Pager)">
 
-    </div>
+    if (ViewBag.MaxCount >= ViewBag.Pager)
+    {
 
-    <div id=@("Delete_Id" + ViewBag.Pager)>
-        @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
-       new { Pager = ViewBag.Pager },
-       new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
-       new { @class = "btn btn-primary" }
-       )
-    </div>
+        <div id="@("LoadingListDiv" + ViewBag.Pager)" class="row">
+
+        </div>
+
+            <div id=@("Delete_Id" + ViewBag.Pager)>
+                @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
+                new { Pager = ViewBag.Pager },
+                new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
+                new { @class = "btn btn-primary" }
+                )
+            </div>
+    }
 }
 else
 {
-    <h3>Все новости уже отображены на странице</h3>
+
 }
 

@@ -3,7 +3,9 @@
 *.suo
 *.cache
 *.user
-
 *.gen.*/vs/
 .ProducerInterface/Properties/PublishProfiles/TEST LOCAL.pubxml
 ./ProducerInterface/ProducerInterface.csproj
+*.log
+
+./ProducerInterface/debug.log

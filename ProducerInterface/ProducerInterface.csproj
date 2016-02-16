@@ -306,6 +306,7 @@
     <Content Include="Scripts\WorkPlace\Analit.js" />
     <Content Include="Scripts\WorkPlace\DatePicker.js" />
     <Content Include="Scripts\WorkPlace\FileUpLoad.js" />
+    <Content Include="Scripts\WorkPlace\GradientText.js" />
     <Content Include="Scripts\WorkPlace\ModalView.js" />
     <Content Include="Scripts\WorkPlace\ZAnalit.js" />
     <Content Include="Scripts\_references.js" />
@@ -423,6 +424,7 @@
     <Content Include="Views\Promotion\Partial\FileUpLoadChange.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\LongListRegion.cshtml" />
     <Content Include="Views\Profile\GetNextList.cshtml" />
+    <Content Include="Views\Profile\News.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
   </ItemGroup>
   <ItemGroup>

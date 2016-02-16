@@ -162,11 +162,17 @@
     <Compile Include="ContextModels\CompanyDomainName.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\DrugDescriptionRemark.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\drugfamily.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\ContextEF.cs" />
     <Compile Include="ContextModels\drugfamilynames.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\NewsChange.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\NotificationToProducers.cs">

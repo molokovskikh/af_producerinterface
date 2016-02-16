@@ -1,0 +1,12 @@
+﻿@model ProducerInterfaceCommon.ContextModels.AccountEmail
+
+
+    <div id="email_item_@Model.Id">
+        <p>@Model.eMail &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Ajax.ActionLink(" ", "DeleteEmail",
+                                                                        new { Id = Model.Id }, new AjaxOptions {
+                                                                            HttpMethod = "POST", OnSuccess = "OnDeleteSucces(" + Model.Id + ")",
+                                                                            Confirm = "Вы уверены, что хотите удалить данный адрес?",
+                                                                            OnFailure = "Alert('При удалении возникла ошибка')" }
+                                                                        , new { @class = "glyphicon glyphicon-trash", @title = "Удалить " + Model.eMail })
+        </p>
+    </div>

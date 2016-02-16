@@ -2,13 +2,13 @@
 
 @{
     ViewBag.Title = "Логи ошибок";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
 <h2>Лог ошибок</h2>
 <hr />
 
-@Html.Partial("PagerPArtial")
+@Html.Partial("Partial/PagerPArtial")
 
 <table class="table table-bordered table-striped table-width-100prc" id="ErrorLogTable">
     <tr>
