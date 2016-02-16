@@ -434,6 +434,15 @@
           <Property Name="HomeRegion" Type="ubigint" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.supplierregions" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="supplierregions">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="uint" Nullable="false" />
+          <Property Name="RegionCode" Type="ubigint" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.usernames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="usernames">
           <Key>
@@ -758,6 +767,12 @@ FROM `regionnames` AS `regionnames`</DefiningQuery>
 `suppliernames`.`SupplierName`, 
 `suppliernames`.`HomeRegion`
 FROM `suppliernames` AS `suppliernames`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="supplierregions" EntityType="Self.supplierregions" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`supplierregions`.`SupplierId`, 
+`supplierregions`.`RegionCode`
+FROM `supplierregions` AS `supplierregions`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="usernames" EntityType="Self.usernames" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -1132,6 +1147,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="NotificationToProducers" EntitySet="NotificationToProducers" />
             <End Role="NewsChange" EntitySet="NewsChange" />
           </AssociationSet>
+          <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1489,6 +1505,13 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="supplierregions">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="Int64" Nullable="false" />
+          <Property Name="RegionCode" Type="Decimal" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1909,6 +1932,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="TypeCnhange" ColumnName="TypeCnhange" />
                 <ScalarProperty Name="IdNews" ColumnName="IdNews" />
                 <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="supplierregions">
+            <EntityTypeMapping TypeName="producerinterface_Model.supplierregions">
+              <MappingFragment StoreEntitySet="supplierregions">
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

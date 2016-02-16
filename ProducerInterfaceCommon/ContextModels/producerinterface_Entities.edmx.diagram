@@ -51,7 +51,8 @@
         <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="2.5" PointX="6.125" PointY="22.5" />
         <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.FK2_NewsChangeToNotification" />
-        </Diagram>
+        <EntityTypeShape EntityType="producerinterface_Model.supplierregions" Width="1.5" PointX="11.375" PointY="7.75" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

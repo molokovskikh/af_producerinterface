@@ -184,6 +184,9 @@
     <Compile Include="ContextModels\promotionsimage.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\supplierregions.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\usernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -449,7 +452,7 @@
       <DependentUpon>Reports_Entities.edmx</DependentUpon>
       <LastGenOutput>Reports_Entities.cs</LastGenOutput>
     </Content>
-    <Content Include="TextFile1.txt" />
+    <Content Include="migration.sql" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
