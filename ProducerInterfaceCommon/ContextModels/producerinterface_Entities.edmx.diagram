@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5a6501554ad741428f74ceb65064d7fb" Name="Diagram1" ZoomLevel="85">
+      <Diagram DiagramId="5a6501554ad741428f74ceb65064d7fb" Name="Diagram1" ZoomLevel="94" DisplayType="true">
         <EntityTypeShape EntityType="producerinterface_Model.jobextend" Width="1.5" PointX="8.875" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.mailform" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.profilenews" Width="1.5" PointX="7.75" PointY="0.625" IsExpanded="true" />
@@ -47,11 +47,11 @@
         <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" />
         <EntityTypeShape EntityType="producerinterface_Model.DrugDescriptionRemark" Width="3.75" PointX="3.125" PointY="6.75" />
-        <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="2.125" PointX="9.375" PointY="22.375" />
-        <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="3.25" PointX="5.5" PointY="23.375" />
+        <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="3" PointX="9.5" PointY="22.625" />
+        <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="2.5" PointX="6.125" PointY="22.5" />
         <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.FK2_NewsChangeToNotification" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

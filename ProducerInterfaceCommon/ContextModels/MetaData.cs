@@ -7,10 +7,33 @@ using System.Web.Mvc;
 namespace ProducerInterfaceCommon.ContextModels
 {
 
+    public partial class NewsChange
+    {
+        public string TypeChangeDisplayName
+        {
+         
+                get
+                {
+                    return Heap.AttributeHelper.GetDisplayName(ChangeNewsType.ToString());
+                }
+           
+        }
+
+        public NewsChanges ChangeNewsType
+        {
+            get { return (NewsChanges)TypeCnhange; }
+            set { TypeCnhange = (byte)value; }
+        }      
+    }
+
+
+
+
+
 	[MetadataType(typeof(NotificationToProducersMetaData))]
 	public partial class NotificationToProducers
 	{
-
+   
 	}
 
 	public class NotificationToProducersMetaData

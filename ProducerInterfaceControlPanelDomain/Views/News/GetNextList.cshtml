@@ -1,19 +1,41 @@
 ﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>
 
+
+
 @if (Model != null && Model.Count() > 0)
 {
 
     foreach (var NewsItem in Model)
     {
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div>Тема @NewsItem.Name
-                    <div class="pull-right">Дата изменения @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")</div>
-                </div>                
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div>
+                            Тема @NewsItem.Name
+                            <div class="pull-right">Дата изменения @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")</div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <p>@Html.Raw(NewsItem.Description)</p>
+                        </div>
+                        <div class="form-group">
+                            <a href="@Url.Action("Create", new { Id = NewsItem.Id})" class="btn btn-primary">Редактировать</a>
+                            <a href="@Url.Action("DeleteNews", new { id= NewsItem.Id})" class="btn btn-primary">Удалить</a>
+                        </div>
+
+                        <div class="form-group">
+                            <label>История изменений</label>
+                            @foreach (var HistoryItem in NewsItem.NewsChange)
+                            {
+                                <p>@HistoryItem.DateChange @HistoryItem.Account.Name @HistoryItem.TypeChangeDisplayName </p>
+                            }
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <p><h4>Сообщение</h4>@Html.Raw(NewsItem.Description)</p>
-            </div>      
         </div>
     }
 

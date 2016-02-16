@@ -26,6 +26,16 @@ namespace ProducerInterfaceCommon.ContextModels
         Error = 4
     }
 
+    public enum NewsChanges
+    {
+        [Display(Name ="Добавление")]
+        NewsAdd = 0,
+        [Display(Name = "Редактирование")]
+        NewsChange =1,
+        [Display(Name = "Удаление")]
+        NewsDelete  =2
+    }
+
     public enum Reports
     {
         [Display(Name = "Рейтинг товаров")]

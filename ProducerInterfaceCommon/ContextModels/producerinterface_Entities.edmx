@@ -166,18 +166,9 @@
           <Property Name="IsBodyHtml" Type="bool" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="250" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "def.producerinterface.NewsChange" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="NewsChange">
           <Key>
-            <PropertyRef Name="IdAccount" />
-            <PropertyRef Name="IdNews" />
-            <PropertyRef Name="TypeCnhange" />
-            <PropertyRef Name="DateChange" />
-            <PropertyRef Name="NewsNewTema" />
-            <PropertyRef Name="NewsOldTema" />
-            <PropertyRef Name="NewsOldDescription" />
-            <PropertyRef Name="NewsNewDescription" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="IdAccount" Type="uint" Nullable="false" />
           <Property Name="IdNews" Type="uint" Nullable="false" />
@@ -187,6 +178,7 @@
           <Property Name="NewsOldTema" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="NewsOldDescription" Type="text" Nullable="false" />
           <Property Name="NewsNewDescription" Type="text" Nullable="false" />
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="NotificationToProducers">
           <Key>
@@ -660,6 +652,7 @@
           <EntitySet Name="jobextend" EntityType="Self.jobextend" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="LogForNet" EntityType="Self.LogForNet" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="mailform" EntityType="Self.mailform" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="NewsChange" EntityType="Self.NewsChange" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="NotificationToProducers" EntityType="Self.NotificationToProducers" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="profilenews" EntityType="Self.profilenews" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotions" EntityType="Self.promotions" Schema="producerinterface" store:Type="Tables" />
@@ -668,18 +661,6 @@
           <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reportxml" EntityType="Self.reportxml" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="user_logs" EntityType="Self.user_logs" Schema="producerinterface" store:Type="Tables" />
-          <EntitySet Name="NewsChange" EntityType="Self.NewsChange" store:Type="Tables" store:Schema="producerinterface">
-            <DefiningQuery>SELECT
-`NewsChange`.`IdAccount`, 
-`NewsChange`.`IdNews`, 
-`NewsChange`.`TypeCnhange`, 
-`NewsChange`.`DateChange`, 
-`NewsChange`.`NewsNewTema`, 
-`NewsChange`.`NewsOldTema`, 
-`NewsChange`.`NewsOldDescription`, 
-`NewsChange`.`NewsNewDescription`
-FROM `NewsChange` AS `NewsChange`</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="assortment" EntityType="Self.assortment" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `assortment`.`CatalogId`, 
@@ -1470,14 +1451,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
         </EntityType>
         <EntityType Name="NewsChange">
           <Key>
-            <PropertyRef Name="IdAccount" />
-            <PropertyRef Name="IdNews" />
-            <PropertyRef Name="TypeCnhange" />
-            <PropertyRef Name="DateChange" />
-            <PropertyRef Name="NewsNewTema" />
-            <PropertyRef Name="NewsOldTema" />
-            <PropertyRef Name="NewsOldDescription" />
-            <PropertyRef Name="NewsNewDescription" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="IdAccount" Type="Int64" Nullable="false" />
           <Property Name="IdNews" Type="Int64" Nullable="false" />
@@ -1487,6 +1461,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="NewsOldTema" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="NewsOldDescription" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="NewsNewDescription" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="NewsChange" ToRole="Account" />
           <NavigationProperty Name="NotificationToProducers" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NewsChange" ToRole="NotificationToProducers" />
         </EntityType>
@@ -1925,6 +1900,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="NewsChange">
             <EntityTypeMapping TypeName="producerinterface_Model.NewsChange">
               <MappingFragment StoreEntitySet="NewsChange">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="NewsNewDescription" ColumnName="NewsNewDescription" />
                 <ScalarProperty Name="NewsOldDescription" ColumnName="NewsOldDescription" />
                 <ScalarProperty Name="NewsOldTema" ColumnName="NewsOldTema" />
