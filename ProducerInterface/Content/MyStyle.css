@@ -251,3 +251,7 @@ max-height:300px;
 font-size:14px;
 margin-top:1px;
 }
+
+#CatalogIdEqual_chosen ul.chosen-choices {
+    min-height: 8em;
+}
