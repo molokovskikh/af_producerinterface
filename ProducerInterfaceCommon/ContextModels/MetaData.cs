@@ -16,12 +16,12 @@ namespace ProducerInterfaceCommon.ContextModels
 	public class NotificationToProducersMetaData
 	{
 		[Display(Name = "Оглавление")]
-		[MaxLength(50)]
+		[MaxLength(150)]
 		[Required(ErrorMessage = "Заполните поле Оглавление")]
 		public string Name { get; set; }
 
 		[Required(ErrorMessage = "Заполните поле Новость")]
-		[MaxLength(500)]
+		[MaxLength(10000)]
 		[Display(Name = "Новость")]
 		public string Description { get; set; }
 
@@ -95,7 +95,9 @@ namespace ProducerInterfaceCommon.ContextModels
 		public bool Enable { get; set; }
 	}
 
-	public partial class Account
+
+    [MetadataType(typeof(AccountMetaData))]
+    public partial class Account
 	{
 		[Display(Name = "IP адресс")]
 		public string IP { get; set; }
@@ -118,6 +120,11 @@ namespace ProducerInterfaceCommon.ContextModels
 			set { TypeUser = (SByte)value; }
 		}
 	}
+
+    public class AccountMetaData
+    {
+
+    }
 
 	public partial class AccountGroup
 	{

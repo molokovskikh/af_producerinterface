@@ -52,9 +52,11 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<Account> Account { get; set; }
         public DbSet<AccountGroup> AccountGroup { get; set; }
-        public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<promotionsimage> promotionsimage { get; set; }
         public DbSet<promotions> promotions { get; set; }
+        public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
+        public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
+        public DbSet<NewsChange> NewsChange { get; set; }
     }
 }

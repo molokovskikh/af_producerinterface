@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.Account>
 @{
     ViewBag.Title = "Список администраторов";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
 <h2>Администраторы сайта</h2>
@@ -11,13 +11,13 @@
 <table class="table-bordered table-condensed table-striped" id="table-width-100prc">
     <tr>
         <th>Логин</th>
-        <th>Почтовый адрес</th>      
+        <th>Почтовыe адреса</th>      
     </tr>
     @foreach (var Administrator in Model)
     {
         <tr>
             <td>@Administrator.Name</td>
-            <td><a href="mailto:@Administrator.Email">@Administrator.Email </a></td>
+            <td><a href="mailto:@Administrator.Login">@Administrator.Login </a></td>
         </tr>
     }
 </table>

@@ -1,0 +1,21 @@
+﻿@model ProducerInterfaceCommon.ContextModels.NotificationToProducers
+@{
+    ViewBag.Title = "Новости";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body-content">
+    <h3>@Model.Name   </h3>
+
+    <p>@Html.Raw(Model.Description)</p>
+
+    <p><span class="pull-right panel-title">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></p>
+
+    <hr/>
+
+    @Html.ActionLink("Назад", "Index",null,null, new { @class="btn btn-primary"})
+
+</div>
+
+<h2></h2>
+

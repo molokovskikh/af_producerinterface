@@ -663,3 +663,75 @@
 12.02.2016 15:17:36.616 [9] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
 12.02.2016 18:08:22.239 [10] ERROR MySqlAdoNetAppender - Произошла ошибка при выполнении определения команды. Дополнительные сведения приведены во внутреннем исключении.
 12.02.2016 19:31:42.764 [78] ERROR MySqlAdoNetAppender - Контроллер для пути "/туцы" не найден или не реализует интерфейс IController.
+15.02.2016 18:01:56.042 [9] ERROR MySqlAdoNetAppender - Обнаружено потенциально опасное значение Request.Form, полученное от клиента (Description="<p>&nbsp;</p>
+<p st...").
+16.02.2016 13:12:02.420 [6] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "Partial/Menu" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/AdminAccount/Partial/Menu.aspx
+~/Views/AdminAccount/Partial/Menu.ascx
+~/Views/Shared/Partial/Menu.aspx
+~/Views/Shared/Partial/Menu.ascx
+~/Views/AdminAccount/Partial/Menu.cshtml
+~/Views/AdminAccount/Partial/Menu.vbhtml
+~/Views/Shared/Partial/Menu.cshtml
+~/Views/Shared/Partial/Menu.vbhtml
+~/Views/AdminAccount/Partial/Partial/Menu.cshtml
+16.02.2016 13:12:47.766 [9] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 13:15:25.032 [10] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 13:17:49.377 [10] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 13:23:55.907 [23] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 13:24:20.661 [23] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 13:24:42.663 [40] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 13:52:44.713 [25] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 13:54:30.096 [25] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 14:08:16.240 [30] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\AdminAccount\Index.cshtml(25): error CS1501: No overload for method 'ListBoxFor' takes 1 arguments
+16.02.2016 14:08:24.294 [26] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\AdminAccount\Index.cshtml(25): error CS1501: No overload for method 'ListBoxFor' takes 1 arguments
+16.02.2016 14:51:12.969 [26] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+16.02.2016 14:54:14.325 [46] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "DeleteEmail" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController".
+16.02.2016 14:54:26.939 [35] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "DeleteEmail" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController".
+16.02.2016 14:56:53.180 [46] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult DeleteEmail(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+16.02.2016 14:57:12.713 [46] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult DeleteEmail(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+16.02.2016 14:57:14.916 [30] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult DeleteEmail(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+16.02.2016 14:57:18.161 [46] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult DeleteEmail(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+16.02.2016 15:01:18.535 [27] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult DeleteEmail(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+16.02.2016 15:37:29.357 [20] ERROR MySqlAdoNetAppender - Текущий запрос для действия "Index" на контроллере типа "AdminAccountController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult Index() на типе ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController
+System.Web.Mvc.ActionResult Index(ProducerInterfaceCommon.ContextModels.Account) на типе ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController
+16.02.2016 15:37:38.262 [38] ERROR MySqlAdoNetAppender - Текущий запрос для действия "Index" на контроллере типа "AdminAccountController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult Index() на типе ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController
+System.Web.Mvc.ActionResult Index(ProducerInterfaceCommon.ContextModels.Account) на типе ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.AdminAccountController
+16.02.2016 15:41:53.754 [16] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\AdminAccount\addemail.cshtml(10): error CS0839: Argument missing
+16.02.2016 15:42:48.795 [21] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\AdminAccount\addemail.cshtml(10): error CS0839: Argument missing
+16.02.2016 15:44:11.384 [21] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\AdminAccount\addemail.cshtml(10): error CS0839: Argument missing
+16.02.2016 15:59:58.273 [52] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "Pager/PagerPArtial" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/LogUserChange/Pager/PagerPArtial.aspx
+~/Views/LogUserChange/Pager/PagerPArtial.ascx
+~/Views/Shared/Pager/PagerPArtial.aspx
+~/Views/Shared/Pager/PagerPArtial.ascx
+~/Views/LogUserChange/Pager/PagerPArtial.cshtml
+~/Views/LogUserChange/Pager/PagerPArtial.vbhtml
+~/Views/Shared/Pager/PagerPArtial.cshtml
+~/Views/Shared/Pager/PagerPArtial.vbhtml
+~/Views/LogUserChange/Partial/Pager/PagerPArtial.cshtml
+16.02.2016 16:00:19.346 [52] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "Partil/PagerPArtial" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/LogUserChange/Partil/PagerPArtial.aspx
+~/Views/LogUserChange/Partil/PagerPArtial.ascx
+~/Views/Shared/Partil/PagerPArtial.aspx
+~/Views/Shared/Partil/PagerPArtial.ascx
+~/Views/LogUserChange/Partil/PagerPArtial.cshtml
+~/Views/LogUserChange/Partil/PagerPArtial.vbhtml
+~/Views/Shared/Partil/PagerPArtial.cshtml
+~/Views/Shared/Partil/PagerPArtial.vbhtml
+~/Views/LogUserChange/Partial/Partil/PagerPArtial.cshtml
+16.02.2016 16:02:45.317 [52] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Index.cshtml(20): error CS1061: 'Account' does not contain a definition for 'Email' and no extension method 'Email' accepting a first argument of type 'Account' could be found (are you missing a using directive or an assembly reference?)
+16.02.2016 16:03:32.773 [21] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Index.cshtml(20): error CS1061: 'Account' does not contain a definition for 'Email' and no extension method 'Email' accepting a first argument of type 'Account' could be found (are you missing a using directive or an assembly reference?)
+16.02.2016 16:03:51.241 [52] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PermissionUser\Index.cshtml(20): error CS1061: 'Account' does not contain a definition for 'Email' and no extension method 'Email' accepting a first argument of type 'Account' could be found (are you missing a using directive or an assembly reference?)
+16.02.2016 16:53:53.555 [15] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 16:55:24.971 [15] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 17:04:27.229 [17] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+16.02.2016 17:05:39.707 [17] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Succuss" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PromotionController".
+16.02.2016 17:25:47.467 [19] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.

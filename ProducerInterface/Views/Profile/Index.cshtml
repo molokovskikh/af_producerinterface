@@ -6,60 +6,88 @@
     var currentUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
     ViewBag.Title = "Кабинет производителя";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var NewsList = ViewBag.News as IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>;
 }
 
-<div class="form-group">    
-    <p class="lead">Здраствуйте, @currentUser.Name.</p>	
-</div>
+<div class="container body-content">
 
-<hr/> 
 
-<div class="form-group" id="NewsListDiv">
-	
-	<h2>Новости</h2> <string>Список новостей практически пуст, при попытке получить ещё новости, вернёт тот же список</string>
-	<hr/>
+    <div class="form-group">
+        <p class="lead">Здраствуйте, @currentUser.Name.</p>
+    </div>
 
-    @if (ViewBag.News != null && ViewBag.News.Count > 0)
-    {
-        foreach (var NewsItem in ViewBag.News)
+    <hr />
+
+    <h2>Новости</h2>
+    <hr />
+
+    <div class="form-group" id="NewsListDiv">
+        @if (ViewBag.News != null && ViewBag.News.Count > 0)
         {
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div>
-                        Тема @NewsItem.Name
-                        <div class="pull-right">Дата публикации @NewsItem.DatePublication.ToString("dd-MM-yyyy")</div>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <p><h4>Сообщение</h4>@NewsItem.Description</p>
-                </div>
+
+            <div class="row">
+                @foreach (var NewsItem in NewsList)
+                {                 
+                        <div class="panel panel-default pointer" onclick="window.location='@Url.Action("News", "Profile", new { Id = NewsItem.Id})'">
+                            <div class="panel-heading" style="text-decoration:none;">
+                                <span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right news-date">@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span>
+                                @*<h4 class="panel-title">
+                                    <p data-toggle="collapse" data-parent="#accordion-menu2"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right panel-title">@NewsItem.DatePublication.ToString("dd.MM.yyyy")</span></p>
+                                </h4>*@
+                            </div>
+                            <div class="panel-collapse collapse in" style="text-decoration:none;">
+                                <div class="panel-body" style="text-decoration:none; z-index:1;">
+                                 
+                                        @if (NewsItem.Description.Length > 150)
+                                        {
+                                            <p  class="clip">@Html.Raw(NewsItem.Description.Substring(0, 150)) ...</p>
+                                        }
+                                        else
+                                        {
+                                            <p  class="clip">@Html.Raw(NewsItem.Description) ...</p>
+                                        }
+                                                                      
+                                    </div>
+                            </div>
+                        </div>
+                   
+                }
             </div>
+
+            if (ViewBag.MaxCount > 10)
+            {
+                <div id="@("LoadingListDiv" + ViewBag.Pager)" class="row">
+
+                </div>
+
+                <div id=@("Delete_Id" + ViewBag.Pager)>
+                    @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
+                    new { Pager = ViewBag.Pager },
+                    new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
+                    new { @class = "btn btn-primary" })
+                </div>
+            }
         }
 
-        <div id="@("LoadingListDiv" + ViewBag.Pager)">
-
-        </div>
-
-        <div id=@("Delete_Id" + ViewBag.Pager)>
-            @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
-       new { Pager = ViewBag.Pager },
-       new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
-       new { @class = "btn btn-primary" }
-       )
-        </div>
-    }
-    else
-    {
-        <h3>Список новостей пуст</h3>
-    }
-
+    </div>
 
 </div>
 
+@section JavaScript
+{
+<script src="~/Scripts/WorkPlace/GradientText.js"></script>
+
 <script type="text/javascript">
-    function newsisloadcomplete(data_int)
-    {
+    function newsisloadcomplete(data_int) {
         var ElementId = "#Delete_Id" + data_int;
         $(ElementId).css("display", "none");
     }
+
+    //$("#textboxgradienttext").fadeOut();
+    //$(".gradient").pxgradient({ //произвольный селектор jQuery
+    //    step: 10, // размер шага градиента в пикселях. Меньше шаг — больше качество, но меньше производительность
+    //    colors: [ "#fff","transparent"],
+    //    dir: "x" // направление градиента. x — горизонтальное, y — вертикальное
+    //});
 </script>
+}

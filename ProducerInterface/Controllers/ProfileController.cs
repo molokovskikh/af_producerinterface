@@ -14,6 +14,9 @@ namespace ProducerInterface.Controllers
 {
     public class ProfileController : MasterBaseController
     {
+
+        private int PagerCount = 5;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -23,7 +26,12 @@ namespace ProducerInterface.Controllers
         public ActionResult Index()
         {
             ViewBag.Pager = 1;
-            ViewBag.News = cntx_.NotificationToProducers.Take(10).ToList();
+
+            var NewsAll = cntx_.NotificationToProducers.ToList();
+            NewsAll.Reverse();
+
+            ViewBag.News = NewsAll.Take(PagerCount).ToList();
+            ViewBag.MaxCount = NewsAll.Count();
             return View();
         }
 
@@ -110,8 +118,16 @@ namespace ProducerInterface.Controllers
         public ActionResult GetNextList(int Pager)
         {
             ViewBag.Pager = Pager + 1;
-            var ListNews10 = cntx_.NotificationToProducers.OrderBy(xxx => xxx.Id).Take(10).ToList();
+            var ListNews10 = cntx_.NotificationToProducers.OrderByDescending(xxx => xxx.Id).ToList().Skip(PagerCount * Pager).Take(PagerCount).ToList();
+
+            ViewBag.MaxCount = cntx_.NotificationToProducers.Count() / (PagerCount * Pager);
             return PartialView("GetNextList", ListNews10);
+        }
+        
+        public ActionResult News(int Id)
+        {
+            var News = cntx_.NotificationToProducers.Where(xxx => xxx.Id == Id).First();
+            return View(News);
         }
 
     }

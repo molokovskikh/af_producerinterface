@@ -8,10 +8,10 @@
         <EntityTypeShape EntityType="producerinterface_Model.jobextend" Width="1.5" PointX="8.875" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.mailform" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.profilenews" Width="1.5" PointX="7.75" PointY="0.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.promotionToDrug" Width="1.625" PointX="10.375" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.promotionToDrug" Width="1.625" PointX="11.75" PointY="19.5" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.reporttemplate" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.reportxml" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.user_logs" Width="1.5" PointX="2.625" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.user_logs" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.assortment" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.catalognames" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamily" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="true" />
@@ -26,7 +26,7 @@
         <EntityTypeShape EntityType="producerinterface_Model.drugfamilynames" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountCompany" Width="3.875" PointX="0.5" PointY="13.125" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountEmail" Width="4.5" PointX="5.875" PointY="16.875" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountPermission" Width="1.75" PointX="5.625" PointY="22" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountPermission" Width="1.75" PointX="7.75" PointY="19.5" />
         <EntityTypeShape EntityType="producerinterface_Model.CompanyDomainName" Width="3.125" PointX="0.5" PointY="15.375" />
         <AssociationConnector Association="producerinterface_Model.CompanyId_AccountCompanyId" />
         <EntityTypeShape EntityType="producerinterface_Model.usernames" Width="1.5" PointX="5.375" PointY="3.75" />
@@ -38,7 +38,6 @@
         <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
         <AssociationConnector Association="producerinterface_Model.AccountGroupToPermission" />
         <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
-        <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="1.5" PointX="5.375" PointY="6.75" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="4" PointX="0.5" PointY="22.875" />
         <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
         <EntityTypeShape EntityType="producerinterface_Model.promotionsimage" Width="2.5" PointX="12.75" PointY="16.375" />
@@ -47,6 +46,11 @@
         <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
         <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" />
+        <EntityTypeShape EntityType="producerinterface_Model.DrugDescriptionRemark" Width="3.75" PointX="3.125" PointY="6.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="2.125" PointX="9.375" PointY="22.375" />
+        <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="3.25" PointX="5.5" PointY="23.375" />
+        <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
+        <AssociationConnector Association="producerinterface_Model.FK2_NewsChangeToNotification" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

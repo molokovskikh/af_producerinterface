@@ -1,0 +1,95 @@
+﻿@model ProducerInterfaceCommon.ContextModels.Account    
+@{
+    ViewBag.Title = "Мой профиль";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+<div class="container body-content">
+      
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        <fieldset>
+
+            <legend> ФИО, Должность </legend>
+
+            <div class="form-group">
+                <label>ФИО</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label>Должность</label>
+                @Html.TextBoxFor(m => m.Appointment, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Сохранить" />
+            </div>
+
+        </fieldset>
+    }
+        <fieldset>
+     
+            <legend>Почтовые адреса</legend>
+ 
+                <div class="form-group" id="listemailview">
+                    <label>Список адресов</label>
+                    <div id="accountemaillist">
+                        <br/>
+
+                        @foreach (var eMailAddress in Model.AccountEmail)
+                        {
+                            <div id="email_item_@eMailAddress.Id">
+                                <p>
+                                    @eMailAddress.eMail &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Ajax.ActionLink(" ", "DeleteEmail",
+                                                                                                         new { Id = eMailAddress.Id },
+                                                                                                         new AjaxOptions
+                                                                                                         {
+                                                                                                             HttpMethod = "POST",
+                                                                                                             OnSuccess = "OnDeleteSucces(" + eMailAddress.Id + ")",
+                                                                                                             Confirm = "Вы уверены, что хотите удалить данный адрес?",
+                                                                                                             OnFailure = "Alert('При удалении возникла ошибка')"
+                                                                                                         }, new { @class="glyphicon glyphicon-trash", @title="Удалить" + eMailAddress.eMail })
+                                
+                            </p>
+                        </div>
+                        }
+                     
+                    </div>
+                    <br/>
+                    <label>Добавить адресс</label>
+                    <div class="form-group">
+                        <input name="addemail" id="addemail" type="text" class="form-control" />
+                    </div>
+                        <div class="form-group">
+                            <a onclick="AddEmail()" class="btn btn-primary">Добавить в список адресс</a>
+                        </div>
+                    </div>  
+        </fieldset>    
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        function OnDeleteSucces(id_email)
+        {
+            var elementID = "#email_item_" + id_email;
+            $(elementID).css("display", "none");
+            $("#listemailview").show();
+        }
+        function AddEmail()
+        {
+            var SendItem = $('#addemail').val();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminAccount/addemail',
+                data: 'Mail=' + SendItem,                
+                success: function (data)
+                {
+                    $('#accountemaillist').append(data);
+                }
+            });   
+        }
+
+    </script>
+}
+
+

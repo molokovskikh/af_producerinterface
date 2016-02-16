@@ -117,8 +117,7 @@ namespace ProducerInterfaceCommon.Controllers
                 if (!PermissionExsist)
                 {
                     // проверяем в БД доступ для текущего пользователя              
-                    //var ListPermission = cntx_.AccountPermission.Where(xxx=>xxx.TypePermission == SbyteTypeUser).ToList().Where(xx => xx.AccountGroup.Any(xxx => xxx.Account.Any(x => x.Id == CurrentUser.Id)))
-                    //    .ToList();
+                  //  var ListPermission = cntx_.AccountPermission.Any(xxx => xxx.TypePermission == SbyteTypeUser && xxx.AccountGroup.Any(s => s.Account.Any(d => d.Id == CurrentUser.Id)));
 
                     //PermissionExsist = ListPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
 

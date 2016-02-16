@@ -3,11 +3,14 @@
 
 @{
     ViewBag.Title = "Отчёты Производителей";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 <br />
 <h3>Поиск отчетов Производителей</h3>
 <hr />
+
+
+
 
 @using (Html.BeginForm("SearchReports", "Report", new { HttpMethod = "POST", UpdateTargetId= "SearchResults"}))
 {
