@@ -1,0 +1,62 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+@model IEnumerable<reportrunlogwithuser>
+
+
+<div class="body-content">
+
+    @if (Model != null && Model.Count() > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Список отчетов</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RunNow)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Ip)
+                        </th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RunNow)
+                            </td>
+                            <td>
+                                @if (item.RunNow) {
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                }
+                                else {
+                                    <span>Автоматически по расписанию</span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Ip)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    }
+    else {
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Отчетов не найдено</h4>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+

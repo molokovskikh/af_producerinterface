@@ -12,19 +12,13 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class NotificationToProducers
+    public partial class ReportRunLog
     {
-        public NotificationToProducers()
-        {
-            this.NewsChange = new HashSet<NewsChange>();
-        }
-    
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Nullable<System.DateTime> DatePublication { get; set; }
-        public bool Enabled { get; set; }
-    
-        public virtual ICollection<NewsChange> NewsChange { get; set; }
+        public int Id { get; set; }
+        public string JobName { get; set; }
+        public Nullable<long> AccountId { get; set; }
+        public string Ip { get; set; }
+        public System.DateTime RunStartTime { get; set; }
+        public bool RunNow { get; set; }
     }
 }

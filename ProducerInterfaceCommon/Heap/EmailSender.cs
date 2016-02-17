@@ -64,7 +64,7 @@ namespace ProducerInterfaceCommon.Heap
 			var body = $"{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(user.Login, subject, body, null);
 
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчёт \"{reportName}\", задача {jobName}, сообщение об ошибке {errorMessage}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{reportName}\", задача {jobName}, сообщение об ошибке {errorMessage}";
 			var mailError = ConfigurationManager.AppSettings["MailError"];
 			EmailSender.SendEmail(mailError, subject, bodyExtended, null);
 		}

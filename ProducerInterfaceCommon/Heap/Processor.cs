@@ -22,16 +22,23 @@ namespace ProducerInterfaceCommon.Heap
 		public Processor()
 		{
 			_type = typeof(T);
-            _cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
-            _helper = new HeaderHelper(_cntx);
+      _cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+      _helper = new HeaderHelper(_cntx);
 		}
 
 		public void Process(JobKey key, Report jparam, TriggerParam tparam)
 		{
+			// записали в историю запусков только для крона. При запуске вручную - пишем на странице запуска, потому что знаем пользователя
+			if (tparam is CronParam) {
+				var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false };
+				_cntx.ReportRunLog.Add(reportRunLog);
+				_cntx.SaveChanges();
+			}
+
 			// вытащили расширенные параметры задачи
 			var jext = _cntx.jobextend.Single(x => x.JobName == key.Name
-																							&& x.JobGroup == key.Group
-																							&& x.Enable == true);
+																						&& x.JobGroup == key.Group
+																						&& x.Enable == true);
 
 			var querySort = new List<T>();
 			var connString = ConfigurationManager.ConnectionStrings["producerinterface"].ConnectionString;
@@ -49,7 +56,7 @@ namespace ProducerInterfaceCommon.Heap
 				}
 			}
 
-			// действия при пустом отчёте
+			// действия при пустом отчете
 			if (querySort.Count == 0) {
 				jext.DisplayStatusEnum = DisplayStatus.Empty;
 				_cntx.SaveChanges();
@@ -105,7 +112,7 @@ namespace ProducerInterfaceCommon.Heap
 			else 
 				jxml.Xml = sw.ToString();
 
-			// отправили статус, что отчёт готов
+			// отправили статус, что отчет готов
 			jext.DisplayStatusEnum = DisplayStatus.Ready;
 			_cntx.SaveChanges();
 
@@ -115,7 +122,7 @@ namespace ProducerInterfaceCommon.Heap
 				if (file.Exists)
 					file.Delete();
 
-				// TODO именование листов. Сейчас лист называется именем, данным отчёту пользователем
+				// TODO именование листов. Сейчас лист называется именем, данным отчету пользователем
 				var ecreator = new ExcelCreator<T>();
 				ecreator.Create(file, jparam.CastomName, headers, dataTable);
 

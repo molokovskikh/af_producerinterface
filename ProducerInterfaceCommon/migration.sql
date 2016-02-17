@@ -35,4 +35,47 @@ CREATE TABLE `NewsChange` (
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB;
 
+ALTER TABLE `NewsChange` DROP FOREIGN KEY `FK2_NewsChangeToNotification`;
+
+ALTER TABLE `NewsChange` ADD CONSTRAINT `FK2_NewsChangeToNotification` 
+FOREIGN KEY (`IdNews`) REFERENCES `NotificationToProducers` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+ALTER TABLE `NotificationToProducers` ADD COLUMN `Enabled` TINYINT(1) NOT NULL DEFAULT '1' AFTER `DatePublication`;
+
+ALTER TABLE `NewsChange` ALTER `NewsNewTema` DROP DEFAULT, ALTER `NewsOldTema` DROP DEFAULT;
+
+ALTER TABLE `NewsChange`
+ CHANGE COLUMN `NewsNewTema` `NewsNewTema` VARCHAR(150) NULL AFTER `DateChange`,
+ CHANGE COLUMN `NewsOldTema` `NewsOldTema` VARCHAR(150) NULL AFTER `NewsNewTema`,
+ CHANGE COLUMN `NewsOldDescription` `NewsOldDescription` TEXT NULL AFTER `NewsOldTema`,
+ CHANGE COLUMN `NewsNewDescription` `NewsNewDescription` TEXT NULL AFTER `NewsOldDescription`;
+
+ALTER TABLE `NotificationToProducers`
+ CHANGE COLUMN `Enabled` `Enabled` TINYINT(1) NOT NULL DEFAULT '1' AFTER `DatePublication`;
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view catalognameswithuptime as
+select cn.Id, cn.Name, cn.DescriptionId, cn.MnnId, COALESCE(d.UpdateTime, cn.UpdateTime) as UpdateTime 
+from catalogs.catalognames cn
+left join catalogs.Descriptions d on d.Id = cn.DescriptionId;
+
+CREATE TABLE `ReportRunLog` (
+	`Id` INT(10) NOT NULL AUTO_INCREMENT,
+	`JobName` VARCHAR(200) NOT NULL,
+	`AccountId` INT(11) UNSIGNED NULL DEFAULT NULL,
+	`Ip` VARCHAR(50) NULL DEFAULT NULL,
+	`RunStartTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`RunNow` TINYINT(1) NOT NULL DEFAULT '1',
+	PRIMARY KEY (`Id`),
+	INDEX `IDX_JobName` (`JobName`)
+);
+
+alter table `jobextend` add index `IDX_JobName` (`JobName`);
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view reportrunlogwithuser as
+select rl.Id, rl.JobName, rl.Ip, rl.RunStartTime, rl.RunNow, a.Name as UserName
+from ReportRunLog rl
+left outer join Account a on a.Id = rl.AccountId;
+
+
+
 

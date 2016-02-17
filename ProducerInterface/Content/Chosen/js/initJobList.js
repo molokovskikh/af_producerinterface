@@ -14,14 +14,14 @@ function ajaxCall() {
 					el.text('Не запускался');
 					break;
 				case 1:
-			  	el.text('Отчёт готовится');
+			  	el.text('Отчет готовится');
 			  	break;
 				case 2:
-					el.html('<a href="' + data.url + '">Отчёт готов</a>');
+					el.html('<a href="' + data.url + '">Отчет готов</a>');
 					el.removeClass('processed');
 					break;
 				case 3:
-					el.text('Нет данных для построения отчёта');
+					el.text('Нет данных для построения отчета');
 					break;
 				case 4:
 					el.text('В процессе подготовки произошла ошибка');

@@ -174,10 +174,10 @@
           <Property Name="IdNews" Type="uint" Nullable="false" />
           <Property Name="TypeCnhange" Type="utinyint" Nullable="false" />
           <Property Name="DateChange" Type="datetime" Precision="0" Nullable="false" />
-          <Property Name="NewsNewTema" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="NewsOldTema" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="NewsOldDescription" Type="text" Nullable="false" />
-          <Property Name="NewsNewDescription" Type="text" Nullable="false" />
+          <Property Name="NewsNewTema" Type="varchar" MaxLength="150" />
+          <Property Name="NewsOldTema" Type="varchar" MaxLength="150" />
+          <Property Name="NewsOldDescription" Type="text" />
+          <Property Name="NewsNewDescription" Type="text" />
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="NotificationToProducers">
@@ -188,6 +188,7 @@
           <Property Name="Name" Type="varchar" MaxLength="150" />
           <Property Name="Description" Type="text" />
           <Property Name="DatePublication" Type="date" />
+          <Property Name="Enabled" Type="bool" Nullable="false" />
         </EntityType>
         <EntityType Name="profilenews">
           <Key>
@@ -238,6 +239,17 @@
           </Key>
           <Property Name="DrugId" Type="uint" Nullable="false" />
           <Property Name="PromotionId" Type="uint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReportRunLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="AccountId" Type="uint" />
+          <Property Name="Ip" Type="varchar" MaxLength="50" />
+          <Property Name="RunStartTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RunNow" Type="bool" Nullable="false" />
         </EntityType>
         <EntityType Name="reporttemplate">
           <Key>
@@ -298,6 +310,19 @@
           <Property Name="CatalogId" Type="uint" Nullable="false" />
           <Property Name="CatalogName" Type="varchar" MaxLength="511" />
           <Property Name="IsPharmacie" Type="bool" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.catalognameswithuptime" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="catalognameswithuptime">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Id" Type="uint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="DescriptionId" Type="uint" />
+          <Property Name="MnnId" Type="uint" />
+          <Property Name="UpdateTime" Type="timestamp" Precision="0" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamily" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -422,6 +447,22 @@
           </Key>
           <Property Name="RegionCode" Type="ubigint" Nullable="false" />
           <Property Name="RegionName" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.reportrunlogwithuser" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="reportrunlogwithuser">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="RunStartTime" />
+            <PropertyRef Name="RunNow" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="JobName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Ip" Type="varchar" MaxLength="50" />
+          <Property Name="RunStartTime" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="RunNow" Type="bool" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="75" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.suppliernames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -667,6 +708,7 @@
           <EntitySet Name="promotions" EntityType="Self.promotions" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotionsimage" EntityType="Self.promotionsimage" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotionToDrug" EntityType="Self.promotionToDrug" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ReportRunLog" EntityType="Self.ReportRunLog" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reportxml" EntityType="Self.reportxml" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="user_logs" EntityType="Self.user_logs" Schema="producerinterface" store:Type="Tables" />
@@ -684,6 +726,15 @@ FROM `assortment` AS `assortment`</DefiningQuery>
 `catalognames`.`CatalogName`, 
 `catalognames`.`IsPharmacie`
 FROM `catalognames` AS `catalognames`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="catalognameswithuptime" EntityType="Self.catalognameswithuptime" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`catalognameswithuptime`.`Id`, 
+`catalognameswithuptime`.`Name`, 
+`catalognameswithuptime`.`DescriptionId`, 
+`catalognameswithuptime`.`MnnId`, 
+`catalognameswithuptime`.`UpdateTime`
+FROM `catalognameswithuptime` AS `catalognameswithuptime`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="drugfamily" EntityType="Self.drugfamily" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -760,6 +811,16 @@ FROM `ratingreportorderitems` AS `ratingreportorderitems`</DefiningQuery>
 `regionnames`.`RegionCode`, 
 `regionnames`.`RegionName`
 FROM `regionnames` AS `regionnames`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="reportrunlogwithuser" EntityType="Self.reportrunlogwithuser" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`reportrunlogwithuser`.`Id`, 
+`reportrunlogwithuser`.`JobName`, 
+`reportrunlogwithuser`.`Ip`, 
+`reportrunlogwithuser`.`RunStartTime`, 
+`reportrunlogwithuser`.`RunNow`, 
+`reportrunlogwithuser`.`UserName`
+FROM `reportrunlogwithuser` AS `reportrunlogwithuser`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="suppliernames" EntityType="Self.suppliernames" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -1148,6 +1209,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="NewsChange" EntitySet="NewsChange" />
           </AssociationSet>
           <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
+          <EntitySet Name="catalognameswithuptime" EntityType="producerinterface_Model.catalognameswithuptime" />
+          <EntitySet Name="ReportRunLog" EntityType="producerinterface_Model.ReportRunLog" />
+          <EntitySet Name="reportrunlogwithuser" EntityType="producerinterface_Model.reportrunlogwithuser" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1464,6 +1528,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="DatePublication" Type="DateTime" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NotificationToProducers" ToRole="NewsChange" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="NewsChange">
           <Key>
@@ -1511,6 +1576,42 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </Key>
           <Property Name="SupplierId" Type="Int64" Nullable="false" />
           <Property Name="RegionCode" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="catalognameswithuptime">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DescriptionId" Type="Int64" />
+          <Property Name="MnnId" Type="Int64" />
+          <Property Name="UpdateTime" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="ReportRunLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RunStartTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RunNow" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reportrunlogwithuser">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="RunStartTime" />
+            <PropertyRef Name="RunNow" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RunStartTime" Type="DateTime" Nullable="false" />
+          <Property Name="RunNow" Type="Boolean" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1913,6 +2014,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="NotificationToProducers">
             <EntityTypeMapping TypeName="producerinterface_Model.NotificationToProducers">
               <MappingFragment StoreEntitySet="NotificationToProducers">
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="DatePublication" ColumnName="DatePublication" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1940,6 +2042,41 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <MappingFragment StoreEntitySet="supplierregions">
                 <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalognameswithuptime">
+            <EntityTypeMapping TypeName="producerinterface_Model.catalognameswithuptime">
+              <MappingFragment StoreEntitySet="catalognameswithuptime">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="MnnId" ColumnName="MnnId" />
+                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportRunLog">
+            <EntityTypeMapping TypeName="producerinterface_Model.ReportRunLog">
+              <MappingFragment StoreEntitySet="ReportRunLog">
+                <ScalarProperty Name="RunNow" ColumnName="RunNow" />
+                <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />
+                <ScalarProperty Name="Ip" ColumnName="Ip" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reportrunlogwithuser">
+            <EntityTypeMapping TypeName="producerinterface_Model.reportrunlogwithuser">
+              <MappingFragment StoreEntitySet="reportrunlogwithuser">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="RunNow" ColumnName="RunNow" />
+                <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />
+                <ScalarProperty Name="Ip" ColumnName="Ip" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -7,33 +7,27 @@ using System.Web.Mvc;
 namespace ProducerInterfaceCommon.ContextModels
 {
 
-    public partial class NewsChange
-    {
-        public string TypeChangeDisplayName
-        {
-         
-                get
-                {
-                    return Heap.AttributeHelper.GetDisplayName(ChangeNewsType.ToString());
-                }
-           
-        }
+	public partial class NewsChange
+	{
+		public string TypeChangeDisplayName
+		{
+			get
+			{
+				return Heap.AttributeHelper.GetDisplayName(ChangeNewsType.ToString());
+			}
+		}
 
-        public NewsChanges ChangeNewsType
-        {
-            get { return (NewsChanges)TypeCnhange; }
-            set { TypeCnhange = (byte)value; }
-        }      
-    }
-
-
-
-
+		public NewsChanges ChangeNewsType
+		{
+			get { return (NewsChanges)TypeCnhange; }
+			set { TypeCnhange = (byte)value; }
+		}
+	}
 
 	[MetadataType(typeof(NotificationToProducersMetaData))]
 	public partial class NotificationToProducers
 	{
-   
+
 	}
 
 	public class NotificationToProducersMetaData
@@ -53,7 +47,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	}
 
 	[MetadataType(typeof(JobExtendMetaData))]
-	[DisplayName("Отчёт")]
+	[DisplayName("Отчет")]
 	public partial class jobextend
 	{
 		public Reports ReportTypeEnum
@@ -101,8 +95,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		[ScaffoldColumn(false)]
 		public System.DateTime CreationDate { get; set; }
 
-		//[Display(Name = "Последние изменения")]
-		[ScaffoldColumn(false)]
+		[Display(Name = "Изменен")]
 		public System.DateTime LastModified { get; set; }
 
 		[ScaffoldColumn(false)]
@@ -119,8 +112,8 @@ namespace ProducerInterfaceCommon.ContextModels
 	}
 
 
-    [MetadataType(typeof(AccountMetaData))]
-    public partial class Account
+	[MetadataType(typeof(AccountMetaData))]
+	public partial class Account
 	{
 		[Display(Name = "IP адресс")]
 		public string IP { get; set; }
@@ -144,10 +137,10 @@ namespace ProducerInterfaceCommon.ContextModels
 		}
 	}
 
-    public class AccountMetaData
-    {
+	public class AccountMetaData
+	{
 
-    }
+	}
 
 	public partial class AccountGroup
 	{
@@ -194,5 +187,28 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
 
+	}
+
+	[MetadataType(typeof(reportrunlogwithuserMetaData))]
+	public partial class reportrunlogwithuser
+	{
+	}
+
+	public partial class reportrunlogwithuserMetaData
+	{
+		public int Id { get; set; }
+		public string JobName { get; set; }
+
+		[Display(Name = "IP-адрес пользователя")]
+		public string Ip { get; set; }
+
+		[Display(Name = "Дата запуска")]
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy hh:mm:ss}")]
+		public DateTime RunStartTime { get; set; }
+
+		public bool RunNow { get; set; }
+
+		[Display(Name = "Пользователь")]
+		public string UserName { get; set; }
 	}
 }

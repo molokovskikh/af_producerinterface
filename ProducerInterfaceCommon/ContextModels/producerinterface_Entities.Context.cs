@@ -59,5 +59,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
         public DbSet<NewsChange> NewsChange { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
+        public DbSet<catalognameswithuptime> catalognameswithuptime { get; set; }
+        public DbSet<ReportRunLog> ReportRunLog { get; set; }
+        public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
     }
 }

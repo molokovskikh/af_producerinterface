@@ -15,7 +15,7 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			var key = context.JobDetail.Key;
 
-			// jparam хранит параметры отчёта, неспецифические к моменту запуска
+			// jparam хранит параметры отчета, неспецифические к моменту запуска
 			var jparam = (Report)context.JobDetail.JobDataMap["param"];
 			// tparam хранит временнЫе параметы
 			var tparam = (TriggerParam)context.Trigger.JobDataMap["tparam"];
@@ -23,7 +23,7 @@ namespace ProducerInterfaceCommon.Heap
 				((IInterval)jparam).DateFrom = ((IInterval)tparam).DateFrom;
 				((IInterval)jparam).DateTo = ((IInterval)tparam).DateTo;
 			}
-			// TODO при появлении неинтервальных отчётов написать код здесь
+			// TODO при появлении неинтервальных отчетов написать код здесь
 			else {
 				logger.Error($"Job {key.Group} {key.Name} is not interval report. Mast to be upgrade");
 				return;
@@ -54,7 +54,7 @@ namespace ProducerInterfaceCommon.Heap
 																							&& x.JobGroup == key.Group
 																							&& x.Enable == true);
 
-				// отправили статус об ошибке отчёта
+				// отправили статус об ошибке отчета
 				jext.DisplayStatusEnum = DisplayStatus.Error;
 				jext.LastRun = DateTime.Now;
 				cntx.SaveChanges();

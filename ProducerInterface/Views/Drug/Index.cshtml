@@ -1,5 +1,6 @@
-﻿@using ProducerInterfaceCommon.CatalogModels
-@model IEnumerable<catalognames>
+﻿@using ProducerInterfaceCommon.ContextModels
+@using System
+@model IEnumerable<catalognameswithuptime>
 
 @{
     var title = $"Список препаратов производителя \"{ViewData["producerName"]}\"";
@@ -39,15 +40,7 @@
                         <td>
                             @Html.ActionLink("Формы выпуска и дозировка", "DisplayForms", new { id = item.Id })
                         </td>
-                        @*<td>
-                            @if (item.MnnId.HasValue) {
-                                @Html.ActionLink("МНН", "EditMnn", new { id = item.FamilyId })
-                            }
-                            else {
-                                <a style="color: red" href="@Url.Action("EditMnn", new { id = item.FamilyId })">Добавить МНН</a>
-                            }
-                        </td>*@
-                        <td>@Html.DisplayTextFor(m => item.UpdateTime)</td>
+                        <td>@Html.Raw(String.Format("{0:dd.MM.yyyy hh:mm:ss}", item.UpdateTime))</td>
                     </tr>
                 }
                 </tbody>

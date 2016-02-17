@@ -124,7 +124,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         
         public ActionResult RunReportsList(Guid GuidReport)
         {
-            // Список запусков текущего отчёта
+            // Список запусков текущего отчета
             return View();
         }
 

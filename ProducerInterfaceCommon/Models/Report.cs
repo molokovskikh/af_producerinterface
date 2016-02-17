@@ -14,9 +14,9 @@ namespace ProducerInterfaceCommon.Models
 	{
 		public abstract string Name { get; }
 
-		[Display(Name = "Название отчёта")]
-		[Required(ErrorMessage = "Не указано название отчёта")]
-		[StringLength(250, ErrorMessage = "Название отчёта должно быть не длиннее 250 символов")]
+		[Display(Name = "Название отчета")]
+		[Required(ErrorMessage = "Не указано название отчета")]
+		[StringLength(250, ErrorMessage = "Название отчета должно быть не длиннее 250 символов")]
 		[UIHint("String")]
 		public string CastomName { get; set; }
 
@@ -24,7 +24,7 @@ namespace ProducerInterfaceCommon.Models
 		[Required]
 		public string MailSubject { get; set; }
 
-		// тип отчёта по enum
+		// тип отчета по enum
 		[HiddenInput(DisplayValue = false)]
 		[Required]
 		public int Id { get; set; }

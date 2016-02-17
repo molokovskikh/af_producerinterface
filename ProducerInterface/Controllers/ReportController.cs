@@ -61,9 +61,9 @@ namespace ProducerInterface.Controllers
 
 
 		/// <summary>
-		/// Возвращает форму указанного типа для заполнения параметров отчёта, проверяет их, сохраняет задание в шедулере Quartz
+		/// Возвращает форму указанного типа для заполнения параметров отчета, проверяет их, сохраняет задание в шедулере Quartz
 		/// </summary>
-		/// <param name="Id">Идентификатор типа отчёта</param>
+		/// <param name="Id">Идентификатор типа отчета</param>
 		/// <returns></returns>
 		public ActionResult AddJob(int? Id)
 		{
@@ -135,8 +135,9 @@ namespace ProducerInterface.Controllers
 			};
 
 			cntx.jobextend.Add(jext);
-			cntx.SaveChanges(CurrentUser, "Добавление отчёта");
-			return View("Success", (object)"Отчёт успешно добавлен");
+			cntx.SaveChanges(CurrentUser, "Добавление отчета");
+			return RedirectToAction("JobList", "Report");
+			//return View("Success", (object)"Отчет успешно добавлен");
 		}
 
 		/// <summary>
@@ -167,7 +168,7 @@ namespace ProducerInterface.Controllers
 				return View("Error", (object)(e.Message));
 			}
 			jext.Enable = false;
-			cntx.SaveChanges(CurrentUser, "Удаление отчёта");
+			cntx.SaveChanges(CurrentUser, "Удаление отчета");
 			return View("Success", (object)"Задача удалена");
 		}
 
@@ -199,12 +200,12 @@ namespace ProducerInterface.Controllers
 				return View("Error", (object)(e.Message));
 			}
 			jext.Enable = true;
-			cntx.SaveChanges(CurrentUser, "Восстановление отчёта");
+			cntx.SaveChanges(CurrentUser, "Восстановление отчета");
 			return View("Success", (object)"Задача восстановлена");
 		}
 
 		/// <summary>
-		/// Возвращает параметры отчёта, сохранённые в указанном задании, для редактирования, проверяет их, сохраняет изменения
+		/// Возвращает параметры отчета, сохранённые в указанном задании, для редактирования, проверяет их, сохраняет изменения
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <param name="jobGroup">Группа задания в Quartz</param>
@@ -268,8 +269,8 @@ namespace ProducerInterface.Controllers
 			// вносим изменения в расширенные параметры
 			jext.LastModified = DateTime.Now;
 			jext.CustomName = model.CastomName;
-			cntx.SaveChanges(CurrentUser, "Редактирование отчёта");
-			return View("Success", (object)"Отчёт успешно изменён");
+			cntx.SaveChanges(CurrentUser, "Редактирование отчета");
+			return View("Success", (object)"Отчет успешно изменён");
 		}
 
 		/// <summary>
@@ -280,7 +281,7 @@ namespace ProducerInterface.Controllers
 		{
 			var scheduler = GetScheduler();
 			var jobList = cntx.jobextend.Where(x => x.ProducerId == producerId
-																																											&& x.SchedName == scheduler.SchedulerName
+																				&& x.SchedName == scheduler.SchedulerName
 																				&& x.Enable == true)
 																				.OrderByDescending(x => x.CreationDate)
 																				.ToList();
@@ -290,7 +291,7 @@ namespace ProducerInterface.Controllers
 
 
 		/// <summary>
-		/// Возвращает для заполнения форму установки параметров запуска отчёта, проверяет их, запускает отчёт
+		/// Возвращает для заполнения форму установки параметров запуска отчета, проверяет их, запускает отчет
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <param name="jobGroup">Группа задания в Quartz</param>
@@ -314,9 +315,9 @@ namespace ProducerInterface.Controllers
 			RunNowParam model;
 			if (param is IInterval)
 				model = new RunNowIntervalParam();
-			// TODO при появлении неинтервальных отчётов добавить код
+			// TODO при появлении неинтервальных отчетов добавить код
 			else
-				return View("Error", (object)"Отчёт этого типа невозможно запустить вручную");
+				return View("Error", (object)"Отчет этого типа невозможно запустить вручную");
 
 			// при GET возвращаем пустую модель для заполнения
 			if (HttpContext.Request.HttpMethod == "GET")
@@ -340,6 +341,11 @@ namespace ProducerInterface.Controllers
 					.Build();
 			trigger.JobDataMap["tparam"] = model;
 
+			// записали в историю запусков
+			var reportRunLog = new ReportRunLog() { AccountId = userId, Ip = CurrentUser.IP, JobName = key.Name, RunNow = true };
+			cntx.ReportRunLog.Add(reportRunLog);
+			cntx.SaveChanges();
+
 			try
 			{
 				scheduler.ScheduleJob(trigger);
@@ -350,14 +356,14 @@ namespace ProducerInterface.Controllers
 				return View("Error", (object)(e.Message));
 			}
 
-			// отправили статус, что отчёт готовится
+			// отправили статус, что отчет готовится
 			jext.DisplayStatusEnum = DisplayStatus.Processed;
 			jext.LastRun = DateTime.Now;
-			cntx.SaveChanges(CurrentUser, "Запуск отчёта");
+			cntx.SaveChanges();
 
 			var message = "АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же ";
 			if (model.ByDisplay)
-				message = message + "появится в списке отчётов";
+				message = message + "появится в списке отчетов";
 			if (model.ByDisplay && model.ByEmail)
 				message = message + " и ";
 			if (model.ByEmail)
@@ -366,8 +372,20 @@ namespace ProducerInterface.Controllers
 			return View("Success", (object)message);
 		}
 
+
 		/// <summary>
-		/// Возвращает форму для заполнения параметров запуска отчётов, включая расписание, устанавливает исполнение задания по расписанию
+		/// Возвращает историю запуска отчёта
+		/// </summary>
+		/// <param name="jobName">Имя задания в Quartz</param>
+		/// <returns></returns>
+		public ActionResult RunHistory(string jobName)
+		{
+			var model = cntx.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+      return View(model);
+		}
+
+		/// <summary>
+		/// Возвращает форму для заполнения параметров запуска отчетов, включая расписание, устанавливает исполнение задания по расписанию
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <param name="jobGroup">Группа задания в Quartz</param>
@@ -391,9 +409,9 @@ namespace ProducerInterface.Controllers
 			CronParam model;
 			if (param is IInterval)
 				model = new CronIntervalParam();
-			// TODO при появлении неинтервальных отчётов добавить код
+			// TODO при появлении неинтервальных отчетов добавить код
 			else
-				return View("Error", (object)"Отчёт этого типа невозможно запустить вручную");
+				return View("Error", (object)"Отчет этого типа невозможно запустить вручную");
 
 			// триггер вставлялся с идентификатором задачи
 			var oldTriggerKey = new TriggerKey(key.Name, key.Group);
@@ -446,12 +464,12 @@ namespace ProducerInterface.Controllers
 			}
 			// меняем человекочитаемое описание в доп. параметрах задачи
 			jext.Scheduler = model.CronHumanText;
-			cntx.SaveChanges(CurrentUser, "Установка расписания отчёта");
+			cntx.SaveChanges(CurrentUser, "Установка расписания отчета");
 			return View("Success", (object)"Расписание успешно установлено");
 		}
 
 		/// <summary>
-		/// Возвращает последнюю версию указанного отчёта для отображения пользователю в веб-интерфейсе
+		/// Возвращает последнюю версию указанного отчета для отображения пользователю в веб-интерфейсе
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <param name="jobGroup">Группа задания в Quartz</param>
@@ -460,7 +478,7 @@ namespace ProducerInterface.Controllers
 		{
 			var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == jobName && x.JobGroup == jobGroup);
 			if (jxml == null)
-				return View("Error", (object)"Отчёт не найден");
+				return View("Error", (object)"Отчет не найден");
 
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
@@ -486,7 +504,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// Возвращает статус указанного задания и ссылку на последний отчёт
+		/// Возвращает статус указанного задания и ссылку на последний отчет
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <param name="jobGroup">Группа задания в Quartz</param>
@@ -525,9 +543,9 @@ namespace ProducerInterface.Controllers
 
 
 		/// <summary>
-		/// Возвращает тип отчёта по идентификатору типа отчёта
+		/// Возвращает тип отчета по идентификатору типа отчета
 		/// </summary>
-		/// <param name="id">Идентификатор типа отчёта</param>
+		/// <param name="id">Идентификатор типа отчета</param>
 		/// <returns></returns>
 		protected Type GetModelType(int id)
 		{
@@ -556,9 +574,9 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// Устанавливает значения ViewData, требующиеся для отображения формы ввода параметров заданной модели отчёта
+		/// Устанавливает значения ViewData, требующиеся для отображения формы ввода параметров заданной модели отчета
 		/// </summary>
-		/// <param name="model">Модель отчёта</param>
+		/// <param name="model">Модель отчета</param>
 		protected void SetViewData(Report model)
 		{
 			foreach (var item in model.ViewDataValues(h))

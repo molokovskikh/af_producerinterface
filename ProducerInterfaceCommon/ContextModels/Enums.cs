@@ -13,13 +13,13 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Не запускался")]
         New = 0,
 
-        [Display(Name = "Отчёт готовится")]
+        [Display(Name = "Отчет готовится")]
         Processed = 1,
 
-        [Display(Name = "Отчёт готов")]
+        [Display(Name = "Отчет готов")]
         Ready = 2,
 
-        [Display(Name = "Нет данных для построения отчёта")]
+        [Display(Name = "Нет данных для построения отчета")]
         Empty = 3,
 
         [Display(Name = "В процессе подготовки произошла ошибка")]

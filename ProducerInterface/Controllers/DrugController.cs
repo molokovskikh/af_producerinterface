@@ -43,13 +43,8 @@ namespace ProducerInterface.Controllers
 			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 
 			var catalogIds = ccntx.assortment.Where(x => x.ProducerId == producerId).Select(x => x.CatalogId).ToList();
-			var model = ccntx.catalognames.Where(x => x.Catalog.Any(y => catalogIds.Contains(y.Id))).OrderBy(x => x.Name).ToList();
-
-
-			//var model = cntx_.drugfamily
-			//	.Where(x => x.ProducerId == producerId)
-			//	.OrderBy(x => x.FamilyName)
-			//	.ToList();
+			var catalogNamesIds = ccntx.Catalog.Where(x => catalogIds.Contains(x.Id)).Select(x => x.NameId).Distinct().ToList();
+			var model = cntx_.catalognameswithuptime.Where(x => catalogNamesIds.Contains(x.Id)).OrderBy(x => x.Name).ToList();
 
 			return View(model);
 		}

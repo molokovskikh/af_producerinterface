@@ -426,6 +426,7 @@
     <Content Include="Views\Profile\GetNextList.cshtml" />
     <Content Include="Views\Profile\News.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
+    <Content Include="Views\Report\RunHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
