@@ -25,6 +25,7 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "В процессе подготовки произошла ошибка")]
         Error = 4
     }
+     
 
     public enum NewsChanges
     {
@@ -32,8 +33,8 @@ namespace ProducerInterfaceCommon.ContextModels
         NewsAdd = 0,
         [Display(Name = "Редактирование")]
         NewsChange =1,
-        [Display(Name = "Удаление")]
-        NewsDelete  =2
+        [Display(Name = "Отправлено в архив")]
+        NewsArchive = 2       
     }
 
     public enum Reports

@@ -9,25 +9,20 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	public partial class NewsChange
 	{
-		public string TypeChangeDisplayName
+		public string GetDisplayNewsTypeChange
 		{
-			get
-			{
-				return Heap.AttributeHelper.GetDisplayName(ChangeNewsType.ToString());
-			}
+			get { return Heap.AttributeHelper.DisplayName(ChangeNewsType); }
 		}
-
-		public NewsChanges ChangeNewsType
+		private NewsChanges ChangeNewsType
 		{
 			get { return (NewsChanges)TypeCnhange; }
-			set { TypeCnhange = (byte)value; }
 		}
 	}
 
 	[MetadataType(typeof(NotificationToProducersMetaData))]
 	public partial class NotificationToProducers
 	{
-
+   
 	}
 
 	public class NotificationToProducersMetaData
@@ -112,8 +107,8 @@ namespace ProducerInterfaceCommon.ContextModels
 	}
 
 
-	[MetadataType(typeof(AccountMetaData))]
-	public partial class Account
+    [MetadataType(typeof(AccountMetaData))]
+    public partial class Account
 	{
 		[Display(Name = "IP адресс")]
 		public string IP { get; set; }
@@ -135,12 +130,14 @@ namespace ProducerInterfaceCommon.ContextModels
 			get { return (TypeUsers)TypeUser; }
 			set { TypeUser = (SByte)value; }
 		}
+
+        public long ID_LOG { get; set; }
 	}
 
-	public class AccountMetaData
-	{
+    public class AccountMetaData
+    {
 
-	}
+    }
 
 	public partial class AccountGroup
 	{

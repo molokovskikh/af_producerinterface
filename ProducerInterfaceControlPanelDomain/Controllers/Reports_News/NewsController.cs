@@ -12,17 +12,58 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public ActionResult List()
         {
-           ViewBag.Pager = 1;
-           var ListNews10 = cntx_.NotificationToProducers.OrderByDescending(xxx=>xxx.DatePublication).Take(10).ToList();
+            ViewBag.Title = "Новости";
+            ViewBag.Pager = 1;
+           var ListNews10 = cntx_.NotificationToProducers.Where(xxx=>xxx.Enabled == true).OrderByDescending(xxx=>xxx.DatePublication).Take(10).ToList();
            return View(ListNews10);
         }
 
         public ActionResult GetNextList(int Pager)
         {
             ViewBag.Pager = Pager + 1;
-            var ListNews10 = cntx_.NotificationToProducers.OrderByDescending(xxx => xxx.DatePublication).Skip(Pager*10).Take(10).ToList();
+            var ListNews10 = cntx_.NotificationToProducers.Where(xxx => xxx.Enabled == true).OrderByDescending(xxx => xxx.DatePublication).Skip(Pager*10).Take(10).ToList();
             return PartialView("GetNextList",ListNews10);
         }
+           
+        public ActionResult Archive()
+        {
+            ViewBag.Title = "Архив Новостей";
+            var ListNews10 = cntx_.NotificationToProducers.Where(xxx => xxx.Enabled == false).OrderByDescending(xxx => xxx.DatePublication).ToList();
+            return View("List",ListNews10);
+        }
+
+        public ActionResult DeleteNews(long Id)
+        {            
+            // отправляем новость в архив
+            var NewsRemove = cntx_.NotificationToProducers.Find(Id);
+            NewsRemove.Enabled = false;
+            cntx_.Entry(NewsRemove).State = System.Data.Entity.EntityState.Modified;
+            cntx_.SaveChanges();
+
+            // добавляем историю изменений
+            NewsHistoryAdd(NewsRemove.Id, null, null, ProducerInterfaceCommon.ContextModels.NewsChanges.NewsArchive);        
+            
+            SuccessMessage("Новость отправлена в архив");
+            return RedirectToAction("List");
+        }
+
+        public ActionResult PastRetrieve(long Id)
+        {
+            var News = cntx_.NotificationToProducers.Find(Id);
+
+            var NewsHistoryList = cntx_.NewsChange.Where(xxx => xxx.IdNews == Id).ToList();
+
+            cntx_.NewsChange.RemoveRange(NewsHistoryList);
+            cntx_.SaveChanges();
+
+            cntx_.Entry(News).State = System.Data.Entity.EntityState.Deleted;
+            cntx_.SaveChanges(CurrentUser, "Удаление новости");
+
+            SuccessMessage("Новость удалена");
+            return RedirectToAction("Archive");
+
+        }
+
 
         [HttpGet]
         public ActionResult Create(long Id = 0)
@@ -32,20 +73,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             {
                 NewsModel = cntx_.NotificationToProducers.Find(Id);
             }
-          
             return View(NewsModel);
-        }
-
-        public ActionResult DeleteNews(long Id)
-        {
-                    
-            cntx_.NotificationToProducers.Remove(cntx_.NotificationToProducers.Find(Id));
-            cntx_.SaveChanges(CurrentUser, "Удаление новости");
-
-            SuccessMessage("Новость удалена");
-
-            return RedirectToAction("Index");
-
         }
 
         [ValidateInput(false)]
@@ -56,51 +84,74 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             {
                 return View(News);
             }
-
-            var HistoryNews = new ProducerInterfaceCommon.ContextModels.NewsChange();
-            HistoryNews.Account = CurrentUser;
-            HistoryNews.NewsNewTema = News.Name;
-            HistoryNews.NewsNewDescription = News.Description;
-            HistoryNews.DateChange = System.DateTime.Now;
-
+                  
             if (News.Id > 0)
             {
                 var OldNews = cntx_.NotificationToProducers.Find(News.Id);
 
-                HistoryNews.DateChange = System.DateTime.Now;  
-                HistoryNews.NewsOldTema = OldNews.Name;
-                HistoryNews.NewsOldDescription = OldNews.Description;
-                HistoryNews.TypeCnhange = (byte)ProducerInterfaceCommon.ContextModels.NewsChanges.NewsChange;
-                HistoryNews.NotificationToProducers = OldNews;
+                // добавляем в историю изменения
+                NewsHistoryAdd(News.Id, OldNews, News, ProducerInterfaceCommon.ContextModels.NewsChanges.NewsChange);
+
+                // изменияем новость
                 OldNews.DatePublication = System.DateTime.Now;
                 OldNews.Description = News.Description;
                 OldNews.Name = News.Name;
+                OldNews.Enabled = true;
+
                 cntx_.Entry(OldNews).State = System.Data.Entity.EntityState.Modified;
                 cntx_.SaveChanges();
-                cntx_.NewsChange.Add(HistoryNews);
-               // cntx_.Entry(HistoryNews).State = System.Data.Entity.EntityState.Added;
-                cntx_.SaveChanges();
+                                                                          
                 SuccessMessage("Изменения успешно сохранены");
             }
-            else {
-                HistoryNews.TypeCnhange = (byte)ProducerInterfaceCommon.ContextModels.NewsChanges.NewsAdd;             
+            else {              
+
+                // добавляем новость
                 News.DatePublication = System.DateTime.Now;
+                News.Enabled = true;
                 cntx_.Entry(News).State = System.Data.Entity.EntityState.Added;
                 cntx_.SaveChanges();
-
-                HistoryNews.NotificationToProducers = News;            
-                cntx_.NewsChange.Add(HistoryNews);
-
-
-                cntx_.SaveChanges();
+                
+                // пишем в историю
+                NewsHistoryAdd(News.Id, null, News, ProducerInterfaceCommon.ContextModels.NewsChanges.NewsAdd);              
 
                 SuccessMessage("Новость успешно добавлена");
-            }
-            
-          
+            }  
 
             return RedirectToAction("List");
         }
+        
+        private void NewsHistoryAdd(long ID_NEWS,ProducerInterfaceCommon.ContextModels.NotificationToProducers OldNews, ProducerInterfaceCommon.ContextModels.NotificationToProducers NewNews, ProducerInterfaceCommon.ContextModels.NewsChanges TypeChanges)
+        {
 
+            var NewsHistory = new ProducerInterfaceCommon.ContextModels.NewsChange();
+
+            NewsHistory.IdNews = ID_NEWS;
+            NewsHistory.IdAccount = CurrentUser.Id;
+            NewsHistory.DateChange = System.DateTime.Now;
+            NewsHistory.TypeCnhange =(byte)TypeChanges;
+            
+            if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsAdd)
+            {
+                NewsHistory.NewsNewDescription = NewNews.Description;
+                NewsHistory.NewsNewTema = NewNews.Name;               
+            }
+
+            if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsChange)
+            {
+                NewsHistory.NewsNewDescription = NewNews.Description;
+                NewsHistory.NewsNewTema = NewNews.Name;
+
+                NewsHistory.NewsOldDescription = OldNews.Description;
+                NewsHistory.NewsOldTema = OldNews.Name;
+            }
+
+            if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsArchive)
+            {
+                
+            }
+
+            cntx_.Entry(NewsHistory).State = System.Data.Entity.EntityState.Added;
+            cntx_.SaveChanges();        
+        }
     }
 }

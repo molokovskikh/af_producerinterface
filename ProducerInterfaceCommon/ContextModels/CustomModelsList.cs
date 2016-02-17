@@ -38,7 +38,14 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual string RussianValue { get; set; }
         public virtual DateTime UpdateTime { get; set; }
     }
-      
+
+    public class AdminAutentification
+    {
+        public long IdProducerUser { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+    }
+
     public class PromotionValidation
     {
         public long Id { get; set; }

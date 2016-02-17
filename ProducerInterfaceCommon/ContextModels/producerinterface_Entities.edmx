@@ -1198,6 +1198,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           <EntitySet Name="DrugDescriptionRemark" EntityType="producerinterface_Model.DrugDescriptionRemark" />
+          <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
           <EntitySet Name="NotificationToProducers" EntityType="producerinterface_Model.NotificationToProducers" />
           <EntitySet Name="NewsChange" EntityType="producerinterface_Model.NewsChange" />
           <AssociationSet Name="FK1_NewsChangeToAccount" Association="producerinterface_Model.FK1_NewsChangeToAccount">
@@ -1208,8 +1209,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="NotificationToProducers" EntitySet="NotificationToProducers" />
             <End Role="NewsChange" EntitySet="NewsChange" />
           </AssociationSet>
-          <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
-          <EntitySet Name="catalognameswithuptime" EntityType="producerinterface_Model.catalognameswithuptime" />
+					<EntitySet Name="catalognameswithuptime" EntityType="producerinterface_Model.catalognameswithuptime" />
           <EntitySet Name="ReportRunLog" EntityType="producerinterface_Model.ReportRunLog" />
           <EntitySet Name="reportrunlogwithuser" EntityType="producerinterface_Model.reportrunlogwithuser" />
           </EntityContainer>
@@ -1519,7 +1519,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="DrugFamilyId" Type="Int64" />
           <Property Name="MNNId" Type="Int64" />
         </EntityType>
-        <EntityType Name="NotificationToProducers">
+        <EntityType Name="supplierregions">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="Int64" Nullable="false" />
+          <Property Name="RegionCode" Type="Decimal" />
+        </EntityType>
+				<EntityType Name="NotificationToProducers">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -1527,8 +1534,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="DatePublication" Type="DateTime" />
-          <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NotificationToProducers" ToRole="NewsChange" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NotificationToProducers" ToRole="NewsChange" />
         </EntityType>
         <EntityType Name="NewsChange">
           <Key>
@@ -1538,10 +1545,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="IdNews" Type="Int64" Nullable="false" />
           <Property Name="TypeCnhange" Type="Byte" Nullable="false" />
           <Property Name="DateChange" Type="DateTime" Nullable="false" />
-          <Property Name="NewsNewTema" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldTema" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldDescription" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="NewsNewDescription" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="NewsNewTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="NewsNewDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="NewsChange" ToRole="Account" />
           <NavigationProperty Name="NotificationToProducers" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NewsChange" ToRole="NotificationToProducers" />
@@ -1570,13 +1577,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="supplierregions">
-          <Key>
-            <PropertyRef Name="SupplierId" />
-          </Key>
-          <Property Name="SupplierId" Type="Int64" Nullable="false" />
-          <Property Name="RegionCode" Type="Decimal" />
-        </EntityType>
         <EntityType Name="catalognameswithuptime">
           <Key>
             <PropertyRef Name="Id" />

@@ -301,7 +301,62 @@ namespace ProducerInterface.Controllers
             SuccessMessage("Ваша заявка принята.   eMail пока не отправляется, в панеле управления можно посмотреть список заявок на регистрацию");
             return View();
 
-        }          
+        }
 
+
+        [HttpGet]
+        public ActionResult AdminAuthentification(string AdminLogin, long? IdProducerUSer, string SecureHash)
+        {
+
+            // cfe07e5639884d77a061b42ec7f7170d58c1973f7f484b1b8df2db8f2aa62bd305a0055c490a4619a893e3b8e6cb66ffd375760e3c1d4282b0f2dc8daf3e76209abfd73cc7964ee4a4973ce1ea11b9b03cbeb558ea7f4c138ba28b2cc79efe02d14bc213a56843ffbef233a90658ff7b7ba14bd42cda4b99adf83997168e6cbe8cb76bc7503b4d768af00edd5f964b607a18326ce6b14fe89b1ccaa86a6ddb9d
+            // 10 гуидов (только буквы и цыфры) для секретности //  далее раз в сутки можно будет генерировать новое значение
+
+            if (AdminLogin == null || IdProducerUSer == null)
+            {
+                return RedirectToAction("index", "home");
+            }
+
+            // проверка наличия Админа В БД.
+
+            var AccountAdminExsist = cntx_.Account.Any(xxx => xxx.Login == AdminLogin && xxx.TypeUser == (SByte)ProducerInterfaceCommon.ContextModels.TypeUsers.ControlPanelUser);
+            var ProducerUserExsist = cntx_.Account.Any(xxx => xxx.Id == IdProducerUSer && xxx.TypeUser == (SByte)ProducerInterfaceCommon.ContextModels.TypeUsers.ProducerUser);
+
+            // проверка SecureHash
+
+            var AdminAccount = cntx_.Account.Where(xxx => xxx.Login == AdminLogin).First();
+
+            var i = AdminAccount.Name.Length * 1980;
+
+            if (!SecureHash.Contains(i.ToString()))
+            {
+                return RedirectToAction("index", "home");
+            }
+
+            if (AccountAdminExsist && ProducerUserExsist)
+            {
+                return View("AdminAuth",new ProducerInterfaceCommon.ContextModels.AdminAutentification() { IdProducerUser = (long) IdProducerUSer, Login = AdminAccount.Login });
+            }
+
+            return RedirectToAction("index", "home");
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AdminAuth(ProducerInterfaceCommon.ContextModels.AdminAutentification AdminAccountModel)
+        {
+            var DomainAuth = new ProducerInterfaceCommon.Controllers.DomainAutentification();
+            if (DomainAuth.IsAuthenticated(AdminAccountModel.Login, AdminAccountModel.Password))
+            {
+                // авторизовываем как обычного пользователя, но с добавление ID Администратора 
+
+                CurrentUser = cntx_.Account.Find(AdminAccountModel.IdProducerUser);
+                var AdminId = cntx_.Account.Where(xxx => xxx.Login == AdminAccountModel.Login).First().Id.ToString();
+                Autentificate(this, true, AdminId);
+            }
+            AdminAccountModel.Password = "";
+            ErrorMessage("Пароль указан не верно");
+            return View("AdminAuth", AdminAccountModel);
+        }
     }
 }

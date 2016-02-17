@@ -36,7 +36,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 		{
 
 			// кто
-			var set = new LogChangeSet() { UserId = _user.Id, Ip = _user.IP, Timestamp = DateTime.Now, Description = description };
+			var set = new LogChangeSet() { UserId = _user.ID_LOG, Ip = _user.IP, Timestamp = DateTime.Now, Description = description };
 			foreach (var entry in entries)
 			{
 				// вытащили имя сущности = имя таблицы
@@ -108,7 +108,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 				{
 					// объявление и установка параметров пользователя
 					comUser.CommandType = CommandType.StoredProcedure;
-					comUser.Parameters.AddWithValue("@UserId", _user.Id);
+					comUser.Parameters.AddWithValue("@UserId", _user.ID_LOG);
 					comUser.Parameters.AddWithValue("@Ip", _user.IP);
 					comUser.Parameters.Add("@LogChangeSetId", MySqlDbType.Int32);
 					comUser.Parameters["@LogChangeSetId"].Direction = ParameterDirection.Output;

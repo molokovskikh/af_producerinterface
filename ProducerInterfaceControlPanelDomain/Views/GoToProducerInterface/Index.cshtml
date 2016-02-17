@@ -1,0 +1,41 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+@model IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>
+
+@{
+    ViewBag.Title = "Вход в интерфейс производителя";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="container body-content">
+    <h2>Вход в интерфейс производителя</h2>
+
+    @using (Html.BeginForm(FormMethod.Post))
+    { 
+    <div class="form-group">
+        <label>Выберите производителя</label>   
+        <select id="idproducer" name="idproducer" class="form-control" onselect="LoadListUser()">
+            @foreach (var ProducerItem in Model)
+            {
+                <option value="@ProducerItem.Value">@ProducerItem.Text</option>
+                }
+        </select>
+    </div>
+
+    <div class="form-group" id="listUsers">
+        <label>Выберите пользователя</label>
+        <select id="produceruserid" name="produceruserid" class="form-control">
+            <option></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Перейти в интерфейс производителя" class="btn btn-primary"/>
+    </div>
+
+        }
+    </div>
+
+@section scripts
+{   
+    <script src="~/Content/Chosen/js/GoToProducerInterface.js"></script>
+}

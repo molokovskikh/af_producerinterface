@@ -207,10 +207,21 @@ namespace ProducerInterfaceCommon.Controllers
 
 				retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == EmailUser && xxx.Enabled == 1).FirstOrDefault();
 
-				if (retUser == null || String.IsNullOrEmpty(retUser.Login))
-				{
-					retUser = null;
-				}
+                if (retUser == null || String.IsNullOrEmpty(retUser.Login))
+                {
+                    retUser = null;
+                }
+                else
+                {
+                    if (CurrentUserIdLog > 0)
+                    {
+                        retUser.ID_LOG = CurrentUserIdLog;
+                    }
+                    else
+                    {
+                        retUser.ID_LOG = retUser.Id;
+                    }
+                }
 			}
 
 			if (TypeUser_ == TypeUsers.ControlPanelUser)

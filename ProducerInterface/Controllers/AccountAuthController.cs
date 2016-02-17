@@ -36,8 +36,7 @@ namespace ProducerInterface.Controllers
             }
 
             // проверка наличия в БД
-
-
+            
             string originalPass = User_.password;
             User_.password = Md5HashHelper.GetHash(User_.password);
 
@@ -52,8 +51,7 @@ namespace ProducerInterface.Controllers
 
             // если всё выше перечисленное пройдено,
             // проверяем первый раз логинится пользователь или второй или после смены пароля
-
-
+            
             if (ThisUser.Enabled == 1) // логинится не впервый раз и не заблокирован
             {
 

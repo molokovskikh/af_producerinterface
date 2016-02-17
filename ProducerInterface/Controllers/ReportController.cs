@@ -39,7 +39,7 @@ namespace ProducerInterface.Controllers
 			//  TODO: берётся у юзера            
 			try
 			{
-				userId = CurrentUser.Id;
+				userId = CurrentUser.ID_LOG;
 				producerId = (long)CurrentUser.AccountCompany.ProducerId;
 			}
 			catch
