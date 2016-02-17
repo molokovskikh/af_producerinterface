@@ -82,6 +82,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
@@ -191,6 +192,7 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />

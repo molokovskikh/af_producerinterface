@@ -1,0 +1,39 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+@model ProducerInterfaceCommon.ContextModels.AdminAutentification
+@{
+    ViewBag.Title = "Вход для администратора";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body-content">
+
+    <h3>Вход с паролем администратора</h3>
+    <hr/>
+
+    @using (Html.BeginForm("AdminAuth", "Account", FormMethod.Post))
+    {
+        <div class="form-group" style="max-width:480px;">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m=>m.IdProducerUser)
+          
+            <div class="form-group">
+                <label>Введите ваш логин</label>
+                @Html.TextBoxFor(m => m.Login, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Введите ваш пароль</label>
+                @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "Password" })
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Вход" />
+            </div>
+        </div>
+    }
+    </div>
+
+
+    @*public long IdProducerUser { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }*@

@@ -47,12 +47,12 @@
         <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" />
         <EntityTypeShape EntityType="producerinterface_Model.DrugDescriptionRemark" Width="3.75" PointX="3.125" PointY="6.75" />
-        <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="3" PointX="9.5" PointY="22.625" />
-        <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="2.5" PointX="6.125" PointY="22.5" />
+        <EntityTypeShape EntityType="producerinterface_Model.supplierregions" Width="1.5" PointX="11.375" PointY="7.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="1.5" PointX="3.75" PointY="26.25" />
+        <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="1.5" PointX="6" PointY="22.625" />
         <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.FK2_NewsChangeToNotification" />
-        <EntityTypeShape EntityType="producerinterface_Model.supplierregions" Width="1.5" PointX="11.375" PointY="7.75" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

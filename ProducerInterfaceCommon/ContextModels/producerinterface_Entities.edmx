@@ -174,10 +174,10 @@
           <Property Name="IdNews" Type="uint" Nullable="false" />
           <Property Name="TypeCnhange" Type="utinyint" Nullable="false" />
           <Property Name="DateChange" Type="datetime" Precision="0" Nullable="false" />
-          <Property Name="NewsNewTema" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="NewsOldTema" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="NewsOldDescription" Type="text" Nullable="false" />
-          <Property Name="NewsNewDescription" Type="text" Nullable="false" />
+          <Property Name="NewsNewTema" Type="varchar" MaxLength="150" />
+          <Property Name="NewsOldTema" Type="varchar" MaxLength="150" />
+          <Property Name="NewsOldDescription" Type="text" />
+          <Property Name="NewsNewDescription" Type="text" />
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="NotificationToProducers">
@@ -188,6 +188,7 @@
           <Property Name="Name" Type="varchar" MaxLength="150" />
           <Property Name="Description" Type="text" />
           <Property Name="DatePublication" Type="date" />
+          <Property Name="Enabled" Type="bool" Nullable="false" />
         </EntityType>
         <EntityType Name="profilenews">
           <Key>
@@ -1137,6 +1138,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           <EntitySet Name="DrugDescriptionRemark" EntityType="producerinterface_Model.DrugDescriptionRemark" />
+          <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
           <EntitySet Name="NotificationToProducers" EntityType="producerinterface_Model.NotificationToProducers" />
           <EntitySet Name="NewsChange" EntityType="producerinterface_Model.NewsChange" />
           <AssociationSet Name="FK1_NewsChangeToAccount" Association="producerinterface_Model.FK1_NewsChangeToAccount">
@@ -1147,7 +1149,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="NotificationToProducers" EntitySet="NotificationToProducers" />
             <End Role="NewsChange" EntitySet="NewsChange" />
           </AssociationSet>
-          <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1455,6 +1456,13 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="DrugFamilyId" Type="Int64" />
           <Property Name="MNNId" Type="Int64" />
         </EntityType>
+        <EntityType Name="supplierregions">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="Int64" Nullable="false" />
+          <Property Name="RegionCode" Type="Decimal" />
+        </EntityType>
         <EntityType Name="NotificationToProducers">
           <Key>
             <PropertyRef Name="Id" />
@@ -1463,6 +1471,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="DatePublication" Type="DateTime" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NotificationToProducers" ToRole="NewsChange" />
         </EntityType>
         <EntityType Name="NewsChange">
@@ -1473,10 +1482,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="IdNews" Type="Int64" Nullable="false" />
           <Property Name="TypeCnhange" Type="Byte" Nullable="false" />
           <Property Name="DateChange" Type="DateTime" Nullable="false" />
-          <Property Name="NewsNewTema" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldTema" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldDescription" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="NewsNewDescription" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="NewsNewTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="NewsNewDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="NewsChange" ToRole="Account" />
           <NavigationProperty Name="NotificationToProducers" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NewsChange" ToRole="NotificationToProducers" />
@@ -1505,13 +1514,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="supplierregions">
-          <Key>
-            <PropertyRef Name="SupplierId" />
-          </Key>
-          <Property Name="SupplierId" Type="Int64" Nullable="false" />
-          <Property Name="RegionCode" Type="Decimal" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1910,9 +1912,18 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="supplierregions">
+            <EntityTypeMapping TypeName="producerinterface_Model.supplierregions">
+              <MappingFragment StoreEntitySet="supplierregions">
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="NotificationToProducers">
             <EntityTypeMapping TypeName="producerinterface_Model.NotificationToProducers">
               <MappingFragment StoreEntitySet="NotificationToProducers">
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="DatePublication" ColumnName="DatePublication" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1932,14 +1943,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="TypeCnhange" ColumnName="TypeCnhange" />
                 <ScalarProperty Name="IdNews" ColumnName="IdNews" />
                 <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="supplierregions">
-            <EntityTypeMapping TypeName="producerinterface_Model.supplierregions">
-              <MappingFragment StoreEntitySet="supplierregions">
-                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
-                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

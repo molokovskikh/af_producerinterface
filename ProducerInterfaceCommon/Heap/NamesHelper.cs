@@ -136,6 +136,11 @@ namespace ProducerInterfaceCommon.Heap
 				return new List<long>();
 			}
 
+            if (RegionMask == 0)
+            {
+                return new List<long>(){ 0 };
+            }
+
 			var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();
 
 			var results = LisrRegions
@@ -146,7 +151,26 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
-		public List<OptionElement> GetProducerList()
+        public List<OptionElement> RegisterListProducer()
+        {
+            var producerListLong =_cntx.AccountCompany.Where(zzz => zzz.ProducerId != null)
+                .GroupBy(x => x.ProducerId).Select(x => x.FirstOrDefault()).Select(xxx => xxx.ProducerId).ToList();
+
+          
+            var listProducer = _cntx.producernames
+                .Where(xxx => producerListLong.Contains(xxx.ProducerId))
+                .ToList().Select(v => new OptionElement { Text = v.ProducerName, Value = v.ProducerId.ToString() }).ToList();
+            return listProducer;
+        }
+
+        public List<OptionElement> GetProducerUserList(long ProducerId)
+        {
+            return _cntx.Account.Where(xxx => xxx.AccountCompany.ProducerId == ProducerId)
+                .ToList().Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() })
+                .ToList();
+        }
+
+        public List<OptionElement> GetProducerList()
 		{
 			var X = _cntx.producernames.ToList().Select(xxx => new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList();
 			var Y = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };

@@ -28,6 +28,7 @@ namespace ProducerInterfaceCommon.Controllers
 
         // сюда попадёт авторизованный пользователь
         protected ContextModels.Account CurrentUser { get; set; }
+        protected long CurrentUserIdLog { get; set; }
 
         // Context DataBase       
         protected ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
@@ -114,6 +115,12 @@ namespace ProducerInterfaceCommon.Controllers
                     string userData = ticket.UserData;
                     string version = ticket.Version.ToString();
                     currentUser = name;
+                    if (String.IsNullOrEmpty(ticket.UserData))
+                    { }
+                    else
+                    {
+                        CurrentUserIdLog = Convert.ToInt64(ticket.UserData);
+                    }                 
                     authCookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
                     Response.Cookies.Set(authCookie);
                 }

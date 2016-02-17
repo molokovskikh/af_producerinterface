@@ -56,8 +56,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<promotionsimage> promotionsimage { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
+        public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
         public DbSet<NewsChange> NewsChange { get; set; }
-        public DbSet<supplierregions> supplierregions { get; set; }
     }
 }

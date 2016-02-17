@@ -1,0 +1,6 @@
+﻿<select name="ProducerUserId">
+    @foreach (var UserItem in ViewBag.UserList)
+    {
+        <option value="@UserItem.Value">@UserItem.Text</option>
+    }
+</select>

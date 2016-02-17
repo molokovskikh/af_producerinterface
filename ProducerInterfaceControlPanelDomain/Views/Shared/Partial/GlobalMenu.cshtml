@@ -21,11 +21,21 @@
                     <li><a href="~/ProducerInfermation/Index">Статистика по производителям</a></li>
                     <li><a href="~/Promotion/Index">Промо-Акции</a></li>
                     <li><a href="~/Report/Index">Отчеты</a></li>
-                    <li><a href="~/News/List">Новости</a></li>
+                   
                 </ul>
             </li>
         </ul>
-
+        <ul class="nav navbar-nav navbar-left" role="navigation">
+            <li class="dropdown" id="dropdownmenu">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-info-sign"></span>&nbsp; Новости</a>
+                <ul class="dropdown-menu">
+                    <li><a href="~/News/List">Список новостей</a></li>
+                    <li><a href="~/News/Archive">Архив новостей</a></li>
+                    <li><a href="~/News/Create">Создать</a></li>
+                </ul>
+            </li>
+        </ul>
+    
         <ul class="nav navbar-nav navbar-left" role="navigation">
             <li class="dropdown" id="dropdownmenu">
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span>&nbsp; Администрирование</a>
@@ -46,6 +56,8 @@
                 </ul>
             </li>
         </ul>
+
+
 
         <ul class="nav navbar-nav navbar-left">
             <li><a>Custom</a></li>

@@ -16,10 +16,7 @@
                             <div class="pull-right">Дата изменения @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")</div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <p>@Html.Raw(NewsItem.Description)</p>
-                        </div>
+                    <div class="panel-body">                    
                         <div class="form-group">
                             <a href="@Url.Action("Create", new { Id = NewsItem.Id})" class="btn btn-primary">Редактировать</a>
                             <a href="@Url.Action("DeleteNews", new { id= NewsItem.Id})" class="btn btn-primary">Удалить</a>
@@ -29,7 +26,7 @@
                             <label>История изменений</label>
                             @foreach (var HistoryItem in NewsItem.NewsChange)
                             {
-                                <p>@HistoryItem.DateChange @HistoryItem.Account.Name @HistoryItem.TypeChangeDisplayName </p>
+                                <p>@HistoryItem.DateChange @HistoryItem.Account.Name @HistoryItem.GetDisplayNewsTypeChange </p>
                             }
                         </div>
 

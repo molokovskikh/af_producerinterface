@@ -23,6 +23,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Name { get; set; }
         public string Description { get; set; }
         public Nullable<System.DateTime> DatePublication { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual ICollection<NewsChange> NewsChange { get; set; }
     }
