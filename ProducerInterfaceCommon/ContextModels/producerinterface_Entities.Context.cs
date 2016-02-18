@@ -36,7 +36,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<catalognames> catalognames { get; set; }
         public DbSet<drugfamily> drugfamily { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
-        public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
         public DbSet<pharmacynames> pharmacynames { get; set; }
         public DbSet<producernames> producernames { get; set; }
         public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
@@ -62,5 +61,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<ReportRunLog> ReportRunLog { get; set; }
         public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
         public DbSet<promotionsimage> promotionsimage { get; set; }
+        public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
     }
 }

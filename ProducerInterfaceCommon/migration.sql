@@ -76,6 +76,39 @@ select rl.Id, rl.JobName, rl.Ip, rl.RunStartTime, rl.RunNow, a.Name as UserName
 from ReportRunLog rl
 left outer join Account a on a.Id = rl.AccountId;
 
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view PharmacyNames as
+select cl.Id as PharmacyId, concat(cl.Name, ' - ', rg.Region) as PharmacyName
+from Customers.Clients cl
+left join farm.regions rg on rg.RegionCode = cl.RegionCode;
+
+ALTER TABLE `promotionsimage`
+ ADD COLUMN `NewsOrPromotions` TINYINT(1) NOT NULL AFTER `ImageSize`;
+
+ insert into mailform (Id, Subject, Body, IsBodyHtml, Description)
+ values (9, 'Нет данных для формировании отчета на сайте {SiteName}', 
+ 'Для формирования запрошенного Вами отчета {ReportName} недостаточно данных, обратитесь в АналитФармация (office@analit.net)', 
+ 0, 'Нет данных для формировании отчета');
+ 
+ insert into mailform (Id, Subject, Body, IsBodyHtml, Description)
+ values (10, 'Отчет с сайта {SiteName}', 
+ 'Отчет {ReportName} пользователя {CreatorName} производителя {ProducerName}, сформированный в {DateTimeNow}. Чтобы отписаться от автоматической рассылки, перешлите это письмо на адрес office@analit.net', 
+ 0, 'Автоматическая рассылка отчетов');
+ 
+ insert into mailform (Id, Subject, Body, IsBodyHtml, Description)
+ values (11, 'Отчет с сайта {SiteName}', 
+ 'Отчет {ReportName} пользователя {CreatorName} производителя {ProducerName}, сформированный в {DateTimeNow} пользователем {UserName} ({UserLogin})', 
+ 0, 'Ручная рассылка отчетов');
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view mailformwithfooter as
+select m.Id, m.Subject, m.Body, mm.Body as Footer, m.IsBodyHtml, m.Description, mm.Subject as Header
+from mailform m
+inner join mailform mm on mm.Id = 8;
+
+
+
+
+
+
 
 
 

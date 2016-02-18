@@ -1,39 +1,73 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.mailform>
+﻿@using ProducerInterfaceCommon.Heap
+@using ProducerInterfaceCommon.Models
 
 @{
-    ViewBag.Title = "Шаблоны Писем";
+    ViewBag.Title = "Шаблоны писем";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-
-@if(Model != null && Model.Count() > 0)
-{
- <br/>
-    <h2>Шаблоны писем</h2>
-    <h4>На данный момент их @Model.Count() </h4>
-    <hr />
-
-    <div class="row">
-
-        @foreach(var Item in Model)
-        {
-            <div class="col-xs-6 col-md-4 col-sm-3 col-lg-2 ">
-                <div class="Form-Group" id="form-group-mial-list">
-                    <br/>
-                    <p>@Item.Description</p>
-                    <a href="~/Mail/Edit/@Item.Id" class="btn btn-primary">Редактирование шаблона</a>                  
-                </div>
-            </div>     
-        }
-
-    </div>
-
-}
-else
-{
-<hr />
 <h2>Шаблоны писем</h2>
-<h4>Шаблонов не найдено в Базе данных</h4>
-<hr />
-}
+
+<div class="jumbotron">
+    @using (Html.BeginForm("Edit", "Mail", FormMethod.Get)) {
+        <div class="form-group">
+            <select name="id" class="form-control">
+                    <option selected="selected"></option>
+                <optgroup label="Рассылка регистрационных данных">
+                    <option value="@((int)MailType.Registration)">@MailType.Registration.DisplayName()</option>
+                    <option value="@((int)MailType.PasswordChange)">@MailType.PasswordChange.DisplayName()</option>
+                    <option value="@((int)MailType.PasswordRecovery)">@MailType.PasswordRecovery.DisplayName()</option>
+                </optgroup>
+                <optgroup label="Рассылка отчетов">
+                    <option value="@((int)MailType.AutoPostReport)">@MailType.AutoPostReport.DisplayName()</option>
+                    <option value="@((int)MailType.ManualPostReport)">@MailType.ManualPostReport.DisplayName()</option>
+                </optgroup>
+                <optgroup label="Акции">
+                    <option value="@((int)MailType.CreatePromotion)">@MailType.CreatePromotion.DisplayName()</option>
+                    <option value="@((int)MailType.EditPromotion)">@MailType.EditPromotion.DisplayName()</option>
+                    <option value="@((int)MailType.StatusPromotion)">@MailType.StatusPromotion.DisplayName()</option>
+                </optgroup>
+                <optgroup label="Сообщения об ошибках">
+                    <option value="@((int)MailType.ReportError)">@MailType.ReportError.DisplayName()</option>
+                    <option value="@((int)MailType.EmptyReport)">@MailType.EmptyReport.DisplayName()</option>
+                </optgroup>
+                <optgroup label="Прочее">
+                    <option value="@((int)MailType.HeaderFooter)">@MailType.HeaderFooter.DisplayName()</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Редактировать шаблон" class="btn btn-primary"/>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Расшифровка подставляемых значений</h2>
+        <ul>
+            <li>SiteName - название сайта, из конфигурации</li>
+            <li>UserName - имя пользователя, указанное им при регистрации</li>
+            <li>UserLogin - email пользователя</li>
+            <li>Password - пароль, генерируется</li>
+            <li>ReportName - имя отчёта, данное пользователем</li>
+            <li>CreatorName - имя пользователя, создавшего отчет</li>
+            <li>ProducerName - название производителя</li>
+            <li>DateTimeNow - текущее время</li>
+            <li>PromotionName - имя акции, данное пользователем</li>
+            <li>Http - ссылка на акцию</li>
+            <li>Status - статус промоакции, устанавливается админом</li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
 

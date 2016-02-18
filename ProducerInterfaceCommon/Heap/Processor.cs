@@ -39,6 +39,9 @@ namespace ProducerInterfaceCommon.Heap
 			var jext = _cntx.jobextend.Single(x => x.JobName == key.Name
 																						&& x.JobGroup == key.Group
 																						&& x.Enable == true);
+			// добавили сведения о последнем запуске
+			jext.LastRun = DateTime.Now;
+			_cntx.SaveChanges();
 
 			var querySort = new List<T>();
 			var connString = ConfigurationManager.ConnectionStrings["producerinterface"].ConnectionString;
@@ -60,6 +63,7 @@ namespace ProducerInterfaceCommon.Heap
 			if (querySort.Count == 0) {
 				jext.DisplayStatusEnum = DisplayStatus.Empty;
 				_cntx.SaveChanges();
+				EmailSender.SendEmptyReportMessage(_cntx, tparam.UserId, jparam.CastomName, key.Name);
 				return;
 			}
 
@@ -124,8 +128,11 @@ namespace ProducerInterfaceCommon.Heap
 				var ecreator = new ExcelCreator<T>();
 				ecreator.Create(file, jparam.CastomName, headers, dataTable);
 
-				// TODO тема и текст письма
-				EmailSender.SendEmail(tparam.MailTo, jparam.MailSubject, jparam.CastomName, file.FullName);
+				// при автоматическом и ручном запуске разное содержимое письма
+				if (tparam is CronParam)
+					EmailSender.AutoPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo);
+				else if (tparam is RunNowParam)
+					EmailSender.ManualPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo);
 			}
 		}
 	}

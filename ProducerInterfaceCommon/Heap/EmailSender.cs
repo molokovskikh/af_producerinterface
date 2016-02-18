@@ -54,14 +54,63 @@ namespace ProducerInterfaceCommon.Heap
 			}
 		}
 
+		// Автоматическая рассылка отчетов, пользователю и расширенное сотрудникам
+		public static void AutoPostReportMessage(producerinterface_Entities cntx, long userId, jobextend jext, string path, List<string> mailTo)
+		{
+			var user = cntx.Account.Single(x => x.Id == userId);
+			var producerName = cntx.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
+
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.AutoPostReport);
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = jext.Creator, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
+      EmailSender.SendEmail(mailTo, subject, body, path);
+
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, path);
+		}
+
+		// Ручная рассылка отчетов, пользователю и расширенное сотрудникам
+		public static void ManualPostReportMessage(producerinterface_Entities cntx, long userId, jobextend jext, string path, List<string> mailTo)
+		{
+			var user = cntx.Account.Single(x => x.Id == userId);
+			var producerName = cntx.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
+
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ManualPostReport);
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = jext.Creator, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
+			EmailSender.SendEmail(mailTo, subject, body, path);
+
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, path);
+		}
+
+		// Нет данных для формировании отчета, пользователю и расширенное сотрудникам
+		public static void SendEmptyReportMessage(producerinterface_Entities cntx, long userId, string reportName, string jobName)
+		{
+			var user = cntx.Account.Single(x => x.Id == userId);
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.EmptyReport);
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
+			EmailSender.SendEmail(user.Login, subject, body, null);
+
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{reportName}\", задача {jobName}";
+			var mailError = ConfigurationManager.AppSettings["MailError"];
+			EmailSender.SendEmail(mailError, subject, bodyExtended, null);
+		}
+
+		// Ошибка при формировании отчета, пользователю и расширенное сотрудникам
 		public static void SendReportErrorMessage(producerinterface_Entities cntx, long userId, string reportName, string jobName, string errorMessage)
 		{
-			// TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
 			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ReportError);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(user.Login, subject, body, null);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{reportName}\", задача {jobName}, сообщение об ошибке {errorMessage}";
@@ -69,21 +118,25 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailError, subject, bodyExtended, null);
 		}
 
+		// Регистрация в системе, пользователю и расширенное сотрудникам
 		public static void SendRegistrationMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip)
 		{
 			SendPasswordMessage(cntx, userId, password, MailType.Registration, ip);
 		}
 
+		// Смена пароля, пользователю и расширенное сотрудникам
 		public static void SendPasswordChangeMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip)
 		{
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordChange, ip);
 		}
 
+		// Восстановление пароля, пользователю и расширенное сотрудникам
 		public static void SendPasswordRecoveryMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip)
 		{
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
 		}
 
+		// Универсальное на смену пароля, пользователю и расширенное сотрудникам
 		private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
 		{
 			// TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
@@ -91,7 +144,7 @@ namespace ProducerInterfaceCommon.Heap
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)type);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(user.Login, subject, body, null, true);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
@@ -99,6 +152,7 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, false);
 		}
 
+		// Изменение описания препарата, сотрудникам
 		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string field, long? id, string before, string after)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
@@ -109,6 +163,7 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(catalogChangeEmail, subject, bodyExtended, null, false);
 		}
 
+		// Именение МНН препарата, сотрудникам
 		public static void SendMnnChangeMessage(producerinterface_Entities cntx, Account user, string drugFamilyName, string mnnBefore, string mnnAfter)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
@@ -119,6 +174,7 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(catalogChangeEmail, subject, bodyExtended, null, false);
 		}
 
+		// Создание акции, пользователю и расширенное сотрудникам
 		public static void SendNewPromotion(producerinterface_Entities cntx, long userId, long PromotionId, string ip)
 		{
 			var User_ = cntx.Account.Where(x => x.Id == userId).First();
@@ -134,7 +190,7 @@ namespace ProducerInterfaceCommon.Heap
 			//     Акция { PromotionName}
 			//     изменена { UserName}. Посмотреть статус и изменить акцию { Http}
 
-			var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(User_.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
@@ -142,6 +198,7 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
 		}
 
+		// Изменение акции, пользователю и расширенное сотрудникам
 		public static void SendChangePromotion(producerinterface_Entities cntx, long userId, long PromotionId, string ip)
 		{
 			var User_ = cntx.Account.Where(x => x.Id == userId).First();
@@ -159,7 +216,7 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 
-			var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = SendEmailOnCreateUserPromotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = SendEmailOnCreateUserPromotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(SendEmailOnCreateUserPromotion.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
@@ -167,6 +224,7 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
 		}
 
+		// Подтверждение акции, пользователю и расширенное сотрудникам
 		public static void SendPromotionStatus(producerinterface_Entities cntx, long userId, long PromotionId, string ip)
 		{
 			var User_ = cntx.Account.Where(x => x.Id == userId).First();
@@ -184,7 +242,7 @@ namespace ProducerInterfaceCommon.Heap
 			if (Promotion.Status) { StatusPromotion = "Подтверждена"; }
 
 
-			var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(SendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";

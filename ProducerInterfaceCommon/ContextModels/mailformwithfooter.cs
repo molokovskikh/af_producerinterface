@@ -20,5 +20,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Footer { get; set; }
         public bool IsBodyHtml { get; set; }
         public string Description { get; set; }
+        public string Header { get; set; }
     }
 }

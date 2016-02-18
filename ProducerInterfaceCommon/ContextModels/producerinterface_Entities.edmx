@@ -389,13 +389,15 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="Subject" />
             <PropertyRef Name="IsBodyHtml" />
+            <PropertyRef Name="Header" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Subject" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="Body" Type="mediumtext" />
-          <Property Name="Footer" Type="text" />
+          <Property Name="Footer" Type="mediumtext" />
           <Property Name="IsBodyHtml" Type="bool" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="250" />
+          <Property Name="Header" Type="varchar" MaxLength="250" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.pharmacynames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -778,7 +780,8 @@ FROM `jobextendwithproducer` AS `jobextendwithproducer`</DefiningQuery>
 `mailformwithfooter`.`Body`, 
 `mailformwithfooter`.`Footer`, 
 `mailformwithfooter`.`IsBodyHtml`, 
-`mailformwithfooter`.`Description`
+`mailformwithfooter`.`Description`, 
+`mailformwithfooter`.`Header`
 FROM `mailformwithfooter` AS `mailformwithfooter`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="pharmacynames" EntityType="Self.pharmacynames" store:Type="Views" store:Schema="producerinterface">
@@ -1059,19 +1062,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="LastModified" Type="DateTime" Nullable="false" />
           <Property Name="DisplayStatus" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="mailformwithfooter">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Subject" />
-            <PropertyRef Name="IsBodyHtml" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Subject" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Body" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
-          <Property Name="Footer" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="IsBodyHtml" Type="Boolean" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="pharmacynames">
           <Key>
             <PropertyRef Name="PharmacyId" />
@@ -1135,7 +1125,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="catalognames" EntityType="Self.catalognames" />
           <EntitySet Name="drugfamily" EntityType="Self.drugfamily" />
           <EntitySet Name="jobextendwithproducer" EntityType="Self.jobextendwithproducer" />
-          <EntitySet Name="mailformwithfooter" EntityType="Self.mailformwithfooter" />
           <EntitySet Name="pharmacynames" EntityType="Self.pharmacynames" />
           <EntitySet Name="producernames" EntityType="Self.producernames" />
           <EntitySet Name="ratingreportorderitems" EntityType="Self.ratingreportorderitems" />
@@ -1213,6 +1202,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="promotionsimage" EntitySet="promotionsimage" />
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
+          <EntitySet Name="mailformwithfooter" EntityType="producerinterface_Model.mailformwithfooter" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1615,6 +1605,21 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="mailformwithfooter">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Subject" />
+            <PropertyRef Name="IsBodyHtml" />
+            <PropertyRef Name="Header" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Body" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Footer" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="IsBodyHtml" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Header" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1756,18 +1761,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="Enable" ColumnName="Enable" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="mailformwithfooter">
-            <EntityTypeMapping TypeName="producerinterface_Model.mailformwithfooter">
-              <MappingFragment StoreEntitySet="mailformwithfooter">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Subject" ColumnName="Subject" />
-                <ScalarProperty Name="Body" ColumnName="Body" />
-                <ScalarProperty Name="Footer" ColumnName="Footer" />
-                <ScalarProperty Name="IsBodyHtml" ColumnName="IsBodyHtml" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2079,6 +2072,19 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="ImageType" ColumnName="ImageType" />
                 <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
                 <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mailformwithfooter">
+            <EntityTypeMapping TypeName="producerinterface_Model.mailformwithfooter">
+              <MappingFragment StoreEntitySet="mailformwithfooter">
+                <ScalarProperty Name="Header" ColumnName="Header" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsBodyHtml" ColumnName="IsBodyHtml" />
+                <ScalarProperty Name="Footer" ColumnName="Footer" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
