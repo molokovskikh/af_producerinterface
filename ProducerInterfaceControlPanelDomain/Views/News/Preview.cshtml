@@ -1,0 +1,23 @@
+﻿@model ProducerInterfaceCommon.ContextModels.NotificationToProducers
+@{
+    ViewBag.Title = "Preview";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+
+<div class="container body-content"> 
+    <div class="row">
+        <h3>@Model.Name <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>
+    </div>
+
+    <hr/>
+    <div class="row">
+        <p>@Html.Raw(Model.Description)</p>
+    </div>
+</div>
+
+
+
+
+
+

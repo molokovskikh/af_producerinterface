@@ -5,17 +5,19 @@
 }
 
 <div class="container body-content">
-    <h3>@Model.Name   </h3>
-
-    <p>@Html.Raw(Model.Description)</p>
-
-    <p><span class="pull-right panel-title">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></p>
-
-    <hr/>
-
-    @Html.ActionLink("Назад", "Index",null,null, new { @class="btn btn-primary"})
-
+    <div class="row">
+        @Html.ActionLink("Вернутся в кабинет производителя", "Index", null, null, new { @class = "btn btn-primary" })
+    </div> 
+    <hr />
+    <div class="row">
+        <h3>@Model.Name <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>       
+    </div>  
+    <hr />   
+    <div class="row">
+        <p>@Html.Raw(Model.Description)</p>
+    </div>
 </div>
 
-<h2></h2>
+
+
 
