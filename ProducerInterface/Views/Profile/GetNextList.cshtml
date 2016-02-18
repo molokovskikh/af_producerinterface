@@ -4,29 +4,13 @@
 {
     foreach (var NewsItem in Model)
     {
-        <div class="panel panel-default pointer" onclick="window.location='@Url.Action("News", "Profile", new { Id = NewsItem.Id})'">
-            <div class="panel-heading" style="text-decoration:none;">
-                <span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right panel-title">@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span>
-                @*<h4 class="panel-title">
-                        <p data-toggle="collapse" data-parent="#accordion-menu2"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right panel-title">@NewsItem.DatePublication.ToString("dd.MM.yyyy")</span></p>
-                    </h4>*@
-            </div>
-            <div class="panel-collapse collapse in" style="text-decoration:none;">
-                <div class="panel-body" style="text-decoration:none; z-index:1;">
-
-                    @if (NewsItem.Description.Length > 150)
-                    {
-                        <p class="clip">@Html.Raw(NewsItem.Description.Substring(0, 150)) ...</p>
-                    }
-                    else
-                    {
-                        <p class="clip">@Html.Raw(NewsItem.Description) ...</p>
-                    }
-
-                </div>
-            </div>
+        <div class="col-xs-12 pointer" onclick="window.location='@Url.Action("News", "Profile", new { Id = NewsItem.Id})'">
+            <h4><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; <strong>@NewsItem.Name</strong></h4>
+            <p><span>@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span></p>
+            <br />
+            <a href="@Url.Action("News", "Profile", new { Id = NewsItem.Id})">читать далее</a>
         </div>
-
+        <hr /> 
     }
 
     if (ViewBag.MaxCount >= ViewBag.Pager)

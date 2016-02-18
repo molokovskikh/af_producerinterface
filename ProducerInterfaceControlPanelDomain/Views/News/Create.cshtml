@@ -5,18 +5,19 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-@if(Model.Id > 0)
-{
-<h2>Редактирование новости</h2>
-}
-else
-{
-<h2>Новая новость</h2>
+<div class="container body-content">
+    @if (Model.Id > 0)
+    {
+        <h2>Редактирование новости</h2>
+    }
+    else
+    {
+        <h2>Новая новость</h2>
 
-<hr />
-}
+        <hr />
+    }
 
-   
+
 
     @using (Html.BeginForm(FormMethod.Post))
     {
@@ -40,31 +41,33 @@ else
         <div class="form-group">
             @Html.LabelFor(m => m.Description)
 
-            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows="10" })
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = "10" })
             @Html.ValidationMessageFor(m => m.Description)
         </div>
 
-        <div class="form-group">            
-            <a href="@Url.Action("List")" class="btn btn-primary">Назад к списку новостей</a>                        
-            @if (Model.Id == 0){<input type="submit" class="btn btn-primary" value="Добавить новость" />}
-            else{<input type="submit" class="btn btn-primary" value="Сохранить изменения" />}                        
+        <div class="form-group">
+            <a href="@Url.Action("List")" class="btn btn-primary">Назад к списку новостей</a>
+            @if (Model.Id == 0)
+            {<input type="submit" class="btn btn-primary" value="Добавить новость" />}
+            else {<input type="submit" class="btn btn-primary" value="Сохранить изменения" />}
         </div>
     }
-    
+</div>
+
 @section scripts
 {   
 <script src="~/Scripts/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        CKEDITOR.replace('Description',{'filebrowserBrowseUrl':'/MediaFiles/Index/',
-            'filebrowserImageBrowseUrl': '/MediaFiles/Index/',
-  'filebrowserFlashBrowseUrl': '/MediaFiles/Index/',
-  'filebrowserUploadUrl': '/MediaFiles/Index/',
-  'filebrowserImageUploadUrl':'/MediaFiles/Index/',
-  'filebrowserFlashUploadUrl':'/MediaFiles/Index/'
-        });
+        CKEDITOR.replace('Description',
+            {
+                'filebrowserBrowseUrl': '/MediaFiles/Index/',
+                'filebrowserImageBrowseUrl': '/MediaFiles/Index/',
+                'filebrowserUploadUrl': '/MediaFiles/SaveFile/',
+                'filebrowserImageUploadUrl': '/MediaFiles/SaveFile/',
+                'height': '35em'
+            });
     });
-
 </script>
 }
 

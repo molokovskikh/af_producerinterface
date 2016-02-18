@@ -126,11 +126,13 @@ min-width:100%;
     text-align:center;
 }
 
-#SubMenuProducerInformation ul a {
-font-size:16px;
-color:#e5c6c6;
+#MenuPU {
 }
-#SubMenuProducerInformation .dropdown ul a {
-font-size:16px;
-color:#000000;
+MenuPU a {
+font-size:1.6em;
+}
+.feedback_item {
+padding:2em;
+background-color:#eeeeee;
+
 }

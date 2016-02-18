@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.AccountFeedBack>
+
+@{
+    var ProducerList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+@foreach (var FeedBackItem in Model)
+{
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">     
+        <div class="feedback_item">
+            <p>Обращение: @FeedBackItem.FeedBack_Text</p>
+            <p>Контакт для связи: @FeedBackItem.Contact</p>
+            <p>@FeedBackItem.DateAdd.Value.ToString("dd.MM.yyyy")</p>
+            @if (FeedBackItem.AccountId != null)
+            {
+                <p>Производитель:  @ProducerList.Where(xxx => xxx.Value == FeedBackItem.Account.AccountCompany.ProducerId.ToString()).First().Text</p>
+            }
+        </div>   
+    </div>
+
+}

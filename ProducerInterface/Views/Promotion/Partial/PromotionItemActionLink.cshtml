@@ -10,7 +10,7 @@
     }
 
     <!-- копия акции (сразу открывается для редактирования) -->
-    <a href="@Url.Action("CopyPaste", new { Id = Model.Id })" title="Создать копию акции" class="btn  btn-default glyphicon glyphicon-duplicate"></a>
+    <a href="@Url.Action("CopyPaste", new { Id = Model.Id })" title="Создать копию акции" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
 
     @if (Model.Enabled == true && Model.Status == true)
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterface.Controllers
 {
@@ -14,14 +14,15 @@ namespace ProducerInterface.Controllers
             TypeLoginUser = ProducerInterfaceCommon.ContextModels.TypeUsers.ProducerUser;          
             base.OnActionExecuting(filterContext);
 
-        }
 
-
-
-
-
-
-
-
+            // в разработке
+            //var AC = new ProducerInterfaceCommon.Controllers.Account_Statistics(HttpContext, CurrentUser);
+            
+            //new Thread(() =>
+            //{
+            //    AC.SaveAccountAsync();              
+            //}).Start();               
+                
+        }   
     }
 }

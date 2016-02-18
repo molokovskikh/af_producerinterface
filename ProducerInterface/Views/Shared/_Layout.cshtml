@@ -12,7 +12,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аналит @ViewBag.Title</title>
+    <title>Pharm-Статистика и Pro-движение @ViewBag.Title</title>
 
     <link href="~/Content/Chosen/css/Site.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
@@ -54,6 +54,6 @@
 	 <script src="~/Scripts/WorkPlace/ModalView.js"></script>
     @RenderSection("JavaScript", required: false)
 
-	
+    <a hidden="hidden" name="UrlString" id="UrlString" value="@ViewBag.UrlString"></a>
 </body>
 </html>

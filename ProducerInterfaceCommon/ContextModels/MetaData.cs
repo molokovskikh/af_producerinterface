@@ -7,6 +7,31 @@ using System.Web.Mvc;
 namespace ProducerInterfaceCommon.ContextModels
 {
 
+    public partial class AccountFeedBack
+    {
+        public string Url_
+        {
+            get
+            {
+                return this.Description.Split(new Char[] { '>' })[0];
+            }
+        }
+        public string FeedBack_Text
+        {
+            get
+            {
+                return this.Description.Split(new Char[] { '>' })[2];
+            }
+        }
+        public string Contact
+        {
+            get
+            {
+                return this.Description.Split(new Char[] { '>' })[1];
+            }
+        }       
+    }
+
 	public partial class NewsChange
 	{
 		public string GetDisplayNewsTypeChange

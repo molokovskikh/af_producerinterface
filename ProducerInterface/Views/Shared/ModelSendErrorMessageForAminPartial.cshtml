@@ -15,10 +15,10 @@ var user = ViewBag.CurrentUser;
 
             <div class="modal-body" id="ModalBodyId">
 
-		 @using(Ajax.BeginForm("index", "feedback", null,
+		 @using(Ajax.BeginForm("Index", "FeedBack", null,
             new AjaxOptions{HttpMethod = "POST", OnBegin = "SendMessage",UpdateTargetId="footer_model_message"}))
  {
-     <input id="PageUrl" name="PageUrl" hidden="hidden" value="---"/>
+     <input id="PageUrl" name="PageUrl" hidden="hidden" value="@ViewBag.UrlString"/>
 
 	       <div class="form-group">        
                     <div class="form-group">                     
@@ -40,7 +40,8 @@ var user = ViewBag.CurrentUser;
                     <input id="UdobstvaSvyazi" name="UdobstvaSvyazi" class="form-control" />
                     }
 
-                
+                   
+
                   </div>
                   
                     <div class="form-group">

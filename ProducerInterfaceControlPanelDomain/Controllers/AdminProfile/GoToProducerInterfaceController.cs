@@ -35,10 +35,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
             Guid G1 = Guid.NewGuid();
             Guid G2 = Guid.NewGuid();
 
-            var i = G1.ToString().Replace("-","").Replace(" ","") +  (CurrentUser.Name.Length * 1980).ToString() + G2.ToString().Replace("-", "").Replace(" ", "");
+            var match = System.Text.RegularExpressions.Regex.Match(G1.ToString(), @"\-?\d+(\.\d{0,})?");
+            var match2 = System.Text.RegularExpressions.Regex.Match(G2.ToString(), @"[0-9][0-9]+(?:\.[0-9]*)?");
+            
+            var i = match +  (CurrentUser.Name.Length * 19801112).ToString() + match2;
             var Url = GetWebConfigParameters("GoToProducerUserUrl");
 
-            return Redirect(Url + "?SecureHash=" + i + "&AdminLogin=" + CurrentUser.Login + "&IdProducerUSer=" + produceruserid);            
+            var UrlRedirect = Url + "?SecureHash=" + i + "&AdminLogin=" + CurrentUser.Login + "&IdProducerUSer=" + produceruserid;
+
+            return Redirect(UrlRedirect);            
         }
 
         public JsonResult GetListUser(long idproducer)

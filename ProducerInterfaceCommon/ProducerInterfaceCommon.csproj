@@ -200,6 +200,7 @@
     <Compile Include="ContextModels\usernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Account_Statistics.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />

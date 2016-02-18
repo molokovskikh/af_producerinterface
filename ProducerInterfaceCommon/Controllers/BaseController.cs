@@ -21,12 +21,17 @@ namespace ProducerInterfaceCommon.Controllers
 			base.OnActionExecuting(filterContext);
 			CurrentUser = GetCurrentUser(TypeLoginUser);
 
+            ViewBag.UrlString = HttpContext.Request.Url;
 
 			if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
 			{
 				CurrentUser.IP = Request.UserHostAddress.ToString();
 				ViewBag.CurrentUser = CurrentUser;
-			}
+                if (CurrentUserIdLog != CurrentUser.Id)
+                {
+                    ViewBag.AdminUser = cntx_.Account.Find(CurrentUserIdLog);
+                }
+            }      
 			CheckGlobalPermission(); // проверка наличия пермишена для данного экшена в БД  
 			CheckUserPermission(filterContext); // проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)       
 		}

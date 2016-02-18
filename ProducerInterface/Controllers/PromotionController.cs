@@ -141,7 +141,7 @@ namespace ProducerInterface.Controllers
                 PromoFile.ImageName = PromoAction.File.FileName.Split(new Char[] { '\\' }).Last();
                 PromoFile.ImageType = PromoAction.File.ContentType;
                 PromoFile.ImageSize = MS.Length.ToString();
-
+                PromoFile.NewsOrPromotions = false; // false - promofile  true - news file
                 cntx_.promotionsimage.Add(PromoFile);
                 cntx_.SaveChanges();
 

@@ -325,7 +325,7 @@ namespace ProducerInterface.Controllers
 
             var AdminAccount = cntx_.Account.Where(xxx => xxx.Login == AdminLogin).First();
 
-            var i = AdminAccount.Name.Length * 1980;
+            var i = AdminAccount.Name.Length * 19801112;
 
             if (!SecureHash.Contains(i.ToString()))
             {
@@ -341,8 +341,7 @@ namespace ProducerInterface.Controllers
 
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]     
         public ActionResult AdminAuth(ProducerInterfaceCommon.ContextModels.AdminAutentification AdminAccountModel)
         {
             var DomainAuth = new ProducerInterfaceCommon.Controllers.DomainAutentification();
@@ -354,6 +353,12 @@ namespace ProducerInterface.Controllers
                 var AdminId = cntx_.Account.Where(xxx => xxx.Login == AdminAccountModel.Login).First().Id.ToString();
                 Autentificate(this, true, AdminId);
             }
+
+            if (CurrentUser != null)
+            {
+                return RedirectToAction("Index", "Profile");
+            }
+
             AdminAccountModel.Password = "";
             ErrorMessage("Пароль указан не верно");
             return View("AdminAuth", AdminAccountModel);
