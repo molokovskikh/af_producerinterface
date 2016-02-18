@@ -255,3 +255,7 @@ margin-top:1px;
 #CatalogIdEqual_chosen ul.chosen-choices {
     min-height: 8em;
 }
+
+.panel-heading a {
+text-decoration:none;
+}

@@ -25,7 +25,20 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "В процессе подготовки произошла ошибка")]
         Error = 4
     }
-     
+
+    public enum FeedBackStatus
+    {
+        [Display(Name = "Новое обращение")]
+        FeedBack_New = 0,
+        [Display(Name = "В работе")]
+        FeedBack_Work = 1,
+        [Display(Name = "Успешно выполнено")]
+        FeedBack_End_Success =2,
+        [Display(Name = "Необходимы дополнительные действия")]
+        FeedBack_End_Error =3,
+        [Display(Name = "Удалена")]
+        FeedBack_delete =4
+    }
 
     public enum NewsChanges
     {

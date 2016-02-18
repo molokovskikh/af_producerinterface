@@ -184,6 +184,7 @@
     <Compile Include="Controllers\general_reportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterBaseController.cs" />
+    <Compile Include="Controllers\MediaFilesController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
@@ -304,6 +305,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\WorkPlace\Analit.js" />
+    <Content Include="Scripts\WorkPlace\CountAlfavit.js" />
     <Content Include="Scripts\WorkPlace\DatePicker.js" />
     <Content Include="Scripts\WorkPlace\FileUpLoad.js" />
     <Content Include="Scripts\WorkPlace\GradientText.js" />
@@ -437,6 +439,7 @@
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Configuration\" />
     <Folder Include="Views\MasterBase\" />
+    <Folder Include="Views\MediaFiles\" />
     <Folder Include="Views\OldProfile\" />
   </ItemGroup>
   <ItemGroup>

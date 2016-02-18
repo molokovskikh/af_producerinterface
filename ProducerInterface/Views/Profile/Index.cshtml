@@ -9,69 +9,68 @@
     var NewsList = ViewBag.News as IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>;
 }
 
-<div class="container body-content">
-
-
-    <div class="form-group">
-        <p class="lead">Здраствуйте, @currentUser.Name.</p>
-    </div>
-
-    <hr />
-
-    <h2>Новости</h2>
-    <hr />
-
-    <div class="form-group" id="NewsListDiv">
-        @if (ViewBag.News != null && ViewBag.News.Count > 0)
-        {
-
-            <div class="row">
-                @foreach (var NewsItem in NewsList)
-                {                 
-                        <div class="panel panel-default pointer" onclick="window.location='@Url.Action("News", "Profile", new { Id = NewsItem.Id})'">
-                            <div class="panel-heading" style="text-decoration:none;">
-                                <span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right news-date">@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span>
-                                @*<h4 class="panel-title">
-                                    <p data-toggle="collapse" data-parent="#accordion-menu2"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; @NewsItem.Name <span class="pull-right panel-title">@NewsItem.DatePublication.ToString("dd.MM.yyyy")</span></p>
-                                </h4>*@
-                            </div>
-                            <div class="panel-collapse collapse in" style="text-decoration:none;">
-                                <div class="panel-body" style="text-decoration:none; z-index:1;">
-                                 
-                                        @if (NewsItem.Description.Length > 150)
-                                        {
-                                            <p  class="clip">@Html.Raw(NewsItem.Description.Substring(0, 150)) ...</p>
-                                        }
-                                        else
-                                        {
-                                            <p  class="clip">@Html.Raw(NewsItem.Description) ...</p>
-                                        }
-                                                                      
-                                    </div>
-                            </div>
-                        </div>
-                   
-                }
+<div class="row">
+    <div class="col-xs-12">
+        <div class="col-lg-2 visible-lg">
+            <div class="body-content" style="padding:0.2em;">
+                <h3 style="margin:0.5em;">Меню</h3>
+                <hr/>
+                <div class="btn-group-vertical" style="width:100%;">
+                    <a href="@Url.Action("Index", "Promotion")" class="btn btn-primary" style="width:100%;">Акции</a>
+                    <a href="@Url.Action("JobList", "Report")" class="btn btn-primary">Отчеты</a>
+                    <a href="@Url.Action("Index", "Drug")" class="btn btn-primary">Препараты</a>
+                    <a data-toggle="modal" data-target="#myModal" class="pointer btn btn-primary">Обратная связь</a>
+                </div>             
             </div>
-
-            if (ViewBag.MaxCount > 10)
-            {
-                <div id="@("LoadingListDiv" + ViewBag.Pager)" class="row">
-
+        </div>
+        <div class="col-xs-12 col-lg-10">
+            <div class="body-content">
+                <div class="form-group">
+                    <p class="lead">Здраствуйте, @currentUser.Name.</p>
                 </div>
 
-                <div id=@("Delete_Id" + ViewBag.Pager)>
-                    @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
+                <hr />
+
+                <h2>Новости</h2>
+                <hr />
+
+                <div class="form-group" id="NewsListDiv">
+                    @if (ViewBag.News != null && ViewBag.News.Count > 0)
+                {                      
+                        <div class="row">
+                            @foreach (var NewsItem in NewsList)
+                            {                            
+                                    <div class="col-xs-12 pointer" onclick="window.location='@Url.Action("News", "Profile", new { Id = NewsItem.Id})'">
+                                        <h4><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; <strong>@NewsItem.Name</strong></h4>
+                                        <p><span>@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span></p>                                      
+                                        <a href="@Url.Action("News", "Profile", new { Id = NewsItem.Id})">читать далее</a>
+                                    </div>
+                                    <hr />      
+                        }
+                        </div>
+
+                    if (ViewBag.MaxCount > 10)
+                    {
+                            <div id="@("LoadingListDiv" + ViewBag.Pager)" class="row">
+
+                            </div>
+
+                            <div id=@("Delete_Id" + ViewBag.Pager)>
+                                @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
                     new { Pager = ViewBag.Pager },
                     new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
                     new { @class = "btn btn-primary" })
+                            </div>
+                    }
+                }
+
                 </div>
-            }
-        }
 
+            </div>
+        </div>
     </div>
-
 </div>
+
 
 @section JavaScript
 {

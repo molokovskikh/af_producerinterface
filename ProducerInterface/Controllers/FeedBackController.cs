@@ -20,9 +20,9 @@ namespace ProducerInterface.Controllers
             }
 
             FeedBack.DateAdd = System.DateTime.Now;
-            FeedBack.Description = "Сообщение отправлено с " + PageUrl + System.Environment.NewLine;
-            FeedBack.Description += "Контакт для связи " + UdobstvaSvyazi + System.Environment.NewLine;
-            FeedBack.Description += "Текст Сообщения" + System.Environment.NewLine + Id;
+            FeedBack.Description = "" + PageUrl + System.Environment.NewLine + ">";
+            FeedBack.Description += "" + UdobstvaSvyazi + System.Environment.NewLine + ">";
+            FeedBack.Description += "" + System.Environment.NewLine + Id;
 
             cntx_.Entry(FeedBack).State = System.Data.Entity.EntityState.Added;
             cntx_.SaveChanges();

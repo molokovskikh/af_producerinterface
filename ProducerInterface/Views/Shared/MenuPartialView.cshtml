@@ -29,7 +29,13 @@
         </ul>
 
         @if (user != null)
+        {
+            if(ViewBag.AdminUser != null)
             {
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.AdminUser.Login (админ)</a></li>
+            </ul>
+            }
             <ul class="nav navbar-nav navbar-right" role="navigation">
                 <li class="dropdown">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Login</a>

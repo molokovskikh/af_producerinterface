@@ -748,3 +748,27 @@ System.Web.Mvc.ActionResult Index(ProducerInterfaceCommon.ContextModels.Account)
 16.02.2016 20:22:23.707 [9] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
 16.02.2016 20:28:32.511 [11] ERROR MySqlAdoNetAppender - При обновлении записей возникла ошибка. Дополнительные сведения приведены во внутреннем исключении.
 16.02.2016 20:30:13.647 [21] ERROR MySqlAdoNetAppender - При обновлении записей возникла ошибка. Дополнительные сведения приведены во внутреннем исключении.
+17.02.2016 17:02:12.548 [7] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+17.02.2016 17:03:57.079 [30] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "idproducer" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.JsonResult GetListUser(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.GoToProducerInterfaceController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+17.02.2016 17:56:45.910 [8] ERROR MySqlAdoNetAppender - В блоке if отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+17.02.2016 17:56:50.305 [8] ERROR MySqlAdoNetAppender - В блоке if отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+17.02.2016 17:56:52.133 [9] ERROR MySqlAdoNetAppender - В блоке if отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+17.02.2016 17:56:54.858 [9] ERROR MySqlAdoNetAppender - В блоке if отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+17.02.2016 17:59:49.717 [7] ERROR MySqlAdoNetAppender - В блоке if отсутствует закрывающий символ "}". Убедитесь, что символ "}" указан для всех символов "{" в этом блоке и что ни один из символов "}" не интерпретируется как разметка.
+
+17.02.2016 18:34:29.443 [53] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+17.02.2016 18:36:02.177 [55] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "idproducer" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.JsonResult GetListUser(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.AdminProfile.GoToProducerInterfaceController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+17.02.2016 18:49:53.136 [45] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+17.02.2016 19:01:49.240 [48] ERROR MySqlAdoNetAppender - Путь '/Views/Shared/Partial/GlobalMenu.cshtml' не найден.
+17.02.2016 19:03:19.762 [57] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "CreateGroup" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionController".
+17.02.2016 19:06:32.223 [35] ERROR MySqlAdoNetAppender - Контроллер для пути "/ProducerInfermation/Index" не найден или не реализует интерфейс IController.
+17.02.2016 19:06:34.967 [35] ERROR MySqlAdoNetAppender - Контроллер для пути "/ProducerInfermation/Index" не найден или не реализует интерфейс IController.
+18.02.2016 10:05:40.003 [809] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\MediaFiles\Index.cshtml(34): error CS1003: Syntax error, ',' expected
+18.02.2016 13:29:08.533 [15] ERROR MySqlAdoNetAppender - Контроллер для пути "/ProducerInfermation/Index" не найден или не реализует интерфейс IController.
+18.02.2016 13:29:11.564 [9] ERROR MySqlAdoNetAppender - Контроллер для пути "/ProducerInfermation/Index" не найден или не реализует интерфейс IController.

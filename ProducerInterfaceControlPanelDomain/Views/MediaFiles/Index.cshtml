@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.promotionsimage>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Example: Browsing Files</title>       
+    <script>        
+        function getUrlParam( paramName ) {
+            var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' );
+            var match = window.location.search.match( reParam );
+
+            return ( match && match.length > 1 ) ? match[1] : null;
+        }
+        
+        function returnFileUrl(url_) {
+
+            var funcNum = getUrlParam( 'CKEditorFuncNum' );
+            var fileUrl = url_;
+            window.opener.CKEDITOR.tools.callFunction( funcNum, fileUrl );
+            window.close();
+        }
+    </script>
+</head>
+
+<body>
+
+    @foreach (var FileItem in Model)
+    {
+        <img src="@Url.Action("GetFile", "MediaFiles", new { Id = FileItem.Id})" style="max-height:50px;"
+             onclick="returnFileUrl(@(@"""/MediaFiles/GetFile/" + FileItem.Id + @""""))"/>
+    }
+  
+</body>
+</html>

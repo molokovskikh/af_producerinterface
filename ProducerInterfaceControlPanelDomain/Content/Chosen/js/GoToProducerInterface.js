@@ -6,16 +6,12 @@
     stringPathName = (stringPathName.substring(0, stringPathName.length));
     stringPathName = stringPathName + '/GetListUser';
 
-    $.getJSON(stringPathName, prm, function (data) {      
-        $.each(data, function (index, item) {
-
-            //$("#selectList").append(new Option("option text", "value"));
-            //sup.append(new Option(text(item.text), value(item.value)));
-            sup.children().remove();
+    $.getJSON(stringPathName, prm, function (data) {
+        sup.children().remove();
+        $.each(data, function (index, item) {   
             var NewOption = $('<option></option>').text(item.text).val(item.value);
             sup.append(NewOption);
-
         });
-     /*   sup.trigger("chosen:updated");*/
+     
     });
 });

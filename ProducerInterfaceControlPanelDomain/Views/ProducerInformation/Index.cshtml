@@ -1,20 +1,13 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
-
 @{
-    var CompanyInformation = ViewBag.CompanyInformation as AccountCompany;
+  
     ViewBag.Title = "Производитель";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
 <div class="row">
     <div class="col-xs-12">
-        @Html.Partial("Partial/SubMenu")
+        <h2>В работе</h2>
+        <h4>На данной странице будет отображатся статистика по интерфейсу производителя</h4>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-xs-12" id="ResultView">
-
-    </div>
-</div>
-

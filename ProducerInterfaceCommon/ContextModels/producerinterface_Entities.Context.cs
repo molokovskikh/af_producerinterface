@@ -53,14 +53,14 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<Account> Account { get; set; }
         public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
-        public DbSet<promotionsimage> promotionsimage { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
+        public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
         public DbSet<NewsChange> NewsChange { get; set; }
-        public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<catalognameswithuptime> catalognameswithuptime { get; set; }
         public DbSet<ReportRunLog> ReportRunLog { get; set; }
         public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
+        public DbSet<promotionsimage> promotionsimage { get; set; }
     }
 }

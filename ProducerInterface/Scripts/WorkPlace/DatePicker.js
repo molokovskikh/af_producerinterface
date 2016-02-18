@@ -1,8 +1,4 @@
 ﻿$(function () {
-  
-    var characters = 500;
-    $("#counter").append(characters);
-
     var dateFrom = $('#Begin').datepicker({
         format: 'dd.mm.yyyy',
         language: 'ru',
@@ -27,33 +23,16 @@
     }).data('datepicker');
 });
 
-function UpKey()
-{
-  //  var element_ = $('#annotation');
-  //  var CountVal = element_.val().length;
-    
-
-
-    // counter
-
+function KyUp() {
+    var stringText = $('#Annotation').val();
+    var count = stringText.length; // кол-во уже введенных символов
+    var num = 500 - count; // кол-во символов, которое еще можно ввести
+    if (num > 0) {
+        // если не достигнут лимит символов         
+        $('#counter').text('Количество оставшихся для ввода знаков: ' + num);
+    } else {
+        // если достигнут лимит символов         
+        $('#counter').text('Достигнут лимит символов');
+        return false;
+    }
 }
-
-
-//    $("#annotation").keyup(function () {
-
-//        var element_ = document.getElementById('annotation');
-//        var CountVal = element_.val().trim();
-        
-//        var txt = $('#annotation').val().trim();
-//        var value = $(this).attr('value');
-//        var remaining = characters - $('#annotation').innerText.length;
-//        document.getElementById('#counter').append(remaining);
-//     //   $("#counter").innerHTML = remaining.toString();     
-//        if (remaining <= 999) {
-//            $("#counter").css("color", "red");
-//        }
-//        else {
-//            $("#counter").css("color", "black");
-//        }
-//    });
-//}

@@ -1,82 +1,91 @@
 ﻿
 
-<div class="navbar navbar-fixed-top navbar-inverse">
-    <div class="navbar-header navbar-left">
-        <button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-    </div>
+<div class="navbar navbar-fixed-top navbar-inverse" id="MenuPU">
 
-    <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-left">
-            <li><a href="~/Home/Index"><i class="glyphicon glyphicon-home"></i></a></li>
-        </ul>
+    @if (ViewBag.CurrentUser != null)
+    {
+        <div class="navbar-header navbar-left">
+            <button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
 
-        <ul class="nav navbar-nav navbar-left" role="navigation">
-            <li class="dropdown" id="dropdownmenu">
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-th"></span>&nbsp; Разделы сайта</a>
-                <ul class="dropdown-menu">
-                    <li><a href="~/ProducerInfermation/Index">Статистика по производителям</a></li>
-                    <li><a href="~/Promotion/Index">Акции</a></li>
-                    <li><a href="~/Report/Index">Отчеты</a></li>
-                   
-                </ul>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-left" role="navigation">
-            <li class="dropdown" id="dropdownmenu">
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-info-sign"></span>&nbsp; Новости</a>
-                <ul class="dropdown-menu">
-                    <li><a href="~/News/List">Список новостей</a></li>
-                    <li><a href="~/News/Archive">Архив новостей</a></li>
-                    <li><a href="~/News/Create">Создать</a></li>
-                </ul>
-            </li>
-        </ul>
-    
-        <ul class="nav navbar-nav navbar-left" role="navigation">
-            <li class="dropdown" id="dropdownmenu">
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span>&nbsp; Администрирование</a>
-                <ul class="dropdown-menu">
-                    <li><a href="~/Permission/Index">Права доступа (панель управления)</a></li>
-                    <li><a href="~/PermissionUser/Index">Права доступа (интерфейст производителей)</a></li>
-                    <li><a href="~/Mail/Index">Шаблоны писем</a></li>
-                </ul>
-            </li>
-        </ul>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="~/Home/Index"><i class="glyphicon glyphicon-home"></i></a></li>
+            </ul>
 
-        <ul class="nav navbar-nav navbar-left" role="navigation">
-            <li class="dropdown" id="dropdownmenu">
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-list"></span>&nbsp; Логи</a>
-                <ul class="dropdown-menu">
-                    <li><a href="~/LogForNet/Index">Логи ошибок</a></li>
-                    <li><a href="~/LogUserChange/Index">Логи изменений</a></li>
-                </ul>
-            </li>
-        </ul>
+            <ul class="nav navbar-nav navbar-left" role="navigation">
+                <li class="dropdown" id="dropdownmenu">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-th"></span>&nbsp; Разделы сайта</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="~/ProducerInformation/Index">Статистика по производителям</a></li>
+                        <li><a href="~/Promotion/Index">Акции</a></li>
+                        <li><a href="~/Report/Index">Отчеты</a></li>
+                        <li><a href="~/Mail/Index">Шаблоны писем</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-left" role="navigation">
+                <li class="dropdown" id="dropdownmenu">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-info-sign"></span>&nbsp; Новости</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="~/News/List">Список новостей</a></li>
+                        <li><a href="~/News/Archive">Архив новостей</a></li>
+                        <li><a href="~/News/Create">Создать</a></li>
+                    </ul>
+                </li>
+            </ul>
 
+            <ul class="nav navbar-nav navbar-left" role="navigation">
+                <li class="dropdown" id="dropdownmenu">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span>&nbsp; Администрирование</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="~/LogForNet/Index">Логи ошибок</a></li>
+                        <li><a href="~/LogUserChange/Index">Логи изменений</a></li>  
+                        <li><a href="@Url.Action("Index","GoToProducerInterface")">Вход в интерфейс производителя</a></li> 
+                        <li><a href="~/Feedback/Index">Обращения пользователей</a></li>    
+                    </ul>
+                </li>
+            </ul>
 
+            <ul class="nav navbar-nav navbar-left" role="navigation">
+                <li class="dropdown" id="dropdownmenu">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Управление правами (Панель управления)"> <span class="glyphicon glyphicon-user"></span>&nbsp; Права (ПУ)</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="~/Permission/Group">Список групп</a></li>
+                        <li><a href="~/Permission/ListPermission">Список прав</a></li>
+                        <li><a href="~/Permission/Users">Список пользователей</a></li>                   
+                        <li><a href="~/Permission/CreateGroupPermission">Создать группу</a></li>                    
+                    </ul>
+                </li>
+            </ul>
 
-        <ul class="nav navbar-nav navbar-left">
-            <li><a>Custom</a></li>
-            <li><a>Custom</a></li>
-            <li><a>Custom</a></li>
-            <li><a>Custom</a></li>
-        </ul>
-@if (ViewBag.CurrentUser != null)
-{
-        <ul class="nav navbar-nav navbar-right">          
-            <li><a href="~/AdminAccount/Index"><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Name</a></li>
-        </ul>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href="~/AdminAccount/Index"><span class="glyphicon glyphicon-user"></span>&nbsp; Аноним</a></li>
-    </ul>
-}
-    </div>
+            <ul class="nav navbar-nav navbar-left" role="navigation">
+                <li class="dropdown" id="dropdownmenu">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Управление правами (Интерфейс производителя)"> <span class="glyphicon glyphicon-user"></span>&nbsp; Права (ИП)</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="~/PermissionUser/Group">Список групп</a></li>
+                        <li><a href="~/PermissionUser/ListPermission">Список прав</a></li>
+                        <li><a href="~/PermissionUser/Users">Список пользователей</a></li>
+                        <li><a href="~/PermissionUser/SearchUser">Поиск пользователя</a></li>
+                        <li><a href="~/PermissionUser/CreateGroupPermission">Создать группу</a></li>                     
+                    </ul>
+                </li>
+            </ul>                 
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Name</a></li>
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="~/Registration/Index"><span class="glyphicon glyphicon-user"></span>&nbsp; Аноним</a></li>
+            </ul>
+        </div>
+    }
 </div>
-

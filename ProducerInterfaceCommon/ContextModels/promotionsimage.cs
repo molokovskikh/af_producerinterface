@@ -24,6 +24,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public byte[] ImageFile { get; set; }
         public string ImageType { get; set; }
         public string ImageSize { get; set; }
+        public bool NewsOrPromotions { get; set; }
     
         public virtual ICollection<promotions> promotions { get; set; }
     }
