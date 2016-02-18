@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Должности";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="container body-content">
+    
+    <h2>Управление списком должностей, доступным при регистрации нового пользователя</h2>
+     
+    <div class="row">
+        <div class="col-xs-12" id="replacecontent">
+            @Html.Partial("partial/appointment")
+        </div>
+    </div>
+
+</div>
+@section scripts
+{
+ <script type="text/javascript">
+
+     function ActivateDeactivete(i) // i=0 deactivate  i=1 activate
+     {
+         var sendParam = "";
+         var stringPathName = document.location.pathname;
+         stringPathName = stringPathName.replace("AppointmentNameList", "AppointmentEnable");
+                  
+         var sendParamId = "";
+
+         if (i == 0)
+         {
+             sendParamId =  $("#active").val();
+         }
+         if (i == 1) {
+             sendParamId = $("#inactive").val();
+         }
+
+         sendParam = "Id=" + sendParamId + "&enabled=" + i;
+               
+         $.ajax(
+         {
+             url: stringPathName,
+             data: sendParam,
+             type: "POST",
+             success: function (data) {
+                 $('#replacecontent').html(data);
+             }
+         });
+     }
+</script>    
+}

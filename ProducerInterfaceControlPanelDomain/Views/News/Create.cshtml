@@ -47,27 +47,19 @@
 
         <div class="form-group">
             <a href="@Url.Action("List")" class="btn btn-primary">Назад к списку новостей</a>
+            <a class="btn btn-primary" onclick="TargetBlackPreviewNews()">Посмотреть результат</a>
             @if (Model.Id == 0)
             {<input type="submit" class="btn btn-primary" value="Добавить новость" />}
             else {<input type="submit" class="btn btn-primary" value="Сохранить изменения" />}
         </div>
+   
     }
 </div>
 
 @section scripts
 {   
 <script src="~/Scripts/ckeditor/ckeditor.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        CKEDITOR.replace('Description',
-            {
-                'filebrowserBrowseUrl': '/MediaFiles/Index/',
-                'filebrowserImageBrowseUrl': '/MediaFiles/Index/',
-                'filebrowserUploadUrl': '/MediaFiles/SaveFile/',
-                'filebrowserImageUploadUrl': '/MediaFiles/SaveFile/',
-                'height': '35em'
-            });
-    });
-</script>
+<script src="~/Scripts/ckeditor/InitCKEditor_News.js"></script>
+
 }
 

@@ -12,7 +12,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpGet]       
         public ActionResult Index()
         {
-            return View();    
+            // ListProducers - список не только компаниий производителей но и компаний с анонимным производителем 
+            // точнее с анонимными пользователями.
+
+            var ListProducers = cntx_.AccountCompany.ToList();
+            return View(ListProducers);    
         }        
     }
 }

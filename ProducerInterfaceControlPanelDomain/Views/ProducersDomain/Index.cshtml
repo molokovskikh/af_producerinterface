@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Упраление списком доменов производителей";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+    var ProducerList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
+}
+
+<div class="container body-content">
+    <h2>Упраление списком доменов производителей</h2>
+
+    <div class="row">
+        <div class="form-group">
+            <select id="idproducer" class="form-control">
+                @foreach (var ProducerItem in ProducerList)
+            {
+                    <option value="@ProducerItem.Value">@ProducerItem.Text</option>
+                }
+            </select>
+        </div>     
+    </div>
+    <div class="row" id="replacecontent">
+
+
+
+    </div>
+</div>
+
+@section scripts
+{
+<script type="text/javascript">
+    $('#idproducer').on('change', function () {
+        var sup = $('#idproducer');
+        var prm = "idproducer=" + $('#idproducer').val();
+
+        var stringPathName = document.location.pathname;
+        stringPathName = (stringPathName.substring(0, stringPathName.length));
+        if (stringPathName.substring(stringPathName.length - 1, stringPathName.length) == 'x')
+        {
+            stringPathName = (stringPathName.substring(0, stringPathName.length -5));
+        }
+        stringPathName = stringPathName + '/GetDomain';
+        
+        $.ajax(
+            {url: stringPathName,data: prm,type: "POST",success: function (data)
+                {
+                    $('#replacecontent').html(data);
+                }
+            });       
+    });
+</script>    
+    
+}

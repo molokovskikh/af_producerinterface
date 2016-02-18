@@ -2,7 +2,7 @@
 ProducerInterfaceCommon.ContextModels.SortingPagingInfo info = ViewBag.Info;
 }
 
-<ul class="pagination">
+<ul class="pagination pagination-sm">
      
     @for(var i=0;i<info.PageCount;i++)
 {
@@ -20,8 +20,7 @@ else
 
     if(I3 > info.CurrentPageIndex && I2 < info.CurrentPageIndex)
     {
-        <li>
-          
+        <li>          
             <a href="@Url.Action("Index", new { id = i })">@(i + 1)</a>
         </li>
     }

@@ -190,7 +190,7 @@ namespace ProducerInterfaceCommon.Controllers
 					if (permission.Enabled && !permissionList.Contains(permissionKey))
 						permissionList.Add(permissionKey);
 				}
-			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(60), Cache.NoSlidingExpiration);
+			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(15), Cache.NoSlidingExpiration);
 			return permissionList;
 		}
 
