@@ -38,6 +38,11 @@ namespace ProducerInterfaceCommon.Models
 			}
 		}
 
+		[Display(Name = "Отправить на e-mail")]
+		[Required(ErrorMessage = "Не указаны e-mail")]
+		[UIHint("MailTo")]
+		public List<string> MailTo { get; set; }
+
 		protected CronParam()
 		{
 			// значение по умолчанию для UI - без первого нуля для секунд и без знаков "?"
@@ -50,7 +55,24 @@ namespace ProducerInterfaceCommon.Models
 			var arrInput = CronExpressionUi.Split(' ');
 			if (arrInput.Length != 5)
 				errors.Add(new ErrorMessage("", "Неправильный формат строки Cron"));
+
+			if (MailTo == null)
+				return errors;
+			var ea = new EmailAddressAttribute();
+			var ok = true;
+			foreach (var mail in MailTo)
+				ok = ok && ea.IsValid(mail);
+			if (!ok)
+				errors.Add(new ErrorMessage("MailTo", "Неверный формат почтового адреса"));
+
 			return errors;
+		}
+
+		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
+		{
+			var viewDataValues = new Dictionary<string, object>();
+			viewDataValues.Add("MailTo", h.GetMailList());
+			return viewDataValues;
 		}
 
 		private string UiToQuartz(string cronExprUi)

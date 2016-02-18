@@ -320,8 +320,10 @@ namespace ProducerInterface.Controllers
 				return View("Error", (object)"Отчет этого типа невозможно запустить вручную");
 
 			// при GET возвращаем пустую модель для заполнения
-			if (HttpContext.Request.HttpMethod == "GET")
+			if (HttpContext.Request.HttpMethod == "GET") {
+				SetViewData(model);
 				return View(model);
+			}
 
 			// биндим
 			Bind(model, model.GetType());
@@ -332,8 +334,10 @@ namespace ProducerInterface.Controllers
 				ModelState.AddModelError(error.PropertyName, error.Message);
 
 			// если модель невалидна - возвращаем пользователю
-			if (!ModelState.IsValid)
+			if (!ModelState.IsValid) {
+				SetViewData(model);
 				return View(model);
+			}
 
 			var trigger = (ISimpleTrigger)TriggerBuilder.Create()
 					.StartNow()
@@ -380,7 +384,8 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult RunHistory(string jobName)
 		{
-			var model = cntx.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+			ViewData["repName"] = $"История запусков отчета \"{h.GetReportName(jobName)}\"";
+      var model = cntx.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
       return View(model);
 		}
 
@@ -424,8 +429,7 @@ namespace ProducerInterface.Controllers
 				//// если триггер уже был - устанавливаем UI его значением
 				if (oldTrigger != null)
 					model = (CronParam)oldTrigger.JobDataMap["tparam"];
-				//if (oldTrigger != null)
-				//	model.CronExpression = oldTrigger.CronExpressionString;
+				SetViewData(model);
 				return View(model);
 			}
 
@@ -438,8 +442,10 @@ namespace ProducerInterface.Controllers
 				ModelState.AddModelError(error.PropertyName, error.Message);
 
 			// если модель невалидна - возвращаем пользователю
-			if (!ModelState.IsValid)
+			if (!ModelState.IsValid) {
+				SetViewData(model);
 				return View(model);
+			}
 
 			// новый триггер для этой задачи
 			var trigger = TriggerBuilder.Create()
@@ -582,6 +588,17 @@ namespace ProducerInterface.Controllers
 			foreach (var item in model.ViewDataValues(h))
 				ViewData[item.Key] = item.Value;
 		}
+
+		/// <summary>
+		/// Устанавливает значения ViewData, требующиеся для отображения формы ввода параметров заданной модели триггера
+		/// </summary>
+		/// <param name="model">Модель триггера</param>
+		protected void SetViewData(TriggerParam model)
+		{
+			foreach (var item in model.ViewDataValues(h))
+				ViewData[item.Key] = item.Value;
+		}
+
 
 		//	logger.Debug($"Start setting job {model.JobGroup} {model.JobName}");
 

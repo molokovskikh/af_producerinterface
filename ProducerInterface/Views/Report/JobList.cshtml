@@ -62,7 +62,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.DisplayStatusEnum)
                         </th>
-
+                        <th>История запусков</th>
                     </tr>
 
                     @foreach (var item in Model)
@@ -93,15 +93,15 @@
                             </td>
                             <td class="@(item.DisplayStatusEnum == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup }))">
 
-                                @if (item.DisplayStatusEnum == DisplayStatus.Ready)
-                                {
+                                @if (item.DisplayStatusEnum == DisplayStatus.Ready) {
                                     <a href="@Url.Action("DisplayReport", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })">
                                         @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
                                     </a>}
-                    else {
+                                else {
                                     @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
                                 }
                             </td>
+                            <td>@Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })</td>
                         </tr>}
 
                 </table>

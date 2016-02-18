@@ -2,6 +2,7 @@
 using ProducerInterfaceCommon.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.Heap
 {
@@ -55,6 +56,16 @@ namespace ProducerInterfaceCommon.Heap
 			}
 			return result;
 		}
+
+		public string GetReportName(string jobName)
+		{
+			var report = _cntx.jobextend.SingleOrDefault(x => x.JobName == jobName);
+			if (report == null)
+				return "";
+			//var producerName = _cntx.producernames.Single(x => x.ProducerId == report.ProducerId).ProducerName;
+			return report.CustomName;
+		}
+
 
 		// для UI
 		public List<OptionElement> GetRegionList()

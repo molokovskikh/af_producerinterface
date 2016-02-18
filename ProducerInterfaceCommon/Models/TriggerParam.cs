@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProducerInterfaceCommon.Heap;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,5 +13,7 @@ namespace ProducerInterfaceCommon.Models
 		public long UserId { get; set; }
 
 		public abstract List<ErrorMessage> Validate();
+
+		public abstract Dictionary<string, object> ViewDataValues(NamesHelper h);
 	}
 }

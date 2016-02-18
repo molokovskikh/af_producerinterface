@@ -228,7 +228,7 @@
     <Content Include="Content\Chosen\js\initAddJob.js" />
     <Content Include="Content\Chosen\js\initDrug.js" />
     <Content Include="Content\Chosen\js\initCron.js" />
-    <Content Include="Content\Chosen\js\initDatePicker.js" />
+    <Content Include="Content\Chosen\js\initRunNow.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
     <Content Include="Content\Chosen\js\InitPermission.js" />
     <Content Include="Content\Chosen\js\InitPromotion.js" />
