@@ -33,11 +33,6 @@ namespace ProducerInterfaceCommon.Models
 		[Required]
 		public long ProducerId { get; set; }
 
-		[Display(Name = "Отправить на e-mail")]
-		[Required(ErrorMessage = "Не указаны e-mail")]
-		[UIHint("MailTo")]
-		public List<string> MailTo { get; set; }
-
 		public abstract List<string> GetHeaders(HeaderHelper h);
 
 		public abstract Report Process(JobKey key, Report jparam, TriggerParam tparam);
@@ -49,14 +44,6 @@ namespace ProducerInterfaceCommon.Models
 		public virtual List<ErrorMessage> Validate()
 		{
 			var errors = new List<ErrorMessage>();
-			if (MailTo == null)
-				return errors;
-			var ea = new EmailAddressAttribute();
-			var ok = true;
-			foreach (var mail in MailTo)
-				ok = ok && ea.IsValid(mail);
-			if(!ok)
-				errors.Add(new ErrorMessage("MailTo", "Неверный формат почтового адреса"));
 			return errors;
 		}
 

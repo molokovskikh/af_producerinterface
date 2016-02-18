@@ -42,7 +42,7 @@ namespace ProducerInterface.Controllers
 
             if (User_.password != ThisUser.Password)
             {
-                ErrorMessage("Неправильно введён пароль.");
+                ErrorMessage("Неправильно введен пароль.");
                 ViewBag.CurrentUser = null;
                 return RedirectToAction("Index", "Home");
             }
@@ -255,7 +255,7 @@ namespace ProducerInterface.Controllers
 
                         ProducerInterfaceCommon.Heap.EmailSender.SendPasswordRecoveryMessage(cntx_, User.Id, Password, Request.UserHostAddress.ToString());
 
-                        SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
+                        SuccessMessage("Новый пароль отправлен на ваш email: " + login);
                         return RedirectToAction("Index", "Home");
                     }
                     else
@@ -267,7 +267,7 @@ namespace ProducerInterface.Controllers
                             cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
                             cntx_.SaveChanges();
 
-                            SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + login);
+                            SuccessMessage("Новый пароль отправлен на ваш email: " + login);
 
                             ProducerInterfaceCommon.Heap.EmailSender.SendPasswordRecoveryMessage(cntx_, User.Id, Password, Request.UserHostAddress.ToString());
 
@@ -276,7 +276,7 @@ namespace ProducerInterface.Controllers
                         }
                         else
                         {
-                            ErrorMessage("Ваша учетная запись Заблокирована, для обращений используйте адрес " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
+                            ErrorMessage("Ваша учетная запись Заблокирована, для обращений используйте email " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
                             return RedirectToAction("Index", "Home");
                         }
                     }
@@ -286,7 +286,7 @@ namespace ProducerInterface.Controllers
                     // пользователь не найден
                     // отсылаем на домашнюю, с ошибкой
 
-                    ErrorMessage("Пользователь с почтовым ящиком не найден в базе или заблокирован , для обращений используйте адрес " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
+                    ErrorMessage("Пользователь с email " + login + " не найден в базе или заблокирован , для обращений используйте email " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
                     return RedirectToAction("PasswordRecovery", "Registration");
 
                 }
@@ -302,7 +302,7 @@ namespace ProducerInterface.Controllers
             cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
             cntx_.SaveChanges();
 
-            SuccessMessage("Новый пароль отправлен на ваш почтовый ящик: " + User.Login);
+            SuccessMessage("Новый пароль отправлен на ваш email: " + User.Login);
 
             ProducerInterfaceCommon.Heap.EmailSender.SendPasswordChangeMessage(cntx: cntx_, userId: User.Id, password: password, ip: Request.UserHostAddress);
 

@@ -130,7 +130,7 @@ namespace ProducerInterface.Controllers
 
             ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx_, NewAccount.Id, Password, NewAccount.IP);
 
-            SuccessMessage("Пароль отправлен на ваш почтовый адрес " + NewAccount.Login);
+            SuccessMessage("Пароль отправлен на ваш email " + NewAccount.Login);
             return RedirectToAction("Index", "Home");
         }
         
@@ -228,7 +228,7 @@ namespace ProducerInterface.Controllers
 
             ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx_, NewAccount.Id, Password, HttpContext.Request.UserHostAddress.ToString());
 
-            SuccessMessage("Письмо с паролем отправлено на ваш почтовый адрес");
+            SuccessMessage("Письмо с паролем отправлено на ваш email");
             return RedirectToAction("Index", "Home");
 
         }

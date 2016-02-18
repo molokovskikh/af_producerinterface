@@ -256,23 +256,23 @@ namespace ProducerInterface.Controllers
             {
                 PromoAction.Enabled = Enabled;
                 cntx_.Entry(PromoAction).State = EntityState.Modified;
-                cntx_.SaveChanges(CurrentUser, "Изменения статуса промо-акции");
+                cntx_.SaveChanges(CurrentUser, "Изменения статуса акции");
             }
 
             if (Enabled)
             {
                 if (System.DateTime.Now > PromoAction.Begin && System.DateTime.Now < PromoAction.End)
                 {
-                    SuccessMessage("промо-акция публикуется");
+                    SuccessMessage("акция публикуется");
                 }
                 else
                 {
-                    SuccessMessage("при наступлении даты начала промо-акция будет публиковатся");
+                    SuccessMessage("при наступлении даты начала акция будет публиковатся");
                 }
             }
             else
             {
-                SuccessMessage("публикация промо-акции отключена");
+                SuccessMessage("публикация акции отключена");
             }
             return RedirectToAction("Index", new { Id = Id.ToString() });
         }
@@ -295,7 +295,7 @@ namespace ProducerInterface.Controllers
 
             if (ModelPromoAction.ProducerId != CurrentUser.AccountCompany.ProducerId)
             {
-                ErrorMessage("У вас нет прав копировать промо-акцию другого производителя");
+                ErrorMessage("У вас нет прав копировать акцию другого производителя");
                 return RedirectToAction("Index");
             }
 
@@ -338,12 +338,12 @@ namespace ProducerInterface.Controllers
 
             if (PromoAction == null && Id == 0)
             {
-                ErrorMessage("Промо-Акция не найдена");
+                ErrorMessage("Акция не найдена");
                 return RedirectToAction("Index");
             }
             if (PromoAction.ProducerId != CurrentUser.AccountCompany.ProducerId)
             {
-                ErrorMessage("У вас нет прав для удаления данной промо-акции");
+                ErrorMessage("У вас нет прав для удаления данной акции");
                 return RedirectToAction("Index");
             }
 
@@ -352,14 +352,14 @@ namespace ProducerInterface.Controllers
                 var IdFile = PromoAction.PromoFileId;
                 PromoAction.PromoFileId = null;
                 cntx_.Entry(PromoAction).State = EntityState.Modified;
-                cntx_.SaveChanges(CurrentUser, "Удаление промо-акции");
+                cntx_.SaveChanges(CurrentUser, "Удаление акции");
 
                 cntx_.promotionsimage.Remove(cntx_.promotionsimage.Where(xxx => xxx.Id == IdFile).First());
                 cntx_.promotions.Remove(PromoAction);
-                cntx_.SaveChanges(CurrentUser, "Удаление промо-акции");
+                cntx_.SaveChanges(CurrentUser, "Удаление акции");
             }
 
-            SuccessMessage("Промо-Акция удалена");
+            SuccessMessage("Акция удалена");
             return RedirectToAction("Index");
         }
 
@@ -419,7 +419,7 @@ namespace ProducerInterface.Controllers
 
         //    if (file == null)
         //    {
-        //        ErrorMessage("Файл не был прикреплен к промо-акции");
+        //        ErrorMessage("Файл не был прикреплен к акции");
         //        return RedirectToAction("Index", new { Id = Id.ToString()});
         //    }
 
@@ -467,7 +467,7 @@ namespace ProducerInterface.Controllers
 
         //    if (promo == null || String.IsNullOrEmpty(promo.Name))
         //    {
-        //        ErrorMessage("У вас нет прав для редактирования данной промо-акции");
+        //        ErrorMessage("У вас нет прав для редактирования данной акции");
         //        return RedirectToAction("Index");
         //    }
         //    var ImageId = promo.PromoFileId;
@@ -495,7 +495,7 @@ namespace ProducerInterface.Controllers
 
         //    if (image == null)
         //    {
-        //        ErrorMessage("Файл не был прикреплен к промо-акции");
+        //        ErrorMessage("Файл не был прикреплен к акции");
         //        return RedirectToAction("Index");
         //    }
 

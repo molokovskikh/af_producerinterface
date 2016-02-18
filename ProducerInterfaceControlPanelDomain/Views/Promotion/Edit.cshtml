@@ -1,12 +1,12 @@
 ﻿@model ProducerInterfaceCommon.ContextModels.promotions
 @{
-    ViewBag.Title = "Редактирование Промо-Акции";
+    ViewBag.Title = "Редактирование акции";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
     var DrugListItems = ViewBag.ListDrugs as List<ProducerInterfaceCommon.ContextModels.catalognames>;
     var ProducersList = ViewBag.ProducerList as ProducerInterfaceCommon.ContextModels.producernames;
 }
 
-<h2>Промо Акция '@Model.Name'</h2>
+<h2>Акция '@Model.Name'</h2>
 <h3>Производитель '@ProducersList.ProducerName'</h3>
 <h4>
     <strong>Статус </strong>

@@ -6,11 +6,11 @@
   // лист всех вариантов для построения селекта
   var propList = (List<OptionElement>)ViewData[propName];
   if (Model != null) {
-      // сохранённые адреса
+      // сохранённые email
       var propListVal = propList.Select(x => x.Value).ToList();
-      // новые адреса из модели, возможно, невалидные
+      // новые email из модели, возможно, невалидные
       var newMail = Model.Where(x => !propListVal.Contains(x)).Select(x => new OptionElement() { Value = x, Text = x }).ToList();
-      // добавили к сохранённым адресам новые
+      // добавили к сохранённым email новые
       propList.AddRange(newMail);
   }
   // класс для ошибки валидации, если есть

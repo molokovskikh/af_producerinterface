@@ -65,7 +65,6 @@ namespace ProducerInterfaceCommon.Models
 
             viewDataValues.Add("RegionCodeEqual", h.GetRegionList());
             viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());          
-            viewDataValues.Add("MailTo", h.GetMailList());
 
             return viewDataValues;
         }

@@ -3,8 +3,8 @@
 
 @{
 
-    ViewBag.Title = (Model != null && Model.Id != 0 ? "Редактирование Промо-Акции" : "Добавление Промо-Акции");
-    // "Добавить(редактировать) Промо-Акцию";
+    ViewBag.Title = (Model != null && Model.Id != 0 ? "Редактирование акции" : "Добавление акции");
+    // "Добавить(редактировать) акцию";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -21,7 +21,7 @@
     <div class="col-xs-12">
         @using (Html.BeginForm("Manage", "Promotion", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            @* некорректно отрабатывает при копирывании акции, поэтому тег формариется ручками если Id==0 *@
+            @* некорректно отрабатывает при копировании акции, поэтому тег формариется ручками если Id==0 *@
 
         if (Model.Id != 0)
         {@Html.HiddenFor(s => s.Id)}
@@ -31,7 +31,7 @@
 
             <div class="row">
                 <div class="form-group">
-                    <label class="control-label">Наименование промо-акции:</label>
+                    <label class="control-label">Наименование акции:</label>
                     @Html.TextBoxFor(s => s.Name, new { @Class = "form-control", @Placeholder = "Заголовок" })
                     @Html.ValidationMessageFor(s => s.Name)
                 </div>
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     @if (Model.PromotionFileId > 0)
                 {
-                        <label>Прикреплённый файл</label>
+                        <label>Прикрепленный файл</label>
                         <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />
                     }
 
@@ -90,7 +90,7 @@
             <div class="row">
                 <div class="form-group">
                     <a href="@Url.Action("Index")" class="btn btn-primary">Назад</a>
-                    <button type="submit" class="btn btn-primary filter-buttons active-form">@(Model != null && Model.Id != 0 ? "Сохранить изменения и отправить запрос на ее проведение" : "Добавить Акцию")</button>
+                    <button type="submit" class="btn btn-primary filter-buttons active-form">@(Model != null && Model.Id != 0 ? "Сохранить изменения и отправить запрос на ее проведение" : "Добавить акцию")</button>
                 </div>
             </div>
         }

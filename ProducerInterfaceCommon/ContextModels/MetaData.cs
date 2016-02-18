@@ -110,7 +110,7 @@ namespace ProducerInterfaceCommon.ContextModels
     [MetadataType(typeof(AccountMetaData))]
     public partial class Account
 	{
-		[Display(Name = "IP адресс")]
+		[Display(Name = "IP-адрес")]
 		public string IP { get; set; }
 
 		[Display(Name = "Список прав")]

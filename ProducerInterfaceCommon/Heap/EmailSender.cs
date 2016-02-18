@@ -114,7 +114,7 @@ namespace ProducerInterfaceCommon.Heap
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			var subject = $"Изменение МНН препарата на сайте {siteName}";
-			var body = $"Изменён МНН препарата {drugFamilyName}\r\n\r\nБыло:\r\n\r\n{mnnBefore}\r\n\r\nСтало:\r\n\r\n{mnnAfter}";
+			var body = $"Изменен МНН препарата {drugFamilyName}\r\n\r\nБыло:\r\n\r\n{mnnBefore}\r\n\r\nСтало:\r\n\r\n{mnnAfter}";
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {user.IP}";
 			EmailSender.SendEmail(catalogChangeEmail, subject, bodyExtended, null, false);
 		}
@@ -131,8 +131,8 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 
-			//     Промо Акция { PromotionName}
-			//     изменена { UserName}. Посмотреть статус и изменить промо - акцию { Http}
+			//     Акция { PromotionName}
+			//     изменена { UserName}. Посмотреть статус и изменить акцию { Http}
 
 			var body = $"{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(User_.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);

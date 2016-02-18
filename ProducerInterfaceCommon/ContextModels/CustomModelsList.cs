@@ -64,7 +64,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Annotation { get; set; }
 
         [UIHint("Date")]
-        [Required(ErrorMessage = "Укажите дату начала Акции")]
+        [Required(ErrorMessage = "Укажите дату начала акции")]
         [Display(Name = "Дата начала акции")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
                            
@@ -147,9 +147,9 @@ namespace ProducerInterfaceCommon.ContextModels
     public class LoginValidation
     {
         [UIHint("EditorMail")]
-        [Display(Name = "E-mail")]
-        [Required(ErrorMessage = "введите E-mail")]
-        [EmailAddress(ErrorMessage = "Введите корректный E-mail")]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "введите email")]
+        [EmailAddress(ErrorMessage = "Введите корректный email")]
         public string login { get; set; }
 
         [UIHint("Editor_Password")]
@@ -177,9 +177,9 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Название компании")]
         public string CompanyName { get; set; }
 
-        [Display(Name = "E-mail")]
+        [Display(Name = "Email")]
         [UIHint("EditorStringMail")]
-        [Required(ErrorMessage = "Запоните e-Mail")]
+        [Required(ErrorMessage = "Заполните email")]
         public string Mailname { get; set; }
 
         [Display(Name = "Доменное имя")]
@@ -194,7 +194,7 @@ namespace ProducerInterfaceCommon.ContextModels
 
         [UIHint("EditorPhone")]
         [Display(Name = "Номер телефона")]       
-        [Phone(ErrorMessage = "Некорректно введён номер")]
+        [Phone(ErrorMessage = "Некорректно введен номер")]
           [StringLength(15,MinimumLength = 15, ErrorMessage ="Корректно заполните номер телефона")]
         public string PhoneNumber { get; set; }
     }
@@ -209,9 +209,9 @@ namespace ProducerInterfaceCommon.ContextModels
 
 
         [UIHint("EditorMailReg")]
-        [Display(Name = "E-mail")]
-        [Required(ErrorMessage = "Введите E-mail")]
-        [EmailAddress(ErrorMessage = "Введите корректый E-mail")]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Введите email")]
+        [EmailAddress(ErrorMessage = "Введите корректый email")]
         public string login { get; set; }
 
 
@@ -226,7 +226,7 @@ namespace ProducerInterfaceCommon.ContextModels
 
         [UIHint("EditorPhone")]
         [Display(Name = "Номер телефона")]      
-        [Phone(ErrorMessage ="Некорректно введён номер")]
+        [Phone(ErrorMessage ="Некорректно введен номер")]
         [StringLength(15, MinimumLength = 15, ErrorMessage = "Корректно заполните номер телефона")]
         public string PhoneNumber { get; set; }
 
@@ -249,9 +249,9 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Название компании")]      
         public string CompanyName { get; set; }
 
-        [Display(Name = "E-mail")]
+        [Display(Name = "Email")]
         [UIHint("EditorStringMail")]
-        [Required(ErrorMessage = "Запоните e-Mail")]
+        [Required(ErrorMessage = "Заполните email")]
         public string Mailname { get; set; }
 
         [Display(Name = "Доменное имя")]
@@ -270,7 +270,7 @@ namespace ProducerInterfaceCommon.ContextModels
 
         [UIHint("EditorPhone")]
         [Display(Name = "Номер телефона")]      
-        [Phone(ErrorMessage = "Некорректно введён номер")]
+        [Phone(ErrorMessage = "Некорректно введен номер")]
         [StringLength(15, MinimumLength = 15, ErrorMessage = "Корректно заполните номер телефона")]
         public string PhoneNumber { get; set; }
     }
@@ -289,9 +289,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public string CompanyName { get; set; }
 
         [UIHint("EditorMailReg")]
-        [Display(Name = "E-mail")]
-        [Required(ErrorMessage = "Введите E-mail")]
-        [EmailAddress(ErrorMessage = "Введите корректый E-mail")]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Введите email")]
+        [EmailAddress(ErrorMessage = "Введите корректый email")]
         public string login { get; set; }
 
         [UIHint("EditorStringPosition")]
@@ -302,7 +302,7 @@ namespace ProducerInterfaceCommon.ContextModels
         [UIHint("EditorPhone")]
         [Display(Name = "Номер телефона")]
         [StringLength(15,MinimumLength = 15, ErrorMessage ="Корректно заполните номер телефона")]
-        [Phone(ErrorMessage = "Некорректно введён номер")]
+        [Phone(ErrorMessage = "Некорректно введен номер")]
         public string PhoneNumber { get; set; }
 
     }
@@ -320,9 +320,9 @@ namespace ProducerInterfaceCommon.ContextModels
     public class PasswordUpdate
     {
         [UIHint("EditorMail")]
-        [Display(Name = "E-mail")]
-        [Required(ErrorMessage = "Введите E-mail")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Введите корректый E-mail")]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Введите email")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Введите корректый email")]
         public string login { get; set; }
     }
 

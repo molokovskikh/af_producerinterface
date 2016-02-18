@@ -79,9 +79,7 @@ namespace ProducerInterfaceCommon.Heap
 			if (!Directory.Exists(subdir))
 				Directory.CreateDirectory(subdir);
 
-			// если запущено вручную с указанием показать на экране
-			//if (tparam is RunNowParam && ((RunNowParam)tparam).ByDisplay)
-
+			// чтобы показать на экране
 			var ds = new DataSet();
 			// добавили название страницы
 			var dtt = ds.Tables.Add("Titles");
@@ -116,8 +114,8 @@ namespace ProducerInterfaceCommon.Heap
 			jext.DisplayStatusEnum = DisplayStatus.Ready;
 			_cntx.SaveChanges();
 
-			// если запущено кроном или запущено вручную с указанием отправить на почту
-			if (tparam is CronParam || (tparam is RunNowParam && ((RunNowParam)tparam).ByEmail)) {
+			// если указаны email - отправляем
+			if (tparam.MailTo != null && tparam.MailTo.Count > 0) {
 				var file = new FileInfo($"{subdir}\\{key.Name}.xlsx");
 				if (file.Exists)
 					file.Delete();
@@ -127,7 +125,7 @@ namespace ProducerInterfaceCommon.Heap
 				ecreator.Create(file, jparam.CastomName, headers, dataTable);
 
 				// TODO тема и текст письма
-				EmailSender.SendEmail(jparam.MailTo, jparam.MailSubject, jparam.CastomName, file.FullName);
+				EmailSender.SendEmail(tparam.MailTo, jparam.MailSubject, jparam.CastomName, file.FullName);
 			}
 		}
 	}

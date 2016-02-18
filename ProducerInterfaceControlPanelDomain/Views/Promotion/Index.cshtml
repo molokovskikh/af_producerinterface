@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.promotions>
 @{
-    ViewBag.Title = "Список Акций";
+    ViewBag.Title = "Список акций";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
     var DrugListItems = ViewBag.ListDrugs as IEnumerable<ProducerInterfaceCommon.ContextModels.catalognames>;
     var ProducersList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.producernames>;
@@ -10,7 +10,7 @@
 <h2 class="panel-title">
 
     @if (ViewBag.ProducerName != null)
-    { <span>Список Промо-Акций @ViewBag.ProducerName</span> }
+    { <span>Список акций @ViewBag.ProducerName</span> }
     else
     {
         if (ViewBag.ActivePromo != null)
@@ -18,11 +18,11 @@
         else {
             if (ViewBag.EnabledPromotion == true)
             {
-                <span>Список подтвержденных Промо-Акций</span>
+                <span>Список подтвержденных акций</span>
             }
             else
             {
-                <span>Список не подтверждённых Промо-Акций</span>
+                <span>Список не подтвержденных акций</span>
             }
         }
     }
@@ -69,7 +69,7 @@
                                     }
                                     else
                                     {
-                                        <p>Файл к данной промо акции не прикреплён</p>
+                                        <p>Файл к данной акции не прикреплен</p>
                                     }
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                                         {
                                             <div class="form-group">
                                                 <p>ФИО : @ProducerUserItem.Name</p>
-                                                <p>e-Mail : <a href="@("mailto:" + ProducerUserItem.Login)">@ProducerUserItem.Login</a></p>
+                                                <p>Email : <a href="@("mailto:" + ProducerUserItem.Login)">@ProducerUserItem.Login</a></p>
                                                 <p>Телефон : @ProducerUserItem.Phone</p>
                                             </div>
                                             if (PromoItem.Account.AccountCompany.Account.Count() > 1)
@@ -150,7 +150,7 @@
                         <hr />
 
                         <div class="form-group col-xs-12">
-                                @Html.ActionLink("Подтвердить промо-акцию", "Success", "Promotion", new { Id = PromoItem.Id }, new { @class = "btn btn-primary", @title = "Подтверждение промо-акции" } )                                  
+                                @Html.ActionLink("Подтвердить акцию", "Success", "Promotion", new { Id = PromoItem.Id }, new { @class = "btn btn-primary", @title = "Подтверждение акции" } )                                  
                         </div>
 
                     </div>

@@ -16,13 +16,13 @@ namespace ProducerInterfaceCommon.Models
         [Display(Name = "Ошибка при формировании отчета")]
         ReportError = 4,
 
-        [Display(Name = "Создание Промо-Акции")]
+        [Display(Name = "Создание акции")]
         CreatePromotion = 5,
 
-        [Display(Name = "Изменение Промо-Акции")]
+        [Display(Name = "Изменение акции")]
         EditPromotion = 6,
 
-        [Display(Name = "Подтверждение Промо-Акции")]
+        [Display(Name = "Подтверждение акции")]
         StatusPromotion = 7
 
 	}

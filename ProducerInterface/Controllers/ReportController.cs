@@ -270,7 +270,7 @@ namespace ProducerInterface.Controllers
 			jext.LastModified = DateTime.Now;
 			jext.CustomName = model.CastomName;
 			cntx.SaveChanges(CurrentUser, "Редактирование отчета");
-			return View("Success", (object)"Отчет успешно изменён");
+			return View("Success", (object)"Отчет успешно изменен");
 		}
 
 		/// <summary>
@@ -365,20 +365,16 @@ namespace ProducerInterface.Controllers
 			jext.LastRun = DateTime.Now;
 			cntx.SaveChanges();
 
-			var message = "АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же ";
-			if (model.ByDisplay)
-				message = message + "появится в списке отчетов";
-			if (model.ByDisplay && model.ByEmail)
-				message = message + " и ";
-			if (model.ByEmail)
-				message = message + "будет отправлен на указанные адреса электронной почты";
+			var message = "АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же появится в списке отчетов";
+			if (model.MailTo != null && model.MailTo.Count > 0)
+				message = message + " и будет отправлен на указанные email";
 
 			return View("Success", (object)message);
 		}
 
 
 		/// <summary>
-		/// Возвращает историю запуска отчёта
+		/// Возвращает историю запуска отчета
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <returns></returns>
@@ -643,7 +639,7 @@ namespace ProducerInterface.Controllers
 			// проверяем удалённый ли шедулер
 			var metaData = scheduler.GetMetaData();
 			if (!metaData.SchedulerRemote)
-				throw new NotSupportedException("Должен использоваться удалённый ServerScheduler");
+				throw new NotSupportedException("Должен использоваться удаленный ServerScheduler");
 
 			return scheduler;
 		}

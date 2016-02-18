@@ -3,7 +3,6 @@
 	$('#RegionCodeEqual').chosen({ width: '95%' });
 	$('#CatalogIdEqual').chosen({ width: '95%' });
 	$('#SupplierIdNonEqual').chosen({ width: '95%' });
-	$('#MailTo').chosen({ width: '95%' });
 	$('#CatalogNamesId').chosen({ width: '95%' });
 	SetChosen("CatalogNamesId", "/Report/GetCatalogDragFamalyNames");
 
@@ -32,20 +31,6 @@
 			});
 			sup.trigger("chosen:updated");
 		});
-	});
-
-	// при клике кнопки Добавить почту - добавляем
-	$('#addBtn').on('click', function () {
-		var newMail = $('#MailTo_addMail');
-		var mailList = $('#MailTo');
-		if (!newMail)
-			return;
-		var op = $('<option selected></option>')
-					.text(newMail.val())
-					.val(newMail.val());
-		mailList.append(op);
-		newMail.val('');
-		mailList.trigger("chosen:updated");
 	});
 
 });

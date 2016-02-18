@@ -64,7 +64,6 @@ namespace ProducerInterfaceCommon.Models
 
             viewDataValues.Add("RegionCodeEqual", h.GetRegionList());
             viewDataValues.Add("CatalogNamesId", h.GetDrugList(CatalogNamesId));
-            viewDataValues.Add("MailTo", h.GetMailList());
 
             return viewDataValues;
             throw new NotImplementedException();
