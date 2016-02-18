@@ -1,0 +1,42 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<ProducerInterfaceCommon.ContextModels.CompanyDomainName>
+
+<div class="form-group">
+    @foreach (var DomainItem in Model)
+    {
+        <hr />
+        <div class="form-group">
+            <h3 style="text-decoration:none;">Домен: @DomainItem.Name <a style="text-decoration:none;" href="@Url.Action("DeleteDomain", new { Id= DomainItem.Id })"><span class="glyphicon glyphicon-trash"></span> &nbsp; Удалить</a></h3>
+            <h4>Список пользозователей, которые будут заблокированы при удалении домена</h4>
+            @foreach (var AccountItem in DomainItem.AccountCompany.Account)
+            {
+                if (AccountItem.Login.Contains(DomainItem.Name))
+                {
+                    <p>@AccountItem.Name @AccountItem.Login @AccountItem.AccountAppointment.Name</p>
+                }
+            }
+        </div>
+    }
+
+    @if (ViewBag.Delete != null)
+    { <p>>@ViewBag.Delete удален</p> }
+</div>
+
+@using (Ajax.BeginForm("AddDomain", "ProducersDomain", new AjaxOptions { UpdateTargetId = "replacecontent", Confirm = "Добавляем?", HttpMethod = "POST" }))
+{
+    <div class="row">
+        <input id="AccountCompanyId" name="AccountCompanyId" value="@Model.Select(x=>x.AccountCompany).First().Id" hidden="hidden" />
+
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" id="NewDomainName" name="NewDomainName" placeholder="Доменное имя">
+                <span class="input-group-btn">
+                    <input class="btn btn-primary" type="submit" value="Добавить домен" />
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+
+}

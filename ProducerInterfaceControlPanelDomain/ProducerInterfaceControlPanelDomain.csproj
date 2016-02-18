@@ -184,6 +184,7 @@
     <Compile Include="Controllers\Global\MailController.cs" />
     <Compile Include="Controllers\Global\MasterBaseController.cs" />
     <Compile Include="Controllers\Global\MediaFilesController.cs" />
+    <Compile Include="Controllers\ProducersInformation\ProducersDomianController.cs" />
     <Compile Include="Controllers\Reports_News\NewsController.cs" />
     <Compile Include="Controllers\Permissions\PermissionController.cs" />
     <Compile Include="Controllers\Permissions\PermissionUserController.cs" />
@@ -641,6 +642,10 @@
     <Content Include="Views\GoToProducerInterface\GetListUser.cshtml" />
     <Content Include="Views\MediaFiles\Index.cshtml" />
     <Content Include="Views\FeedBack\Index.cshtml" />
+    <Content Include="Views\ProducersDomain\Index.cshtml" />
+    <Content Include="Views\ProducersDomain\GetDomain.cshtml" />
+    <Content Include="Views\ProducersDomain\AppointmentNameList.cshtml" />
+    <Content Include="Views\ProducersDomain\partial\appointment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

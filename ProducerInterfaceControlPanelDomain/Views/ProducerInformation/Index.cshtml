@@ -1,4 +1,5 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
+@model  IEnumerable<AccountCompany>
 @{
   
     ViewBag.Title = "Производитель";
@@ -6,8 +7,16 @@
 }
 
 <div class="row">
-    <div class="col-xs-12">
-        <h2>В работе</h2>
-        <h4>На данной странице будет отображатся статистика по интерфейсу производителя</h4>
+    <div class="col-xs-12">     
+        <div class="row">
+            <div class="col-xs-12">
+                <p>Количество компаний зарегистрированнный на сайте: @Model.Where(xxx=>xxx.ProducerId != null).GroupBy(xxx=>xxx.ProducerId).Select(x=>x.FirstOrDefault()).Count()</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <p>Количество анонимных пользователей: @Model.Where(xxx => xxx.ProducerId == null).Count()</p>
+            </div>
+        </div>
     </div>
 </div>
