@@ -587,7 +587,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Shared\MenuPartial.cshtml" />
-    <Content Include="Views\Report\EditorTemplates\EditorProducer.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Producer.cshtml" />
     <Content Include="Views\Report\SearchResult.cshtml" />
     <Content Include="Views\Mail\Index.cshtml" />
     <Content Include="Views\Mail\Edit.cshtml" />
@@ -646,6 +646,10 @@
     <Content Include="Views\ProducersDomain\GetDomain.cshtml" />
     <Content Include="Views\ProducersDomain\AppointmentNameList.cshtml" />
     <Content Include="Views\ProducersDomain\partial\appointment.cshtml" />
+    <Content Include="Views\Report\DisplayTemplates\Enum.cshtml" />
+    <Content Include="Views\Report\Partial\Pager.cshtml" />
+    <Content Include="Views\Report\RunHistory.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

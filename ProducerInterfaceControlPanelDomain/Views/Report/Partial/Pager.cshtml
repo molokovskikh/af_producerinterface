@@ -8,25 +8,25 @@
         @for (var i = 0; i < info.PageCount; i++) {
             if (i == info.CurrentPageIndex) {
                 <li class="active">
-                    <a>@(i + 1)</a>
+                    <span>@(i + 1)</span>
                 </li>
             }
             else {
                 var I2 = i - 4;
                 var I3 = i + 4;
                 if (I3 > info.CurrentPageIndex && I2 < info.CurrentPageIndex) {
-                    <li>
-                        <a href="@Url.Action("Index", new { id = i })">@(i + 1)</a>
+                    <li class="pointer">
+                        <span  onclick="getPage(@i)">@(i + 1)</span>
                     </li>
                 }
                 if (I2 == info.CurrentPageIndex) {
-                    <li>
-                        <a href="@Url.Action("Index", new { id = i })">Следующая</a>
+                    <li class="pointer">
+                        <span onclick="getPage(@i)">Следующая</span>
                     </li>
                 }
                 if (I3 == info.CurrentPageIndex) {
-                    <li>
-                        <a href="@Url.Action("Index", new { id = i })">Предыдущая</a>
+                    <li class="pointer">
+                        <span onclick="getPage(@i)">Предыдущая</span>
                     </li>
                 }
             }

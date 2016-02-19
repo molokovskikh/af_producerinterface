@@ -4,156 +4,105 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using System.Data;
+using System.IO;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class ReportController : MasterBaseController
-    {        // GET: Report
-       
-        private string shedName_ = ""; // DebugShedulerName(); 
+	public class ReportController : MasterBaseController
+	{        // GET: Report
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-            // ViewBag.currentUser = User.Identity.Name;
-            shedName_ = DebugShedulerName();
-        }
-        
-        [HttpGet]
-        public ActionResult Index()
-        {           
-            ViewBag.ProducerList = GetProducerList();
+		private string shedName_ = ""; // DebugShedulerName(); 
 
-            var Model = new SearchProducerReportsModel();
+		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+		{
+			base.OnActionExecuting(filterContext);
+			// ViewBag.currentUser = User.Identity.Name;
+			shedName_ = DebugShedulerName();
+		}
 
-            return View(Model);
-        }    
+		[HttpGet]
+		public ActionResult Index()
+		{
+			var model = new SearchProducerReportsModel();
+			model.Enable = true;
+			model.CurrentPageIndex = 0;
 
-        [HttpPost]
-        public ActionResult SearchReports(SearchProducerReportsModel Models_id_Producer)
-        {
-            ViewBag.Searh = "Search";          
+			ViewBag.ProducerList = GetProducerList();
+			return View(model);
+		}
 
-            if (ModelState.IsValid)
-            {
-                List<jobextendwithproducer> ListReport = cntx_.jobextendwithproducer.Where(xxx => xxx.ProducerId == Models_id_Producer.Producers).ToList();                         
-                ViewBag.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == Models_id_Producer.Producers).ToList().First().ProducerName;
-                return View("SearchResult", ListReport);
-            }
-            else
-            {
-                ViewBag.ProducerList = GetProducerList();
-                return View("Index", Models_id_Producer);
-            }        
-        }
+		[HttpPost]
+		public ActionResult Index(SearchProducerReportsModel model)
+		{
+			ViewBag.ProducerList = GetProducerList();
+			return View(model);
+		}
 
-        public ActionResult ActiveReport(int Id=0)
-        {
-            var CounMax = cntx_.jobextend.Where(xxx=>xxx.Enable == true)
-                .Where(xxx=>xxx.SchedName == shedName_).Count();
-            int CountListInOnePage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
-            int Skip_ = Id * CountListInOnePage;   
-                   
-            ViewBag.CountPage = CountListInOnePage;
+		public ActionResult SearchResult(SearchProducerReportsModel param)
+		{
+			var query = cntx_.jobextendwithproducer.Where(x => x.SchedName == shedName_ && x.Enable == param.Enable);
+			if (param.Producer.HasValue)
+				query = query.Where(x => x.ProducerId == param.Producer);
 
-            int PagerMax =(CounMax/ CountListInOnePage);
+			var itemCount = query.Count();
+			var itemsOnPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
+			var skip = param.CurrentPageIndex * itemsOnPage;
+			SetPager(itemCount, param.CurrentPageIndex, itemsOnPage);
 
-            if (PagerMax == Id && Id != 0)
-            {
-                ViewBag.Preview = (Id - 1);
-            }
-            else if (PagerMax < Id && Id != 0)
-            {
-                ViewBag.Next = 1;
-            }
-            else if (PagerMax > Id && Id != 0)
-            {
-                ViewBag.Preview = (Id - 1);
-                ViewBag.Next = (Id + 1);
-            }
-            else if (PagerMax > Id && Id == 0)
-            {
-                ViewBag.Next = (Id + 1);
-            }
-            else if (PagerMax < Id && Id == 0)
-            {
-                // кнопок для листания не будет, если список меньше количества выводимых записей
-            }
-            
-            var ListRep = GetListReportActiveNot(true, Id, CountListInOnePage, DebugShedulerName(), CounMax);
-                      
-            return View("SearchResult", ListRep);     
+			var model = query.OrderBy(x => x.CreationDate).Skip(skip).Take(itemsOnPage).ToList();
+			return View(model);
+		}
 
-        }
+		private void SetPager(int itemCount, int page, int itemsOnPage)
+		{
+			var info = new SortingPagingInfo();
+			info.CurrentPageIndex = page;
+			info.PageCount = (int)Math.Ceiling((decimal)itemCount / itemsOnPage);
+			ViewBag.Info = info;
+		}
 
-        public ActionResult NotActiveReport(int Id = 0)
-        {
-            var CounMax = cntx_.jobextend.Where(xxx => xxx.Enable == false).Count();
-            int CountListInOnePage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
-            int Skip_ = Id * CountListInOnePage;
+		/// <summary>
+		/// Возвращает историю запуска отчета
+		/// </summary>
+		/// <param name="jobName">Имя задания в Quartz</param>
+		/// <returns></returns>
+		public ActionResult RunHistory(string jobName)
+		{
+			var reportName = cntx_.jobextend.Single(x => x.JobName == jobName).CustomName;
+			ViewData["repName"] = $"История запусков отчета \"{reportName}\"";
+			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+			return View(model);
+		}
 
-            int PagerMax = (CounMax / CountListInOnePage);
+		/// <summary>
+		/// Возвращает последнюю версию указанного отчета для отображения пользователю в веб-интерфейсе
+		/// </summary>
+		/// <param name="jobName">Имя задания в Quartz</param>
+		/// <returns></returns>
+		public ActionResult DisplayReport(string jobName)
+		{
+			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
+			if (jxml == null)
+				return View("Error", (object)"Отчет не найден");
 
-            if (PagerMax == Id)
-            {
-                ViewBag.Preview = (Id - 1);
-            }
-            else if (PagerMax < Id && Id != 0)
-            {
-                ViewBag.Next = 1;
-            }
-            else if (PagerMax > Id && Id != 0)
-            {
-                ViewBag.Preview = (Id - 1);
-                ViewBag.Next = (Id + 1);
-            }
-            else if (PagerMax > Id && Id == 0)
-            {
-                ViewBag.Next = (Id + 1);
-            }
-            else if (PagerMax < Id && Id == 0)
-            {
-                // кнопок для листания не будет, если список меньше количества выводимых записей
-            }
-                
-            var ListRep = GetListReportActiveNot(false, Id, CountListInOnePage, DebugShedulerName(), CounMax);
-                
-            return View("SearchResult", ListRep);
-
-        }                
-        
-        public ActionResult RunReportsList(Guid GuidReport)
-        {
-            // Список запусков текущего отчета
-            return View();
-        }
-
-        public List<jobextendwithproducer> GetListReportActiveNot(bool activeRep, int Pager, int CountInOnePage, string ShedullerName, int CounMax)
-        {
-            int Skip_ = Pager * CountInOnePage;
-
-            if (CounMax <= Skip_)
-            {
-                Skip_ = 0;
-            }
-
-            var ListReport = cntx_.jobextendwithproducer
-                .Where(xxx => xxx.Enable == activeRep)
-                .Where(xxx => xxx.SchedName == ShedullerName)
-                .ToList()
-               .OrderBy(xxx => xxx.CreationDate).Skip(Skip_).Take(CountInOnePage).ToList();
-
-            return ListReport;
-        }
-
-        public List<OptionElement> GetProducerList()
-        {
-            var X = cntx_.producernames.ToList().Select(xxx => new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList();
-            var Y = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-            Y.AddRange(X);
-            return Y;
-        }
+			var ds = new DataSet();
+			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
+			return View(ds);
+		}
 
 
-    }
+		public List<OptionElement> GetProducerList()
+		{
+			// возвращаем только производителей, у которых есть отчёты
+			var producerIdList = cntx_.jobextend.Where(x => x.SchedName == shedName_).Select(x => x.ProducerId).Distinct().ToList();
+			var producers = cntx_.producernames.Where(x => producerIdList.Contains(x.ProducerId)).ToList()
+				.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList();
+
+			var model = new List<OptionElement>() { new OptionElement { Text = "(Ничего не выбрано)", Value = "" } };
+			model.AddRange(producers);
+			return model;
+		}
+
+	}
 }

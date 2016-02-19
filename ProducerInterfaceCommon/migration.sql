@@ -104,8 +104,11 @@ select m.Id, m.Subject, m.Body, mm.Body as Footer, m.IsBodyHtml, m.Description, 
 from mailform m
 inner join mailform mm on mm.Id = 8;
 
-
-
+ALTER TABLE `AccountAppointment`
+ADD COLUMN `IdAccountCompany` INT(10) UNSIGNED NULL AFTER `GlobalEnabled`;
+ 
+ALTER TABLE `AccountAppointment`
+ADD CONSTRAINT `FK1_Appointment_To_AccountCompany_Id` FOREIGN KEY (`IdAccountCompany`) REFERENCES `AccountCompany` (`Id`);
 
 
 
