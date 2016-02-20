@@ -184,8 +184,6 @@ namespace ProducerInterfaceCommon.Controllers
                 var lastUpdatePermissiion = GetLastDate();
                 if (lastUpdatePermissiion.First().ToLower() == permissionList.First().ToLower())
                 {
-
-                    SuccessMessage("300");
                     return permissionList;
                 }
             }

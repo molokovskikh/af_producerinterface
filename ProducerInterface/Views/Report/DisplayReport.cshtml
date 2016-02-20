@@ -13,40 +13,40 @@
     </div>
 </div>
 
-<h2>@title</h2>
+<div class="body-content">
 
-<div class="row">
-    <ul>
-        @foreach (System.Data.DataRow row in headers.Rows)
-        {
-            <li>@row[0].ToString()</li>
+    <h2>@title</h2>
+
+    <div class="row">
+        <ul>
+            @foreach (System.Data.DataRow row in headers.Rows) {
+                <li>@row[0].ToString()</li>
         }
-    </ul>
+        </ul>
 
 
 
-    <table border="1">
-        <thead>
-            <tr>
-                @foreach (System.Data.DataColumn col in data.Columns)
-                {
-                    <th>@col.Caption</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (System.Data.DataRow row in data.Rows)
-            {
+        <table border="1">
+            <thead>
                 <tr>
-                    @foreach (var cell in row.ItemArray)
-                    {
-                        <td>@cell.ToString()</td>
-                    }
-                </tr>
+                    @foreach (System.Data.DataColumn col in data.Columns) {
+                        <th>@col.Caption</th>
             }
-        </tbody>
-    </table>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (System.Data.DataRow row in data.Rows) {
+                    <tr>
+                        @foreach (var cell in row.ItemArray) {
+                            <td>@cell.ToString()</td>
+                }
+                    </tr>
+        }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <div class="row">
     <div class="col-md-12">
         @Html.ActionLink("К списку отчетов", "JobList", new {r = Guid.NewGuid()})
