@@ -77,7 +77,7 @@
                                 @Html.ActionLink(item.Scheduler, "ScheduleJob", new { jobName = item.JobName, jobGroup = item.JobGroup })
                             </td>
                             <td>
-                                <a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета"><span class="glyphicon glyphicon-th-list"></span></a>
+                                <a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета"><span class="glyphicon glyphicon-pencil"></span>&nbsp; ред.</a>
                                 @Html.DisplayFor(modelItem => item.ReportTypeEnum)
                             </td>
                             <td>

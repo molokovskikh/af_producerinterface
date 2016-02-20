@@ -98,7 +98,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Название")]
 		public string CustomName { get; set; }
 
-		[Display(Name = "Расписание")]
+		[Display(Name = "Формировать отчет")]
 		public string Scheduler { get; set; }
 
 		[ScaffoldColumn(false)]

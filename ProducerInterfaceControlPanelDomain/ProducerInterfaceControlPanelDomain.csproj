@@ -292,6 +292,8 @@
     <Content Include="Scripts\ckeditor\plugins\base64image\lang\zh.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\plugin.js" />
     <Content Include="Scripts\ckeditor\plugins\filebrowser\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
     <Content Include="WebForm\ReportList.aspx" />
     <None Include="Content\Chosen\js\_references.js" />
@@ -723,6 +725,11 @@
     <Content Include="Views\ProducerInformation\Partial\producerappointment.cshtml" />
     <Content Include="Views\ProducerInformation\RequestAccount.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\producerinformation.cshtml" />
+    <Content Include="Views\Report\Partial\Pager.cshtml" />
+    <Content Include="Views\Report\DisplayTemplates\Enum.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
+    <Content Include="Views\Report\RunHistory.cshtml" />
+    <Content Include="Views\News\Preview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

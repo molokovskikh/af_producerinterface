@@ -842,3 +842,4 @@ System.Web.Mvc.ActionResult Index(ProducerInterfaceCommon.ContextModels.Account)
 20.02.2016 10:30:19.474 [98] ERROR MySqlAdoNetAppender - ƒлина строки этого запроса превышает настроенное значение maxQueryStringLength.
 20.02.2016 10:56:45.688 [88] ERROR MySqlAdoNetAppender -  онтроллер дл€ пути "/SaveFile/" не найден или не реализует интерфейс IController.
 20.02.2016 11:01:05.962 [88] ERROR MySqlAdoNetAppender - Ќе удалось найти общедоступный метод действи€ "SaveFile" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.NewsController".
+20.02.2016 11:14:04.705 [6] ERROR MySqlAdoNetAppender - Ќе удалось найти общедоступный метод действи€ "SaveFile" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.NewsController".

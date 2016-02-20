@@ -12,7 +12,7 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("Bool")]
 		public bool ByPreviousMonth { get; set; }
 
-		[Display(Name = "Дней от текущей даты")]
+		[Display(Name = "За предыдущие")]
 		[UIHint("Interval")]
 		public int? Interval { get; set; }
 

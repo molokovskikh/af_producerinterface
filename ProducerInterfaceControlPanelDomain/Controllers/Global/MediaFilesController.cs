@@ -12,6 +12,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
             var Files = cntx_.promotionsimage.Where(xxx=>xxx.NewsOrPromotions == true).ToList();
             return View(Files);
         }

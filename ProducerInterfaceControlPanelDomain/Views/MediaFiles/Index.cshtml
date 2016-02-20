@@ -9,31 +9,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Example: Browsing Files</title>       
-    <script>        
-        function getUrlParam( paramName ) {
-            var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' );
-            var match = window.location.search.match( reParam );
-
-            return ( match && match.length > 1 ) ? match[1] : null;
+    <script>
+        function getUrlParam(paramName) {
+            var reParam = new RegExp('(?:[\?&]|&)' + paramName + '=([^&]+)', 'i');
+            var match = window.location.search.match(reParam);
+            return (match && match.length > 1) ? match[1] : null;
         }
-        
         function returnFileUrl(url_) {
-
-            var funcNum = getUrlParam( 'CKEditorFuncNum' );
+            var funcNum = getUrlParam('CKEditorFuncNum');
             var fileUrl = url_;
-            window.opener.CKEDITOR.tools.callFunction( funcNum, fileUrl );
+            window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
             window.close();
+        }
+        function OnClickReturnHttp(Id) {
+            var Url = "@ViewBag.FullUrlStringFile";
+            Url += "GetFile/" + Id;
+            returnFileUrl(Url);
         }
     </script>
 </head>
 
 <body>
 
+    <input id="globalUrl" value="@ViewBag.FullUrlStringFile" hidden="hidden"/>
+
     @foreach (var FileItem in Model)
     {
         <img src="@Url.Action("GetFile", "MediaFiles", new { Id = FileItem.Id})" style="max-height:50px;"
-             onclick="returnFileUrl(@(@"""/MediaFiles/GetFile/" + FileItem.Id + @""""))"/>
+             onclick="OnClickReturnHttp(@FileItem.Id)"/>
     }
-  
 </body>
 </html>

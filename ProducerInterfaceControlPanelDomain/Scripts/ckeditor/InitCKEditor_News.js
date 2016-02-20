@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    var UrlString = window.location.href.replace("News/Create", "MediaFiles");
+   // var UrlString = window.location.href.replace("News/Create", "MediaFiles");
     var FullUrlString = $('#FullUrlStringFile').val();
     CKEDITOR.replace('Description',
         {

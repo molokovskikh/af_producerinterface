@@ -78,6 +78,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpGet]
         public ActionResult Create(long Id = 0)
         {
+            ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
+
             var NewsModel = new ProducerInterfaceCommon.ContextModels.NotificationToProducers();
             if (Id > 0)
             {
@@ -91,7 +93,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         public ActionResult Create(ProducerInterfaceCommon.ContextModels.NotificationToProducers News)
         {
 
-            ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
+     
 
             if (!ModelState.IsValid)
             {
