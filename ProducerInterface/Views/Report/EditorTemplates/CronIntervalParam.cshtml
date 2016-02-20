@@ -1,8 +1,18 @@
 ﻿@model ProducerInterfaceCommon.Models.CronIntervalParam
 
 @Html.EditorFor(m => m.CronExpressionUi)
-@Html.EditorFor(m => m.ByPreviousMonth)
-@Html.EditorFor(m => m.Interval)
+
+<div class="form-group">
+    
+    @Html.EditorFor(m => m.ByPreviousMonth)
+
+    <div id="Interval_param" style="display:none;">
+        @Html.EditorFor(m => m.Interval)
+    </div>
+
+</div>
+
+
 @Html.EditorFor(m => m.CronHumanText)
 @Html.EditorFor(m => m.MailTo)
 

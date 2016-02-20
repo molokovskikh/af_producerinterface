@@ -8,7 +8,7 @@ namespace ProducerInterfaceCommon.Models
 	[Serializable]
 	public class RunNowIntervalParam : RunNowParam, IInterval
 	{
-		[Display(Name = "Дата с")]
+		[Display(Name = "с")]
 		[NotMinDate(ErrorMessage = "Не указана дата")]
 		[UIHint("Date")]
 		[PastDate(ErrorMessage = "Укажите дату в прошлом")]

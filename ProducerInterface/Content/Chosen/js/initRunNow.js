@@ -23,7 +23,7 @@
 	  }
 	}).data('datepicker');
 
-	$('#MailTo').chosen({ width: '95%' });
+	$('#MailTo').chosen({ width: '100%' });
 
     // при клике кнопки Добавить почту - добавляем
 	$('#addBtn').on('click', function () {

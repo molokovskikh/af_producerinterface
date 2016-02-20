@@ -17,10 +17,10 @@
                     @Html.EditorForModel()
                     <div class="row margin5">
                         <div class="flabel col-md-4">
-                            @Html.ActionLink("К списку отчетов", "JobList", new { r = Guid.NewGuid() })
+                            @Html.ActionLink("К списку отчетов", "JobList", new { r = Guid.NewGuid() }, new { @class="btn btn-primary"})
                         </div>
                         <div class="feditor col-md-8">
-                            <input id="btn" type="submit" value="Сформировать отчет" />
+                            <input id="btn" type="submit" class="btn btn-primary" value="Сформировать отчет" />
                         </div>
                     </div>
                 </fieldset>
@@ -35,5 +35,4 @@
         <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
         <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
         <script src="~/Content/Chosen/js/initRunNow.js"></script>
-
     }

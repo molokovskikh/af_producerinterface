@@ -68,7 +68,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 return RedirectToAction("Group", "Permission");
             }
 
-            ViewBag.UserList = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+            ViewBag.UserList = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.TypeUser == FilterSbyte).Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Text = xxx.Name + " - " +  xxx.Login, Value = xxx.Id.ToString() }).ToList();
 
             ViewBag.PermissionList = cntx_.AccountPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == FilterSbyte).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
 
