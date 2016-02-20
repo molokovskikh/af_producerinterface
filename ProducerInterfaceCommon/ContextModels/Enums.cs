@@ -90,4 +90,19 @@ namespace ProducerInterfaceCommon.ContextModels
         Modified = 16
     }
 
+    public enum PromotionStatus
+    {
+        [Display(Name = "Не подтверждена")]
+        СonfirmedFalse = 0,
+        [Display(Name = "Ожидание даты начала ")]
+        ConfirmedNotBedin = 1,
+        [Display(Name = "Завершена")]
+        ConfirmedEnd = 2,
+        [Display(Name = "Публикуется")]
+        Confirmed = 3,
+        [Display(Name = "Не публикуется")]
+        ConfirmedNotView = 4,
+        [Display(Name = "Любой")]
+        All = 5
+    }
 }

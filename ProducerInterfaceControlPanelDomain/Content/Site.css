@@ -152,8 +152,10 @@ min-width:100%;
         .nav-tabs > li.active > a:focus{
             color: whitesmoke;
             background-color: #584a4a;  
-        } 
-=======
-
+        }     
 .pointer { cursor: pointer; }
->>>>>>> e7298cfa9125925fd0cb68d4af844e41b7e0bac2
+
+#Begin, #End .form-control {
+cursor:pointer;
+}
+

@@ -35,14 +35,14 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.AdminUser.Login (админ)</a></li>
             </ul>
-            }
+            }                        
             <ul class="nav navbar-nav navbar-right" role="navigation">
                 <li class="dropdown">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>&nbsp; @user.Login</a>
                     <ul class="dropdown-menu">
                         <li><a href="~/Profile/Account">Мой профиль</a></li>
                         <li class="divider"></li>
-                        <li><a href="~/Profile/Index">Кабинет производителя</a></li>
+                        <li><a href="~/Profile/Index">@ViewBag.Producernames (кабинет)</a></li>
                         <li class="divider"></li>
                         <li><a href="~/Permission/Index">Редактирование прав</a></li>
                         <li class="divider"></li>

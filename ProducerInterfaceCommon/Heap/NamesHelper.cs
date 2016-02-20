@@ -182,6 +182,12 @@ namespace ProducerInterfaceCommon.Heap
             return listProducer;
         }
 
+        public List<OptionElement> GetDrugInPromotion(long PromotionId)
+        {
+            List<long> DrudIdList = _cntx.promotionToDrug.Where(x => x.PromotionId == PromotionId).Select(x => x.DrugId).ToList();
+            return _cntx.drugfamilynames.Where(x => DrudIdList.Contains(x.FamilyId)).ToList().Select(x => new OptionElement { Text = x.FamilyName, Value = x.FamilyId.ToString() }).ToList();
+        }
+
         public List<OptionElement> GetProducerUserList(long ProducerId)
         {
             return _cntx.Account.Where(xxx=>xxx.CompanyId != null).Where(xxx => xxx.AccountCompany.ProducerId == ProducerId)

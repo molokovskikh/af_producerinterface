@@ -1,0 +1,44 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<promotions>
+@{
+    var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
+}
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table-bordered table-custom" style="min-width:100%;">
+                <tr>
+                    <th>Наименование</th>
+                    <th>Аннотация</th>
+                    <th>Дата начала</th>
+                    <th>Дата окончания</th>
+                    <th>Препараты</th>
+                    <th>Производитель</th>
+                    <th>Файл</th>
+                </tr>
+
+                @foreach (var Item in Model)
+                {
+                    <tr>
+                        <td>@Item.Name</td>
+                        <td>@Item.Annotation</td>
+                        <td>@Item.Begin.Value.ToString("dd.MM.yyyy")</td>
+                        <td>@Item.End.Value.ToString("dd.MM.yyyy")</td>
+                        <td>@Item.promotionToDrug.Count()
+                        @foreach (var ItemGrug in Item.promotionToDrug)
+                        {
+                             
+                        }
+                        </td>
+                        <td>@ProducerList.Where(xx=>xx.Value == Item.ProducerId.ToString()).First().Text</td>
+                        <td>
+                            @if (Item.promotionsimage != null)
+                            {
+                                <a href="@Url.Action("GetFile", "MediaFiles", new { Id= Item.promotionsimage.Id})">@Item.promotionsimage.ImageName</a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
