@@ -1,0 +1,28 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@{
+    var CompanyList = ViewBag.ProducerList as IEnumerable<AccountCompany>;
+    var ProducerNames = ViewBag.ProducerNames as IEnumerable<OptionElement>;
+}
+
+<div class="form-group">
+    <br />
+    <label>Выберите производителя</label>
+
+    <select onchange="GetListAppointmentNamesThisProducer()" id="IdSelectProducer" class="form-control">
+        <option value="0"></option>
+        @foreach (var Producer in CompanyList)
+        {
+            if (Producer.ProducerId != null)
+            {
+                <option value="@Producer.Id">@ProducerNames.Where(xxx => xxx.Value == Producer.ProducerId.ToString()).First().Text</option>
+            }
+        }
+    </select>
+
+    <div class="row">
+        <div class="col-xs-12" id="replacecontent2">
+
+        </div>
+    </div>
+</div>
+

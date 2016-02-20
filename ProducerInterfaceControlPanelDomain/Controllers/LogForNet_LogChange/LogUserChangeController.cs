@@ -20,8 +20,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             var pagerCount = Convert.ToInt32(GetWebConfigParameters("LogCountPage"));
 
             ProducerInterfaceCommon.ContextModels.SortingPagingInfo Info = new SortingPagingInfo();
-            Info.CurrentPageIndex = Id;
-            Info.PageCount = ((MaxLogCount / pagerCount) + 1);          
+            Info.CurrentPageIndex = Id;          
+            Info.PageCount = (int)Math.Ceiling((decimal)MaxLogCount / pagerCount);          
             ViewBag.Info = Info;
 
             if (Id > (MaxLogCount / pagerCount))

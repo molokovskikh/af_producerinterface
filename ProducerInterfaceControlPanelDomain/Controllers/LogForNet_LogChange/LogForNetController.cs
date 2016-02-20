@@ -18,8 +18,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             var MaxCountLogs = cntx_.LogForNet.Count();
             var PagerCount = Convert.ToInt32(GetWebConfigParameters("ErrorCountPage"));
 
-            int Max_Vozmozhniy_ID = MaxCountLogs / PagerCount;
-
+            int Max_Vozmozhniy_ID = (int)Math.Ceiling((decimal)MaxCountLogs / PagerCount);
+                  
             if (Max_Vozmozhniy_ID < Id && Id != 0)
             {
                 RedirectToAction("Index");
@@ -27,7 +27,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             SortingPagingInfo Info = new SortingPagingInfo();
             Info.CurrentPageIndex = Id;
-            Info.PageCount = Max_Vozmozhniy_ID +1;          
+            Info.PageCount =  Max_Vozmozhniy_ID;          
             ViewBag.Info = Info;
            
             var ModelView = new List<ProducerInterfaceCommon.ContextModels.LogForNet>();

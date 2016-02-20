@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
@@ -176,6 +177,18 @@ namespace ProducerInterfaceCommon.ContextModels
 	public partial class promotions
 	{
 		public List<OptionElement> GlobalDrugList { get; set; }
+        public List<OptionElement> RegionnamesList
+        {
+            get; set;
+        }
+
+        public void GetRegionnamesList()
+        {
+            var cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, cntx.Account.Where(xxx => xxx.Id == this.Account.Id).First().Id);
+            RegionnamesList = h.GetPromotionRegionNames(Convert.ToUInt64(this.RegionMask));
+        }
+
 	}
 
 	[MetadataType(typeof(promotionsMetaData))]

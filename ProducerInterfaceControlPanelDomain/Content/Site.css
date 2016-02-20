@@ -134,5 +134,21 @@ font-size:1.6em;
 .feedback_item {
 padding:2em;
 background-color:#eeeeee;
-
 }
+.table-custom {
+width:100%;
+min-width:100%;
+}
+    .table-custom th {
+    text-align:center;
+    }
+    .table-custom td {
+    padding:2px;
+    }
+
+    .nav-tabs > li.active > a,
+        .nav-tabs > li.active > a:hover,
+        .nav-tabs > li.active > a:focus{
+            color: whitesmoke;
+            background-color: #584a4a;  
+        } 

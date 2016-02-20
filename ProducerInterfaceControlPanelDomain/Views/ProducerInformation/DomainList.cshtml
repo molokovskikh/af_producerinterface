@@ -33,11 +33,9 @@
         var prm = "idproducer=" + $('#idproducer').val();
 
         var stringPathName = document.location.pathname;
-        stringPathName = (stringPathName.substring(0, stringPathName.length));
-        if (stringPathName.substring(stringPathName.length - 1, stringPathName.length) == 'x')
-        {
-            stringPathName = (stringPathName.substring(0, stringPathName.length -5));
-        }
+      
+        stringPathName = (stringPathName.substring(0, stringPathName.length -10));
+      
         stringPathName = stringPathName + '/GetDomain';
         
         $.ajax(

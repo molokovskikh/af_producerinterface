@@ -48,7 +48,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
-        public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<Account> Account { get; set; }
         public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
@@ -62,5 +61,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
         public DbSet<promotionsimage> promotionsimage { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
+        public DbSet<AccountAppointment> AccountAppointment { get; set; }
     }
 }

@@ -100,6 +100,7 @@ namespace ProducerInterfaceCommon.Heap
 					.ToList();
 			return results;
 		}
+        
 
 		public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
 		{
@@ -141,7 +142,7 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		public List<long> GetPromotionRegions(ulong? RegionMask)
-		{
+		{ 
 			if (RegionMask == null)
 			{
 				return new List<long>();
@@ -161,6 +162,13 @@ namespace ProducerInterfaceCommon.Heap
 			.Select(x => (long)x.RegionCode).ToList();
 			return results;
 		}
+
+        public List<OptionElement> GetPromotionRegionNames(ulong RegionMask)
+        {
+            var RegionLongList = GetPromotionRegions((ulong)RegionMask);
+            List<decimal> RLS = RegionLongList.Select(x => (decimal)x).ToList();
+            return _cntx.regionnames.Where(x => RLS.Contains(x.RegionCode)).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
+        }
 
         public List<OptionElement> RegisterListProducer()
         {

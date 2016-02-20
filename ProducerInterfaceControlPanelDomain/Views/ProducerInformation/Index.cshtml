@@ -1,22 +1,59 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
 @model  IEnumerable<AccountCompany>
 @{
-  
+    var ListProducer = ViewBag.ListProducer as IEnumerable<OptionElement>;
     ViewBag.Title = "Производитель";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
 <div class="row">
-    <div class="col-xs-12">     
-        <div class="row">
-            <div class="col-xs-12">
-                <p>Количество компаний зарегистрированнный на сайте: @Model.Where(xxx=>xxx.ProducerId != null).GroupBy(xxx=>xxx.ProducerId).Select(x=>x.FirstOrDefault()).Count()</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <p>Количество анонимных пользователей: @Model.Where(xxx => xxx.ProducerId == null).Count()</p>
-            </div>
-        </div>
+    <div class="col-xs-12">
+        <label>Выберите производителя</label>
+        <select id="CompanySelectId" onchange="GetProducerInformation()" class="form-control">
+            @foreach (var ItemCompany in Model.Where(x => x.ProducerId != null).ToList())
+            {
+                <option value="@ItemCompany.Id">@ListProducer.Where(xxx=>xxx.Value==ItemCompany.ProducerId.ToString()).First().Text</option>
+            }
+        </select>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-xs-12" style="display:none;" id="loading">
+        <br />
+        <h2><i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp; Ожидайте, сбор информации</h2>
+    </div>
+    <div class="col-xs-12" id="replacecontent">
+
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        function GetProducerInformation()
+        {
+            var ElemUpdate = '#' + "replacecontent";
+            $('#loading').css("display", "block");
+            $(ElemUpdate).html("");
+            var CompanyId = $('#CompanySelectId').val();
+            var stringPathName = document.location.pathname;
+            stringPathName = stringPathName.replace("Index", "GetProducerInformation");
+            var sendParam = "Id=" + CompanyId;
+            AjaxPost(stringPathName, sendParam, ElemUpdate);
+        }
+        
+        function AjaxPost(url_, sendData_, ElemUpdate) {
+            $.ajax({
+                url: url_,
+                data: sendData_,
+                type: "POST",
+                success: function (data) {
+                    $(ElemUpdate).html(data);
+                    $('#loading').css("display", "none");
+                }
+            });
+        }
+
+    </script>    
+}

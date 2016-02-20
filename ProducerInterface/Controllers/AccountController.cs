@@ -33,23 +33,25 @@ namespace ProducerInterface.Controllers
             var CompanyExsist = cntx_.AccountCompany.Any(xxx => xxx.ProducerId == One.Producers);
 
             var ListAppointment = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-            ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
+            ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1 && xx.IdAccountCompany == null)
                  .ToList()
                  .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
                  .ToList());
-
-            ViewBag.AppointmentList = ListAppointment;
                 
             if (CompanyExsist)
             {
+                var CompanyCustomAppointment = cntx_.AccountAppointment.Where(xxx => xxx.AccountCompany.ProducerId == One.Producers).ToList().Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+                ListAppointment.AddRange(CompanyCustomAppointment);
+                ViewBag.AppointmentList = ListAppointment;
+
                 RegisterDomainValidation ModelView2 = new RegisterDomainValidation();
                 ModelView2.Producers = One.Producers;
-                ModelView2.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == One.Producers).First().ProducerName;
-              
+                ModelView2.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == One.Producers).First().ProducerName;                
                 ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == One.Producers).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
                 return View("DomainRegistration", ModelView2);
             }
 
+            ViewBag.AppointmentList = ListAppointment;
             RegistrerValidation ModelView = new RegistrerValidation();
             ModelView.Producers = One.Producers;
             ModelView.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == One.Producers).First().ProducerName;

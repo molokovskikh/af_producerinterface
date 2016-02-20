@@ -13,7 +13,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
-		{ name: 'insert' },
+		//{ name: 'insert' },
+	    { name: 'insert', groups: ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
 		{ name: 'forms' },
 		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
@@ -29,11 +30,11 @@ CKEDITOR.editorConfig = function( config ) {
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';
-
+	//config.removePlugins = 'image';
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
-
 	// Simplify the dialog windows.
-	config.removeDialogTabs = 'image:advanced;link:advanced';
-	config.extraPlugins = 'filebrowser';	
+	config.removeDialogTabs = 'image:advanced;link:advanced;';
+	config.extraPlugins = 'filebrowser';
+	//config.extraPlugins = 'base64image';
 };

@@ -1,16 +1,19 @@
 ﻿$(document).ready(function () {
+    var UrlString = window.location.href.replace("News/Create", "MediaFiles");
+    var FullUrlString = $('#FullUrlStringFile').val();
     CKEDITOR.replace('Description',
         {
-            'filebrowserBrowseUrl': '/MediaFiles/Index/',
-            'filebrowserImageBrowseUrl': '/MediaFiles/Index/',
-            'filebrowserUploadUrl': '/MediaFiles/SaveFile/',
-            'filebrowserImageUploadUrl': '/MediaFiles/SaveFile/',
+            'filebrowserBrowseUrl': FullUrlString + 'Index/',
+            'filebrowserImageBrowseUrl': FullUrlString + 'Index/',
+            'filebrowserUploadUrl': FullUrlString + 'SaveFile/',
+            'filebrowserImageUploadUrl': FullUrlString + 'SaveFile/',
             'height': '35em'
         });
 });
 function TargetBlackPreviewNews() {
     var Param1 = $('#Name').val();
-    var ParamDescription = CKEDITOR.instances.Description.getData();
-    //  var Param2 = $('#Description').val();
-    window.open('http://localhost:53367/News/Preview' + "?Name=" + Param1 + "&Description=" + ParamDescription, '_blank');
+    var ParamDescription = CKEDITOR.instances.Description.getData();    
+    var UrlString = window.location.href.replace("Create", "Preview");
+    window.open(UrlString + "?Name=" + Param1 + "&Description=" + ParamDescription, '_blank');
 }
+

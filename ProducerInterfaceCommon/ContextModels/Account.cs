@@ -36,7 +36,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<System.DateTime> PasswordUpdated { get; set; }
         public Nullable<sbyte> Enabled { get; set; }
     
-        public virtual AccountAppointment AccountAppointment { get; set; }
         public virtual AccountCompany AccountCompany { get; set; }
         public virtual ICollection<AccountEmail> AccountEmail { get; set; }
         public virtual ICollection<AccountGroup> AccountGroup { get; set; }
@@ -44,5 +43,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual ICollection<promotions> promotions { get; set; }
         public virtual ICollection<promotions> promotions1 { get; set; }
         public virtual ICollection<NewsChange> NewsChange { get; set; }
+        public virtual AccountAppointment AccountAppointment { get; set; }
     }
 }

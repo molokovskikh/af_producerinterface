@@ -18,6 +18,7 @@ namespace ProducerInterfaceCommon.ContextModels
         {
             this.CompanyDomainName = new HashSet<CompanyDomainName>();
             this.Account = new HashSet<Account>();
+            this.AccountAppointment = new HashSet<AccountAppointment>();
         }
     
         public long Id { get; set; }
@@ -26,5 +27,6 @@ namespace ProducerInterfaceCommon.ContextModels
     
         public virtual ICollection<CompanyDomainName> CompanyDomainName { get; set; }
         public virtual ICollection<Account> Account { get; set; }
+        public virtual ICollection<AccountAppointment> AccountAppointment { get; set; }
     }
 }

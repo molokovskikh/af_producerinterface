@@ -1,0 +1,161 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model AccountCompany
+@{
+    var ListProducer = ViewBag.ListProducer as IEnumerable<OptionElement>;
+    var ListPromotion = ViewBag.PromotionList as IEnumerable<promotions>;
+    var ListDrugNames = ViewBag.DrugList as IEnumerable<OptionElement>;
+    var ListReport = ViewBag.ReportList as IEnumerable<jobextend>;
+}
+
+<hr />
+
+<h3>Информация по @ListProducer.Where(x => x.Value == Model.ProducerId.ToString()).First().Text</h3>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#panel1">Сотрудники</a></li>
+    <li><a data-toggle="tab" href="#panel2">Домены</a></li>
+    <li><a data-toggle="tab" href="#panel3">Промоакции</a></li>
+    <li><a data-toggle="tab" href="#panel4">Отчеты</a></li>
+    <li><a data-toggle="tab" href="#panel5">Список должностей</a></li>
+</ul>
+
+<div class="tab-content">
+
+    <div id="panel1" class="tab-pane fade in active">
+        <br />
+
+        @if (Model.Account != null && Model.Account.Count() > 0)
+        {
+            <div class="form-group">
+
+                @foreach (var ItemAccount in Model.Account)
+                {
+                    <p>
+                        @ItemAccount.Name @ItemAccount.Login
+                        @if (ItemAccount.Enabled == 1)
+                        {<span>Почтовый адресс подтвержден</span>
+                        }
+                        else
+                        {
+                            <span>Почтовый адресс не подтвержден</span>
+                        }
+                    </p>
+                }
+            </div>
+            <hr />
+        }
+    </div>
+
+    <div id="panel2" class="tab-pane fade">
+        <br />
+
+        @if (Model.CompanyDomainName != null && Model.CompanyDomainName.Count() > 0)
+        {
+            <div class="form-group">
+
+                @foreach (var ItemDomainName in Model.CompanyDomainName)
+                {
+                    <p>@ItemDomainName.Name</p>
+                }
+            </div>
+            <hr />
+        }
+
+    </div>
+
+    <div id="panel3" class="tab-pane fade">
+        <br />
+
+        @if (ListPromotion != null && ListPromotion.Count() > 0)
+        {
+
+            <div class="form-group">
+
+                <table class="table-bordered table-striped table-custom">
+                    <tr>
+                        <th>Название</th>
+                        <th>Дата начала</th>
+                        <th>Дата окончания</th>
+                        <th>Список препаратов</th>
+                        <th>Список регионов</th>
+                    </tr>
+
+                    @foreach (var ItemPromotion in ListPromotion)
+                    {
+                        <tr>
+                            <td>@ItemPromotion.Name</td>
+                            <td>@ItemPromotion.Begin.Value.ToString("dd.MM.yyyy")</td>
+                            <td>@ItemPromotion.End.Value.ToString("dd.MM.yyyy")</td>
+                            <td>
+
+                                <a href="#Drugs_@ItemPromotion.Id" data-toggle="collapse">Развернуть список препаратов (@ItemPromotion.promotionToDrug.Count())</a>
+                                <div id="Drugs_@ItemPromotion.Id" class="collapse">
+                                    @foreach (var ItemDrug in ItemPromotion.promotionToDrug)
+                                    {
+                                        <p>@ListDrugNames.Where(x => x.Value == ItemDrug.DrugId.ToString()).First().Text</p>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <a href="#Regions_@ItemPromotion.Id" data-toggle="collapse">Развернуть список регионов (@ItemPromotion.RegionnamesList.Count())</a>
+
+                                <div id="Regions_@ItemPromotion.Id" class="collapse">
+                                    @foreach (var ItemRegion in ItemPromotion.RegionnamesList)
+                                    {
+                                        <p>@ItemRegion.Text</p>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <hr />
+        }
+    </div>
+
+    <div id="panel4" class="tab-pane fade">
+        <br />
+
+        @if (ListReport != null && ListReport.Count() > 0)
+        {
+            <div class="form-group">
+
+                <table class="table-bordered table-striped table-custom">
+                    <tr>
+                        <th>Название</th>
+                        <th>Создатель</th>
+                        <th>Последний раз изменялась</th>
+                        <th>Последний запуск</th>
+                    </tr>
+                    <tr>
+                        @foreach (var ItemReport in ListReport)
+                        {
+                            <td>@ItemReport.CustomName</td>
+                            <td>@ItemReport.Creator</td>
+                            <td>@ItemReport.LastModified</td>
+                                    <td>@ItemReport.LastRun</td>
+                        }
+                    </tr>
+                </table>
+            </div>
+        }
+
+    </div>
+
+    <div id="panel5" class="tab-pane fade">
+        <br />
+
+        @if (Model.Account != null && Model.Account.Count() > 0)
+        {
+           
+                var ListAppointment = Model.Account.Select(x => x.AccountAppointment).ToList().Select(x => x.Name).ToList().Distinct();
+           
+                    foreach (var ItemAppointment in ListAppointment)
+                    {
+                        <p>@ItemAppointment</p>
+                    }
+        }
+    </div>
+</div>
+

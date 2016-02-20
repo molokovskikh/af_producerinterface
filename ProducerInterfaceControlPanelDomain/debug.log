@@ -772,3 +772,73 @@ System.Web.Mvc.ActionResult Index(ProducerInterfaceCommon.ContextModels.Account)
 18.02.2016 10:05:40.003 [809] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\MediaFiles\Index.cshtml(34): error CS1003: Syntax error, ',' expected
 18.02.2016 13:29:08.533 [15] ERROR MySqlAdoNetAppender - Контроллер для пути "/ProducerInfermation/Index" не найден или не реализует интерфейс IController.
 18.02.2016 13:29:11.564 [9] ERROR MySqlAdoNetAppender - Контроллер для пути "/ProducerInfermation/Index" не найден или не реализует интерфейс IController.
+19.02.2016 10:39:21.245 [6] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Preview" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.NewsController".
+19.02.2016 11:06:34.238 [23] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+19.02.2016 11:10:28.965 [30] ERROR MySqlAdoNetAppender - Контроллер для пути "/mediafile/GetFile/30" не найден или не реализует интерфейс IController.
+19.02.2016 11:44:03.134 [23] ERROR MySqlAdoNetAppender - Контроллер для пути "/ProducerInterfaceControlPanel/Medtyjutyu" не найден или не реализует интерфейс IController.
+19.02.2016 11:45:00.560 [5] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.FileResult GetFile(Int32)" в "ProducerInterfaceControlPanelDomain.Controllers.MediaFilesController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+19.02.2016 12:50:20.911 [6] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "DomainList" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducerInformationController".
+19.02.2016 12:50:26.758 [9] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "DomainList" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducerInformationController".
+19.02.2016 12:50:32.929 [6] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "DomainList" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducerInformationController".
+19.02.2016 12:54:54.870 [9] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "partial/appointment" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/ProducersDomain/partial/appointment.aspx
+~/Views/ProducersDomain/partial/appointment.ascx
+~/Views/Shared/partial/appointment.aspx
+~/Views/Shared/partial/appointment.ascx
+~/Views/ProducersDomain/partial/appointment.cshtml
+~/Views/ProducersDomain/partial/appointment.vbhtml
+~/Views/Shared/partial/appointment.cshtml
+~/Views/Shared/partial/appointment.vbhtml
+~/Views/ProducersDomain/Partial/partial/appointment.cshtml
+19.02.2016 13:46:37.635 [63] ERROR MySqlAdoNetAppender - Путь '/Views/ProducerInformation/' не найден.
+19.02.2016 14:39:57.587 [21] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "producerappoinment" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducerInformationController".
+19.02.2016 14:40:01.798 [13] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "producerappoinment" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducerInformationController".
+19.02.2016 14:52:00.911 [15] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\partial\customapointment.cshtml(14): error CS1061: 'OptionElement' does not contain a definition for 'ProducerId' and no extension method 'ProducerId' accepting a first argument of type 'OptionElement' could be found (are you missing a using directive or an assembly reference?)
+19.02.2016 14:54:24.085 [13] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult GetAppointmentProducer(Int32)" в "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducersAppointmentController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+19.02.2016 14:55:24.409 [13] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult GetAppointmentProducer(Int32)" в "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducersAppointmentController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+19.02.2016 14:59:41.977 [21] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+19.02.2016 15:29:40.738 [13] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult AddProducerAppointment(System.String, Int32)" в "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducersAppointmentController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+19.02.2016 15:31:35.146 [15] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult AddProducerAppointment(System.String, Int32)" в "ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation.ProducersAppointmentController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+19.02.2016 15:38:00.609 [13] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+19.02.2016 15:42:12.138 [13] ERROR MySqlAdoNetAppender - Последовательность не содержит элементов
+19.02.2016 16:58:31.612 [34] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\PICustomAccount\CustomAccount.cshtml(21): error CS1026: ) expected
+19.02.2016 17:00:43.188 [34] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\CustomAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 17:01:27.557 [34] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\CustomAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 17:01:32.381 [34] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\CustomAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 17:04:16.508 [48] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\CustomAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 17:06:08.808 [34] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\CustomAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 17:09:03.049 [6] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\CustomAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 17:13:18.187 [6] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\RequestAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 17:14:02.055 [6] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\ProducerInformation\RequestAccount.cshtml(22): error CS1026: ) expected
+19.02.2016 18:51:34.072 [98] ERROR MySqlAdoNetAppender - Метод "First" можно использовать только как завершающую операцию запроса. Вместо этого в данном экземпляре можно использовать метод "FirstOrDefault".
+19.02.2016 18:52:51.013 [98] ERROR MySqlAdoNetAppender - Заданное приведение является недопустимым.
+19.02.2016 18:54:38.526 [100] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+19.02.2016 18:55:56.103 [98] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+19.02.2016 18:59:16.242 [97] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+19.02.2016 19:05:16.798 [97] ERROR MySqlAdoNetAppender - Произошла ошибка базового поставщика в Open.
+19.02.2016 19:07:11.562 [97] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+19.02.2016 19:09:32.596 [27] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+19.02.2016 19:10:10.667 [97] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+19.02.2016 19:14:11.750 [97] ERROR MySqlAdoNetAppender - Не удалось найти частичное представление "partial/produceinformation" или ни один обработчик представлений не поддерживает места поиска. Выполнялся поиск в следующих местах:
+~/Views/ProducerInformation/partial/produceinformation.aspx
+~/Views/ProducerInformation/partial/produceinformation.ascx
+~/Views/Shared/partial/produceinformation.aspx
+~/Views/Shared/partial/produceinformation.ascx
+~/Views/ProducerInformation/partial/produceinformation.cshtml
+~/Views/ProducerInformation/partial/produceinformation.vbhtml
+~/Views/Shared/partial/produceinformation.cshtml
+~/Views/Shared/partial/produceinformation.vbhtml
+~/Views/ProducerInformation/Partial/partial/produceinformation.cshtml
+19.02.2016 20:02:52.132 [98] ERROR MySqlAdoNetAppender - Непредвиденный символ "{" после символа "@". В тексте блока кода (@if {}, @{} и т. д.) не требуется использовать "@{" для переключения на код.
+
+20.02.2016 10:25:13.859 [98] ERROR MySqlAdoNetAppender - Длина строки этого запроса превышает настроенное значение maxQueryStringLength.
+20.02.2016 10:26:35.191 [98] ERROR MySqlAdoNetAppender - Длина строки этого запроса превышает настроенное значение maxQueryStringLength.
+20.02.2016 10:28:27.386 [98] ERROR MySqlAdoNetAppender - Длина строки этого запроса превышает настроенное значение maxQueryStringLength.
+20.02.2016 10:30:19.474 [98] ERROR MySqlAdoNetAppender - Длина строки этого запроса превышает настроенное значение maxQueryStringLength.
+20.02.2016 10:56:45.688 [88] ERROR MySqlAdoNetAppender - Контроллер для пути "/SaveFile/" не найден или не реализует интерфейс IController.
+20.02.2016 11:01:05.962 [88] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "SaveFile" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.NewsController".

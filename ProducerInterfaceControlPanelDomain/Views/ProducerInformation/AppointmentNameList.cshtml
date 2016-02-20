@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Должности";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="container body-content">
+
+    <h2>Управление списками должностей</h2>
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#panel1">Общий список должностей</a></li>
+        <li><a data-toggle="tab" href="#panel2">Списки должностей производителей</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="panel1" class="tab-pane fade in active">
+
+            <div class="row">
+                <div class="col-xs-12" id="replacecontent">
+                    @Html.Partial("partial/appointment")
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="panel2" class="tab-pane fade">
+            <div class="row">
+                <div class="col-xs-12">
+                    @Html.Partial("partial/customapointment")
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section scripts
+{
+<script src="~/Scripts/WorkPlace/ProducerInformation_Appointment.js"></script>
+}

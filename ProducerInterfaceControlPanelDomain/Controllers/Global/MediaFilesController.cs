@@ -53,8 +53,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 cntx_.SaveChanges();                
             }
             string CKEditorFuncNum = HttpContext.Request["CKEditorFuncNum"];
-            string url = "/MediaFiles/GetFile/" + NewsFile.Id;
-         //   HttpContext.Response.Write("<script>window.parent.CKEDITOR.tools.callFunction(" + CKEditorFuncNum + ", \"" + url + "\");</script>");
+                  
+          //  string url = "/mediafiles/GetFile/" + NewsFile.Id;
+
+            string url = GetWebConfigParameters("ImageFullUrlString");
+            url += "/GetFile/" + NewsFile.Id;
 
             return Content("<script>window.parent.CKEDITOR.tools.callFunction(" + CKEditorFuncNum + ", \"" + url + "\");</script>");
 

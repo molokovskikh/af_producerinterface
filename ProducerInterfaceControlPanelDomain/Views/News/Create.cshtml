@@ -8,16 +8,16 @@
 <div class="container body-content">
     @if (Model.Id > 0)
     {
-        <h2>Редактирование новости</h2>
+        <h2>Редактирование новости</h2>       
+        <hr />
     }
     else
     {
-        <h2>Новая новость</h2>
-
+        <h2>Создание новости</h2>
         <hr />
     }
 
-
+    <input hidden="hidden" id="FullUrlStringFile" value="@ViewBag.FullUrlStringFile" />
 
     @using (Html.BeginForm(FormMethod.Post))
     {

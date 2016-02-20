@@ -14,26 +14,36 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             ViewBag.Title = "Новости";
             ViewBag.Pager = 1;
-           var ListNews10 = cntx_.NotificationToProducers.Where(xxx=>xxx.Enabled == true).OrderByDescending(xxx=>xxx.DatePublication).Take(10).ToList();
-           return View(ListNews10);
+            var ListNews10 = cntx_.NotificationToProducers.Where(xxx => xxx.Enabled == true).OrderByDescending(xxx => xxx.DatePublication).Take(10).ToList();
+            return View(ListNews10);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult Preview(string Name, string Description)
+        {
+            var News = new ProducerInterfaceCommon.ContextModels.NotificationToProducers();
+            News.DatePublication = System.DateTime.Now;
+            News.Name = Name;
+            News.Description = Description;
+            return View(News);
         }
 
         public ActionResult GetNextList(int Pager)
         {
             ViewBag.Pager = Pager + 1;
-            var ListNews10 = cntx_.NotificationToProducers.Where(xxx => xxx.Enabled == true).OrderByDescending(xxx => xxx.DatePublication).Skip(Pager*10).Take(10).ToList();
-            return PartialView("GetNextList",ListNews10);
+            var ListNews10 = cntx_.NotificationToProducers.Where(xxx => xxx.Enabled == true).OrderByDescending(xxx => xxx.DatePublication).Skip(Pager * 10).Take(10).ToList();
+            return PartialView("GetNextList", ListNews10);
         }
-           
+
         public ActionResult Archive()
         {
             ViewBag.Title = "Архив Новостей";
             var ListNews10 = cntx_.NotificationToProducers.Where(xxx => xxx.Enabled == false).OrderByDescending(xxx => xxx.DatePublication).ToList();
-            return View("List",ListNews10);
+            return View("List", ListNews10);
         }
 
         public ActionResult DeleteNews(long Id)
-        {            
+        {
             // отправляем новость в архив
             var NewsRemove = cntx_.NotificationToProducers.Find(Id);
             NewsRemove.Enabled = false;
@@ -41,8 +51,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             cntx_.SaveChanges();
 
             // добавляем историю изменений
-            NewsHistoryAdd(NewsRemove.Id, null, null, ProducerInterfaceCommon.ContextModels.NewsChanges.NewsArchive);        
-            
+            NewsHistoryAdd(NewsRemove.Id, null, null, ProducerInterfaceCommon.ContextModels.NewsChanges.NewsArchive);
+
             SuccessMessage("Новость отправлена в архив");
             return RedirectToAction("List");
         }
@@ -80,11 +90,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpPost]
         public ActionResult Create(ProducerInterfaceCommon.ContextModels.NotificationToProducers News)
         {
+
+            ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
+
             if (!ModelState.IsValid)
             {
                 return View(News);
             }
-                  
+
             if (News.Id > 0)
             {
                 var OldNews = cntx_.NotificationToProducers.Find(News.Id);
@@ -100,27 +113,27 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
                 cntx_.Entry(OldNews).State = System.Data.Entity.EntityState.Modified;
                 cntx_.SaveChanges();
-                                                                          
+
                 SuccessMessage("Изменения успешно сохранены");
             }
-            else {              
+            else {
 
                 // добавляем новость
                 News.DatePublication = System.DateTime.Now;
                 News.Enabled = true;
                 cntx_.Entry(News).State = System.Data.Entity.EntityState.Added;
                 cntx_.SaveChanges();
-                
+
                 // пишем в историю
-                NewsHistoryAdd(News.Id, null, News, ProducerInterfaceCommon.ContextModels.NewsChanges.NewsAdd);              
+                NewsHistoryAdd(News.Id, null, News, ProducerInterfaceCommon.ContextModels.NewsChanges.NewsAdd);
 
                 SuccessMessage("Новость успешно добавлена");
-            }  
+            }
 
             return RedirectToAction("List");
         }
-        
-        private void NewsHistoryAdd(long ID_NEWS,ProducerInterfaceCommon.ContextModels.NotificationToProducers OldNews, ProducerInterfaceCommon.ContextModels.NotificationToProducers NewNews, ProducerInterfaceCommon.ContextModels.NewsChanges TypeChanges)
+
+        private void NewsHistoryAdd(long ID_NEWS, ProducerInterfaceCommon.ContextModels.NotificationToProducers OldNews, ProducerInterfaceCommon.ContextModels.NotificationToProducers NewNews, ProducerInterfaceCommon.ContextModels.NewsChanges TypeChanges)
         {
 
             var NewsHistory = new ProducerInterfaceCommon.ContextModels.NewsChange();
@@ -128,12 +141,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             NewsHistory.IdNews = ID_NEWS;
             NewsHistory.IdAccount = CurrentUser.Id;
             NewsHistory.DateChange = System.DateTime.Now;
-            NewsHistory.TypeCnhange =(byte)TypeChanges;
-            
+            NewsHistory.TypeCnhange = (byte)TypeChanges;
+
             if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsAdd)
             {
                 NewsHistory.NewsNewDescription = NewNews.Description;
-                NewsHistory.NewsNewTema = NewNews.Name;               
+                NewsHistory.NewsNewTema = NewNews.Name;
             }
 
             if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsChange)
@@ -147,11 +160,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsArchive)
             {
-                
+
             }
 
             cntx_.Entry(NewsHistory).State = System.Data.Entity.EntityState.Added;
-            cntx_.SaveChanges();        
+            cntx_.SaveChanges();
         }
     }
 }
