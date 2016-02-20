@@ -37,8 +37,17 @@
     <div class="form-group form-group-otstup">
         <div class="flabel col-md-4">&nbsp;</div>
         <div class="feditor col-md-8">
-            Дополнительные Email-адреса @Html.TextBox("addMail")
-            <input type="button" id="addBtn" name="addBtn" value="Добавить" />
+            <label>Дополнительные Email-адреса</label>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        @Html.TextBox("addMail", null, new { @class = "form-control", @placeholder = "Email" })
+                        <span class="input-group-btn">
+                            <input id="addBtn" name="addBtn" value="Добавить" class="btn btn-primary" />
+                        </span>
+                    </div>
+                </div>
+            </div>       
         </div>
     </div>
 </div>

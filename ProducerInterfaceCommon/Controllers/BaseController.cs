@@ -180,23 +180,68 @@ namespace ProducerInterfaceCommon.Controllers
 			var key = $"permission{CurrentUser.Id}";
 			var permissionList = HttpContext.Cache.Get(key) as HashSet<string>;
 			if (permissionList != null)
-				return permissionList;
+            {
+                var lastUpdatePermissiion = GetLastDate();
+                if (lastUpdatePermissiion.First().ToLower() == permissionList.First().ToLower())
+                {
 
-			permissionList = new HashSet<string>();
-			foreach (var group in CurrentUser.AccountGroup)
-				foreach (var permission in group.AccountPermission)
-				{
-					var permissionKey = $"{permission.ControllerAction}_{permission.ActionAttributes}";
-					if (permission.Enabled && !permissionList.Contains(permissionKey))
-						permissionList.Add(permissionKey);
-				}
-			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(15), Cache.NoSlidingExpiration);
+                    SuccessMessage("300");
+                    return permissionList;
+                }
+            }
+            permissionList = new HashSet<string>();
+
+            if (CurrentUser.LastUpdatePermisison == null)
+            {
+                permissionList.Add(DateTime.MinValue.Year.ToString());              
+            }
+            else
+            {
+                permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());              
+            }
+
+            permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());
+
+            foreach (var group in CurrentUser.AccountGroup)
+            {
+                foreach (var permission in group.AccountPermission)
+                {
+                    var permissionKey = $"{permission.ControllerAction}_{permission.ActionAttributes}";
+                    if (permission.Enabled && !permissionList.Contains(permissionKey))
+                        permissionList.Add(permissionKey);
+                }
+            }
+
+			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
 			return permissionList;
 		}
 
-		#region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
+        public HashSet<string> GetLastDate()
+        {
+            var key = $"date{CurrentUser.Id}";
+            var DateList = HttpContext.Cache.Get(key) as HashSet<string>;
 
-		protected Account GetCurrentUser(TypeUsers TypeUser_)
+            if (DateList != null) { return DateList; }
+
+            DateList = new HashSet<string>();
+
+            if (CurrentUser.LastUpdatePermisison == null)
+            {
+                DateList.Add(DateTime.MinValue.Year.ToString());
+            }
+            else
+            {
+                DateList.Add(CurrentUser.LastUpdatePermisison.ToString());
+            }
+          
+            HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(10), Cache.NoSlidingExpiration);
+            return DateList;
+        }       
+         
+
+        #region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
+
+        protected Account GetCurrentUser(TypeUsers TypeUser_)
 		{
 			var retUser = new Account();
 			TypeLoginUser = TypeUser_;

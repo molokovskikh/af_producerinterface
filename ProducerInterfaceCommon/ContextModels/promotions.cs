@@ -36,9 +36,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public bool Status { get; set; }
         public Nullable<long> ProducerAdminId { get; set; }
     
-        public virtual Account Account { get; set; }
-        public virtual Account Account1 { get; set; }
         public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
         public virtual promotionsimage promotionsimage { get; set; }
+        public virtual Account Account { get; set; }
+        public virtual Account Account1 { get; set; }
     }
 }

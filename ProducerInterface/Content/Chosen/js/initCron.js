@@ -28,10 +28,15 @@
 		interval.prop('disabled', true).trigger("chosen:updated");
 
 	bm.click(function () {
-		if ($(this).prop('checked'))
-			interval.prop('disabled', true).trigger("chosen:updated");
-		else
-			interval.removeProp('disabled').trigger("chosen:updated");
+	    if ($(this).prop('checked')) {
+	        interval.prop('disabled', true).trigger("chosen:updated");
+	        $('#Interval_param').css("display", "none");
+	    }
+	    else
+	    {
+	        interval.removeProp('disabled').trigger("chosen:updated");
+	        $('#Interval_param').css("display", "block");
+	    }
 	});
 
 	// cron human text insert
@@ -39,7 +44,7 @@
 		$('#CronHumanText').val(cr.getHumanText());
 	});
 
-	$('#MailTo').chosen({ width: '95%' });
+	$('#MailTo').chosen({ width: '100%' });
 
     // при клике кнопки Добавить почту - добавляем
 	$('#addBtn').on('click', function () {

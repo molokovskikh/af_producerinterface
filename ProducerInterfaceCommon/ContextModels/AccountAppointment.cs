@@ -24,7 +24,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<sbyte> GlobalEnabled { get; set; }
         public Nullable<long> IdAccountCompany { get; set; }
     
-        public virtual ICollection<Account> Account { get; set; }
         public virtual AccountCompany AccountCompany { get; set; }
+        public virtual ICollection<Account> Account { get; set; }
     }
 }

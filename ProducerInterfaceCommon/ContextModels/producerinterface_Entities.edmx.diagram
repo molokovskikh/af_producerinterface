@@ -29,23 +29,15 @@
         <EntityTypeShape EntityType="producerinterface_Model.CompanyDomainName" Width="3.125" PointX="4.75" PointY="13.125" />
         <AssociationConnector Association="producerinterface_Model.CompanyId_AccountCompanyId" />
         <EntityTypeShape EntityType="producerinterface_Model.usernames" Width="1.5" PointX="2.75" PointY="2.875" />
-        <EntityTypeShape EntityType="producerinterface_Model.Account" Width="4.75" PointX="0.5" PointY="18" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountGroup" Width="1.75" PointX="5.625" PointY="19.5" />
-        <AssociationConnector Association="producerinterface_Model.Account_CompanyId" />
-        <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
         <AssociationConnector Association="producerinterface_Model.AccountGroupToPermission" />
-        <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="4" PointX="0.5" PointY="23.125" />
-        <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
         <EntityTypeShape EntityType="producerinterface_Model.promotions" Width="4.25" PointX="9.75" PointY="14.125" />
-        <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
-        <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
         <AssociationConnector Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" />
         <EntityTypeShape EntityType="producerinterface_Model.DrugDescriptionRemark" Width="5" PointX="2.75" PointY="5.5" />
       
         <EntityTypeShape EntityType="producerinterface_Model.NotificationToProducers" Width="1.5" PointX="7.875" PointY="22.625" />
         <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="1.5" PointX="6" PointY="22.625" />
-        <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.FK2_NewsChangeToNotification" />
         <EntityTypeShape EntityType="producerinterface_Model.supplierregions" Width="1.5" PointX="9.875" PointY="4.5" />
         <EntityTypeShape EntityType="producerinterface_Model.catalognameswithuptime" Width="1.5" PointX="9.875" PointY="6.125" />
@@ -55,8 +47,16 @@
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" />
         <EntityTypeShape EntityType="producerinterface_Model.mailformwithfooter" Width="1.5" PointX="11.625" PointY="7.875" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountAppointment" Width="1.5" PointX="0.75" PointY="15.375" />
-        <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
         <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
+        <EntityTypeShape EntityType="producerinterface_Model.Account" Width="1.5" PointX="11.125" PointY="20" />
+        <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
+        <AssociationConnector Association="producerinterface_Model.Account_CompanyId" />
+        <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
+        <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
+        <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
+        <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
