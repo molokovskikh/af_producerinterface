@@ -16,7 +16,7 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Отчет готовится")]
         Processed = 1,
 
-        [Display(Name = "Отчет готов")]
+        [Display(Name = "Посмотреть отчет")]
         Ready = 2,
 
         [Display(Name = "Нет данных для построения отчета")]

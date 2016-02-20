@@ -6,6 +6,18 @@
 	$('#CatalogNamesId').chosen({ width: '95%' });
 	SetChosen("CatalogNamesId", "/Report/GetCatalogDragFamalyNames");
 
+	var ac = $('#AllCatalog');
+    var hc = $('#HideCatalog');
+	if (ac.prop('checked'))
+	    hc.hide();
+
+	ac.click(function () {
+	    if (ac.prop('checked'))
+            hc.hide();
+        else
+            hc.show();
+    });
+
 	// при изменении регионов загружаем список поставщиков из этих регионов
 	$('#RegionCodeEqual').on('change', function () {
 		var sup = $('#SupplierIdNonEqual');

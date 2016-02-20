@@ -110,8 +110,32 @@ ADD COLUMN `IdAccountCompany` INT(10) UNSIGNED NULL AFTER `GlobalEnabled`;
 ALTER TABLE `AccountAppointment`
 ADD CONSTRAINT `FK1_Appointment_To_AccountCompany_Id` FOREIGN KEY (`IdAccountCompany`) REFERENCES `AccountCompany` (`Id`);
 
+ALTER TABLE `Account`
+ ADD COLUMN `LastUpdatePermisison` DATETIME NULL AFTER `Enabled`;
 
+CREATE DEFINER=`system`@`%` TRIGGER `AccountGroupToPermission_after_insert` BEFORE INSERT ON `AccountGroupToPermission` FOR EACH ROW BEGIN
+ UPDATE Account ACC
+    SET ACC.LastUpdatePermisison = now() 
+  WHERE ACC.Id = (select AUTG.Iduser Id from AccountUserToGroup AUTG where AUTG.IdGroup = NEW.IdGroup);
+END;
 
+CREATE DEFINER=`system`@`%` TRIGGER `AccountGroupToPermission_before_delete` BEFORE DELETE ON `AccountGroupToPermission` FOR EACH ROW BEGIN
+ UPDATE Account ACC
+    SET ACC.LastUpdatePermisison = now() 
+  WHERE ACC.Id = (select AUTG.Iduser Id from AccountUserToGroup AUTG where AUTG.IdGroup = OLD.IdGroup);
+END;
+
+CREATE DEFINER=`system`@`%` TRIGGER `AccountUserToGroup_after_insert` AFTER INSERT ON `AccountUserToGroup` FOR EACH ROW BEGIN
+ UPDATE Account ACC
+    SET ACC.LastUpdatePermisison = now() 
+  WHERE ACC.Id = new.IdUser;
+END;
+
+CREATE DEFINER=`system`@`%` TRIGGER `AccountUserToGroup_before_delete` BEFORE DELETE ON `AccountUserToGroup` FOR EACH ROW BEGIN
+ UPDATE Account ACC
+    SET ACC.LastUpdatePermisison = now() 
+  WHERE ACC.Id = OLD.IdUser;
+END;
 
 
 

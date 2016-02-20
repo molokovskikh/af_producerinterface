@@ -114,7 +114,8 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} add failed:" + e.Message, e);
-				return View("Error", (object)(e.Message));
+				ErrorMessage(e.Message);
+				return RedirectToAction("JobList", "Report");
 			}
 
 			var userName = cntx.Account.Single(x => x.Id == userId).Name;
@@ -136,8 +137,8 @@ namespace ProducerInterface.Controllers
 
 			cntx.jobextend.Add(jext);
 			cntx.SaveChanges(CurrentUser, "Добавление отчета");
+			SuccessMessage("Отчет успешно добавлен");
 			return RedirectToAction("JobList", "Report");
-			//return View("Success", (object)"Отчет успешно добавлен");
 		}
 
 		/// <summary>
@@ -151,12 +152,16 @@ namespace ProducerInterface.Controllers
 			var key = new JobKey(jobName, jobGroup);
 			var scheduler = GetScheduler();
 			var job = scheduler.GetJobDetail(key);
-			if (job == null)
-				return View("Error", (object)"Задача не найдена");
+			if (job == null) {
+				ErrorMessage("Задача не найдена");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null)
-				return View("Error", (object)"Дополнительные параметры задачи не найдены");
+			if (jext == null) {
+				ErrorMessage("Дополнительные параметры задачи не найдены");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			try
 			{
@@ -165,11 +170,14 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} paused failed:" + e.Message, e);
-				return View("Error", (object)(e.Message));
+				ErrorMessage(e.Message);
+				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = false;
 			cntx.SaveChanges(CurrentUser, "Удаление отчета");
-			return View("Success", (object)"Задача удалена");
+			SuccessMessage("Задача удалена");
+			return RedirectToAction("JobList", "Report");
+
 		}
 
 		/// <summary>
@@ -183,12 +191,16 @@ namespace ProducerInterface.Controllers
 			var key = new JobKey(jobName, jobGroup);
 			var scheduler = GetScheduler();
 			var job = scheduler.GetJobDetail(key);
-			if (job == null)
-				return View("Error", (object)"Задача не найдена");
+			if (job == null) {
+				ErrorMessage("Задача не найдена");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null)
-				return View("Error", (object)"Дополнительные параметры задачи не найдены");
+			if (jext == null) {
+				ErrorMessage("Дополнительные параметры задачи не найдены");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			try
 			{
@@ -197,11 +209,13 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} resume failed:" + e.Message, e);
-				return View("Error", (object)(e.Message));
+				ErrorMessage(e.Message);
+				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = true;
 			cntx.SaveChanges(CurrentUser, "Восстановление отчета");
-			return View("Success", (object)"Задача восстановлена");
+			SuccessMessage("Задача восстановлена");
+			return RedirectToAction("JobList", "Report");
 		}
 
 		/// <summary>
@@ -215,12 +229,16 @@ namespace ProducerInterface.Controllers
 			var key = new JobKey(jobName, jobGroup);
 			var scheduler = GetScheduler();
 			var job = scheduler.GetJobDetail(key);
-			if (job == null)
-				return View("Error", (object)"Задача не найдена");
+			if (job == null) {
+				ErrorMessage("Задача не найдена");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null)
-				return View("Error", (object)"Дополнительные параметры задачи не найдены");
+			if (jext == null) {
+				ErrorMessage("Дополнительные параметры задачи не найдены");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var model = (Report)job.JobDataMap["param"];
 
@@ -263,14 +281,16 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} change failed:" + e.Message, e);
-				return View("Error", (object)(e.Message));
+				ErrorMessage(e.Message);
+				return RedirectToAction("JobList", "Report");
 			}
 
 			// вносим изменения в расширенные параметры
 			jext.LastModified = DateTime.Now;
 			jext.CustomName = model.CastomName;
 			cntx.SaveChanges(CurrentUser, "Редактирование отчета");
-			return View("Success", (object)"Отчет успешно изменен");
+			SuccessMessage("Отчет успешно изменен");
+			return RedirectToAction("JobList", "Report");
 		}
 
 		/// <summary>
@@ -302,12 +322,16 @@ namespace ProducerInterface.Controllers
 			var scheduler = GetScheduler();
 			// нашли задачу
 			var job = scheduler.GetJobDetail(key);
-			if (job == null)
-				return View("Error", (object)"Задача не найдена");
+			if (job == null) {
+				ErrorMessage("Задача не найдена");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null)
-				return View("Error", (object)"Дополнительные параметры задачи не найдены");
+			if (jext == null) {
+				ErrorMessage("Дополнительные параметры задачи не найдены");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var param = (Report)job.JobDataMap["param"];
 			ViewBag.Title = $"Запуск \"{param.CastomName}\"";
@@ -316,8 +340,10 @@ namespace ProducerInterface.Controllers
 			if (param is IInterval)
 				model = new RunNowIntervalParam();
 			// TODO при появлении неинтервальных отчетов добавить код
-			else
-				return View("Error", (object)"Отчет этого типа невозможно запустить вручную");
+			else {
+				ErrorMessage("Отчет этого типа невозможно запустить вручную");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			// при GET возвращаем пустую модель для заполнения
 			if (HttpContext.Request.HttpMethod == "GET") {
@@ -357,7 +383,8 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
-				return View("Error", (object)(e.Message));
+				ErrorMessage(e.Message);
+				return RedirectToAction("JobList", "Report");
 			}
 
 			// отправили статус, что отчет готовится
@@ -369,7 +396,8 @@ namespace ProducerInterface.Controllers
 			if (model.MailTo != null && model.MailTo.Count > 0)
 				message = message + " и будет отправлен на указанные email";
 
-			return View("Success", (object)message);
+			SuccessMessage(message);
+			return RedirectToAction("JobList", "Report");
 		}
 
 
@@ -397,12 +425,16 @@ namespace ProducerInterface.Controllers
 			var scheduler = GetScheduler();
 			// нашли задачу
 			var job = scheduler.GetJobDetail(key);
-			if (job == null)
-				return View("Error", (object)"Задача не найдена");
+			if (job == null) {
+				ErrorMessage("Задача не найдена");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var jext = GetJobExtend(key.Name, key.Group);
-			if (jext == null)
-				return View("Error", (object)"Дополнительные параметры задачи не найдены");
+			if (jext == null) {
+				ErrorMessage("Дополнительные параметры задачи не найдены");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var param = (Report)job.JobDataMap["param"];
 			ViewBag.Title = $"Расписание для \"{param.CastomName}\"";
@@ -411,8 +443,10 @@ namespace ProducerInterface.Controllers
 			if (param is IInterval)
 				model = new CronIntervalParam();
 			// TODO при появлении неинтервальных отчетов добавить код
-			else
-				return View("Error", (object)"Отчет этого типа невозможно запустить вручную");
+			else {
+				ErrorMessage("Для отчета этого невозможно задать расписание");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			// триггер вставлялся с идентификатором задачи
 			var oldTriggerKey = new TriggerKey(key.Name, key.Group);
@@ -462,12 +496,14 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
-				return View("Error", (object)(e.Message));
+				ErrorMessage(e.Message);
+				return RedirectToAction("JobList", "Report");
 			}
 			// меняем человекочитаемое описание в доп. параметрах задачи
 			jext.Scheduler = model.CronHumanText;
 			cntx.SaveChanges(CurrentUser, "Установка расписания отчета");
-			return View("Success", (object)"Расписание успешно установлено");
+			SuccessMessage("Расписание успешно установлено");
+			return RedirectToAction("JobList", "Report");
 		}
 
 		/// <summary>
@@ -479,8 +515,10 @@ namespace ProducerInterface.Controllers
 		public ActionResult DisplayReport(string jobName, string jobGroup)
 		{
 			var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == jobName && x.JobGroup == jobGroup);
-			if (jxml == null)
-				return View("Error", (object)"Отчет не найден");
+			if (jxml == null) {
+				ErrorMessage("Отчет не найден");
+				return RedirectToAction("JobList", "Report");
+			}
 
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
