@@ -26,7 +26,7 @@ namespace ProducerInterfaceCommon.ContextModels
         Error = 4
     }
 
-    public enum FeedBackStatus
+		public enum FeedBackStatus
     {
         [Display(Name = "Новое обращение")]
         FeedBack_New = 0,

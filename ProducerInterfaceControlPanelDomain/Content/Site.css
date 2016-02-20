@@ -135,6 +135,7 @@ font-size:1.6em;
 padding:2em;
 background-color:#eeeeee;
 }
+<<<<<<< HEAD
 .table-custom {
 width:100%;
 min-width:100%;
@@ -152,3 +153,7 @@ min-width:100%;
             color: whitesmoke;
             background-color: #584a4a;  
         } 
+=======
+
+.pointer { cursor: pointer; }
+>>>>>>> e7298cfa9125925fd0cb68d4af844e41b7e0bac2

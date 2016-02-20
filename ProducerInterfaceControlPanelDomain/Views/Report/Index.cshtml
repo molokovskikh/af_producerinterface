@@ -1,26 +1,19 @@
 ﻿@model ProducerInterfaceCommon.ContextModels.SearchProducerReportsModel
 
-
 @{
-    ViewBag.Title = "Отчеты Производителей";
+    ViewBag.Title = "Отчеты";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
-<br />
-<h3>Поиск отчетов Производителей</h3>
-<hr />
+<h3>@ViewBag.Title</h3>
 
-
-
-
-@using (Html.BeginForm("SearchReports", "Report", new { HttpMethod = "POST", UpdateTargetId= "SearchResults"}))
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "sform" }))
 {
-    <div class="form-group">
-        @Html.EditorFor(m => m.Producers)
-    </div>
-    <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="Поиск"/>
-    </div>
+    @Html.EditorForModel()
+   <div class="form-group">
+        <input type="button" class="btn btn-primary" value="Искать" onclick="getSearch()"/>
+   </div>
 }
+@Html.Action("SearchResult", Model)
 
 @section scripts
 {    

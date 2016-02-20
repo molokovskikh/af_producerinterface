@@ -246,4 +246,21 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Пользователь")]
 		public string UserName { get; set; }
 	}
+
+	public partial class jobextendwithproducer
+	{
+		public Reports ReportTypeEnum
+		{
+			get { return (Reports)ReportType; }
+			set { ReportType = (int)value; }
+		}
+
+		public DisplayStatus DisplayStatusEnum
+		{
+			get { return (DisplayStatus)DisplayStatus; }
+			set { DisplayStatus = (int)value; }
+		}
+
+	}
+
 }
