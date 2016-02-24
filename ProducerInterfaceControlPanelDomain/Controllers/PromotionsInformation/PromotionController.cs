@@ -9,126 +9,45 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 {
     public class PromotionController : MasterBaseController
     {
-        // GET: Promotion
-        public ActionResult Index(bool EnabledPromotion = false, long ProducerId = 0)
-        {
-            var ListPromotion = new  List<promotions>();          
-            var UserId = cntx_.Account.Where(xxx => xxx.Login == CurrentUser.Login).First();
-         
-            if (ProducerId == 0)
-            {
-                // Глобальный список акций (по умолчанию, не подтверждённых)
-                ViewBag.EnabledPromotion = EnabledPromotion;
-                ListPromotion = cntx_.promotions.Where(xxx => xxx.Status == EnabledPromotion).ToList();                                 
-            }
-            else
-            {
-                // Акции производителя
-                ViewBag.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ProducerId).First().ProducerName;
-                ListPromotion = cntx_.promotions.Where(xxx => xxx.Status == EnabledPromotion).Where(xxx=>xxx.ProducerId==ProducerId).ToList();
-            }
-
-            ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-            foreach (var PromoItem in ListPromotion)
-            {
-              
-                PromoItem.RegionList = h.GetPromotionRegions((ulong)PromoItem.RegionMask);
-            }
-
-            ViewBag.RegionList = h.GetRegionList();
-            ViewBag.ListDrugs = cntx_.catalognames.ToList();
-            ViewBag.ProducerList = cntx_.producernames.ToList();
-
-            return View(ListPromotion);
-        }
 
         [HttpGet]
-        public ActionResult Search()
+        public ActionResult Index()
         {
-            var ViewModel =new SearchPromotion();
-            var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-            ProducerList.AddRange(cntx_.producernames.ToList().Select(xxx =>
-                                   new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList());
-            ViewBag.ProducerList = ProducerList;            
-            return View(ViewModel);
+
+            var ModelSearch = new SearchProducerPromotion();
+            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
+
+            var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "0" } };
+            ProducerList.AddRange(h.RegisterListProducer());
+            ViewBag.ProducerList = ProducerList;
+
+            ModelSearch.Status = 5;
+            ModelSearch.Begin = DateTime.Now.AddDays(-30);
+            ModelSearch.End = DateTime.Now.AddDays(30);
+            ModelSearch.PagerInt = 0;
+
+            return View(ModelSearch);
+          
         }
-        [HttpPost]
-        public ActionResult Search(SearchPromotion IdProducers)
-        {
-            if (!ModelState.IsValid)
-            {
-                var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "" }};             
-                ProducerList.AddRange(cntx_.producernames.ToList().Select(xxx =>
-                                       new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList());
-                ViewBag.ProducerList = ProducerList;
-
-                var ViewModel = new SearchPromotion();
-                
-                return View("Search", ViewModel);
-            }
-
-            return RedirectToAction("Index", new { ProducerId = IdProducers.IdProducer });
-        }
-
-        [HttpGet]
-        public ActionResult Edit(long Id)
-        {
-            var PromoActionModel = cntx_.promotions.Where(xxx => xxx.Id == Id).First();
             
-            ViewBag.ListDrugs = cntx_.catalognames.ToList();            
-
-            ViewBag.ProducerList = cntx_.producernames.Where(xxx => xxx.ProducerId == PromoActionModel.ProducerId).First();
-            return View(PromoActionModel);
-        }
-
-        public ActionResult Edit(promotions PromotionSuccess)
+        public ActionResult SearchResult(SearchProducerPromotion Filter)
         {
-            var promotionUpdate = cntx_.promotions.Where(xxx => xxx.Id == PromotionSuccess.Id).First();
-            var ContolUserName = CurrentUser.Login;
-            var ControlUser = cntx_.Account.Where(xxx => xxx.Login == ContolUserName && xxx.TypeUser == SbyteTypeUser).First().Id;
+            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
+            ViewBag.ProducerList = h.RegisterListProducer();
 
-            promotionUpdate.Status = true;
-        //    promotionUpdate.AdminId = ControlUser;      
-                   
-            cntx_.Entry(promotionUpdate).State = System.Data.Entity.EntityState.Modified;
-            cntx_.SaveChanges();
+            var PromotionList = cntx_.promotions.ToList();
 
-            SuccessMessage("Акция " + promotionUpdate.Name + " подтверждена");        
-            return RedirectToAction("Index", new { EnabledPromotion=true });
+            foreach (var ItemPromo in PromotionList)
+            {
+                ItemPromo.GetRegionnamesList();
+                ItemPromo.DrugList = h.GetDrugInPromotion(ItemPromo.Id);
+            }
+
+            ViewBag.PromotionDrugList = h.GetCatalogListPromotion();
+
+
+            return PartialView(PromotionList);
         }
-
-        public ActionResult Active()
-        {
-            var ListPromotion = cntx_.promotions.Where(xxx => xxx.End > DateTime.Now && xxx.Begin < DateTime.Now && xxx.Status ==true && xxx.Enabled == true).ToList();
-            ViewBag.ListDrugs = cntx_.catalognames.ToList();
-            ViewBag.ProducerList = cntx_.producernames.ToList();
-            ViewBag.ActivePromo = "Подтвержденные и активные на данный момент акции";
-            return View("Index",ListPromotion);
-        }
-
-        public FileResult GetFile(int Id)
-        {
-            var File_ = cntx_.promotionsimage.Where(xxx => xxx.Id == Id).First();
-            return File(File_.ImageFile, File_.ImageType, File_.ImageName);
-        }
-
-
-        public ActionResult Success(int Id)
-        {
-
-            var Promotion = cntx_.promotions.Find(Id);
-
-            Promotion.Status = true;
-            Promotion.ProducerAdminId = CurrentUser.Id;
-            Promotion.UpdateTime = System.DateTime.Now;
-
-            cntx_.Entry(Promotion).State = System.Data.Entity.EntityState.Modified;
-
-            cntx_.SaveChanges(CurrentUser, "Подтверждение акции");
-
-            return RedirectToAction("Index");
-        }
-
 
     }
 }

@@ -1,163 +1,99 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.promotions>
+﻿
+@using ProducerInterfaceCommon.ContextModels;
+@model ProducerInterfaceCommon.ContextModels.SearchProducerPromotion
+
 @{
-    ViewBag.Title = "Список акций";
+    ViewBag.Title = "Промоакции";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
-    var DrugListItems = ViewBag.ListDrugs as IEnumerable<ProducerInterfaceCommon.ContextModels.catalognames>;
-    var ProducersList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.producernames>;
-    var RegionList = ViewBag.RegionList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
+
+    var listStatus = new List<SelectListItem>();
+    listStatus.AddRange(EnumHelper.GetSelectList(typeof(PromotionStatus)));
+
+    var ProducerList =  ViewBag.ProducerList as IEnumerable<OptionElement>;
 }
 
-<h2 class="panel-title">
+<h2>Промо-Акции</h2>
 
-    @if (ViewBag.ProducerName != null)
-    { <span>Список акций @ViewBag.ProducerName</span> }
-    else
-    {
-        if (ViewBag.ActivePromo != null)
-        { @ViewBag.ActivePromo }
-        else {
-            if (ViewBag.EnabledPromotion == true)
-            {
-                <span>Список подтвержденных акций</span>
-            }
-            else
-            {
-                <span>Список не подтвержденных акций</span>
-            }
-        }
-    }
-</h2>
-
-<hr />
-
-<div class="col-xs-12">
+<div class="body-content">
     <div class="row">
-        <div class="panel-group">
-            @foreach (var PromoItem in Model)
-            {
-                <div class="panel panel-info">
+        <div class="row">
+            <div class="col-xs-12">
+                <a href="#FiltersMenu" data-toggle="collapse" class="btn btn-primary">Фильтр</a>
+                <div id="FiltersMenu" class="collapse">
 
-                    <div class="panel-heading col-lg-12" style="min-height:42px;">
-                        <a data-toggle="collapse" href="#collaps__@PromoItem.Id" class="panel-title">
-                            <p class="col-lg-6"><span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp; @PromoItem.Name</p>
-                            <p class="col-xs-offset-1 col-lg-6">@ProducersList.Where(xxx => xxx.ProducerId == PromoItem.ProducerId).First().ProducerName</p>
-                        </a>
+                    <div class="form-group">
+                        <label>Производитель</label>
+                        @Html.DropDownList(Model.Producer.ToString(), new SelectList(ProducerList, "Value", "Text", Model.Producer), new { @class = "form-control" })
                     </div>
 
-                    <div id="collaps__@PromoItem.Id" class="panel-collapse collapse">
+                    <div class="form-group">
+                        <label>Статус</label>
+                        @Html.DropDownList(Model.Status.ToString(), listStatus, new { @class = "form-control" })
+                    </div>
 
-                        <div class="panel-body">
-                            <div class="col-md-12">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label>Кем создана</label>
-                                    <p>@PromoItem.Account.Name</p>
-                                </div>
 
-                                <div class="form-group">
-                                    <label>Дата последнего изменения</label>
-                                    <p>@PromoItem.UpdateTime.ToString("dd.MM.yyy")</p>
-                                </div>
-
-                                <!-- Прикрепленный файл -->
-
-                                <div class="form-group">
-                                    <label>Прикреплен файл</label>
-                                    @if (PromoItem.PromoFileId != null)
-                                    {
-                                        <a target="_blank" href="@Url.Action("GetFile", new { Id = PromoItem.PromoFileId })">@PromoItem.promotionsimage.ImageName (скачать)</a> <br />
-                                    }
-                                    else
-                                    {
-                                        <p>Файл к данной акции не прикреплен</p>
-                                    }
-                                </div>
-                            </div>
-
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label>Аннотация</label>
-                                    <p>@PromoItem.Annotation</p>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Дата начала</label>
+                                @Html.TextBoxFor(m => m.Begin, new { @class = "form-control", @readonly = "readonly" })
                             </div>
                         </div>
-                        <!-- Список Препаратов-->
-
-                        <div class="form-group col-xs-12">
-                            <div class="panel panel-danger">
-                                <div class="panel-heading">
-                                    <a class="panel-title" data-toggle="collapse" href="#collapse__@PromoItem.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список препаратов <p class="pull-right">@PromoItem.promotionToDrug.Count()</p></a>
-                                </div>
-                                <div id="collapse__@PromoItem.Id" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        @foreach (var DrugItem_ in PromoItem.promotionToDrug)
-                                        {
-                                            <p>@DrugListItems.Where(xxx => xxx.CatalogId == DrugItem_.DrugId).First().CatalogName</p>
-                                        }
-                                    </div>
-                                </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Дата окончания</label>
+                                @Html.TextBoxFor(m => m.End, new { @class = "form-control", @readonly = "readonly" })
                             </div>
                         </div>
-
-                        <!-- Список регионов-->
-
-                        <div class="form-group  col-xs-12">
-                            <div class="panel panel-danger">
-                                <div class="panel-heading">
-                                    <a class="panel-title" data-toggle="collapse" href="#collaps___@PromoItem.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список регионов <p class="pull-right">0</p></a>
-                                </div>
-                                <div id="collaps___@PromoItem.Id" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        @foreach (var RegionItem in PromoItem.RegionList)
-                                        {
-                                            <p>@RegionList.Where(xxx=>xxx.Value == RegionItem.ToString()).First().Text</p>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Контактные данные-->
-
-                        <div class="form-group col-xs-12">
-                            <div class="panel panel-danger">
-                                <div class="panel-heading">
-                                    <a class="panel-title" data-toggle="collapse" href="#collapse_i_@PromoItem.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Контакты производителя <p class="pull-right"></p></a>
-                                </div>
-                                <div id="collapse_i_@PromoItem.Id" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                    
-                                        @foreach (var ProducerUserItem in PromoItem.Account.AccountCompany.Account)
-                                        {
-                                            <div class="form-group">
-                                                <p>ФИО : @ProducerUserItem.Name</p>
-                                                <p>Email : <a href="@("mailto:" + ProducerUserItem.Login)">@ProducerUserItem.Login</a></p>
-                                                <p>Телефон : @ProducerUserItem.Phone</p>
-                                            </div>
-                                            if (PromoItem.Account.AccountCompany.Account.Count() > 1)
-                                            { <hr/> }
-                                        }
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- Экшен линки -->
-
-                        <hr />
-
-                        <div class="form-group col-xs-12">
-                                @Html.ActionLink("Подтвердить акцию", "Success", "Promotion", new { Id = PromoItem.Id }, new { @class = "btn btn-primary", @title = "Подтверждение акции" } )                                  
-                        </div>
-
                     </div>
                 </div>
-
-            }
+            </div>
         </div>
     </div>
 </div>
 
+<hr />
+
+<div class="row">
+    <div class="col-xs-12" id="replacecontent">
+        @Html.Action("SearchResult", Model);
+
+    </div>
+</div>
+
+@section scripts
+{
+
+    <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            var dateFrom = $('#Begin').datepicker({
+                format: 'dd.mm.yyyy',
+                language: 'ru',
+                weekStart: 1,
+                autoclose: true,
+                onRender: function (date) {
+                    return date.valueOf() > Date.now() ? 'disabled' : '';
+                }
+            }).on('changeDate', function (ev) {
+                //$('#DateToUI')[0].focus();
+            }).data('datepicker');
+
+            var dateTo = $('#End').datepicker({
+                format: 'dd.mm.yyyy',
+                autoclose: true,
+                language: 'ru',
+                weekStart: 1,
+                onRender: function (date) {
+                    //return date.valueOf() <= dateFrom.date.valueOf() ? 'disabled' : '';
+                    return date.valueOf() > Date.now() ? 'disabled' : '';
+                }
+            }).data('datepicker');
+        });
+    </script>
+
+
+}

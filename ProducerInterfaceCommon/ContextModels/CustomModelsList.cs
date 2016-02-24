@@ -98,6 +98,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	public partial class promotions
 	{
 		public List<long> RegionList { get; set; }
+        public List<OptionElement> DrugList { get; set; }
 	}
 
 	public class PromotionFile
@@ -120,7 +121,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public List<UsersViewInChange> ListUsersInGroup { get; set; }
 
 	}
-
+    
 	public class UsersViewInChange
 	{
 		public string Name { get; set; }
@@ -307,9 +308,16 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	}
 
+    public class SearchProducerPromotion
+    {
+        public byte Status { get; set; }
+        public long Producer { get; set; }
+        public DateTime Begin { get; set; }
+        public DateTime End { get; set; }
+        public int PagerInt { get; set; }
+    }
 
-
-	public class SearchProducerReportsModel
+    public class SearchProducerReportsModel
 	{
 		[UIHint("Producer")]
 		[Display(Name = "Производитель")]
