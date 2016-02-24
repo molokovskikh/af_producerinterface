@@ -4,14 +4,30 @@
     var data = Model.Tables["Data"];
     var headers = Model.Tables["Headers"];
     var title = Model.Tables["Titles"].Rows[0][0].ToString();
+    var jobName = (string)ViewData["jobName"];
     ViewBag.Title = title;
 }
 
 <div class="row">
-    <div class="col-md-12">
-        @Html.ActionLink("К списку отчетов", "JobList", new {r = Guid.NewGuid()})
+    <div class="col-md-6">
+        @Html.ActionLink("К списку отчетов", "JobList", new { r = Guid.NewGuid() })
+    </div>
+    <div class="col-md-6">
+        @Html.ActionLink("Сохранить в Excel", "GetFile", new { jobName = jobName })
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("SendReport", "Report", FormMethod.Post))
+        {
+          @Html.Hidden("mailTo", "137@analit.net")
+          @Html.Hidden("jobName", jobName)
+          <input type="submit" class="btn btn-primary" value="Отправить" />
+        }
+    </div>
+</div>
+
 
 <div class="body-content">
 

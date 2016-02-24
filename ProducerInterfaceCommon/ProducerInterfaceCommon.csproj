@@ -205,6 +205,7 @@
     <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
+    <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
     <Compile Include="ContextModels\LogForNet.cs">

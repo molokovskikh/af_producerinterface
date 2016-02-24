@@ -35,8 +35,6 @@ namespace ProducerInterfaceCommon.Models
 
 		public abstract List<string> GetHeaders(HeaderHelper h);
 
-		public abstract Report Process(JobKey key, Report jparam, TriggerParam tparam);
-
 		public abstract string GetSpName();
 
 		public abstract Dictionary<string, object> GetSpParams();
@@ -48,6 +46,8 @@ namespace ProducerInterfaceCommon.Models
 		}
 
 		public abstract Dictionary<string, object> ViewDataValues(NamesHelper h);
+
+		public abstract IProcessor GetProcessor(); 
 
 	}
 }

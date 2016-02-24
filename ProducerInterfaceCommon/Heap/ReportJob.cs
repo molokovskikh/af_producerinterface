@@ -32,8 +32,8 @@ namespace ProducerInterfaceCommon.Heap
 			logger.Info($"Start running job {key.Group} {key.Name}");
 
 			try {
-				jparam.Process(key, jparam, tparam);
-				//throw new NotSupportedException("Ошибка!");
+				var processor = jparam.GetProcessor();
+				processor.Process(key, jparam, tparam);
 			}
 			catch (Exception e) {
 				logger.Error($"Job {key.Group} {key.Name} run failed:" + e.Message, e);

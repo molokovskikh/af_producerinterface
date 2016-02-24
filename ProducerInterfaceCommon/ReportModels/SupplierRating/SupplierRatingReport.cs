@@ -33,13 +33,6 @@ namespace ProducerInterfaceCommon.Models
 			return result;
 		}
 
-		public override Report Process(JobKey key, Report jparam, TriggerParam tparam)
-		{
-			var processor = new Processor<SupplierRatingReportRow>();
-			processor.Process(key, jparam, tparam);
-			return jparam;
-		}
-
 		public override string GetSpName()
 		{
 			return "SupplierRatingReport";
@@ -63,6 +56,11 @@ namespace ProducerInterfaceCommon.Models
 			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
 
 			return viewDataValues;
+		}
+
+		public override IProcessor GetProcessor()
+		{
+			return new Processor<SupplierRatingReportRow>();
 		}
 	}
 }

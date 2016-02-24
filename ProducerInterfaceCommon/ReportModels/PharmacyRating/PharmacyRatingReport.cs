@@ -41,13 +41,6 @@ namespace ProducerInterfaceCommon.Models
 			return result;
 		}
 
-		public override Report Process(JobKey key, Report jparam, TriggerParam tparam)
-		{
-			var processor = new Processor<PharmacyRatingReportRow>();
-			processor.Process(key, jparam, tparam);
-			return jparam;
-		}
-
 		public override string GetSpName()
 		{
 			return "PharmacyRatingReport";
@@ -85,5 +78,11 @@ namespace ProducerInterfaceCommon.Models
 				errors.Add(new ErrorMessage("CatalogIdEqual", "Не выбраны товары"));
 			return errors;
 		}
+
+		public override IProcessor GetProcessor()
+		{
+			return new Processor<PharmacyRatingReportRow>();
+		}
+
 	}
 }
