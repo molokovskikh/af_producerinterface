@@ -233,7 +233,11 @@ namespace ProducerInterfaceCommon.Controllers
                 }
             }
 
+<<<<<<< HEAD
 			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(1), Cache.NoSlidingExpiration);
+=======
+			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(10), Cache.NoSlidingExpiration);
+>>>>>>> c36163d2d38b8f2a764956ef806741e68de494de
 			return permissionList;
 		}
 

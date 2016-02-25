@@ -11,7 +11,7 @@ using Quartz;
 
 namespace ProducerInterfaceCommon.Heap
 {
-	public class Processor<T> where T : ReportRow
+	public class Processor<T> : IProcessor where T : ReportRow
 	{
 		private Type _type;
 
@@ -75,14 +75,6 @@ namespace ProducerInterfaceCommon.Heap
 
 			var headers = jparam.GetHeaders(_helper);
 
-			var dir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Reports");
-			if (!Directory.Exists(dir))
-				Directory.CreateDirectory(dir);
-
-			var subdir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Reports", key.Group);
-			if (!Directory.Exists(subdir))
-				Directory.CreateDirectory(subdir);
-
 			// чтобы показать на экране
 			var ds = new DataSet();
 			// добавили название страницы
@@ -120,13 +112,8 @@ namespace ProducerInterfaceCommon.Heap
 
 			// если указаны email - отправляем
 			if (tparam.MailTo != null && tparam.MailTo.Count > 0) {
-				var file = new FileInfo($"{subdir}\\{key.Name}.xlsx");
-				if (file.Exists)
-					file.Delete();
-
-				// TODO именование листов. Сейчас лист называется именем, данным отчету пользователем
-				var ecreator = new ExcelCreator<T>();
-				ecreator.Create(file, jparam.CastomName, headers, dataTable);
+				// создали excel-файл
+				var file = CreateExcel(key.Group, key.Name, ds);
 
 				// при автоматическом и ручном запуске разное содержимое письма
 				if (tparam is CronParam)
@@ -134,6 +121,35 @@ namespace ProducerInterfaceCommon.Heap
 				else if (tparam is RunNowParam)
 					EmailSender.ManualPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo);
 			}
+		}
+
+		public FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds)
+		{
+			var dir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Reports");
+			if (!Directory.Exists(dir))
+				Directory.CreateDirectory(dir);
+
+			var subdir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Reports", jobGroup);
+			if (!Directory.Exists(subdir))
+				Directory.CreateDirectory(subdir);
+
+			var file = new FileInfo($"{subdir}\\{jobName}.xlsx");
+			if (file.Exists)
+				file.Delete();
+
+			var data = ds.Tables["Data"];
+			var headers = new List<string>();
+
+			foreach (System.Data.DataRow row in ds.Tables["Headers"].Rows)
+				headers.Add(row[0].ToString());
+
+			var title = ds.Tables["Titles"].Rows[0][0].ToString();
+
+			// TODO именование листов. Сейчас лист называется именем, данным отчету пользователем
+			var ecreator = new ExcelCreator<T>();
+			ecreator.Create(file, title, headers, data);
+
+			return file;
 		}
 	}
 }

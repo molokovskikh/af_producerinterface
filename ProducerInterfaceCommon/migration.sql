@@ -137,5 +137,16 @@ CREATE DEFINER=`system`@`%` TRIGGER `AccountUserToGroup_before_delete` BEFORE DE
   WHERE ACC.Id = OLD.IdUser;
 END;
 
+ALTER TABLE `Account`
+ ADD COLUMN `RegionMask` BIGINT(20) UNSIGNED NULL DEFAULT NULL AFTER `LastUpdatePermisison`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `PromotionsInRegionMask`(IN `RGM` bigint(20) UNSIGNED)
+BEGIN
+ select ps.Id Id, ps.RegionMask
+ from promotions ps
+ where RGM & ps.RegionMask;
+END
+
+
 
 

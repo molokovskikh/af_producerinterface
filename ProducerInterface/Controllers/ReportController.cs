@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Web.Mvc;
-
 using Quartz;
 using Quartz.Impl;
 using ProducerInterfaceCommon.Heap;
-
 using System.Configuration;
 using Common.Logging;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
-
 using System.Data;
 using System.IO;
-
+using System.Net;
 
 namespace ProducerInterface.Controllers
 {
@@ -514,7 +511,8 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult DisplayReport(string jobName, string jobGroup)
 		{
-			var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == jobName && x.JobGroup == jobGroup);
+			ViewData["jobName"] = jobName;
+      var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == jobName && x.JobGroup == jobGroup);
 			if (jxml == null) {
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
@@ -581,6 +579,49 @@ namespace ProducerInterface.Controllers
 			return ret;
 		}
 
+		/// <summary>
+		/// Возвращает отчет в виде excel-файла
+		/// </summary>
+		/// <param name="jobName">Имя задания в Quartz</param>
+		/// <returns></returns>
+		public FileResult GetFile(string jobName)
+		{
+			var jext = cntx.jobextend.Single(x => x.JobName == jobName);
+			var file = GetExcel(jext);
+
+			// вернули файл
+			byte[] fileBytes = System.IO.File.ReadAllBytes(file.FullName);
+			var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      return File(fileBytes, contentType, file.Name);
+		}
+
+		[HttpPost]
+		public ActionResult SendReport(string jobName, List<string> mailTo)
+		{
+			var jext = cntx.jobextend.Single(x => x.JobName == jobName);
+			var file = GetExcel(jext);
+
+			EmailSender.ManualPostReportMessage(cntx, userId, jext, file.FullName, mailTo);
+			SuccessMessage("Отчет отправлен на указанные email");
+			return RedirectToAction("DisplayReport", "Report", new { jobName = jext.JobName, jobGroup = jext.JobGroup });
+		}
+
+		private FileInfo GetExcel(jobextend jext)
+		{
+			var jxml = cntx.reportxml.Single(x => x.JobName == jext.JobName);
+
+			// вытащили сохраненный отчет
+			var ds = new DataSet();
+			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
+
+			// создали процессор для этого типа отчетов
+			var type = GetModelType(jext.ReportType);
+			var report = (Report)Activator.CreateInstance(type);
+			var processor = report.GetProcessor();
+
+			// создали excel-файл
+			return processor.CreateExcel(jext.JobGroup, jext.JobName, ds);
+		}
 
 		/// <summary>
 		/// Возвращает тип отчета по идентификатору типа отчета

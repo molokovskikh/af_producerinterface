@@ -211,6 +211,7 @@
     <Compile Include="CustomHelpers\Promotions.cs" />
     <Compile Include="CustomHelpers\RegionMaskConverter.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
+    <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
     <Compile Include="ContextModels\LogForNet.cs">
