@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -344,6 +345,23 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Required(ErrorMessage = "Введите email")]
 		[DataType(DataType.EmailAddress, ErrorMessage = "Введите корректый email")]
 		public string login { get; set; }
+	}
+
+	public class SendReport
+	{
+		[Required]
+		[HiddenInput(DisplayValue = false)]
+		public string jobName { get; set; }
+
+		[UIHint("MailTo")]
+		[Display(Name = "Email")]
+		[Required(ErrorMessage = "Введите email")]
+		public List<string> MailTo { get; set; }
+
+		public SendReport()
+		{
+			MailTo = new List<string>();
+		}
 	}
 
 	public class OptionElement

@@ -90,10 +90,10 @@
                                 <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-play" title="Разовое формирование отчета за истекшие периоды времени и даты"></span></a>
                                 @Html.DisplayFor(modelItem => item.LastRun)
                             </td>
-                            <td class="@(item.DisplayStatusEnum == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Ajax", new { jobName = item.JobName, jobGroup = item.JobGroup }))">
+                            <td class="@(item.DisplayStatusEnum == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Ajax", new { jobName = item.JobName }))">
 
                                 @if (item.DisplayStatusEnum == DisplayStatus.Ready) {
-                                    <a href="@Url.Action("DisplayReport", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })">
+                                    <a href="@Url.Action("DisplayReport", "Report", new { jobName = item.JobName })">
                                         @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
                                     </a>}
                                 else {

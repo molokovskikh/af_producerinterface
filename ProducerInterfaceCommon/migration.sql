@@ -147,6 +147,13 @@ BEGIN
  where RGM & ps.RegionMask;
 END
 
+ALTER TABLE `Account`
+ CHANGE COLUMN `Name` `Name` VARCHAR(75) NULL DEFAULT '0' AFTER `TypeUser`,
+ ADD COLUMN `LastName` VARCHAR(30) NULL DEFAULT '0' COMMENT 'Фамилия' AFTER `Name`,
+ ADD COLUMN `FirstName` VARCHAR(30) NULL DEFAULT '0' COMMENT 'Имя' AFTER `LastName`,
+ ADD COLUMN `OtherName` VARCHAR(30) NULL DEFAULT '0' COMMENT 'Отчество' AFTER `FirstName`;
+
+
 
 
 

@@ -39,23 +39,23 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// для UI ???
-		public string GetMailOkReportSubject()
-		{
-			// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
-			var result = "Отчет пользователя *** производителя *** (будет указано после переноса в ProducerInterface)";
-			var u = _cntx.Account.SingleOrDefault(x => x.Id == _userId);
-			if (u != null)
-			{
-				var X = _cntx.producernames.Where(xxx => xxx.ProducerId == u.AccountCompany.ProducerId).FirstOrDefault();
-				string companyName = "";
-				if (X != null && X.ProducerId != 0) { companyName = X.ProducerName; }
-				else { companyName = u.AccountCompany.Name; }
+		//public string GetMailOkReportSubject()
+		//{
+		//	// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
+		//	var result = "Отчет пользователя *** производителя *** (будет указано после переноса в ProducerInterface)";
+		//	var u = _cntx.Account.SingleOrDefault(x => x.Id == _userId);
+		//	if (u != null)
+		//	{
+		//		var X = _cntx.producernames.Where(xxx => xxx.ProducerId == u.AccountCompany.ProducerId).FirstOrDefault();
+		//		string companyName = "";
+		//		if (X != null && X.ProducerId != 0) { companyName = X.ProducerName; }
+		//		else { companyName = u.AccountCompany.Name; }
 
 
-				result = $"Отчет пользователя {u.Name} {u.Login} производителя {companyName}";
-			}
-			return result;
-		}
+		//		result = $"Отчет пользователя {u.Name} {u.Login} производителя {companyName}";
+		//	}
+		//	return result;
+		//}
 
 		public string GetReportName(string jobName)
 		{

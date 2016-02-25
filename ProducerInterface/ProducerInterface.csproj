@@ -226,6 +226,7 @@
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
     <Content Include="Content\Chosen\js\chosen.jquery.js" />
     <Content Include="Content\Chosen\js\initAddJob.js" />
+    <Content Include="Content\Chosen\js\initDisplayReport.js" />
     <Content Include="Content\Chosen\js\initDrug.js" />
     <Content Include="Content\Chosen\js\initCron.js" />
     <Content Include="Content\Chosen\js\initRunNow.js" />
@@ -361,7 +362,6 @@
     <Content Include="Views\Registration\EditorTemplates\EditorStringPosition.cshtml" />
     <Content Include="Views\Registration\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Shared\LoginPartialView.cshtml" />
-    <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\Report\EditorTemplates\CronIntervalParam.cshtml" />
     <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\LongList.cshtml" />
@@ -430,7 +430,7 @@
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
     <Content Include="Views\Account\AdminAuth.cshtml" />
     <Content Include="Views\Report\RunHistory.cshtml" />
-    <Content Include="Views\FeedBack\TestAddPermissionToDB.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

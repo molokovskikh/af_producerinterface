@@ -1,70 +1,110 @@
-﻿@model System.Data.DataSet
+﻿@using ProducerInterfaceCommon.ContextModels
+@using System.Data
+@model SendReport
 
 @{
-    var data = Model.Tables["Data"];
-    var headers = Model.Tables["Headers"];
-    var title = Model.Tables["Titles"].Rows[0][0].ToString();
-    var jobName = (string)ViewData["jobName"];
-    ViewBag.Title = title;
+  var ds = (DataSet)ViewData["ds"];
+  var headers = ds.Tables["Headers"];
+  var data = ds.Tables["Data"];
+
+
+  // лист всех вариантов для построения селекта
+  var propList = (List<OptionElement>)ViewData["MailTo"];
+  if (Model.MailTo != null && Model.MailTo.Count > 0)
+  {
+      // сохранённые email
+      var propListVal = propList.Select(x => x.Value).ToList();
+      // новые email из модели, возможно, невалидные
+      var newMail = Model.MailTo.Where(x => !propListVal.Contains(x)).Select(x => new OptionElement() { Value = x, Text = x }).ToList();
+      // добавили к сохранённым email новые
+      propList.AddRange(newMail);
+  }
+  // класс для ошибки валидации, если есть
+  var errorClass = "";
+  var state = ViewData.ModelState["MailTo"];
+  if (state != null && state.Errors.Count > 0)
+  {
+      errorClass = " input-validation-error";
+  }
+
 }
 
-<div class="row">
-    <div class="col-md-6">
-        @Html.ActionLink("К списку отчетов", "JobList", new { r = Guid.NewGuid() })
-    </div>
-    <div class="col-md-6">
-        @Html.ActionLink("Сохранить в Excel", "GetFile", new { jobName = jobName })
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        @using (Html.BeginForm("SendReport", "Report", FormMethod.Post))
-        {
-          @Html.Hidden("mailTo", "137@analit.net")
-          @Html.Hidden("jobName", jobName)
-          <input type="submit" class="btn btn-primary" value="Отправить" />
-        }
-    </div>
-</div>
 
 
 <div class="body-content">
+    <h2>@ViewBag.Title</h2>
+    <div class="row">
+        @*<div class="col-md-6">
+                @Html.ActionLink("К списку отчетов", "JobList", new { r = Guid.NewGuid() })
+            </div>*@
+        <div class="col-md-6">
+            @Html.ActionLink("Сохранить в Excel", "GetFile", new { jobName = Model.jobName })
+        </div>
+        <div class="col-md-6">
+            @using (Html.BeginForm())
+            {
+                @Html.EditorFor(m => m.jobName)
+                <div class="form-group form-group-otstup">
+                    <label>Отправить на email</label>
+                    <div class="@(errorClass)">
+                        @Html.ListBoxFor(m => Model.MailTo, new MultiSelectList(propList, "Value", "Text", Model.MailTo), new { style = "display: none;" })
+                        @Html.ValidationMessageFor(m => Model.MailTo)
+                    </div>
+                </div>
 
-    <h2>@title</h2>
+                <div class="form-group form-group-otstup">
+                    <label>Дополнительные email-адреса</label>
+                    <div class="input-group">
+                        @Html.TextBox("addMail", null, new { @class = "form-control", @placeholder = "Email" })
+                        <span class="input-group-btn">
+                            <input id="addBtn" name="addBtn" value="Добавить" class="btn btn-primary" />
+                        </span>
+                    </div>
+                </div>
 
+                <div class="form-group form-group-otstup">
+                    <input type="submit" class="btn btn-primary" value="Отправить"/>
+                </div>
+            }
+        </div>
+    </div>
+    <hr/>
     <div class="row">
         <ul>
-            @foreach (System.Data.DataRow row in headers.Rows) {
-                <li>@row[0].ToString()</li>
-        }
+            @foreach (System.Data.DataRow row in headers.Rows)
+            {
+            <li>@row[0].ToString()</li>}
         </ul>
 
-
-
         <table border="1">
-            <thead>
-                <tr>
-                    @foreach (System.Data.DataColumn col in data.Columns) {
-                        <th>@col.Caption</th>
-            }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (System.Data.DataRow row in data.Rows) {
+                <thead>
                     <tr>
-                        @foreach (var cell in row.ItemArray) {
-                            <td>@cell.ToString()</td>
-                }
+                        @foreach (System.Data.DataColumn col in data.Columns)
+                        {
+                        <th>@col.Caption</th>}
                     </tr>
-        }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (System.Data.DataRow row in data.Rows)
+                    {
+                    <tr>
+                        @foreach (var cell in row.ItemArray)
+                        {
+                        <td>@cell.ToString()</td>}
+                    </tr>}
+                </tbody>
+            </table>
     </div>
+
+    @*<div class="row">
+            <div class="col-md-12">
+                @Html.ActionLink("К списку отчетов", "JobList", new {r = Guid.NewGuid()})
+            </div>
+        </div>*@
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        @Html.ActionLink("К списку отчетов", "JobList", new {r = Guid.NewGuid()})
-    </div>
-</div>
+@section JavaScript {
+    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+    <script src="~/Content/Chosen/js/initDisplayReport.js"></script>
+}

@@ -21,8 +21,9 @@ function ajaxCall() {
 		                el.text('Отчет готовится');
 		                break;
 		            case 2:
-		                el.html('<a href="' + data.url + '">Посмотреть отчет</a>');
-		                el.removeClass('processed');
+		                location.reload();
+		                //el.html('<a href="' + data.url + '">Посмотреть отчет</a>');
+		                //el.removeClass('processed');
 		                break;
 		            case 3:
 		                el.text('Нет данных для построения отчета');
