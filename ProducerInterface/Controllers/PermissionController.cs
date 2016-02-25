@@ -76,6 +76,7 @@ namespace ProducerInterface.Controllers
                     var GroupItem = cntx_.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
                     GroupItem.Account.Remove(cntx_.Account.Where(xxx => xxx.Id == Id).First());
                     cntx_.SaveChanges();
+                    AccountLastUpdatePermission(GroupItem.Id);
                 }
             }
 
@@ -92,6 +93,7 @@ namespace ProducerInterface.Controllers
                     var GroupItem = cntx_.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
                     GroupItem.Account.Add(cntx_.Account.Where(xxx => xxx.Id == Id).First());
                     cntx_.SaveChanges();
+                    AccountLastUpdatePermission(GroupItem.Id);
                 }
             }
 

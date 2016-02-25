@@ -100,56 +100,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 GroupInDB.TypeGroup = FilterSbyte;
                 cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
 
+                // обновляем список пермишенов для данной группы              
+                List<int> ListIntPermission = GroupInDB.AccountPermission.ToList().Select(x => x.Id).ToList();
+                
+                ChangePermissionListInGroup(GroupInDB.Id, ListIntPermission, ChangedGroup.ListPermission);
 
-                // очищаем список пермишенов для данной группы
-                var ListPermissionInDataBase = GroupInDB.AccountPermission.ToList();
+                //обновляем список пользователей для данной группы
 
-                foreach (var ListPermissionInDataBaseItem in ListPermissionInDataBase)
-                {
-                    GroupInDB.AccountPermission.Remove(ListPermissionInDataBaseItem);
-                }
-                cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
-
-                // заполняем список пермишенов для данной группы  
-                var NewListPermission = new List<AccountPermission>();
-
-                if (ChangedGroup.ListPermission != null) // если список не пуст, заполняем пермишены
-                {
-                    foreach (var OnePermisson in ChangedGroup.ListPermission)
-                    {
-                        NewListPermission.Add(cntx_.AccountPermission.Where(xxx => xxx.Id == OnePermisson).First());
-                    }
-                    // вставляем в список пермишенов в группу
-                    GroupInDB.AccountPermission = NewListPermission;
-                }
-
-                //Очищаем список пользователей
-                var ListUserInDateBase = GroupInDB.Account.ToList();
-
-                foreach (var ListUserInDateBaseItem in ListUserInDateBase)
-                {
-                    GroupInDB.Account.Remove(ListUserInDateBaseItem);
-                }
-                cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
-
-                // заполняем список пользователей
-                var NewListUsers = new List<Account>();
-                if (ChangedGroup.ListUser != null)  // если список не пуст, заполняем пользователей
-                {
-                    foreach (var OnePermisson in ChangedGroup.ListUser)
-                    {
-                        NewListUsers.Add(cntx_.Account.Where(xxx => xxx.Id == OnePermisson).First());
-                    }
-
-                    // вставляем список пользователей
-                    GroupInDB.Account = NewListUsers;
-                }
-
-                // сообщаем контексту об изменениях
-                cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
-
-                //сохраняем
-                cntx_.SaveChanges();
+                var oldListAccount = GroupInDB.Account.ToList().Select(x => x.Id).ToList();
+                
+                ChangeAccountListInGroup(GroupInDB.Id, oldListAccount, ChangedGroup.ListUser);
+                
             }
             else
             {
@@ -162,44 +123,105 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 GroupInDB.Description = ChangedGroup.Description;
                 GroupInDB.TypeGroup = FilterSbyte;
                 cntx_.SaveChanges(); // сохраняем, что бы присвоился Id
-
-                // заполняем список пермишенов для данной группы
-                var NewListPermission = new List<AccountPermission>();
-
+                   
+                // заполняем список доступов для группы       
                 if (ChangedGroup.ListPermission != null) // если список не пуст, заполняем пермишены
                 {
-                    foreach (var OnePermisson in ChangedGroup.ListPermission)
-                    {
-                        NewListPermission.Add(cntx_.AccountPermission.Where(xxx => xxx.Id == OnePermisson).First());
-                    }
-                    // вставляем в список пермишенов в группу
-                    GroupInDB.AccountPermission = NewListPermission;
+                    ChangePermissionListInGroup(GroupInDB.Id, new List<int>(), ChangedGroup.ListPermission);                    
                 }
 
-                // заполняем список пользователей
-                var NewListUsers = new List<Account>();
+                // заполняем список пользователей в данной группе         
                 if (ChangedGroup.ListUser != null)  // если список не пуст, заполняем пользователей
                 {
-                    foreach (var OnePermisson in ChangedGroup.ListUser)
-                    {
-                        NewListUsers.Add(cntx_.Account.Where(xxx => xxx.Id == OnePermisson).First());
-                    }
-
-                    // вставляем список пользователей
-                    GroupInDB.Account = NewListUsers;
+                    ChangeAccountListInGroup(GroupInDB.Id, new List<long>(), ChangedGroup.ListUser);                 
                 }
 
-                // сообщаем контексту об изменениях
-                cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
-
-                //сохраняем
-                cntx_.SaveChanges();
+                AccountLastUpdatePermission(GroupInDB.Id);
             }
 
             SuccessMessage("Изменения в группе " + ChangedGroup.Name + " применены");
             return RedirectToAction("Group");
         }
 
+
+
+
+        private void ChangeAccountListInGroup(int IdGroup, List<long> OldListUser, List<long> NewListUser)
+        {
+
+            var GroupItem = cntx_.AccountGroup.Find(IdGroup);
+            bool ExsistSummary = true;
+
+            if (OldListUser != null && NewListUser != null)
+            {
+                bool AccountExsistListNew = NewListUser.Any(x => !OldListUser.Contains(x));
+                bool AccountExsistListOld = OldListUser.Any(x => !NewListUser.Contains(x));
+
+                // получаем false если список пользователей не изменился
+                ExsistSummary = (AccountExsistListNew || AccountExsistListOld);
+            }
+            if (ExsistSummary)
+            {
+                if (NewListUser == null || NewListUser.Count() == 0)
+                {
+                    GroupItem.Account = new List<Account>();
+                }
+                else
+                {
+                    GroupItem.Account = new List<Account>();
+                    cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
+                    cntx_.SaveChanges();
+                    GroupItem.Account = cntx_.Account.Where(x => NewListUser.Contains(x.Id)).ToList();                 
+                }
+                cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
+                cntx_.SaveChanges();
+            }
+        }
+
+        private void ChangePermissionListInGroup(int IdGroup, List<int> OldListPermission, List<int> NewListPermission)
+        {
+            var GroupItem = cntx_.AccountGroup.Find(IdGroup);         
+            bool ExsistSummary = true;
+            if (OldListPermission != null && NewListPermission != null)
+            {
+                bool PermissionExsistListNew = NewListPermission.Any(x => !OldListPermission.Contains(x));
+                bool PermissionExsistListOld = OldListPermission.Any(x => !NewListPermission.Contains(x));
+
+                // получаем false если список доступов не изменился
+                ExsistSummary = (PermissionExsistListNew || PermissionExsistListOld);
+            }      
+
+            if (ExsistSummary)
+            {
+                if (NewListPermission == null || NewListPermission.Count() == 0)
+                {
+
+                    var ListOldPermission = cntx_.AccountPermission.Where(x => OldListPermission.Contains(x.Id)).ToList();
+
+                    foreach (var RemovieItem in ListOldPermission)
+                    {
+                        GroupItem.AccountPermission.Remove(RemovieItem);
+                        cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
+                        cntx_.SaveChanges();
+                    }     
+                }
+                else
+                {
+                    var ListOldPermission = cntx_.AccountPermission.Where(x => OldListPermission.Contains(x.Id)).ToList();
+
+                    foreach (var RemovieItem in ListOldPermission)
+                    {
+                        GroupItem.AccountPermission.Remove(RemovieItem);
+                        cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
+                        cntx_.SaveChanges();
+                    }
+
+                    GroupItem.AccountPermission = cntx_.AccountPermission.Where(x => NewListPermission.Contains(x.Id)).ToList();
+                    cntx_.SaveChanges();
+                }                         
+            }            
+        }
+        
         [HttpGet]
         public ActionResult CreateGroupPermission()
         {

@@ -179,8 +179,16 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 "",
                 FormsAuthentication.FormsCookiePath);
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
-            cookie.Name = GetWebConfigParameters("CockieName");
+            cookie.Name = GetWebConfigParameters("CookiesName");
             Response.Cookies.Set(cookie);
         }
+
+        public ActionResult LogOut()
+        {
+            CurrentUser = null;
+            LogOut_User();         
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -188,6 +188,9 @@
     <Compile Include="ContextModels\promotionsimage.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\PromotionsInRegionMask_Result.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\ReportRunLog.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -200,10 +203,13 @@
     <Compile Include="ContextModels\usernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AccountGroupPermissionChanges.cs" />
     <Compile Include="Controllers\Account_Statistics.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
+    <Compile Include="CustomHelpers\Promotions.cs" />
+    <Compile Include="CustomHelpers\RegionMaskConverter.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />

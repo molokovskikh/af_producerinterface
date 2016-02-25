@@ -68,28 +68,7 @@
 
 @section scripts
 {
-    <script type="text/javascript">
-        function OnDeleteSucces(id_email)
-        {
-            var elementID = "#email_item_" + id_email;
-            $(elementID).css("display", "none");
-            $("#listemailview").show();
-        }
-        function AddEmail()
-        {
-            var SendItem = $('#addemail').val();
-            $.ajax({
-                type: 'POST',
-                url: '/AdminAccount/addemail',
-                data: 'Mail=' + SendItem,                
-                success: function (data)
-                {
-                    $('#accountemaillist').append(data);
-                }
-            });   
-        }
-
-    </script>
+    <script src="~/Scripts/WorkPlace/AdminAccount_Index.js"></script> 
 }
 
 

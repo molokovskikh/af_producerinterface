@@ -15,18 +15,18 @@
             <div class="body-content" style="padding:0.2em;">
                 <h3 style="margin:0.5em;">Меню</h3>
                 <hr/>
-                <div class="btn-group-vertical" style="width:100%;">
-                    <a href="@Url.Action("Index", "Promotion")" class="btn btn-primary" style="width:100%;">Акции</a>
-                    <a href="@Url.Action("JobList", "Report")" class="btn btn-primary">Отчеты</a>
-                    <a href="@Url.Action("Index", "Drug")" class="btn btn-primary">Препараты</a>
-                    <a data-toggle="modal" data-target="#myModal" class="pointer btn btn-primary">Обратная связь</a>
+                <div class="btn-group-vertical profile_submenu" style="width:100%;">
+                    <a href="@Url.Action("Index", "Promotion")" class="btn btn-default" style="width:100%;"><span class="glyphicon glyphicon-star-empty"></span> Акции</a>
+                    <a href="@Url.Action("JobList", "Report")" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Отчеты</a>
+                    <a href="@Url.Action("Index", "Drug")" class="btn btn-default"><span class="glyphicon glyphicon-align-justify"></span> Препараты</a>
+                    <a data-toggle="modal" data-target="#myModal" class="pointer btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
                 </div>             
             </div>
         </div>
         <div class="col-xs-12 col-lg-10">
             <div class="body-content">
                 <div class="form-group">
-                    <p class="lead">Здраствуйте, @currentUser.Name.</p>
+                    <p class="lead text-center">Здраствуйте, @currentUser.Name</p>
                 </div>
 
                 <hr />
@@ -44,8 +44,9 @@
                                         <h4><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; <strong>@NewsItem.Name</strong></h4>
                                         <p><span>@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span></p>                                      
                                         <a href="@Url.Action("News", "Profile", new { Id = NewsItem.Id})">читать далее</a>
+                                        <hr />      
                                     </div>
-                                    <hr />      
+                                  
                         }
                         </div>
 

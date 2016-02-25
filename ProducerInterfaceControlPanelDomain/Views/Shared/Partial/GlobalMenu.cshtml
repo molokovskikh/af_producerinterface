@@ -77,8 +77,14 @@
                     </ul>
                 </li>
             </ul>                 
-            <ul class="nav navbar-nav navbar-right">
-                <li><a><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Name</a></li>
+            <ul class="nav navbar-nav navbar-right" role="navigation">
+                <li class="dropdown" id="dropdownmenu">                  
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Управление правами (Интерфейс производителя)"><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Name</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="~/AdminAccount/Index">Мой профиль</a></li>
+                        <li><a href="~/Registration/LogOut">Выход</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     }

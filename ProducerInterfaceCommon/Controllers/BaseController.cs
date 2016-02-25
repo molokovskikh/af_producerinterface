@@ -52,7 +52,6 @@ namespace ProducerInterfaceCommon.Controllers
 			if (!PermissionExsist)
 			{
 				// если пермишена в БД нет, то добавим данный пермишен к группе администраторов
-
 				// проверим наличие группы администраторы
 
 				var AdminGroupName = GetWebConfigParameters("AdminGroupName");
@@ -65,24 +64,48 @@ namespace ProducerInterfaceCommon.Controllers
 				{
 					GroupAddPermission = new AccountGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
 					cntx_.AccountGroup.Add(GroupAddPermission);
-				}
+                    cntx_.SaveChanges();
+                }
 				else
 				{
 					GroupAddPermission = cntx_.AccountGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
 				}
 
 				var NewPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
-				cntx_.AccountPermission.Add(NewPermission);
+                // добавляем новый доступ
+                cntx_.AccountPermission.Add(NewPermission);
 				cntx_.SaveChanges();
-				//сохраняем группу и новый пермишен
 
-				GroupAddPermission.AccountPermission.Add(NewPermission);
-				cntx_.Entry(GroupAddPermission).State = System.Data.Entity.EntityState.Modified;
-				// добавляем пермишен к группе
-				cntx_.SaveChanges();
+
+                // добавляем его к группе Администраторы
+                AddPermissionToGroup(GroupAddPermission.Id, NewPermission.Id);            
 			}
 			// пермишен есть в БД, добавлять ничего не требуется                  
 		}
+        
+        private void AddPermissionToGroup(int GroupId, int PermissionId)
+        {
+            var GroupItem = cntx_.AccountGroup.Find(GroupId);
+            var PermissionItem = cntx_.AccountPermission.Find(PermissionId);
+            GroupItem.AccountPermission.Add(PermissionItem);
+            cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
+            cntx_.SaveChanges();
+
+            AccountLastUpdatePermission(GroupId);
+        }
+
+        protected void AccountLastUpdatePermission(int GroupId)
+        {
+            var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).ToList();
+
+            foreach (var AccountItem in AccountList)
+            {
+                AccountItem.LastUpdatePermisison = DateTime.Now;
+            }
+
+            cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
+            cntx_.SaveChanges();
+        }
 
 		#endregion
 
@@ -210,7 +233,7 @@ namespace ProducerInterfaceCommon.Controllers
                 }
             }
 
-			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
+			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(1), Cache.NoSlidingExpiration);
 			return permissionList;
 		}
 
@@ -232,7 +255,7 @@ namespace ProducerInterfaceCommon.Controllers
                 DateList.Add(CurrentUser.LastUpdatePermisison.ToString());
             }
           
-            HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(10), Cache.NoSlidingExpiration);
+            HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(1), Cache.NoSlidingExpiration);
             return DateList;
         }       
          
@@ -281,7 +304,7 @@ namespace ProducerInterfaceCommon.Controllers
 					return null;
 				}
 
-				retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == LoginUser && xxx.Enabled == 1).FirstOrDefault();
+				retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == LoginUser && xxx.Enabled == 1).First();
 
 				if (String.IsNullOrEmpty(retUser.Login))
 				{

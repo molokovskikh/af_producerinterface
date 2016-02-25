@@ -3,8 +3,7 @@
 namespace ProducerInterface.Controllers
 {
     public class FeedBackController : MasterBaseController
-    {
-
+    {      
         public ActionResult Index(string PageUrl, string UdobstvaSvyazi, string Id = null)
         {
             if (Id == null)

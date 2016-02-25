@@ -14,6 +14,7 @@
                     <th>Препараты</th>
                     <th>Производитель</th>
                     <th>Файл</th>
+                    <th></th>                 
                 </tr>
 
                 @foreach (var Item in Model)
@@ -33,9 +34,10 @@
                         <td>
                             @if (Item.promotionsimage != null)
                             {
-                                <a href="@Url.Action("GetFile", "MediaFiles", new { Id= Item.promotionsimage.Id})">@Item.promotionsimage.ImageName</a>
+                                <a href="@Url.Action("GetFile",new { Id= Item.promotionsimage.Id})">@Item.promotionsimage.ImageName</a>
                             }
                         </td>
+                        <td>@Html.ActionLink("Подробно", "OnePromotion", new { id=Item.Id })</td>
                     </tr>
                 }
 

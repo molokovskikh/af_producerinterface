@@ -192,7 +192,7 @@
     <Compile Include="Controllers\Permissions\PermissionUserController.cs" />
     <Compile Include="Controllers\ProducersInformation\ProducerInformationController.cs" />
     <Compile Include="Controllers\AdminProfile\ProfileController.cs" />
-    <Compile Include="Controllers\PromotionsInformation\PromotionController.cs" />
+    <Compile Include="Controllers\PromoActions\PromotionController.cs" />
     <Compile Include="Controllers\AdminProfile\RegistrationController.cs" />
     <Compile Include="Controllers\Reports_News\ReportController.cs" />
     <Compile Include="Global.asax.cs">
@@ -297,7 +297,9 @@
     <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
     <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
+    <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
     <Content Include="WebForm\ReportList.aspx" />
     <None Include="Content\Chosen\js\_references.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.js" />
@@ -731,7 +733,8 @@
     <Content Include="Views\Report\RunHistory.cshtml" />
     <Content Include="Views\News\Preview.cshtml" />
     <Content Include="Views\Promotion\Index.cshtml" />
-    <Content Include="Views\Promotion\SearchResult.cshtml" />
+    <Content Include="Views\Promotion\Partial\SearchResult.cshtml" />
+    <Content Include="Views\Promotion\OnePromotion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

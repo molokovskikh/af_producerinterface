@@ -95,7 +95,7 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Не подтверждена")]
         СonfirmedFalse = 0,
         [Display(Name = "Ожидание даты начала ")]
-        ConfirmedNotBedin = 1,
+        ConfirmedNotBegin = 1,
         [Display(Name = "Завершена")]
         ConfirmedEnd = 2,
         [Display(Name = "Публикуется")]

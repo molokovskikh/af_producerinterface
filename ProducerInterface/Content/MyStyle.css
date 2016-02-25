@@ -259,3 +259,13 @@ margin-top:1px;
 .panel-heading a {
 text-decoration:none;
 }
+
+.profile_submenu {
+width:100%;
+}
+.profile_submenu a {
+    text-align: left;
+}
+    .profile_submenu a span {
+        margin-right: 1em;
+    }

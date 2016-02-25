@@ -430,6 +430,7 @@
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
     <Content Include="Views\Account\AdminAuth.cshtml" />
     <Content Include="Views\Report\RunHistory.cshtml" />
+    <Content Include="Views\FeedBack\TestAddPermissionToDB.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

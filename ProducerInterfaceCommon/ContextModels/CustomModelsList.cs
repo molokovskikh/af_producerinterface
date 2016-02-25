@@ -16,7 +16,13 @@ namespace ProducerInterfaceCommon.ContextModels
 		public int CurrentPageIndex { get; set; }
 	}
 
-	public class Producer
+    public partial class PromotionsInRegionMask_Result
+    {
+        public long Id { get; set; }
+        public decimal RegionMask { get; set; }
+    }
+
+    public class Producer
 	{
 		public virtual string Name { get; set; }
 		public virtual IList<Account> Users { get; set; }
@@ -314,7 +320,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public long Producer { get; set; }
         public DateTime Begin { get; set; }
         public DateTime End { get; set; }
-        public int PagerInt { get; set; }
+        public bool EnabledDateTime { get; set; }
     }
 
     public class SearchProducerReportsModel

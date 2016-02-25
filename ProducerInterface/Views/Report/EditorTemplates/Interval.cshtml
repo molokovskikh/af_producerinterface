@@ -21,7 +21,14 @@
 			@Html.LabelFor(m => m)
 		</div>
 		<div class="@("feditor col-md-8" + errorClass)">
-			@Html.DropDownListFor(m => m, new SelectList(propList, "Value", "Text", Model), new {style = "display: none;"})
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="col-xs-2">@Html.DropDownListFor(m => m, new SelectList(propList, "Value", "Text", Model), new { @class = "form-control" })</span>
+                        <span class="col-xs-10" style="margin-left:0em;"></span>дней от момента формирования отчета
+                    </div>
+                </div>
+            </div>
 			@Html.ValidationMessageFor(m => m)
 		</div>
 	</div>

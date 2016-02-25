@@ -1,0 +1,71 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model promotions
+@{
+    ViewBag.Title = "Промоакция";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+
+    var RegionList = ViewBag.RegionList as IEnumerable<OptionElement>;
+    var DrugList = ViewBag.DrugList as IEnumerable<OptionElement>;
+}
+
+<div class="container body-content">
+    <h2>Промоакция @Model.Name</h2>
+
+    <div class="form-group">
+        <label>Производитель</label>
+        <p>@ViewBag.ProducerName</p>
+    </div>
+
+    <div class="form-group">
+        <label>Пользователь</label>
+        <p>@Model.Account.Name @Model.Account.Login</p>
+    </div>
+
+    <div class="form-group">
+        <label>Дата создания (последнего изменения)</label>
+        <p>@Model.UpdateTime</p>
+    </div>
+
+    <div class="form-group">
+        <label>Аннотация</label>
+        <p>@Model.Annotation</p>
+    </div>
+
+    <div class="form-group">
+        <p><label>Список регионов  <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
+        <div id="promotionregionlist" class="collapse">
+            @foreach (var RegItem in RegionList)
+            {
+                <p>@RegItem.Text</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <p><label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></p>
+        <div id="promotiondruglist" class="collapse">
+            @foreach (var DrugItem in DrugList)
+            {
+                <p>@DrugItem.Text</p>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Дата начала</label>
+        <p>@Model.Begin.Value.ToString("dd.MM.yyyy")</p>
+    </div>
+
+    <div class="form-group">
+        <label>Дата окончания</label>
+        <p>@Model.End.Value.ToString("dd.MM.yyyy")</p>
+    </div>
+
+    @if (Model.PromoFileId != null)
+    {
+        <div class="form-group">
+            <label>Прикреплен файл</label>
+            <a href="@Url.Action("GetFile", "MediaFiles", new { Id = Model.PromoFileId })">Скачать (@Model.promotionsimage.ImageName)</a>
+
+        </div>
+    }

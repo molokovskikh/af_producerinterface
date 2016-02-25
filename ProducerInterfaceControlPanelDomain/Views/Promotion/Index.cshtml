@@ -18,46 +18,89 @@
     <div class="row">
         <div class="row">
             <div class="col-xs-12">
-                <a href="#FiltersMenu" data-toggle="collapse" class="btn btn-primary">Фильтр</a>
+                <a href="#FiltersMenu" data-toggle="collapse" class="btn btn-primary btn-sm">Фильтр</a>
                 <div id="FiltersMenu" class="collapse">
-
+                    
+                    @using (Ajax.BeginForm("SearchResult",new AjaxOptions { HttpMethod = "POST", UpdateTargetId= "replacecontent", OnBegin="LoadingResult", OnSuccess="LoadingResultCompleted" })) {
                     <div class="form-group">
                         <label>Производитель</label>
-                        @Html.DropDownList(Model.Producer.ToString(), new SelectList(ProducerList, "Value", "Text", Model.Producer), new { @class = "form-control" })
+
+                        <select id="Producer" name="Producer" class="form-control">
+                            @foreach (var Item in ProducerList)
+                            {
+                                <option value="@Item.Value">@Item.Text</option>                            
+
+                            }
+                        </select>
+
                     </div>
 
                     <div class="form-group">
                         <label>Статус</label>
-                        @Html.DropDownList(Model.Status.ToString(), listStatus, new { @class = "form-control" })
+
+                        <select id="Status" name="Status" class="form-control">
+                            @foreach (var Item in listStatus)
+                            {
+                                if (Item.Value == "5")
+                                {
+                                    <option value="@Item.Value" selected="selected">@Item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@Item.Value">@Item.Text</option>
+                                }
+                            }
+                        </select>
+
                     </div>
+                    
+                    <hr/>
 
+                    <div class="form-group">
+                        <label class="checkbox-inline"><input type="checkbox" value="@Model.EnabledDateTime" onclick="ShowOrHideDateTime()" id="EnabledDateTime" name="EnabledDateTime">Не учитывать даты от - до</label>
+                     </div>
 
-                    <div class="row">
-                        <div class="col-xs-6">
+                    <div class="row" id="datepickers">
+
+                        <div class="col-xs-12">
+                            <label>Периуд действия акции входит в заданный деапазон дат</label>
+                        </div>
+
+                        <div class="col-xs-6 col-md-4 col-sm-4 col-lg-2">
                             <div class="form-group">
                                 <label>Дата начала</label>
-                                @Html.TextBoxFor(m => m.Begin, new { @class = "form-control", @readonly = "readonly" })
+                                <input type="text" id="Begin" name="Begin" class="form-control" readonly style="max-width:15em; cursor:pointer;" value="@Model.Begin.ToString("dd.MM.yyyy")"/>                              
                             </div>
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-xs-6 col-md-4 col-sm-4 col-lg-2">
                             <div class="form-group">
                                 <label>Дата окончания</label>
-                                @Html.TextBoxFor(m => m.End, new { @class = "form-control", @readonly = "readonly" })
+                                <input type="text" id="End" name="End" class="form-control" readonly style="max-width:15em; cursor:pointer;" value="@Model.End.ToString("dd.MM.yyyy")"/>    
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <input value="Применить" class="btn btn-primary btn-sm" type="submit"/>
+                    </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<hr />
+<hr />  <h3>Фильтр в работе</h3>
+
+<div id="loadingdata" class="row" style="display:none;">
+    <div class="col-xs-12">
+        <h3><span class="glyphicon glyphicon-time"></span>&nbsp; Ожидайте, осуществляется поиск</h3>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-xs-12" id="replacecontent">
         @Html.Action("SearchResult", Model);
-
     </div>
 </div>
 
@@ -66,34 +109,6 @@
 
     <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
     <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
-    <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
-
-    <script type="text/javascript">
-        $(function () {
-            var dateFrom = $('#Begin').datepicker({
-                format: 'dd.mm.yyyy',
-                language: 'ru',
-                weekStart: 1,
-                autoclose: true,
-                onRender: function (date) {
-                    return date.valueOf() > Date.now() ? 'disabled' : '';
-                }
-            }).on('changeDate', function (ev) {
-                //$('#DateToUI')[0].focus();
-            }).data('datepicker');
-
-            var dateTo = $('#End').datepicker({
-                format: 'dd.mm.yyyy',
-                autoclose: true,
-                language: 'ru',
-                weekStart: 1,
-                onRender: function (date) {
-                    //return date.valueOf() <= dateFrom.date.valueOf() ? 'disabled' : '';
-                    return date.valueOf() > Date.now() ? 'disabled' : '';
-                }
-            }).data('datepicker');
-        });
-    </script>
-
-
+    <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>   
+    <script src="~/Scripts/WorkPlace/Promotion_Index.js"></script>
 }

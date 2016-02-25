@@ -12,6 +12,9 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+  //  using System.Data.Objects;
+  //  using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class producerinterface_Entities : DbContext
     {
@@ -45,10 +48,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<drugfamilynames> drugfamilynames { get; set; }
         public DbSet<AccountCompany> AccountCompany { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }
-        public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
-        public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
@@ -61,6 +62,17 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<promotionsimage> promotionsimage { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
+        public DbSet<AccountGroup> AccountGroup { get; set; }
+        public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<Account> Account { get; set; }
+    
+        public virtual System.Data.Entity.Core.Objects.ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
+        {
+            var rGMParameter = rGM.HasValue ?
+                new System.Data.Entity.Core.Objects.ObjectParameter("RGM", rGM) :
+                new System.Data.Entity.Core.Objects.ObjectParameter("RGM", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PromotionsInRegionMask_Result>("PromotionsInRegionMask", rGMParameter);
+        }
     }
 }

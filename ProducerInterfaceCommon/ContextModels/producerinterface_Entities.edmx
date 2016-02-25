@@ -21,6 +21,7 @@
           <Property Name="PasswordUpdated" Type="datetime" Precision="0" />
           <Property Name="Enabled" Type="tinyint" />
           <Property Name="LastUpdatePermisison" Type="datetime" Precision="0" />
+          <Property Name="RegionMask" Type="ubigint" />
         </EntityType>
         <EntityType Name="AccountAppointment">
           <Key>
@@ -704,6 +705,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="PromotionsInRegionMask" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="producerinterface">
+          <Parameter Name="RGM" Type="bigint" Mode="In" />
+        </Function>
         <EntityContainer Name="Хранилище producerinterface_ModelContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountAppointment" EntityType="Self.AccountAppointment" Schema="producerinterface" store:Type="Tables" />
@@ -1152,18 +1156,12 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="drugfamilynames" EntityType="producerinterface_Model.drugfamilynames" />
           <EntitySet Name="AccountCompany" EntityType="producerinterface_Model.AccountCompany" />
           <EntitySet Name="AccountEmail" EntityType="producerinterface_Model.AccountEmail" />
-          <EntitySet Name="AccountPermission" EntityType="producerinterface_Model.AccountPermission" />
           <EntitySet Name="CompanyDomainName" EntityType="producerinterface_Model.CompanyDomainName" />
           <AssociationSet Name="CompanyId_AccountCompanyId" Association="producerinterface_Model.CompanyId_AccountCompanyId">
             <End Role="AccountCompany" EntitySet="AccountCompany" />
             <End Role="CompanyDomainName" EntitySet="CompanyDomainName" />
           </AssociationSet>
           <EntitySet Name="usernames" EntityType="producerinterface_Model.usernames" />
-          <EntitySet Name="AccountGroup" EntityType="producerinterface_Model.AccountGroup" />
-          <AssociationSet Name="AccountGroupToPermission" Association="producerinterface_Model.AccountGroupToPermission">
-            <End Role="AccountGroup" EntitySet="AccountGroup" />
-            <End Role="AccountPermission" EntitySet="AccountPermission" />
-          </AssociationSet>
           <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
           <EntitySet Name="promotions" EntityType="producerinterface_Model.promotions" />
           <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions">
@@ -1191,6 +1189,12 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="FK1_Appointment_To_AccountCompany_Id" Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id">
             <End Role="AccountCompany" EntitySet="AccountCompany" />
             <End Role="AccountAppointment" EntitySet="AccountAppointment" />
+          </AssociationSet>
+          <EntitySet Name="AccountGroup" EntityType="producerinterface_Model.AccountGroup" />
+          <EntitySet Name="AccountPermission" EntityType="producerinterface_Model.AccountPermission" />
+          <AssociationSet Name="AccountGroupToPermission" Association="producerinterface_Model.AccountGroupToPermission">
+            <End Role="AccountGroup" EntitySet="AccountGroup" />
+            <End Role="AccountPermission" EntitySet="AccountPermission" />
           </AssociationSet>
           <EntitySet Name="Account" EntityType="producerinterface_Model.Account" />
           <AssociationSet Name="Account_Appointment" Association="producerinterface_Model.Account_Appointment">
@@ -1225,6 +1229,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
+          <FunctionImport Name="PromotionsInRegionMask" ReturnType="Collection(producerinterface_Model.PromotionsInRegionMask_Result)">
+            <Parameter Name="RGM" Mode="In" Type="Int64" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1264,18 +1271,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="AccountId" Type="Int64" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.Email_AccountId" FromRole="AccountEmail" ToRole="Account" />
         </EntityType>
-        <EntityType Name="AccountPermission">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ControllerAction" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ActionAttributes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <Property Name="TypePermission" Type="SByte" Nullable="false" />
-          <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountGroupToPermission" FromRole="AccountPermission" ToRole="AccountGroup" />
-        </EntityType>
         <EntityType Name="CompanyDomainName">
           <Key>
             <PropertyRef Name="Id" />
@@ -1309,22 +1304,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="ProducerId" Type="Int64" Nullable="false" />
           <Property Name="ProducerName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="AccountGroup">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="TypeGroup" Type="SByte" Nullable="false" />
-          <NavigationProperty Name="AccountPermission" Relationship="producerinterface_Model.AccountGroupToPermission" FromRole="AccountGroup" ToRole="AccountPermission" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="AccountGroup" ToRole="Account" />
-        </EntityType>
-        <Association Name="AccountGroupToPermission">
-          <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
-          <End Type="producerinterface_Model.AccountPermission" Role="AccountPermission" Multiplicity="*" />
-        </Association>
         <EntityType Name="AccountFeedBack">
           <Key>
             <PropertyRef Name="Id" />
@@ -1360,7 +1339,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="promotionsimage" Relationship="producerinterface_Model.fk_promotions_to_fileid" FromRole="promotions" ToRole="promotionsimage" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="promotions" ToRole="Account" />
           <NavigationProperty Name="Account1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="promotions" ToRole="Account" />
-        </EntityType>
+          </EntityType>
         <Association Name="FK_promotioncatalogs_supplierpromotions">
           <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1545,6 +1524,34 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AccountGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="TypeGroup" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="AccountPermission" Relationship="producerinterface_Model.AccountGroupToPermission" FromRole="AccountGroup" ToRole="AccountPermission" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="AccountGroup" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="AccountPermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ControllerAction" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ActionAttributes" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="TypePermission" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountGroupToPermission" FromRole="AccountPermission" ToRole="AccountGroup" />
+        </EntityType>
+        <Association Name="AccountGroupToPermission">
+          <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
+          <End Type="producerinterface_Model.AccountPermission" Role="AccountPermission" Multiplicity="*" />
+        </Association>
         <EntityType Name="Account">
           <Key>
             <PropertyRef Name="Id" />
@@ -1561,6 +1568,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="PasswordUpdated" Type="DateTime" />
           <Property Name="Enabled" Type="SByte" />
           <Property Name="LastUpdatePermisison" Type="DateTime" />
+          <Property Name="RegionMask" Type="Decimal" />
           <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountCompany" Relationship="producerinterface_Model.Account_CompanyId" FromRole="Account" ToRole="AccountCompany" />
           <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
@@ -1658,6 +1666,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
         </Association>
+        <ComplexType Name="PromotionsInRegionMask_Result" />
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1888,18 +1897,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AccountPermission">
-            <EntityTypeMapping TypeName="producerinterface_Model.AccountPermission">
-              <MappingFragment StoreEntitySet="AccountPermission">
-                <ScalarProperty Name="TypePermission" ColumnName="TypePermission" />
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ActionAttributes" ColumnName="ActionAttributes" />
-                <ScalarProperty Name="ControllerAction" ColumnName="ControllerAction" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CompanyDomainName">
             <EntityTypeMapping TypeName="producerinterface_Model.CompanyDomainName">
               <MappingFragment StoreEntitySet="CompanyDomainName">
@@ -1920,25 +1917,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AccountGroup">
-            <EntityTypeMapping TypeName="producerinterface_Model.AccountGroup">
-              <MappingFragment StoreEntitySet="AccountGroup">
-                <ScalarProperty Name="TypeGroup" ColumnName="TypeGroup" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="AccountGroupToPermission" TypeName="producerinterface_Model.AccountGroupToPermission" StoreEntitySet="AccountGroupToPermission">
-            <EndProperty Name="AccountPermission">
-              <ScalarProperty Name="Id" ColumnName="IdPermission" />
-            </EndProperty>
-            <EndProperty Name="AccountGroup">
-              <ScalarProperty Name="Id" ColumnName="IdGroup" />
-            </EndProperty>
-          </AssociationSetMapping>
           <EntitySetMapping Name="AccountFeedBack">
             <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBack">
               <MappingFragment StoreEntitySet="AccountFeedBack">
@@ -2103,9 +2081,41 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AccountGroup">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountGroup">
+              <MappingFragment StoreEntitySet="AccountGroup">
+                <ScalarProperty Name="TypeGroup" ColumnName="TypeGroup" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountPermission">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountPermission">
+              <MappingFragment StoreEntitySet="AccountPermission">
+                <ScalarProperty Name="TypePermission" ColumnName="TypePermission" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionAttributes" ColumnName="ActionAttributes" />
+                <ScalarProperty Name="ControllerAction" ColumnName="ControllerAction" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AccountGroupToPermission" TypeName="producerinterface_Model.AccountGroupToPermission" StoreEntitySet="AccountGroupToPermission">
+            <EndProperty Name="AccountPermission">
+              <ScalarProperty Name="Id" ColumnName="IdPermission" />
+            </EndProperty>
+            <EndProperty Name="AccountGroup">
+              <ScalarProperty Name="Id" ColumnName="IdGroup" />
+            </EndProperty>
+          </AssociationSetMapping>
           <EntitySetMapping Name="Account">
             <EntityTypeMapping TypeName="producerinterface_Model.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="RegionMask" ColumnName="RegionMask" />
                 <ScalarProperty Name="LastUpdatePermisison" ColumnName="LastUpdatePermisison" />
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="PasswordUpdated" ColumnName="PasswordUpdated" />
@@ -2129,6 +2139,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="IdGroup" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="PromotionsInRegionMask" FunctionName="Хранилище producerinterface_Model.PromotionsInRegionMask">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="producerinterface_Model.PromotionsInRegionMask_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

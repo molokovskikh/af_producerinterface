@@ -157,7 +157,15 @@ namespace ProducerInterfaceCommon.ContextModels
 			set { TypeUser = (SByte)value; }
 		}
 
-        public long ID_LOG { get; set; }
+        public long ID_LOG {
+            get
+            {
+                if (_id_log > 0) return _id_log;
+                else return Id;
+            } set { _id_log = value; } }
+
+        private long _id_log { get; set; }
+
 	}
 
     public class AccountMetaData

@@ -20,21 +20,23 @@
 	}).jqCronGetInstance();
 
 	var interval = $('#Interval');
-	interval.chosen({ width: '30%' });
+	//interval.chosen({ width: '30%' });
 
 	// при чеке За предыдущий месяц гасим выбор интервала
 	var bm = $('#ByPreviousMonth');
-	if (bm.prop('checked'))
-		interval.prop('disabled', true).trigger("chosen:updated");
-
+	if (bm.prop('checked')) {
+	    //interval.prop('disabled', true).trigger("chosen:updated");
+	   
+	}
+	else { $('#Interval_param').css("display", "block"); }
 	bm.click(function () {
 	    if ($(this).prop('checked')) {
-	        interval.prop('disabled', true).trigger("chosen:updated");
+	      //  interval.prop('disabled', true).trigger("chosen:updated");
 	        $('#Interval_param').css("display", "none");
 	    }
 	    else
 	    {
-	        interval.removeProp('disabled').trigger("chosen:updated");
+	     //   interval.removeProp('disabled').trigger("chosen:updated");
 	        $('#Interval_param').css("display", "block");
 	    }
 	});

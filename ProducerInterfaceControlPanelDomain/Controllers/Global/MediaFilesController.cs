@@ -23,17 +23,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             var File_ = cntx_.promotionsimage.Find(Id);
             return File(File_.ImageFile, File_.ImageType);
         }
-
-        public JsonResult GetFolder()
-        {
-            return Json("");
-        }
-
-        public JsonResult GetFiles(string FolderName)
-        {
-            return Json("");
-        }
-
+            
         public ActionResult SaveFile()
         {
             var NewsFile = new ProducerInterfaceCommon.ContextModels.promotionsimage();
