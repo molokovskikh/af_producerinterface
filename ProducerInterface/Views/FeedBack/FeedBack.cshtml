@@ -5,18 +5,25 @@
     var AccountUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
 }
 
-@using (Ajax.BeginForm("SaveFeedBack", "FeedBack", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "feedback_modal_content" }))
+@using (Ajax.BeginForm("SaveFeedBack", "FeedBack", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "feedback_modal_content", OnSuccess = "InitPhone()" }))
 {
 
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" onclick="serverMessageCleanForm()">Закрыть</button>
+        @Ajax.ActionLink("Закрыть", "GetView", "FeedBack", new AjaxOptions
+   {
+       UpdateTargetId = "feedback_modal_content",
+       HttpMethod = "Get"
+   }, null, new { @class = "close", @onclick = "ModalClose()" })
+
+        @*<button type="button" class="close" data-dismiss="modal" onclick="AjaxRenew()">Закрыть</button>*@
         <h4 class="modal-title">Ваши пожелания, сообщение об ошибке</h4>
+
     </div>
 
     <div class="modal-body" id="ModalBodyId">
 
         <input value="@ViewBag.UrlString" id="Url" name="Url" hidden="hidden" />
-    
+
         @if (AccountUser != null)
         {
             <div class="form-group">
@@ -44,12 +51,14 @@
                 @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Description)
             </div>
-
+            <div class="form-group">
+                <h4 class="text-danger">@ViewBag.ErrorMessageModal</h4>
+            </div>
             <div class="form-group">
                 <label>Номер телефона</label>
-                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.PhoneNum, new { @class = "form-control", @placeholder = "(999) 999-99-99" })
+                @Html.ValidationMessageFor(m => m.PhoneNum)
             </div>
-
             <div class="form-group">
                 <label>Email</label>
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
@@ -68,8 +77,8 @@
 
     </div>
 
-    <div class="modal-footer" id="footer_model_message">
-       <input type="submit" class="btn btn-primary" value="Отправить запрос"/>
-    </div>
+            <div class="modal-footer" id="footer_model_message">
+                <input type="submit" class="btn btn-primary" value="Отправить запрос" />
+            </div>
 
 }

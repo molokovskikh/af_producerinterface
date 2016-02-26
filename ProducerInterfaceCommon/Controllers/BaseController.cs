@@ -91,21 +91,9 @@ namespace ProducerInterfaceCommon.Controllers
             cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
             cntx_.SaveChanges();
 
-            AccountLastUpdatePermission(GroupId);
+         
         }
-
-        protected void AccountLastUpdatePermission(int GroupId)
-        {
-					var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).Distinct().ToList();
-
-					foreach (var AccountItem in AccountList)
-					{
-						AccountItem.LastUpdatePermisison = DateTime.Now;
-					}
-
-					cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
-					cntx_.SaveChanges();
-		}
+           
 
 		#endregion
 
@@ -145,10 +133,7 @@ namespace ProducerInterfaceCommon.Controllers
 			{
 				if (!PermissionExsist)
 				{
-					// проверяем в БД доступ для текущего пользователя              
-					//  var ListPermission = cntx_.AccountPermission.Any(xxx => xxx.TypePermission == SbyteTypeUser && xxx.AccountGroup.Any(s => s.Account.Any(d => d.Id == CurrentUser.Id)));
-
-					//PermissionExsist = ListPermission.Any(xxx => xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
+					// проверяем в БД доступ для текущего пользователя         
 
 					PermissionExsist = PermissionUserExsist();
 
@@ -168,20 +153,29 @@ namespace ProducerInterfaceCommon.Controllers
 		}
 
 		private bool IgnoreRoutePermission(string ThisRoute)
-		{
-
-
+		{          
 			try
 			{
-				//return true;
-				return IgnoreRouteForPermission().Any(xxx => xxx == ThisRoute);
+
+
+                List<string> IgnoreRoute = IgnoreRouteForPermission();
+
+                foreach (var ItemIgnore in IgnoreRoute)
+                {
+                    if (ItemIgnore == ThisRoute || ItemIgnore.ToLower() == (controllerName + "_*").ToLower())
+                    {                      
+                        return true;
+                    }
+                }    
 			}
 			catch { return false; }
+
+            return false;
 		}
 
 		public List<string> IgnoreRouteForPermission()
 		{
-			// список игнорируемый маршрутов  (хранится в веб конфиге, через запятую в формате Controller_Action)
+			// список игнорируемый маршрутов  (хранится в веб конфиге, через запятую в формате Controller_Action && Controller_* где * игнорируются все акшены в данном контроллере)
 			try
 			{
 				return GetWebConfigParameters("IgnoreRoute").ToString().ToLower().Split(new char[] { ',' }).ToList();

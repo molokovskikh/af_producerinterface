@@ -18,8 +18,3 @@
             }      
         });
     }
-    $('#PhoneNumber').each(function () {
-        $(this).mask("(999) 999-99-99");
-    });
-
-

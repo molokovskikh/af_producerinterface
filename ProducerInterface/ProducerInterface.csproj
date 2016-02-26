@@ -188,7 +188,6 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
-    <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -288,6 +287,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Chosen\ajax-chosen.g.js" />
+    <Content Include="Scripts\Chosen\bootstrap-datepicker.js" />
+    <Content Include="Scripts\Chosen\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\Chosen\chosen.jquery.js" />
+    <Content Include="Scripts\Chosen\jqCron.js" />
+    <Content Include="Scripts\Chosen\jqCron.ru.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -351,16 +356,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Registration\Index.cshtml" />
-    <Content Include="Views\Registration\EditorTemplates\EditorMail.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorProducer.cshtml" />
-    <Content Include="Views\Registration\EditorTemplates\EditorString.cshtml" />
-    <Content Include="Views\Registration\EditorTemplates\Editor_Password.cshtml" />
-    <Content Include="Views\Registration\Registration.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
-    <Content Include="Views\Registration\PasswordRecovery.cshtml" />
-    <Content Include="Views\Registration\EditorTemplates\EditorStringPosition.cshtml" />
-    <Content Include="Views\Registration\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Shared\LoginPartialView.cshtml" />
     <Content Include="Views\Report\EditorTemplates\CronIntervalParam.cshtml" />
     <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
@@ -395,7 +392,6 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Registration.cshtml" />
     <Content Include="Views\Account\CustomRegistration.cshtml" />
-    <Content Include="Views\Registration\EditorTemplates\EditorProducer.cshtml" />
     <Content Include="Views\Account\EditorTemplates\Editor_Password.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorMail.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorMailReg.cshtml" />
@@ -431,6 +427,8 @@
     <Content Include="Views\Account\AdminAuth.cshtml" />
     <Content Include="Views\Report\RunHistory.cshtml" />
     <Content Include="Views\Report\DisplayReport.cshtml" />
+    <Content Include="Views\FeedBack\FeedBack.cshtml" />
+    <Content Include="Views\FeedBack\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

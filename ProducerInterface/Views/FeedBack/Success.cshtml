@@ -3,9 +3,9 @@
 </div>
 
 <div class="modal-body">
-    @Ajax.ActionLink("Создать новое обращение?","GetView", "FeedBack", new AjaxOptions { UpdateTargetId = "feedback_modal_content", HttpMethod = "Get" })
+    @Ajax.ActionLink("Создать новое обращение?","GetView", "FeedBack", new AjaxOptions { UpdateTargetId = "feedback_modal_content", HttpMethod = "Get" }, new { @class="btn btn-primary"})
 </div>
 
 <div class="modal-footer" id="footer_model_message">
-    @Ajax.ActionLink("Закрыть","GetView", "FeedBack", new AjaxOptions { UpdateTargetId = "feedback_modal_content", HttpMethod="Get", OnSuccess="ModalClose()" })
+    @Ajax.ActionLink("Закрыть","GetView", "FeedBack", new AjaxOptions { UpdateTargetId = "feedback_modal_content", HttpMethod="Get", OnSuccess="ModalClose()" }, new { @class = "btn btn-primary" })
 </div>
