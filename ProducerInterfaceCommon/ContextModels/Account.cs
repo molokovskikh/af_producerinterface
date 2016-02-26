@@ -29,6 +29,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<int> AppointmentId { get; set; }
         public sbyte TypeUser { get; set; }
         public string Name { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string OtherName { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
         public string Appointment { get; set; }

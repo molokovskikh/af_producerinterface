@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using ProducerInterfaceCommon.ViewModel.Interface.Global;
 
 namespace ProducerInterface.Controllers
 {
@@ -29,6 +30,27 @@ namespace ProducerInterface.Controllers
             return Content("<p> Ваша заявка принята</p><button type = 'button' class='btn btn-primary' data-dismiss='modal' onclick='serverMessageCleanForm()'>Закрыть</button>");
         }
 
+        [HttpPost]
+        public ActionResult SaveFeedBack(FeedBack Model_View)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("FeedBack", Model_View);
+            }
+            else
+            {
+                // сохраняем
 
+                return PartialView("Success");
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult GetView()
+        {
+            var ModelView = new FeedBack();
+            return PartialView("FeedBack", ModelView);
+        }
     }
 }

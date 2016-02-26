@@ -19,7 +19,7 @@ namespace ProducerInterface.Controllers
 
             if (String.IsNullOrEmpty(User_.login) && String.IsNullOrEmpty(User_.password))
             {
-                ErrorMessage("Некорректно введены данные.");
+                ErrorMessage("Некорректно введены данные.  Вашим логином является Email, указанный при регистрации. Пароль при регистрации был выслан на ваш Email");
                 ViewBag.CurrentUser = null;
                 return RedirectToAction("Index", "Home");
             }
@@ -30,7 +30,7 @@ namespace ProducerInterface.Controllers
 
             if (ThisUser == null || ThisUser.Login == "")
             {
-                ErrorMessage("Пользователь с данным Логином не существует.");
+                ErrorMessage("Пользователь с данным Логином не существует. Вашим логином является Email, указанный при регистрации.");
                 ViewBag.CurrentUser = null;
                 return RedirectToAction("Index", "Home");
             }

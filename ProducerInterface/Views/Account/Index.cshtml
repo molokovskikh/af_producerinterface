@@ -1,4 +1,5 @@
-﻿@model ProducerInterfaceCommon.ContextModels.RegistrationAccountValidation
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Registration;
+@model RegProducerViewModel
 
 @{
     ViewBag.Title = "Регистрация";
@@ -8,28 +9,34 @@
 <div class="container body-content">
     <h2>Регистрация</h2>
 
-    <hr/>
+    <hr />
 
-    @using (Html.BeginForm("Registration", "Account", FormMethod.Get))
-    {
+    <div class="col-xs-12">
 
-        <div class="form-group">
-            <label>Кого из производителей вы представляете</label>
-            @Html.EditorFor(m => m.Producers)
-        </div>
+        @using (Html.BeginForm("Registration", "Account", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Кого из производителей вы представляете</label>
+                    </div>
+                    @Html.EditorFor(m => m.ProducerId)
+                </div>
+            </div>
 
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Выбрать"/>
-            <a class="btn btn-warning" href="~/Account/CustomRegistration">Компания в списке отсутствует</a>
-        </div>
+            <input type="text" class="form-control" />
 
-    }
+            <br/>            <br />            <br />
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Выбрать" />
+                <a class="btn btn-warning" href="~/Account/CustomRegistration">Компания в списке отсутствует</a>
+            </div>
+
+        }
+    </div>
 </div>
 
 @section JavaScript
-{
-    @Scripts.Render("~/bundles/jqueryval")
-    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
-    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+{ 
     <script src="~/Content/Chosen/js/InitRegistrationChosen.js"></script>
 }

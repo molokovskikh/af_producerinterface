@@ -214,6 +214,7 @@
     <Content Include="Content\Chosen\css\bootstrap-datepicker3.css" />
     <Content Include="Content\Chosen\css\bootstrap.css" />
     <Content Include="Content\Chosen\css\bootstrap.min.css" />
+    <Content Include="Content\Chosen\css\chosen.cusom.css" />
     <Content Include="Content\Chosen\css\chosen-sprite%402x.png" />
     <Content Include="Content\Chosen\css\chosen-sprite.png" />
     <Content Include="Content\Chosen\css\chosen.css" />
@@ -287,6 +288,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Chosen\ajax-chosen.g.js" />
+    <Content Include="Scripts\Chosen\bootstrap-datepicker.js" />
+    <Content Include="Scripts\Chosen\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\Chosen\chosen.jquery.js" />
+    <Content Include="Scripts\Chosen\jqCron.js" />
+    <Content Include="Scripts\Chosen\jqCron.ru.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -430,7 +437,8 @@
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
     <Content Include="Views\Account\AdminAuth.cshtml" />
     <Content Include="Views\Report\RunHistory.cshtml" />
-    <Content Include="Views\FeedBack\TestAddPermissionToDB.cshtml" />
+    <Content Include="Views\FeedBack\FeedBack.cshtml" />
+    <Content Include="Views\FeedBack\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

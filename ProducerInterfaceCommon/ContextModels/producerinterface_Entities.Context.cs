@@ -11,11 +11,10 @@ namespace ProducerInterfaceCommon.ContextModels
 {
     using System;
     using System.Data.Entity;
+    using System.Data.Entity.Core.Objects;
     using System.Data.Entity.Infrastructure;
-  //  using System.Data.Objects;
-  //  using System.Data.Objects.DataClasses;
     using System.Linq;
-    
+
     public partial class producerinterface_Entities : DbContext
     {
         public producerinterface_Entities()
@@ -66,11 +65,11 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<Account> Account { get; set; }
     
-        public virtual System.Data.Entity.Core.Objects.ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
+        public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {
             var rGMParameter = rGM.HasValue ?
-                new System.Data.Entity.Core.Objects.ObjectParameter("RGM", rGM) :
-                new System.Data.Entity.Core.Objects.ObjectParameter("RGM", typeof(long));
+                new ObjectParameter("RGM", rGM) :
+                new ObjectParameter("RGM", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PromotionsInRegionMask_Result>("PromotionsInRegionMask", rGMParameter);
         }

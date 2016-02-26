@@ -52,6 +52,31 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Password { get; set; }
 	}
 
+    public class AdminAccountValidation
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public sbyte TypeUser { get; set; }
+
+        public decimal? RegionMask { get; set; }
+
+        [Display(Name = "Список регионов")]
+        [UIHint("LongListRegion")]
+        [Required(ErrorMessage = "Выберите регионы")]
+        public List<long> RegionListId { get; set; }
+
+        [Display(Name = "Список групп")]
+        [UIHint("IntListGroup")]
+        [Required(ErrorMessage = "Выберите группы")]
+        public List<int> GroupListId { get; set; }
+
+        public virtual List<ProducerInterfaceCommon.ContextModels.AccountGroup> ListGroup{get;set;}
+
+    }
+
+
 	public class PromotionValidation
 	{
 		public long Id { get; set; }
@@ -208,7 +233,6 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	public class RegistrerValidation
 	{
-
 		[UIHint("EditorString")]
 		[Display(Name = "ФИО")]
 		[Required(ErrorMessage = "Введите ФИО")]

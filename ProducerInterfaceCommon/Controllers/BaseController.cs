@@ -101,9 +101,9 @@ namespace ProducerInterfaceCommon.Controllers
             foreach (var AccountItem in AccountList)
             {
                 AccountItem.LastUpdatePermisison = DateTime.Now;
+                cntx_.Entry(AccountItem).State = System.Data.Entity.EntityState.Modified;
             }
-
-            cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
+        
             cntx_.SaveChanges();
         }
 
@@ -233,11 +233,11 @@ namespace ProducerInterfaceCommon.Controllers
                 }
             }
 
-<<<<<<< HEAD
+
 			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(1), Cache.NoSlidingExpiration);
-=======
+
 			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(10), Cache.NoSlidingExpiration);
->>>>>>> c36163d2d38b8f2a764956ef806741e68de494de
+//>>>>>>> c36163d2d38b8f2a764956ef806741e68de494de
 			return permissionList;
 		}
 

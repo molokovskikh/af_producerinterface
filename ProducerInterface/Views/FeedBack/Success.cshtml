@@ -1,0 +1,11 @@
+﻿<div class="modal-header">
+    <h4>Ваше обращение поступило в обработку</h4>    
+</div>
+
+<div class="modal-body">
+    @Ajax.ActionLink("Создать новое обращение?","GetView", "FeedBack", new AjaxOptions { UpdateTargetId = "feedback_modal_content", HttpMethod = "Get" })
+</div>
+
+<div class="modal-footer" id="footer_model_message">
+    @Ajax.ActionLink("Закрыть","GetView", "FeedBack", new AjaxOptions { UpdateTargetId = "feedback_modal_content", HttpMethod="Get", OnSuccess="ModalClose()" })
+</div>

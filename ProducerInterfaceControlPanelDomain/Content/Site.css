@@ -159,3 +159,9 @@ min-width:100%;
 cursor:pointer;
 }
 
+#Permission_ListUser_AccountTable {
+
+}
+    #Permission_ListUser_AccountTable span {
+    margin-right:1em;
+    }

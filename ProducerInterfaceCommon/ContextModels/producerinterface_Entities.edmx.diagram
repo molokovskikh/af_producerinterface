@@ -23,9 +23,9 @@
         <EntityTypeShape EntityType="producerinterface_Model.suppliernames" Width="1.625" PointX="8.125" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.LogForNet" Width="1.5" PointX="8.125" PointY="8.375" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamilynames" Width="1.5" PointX="0.75" PointY="2.875" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountCompany" Width="3.875" PointX="4.875" PointY="13.25" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountCompany" Width="3.875" PointX="4.875" PointY="13.625" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountEmail" Width="1.875" PointX="0.5" PointY="20.5" />
-        <EntityTypeShape EntityType="producerinterface_Model.CompanyDomainName" Width="3.125" PointX="0.5" PointY="13.375" />
+        <EntityTypeShape EntityType="producerinterface_Model.CompanyDomainName" Width="3.125" PointX="0.5" PointY="12.875" />
         <AssociationConnector Association="producerinterface_Model.CompanyId_AccountCompanyId" />
         <EntityTypeShape EntityType="producerinterface_Model.usernames" Width="1.5" PointX="2.75" PointY="2.875" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="2.625" PointX="0.5" PointY="18.25" />
@@ -44,21 +44,22 @@
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" ManuallyRouted="false" >
         </AssociationConnector>
         <EntityTypeShape EntityType="producerinterface_Model.mailformwithfooter" Width="1.5" PointX="11.625" PointY="7.875" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountAppointment" Width="1.5" PointX="0.625" PointY="15.625" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountAppointment" Width="1.5" PointX="0.625" PointY="15" />
         <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountGroup" Width="1.5" PointX="9.875" PointY="19.5" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountPermission" Width="1.5" PointX="11.875" PointY="19.5" />
         <AssociationConnector Association="producerinterface_Model.AccountGroupToPermission" />
-        <EntityTypeShape EntityType="producerinterface_Model.Account" Width="4.25" PointX="4.375" PointY="17" />
+        <EntityTypeShape EntityType="producerinterface_Model.Account" Width="4.5" PointX="4.5" PointY="16.375" />
         <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
-        <AssociationConnector Association="producerinterface_Model.Account_CompanyId" />
+        <AssociationConnector Association="producerinterface_Model.Account_CompanyId" ManuallyRouted="false" >
+        </AssociationConnector>
         <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
         <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
         <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
         <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
         <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

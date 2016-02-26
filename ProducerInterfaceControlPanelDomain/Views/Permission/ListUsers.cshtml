@@ -1,0 +1,71 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<Account>
+@{
+    ViewBag.Title = "Список пользователей панели управления";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h2>@ViewBag.Title </h2>
+        <hr />
+
+        <table class="panel-group table-bordered table-striped table-condensed table-custom" id="Permission_ListUser_AccountTable">
+            <tr>
+                <th>ФИО</th>
+                <th>Логин</th>
+                <th>Email (список)</th>
+                <th>Группы</th>
+                <th>Регионы</th>
+            </tr>
+            @foreach (var UserItem in Model)
+            {
+                <tr>
+                    <td rowspan="2">@UserItem.Name</td>
+                    <td rowspan="2">@UserItem.Login</td>
+
+                    <td rowspan="2">
+                        <a href="#Account_email_@UserItem.Id" data-toggle="collapse">подробнее (@UserItem.AccountEmail.Count())</a>
+
+                        <div id="Account_email_@UserItem.Id" class="collapse">
+                            @foreach (var EmailItem in UserItem.AccountEmail)
+                            {
+                                    <p>@EmailItem.eMail</p>
+                            }
+                        </div>
+                    </td>  
+
+                    <td>
+                        <a href="#Account_group_@UserItem.Id" data-toggle="collapse">подробнее (@UserItem.AccountGroup.Count())</a>
+                        <div id="Account_group_@UserItem.Id" class="collapse">                           
+                            @foreach (var GroupItem in UserItem.AccountGroup)
+                            {
+                            <p>@GroupItem.Name @GroupItem.Description</p>
+                            }
+                        </div>
+                    </td>
+
+                    <td>
+                        <a href="#Account_regions_@UserItem.Id" data-toggle="collapse">подробнее (@UserItem.AccountGroup.Count())</a>
+                        <div id="Account_regions_@UserItem.Id" class="collapse">
+                            @foreach (var GroupItem in UserItem.AccountGroup)
+                            {
+                                <p>@GroupItem.Name @GroupItem.Description</p>
+                            }
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr>                 
+                    <td colspan="2">
+                        <a href="@Url.Action("ChangeAccount", new { Id = UserItem.Id})" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span>редактировать регионы и права пользователя</a>                    
+                    </td>                                       
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>
+
+

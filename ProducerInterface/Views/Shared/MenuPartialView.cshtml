@@ -1,8 +1,7 @@
 ﻿@{
     var user = ViewBag.CurrentUser;
 }
-<div class="navbar navbar-fixed-top navbar-default">
-    @*<div class="container">*@
+<div class="navbar navbar-fixed-top navbar-default"> 
     <div class="navbar-header navbar-left">
         <button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
@@ -15,8 +14,7 @@
     </div>
 
     <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-left">
-            @*<li><a href="@Url.Action("Index","Home")"><span class="glyphicon glyphicon-home"></span> Главная</a></li>*@
+        <ul class="nav navbar-nav navbar-left">      
             @if (user != null)
             {
                 <li><a href="~/Report/JobList/"><span class="glyphicon glyphicon-th-list"> </span> Отчеты</a></li>
@@ -63,28 +61,26 @@
                         <li class="divider"></li>
                         <li><a href="~/Account/LogOut">Выход</a></li>
                     </ul>
+
                 </li>
             </ul>
         }
         else
         {
             <ul class="nav navbar-nav navbar-right" role="navigation">
-                <li>
-                    <a data-toggle="modal" data-target="#myModal" class="pointer"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
-                </li>
+                <li><a data-toggle="modal" data-target="#myModal" class="pointer"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a></li>
                 <li><a href="@Url.Action("Index", "Account")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
 
                 <li class="dropdown">
-
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
                     </a>
-                    @Html.Partial("LoginPartialView")
+                    @Html.Partial("LoginPartialView", new ProducerInterfaceCommon.ViewModel.Interface.Registration.AuthViewModel())
                 </li>
 
             </ul>
         }
     </div>
 </div>
-@*</div>*@
+
 

@@ -39,6 +39,7 @@ function LoadingResultCompleted()
 
 function ShowOrHideDateTime() {
     var inputElements = document.getElementById('EnabledDateTime');
+
     if (inputElements.checked) {
         $('#datepickers').css("display", "none");
     }

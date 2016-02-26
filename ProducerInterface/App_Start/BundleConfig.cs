@@ -23,6 +23,14 @@ namespace ProducerInterface
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/MvcAjax").Include("~/Scripts/jquery.unobtrusive-ajax.min.js"));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/chosen").Include("~/Scripts/Chosen/chosen.jquery.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/WorkPlace")
+             .Include("~/Scripts/WorkPlace/Analit.js","~/Scripts/WorkPlace/ZAnalit.js","~/Scripts/WorkPlace/ModalView.js"));        
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",

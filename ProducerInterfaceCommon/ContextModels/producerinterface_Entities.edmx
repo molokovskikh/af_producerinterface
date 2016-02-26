@@ -14,6 +14,9 @@
           <Property Name="AppointmentId" Type="int" />
           <Property Name="TypeUser" Type="tinyint" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="75" />
+          <Property Name="LastName" Type="varchar" MaxLength="30" />
+          <Property Name="FirstName" Type="varchar" MaxLength="30" />
+          <Property Name="OtherName" Type="varchar" MaxLength="30" />
           <Property Name="Phone" Type="varchar" MaxLength="15" />
           <Property Name="Password" Type="varchar" MaxLength="50" />
           <Property Name="Appointment" Type="varchar" MaxLength="50" />
@@ -1196,6 +1199,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="AccountPermission" EntitySet="AccountPermission" />
           </AssociationSet>
+          <FunctionImport Name="PromotionsInRegionMask" ReturnType="Collection(producerinterface_Model.PromotionsInRegionMask_Result)">
+          <Parameter Name="RGM" Mode="In" Type="Int64" />
+          </FunctionImport>
           <EntitySet Name="Account" EntityType="producerinterface_Model.Account" />
           <AssociationSet Name="Account_Appointment" Association="producerinterface_Model.Account_Appointment">
             <End Role="AccountAppointment" EntitySet="AccountAppointment" />
@@ -1229,9 +1235,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
-          <FunctionImport Name="PromotionsInRegionMask" ReturnType="Collection(producerinterface_Model.PromotionsInRegionMask_Result)">
-            <Parameter Name="RGM" Mode="In" Type="Int64" />
-          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1552,6 +1555,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.AccountPermission" Role="AccountPermission" Multiplicity="*" />
         </Association>
+        <ComplexType Name="PromotionsInRegionMask_Result" />
         <EntityType Name="Account">
           <Key>
             <PropertyRef Name="Id" />
@@ -1561,6 +1565,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="AppointmentId" Type="Int32" />
           <Property Name="TypeUser" Type="SByte" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="OtherName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Appointment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -1666,7 +1673,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
         </Association>
-        <ComplexType Name="PromotionsInRegionMask_Result" />
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2112,6 +2118,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="IdGroup" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="PromotionsInRegionMask" FunctionName="Хранилище producerinterface_Model.PromotionsInRegionMask">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="producerinterface_Model.PromotionsInRegionMask_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="Account">
             <EntityTypeMapping TypeName="producerinterface_Model.Account">
               <MappingFragment StoreEntitySet="Account">
@@ -2123,6 +2134,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="Appointment" ColumnName="Appointment" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="OtherName" ColumnName="OtherName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="TypeUser" ColumnName="TypeUser" />
                 <ScalarProperty Name="AppointmentId" ColumnName="AppointmentId" />
@@ -2139,11 +2153,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="IdGroup" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="PromotionsInRegionMask" FunctionName="Хранилище producerinterface_Model.PromotionsInRegionMask">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="producerinterface_Model.PromotionsInRegionMask_Result" />
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
