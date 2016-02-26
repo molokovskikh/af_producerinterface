@@ -19,8 +19,8 @@
     options = $.extend({}, defaultOptions, $(select).data(), settings);
     this.chosen(chosenOptions ? chosenOptions : {});
     return this.each(function () {
-        // search-field
-        return $(this).next('.chosen-container').find(".chosen-search > input").bind('keyup', function () {
+        // ".search-field > input" - mult, ".chosen-search > input" - single
+        return $(this).next('.chosen-container').find(":input").bind('keyup', function () {
         var field, msg, success, untrimmed_val, val;
         untrimmed_val = $(this).val();
         val = $.trim($(this).val());

@@ -51,6 +51,6 @@ $(function () {
         keepTypingMsg: "Введите два или больше символов для поиска",
         lookingForMsg: "Поиск"
     }, null,
-    { width: '95%' }
+    { width: '95%', placeholder_text_single: 'Введите два или больше символов для поиска' }
   );
 });
