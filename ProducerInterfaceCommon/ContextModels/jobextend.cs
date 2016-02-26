@@ -21,7 +21,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Scheduler { get; set; }
         public int ReportType { get; set; }
         public long ProducerId { get; set; }
-        public string Creator { get; set; }
+        public long CreatorId { get; set; }
         public System.DateTime CreationDate { get; set; }
         public System.DateTime LastModified { get; set; }
         public int DisplayStatus { get; set; }

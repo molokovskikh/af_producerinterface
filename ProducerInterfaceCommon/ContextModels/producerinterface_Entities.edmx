@@ -60,6 +60,9 @@
           <Property Name="Description" Type="varchar" MaxLength="500" />
           <Property Name="DateAdd" Type="date" />
           <Property Name="AccountId" Type="uint" />
+          <Property Name="UrlString" Type="varchar" MaxLength="250" />
+          <Property Name="Type" Type="tinyint" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AccountGroup">
           <Key>
@@ -145,7 +148,7 @@
           <Property Name="Scheduler" Type="varchar" MaxLength="250" />
           <Property Name="ReportType" Type="int" Nullable="false" />
           <Property Name="ProducerId" Type="bigint" Nullable="false" />
-          <Property Name="Creator" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="CreatorId" Type="uint" Nullable="false" />
           <Property Name="CreationDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="DisplayStatus" Type="int" Nullable="false" />
@@ -367,7 +370,7 @@
             <PropertyRef Name="CustomName" />
             <PropertyRef Name="ReportType" />
             <PropertyRef Name="ProducerId" />
-            <PropertyRef Name="Creator" />
+            <PropertyRef Name="CreatorId" />
             <PropertyRef Name="CreationDate" />
             <PropertyRef Name="LastModified" />
             <PropertyRef Name="DisplayStatus" />
@@ -380,7 +383,8 @@
           <Property Name="Scheduler" Type="varchar" MaxLength="250" />
           <Property Name="ReportType" Type="int" Nullable="false" />
           <Property Name="ProducerId" Type="bigint" Nullable="false" />
-          <Property Name="Creator" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="CreatorId" Type="uint" Nullable="false" />
+          <Property Name="Creator" Type="varchar" MaxLength="75" />
           <Property Name="CreationDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="DisplayStatus" Type="int" Nullable="false" />
@@ -785,6 +789,7 @@ FROM `drugfamilynames` AS `drugfamilynames`</DefiningQuery>
 `jobextendwithproducer`.`Scheduler`, 
 `jobextendwithproducer`.`ReportType`, 
 `jobextendwithproducer`.`ProducerId`, 
+`jobextendwithproducer`.`CreatorId`, 
 `jobextendwithproducer`.`Creator`, 
 `jobextendwithproducer`.`CreationDate`, 
 `jobextendwithproducer`.`LastModified`, 
@@ -938,26 +943,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="producerinterface_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="jobextend">
-          <Key>
-            <PropertyRef Name="SchedName" />
-            <PropertyRef Name="JobName" />
-            <PropertyRef Name="JobGroup" />
-          </Key>
-          <Property Name="SchedName" Type="String" MaxLength="120" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="JobName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="JobGroup" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CustomName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Scheduler" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="ReportType" Type="Int32" Nullable="false" />
-          <Property Name="ProducerId" Type="Int64" Nullable="false" />
-          <Property Name="Creator" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
-          <Property Name="LastModified" Type="DateTime" Nullable="false" />
-          <Property Name="DisplayStatus" Type="Int32" Nullable="false" />
-          <Property Name="LastRun" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-        </EntityType>
         <EntityType Name="mailform">
           <Key>
             <PropertyRef Name="Id" />
@@ -1058,35 +1043,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="MnnId" Type="Int64" />
           <Property Name="UpdateTime" Type="DateTime" Nullable="false" />
         </EntityType>
-        <EntityType Name="jobextendwithproducer">
-          <Key>
-            <PropertyRef Name="JobName" />
-            <PropertyRef Name="CustomName" />
-            <PropertyRef Name="SchedName" />
-            <PropertyRef Name="ProducerId" />
-            <PropertyRef Name="ReportType" />
-            <PropertyRef Name="Enable" />
-            <PropertyRef Name="CreationDate" />
-            <PropertyRef Name="JobGroup" />
-            <PropertyRef Name="Creator" />
-            <PropertyRef Name="LastModified" />
-            <PropertyRef Name="DisplayStatus" />
-          </Key>
-          <Property Name="JobName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CustomName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SchedName" Type="String" MaxLength="120" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ProducerId" Type="Int64" Nullable="false" />
-          <Property Name="ReportType" Type="Int32" Nullable="false" />
-          <Property Name="LastRun" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
-          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="JobGroup" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Scheduler" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="LastModified" Type="DateTime" Nullable="false" />
-          <Property Name="DisplayStatus" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="pharmacynames">
           <Key>
             <PropertyRef Name="PharmacyId" />
@@ -1139,7 +1095,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="HomeRegion" Type="Decimal" />
         </EntityType>
         <EntityContainer Name="producerinterface_Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="jobextend" EntityType="Self.jobextend" />
           <EntitySet Name="mailform" EntityType="Self.mailform" />
           <EntitySet Name="profilenews" EntityType="Self.profilenews" />
           <EntitySet Name="promotionToDrug" EntityType="Self.promotionToDrug" />
@@ -1149,7 +1104,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="assortment" EntityType="Self.assortment" />
           <EntitySet Name="catalognames" EntityType="Self.catalognames" />
           <EntitySet Name="drugfamily" EntityType="Self.drugfamily" />
-          <EntitySet Name="jobextendwithproducer" EntityType="Self.jobextendwithproducer" />
           <EntitySet Name="pharmacynames" EntityType="Self.pharmacynames" />
           <EntitySet Name="producernames" EntityType="Self.producernames" />
           <EntitySet Name="ratingreportorderitems" EntityType="Self.ratingreportorderitems" />
@@ -1165,7 +1119,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="CompanyDomainName" EntitySet="CompanyDomainName" />
           </AssociationSet>
           <EntitySet Name="usernames" EntityType="producerinterface_Model.usernames" />
-          <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
           <EntitySet Name="promotions" EntityType="producerinterface_Model.promotions" />
           <AssociationSet Name="FK_promotioncatalogs_supplierpromotions" Association="producerinterface_Model.FK_promotioncatalogs_supplierpromotions">
             <End Role="promotions" EntitySet="promotions" />
@@ -1199,9 +1152,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="AccountPermission" EntitySet="AccountPermission" />
           </AssociationSet>
-          <FunctionImport Name="PromotionsInRegionMask" ReturnType="Collection(producerinterface_Model.PromotionsInRegionMask_Result)">
-          <Parameter Name="RGM" Mode="In" Type="Int64" />
-          </FunctionImport>
           <EntitySet Name="Account" EntityType="producerinterface_Model.Account" />
           <AssociationSet Name="Account_Appointment" Association="producerinterface_Model.Account_Appointment">
             <End Role="AccountAppointment" EntitySet="AccountAppointment" />
@@ -1214,10 +1164,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="Email_AccountId" Association="producerinterface_Model.Email_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountEmail" EntitySet="AccountEmail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
           </AssociationSet>
           <AssociationSet Name="FK_promotions_AccountId" Association="producerinterface_Model.FK_promotions_AccountId">
             <End Role="Account" EntitySet="Account" />
@@ -1234,6 +1180,16 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="AccountUserToGroup" Association="producerinterface_Model.AccountUserToGroup">
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <FunctionImport Name="PromotionsInRegionMask" ReturnType="Collection(producerinterface_Model.PromotionsInRegionMask_Result)">
+          <Parameter Name="RGM" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <EntitySet Name="jobextendwithproducer" EntityType="producerinterface_Model.jobextendwithproducer" />
+          <EntitySet Name="jobextend" EntityType="producerinterface_Model.jobextend" />
+          <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
+          <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="LogForNet">
@@ -1306,17 +1262,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ProducerId" Type="Int64" Nullable="false" />
           <Property Name="ProducerName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="AccountFeedBack">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Status" Type="SByte" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="DateAdd" Type="DateTime" />
-          <Property Name="AccountId" Type="Int64" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="AccountFeedBack" ToRole="Account" />
         </EntityType>
         <EntityType Name="promotions">
           <Key>
@@ -1579,11 +1524,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountCompany" Relationship="producerinterface_Model.Account_CompanyId" FromRole="Account" ToRole="AccountCompany" />
           <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
-          <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
+          <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
         </EntityType>
         <Association Name="Account_Appointment">
           <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
@@ -1617,18 +1562,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AccountEmail">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FeedBack_To_Account">
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
-          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AccountFeedBack">
               <PropertyRef Name="AccountId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1673,31 +1606,89 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
         </Association>
+    
+        <EntityType Name="jobextendwithproducer">
+          <Key>
+            <PropertyRef Name="SchedName" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="JobGroup" />
+            <PropertyRef Name="CustomName" />
+            <PropertyRef Name="ReportType" />
+            <PropertyRef Name="ProducerId" />
+            <PropertyRef Name="CreatorId" />
+            <PropertyRef Name="CreationDate" />
+            <PropertyRef Name="LastModified" />
+            <PropertyRef Name="DisplayStatus" />
+            <PropertyRef Name="Enable" />
+          </Key>
+          <Property Name="SchedName" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="JobGroup" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CustomName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Scheduler" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ReportType" Type="Int32" Nullable="false" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="CreatorId" Type="Int64" Nullable="false" />
+          <Property Name="Creator" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
+          <Property Name="LastModified" Type="DateTime" Nullable="false" />
+          <Property Name="DisplayStatus" Type="Int32" Nullable="false" />
+          <Property Name="LastRun" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="jobextend">
+          <Key>
+            <PropertyRef Name="SchedName" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="JobGroup" />
+          </Key>
+          <Property Name="SchedName" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="JobGroup" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CustomName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Scheduler" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ReportType" Type="Int32" Nullable="false" />
+          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="CreatorId" Type="Int64" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" />
+          <Property Name="LastModified" Type="DateTime" Nullable="false" />
+          <Property Name="DisplayStatus" Type="Int32" Nullable="false" />
+          <Property Name="LastRun" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountFeedBack">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="SByte" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DateAdd" Type="DateTime" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="SByte" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="AccountFeedBack" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_FeedBack_To_Account">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBack">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище producerinterface_ModelContainer" CdmEntityContainer="producerinterface_Entities">
-          <EntitySetMapping Name="jobextend">
-            <EntityTypeMapping TypeName="producerinterface_Model.jobextend">
-              <MappingFragment StoreEntitySet="jobextend">
-                <ScalarProperty Name="SchedName" ColumnName="SchedName" />
-                <ScalarProperty Name="JobName" ColumnName="JobName" />
-                <ScalarProperty Name="JobGroup" ColumnName="JobGroup" />
-                <ScalarProperty Name="CustomName" ColumnName="CustomName" />
-                <ScalarProperty Name="Scheduler" ColumnName="Scheduler" />
-                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
-                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
-                <ScalarProperty Name="DisplayStatus" ColumnName="DisplayStatus" />
-                <ScalarProperty Name="LastRun" ColumnName="LastRun" />
-                <ScalarProperty Name="Enable" ColumnName="Enable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="mailform">
             <EntityTypeMapping TypeName="producerinterface_Model.mailform">
               <MappingFragment StoreEntitySet="mailform">
@@ -1794,26 +1785,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
                 <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
                 <ScalarProperty Name="MnnId" ColumnName="MnnId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="jobextendwithproducer">
-            <EntityTypeMapping TypeName="producerinterface_Model.jobextendwithproducer">
-              <MappingFragment StoreEntitySet="jobextendwithproducer">
-                <ScalarProperty Name="DisplayStatus" ColumnName="DisplayStatus" />
-                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="Scheduler" ColumnName="Scheduler" />
-                <ScalarProperty Name="JobGroup" ColumnName="JobGroup" />
-                <ScalarProperty Name="JobName" ColumnName="JobName" />
-                <ScalarProperty Name="CustomName" ColumnName="CustomName" />
-                <ScalarProperty Name="SchedName" ColumnName="SchedName" />
-                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
-                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
-                <ScalarProperty Name="LastRun" ColumnName="LastRun" />
-                <ScalarProperty Name="Enable" ColumnName="Enable" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1920,17 +1891,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AccountFeedBack">
-            <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBack">
-              <MappingFragment StoreEntitySet="AccountFeedBack">
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2153,6 +2113,60 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="IdGroup" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="jobextendwithproducer">
+            <EntityTypeMapping TypeName="producerinterface_Model.jobextendwithproducer">
+              <MappingFragment StoreEntitySet="jobextendwithproducer">
+                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="LastRun" ColumnName="LastRun" />
+                <ScalarProperty Name="DisplayStatus" ColumnName="DisplayStatus" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="Scheduler" ColumnName="Scheduler" />
+                <ScalarProperty Name="CustomName" ColumnName="CustomName" />
+                <ScalarProperty Name="JobGroup" ColumnName="JobGroup" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="SchedName" ColumnName="SchedName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="jobextend">
+            <EntityTypeMapping TypeName="producerinterface_Model.jobextend">
+              <MappingFragment StoreEntitySet="jobextend">
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="LastRun" ColumnName="LastRun" />
+                <ScalarProperty Name="DisplayStatus" ColumnName="DisplayStatus" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="Scheduler" ColumnName="Scheduler" />
+                <ScalarProperty Name="CustomName" ColumnName="CustomName" />
+                <ScalarProperty Name="JobGroup" ColumnName="JobGroup" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="SchedName" ColumnName="SchedName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountFeedBack">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBack">
+              <MappingFragment StoreEntitySet="AccountFeedBack">
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="UrlString" ColumnName="UrlString" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

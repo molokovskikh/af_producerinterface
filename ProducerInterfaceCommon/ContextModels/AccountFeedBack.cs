@@ -19,6 +19,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Description { get; set; }
         public Nullable<System.DateTime> DateAdd { get; set; }
         public Nullable<long> AccountId { get; set; }
+        public string UrlString { get; set; }
+        public Nullable<sbyte> Type { get; set; }
+        public string Contacts { get; set; }
     
         public virtual Account Account { get; set; }
     }

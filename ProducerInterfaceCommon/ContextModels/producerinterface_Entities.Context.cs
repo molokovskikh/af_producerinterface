@@ -9,13 +9,13 @@
 
 namespace ProducerInterfaceCommon.ContextModels
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Core.Objects;
-    using System.Data.Entity.Infrastructure;
-    using System.Linq;
+	using System;
+	using System.Data.Entity;
+	using System.Data.Entity.Core.Objects;
+	using System.Data.Entity.Infrastructure;
+	using System.Linq;
 
-    public partial class producerinterface_Entities : DbContext
+	public partial class producerinterface_Entities : DbContext
     {
         public producerinterface_Entities()
             : base("name=producerinterface_Entities")
@@ -27,7 +27,6 @@ namespace ProducerInterfaceCommon.ContextModels
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<jobextend> jobextend { get; set; }
         public DbSet<mailform> mailform { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
         public DbSet<promotionToDrug> promotionToDrug { get; set; }
@@ -37,7 +36,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
         public DbSet<drugfamily> drugfamily { get; set; }
-        public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<pharmacynames> pharmacynames { get; set; }
         public DbSet<producernames> producernames { get; set; }
         public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
@@ -49,7 +47,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountEmail> AccountEmail { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
-        public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
@@ -64,6 +61,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<Account> Account { get; set; }
+        public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
+        public DbSet<jobextend> jobextend { get; set; }
+        public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {

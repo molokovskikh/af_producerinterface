@@ -93,7 +93,20 @@ namespace ProducerInterfaceCommon.Controllers
 
          
         }
-           
+
+        protected void AccountLastUpdatePermission(int GroupId)
+        {
+					//var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).Distinct().ToList();
+
+					//foreach (var AccountItem in AccountList)
+					//{
+					//	AccountItem.LastUpdatePermisison = DateTime.Now;
+					//}
+
+					//cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
+					//cntx_.SaveChanges();
+		}
+
 
 		#endregion
 

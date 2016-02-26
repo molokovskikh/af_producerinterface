@@ -39,7 +39,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             ViewBag.DrugList = h.GetCatalogListPromotion();
 
-            ViewBag.ReportList = cntx_.jobextend.Where(x => x.ProducerId == cntx_.AccountCompany.Where(vvv => vvv.Id == Id).FirstOrDefault().ProducerId).ToList();
+            ViewBag.ReportList = cntx_.jobextendwithproducer.Where(x => x.ProducerId == cntx_.AccountCompany.Where(vvv => vvv.Id == Id).FirstOrDefault().ProducerId).ToList();
             
 
             var AccountCompanyView = cntx_.AccountCompany.Find(Id);

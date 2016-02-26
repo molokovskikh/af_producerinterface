@@ -116,12 +116,11 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var userName = cntx.Account.Single(x => x.Id == userId).Name;
 			// иначе - успех
 			var jext = new jobextend()
 			{
 				CreationDate = DateTime.Now,
-				Creator = userName,
+				CreatorId = userId,
 				CustomName = model.CastomName,
 				Enable = true,
 				JobGroup = key.Group,
@@ -301,18 +300,26 @@ namespace ProducerInterface.Controllers
 		/// Выводит список заданий производителя
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult JobList()
+		public ActionResult JobList(long? cid)
 		{
 			var scheduler = GetScheduler();
-			var jobList = cntx.jobextend.Where(x => x.ProducerId == producerId
-																				&& x.SchedName == scheduler.SchedulerName
-																				&& x.Enable == true)
-																				.OrderByDescending(x => x.CreationDate)
-																				.ToList();
+			// вытащили всех создателей, создававших отчеты этого производителя
+			var creatorIds = cntx.jobextend
+				.Where(x => x.ProducerId == producerId && x.SchedName == scheduler.SchedulerName && x.Enable == true)
+				.Select(x => x.CreatorId)
+				.Distinct().ToList();
+			ViewData["creators"] = cntx.Account.Where(x => creatorIds.Contains(x.Id)).
+				Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToList();
+
+			var query = cntx.jobextendwithproducer.Where(x => x.ProducerId == producerId
+																												&& x.SchedName == scheduler.SchedulerName
+																												&& x.Enable == true);
+			if (cid.HasValue)
+				query = query.Where(x => x.CreatorId == cid);
+
+			var jobList = query.OrderByDescending(x => x.CreationDate).ToList();
 			return View(jobList);
 		}
-
-
 
 		/// <summary>
 		/// Возвращает для заполнения форму установки параметров запуска отчета, проверяет их, запускает отчет

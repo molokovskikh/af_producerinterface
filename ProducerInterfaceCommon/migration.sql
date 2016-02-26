@@ -113,25 +113,25 @@ ADD CONSTRAINT `FK1_Appointment_To_AccountCompany_Id` FOREIGN KEY (`IdAccountCom
 ALTER TABLE `Account`
  ADD COLUMN `LastUpdatePermisison` DATETIME NULL AFTER `Enabled`;
 
-CREATE DEFINER=`system`@`%` TRIGGER `AccountGroupToPermission_after_insert` BEFORE INSERT ON `AccountGroupToPermission` FOR EACH ROW BEGIN
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` TRIGGER `AccountGroupToPermission_after_insert` BEFORE INSERT ON `AccountGroupToPermission` FOR EACH ROW BEGIN
  UPDATE Account ACC
     SET ACC.LastUpdatePermisison = now() 
   WHERE ACC.Id = (select AUTG.Iduser Id from AccountUserToGroup AUTG where AUTG.IdGroup = NEW.IdGroup);
 END;
 
-CREATE DEFINER=`system`@`%` TRIGGER `AccountGroupToPermission_before_delete` BEFORE DELETE ON `AccountGroupToPermission` FOR EACH ROW BEGIN
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` TRIGGER `AccountGroupToPermission_before_delete` BEFORE DELETE ON `AccountGroupToPermission` FOR EACH ROW BEGIN
  UPDATE Account ACC
     SET ACC.LastUpdatePermisison = now() 
   WHERE ACC.Id = (select AUTG.Iduser Id from AccountUserToGroup AUTG where AUTG.IdGroup = OLD.IdGroup);
 END;
 
-CREATE DEFINER=`system`@`%` TRIGGER `AccountUserToGroup_after_insert` AFTER INSERT ON `AccountUserToGroup` FOR EACH ROW BEGIN
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` TRIGGER `AccountUserToGroup_after_insert` AFTER INSERT ON `AccountUserToGroup` FOR EACH ROW BEGIN
  UPDATE Account ACC
     SET ACC.LastUpdatePermisison = now() 
   WHERE ACC.Id = new.IdUser;
 END;
 
-CREATE DEFINER=`system`@`%` TRIGGER `AccountUserToGroup_before_delete` BEFORE DELETE ON `AccountUserToGroup` FOR EACH ROW BEGIN
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` TRIGGER `AccountUserToGroup_before_delete` BEFORE DELETE ON `AccountUserToGroup` FOR EACH ROW BEGIN
  UPDATE Account ACC
     SET ACC.LastUpdatePermisison = now() 
   WHERE ACC.Id = OLD.IdUser;
@@ -152,6 +152,30 @@ ALTER TABLE `Account`
  ADD COLUMN `LastName` VARCHAR(30) NULL DEFAULT '0' COMMENT 'Фамилия' AFTER `Name`,
  ADD COLUMN `FirstName` VARCHAR(30) NULL DEFAULT '0' COMMENT 'Имя' AFTER `LastName`,
  ADD COLUMN `OtherName` VARCHAR(30) NULL DEFAULT '0' COMMENT 'Отчество' AFTER `FirstName`;
+
+ ALTER TABLE `AccountFeedBack`
+ ADD COLUMN `UrlString` VARCHAR(250) NULL AFTER `AccountId`,
+ ADD COLUMN `Type` TINYINT(4) NULL AFTER `UrlString`,
+ ADD COLUMN `Contacts` VARCHAR(50) NULL AFTER `Type`;
+
+#ниже не выполнено на боевой
+
+ ALTER TABLE `jobextend`
+ADD COLUMN `CreatorId` INT(11) UNSIGNED NULL AFTER `ProducerId`;
+
+update jobextend j set CreatorId = (select a.Id from Account a where a.Name = j.Creator);
+
+ALTER TABLE `jobextend` CHANGE COLUMN `CreatorId` `CreatorId` INT(11) UNSIGNED NOT NULL;
+
+ALTER TABLE `jobextend` drop COLUMN `Creator`;
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view jobextendwithproducer as
+select j.`SchedName`, j.`JobName`, j.`JobGroup`, j.`CustomName`, j.`Scheduler`, j.`ReportType`,
+j.`ProducerId`, j.CreatorId, a.Name as `Creator`, j.`CreationDate`, j.`LastModified`, j.`DisplayStatus`, j.`LastRun`,
+j.`Enable`, p.ProducerName
+from jobextend j
+LEFT JOIN producernames p ON p.ProducerId = j.ProducerId 
+LEFT JOIN Account a ON a.Id = j.CreatorId;
 
 
 

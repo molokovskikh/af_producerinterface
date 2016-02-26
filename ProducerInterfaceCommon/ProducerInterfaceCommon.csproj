@@ -395,7 +395,11 @@
     </Compile>
     <Compile Include="SPAM\Enums.cs" />
     <Compile Include="SPAM\Mail_Send.cs" />
+    <Compile Include="ViewModel\ControlPanel\Permission\ListGroupView.cs" />
+    <Compile Include="ViewModel\ControlPanel\Promotion\SearchProducerPromotion.cs" />
+    <Compile Include="ViewModel\ControlPanel\Report\SearchProducerReportsModel.cs" />
     <Compile Include="ViewModel\Interface\Global\FeedBack.cs" />
+    <Compile Include="ViewModel\Interface\Profile\ProfileValidation.cs" />
     <Compile Include="ViewModel\Interface\Registration\AuthViewModel.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegDomainViewModel.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegNotProducerViewModel.cs" />
@@ -486,9 +490,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\ControlPanel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
