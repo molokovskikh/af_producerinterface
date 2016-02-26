@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.ViewModel.ControlPanel.Permission;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {

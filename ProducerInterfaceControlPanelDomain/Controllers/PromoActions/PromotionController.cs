@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
-using Antlr.Runtime.Misc;
 using ProducerInterfaceCommon.CustomHelpers.Func;
-using ProducerInterfaceCommon.CustomHelpers.Models;
+using ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {

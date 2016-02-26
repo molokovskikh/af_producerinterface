@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
-using Quartz;
-using Quartz.Impl;
-using ProducerInterfaceCommon.Heap;
-using System.Configuration;
-using System.Collections.Specialized;
+using ProducerInterfaceCommon.ViewModel.Interface.Profile;
 
 namespace ProducerInterface.Controllers
 {
@@ -41,7 +35,7 @@ namespace ProducerInterface.Controllers
 
             var ThisUser = cntx_.Account.Where(xxx => xxx.Id == CurrentUser.Id).First();
 
-            var ModelView = new ProducerInterfaceCommon.ContextModels.ProfileValidation();
+            var ModelView = new ProfileValidation();
 
             ModelView.AppointmentId = ThisUser.AccountAppointment.Id;
             ModelView.CompanyName = cntx_.producernames.Where(xxx => xxx.ProducerId == ThisUser.AccountCompany.ProducerId).First().ProducerName;
@@ -70,7 +64,7 @@ namespace ProducerInterface.Controllers
         }
 
         [HttpPost]
-        public ActionResult Account(ProducerInterfaceCommon.ContextModels.ProfileValidation changeProfile)
+        public ActionResult Account(ProfileValidation changeProfile)
         {
 
             if (!ModelState.IsValid)

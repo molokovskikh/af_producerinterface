@@ -135,8 +135,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 {
                     ChangeAccountListInGroup(GroupInDB.Id, new List<long>(), ChangedGroup.ListUser);                 
                 }
-
-                AccountLastUpdatePermission(GroupInDB.Id);
+            
             }
 
             SuccessMessage("Изменения в группе " + ChangedGroup.Name + " применены");

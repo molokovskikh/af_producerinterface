@@ -10,9 +10,11 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Global
 
         [Display(Name = "Выберите способ для связи")]
         public string Contact { get; set; }
-
-        [Display(Name ="Номер телефона")]
-        public string Phone { get; set; }
+             
+        [Display(Name = "Номер телефона")]
+        [Phone(ErrorMessage = "Некорректно введен номер")]
+        [StringLength(maximumLength:15, MinimumLength = 15, ErrorMessage = "Корректно заполните номер телефона")]
+        public string PhoneNum { get; set; }
 
         [Display(Name = "Email")]       
         [EmailAddress(ErrorMessage = "Введите корректый email")]
