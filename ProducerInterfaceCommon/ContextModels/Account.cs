@@ -37,6 +37,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<sbyte> Enabled { get; set; }
         public Nullable<System.DateTime> LastUpdatePermisison { get; set; }
         public Nullable<decimal> RegionMask { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string OtherName { get; set; }
     
         public virtual AccountAppointment AccountAppointment { get; set; }
         public virtual AccountCompany AccountCompany { get; set; }

@@ -116,12 +116,11 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var userName = cntx.Account.Single(x => x.Id == userId).Name;
 			// иначе - успех
 			var jext = new jobextend()
 			{
 				CreationDate = DateTime.Now,
-				Creator = userName,
+				CreatorId = userId,
 				CustomName = model.CastomName,
 				Enable = true,
 				JobGroup = key.Group,
@@ -304,7 +303,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult JobList()
 		{
 			var scheduler = GetScheduler();
-			var jobList = cntx.jobextend.Where(x => x.ProducerId == producerId
+			var jobList = cntx.jobextendwithproducer.Where(x => x.ProducerId == producerId
 																				&& x.SchedName == scheduler.SchedulerName
 																				&& x.Enable == true)
 																				.OrderByDescending(x => x.CreationDate)

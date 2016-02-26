@@ -58,12 +58,13 @@ namespace ProducerInterfaceCommon.Heap
 		public static void AutoPostReportMessage(producerinterface_Entities cntx, long userId, jobextend jext, string path, List<string> mailTo)
 		{
 			var user = cntx.Account.Single(x => x.Id == userId);
+			var creator = cntx.Account.Single(x => x.Id == jext.CreatorId);
 			var producerName = cntx.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
 
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.AutoPostReport);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = jext.Creator, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
       EmailSender.SendEmail(mailTo, subject, body, path);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
@@ -75,12 +76,13 @@ namespace ProducerInterfaceCommon.Heap
 		public static void ManualPostReportMessage(producerinterface_Entities cntx, long userId, jobextend jext, string path, List<string> mailTo)
 		{
 			var user = cntx.Account.Single(x => x.Id == userId);
+			var creator = cntx.Account.Single(x => x.Id == jext.CreatorId);
 			var producerName = cntx.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
 
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ManualPostReport);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = jext.Creator, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(mailTo, subject, body, path);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
