@@ -1,32 +1,27 @@
-﻿@*@{
-var user = new ProducerInterfaceCommon.ContextModels.LoginValidation();
-var model = user;
-}*@
-<div class="dropdown-menu" id="autentificationForm">
-    <form method="post" action="~/Account/UserAuthentication">
-        <div class="form-group-lg">
-            
-            <div class="form-group">
+﻿@model ProducerInterfaceCommon.ViewModel.Interface.Registration.AuthViewModel
 
-                <div class="input-group">
-                    <i class="input-group-addon" id="login-view">Логин</i>                 
-              
-                    <input type="text" class="form-control col-sm-12 col-xs-12 col-md-12 col-lg-12" name="login" id="login"/>
-                          @*@Html.TextBoxFor(model => model.login, null, new { @Name = "login", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12"})*@                 
+<div class="dropdown-menu" id="autentificationForm">
+
+    @using(Html.BeginForm("UserAuthentication", "Account", FormMethod.Post)) { 
+        @Html.ValidationSummary(true)
+        <div class="form-group-lg">            
+            <div class="form-group">
+                <div class="input-group" title="Email указанный при регистрации">
+                    <i class="input-group-addon" id="login-view">Логин</i>  
+                    @Html.TextBoxFor(model => model.login, null, new { @Name = "login", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12", @placeholder = "Email" })                 
                 </div>    
-                @*@Html.ValidationMessageFor(model => model.login)*@
+                @Html.ValidationMessageFor(model => model.login)
               
             </div>
 
             <div class="form-group">
-                <div class="input-group">
-                    <i class="input-group-addon">Пароль</i>
-                    <input type="password" class="form-control col-sm-12 col-xs-12 col-md-12 col-lg-12" name="password" id="password" />
-                    @*@Html.TextBoxFor(model => model.password, null, new { @type = "password", @Name = "password", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12"})*@
+                <div class="input-group" title="Пароль отправленный на вашу почту при регистрации">
+                    <i class="input-group-addon">Пароль</i>         
+                    @Html.TextBoxFor(model => model.password, null, new { @type = "password", @Name = "password", @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12"})
 
-                    @*<input class="form-control input-group-lg" type="password" id="password" Name="password" placeholder="Пароль" />*@
+               
                 </div>
-                @*@Html.ValidationMessageFor(model => model.password)*@
+                @Html.ValidationMessageFor(model => model.password)
             
             </div>
 
@@ -41,5 +36,7 @@ var model = user;
                 </center>
             </div>
         </div>
-    </form>
+   
+
+    }
 </div>                  

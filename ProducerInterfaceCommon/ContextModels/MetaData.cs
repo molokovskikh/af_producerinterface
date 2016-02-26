@@ -165,7 +165,7 @@ namespace ProducerInterfaceCommon.ContextModels
             } set { _id_log = value; } }
 
         private long _id_log { get; set; }
-
+            
 	}
 
     public class AccountMetaData

@@ -47,7 +47,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountEmail> AccountEmail { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
-        public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<promotions> promotions { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
@@ -64,6 +63,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<Account> Account { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
+        public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {

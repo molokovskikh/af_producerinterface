@@ -298,6 +298,7 @@
     <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
     <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
+    <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
     <Content Include="WebForm\ReportList.aspx" />
@@ -735,6 +736,11 @@
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\Partial\SearchResult.cshtml" />
     <Content Include="Views\Promotion\OnePromotion.cshtml" />
+    <Content Include="Views\Promotion\Partial\PromotionStatus.cshtml" />
+    <Content Include="Views\Permission\ChangeAccount.cshtml" />
+    <Content Include="Views\Permission\EditorTemplates\IntListGroup.cshtml" />
+    <Content Include="Views\Permission\EditorTemplates\LongListRegion.cshtml" />
+    <Content Include="Views\Permission\ListUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

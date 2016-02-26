@@ -1,4 +1,6 @@
-﻿@model ProducerInterfaceCommon.ContextModels.RegisterDomainValidation
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Registration;
+@model RegDomainViewModel
+
 @{
     ViewBag.Title = "Регистрация";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,55 +10,57 @@
 
     <h2>Регистрация</h2>
 
-    <hr/>
+    <hr />
 
-@using(Html.BeginForm("DomainRegistration", "Account", FormMethod.Post))
-{
+    @using (Html.BeginForm("DomainRegistration", "Account", FormMethod.Post))
+    {
         @Html.ValidationSummary(true, "")
 
         @Html.HiddenFor(m => m.Producers)
         <h3>Компания : @Model.ProducerName</h3>
-        <hr/>
-		  
-		<div class="form-group">
-		<label>Email (введите имя и выберите доменное имя)</label>
-        <div class="input-group">
-	         @Html.EditorFor(m => m.Mailname)
-	        <div class="input-group-btn" style="min-width: 175px;">
-		       @Html.EditorFor(m => m.EmailDomain)
-	        </div>
-        </div>
-		  @Html.ValidationMessageFor(model => model.Mailname)
-		  @Html.ValidationMessageFor(model => model.EmailDomain)
-
-        
-		</div>
+        <hr />
 
         <div class="form-group">
-            <a data-toggle="modal" data-target="#myModal" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Домена нет в списке (обратная связь)</a> 
+            <label>Email (введите имя и выберите доменное имя)</label>
+            <div class="input-group">
+                @Html.EditorFor(m => m.Mailname)
+                <div class="input-group-btn" style="min-width: 175px;">
+                    @Html.EditorFor(m => m.EmailDomain)
+                </div>
+            </div>
+            @Html.ValidationMessageFor(model => model.Mailname)
+            @Html.ValidationMessageFor(model => model.EmailDomain)
+
+
         </div>
 
-	        @Html.EditorFor(m => m.Name)
+        <div class="form-group">
+            <a data-toggle="modal" data-target="#myModal" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Домена нет в списке (обратная связь)</a>
+        </div>
 
-	        @Html.EditorFor(m => m.PhoneNumber)
-	        @Html.EditorFor(m => m.AppointmentId)
+        @Html.EditorFor(m => m.LastName)
+        @Html.EditorFor(m => m.FirstName)
+        @Html.EditorFor(m => m.OtherName)
 
-	        <br/>
+        @Html.EditorFor(m => m.PhoneNumber)
+        @Html.EditorFor(m => m.AppointmentId)
 
-	        <div class="form-group">
-		        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация"/>
-	        </div>
-	        <div class="form-group">
-		        <a href="~/Registration/Index" class="">Я уже регистрировался</a>
-	        </div>
-	        <div class="form-group">
-		        <a href="~/Registration/PasswordRecovery" class="">Забыли пароль?</a>
-	        </div>
+        <br />
 
-}
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Регистрация" />
+            </div>
+            <div class="form-group">
+                <a href="~/Registration/Index">Я уже регистрировался</a>
+            </div>
+            <div class="form-group">
+                <a href="~/Registration/PasswordRecovery">Забыли пароль?</a>
+            </div>
+
+    }
 </div>
 
 @section JavaScript{
-<script src="~/Scripts/jquery.maskedinput.min.js"></script>
-<script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
 }

@@ -19,40 +19,44 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body name="main_container" class="main_container" id="main_container">
-      
+
     <div class="server-message" style="font-size:1.5em; text-align:center; margin-top:50px;"></div>
 
-     @Html.Partial("MenuPartialView")
+    @Html.Partial("MenuPartialView")
 
     <div class="content" id="page_content">
-      
-            @RenderBody()
-      
+
+        @RenderBody()
+
         <br />
-        <footer class="panel-footer navbar-fixed-bottom">                   
-                <p>&copy; @DateTime.Now.Year – Аналит Фармация | Email: <a href="mailto:marketing@analit.net">marketing@analit.net</a></p>          
+        <footer class="panel-footer navbar-fixed-bottom">
+            <p>&copy; @DateTime.Now.Year – Аналит Фармация | Email: <a href="mailto:marketing@analit.net">marketing@analit.net</a></p>
         </footer>
     </div>
-  
-  
-    
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" id="feedBack_ModalDialog">
+            <div class="modal-content" id="feedback_modal_content">
+                @Html.Action("GetView", "FeedBack")
+            </div>
+        </div>
+    </div>
+
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/MvcAjax")
+    @Scripts.Render("~/bundles/WorkPlace")
     @Scripts.Render("~/bundles/bootstrap")
-	
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @Scripts.Render("~/bundles/chosen")
 
     @if (user == null)
     {
         @Scripts.Render("~/bundles/jqueryval")
     }
 
-    @Html.Partial("ModelSendErrorMessageForAminPartial")
-
-    <script src="~/Scripts/WorkPlace/Analit.js"></script>
-    <script src="~/Scripts/WorkPlace/ZAnalit.js"></script>
-	 <script src="~/Scripts/WorkPlace/ModalView.js"></script>
     @RenderSection("JavaScript", required: false)
 
     <a hidden="hidden" name="UrlString" id="UrlString" value="@ViewBag.UrlString"></a>
+
+
 </body>
 </html>

@@ -5,9 +5,10 @@
 }
     <div class="row">
         <div class="col-xs-12">
-            <table class="table-bordered table-custom" style="min-width:100%;">
+            <table class="table-bordered table-striped table-condensed table-custom" style="min-width:100%;">
                 <tr>
                     <th>Наименование</th>
+                    <th>Статус</th>
                     <th>Аннотация</th>
                     <th>Дата начала</th>
                     <th>Дата окончания</th>
@@ -21,14 +22,15 @@
                 {
                     <tr>
                         <td>@Item.Name</td>
+                        <th>@Html.Partial("PromotionStatus", Item)</th>
                         <td>@Item.Annotation</td>
                         <td>@Item.Begin.Value.ToString("dd.MM.yyyy")</td>
                         <td>@Item.End.Value.ToString("dd.MM.yyyy")</td>
                         <td>@Item.promotionToDrug.Count()
-                        @foreach (var ItemGrug in Item.promotionToDrug)
+                        @*@foreach (var ItemGrug in Item.promotionToDrug)
                         {
                              
-                        }
+                        }*@
                         </td>
                         <td>@ProducerList.Where(xx=>xx.Value == Item.ProducerId.ToString()).First().Text</td>
                         <td>

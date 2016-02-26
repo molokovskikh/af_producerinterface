@@ -208,8 +208,10 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
-    <Compile Include="CustomHelpers\Promotions.cs" />
-    <Compile Include="CustomHelpers\RegionMaskConverter.cs" />
+    <Compile Include="CustomHelpers\Func\SqlProcedure.cs" />
+    <Compile Include="CustomHelpers\Models\BaseModel.cs" />
+    <Compile Include="CustomHelpers\Models\PromotionsInRegionMask.cs" />
+    <Compile Include="CustomHelpers\Models\ReportsInRegionMask.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
     <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
@@ -391,6 +393,14 @@
     <Compile Include="ReportModels\report_type_properties.cs">
       <DependentUpon>Reports_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="SPAM\Enums.cs" />
+    <Compile Include="SPAM\Mail_Send.cs" />
+    <Compile Include="ViewModel\Interface\Global\FeedBack.cs" />
+    <Compile Include="ViewModel\Interface\Registration\AuthViewModel.cs" />
+    <Compile Include="ViewModel\Interface\Registration\RegDomainViewModel.cs" />
+    <Compile Include="ViewModel\Interface\Registration\RegNotProducerViewModel.cs" />
+    <Compile Include="ViewModel\Interface\Registration\RegProducerViewModel.cs" />
+    <Compile Include="ViewModel\Interface\Registration\RegViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="ContextModels\producerinterface_Entities.edmx">
@@ -477,7 +487,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Base\" />
+    <Folder Include="ViewModel\ControlPanel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

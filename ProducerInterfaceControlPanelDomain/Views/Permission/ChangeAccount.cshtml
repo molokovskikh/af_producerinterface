@@ -1,0 +1,49 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model AdminAccountValidation
+
+@{
+    ViewBag.Title = "Управление правами администратора";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="container">
+    <h2>@Model.Name</h2>
+    <hr/>
+
+    @using (Html.BeginForm(new{ FormMethod.Post }))
+    {
+
+        @Html.HiddenFor(m=>m.Id)
+
+        @Html.HiddenFor(m=>m.TypeUser)
+
+
+
+        <div class="form-group">
+            <label>Регионы</label>
+            @Html.EditorFor(m => m.RegionListId)
+        </div>
+
+        <div class="form-group">
+            <label>Список групп</label>
+            @Html.EditorFor(m => m.GroupListId)
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="btn btn-group">
+                    <input type="submit" value="Сохранить изменения" class="btn btn-primary" />
+                    <a href="@Url.Action("ListUsers")" class="btn btn-primary">Назад к списку пользователей</a>
+                </div>  
+            </div>               
+        </div>
+    }
+
+</div>
+
+@section scripts
+{    
+<link href="http://localhost:51244/Content/Chosen/css/chosen.css" rel="stylesheet" />
+    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>    
+    <script src="~/Scripts/WorkPlace/Permission_ChangeAccount.js"></script>
+}

@@ -34,3 +34,50 @@
 24.02.2016 14:42:43.102 [19] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Promotion\PartialSearchResult.cshtml(2): error CS1973: 'HtmlHelper<dynamic>' has no applicable method named 'Action' but appears to have an extension method by that name. Extension methods cannot be dynamically dispatched. Consider casting the dynamic arguments or calling the extension method without the extension method syntax.
 24.02.2016 15:59:50.778 [25] ERROR MySqlAdoNetAppender - При обновлении записей возникла ошибка. Дополнительные сведения приведены во внутреннем исключении.
 24.02.2016 18:20:08.240 [6] ERROR MySqlAdoNetAppender - Тип сущности List`1 не входит в модель для текущего контекста.
+25.02.2016 11:51:56.392 [5] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 12:35:11.048 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 12:36:01.678 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 12:44:05.588 [27] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 12:49:29.692 [16] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 12:51:16.051 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 12:54:00.798 [15] ERROR MySqlAdoNetAppender - Для данного объекта не определено беспараметрических конструкторов.
+25.02.2016 12:54:19.619 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 12:56:10.713 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:04:49.209 [45] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:07:40.364 [45] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:09:06.912 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:10:11.897 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:12:52.574 [45] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:16:18.151 [15] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:17:28.341 [45] ERROR MySqlAdoNetAppender - Ошибка выполнения дочернего запроса для дескриптора 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerAsyncWrapper'.
+25.02.2016 13:34:38.893 [32] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+25.02.2016 13:35:25.682 [21] ERROR MySqlAdoNetAppender - Ссылка на объект не указывает на экземпляр объекта.
+25.02.2016 15:46:47.829 [26] ERROR MySqlAdoNetAppender - Текущий запрос для действия "ChangeAccount" на контроллере типа "PermissionController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult ChangeAccount(Int64) на типе ProducerInterfaceControlPanelDomain.Controllers.PermissionController
+System.Web.Mvc.ActionResult ChangeAccount(ProducerInterfaceCommon.ContextModels.Account) на типе ProducerInterfaceControlPanelDomain.Controllers.PermissionController
+25.02.2016 15:47:26.236 [38] ERROR MySqlAdoNetAppender - Текущий запрос для действия "ChangeAccount" на контроллере типа "PermissionController" является неоднозначным на следующих методах действий:
+System.Web.Mvc.ActionResult ChangeAccount(Int64) на типе ProducerInterfaceControlPanelDomain.Controllers.PermissionController
+System.Web.Mvc.ActionResult ChangeAccount(ProducerInterfaceCommon.ContextModels.Account) на типе ProducerInterfaceControlPanelDomain.Controllers.PermissionController
+25.02.2016 15:49:50.526 [47] ERROR MySqlAdoNetAppender - Тип сущности List`1 не входит в модель для текущего контекста.
+25.02.2016 15:50:01.463 [26] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ChangeAccount.cshtml(13): error CS1061: 'Account' does not contain a definition for 'LongListRegion' and no extension method 'LongListRegion' accepting a first argument of type 'Account' could be found (are you missing a using directive or an assembly reference?)
+25.02.2016 15:55:16.892 [41] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult ChangeAccount(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.PermissionController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+25.02.2016 15:56:57.725 [41] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult ChangeAccount(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.PermissionController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+25.02.2016 16:04:23.198 [41] ERROR MySqlAdoNetAppender - Тип сущности List`1 не входит в модель для текущего контекста.
+25.02.2016 16:37:40.182 [23] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 16:46:15.475 [6] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 16:47:55.302 [6] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 16:48:10.976 [8] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 16:53:27.185 [9] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 16:55:59.452 [9] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 17:10:30.767 [37] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 17:14:53.796 [35] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 17:41:53.136 [22] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 17:45:03.065 [22] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 17:46:26.634 [22] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 17:48:10.050 [20] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int64", не допускающего значение NULL, для метода "System.Web.Mvc.ActionResult ChangeAccount(Int64)" в "ProducerInterfaceControlPanelDomain.Controllers.PermissionController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+25.02.2016 17:49:30.965 [20] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
+25.02.2016 18:03:09.114 [6] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ChangeAccount.cshtml(24): error CS1061: 'Account' does not contain a definition for 'RegionListId' and no extension method 'RegionListId' accepting a first argument of type 'Account' could be found (are you missing a using directive or an assembly reference?)
+25.02.2016 18:44:54.255 [41] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "ChangeUser" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionController".

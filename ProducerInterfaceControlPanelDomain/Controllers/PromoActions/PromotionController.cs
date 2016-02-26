@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using Antlr.Runtime.Misc;
+using ProducerInterfaceCommon.CustomHelpers.Func;
+using ProducerInterfaceCommon.CustomHelpers.Models;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -15,10 +18,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var ModelSearch = new SearchProducerPromotion();
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-            var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "0" } };
+            var ProducerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
             ProducerList.AddRange(h.RegisterListProducer());
             ViewBag.ProducerList = ProducerList;
-
+            ViewBag.RegionList = h.GetRegionList((decimal)CurrentUser.RegionMask);
+            
             ModelSearch = new SearchProducerPromotion();
             ModelSearch.Status = (byte)PromotionStatus.All;
             ModelSearch.Begin = DateTime.Now.AddDays(-30);
@@ -32,21 +36,18 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var PromotionList = new List<promotions>();
 
+            SqlProcedure<ProducerInterfaceCommon.CustomHelpers.Models.PromotionsInRegionMask> CH = new SqlProcedure<ProducerInterfaceCommon.CustomHelpers.Models.PromotionsInRegionMask>((ulong)CurrentUser.RegionMask);
+            var ListId = CH.GetPromotionId();
+            PromotionList = cntx_.promotions.Where(x => ListId.Contains(x.Id)).ToList();
+
             if (!Filter.EnabledDateTime)
             {
-                PromotionList = cntx_.promotions.Where(xxx => xxx.Begin < Filter.End && xxx.End > Filter.Begin).ToList();
+                PromotionList = PromotionList.Where(x=> x.Begin > Filter.Begin && x.End < Filter.End).ToList();
             }
-         
+
             if (Filter.Producer > 0)
             {
-                if (PromotionList.Count() == 0)
-                {
-                    PromotionList = cntx_.promotions.Where(x => x.ProducerId == Filter.Producer).ToList();
-                }
-                else
-                {
-                    PromotionList = PromotionList.Where(x => x.ProducerId == Filter.Producer).ToList();
-                }               
+                PromotionList = PromotionList.Where(x => x.ProducerId == Filter.Producer).ToList();
             }
 
             if (Filter.Status == (byte)PromotionStatus.All)
@@ -79,21 +80,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 }
             }
 
-            var CustomHelper = new ProducerInterfaceCommon.CustomHelpers.Promotions();
-            var ListId = CustomHelper.GetRegionPromotions(1020540654650, 10, 10);
-
-            PromotionList = ListId;
+            PromotionList = PromotionList.OrderByDescending(x => x.UpdateTime).ToList();
 
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
 
-            foreach (var ItemPromo in PromotionList)
-            {
-                ItemPromo.GetRegionnamesList();
-                ItemPromo.DrugList = h.GetDrugInPromotion(ItemPromo.Id);
-            }
-            
             ViewBag.ProducerList = h.RegisterListProducer();
-
+         
             return PartialView("Partial/SearchResult",PromotionList);
         }
 

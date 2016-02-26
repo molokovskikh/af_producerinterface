@@ -1,4 +1,4 @@
 ﻿$(function () {
-    var ProducerUser = $('#Producers');
+    var ProducerUser = $('#ProducerId');
     ProducerUser.chosen({ width: '100%' });
 });

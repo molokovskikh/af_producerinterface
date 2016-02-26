@@ -1,4 +1,6 @@
-﻿@model ProducerInterfaceCommon.ContextModels.RegisterCustomValidation
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Registration;
+@model RegNotProducerViewModel
+
 @{
     ViewBag.Title = "Регистрация";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,16 +12,19 @@
     <hr />
 
     @using (Html.BeginForm("CustomRegistration", "Account", FormMethod.Post))
-            {
+    {
         @Html.ValidationSummary(true, "")
 
         <div class="form-group">
             <label>Какие задачи и в чьих интересах предполагается решать, получив доступ к ресурсу</label>
-            @Html.TextAreaFor(m => m.CompanyName, new {@class = "form-control", rows = "5"})
+            @Html.TextAreaFor(m => m.CompanyName, new { @class = "form-control", rows = "5" })
             @Html.ValidationMessageFor(model => model.CompanyName)
         </div>
 
-        @Html.EditorFor(m => m.Name)
+        @Html.EditorFor(m => m.LastName)
+        @Html.EditorFor(m => m.FirstName)
+        @Html.EditorFor(m => m.OtherName)
+
         @Html.EditorFor(m => m.login)
 
         @Html.EditorFor(m => m.PhoneNumber)
@@ -31,10 +36,10 @@
             <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Запрос на регистрацию" />
         </div>
         <div class="form-group">
-            <a href="~/Registration/Index" class="">Я уже регистрировался</a>
+            <a href="~/Registration/Index">Я уже регистрировался</a>
         </div>
         <div class="form-group">
-            <a href="~/Registration/PasswordRecovery" class="">Забыли пароль?</a>
+            <a href="~/Registration/PasswordRecovery">Забыли пароль?</a>
         </div>
-            }
+    }
 </div>

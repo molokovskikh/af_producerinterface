@@ -77,6 +77,31 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
+        private List<ulong> GetRegionListId(decimal RegionMask, List<regionnames> LisrRegions)
+        {
+
+            var results = LisrRegions
+                .Where(x =>                            ((ulong)x.RegionCode & (ulong) RegionMask) > 0)
+                .OrderBy(x => x.RegionCode)
+                .Select(x => (ulong)x.RegionCode).ToList();         
+                     
+            return results;
+        }
+
+        public List<OptionElement> GetRegionList(decimal RegionMask)
+        {
+
+            if (RegionMask == 0)
+            {
+                return _cntx.regionnames.Where(x => x.RegionCode == 0).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
+            }
+
+            var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();      
+            var IdGetRegions = GetRegionListId(RegionMask, LisrRegions);
+            return LisrRegions.Where(x => IdGetRegions.Contains((ulong)x.RegionCode)).ToList()
+                            .Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
+        }
+
 		// для UI
 		public List<OptionElement> GetCatalogList()
 		{

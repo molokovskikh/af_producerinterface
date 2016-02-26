@@ -1,0 +1,75 @@
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Global;
+@model FeedBack
+
+@{
+    var AccountUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
+}
+
+@using (Ajax.BeginForm("SaveFeedBack", "FeedBack", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "feedback_modal_content" }))
+{
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" onclick="serverMessageCleanForm()">Закрыть</button>
+        <h4 class="modal-title">Ваши пожелания, сообщение об ошибке</h4>
+    </div>
+
+    <div class="modal-body" id="ModalBodyId">
+
+        <input value="@ViewBag.UrlString" id="Url" name="Url" hidden="hidden" />
+    
+        @if (AccountUser != null)
+        {
+            <div class="form-group">
+                <label>Сообщение</label>
+                @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Выберите удобный способ для связи с вами</label>
+                <select name="Contact" id="Contact" class="form-control">
+                    <option value="@AccountUser.Login">@AccountUser.Login</option>
+                    @if (AccountUser.Phone != null)
+                    {
+                        <option value="@AccountUser.Phone">@AccountUser.Phone</option>
+                    }
+                </select>
+            </div>
+        }
+        else
+        {
+            @Html.ValidationSummary(true)
+
+            <div class="form-group">
+                <label>Сообщение</label>
+                @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
+
+            <div class="form-group">
+                <label>Номер телефона</label>
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+        }
+
+        <div class="form-group">
+            <label>Тип обращения</label>
+            <select id="FeedType" name="FeedType" class="form-control">
+                <option value="1" selected="selected">Пожелания</option>
+                <option value="2">Ошибка</option>
+                <option value="3">Другое</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="modal-footer" id="footer_model_message">
+       <input type="submit" class="btn btn-primary" value="Отправить запрос"/>
+    </div>
+
+}
