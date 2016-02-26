@@ -53,9 +53,19 @@ namespace ProducerInterface.Controllers
 #if DEBUG
 			return GetDebagSheduler();
 #else
-						return GetRemoteSheduler();
+			return GetRemoteSheduler();
 #endif
 		}
+
+		private string GetSchedulerName()
+		{
+#if DEBUG
+			return "TestScheduler";
+#else
+			return "ServerScheduler";
+#endif
+		}
+
 
 
 		/// <summary>
@@ -302,17 +312,17 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult JobList(long? cid)
 		{
-			var scheduler = GetScheduler();
+			var schedulerName = GetSchedulerName();
 			// вытащили всех создателей, создававших отчеты этого производителя
 			var creatorIds = cntx.jobextend
-				.Where(x => x.ProducerId == producerId && x.SchedName == scheduler.SchedulerName && x.Enable == true)
+				.Where(x => x.ProducerId == producerId && x.SchedName == schedulerName && x.Enable == true)
 				.Select(x => x.CreatorId)
 				.Distinct().ToList();
 			ViewData["creators"] = cntx.Account.Where(x => creatorIds.Contains(x.Id)).
 				Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
 			var query = cntx.jobextendwithproducer.Where(x => x.ProducerId == producerId
-																												&& x.SchedName == scheduler.SchedulerName
+																												&& x.SchedName == schedulerName
 																												&& x.Enable == true);
 			if (cid.HasValue)
 				query = query.Where(x => x.CreatorId == cid);
