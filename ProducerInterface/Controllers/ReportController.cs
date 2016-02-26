@@ -13,6 +13,7 @@ using ProducerInterfaceCommon.Models;
 using System.Data;
 using System.IO;
 using System.Net;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterface.Controllers
 {
@@ -74,7 +75,7 @@ namespace ProducerInterface.Controllers
 			var model = (Report)Activator.CreateInstance(type);
 			model.Id = Id.Value;
 			model.ProducerId = producerId;
-			model.MailSubject = h.GetMailOkReportSubject();
+			//model.MailSubject = h.GetMailOkReportSubject();
 
 			// при GET - отправили её пользователю на заполнение
 			if (HttpContext.Request.HttpMethod == "GET")
@@ -149,13 +150,15 @@ namespace ProducerInterface.Controllers
 			var key = new JobKey(jobName, jobGroup);
 			var scheduler = GetScheduler();
 			var job = scheduler.GetJobDetail(key);
-			if (job == null) {
+			if (job == null)
+			{
 				ErrorMessage("Задача не найдена");
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null) {
+			var jext = GetJobExtend(jobName);
+			if (jext == null)
+			{
 				ErrorMessage("Дополнительные параметры задачи не найдены");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -188,13 +191,15 @@ namespace ProducerInterface.Controllers
 			var key = new JobKey(jobName, jobGroup);
 			var scheduler = GetScheduler();
 			var job = scheduler.GetJobDetail(key);
-			if (job == null) {
+			if (job == null)
+			{
 				ErrorMessage("Задача не найдена");
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null) {
+			var jext = GetJobExtend(jobName);
+			if (jext == null)
+			{
 				ErrorMessage("Дополнительные параметры задачи не найдены");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -226,13 +231,15 @@ namespace ProducerInterface.Controllers
 			var key = new JobKey(jobName, jobGroup);
 			var scheduler = GetScheduler();
 			var job = scheduler.GetJobDetail(key);
-			if (job == null) {
+			if (job == null)
+			{
 				ErrorMessage("Задача не найдена");
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null) {
+			var jext = GetJobExtend(jobName);
+			if (jext == null)
+			{
 				ErrorMessage("Дополнительные параметры задачи не найдены");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -319,13 +326,15 @@ namespace ProducerInterface.Controllers
 			var scheduler = GetScheduler();
 			// нашли задачу
 			var job = scheduler.GetJobDetail(key);
-			if (job == null) {
+			if (job == null)
+			{
 				ErrorMessage("Задача не найдена");
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var jext = GetJobExtend(jobName, jobGroup);
-			if (jext == null) {
+			var jext = GetJobExtend(jobName);
+			if (jext == null)
+			{
 				ErrorMessage("Дополнительные параметры задачи не найдены");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -337,13 +346,15 @@ namespace ProducerInterface.Controllers
 			if (param is IInterval)
 				model = new RunNowIntervalParam();
 			// TODO при появлении неинтервальных отчетов добавить код
-			else {
+			else
+			{
 				ErrorMessage("Отчет этого типа невозможно запустить вручную");
 				return RedirectToAction("JobList", "Report");
 			}
 
 			// при GET возвращаем пустую модель для заполнения
-			if (HttpContext.Request.HttpMethod == "GET") {
+			if (HttpContext.Request.HttpMethod == "GET")
+			{
 				SetViewData(model);
 				return View(model);
 			}
@@ -357,7 +368,8 @@ namespace ProducerInterface.Controllers
 				ModelState.AddModelError(error.PropertyName, error.Message);
 
 			// если модель невалидна - возвращаем пользователю
-			if (!ModelState.IsValid) {
+			if (!ModelState.IsValid)
+			{
 				SetViewData(model);
 				return View(model);
 			}
@@ -406,8 +418,8 @@ namespace ProducerInterface.Controllers
 		public ActionResult RunHistory(string jobName)
 		{
 			ViewData["repName"] = $"История запусков отчета \"{h.GetReportName(jobName)}\"";
-      var model = cntx.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
-      return View(model);
+			var model = cntx.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+			return View(model);
 		}
 
 		/// <summary>
@@ -422,13 +434,15 @@ namespace ProducerInterface.Controllers
 			var scheduler = GetScheduler();
 			// нашли задачу
 			var job = scheduler.GetJobDetail(key);
-			if (job == null) {
+			if (job == null)
+			{
 				ErrorMessage("Задача не найдена");
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var jext = GetJobExtend(key.Name, key.Group);
-			if (jext == null) {
+			var jext = GetJobExtend(key.Name);
+			if (jext == null)
+			{
 				ErrorMessage("Дополнительные параметры задачи не найдены");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -440,7 +454,8 @@ namespace ProducerInterface.Controllers
 			if (param is IInterval)
 				model = new CronIntervalParam();
 			// TODO при появлении неинтервальных отчетов добавить код
-			else {
+			else
+			{
 				ErrorMessage("Для отчета этого невозможно задать расписание");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -469,7 +484,8 @@ namespace ProducerInterface.Controllers
 				ModelState.AddModelError(error.PropertyName, error.Message);
 
 			// если модель невалидна - возвращаем пользователю
-			if (!ModelState.IsValid) {
+			if (!ModelState.IsValid)
+			{
 				SetViewData(model);
 				return View(model);
 			}
@@ -507,20 +523,46 @@ namespace ProducerInterface.Controllers
 		/// Возвращает последнюю версию указанного отчета для отображения пользователю в веб-интерфейсе
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
-		/// <param name="jobGroup">Группа задания в Quartz</param>
 		/// <returns></returns>
-		public ActionResult DisplayReport(string jobName, string jobGroup)
+		public ActionResult DisplayReport(SendReport model)
 		{
-			ViewData["jobName"] = jobName;
-      var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == jobName && x.JobGroup == jobGroup);
-			if (jxml == null) {
+			// вытащили отчет
+			var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == model.jobName);
+			if (jxml == null)
+			{
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
-
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
-			return View(ds);
+
+			// вытащили заголовок отчета
+			ViewBag.Title = ds.Tables["Titles"].Rows[0][0].ToString();
+			// добавили список адресов для выбора
+			ViewData["MailTo"] = h.GetMailList();
+			// добавили отчет для вывода
+			ViewData["ds"] = ds;
+
+			// если указаны email - проверяем
+			if (model.MailTo != null && model.MailTo.Count > 0)
+			{
+				var ea = new EmailAddressAttribute();
+				var ok = true;
+				foreach (var mail in model.MailTo)
+					ok = ok && ea.IsValid(mail);
+				if (!ok)
+					ModelState.AddModelError("MailTo", "Неверный формат email");
+			}
+
+			// если POST и модель валидна - отправляем
+			if (HttpContext.Request.HttpMethod == "POST" && ModelState.IsValid)
+			{
+				var jext = cntx.jobextend.Single(x => x.JobName == model.jobName);
+				var file = GetExcel(jext);
+				EmailSender.ManualPostReportMessage(cntx, userId, jext, file.FullName, model.MailTo);
+				SuccessMessage("Отчет отправлен на указанные email");
+			}
+			return View(model);
 		}
 
 		/// <summary>
@@ -545,15 +587,14 @@ namespace ProducerInterface.Controllers
 		/// Возвращает статус указанного задания и ссылку на последний отчет
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
-		/// <param name="jobGroup">Группа задания в Quartz</param>
 		/// <returns></returns>
-		public JsonResult GetDisplayStatusJson(string jobName, string jobGroup)
+		public JsonResult GetDisplayStatusJson(string jobName)
 		{
-			var jext = GetJobExtend(jobName, jobGroup);
+			var jext = GetJobExtend(jobName);
 			return Json(new
 			{
 				status = jext.DisplayStatus,
-				url = Url.Action("DisplayReport", "Report", new { jobName = jobName, jobGroup = jobGroup })
+				url = Url.Action("DisplayReport", "Report", new { jobName = jobName })
 			}, JsonRequestBehavior.AllowGet);
 		}
 
@@ -563,14 +604,9 @@ namespace ProducerInterface.Controllers
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <param name="jobGroup">Группа задания в Quartz</param>
 		/// <returns></returns>
-		protected jobextend GetJobExtend(string jobName, string jobGroup)
+		protected jobextend GetJobExtend(string jobName)
 		{
-			var scheduler = GetScheduler();
-			return cntx.jobextend.SingleOrDefault(x => x.SchedName == scheduler.SchedulerName
-																																													&& x.JobName == jobName
-																																													&& x.JobGroup == jobGroup
-																																													&& x.ProducerId == producerId
-																																													&& x.Enable == true);
+			return cntx.jobextend.SingleOrDefault(x => x.JobName == jobName);
 		}
 
 		public JsonResult GetCatalogDragFamalyNames(string term)
@@ -592,18 +628,7 @@ namespace ProducerInterface.Controllers
 			// вернули файл
 			byte[] fileBytes = System.IO.File.ReadAllBytes(file.FullName);
 			var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-      return File(fileBytes, contentType, file.Name);
-		}
-
-		[HttpPost]
-		public ActionResult SendReport(string jobName, List<string> mailTo)
-		{
-			var jext = cntx.jobextend.Single(x => x.JobName == jobName);
-			var file = GetExcel(jext);
-
-			EmailSender.ManualPostReportMessage(cntx, userId, jext, file.FullName, mailTo);
-			SuccessMessage("Отчет отправлен на указанные email");
-			return RedirectToAction("DisplayReport", "Report", new { jobName = jext.JobName, jobGroup = jext.JobGroup });
+			return File(fileBytes, contentType, file.Name);
 		}
 
 		private FileInfo GetExcel(jobextend jext)

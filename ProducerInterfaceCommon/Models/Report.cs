@@ -20,9 +20,9 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("String")]
 		public string CastomName { get; set; }
 
-		[HiddenInput(DisplayValue = false)]
-		[Required]
-		public string MailSubject { get; set; }
+		//[HiddenInput(DisplayValue = false)]
+		//[Required]
+		//public string MailSubject { get; set; }
 
 		// тип отчета по enum
 		[HiddenInput(DisplayValue = false)]

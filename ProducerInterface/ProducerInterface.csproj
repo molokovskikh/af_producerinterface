@@ -214,7 +214,6 @@
     <Content Include="Content\Chosen\css\bootstrap-datepicker3.css" />
     <Content Include="Content\Chosen\css\bootstrap.css" />
     <Content Include="Content\Chosen\css\bootstrap.min.css" />
-    <Content Include="Content\Chosen\css\chosen.cusom.css" />
     <Content Include="Content\Chosen\css\chosen-sprite%402x.png" />
     <Content Include="Content\Chosen\css\chosen-sprite.png" />
     <Content Include="Content\Chosen\css\chosen.css" />
@@ -227,6 +226,7 @@
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
     <Content Include="Content\Chosen\js\chosen.jquery.js" />
     <Content Include="Content\Chosen\js\initAddJob.js" />
+    <Content Include="Content\Chosen\js\initDisplayReport.js" />
     <Content Include="Content\Chosen\js\initDrug.js" />
     <Content Include="Content\Chosen\js\initCron.js" />
     <Content Include="Content\Chosen\js\initRunNow.js" />
@@ -288,12 +288,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\Chosen\ajax-chosen.g.js" />
-    <Content Include="Scripts\Chosen\bootstrap-datepicker.js" />
-    <Content Include="Scripts\Chosen\bootstrap-datepicker.ru.min.js" />
-    <Content Include="Scripts\Chosen\chosen.jquery.js" />
-    <Content Include="Scripts\Chosen\jqCron.js" />
-    <Content Include="Scripts\Chosen\jqCron.ru.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -368,7 +362,6 @@
     <Content Include="Views\Registration\EditorTemplates\EditorStringPosition.cshtml" />
     <Content Include="Views\Registration\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Shared\LoginPartialView.cshtml" />
-    <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\Report\EditorTemplates\CronIntervalParam.cshtml" />
     <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\LongList.cshtml" />
@@ -437,8 +430,7 @@
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
     <Content Include="Views\Account\AdminAuth.cshtml" />
     <Content Include="Views\Report\RunHistory.cshtml" />
-    <Content Include="Views\FeedBack\FeedBack.cshtml" />
-    <Content Include="Views\FeedBack\Success.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

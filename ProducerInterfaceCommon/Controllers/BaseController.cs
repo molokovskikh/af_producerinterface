@@ -96,16 +96,16 @@ namespace ProducerInterfaceCommon.Controllers
 
         protected void AccountLastUpdatePermission(int GroupId)
         {
-            var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).ToList();
+					var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).Distinct().ToList();
 
-            foreach (var AccountItem in AccountList)
-            {
-                AccountItem.LastUpdatePermisison = DateTime.Now;
-                cntx_.Entry(AccountItem).State = System.Data.Entity.EntityState.Modified;
-            }
-        
-            cntx_.SaveChanges();
-        }
+					foreach (var AccountItem in AccountList)
+					{
+						AccountItem.LastUpdatePermisison = DateTime.Now;
+					}
+
+					cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
+					cntx_.SaveChanges();
+		}
 
 		#endregion
 
@@ -233,11 +233,7 @@ namespace ProducerInterfaceCommon.Controllers
                 }
             }
 
-
-			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(1), Cache.NoSlidingExpiration);
-
 			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(10), Cache.NoSlidingExpiration);
-//>>>>>>> c36163d2d38b8f2a764956ef806741e68de494de
 			return permissionList;
 		}
 

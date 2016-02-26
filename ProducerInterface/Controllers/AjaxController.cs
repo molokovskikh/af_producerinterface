@@ -19,16 +19,15 @@ namespace ProducerInterface.Controllers
 		/// Возвращает статус указанного задания и ссылку на последний отчет
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
-		/// <param name="jobGroup">Группа задания в Quartz</param>
 		/// <returns></returns>
-		public JsonResult GetDisplayStatusJson(string jobName, string jobGroup)
+		public JsonResult GetDisplayStatusJson(string jobName)
 		{
 			var cntx = new producerinterface_Entities();
 			var displayStatus = cntx.jobextend.Single(x => x.JobName == jobName).DisplayStatus;
 			return Json(new
 			{
 				status = displayStatus,
-				url = Url.Action("DisplayReport", "Report", new { jobName = jobName, jobGroup = jobGroup })
+				url = Url.Action("DisplayReport", "Report", new { jobName = jobName })
 			});
 		}
 
