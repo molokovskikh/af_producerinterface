@@ -5,9 +5,18 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Profile
     public class ProfileValidation
     {
         [UIHint("EditorString")]
-        [Display(Name = "ФИО")]
-        [Required(ErrorMessage = "Введите ФИО")]
-        public string Name { get; set; }
+        [Display(Name = "Фамилия")]
+        [Required(ErrorMessage = "Введите Фамилию")]
+        public string LastName { get; set; }
+
+        [UIHint("EditorString")]
+        [Display(Name = "Имя")]
+        [Required(ErrorMessage = "Введите Имя")]
+        public string FirstName { get; set; }
+
+        [UIHint("EditorString")]
+        [Display(Name = "Отчество")]      
+        public string OtherName { get; set; }
 
         [UIHint("EditorString")]
         [Display(Name = "Название компании")]

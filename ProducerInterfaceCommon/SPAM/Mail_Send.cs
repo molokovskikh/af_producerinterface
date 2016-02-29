@@ -8,12 +8,12 @@ namespace ProducerInterfaceCommon.SPAM
 {
     public class Mail_Send
     {
-        private Enums.MailType typeMailSend;
-        public Mail_Send(Enums.MailType TypeMailSend)
-        {
-            this.typeMailSend = TypeMailSend;
-        }
+        private Enums.TypeSpam TS;
 
+        public Mail_Send(Enums.TypeSpam MailType)
+        {
+            this.TS = MailType;
+        }
 
 
 

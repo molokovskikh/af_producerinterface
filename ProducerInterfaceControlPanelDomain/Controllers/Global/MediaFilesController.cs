@@ -13,6 +13,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         public ActionResult Index()
         {
             ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
+
+#if DEBUG
+{
+                ViewBag.FullUrlStringFile = this.Request.Url.Segments[0] + @"mediafiles/";
+}
+#endif
+
             var Files = cntx_.promotionsimage.Where(xxx=>xxx.NewsOrPromotions == true).ToList();
             return View(Files);
         }

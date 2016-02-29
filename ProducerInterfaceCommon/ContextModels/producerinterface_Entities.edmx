@@ -33,7 +33,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="GlobalEnabled" Type="tinyint" />
-          <Property Name="IdAccountCompany" Type="uint" />
+          <Property Name="IdAccount" Type="uint" />
         </EntityType>
         <EntityType Name="AccountCompany">
           <Key>
@@ -188,6 +188,7 @@
           <Property Name="NewsOldDescription" Type="text" />
           <Property Name="NewsNewDescription" Type="text" />
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IP" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="NotificationToProducers">
           <Key>
@@ -677,14 +678,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK1_Appointment_To_AccountCompany_Id">
-          <End Role="AccountCompany" Type="Self.AccountCompany" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
           <End Role="AccountAppointment" Type="Self.AccountAppointment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="AccountCompany">
+            <Principal Role="Account">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AccountAppointment">
-              <PropertyRef Name="IdAccountCompany" />
+              <PropertyRef Name="IdAccount" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -927,7 +928,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountGroupToPermission" EntitySet="AccountGroupToPermission" />
           </AssociationSet>
           <AssociationSet Name="FK1_Appointment_To_AccountCompany_Id" Association="Self.FK1_Appointment_To_AccountCompany_Id">
-            <End Role="AccountCompany" EntitySet="AccountCompany" />
+            <End Role="Account" EntitySet="Account" />
             <End Role="AccountAppointment" EntitySet="AccountAppointment" />
           </AssociationSet>
           <AssociationSet Name="FK1_NewsChangeToAccount" Association="Self.FK1_NewsChangeToAccount">
@@ -1127,11 +1128,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="DrugDescriptionRemark" EntityType="producerinterface_Model.DrugDescriptionRemark" />
           <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
           <EntitySet Name="NotificationToProducers" EntityType="producerinterface_Model.NotificationToProducers" />
-          <EntitySet Name="NewsChange" EntityType="producerinterface_Model.NewsChange" />
-          <AssociationSet Name="FK2_NewsChangeToNotification" Association="producerinterface_Model.FK2_NewsChangeToNotification">
-            <End Role="NotificationToProducers" EntitySet="NotificationToProducers" />
-            <End Role="NewsChange" EntitySet="NewsChange" />
-          </AssociationSet>
 					<EntitySet Name="catalognameswithuptime" EntityType="producerinterface_Model.catalognameswithuptime" />
           <EntitySet Name="ReportRunLog" EntityType="producerinterface_Model.ReportRunLog" />
           <EntitySet Name="reportrunlogwithuser" EntityType="producerinterface_Model.reportrunlogwithuser" />
@@ -1141,11 +1137,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           <EntitySet Name="mailformwithfooter" EntityType="producerinterface_Model.mailformwithfooter" />
-          <EntitySet Name="AccountAppointment" EntityType="producerinterface_Model.AccountAppointment" />
-          <AssociationSet Name="FK1_Appointment_To_AccountCompany_Id" Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id">
-            <End Role="AccountCompany" EntitySet="AccountCompany" />
-            <End Role="AccountAppointment" EntitySet="AccountAppointment" />
-          </AssociationSet>
           <EntitySet Name="AccountGroup" EntityType="producerinterface_Model.AccountGroup" />
           <EntitySet Name="AccountPermission" EntityType="producerinterface_Model.AccountPermission" />
           <AssociationSet Name="AccountGroupToPermission" Association="producerinterface_Model.AccountGroupToPermission">
@@ -1153,10 +1144,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountPermission" EntitySet="AccountPermission" />
           </AssociationSet>
           <EntitySet Name="Account" EntityType="producerinterface_Model.Account" />
-          <AssociationSet Name="Account_Appointment" Association="producerinterface_Model.Account_Appointment">
-            <End Role="AccountAppointment" EntitySet="AccountAppointment" />
-            <End Role="Account" EntitySet="Account" />
-          </AssociationSet>
           <AssociationSet Name="Account_CompanyId" Association="producerinterface_Model.Account_CompanyId">
             <End Role="AccountCompany" EntitySet="AccountCompany" />
             <End Role="Account" EntitySet="Account" />
@@ -1173,10 +1160,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="Account" EntitySet="Account" />
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
-          <AssociationSet Name="FK1_NewsChangeToAccount" Association="producerinterface_Model.FK1_NewsChangeToAccount">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="NewsChange" EntitySet="NewsChange" />
-          </AssociationSet>
           <AssociationSet Name="AccountUserToGroup" Association="producerinterface_Model.AccountUserToGroup">
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="Account" EntitySet="Account" />
@@ -1190,6 +1173,24 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+          </AssociationSet>
+          <EntitySet Name="NewsChange" EntityType="producerinterface_Model.NewsChange" />
+          <AssociationSet Name="FK1_NewsChangeToAccount" Association="producerinterface_Model.FK1_NewsChangeToAccount">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="NewsChange" EntitySet="NewsChange" />
+          </AssociationSet>
+          <AssociationSet Name="FK2_NewsChangeToNotification" Association="producerinterface_Model.FK2_NewsChangeToNotification">
+            <End Role="NotificationToProducers" EntitySet="NotificationToProducers" />
+            <End Role="NewsChange" EntitySet="NewsChange" />
+          </AssociationSet>
+          <EntitySet Name="AccountAppointment" EntityType="producerinterface_Model.AccountAppointment" />
+          <AssociationSet Name="Account_Appointment" Association="producerinterface_Model.Account_Appointment">
+            <End Role="AccountAppointment" EntitySet="AccountAppointment" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK1_Appointment_To_AccountCompany_Id" Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountAppointment" EntitySet="AccountAppointment" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="LogForNet">
@@ -1218,7 +1219,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ProducerId" Type="Int64" />
           <NavigationProperty Name="CompanyDomainName" Relationship="producerinterface_Model.CompanyId_AccountCompanyId" FromRole="AccountCompany" ToRole="CompanyDomainName" />
-          <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="AccountCompany" ToRole="AccountAppointment" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.Account_CompanyId" FromRole="AccountCompany" ToRole="Account" />
         </EntityType>
         <EntityType Name="AccountEmail">
@@ -1346,34 +1346,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NotificationToProducers" ToRole="NewsChange" />
         </EntityType>
-        <EntityType Name="NewsChange">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="IdAccount" Type="Int64" Nullable="false" />
-          <Property Name="IdNews" Type="Int64" Nullable="false" />
-          <Property Name="TypeCnhange" Type="Byte" Nullable="false" />
-          <Property Name="DateChange" Type="DateTime" Nullable="false" />
-          <Property Name="NewsNewTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="NewsNewDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="NotificationToProducers" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NewsChange" ToRole="NotificationToProducers" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="NewsChange" ToRole="Account" />
-        </EntityType>
-        <Association Name="FK2_NewsChangeToNotification">
-          <End Type="producerinterface_Model.NotificationToProducers" Role="NotificationToProducers" Multiplicity="1" />
-          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NotificationToProducers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="NewsChange">
-              <PropertyRef Name="IdNews" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="catalognameswithuptime">
           <Key>
             <PropertyRef Name="Id" />
@@ -1449,29 +1421,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Header" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="AccountAppointment">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="GlobalEnabled" Type="SByte" />
-          <Property Name="IdAccountCompany" Type="Int64" />
-          <NavigationProperty Name="AccountCompany" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="AccountAppointment" ToRole="AccountCompany" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.Account_Appointment" FromRole="AccountAppointment" ToRole="Account" />
-        </EntityType>
-        <Association Name="FK1_Appointment_To_AccountCompany_Id">
-          <End Type="producerinterface_Model.AccountCompany" Role="AccountCompany" Multiplicity="0..1" />
-          <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AccountCompany">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AccountAppointment">
-              <PropertyRef Name="IdAccountCompany" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="AccountGroup">
           <Key>
             <PropertyRef Name="Id" />
@@ -1521,27 +1470,16 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Enabled" Type="SByte" />
           <Property Name="LastUpdatePermisison" Type="DateTime" />
           <Property Name="RegionMask" Type="Decimal" />
-          <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountCompany" Relationship="producerinterface_Model.Account_CompanyId" FromRole="Account" ToRole="AccountCompany" />
           <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
-          <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
           <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
+          <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
+          <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
+          <NavigationProperty Name="AccountAppointment1" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="Account" ToRole="AccountAppointment" />
         </EntityType>
-        <Association Name="Account_Appointment">
-          <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AccountAppointment">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Account">
-              <PropertyRef Name="AppointmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="Account_CompanyId">
           <End Type="producerinterface_Model.AccountCompany" Role="AccountCompany" Multiplicity="0..1" />
           <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
@@ -1587,18 +1525,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Principal>
             <Dependent Role="promotions">
               <PropertyRef Name="ProducerAdminId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK1_NewsChangeToAccount">
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
-          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="NewsChange">
-              <PropertyRef Name="IdAccount" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1680,6 +1606,82 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Principal>
             <Dependent Role="AccountFeedBack">
               <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="NewsChange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="IdAccount" Type="Int64" Nullable="false" />
+          <Property Name="IdNews" Type="Int64" Nullable="false" />
+          <Property Name="TypeCnhange" Type="Byte" Nullable="false" />
+          <Property Name="DateChange" Type="DateTime" Nullable="false" />
+          <Property Name="NewsNewTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="NewsNewDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="NewsChange" ToRole="Account" />
+          <NavigationProperty Name="NotificationToProducers" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NewsChange" ToRole="NotificationToProducers" />
+        </EntityType>
+        <Association Name="FK1_NewsChangeToAccount">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
+          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsChange">
+              <PropertyRef Name="IdAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK2_NewsChangeToNotification">
+          <End Type="producerinterface_Model.NotificationToProducers" Role="NotificationToProducers" Multiplicity="1" />
+          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotificationToProducers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsChange">
+              <PropertyRef Name="IdNews" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AccountAppointment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GlobalEnabled" Type="SByte" />
+          <Property Name="IdAccount" Type="Int64" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.Account_Appointment" FromRole="AccountAppointment" ToRole="Account" />
+          <NavigationProperty Name="Account1" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="AccountAppointment" ToRole="Account" />
+        </EntityType>
+        <Association Name="Account_Appointment">
+          <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountAppointment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="AppointmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK1_Appointment_To_AccountCompany_Id">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountAppointment">
+              <PropertyRef Name="IdAccount" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1954,21 +1956,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="NewsChange">
-            <EntityTypeMapping TypeName="producerinterface_Model.NewsChange">
-              <MappingFragment StoreEntitySet="NewsChange">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NewsNewDescription" ColumnName="NewsNewDescription" />
-                <ScalarProperty Name="NewsOldDescription" ColumnName="NewsOldDescription" />
-                <ScalarProperty Name="NewsOldTema" ColumnName="NewsOldTema" />
-                <ScalarProperty Name="NewsNewTema" ColumnName="NewsNewTema" />
-                <ScalarProperty Name="DateChange" ColumnName="DateChange" />
-                <ScalarProperty Name="TypeCnhange" ColumnName="TypeCnhange" />
-                <ScalarProperty Name="IdNews" ColumnName="IdNews" />
-                <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="supplierregions">
             <EntityTypeMapping TypeName="producerinterface_Model.supplierregions">
               <MappingFragment StoreEntitySet="supplierregions">
@@ -2033,16 +2020,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="Footer" ColumnName="Footer" />
                 <ScalarProperty Name="Body" ColumnName="Body" />
                 <ScalarProperty Name="Subject" ColumnName="Subject" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AccountAppointment">
-            <EntityTypeMapping TypeName="producerinterface_Model.AccountAppointment">
-              <MappingFragment StoreEntitySet="AccountAppointment">
-                <ScalarProperty Name="IdAccountCompany" ColumnName="IdAccountCompany" />
-                <ScalarProperty Name="GlobalEnabled" ColumnName="GlobalEnabled" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2163,6 +2140,32 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NewsChange">
+            <EntityTypeMapping TypeName="producerinterface_Model.NewsChange">
+              <MappingFragment StoreEntitySet="NewsChange">
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NewsNewDescription" ColumnName="NewsNewDescription" />
+                <ScalarProperty Name="NewsOldDescription" ColumnName="NewsOldDescription" />
+                <ScalarProperty Name="NewsOldTema" ColumnName="NewsOldTema" />
+                <ScalarProperty Name="NewsNewTema" ColumnName="NewsNewTema" />
+                <ScalarProperty Name="DateChange" ColumnName="DateChange" />
+                <ScalarProperty Name="TypeCnhange" ColumnName="TypeCnhange" />
+                <ScalarProperty Name="IdNews" ColumnName="IdNews" />
+                <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountAppointment">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountAppointment">
+              <MappingFragment StoreEntitySet="AccountAppointment">
+                <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
+                <ScalarProperty Name="GlobalEnabled" ColumnName="GlobalEnabled" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

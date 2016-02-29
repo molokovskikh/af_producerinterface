@@ -1,11 +1,8 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.ListGroupView>
+﻿@model IEnumerable<ProducerInterfaceCommon.ViewModel.ControlPanel.Permission.ListGroupView>
 @{
     ViewBag.Title = "Список групп сайта";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
     var ProducerList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
-    @* as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>(); *@
-
-
 }
 <h2>Группы Интерфейса производителя</h2>
 

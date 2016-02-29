@@ -1,5 +1,8 @@
 ﻿using System.Web.Mvc;
 using System.Linq;
+using ProducerInterfaceCommon.ContextModels;
+using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -80,6 +83,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
 
+#if DEBUG
+            {
+                ViewBag.FullUrlStringFile = this.Request.Url.Segments[0] + @"mediafiles/";
+            }
+#endif
+
+
             var NewsModel = new ProducerInterfaceCommon.ContextModels.NotificationToProducers();
             if (Id > 0)
             {
@@ -135,6 +145,25 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return RedirectToAction("List");
         }
 
+        public ActionResult History(long Id =0)
+        {
+            if (Id == 0)
+            {
+                ErrorMessage("Неверный номер истории изменений");
+                return RedirectToAction("List");
+            }
+            var Model_View = cntx_.NewsChange.Find(Id);
+
+            if (Model_View == null)
+            {
+                ErrorMessage("Неверный номер истории изменений");
+                return RedirectToAction("List");
+            }
+            
+            return View(Model_View);
+        }
+        
+
         private void NewsHistoryAdd(long ID_NEWS, ProducerInterfaceCommon.ContextModels.NotificationToProducers OldNews, ProducerInterfaceCommon.ContextModels.NotificationToProducers NewNews, ProducerInterfaceCommon.ContextModels.NewsChanges TypeChanges)
         {
 
@@ -144,6 +173,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             NewsHistory.IdAccount = CurrentUser.Id;
             NewsHistory.DateChange = System.DateTime.Now;
             NewsHistory.TypeCnhange = (byte)TypeChanges;
+            NewsHistory.IP = CurrentUser.IP;
 
             if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsAdd)
             {
@@ -162,9 +192,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             if (TypeChanges == ProducerInterfaceCommon.ContextModels.NewsChanges.NewsArchive)
             {
-
+                NewsHistory.NewsNewTema = cntx_.NotificationToProducers.Find(ID_NEWS).Name;
+                NewsHistory.NewsNewDescription = cntx_.NotificationToProducers.Find(ID_NEWS).Description;
+                NewsHistory.NewsOldTema = cntx_.NotificationToProducers.Find(ID_NEWS).Name;
+                NewsHistory.NewsOldDescription = cntx_.NotificationToProducers.Find(ID_NEWS).Description;
             }
-
+            
             cntx_.Entry(NewsHistory).State = System.Data.Entity.EntityState.Added;
             cntx_.SaveChanges();
         }

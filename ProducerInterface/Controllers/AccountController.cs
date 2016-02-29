@@ -14,14 +14,14 @@ namespace ProducerInterface.Controllers
         private void ViewBagAppointmentList(long ProducerId = 0)
         {
             var ListAppointment = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-            ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1 && xx.IdAccountCompany == null)
+            ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1 && xx.IdAccount == null)
                  .ToList()
                  .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
                  .ToList());
 
             if (ProducerId != 0)
             {
-                var CompanyCustomAppointment = cntx_.AccountAppointment.Where(xxx => xxx.AccountCompany.ProducerId == ProducerId).ToList().Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
+                var CompanyCustomAppointment = cntx_.AccountAppointment.Where(xxx => xxx.Account1.AccountCompany.ProducerId == ProducerId).ToList().Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
                 ListAppointment.AddRange(CompanyCustomAppointment);              
             }
             ViewBag.AppointmentList = ListAppointment;
@@ -279,10 +279,7 @@ namespace ProducerInterface.Controllers
         public ActionResult AdminAuthentification(string AdminLogin, long? IdProducerUSer, string SecureHash)
         {
 
-            // cfe07e5639884d77a061b42ec7f7170d58c1973f7f484b1b8df2db8f2aa62bd305a0055c490a4619a893e3b8e6cb66ffd375760e3c1d4282b0f2dc8daf3e76209abfd73cc7964ee4a4973ce1ea11b9b03cbeb558ea7f4c138ba28b2cc79efe02d14bc213a56843ffbef233a90658ff7b7ba14bd42cda4b99adf83997168e6cbe8cb76bc7503b4d768af00edd5f964b607a18326ce6b14fe89b1ccaa86a6ddb9d
-            // 10 гуидов (только буквы и цыфры) для секретности //  далее раз в сутки можно будет генерировать новое значение
-
-            if (AdminLogin == null || IdProducerUSer == null)
+          if (AdminLogin == null || IdProducerUSer == null)
             {
                 return RedirectToAction("index", "home");
             }
@@ -296,7 +293,16 @@ namespace ProducerInterface.Controllers
 
             var AdminAccount = cntx_.Account.Where(xxx => xxx.Login == AdminLogin).First();
 
-            var i = AdminAccount.Name.Length * 19801112;
+            string i = "";
+
+            if (AdminAccount.Name != null)
+            {
+                i = (AdminAccount.Name.Length * 19801112).ToString();
+            }
+            else
+            {
+                i = (18 * 19801112).ToString();
+            }
 
             if (!SecureHash.Contains(i.ToString()))
             {

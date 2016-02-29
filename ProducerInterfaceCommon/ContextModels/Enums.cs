@@ -26,7 +26,20 @@ namespace ProducerInterfaceCommon.ContextModels
         Error = 4
     }
 
-		public enum FeedBackStatus
+    public enum FeedBackType
+    {
+        [Display(Name = "Пожелание")]
+        Wish = 0,
+        [Display(Name = "Ошибка")]
+        Error =1,
+        [Display(Name = "Другое")]
+        Other =2,
+        [Display(Name = "Добавление должности")]
+        AddNewAppointment = 3
+    }
+
+     
+    public enum FeedBackStatus
     {
         [Display(Name = "Новое обращение")]
         FeedBack_New = 0,
@@ -47,7 +60,9 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Редактирование")]
         NewsChange =1,
         [Display(Name = "Отправлено в архив")]
-        NewsArchive = 2       
+        NewsArchive = 2,
+        [Display(Name = "Возвращено из архива")]
+        NewsRetArchive = 3
     }
 
     public enum Reports

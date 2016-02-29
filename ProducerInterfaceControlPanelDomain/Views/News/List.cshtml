@@ -45,7 +45,8 @@
                             <label>История изменений</label>
                             @foreach (var HistoryItem in NewsItem.NewsChange)
                             {
-                                <p>@HistoryItem.DateChange @HistoryItem.Account.Name @HistoryItem.GetDisplayNewsTypeChange </p>
+                                <p>@HistoryItem.DateChange @HistoryItem.Account.Name @HistoryItem.GetDisplayNewsTypeChange <a title="Посмотреть изменения" href="@Url.Action("History", new {Id = HistoryItem.Id })"><i class="glyphicon glyphicon-info-sign"></i></a></p>
+
                             }
                         </div>
 
