@@ -25,7 +25,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public long Id { get; set; }
         public string IP { get; set; }
     
-        public virtual NotificationToProducers NotificationToProducers { get; set; }
         public virtual Account Account { get; set; }
+        public virtual NotificationToProducers NotificationToProducers { get; set; }
     }
 }

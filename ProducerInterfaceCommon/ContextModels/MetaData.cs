@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
-    
+
 	public partial class NewsChange
 	{
 		public string GetDisplayNewsTypeChange

@@ -14,11 +14,18 @@ namespace ProducerInterfaceCommon.ContextModels
     
     public partial class MediaFiles
     {
+        public MediaFiles()
+        {
+            this.promotions = new HashSet<promotions>();
+        }
+    
         public int Id { get; set; }
         public string ImageName { get; set; }
         public byte[] ImageFile { get; set; }
         public string ImageType { get; set; }
         public string ImageSize { get; set; }
         public int EntityType { get; set; }
+    
+        public virtual ICollection<promotions> promotions { get; set; }
     }
 }

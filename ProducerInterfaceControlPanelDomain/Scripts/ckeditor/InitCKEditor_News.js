@@ -5,8 +5,8 @@
         {
             'filebrowserBrowseUrl': FullUrlString + 'Index/',
             'filebrowserImageBrowseUrl': FullUrlString + 'Index/',
-            'filebrowserUploadUrl': FullUrlString + 'SaveFile/',
-            'filebrowserImageUploadUrl': FullUrlString + 'SaveFile/',
+            'filebrowserUploadUrl': FullUrlString + 'SaveNewsFile/',
+            'filebrowserImageUploadUrl': FullUrlString + 'SaveNewsFile/',
             'height': '35em'
         });
 });

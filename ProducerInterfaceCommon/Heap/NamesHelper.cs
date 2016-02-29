@@ -216,7 +216,7 @@ namespace ProducerInterfaceCommon.Heap
         public List<OptionElement> GetProducerUserList(long ProducerId)
         {
             return _cntx.Account.Where(xxx=>xxx.CompanyId != null).Where(xxx => xxx.AccountCompany.ProducerId == ProducerId)
-                .ToList().Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() })
+                .ToList().Select(xxx => new OptionElement { Text = xxx.Login + " " + xxx.Name, Value = xxx.Id.ToString() })
                 .ToList();
         }
 

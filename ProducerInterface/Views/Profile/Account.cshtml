@@ -1,4 +1,4 @@
-﻿@model ProducerInterfaceCommon.ContextModels.ProfileValidation
+﻿@model ProducerInterfaceCommon.ViewModel.Interface.Profile.ProfileValidation
 @{
    ViewBag.Title = "Мой профиль";
 }
@@ -18,7 +18,10 @@
 		  @Html.ValidationMessageFor(model => model.Mailname)
 		  @Html.ValidationMessageFor(model => model.EmailDomain)
 		</div>
-	        @Html.EditorFor(m => m.Name)
+	 
+    @Html.EditorFor(m => m.LastName)
+    @Html.EditorFor(m => m.FirstName)
+    @Html.EditorFor(m => m.OtherName)
 
 	        @Html.EditorFor(m => m.PhoneNumber)
 	        @Html.EditorFor(m => m.AppointmentId)

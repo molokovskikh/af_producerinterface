@@ -188,9 +188,6 @@
     <Compile Include="ContextModels\promotions.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\promotionsimage.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\PromotionsInRegionMask_Result.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -398,6 +395,7 @@
     </Compile>
     <Compile Include="SPAM\Enums.cs" />
     <Compile Include="SPAM\Mail_Send.cs" />
+    <Compile Include="ViewModel\ControlPanel\FeedBack\SearchModel.cs" />
     <Compile Include="ViewModel\ControlPanel\Permission\ListGroupView.cs" />
     <Compile Include="ViewModel\ControlPanel\Promotion\SearchProducerPromotion.cs" />
     <Compile Include="ViewModel\ControlPanel\Report\SearchProducerReportsModel.cs" />

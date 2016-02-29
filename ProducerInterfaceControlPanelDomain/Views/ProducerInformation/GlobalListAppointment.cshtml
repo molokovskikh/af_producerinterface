@@ -1,0 +1,60 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<AccountAppointment>
+
+@{
+    ViewBag.Title = "Глобальный список должностей";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="container" id="replacecontent">
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Глобальный список должностей</h2>
+            <hr />
+            <table class="table-bordered table-condensed table-striped table-custom">
+                <tr>
+                    <th>Название должности</th>
+                    <th>Количество пользователей выбравших данную должность</th>
+                    <th>Ред. Удал.</th>
+                </tr>
+
+                @foreach (var X in Model)
+               {
+                    <tr>
+                        <td>@X.Name</td>
+                        <td>@X.Account.Count()</td>
+                        <td><a href="#">Дел.</a> <a href="#">Ред.</a></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+
+            <h3>Добавление новой должности в глобальный список</h3>
+            <hr/>
+
+            @using (Ajax.BeginForm("GlobalAppointmentAdd", new AjaxOptions { UpdateTargetId = "replacecontent" }))
+            {
+                <div class="form-group">
+                    <label>Наименование должности</label>
+                    <input type="text" id="NewNameAppointment" name="NewNameAppointment" placeholder="Наименование должности" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Добавить" class="btn btn-primary"/>
+                </div>
+            }
+
+        </div>
+
+    </div>
+ 
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+    </script>    
+}

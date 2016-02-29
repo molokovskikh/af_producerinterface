@@ -155,8 +155,9 @@ min-width:100%;
         }     
 .pointer { cursor: pointer; }
 
-#Begin, #End .form-control {
+.form-group #Begin,.form-group #End {
 cursor:pointer;
+max-width: 15em;
 }
 
 #Permission_ListUser_AccountTable {
@@ -165,3 +166,8 @@ cursor:pointer;
     #Permission_ListUser_AccountTable span {
     margin-right:1em;
     }
+
+.field-validation-error {
+    font-size:1.1em;
+    color:red;
+}

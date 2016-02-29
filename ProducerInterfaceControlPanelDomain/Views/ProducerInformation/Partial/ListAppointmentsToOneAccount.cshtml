@@ -1,0 +1,33 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+
+@model IEnumerable<AccountAppointment>
+
+<div class="row">
+    <div class="container">
+        <div class="col-xs-12" id="UserAppointmentTableResult">
+
+            @if (Model == null || Model.Count() == 0)
+            {
+                <h3>Для данного сотрудника список должностей пуст</h3>
+            }
+            else
+            {
+                <table class="table-bordered table-condensed table-striped table-custom">
+                    <tr>
+                        <th>Название должности</th>
+                        <th>Действие</th>
+                    </tr>
+
+                    @foreach (var AppointmentItem in Model)
+                {
+                        <tr>
+                            <td>@AppointmentItem.Name</td>
+                            <td>@Ajax.ActionLink("Удалить из списка выбора", "AddAppointmentToUser", new AjaxOptions { UpdateTargetId = "UserAppointmentTableResult", HttpMethod = "POST" }, null, new { @IdAccount = "", @AddOrNot = "false", @IdAppointment = AppointmentItem.Id })</td>
+                        </tr>
+                    }
+
+                </table>
+            }
+        </div>
+    </div>
+</div>

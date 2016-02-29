@@ -40,9 +40,11 @@ namespace ProducerInterface.Controllers
             ModelView.AppointmentId = ThisUser.AccountAppointment.Id;
             ModelView.CompanyName = cntx_.producernames.Where(xxx => xxx.ProducerId == ThisUser.AccountCompany.ProducerId).First().ProducerName;
             ModelView.EmailDomain = ThisUser.AccountCompany.CompanyDomainName.Where(xxx => ThisUser.Login.Contains(xxx.Name)).First().Id;
-            ModelView.Mailname = ThisUser.Login.Split(new Char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0].ToString();
-            ModelView.Name = ThisUser.Name;
+            ModelView.Mailname = ThisUser.Login.Split(new Char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0].ToString();         
             ModelView.PhoneNumber = ThisUser.Phone;
+            ModelView.LastName = ThisUser.LastName;
+            ModelView.FirstName = ThisUser.FirstName;
+            ModelView.OtherName = ThisUser.OtherName;
 
             var AppointmentList =
              cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
@@ -91,7 +93,11 @@ namespace ProducerInterface.Controllers
 
             var AccountSave = cntx_.Account.Where(xxx => xxx.Id == CurrentUser.Id).First();
 
-            AccountSave.Name = changeProfile.Name;
+            AccountSave.Name = changeProfile.LastName + " " + changeProfile.FirstName + " " + changeProfile.OtherName;
+            AccountSave.LastName = changeProfile.LastName;
+            AccountSave.FirstName = changeProfile.FirstName;
+            AccountSave.OtherName = changeProfile.OtherName;
+
             AccountSave.Login = changeProfile.Mailname + "@" + AccountSave.AccountCompany.CompanyDomainName.Where(xxx => xxx.Id == changeProfile.EmailDomain).First().Name;
             AccountSave.Phone = changeProfile.PhoneNumber;
             AccountSave.AccountAppointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == changeProfile.AppointmentId).First();
@@ -99,7 +105,7 @@ namespace ProducerInterface.Controllers
             cntx_.Entry(AccountSave).State = System.Data.Entity.EntityState.Modified;
             cntx_.SaveChanges();
 
-            SuccessMessage("Изменения сохранены");
+            SuccessMessage("Ваш профиль сохранен");
             return RedirectToAction("Index");
         }
 

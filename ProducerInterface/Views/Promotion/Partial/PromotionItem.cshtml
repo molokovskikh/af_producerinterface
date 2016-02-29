@@ -45,7 +45,7 @@
 
                 @if (Model.PromoFileId != null)
                 {
-                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromoFileId })">@Model.promotionsimage.ImageName (скачать)</a> <br />
+                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromoFileId })">@Model.MediaFiles.ImageName (скачать)</a> <br />
                     @*@Html.Action("ChangeFile", new { Id= Model.Id})*@
                 }
                 else

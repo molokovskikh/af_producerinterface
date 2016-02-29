@@ -10,8 +10,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
     public class GoToProducerInterfaceController : MasterBaseController
     {
    
-        private ProducerInterfaceCommon.Heap.NamesHelper h;
-
         // GET: GoToProducerInterface
         [HttpGet]
         public ActionResult Index()
@@ -37,13 +35,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
 
             var match = System.Text.RegularExpressions.Regex.Match(G1.ToString(), @"\-?\d+(\.\d{0,})?");
             var match2 = System.Text.RegularExpressions.Regex.Match(G2.ToString(), @"[0-9][0-9]+(?:\.[0-9]*)?");
-            
-            var i = match +  (CurrentUser.Name.Length * 19801112).ToString() + match2;
-            var Url = GetWebConfigParameters("GoToProducerUserUrl");
 
-            var UrlRedirect = Url + "?SecureHash=" + i + "&AdminLogin=" + CurrentUser.Login + "&IdProducerUSer=" + produceruserid;
-
-            return Redirect(UrlRedirect);            
+            if (CurrentUser.Name != null)
+            {
+                var i = match + (CurrentUser.Name.Length * 19801112).ToString() + match2;
+                var Url = GetWebConfigParameters("GoToProducerUserUrl");
+                var UrlRedirect = Url + "?SecureHash=" + i + "&AdminLogin=" + CurrentUser.Login + "&IdProducerUSer=" + produceruserid;
+                return Redirect(UrlRedirect);
+            }
+            else
+            {
+                var i = match + (18 * 19801112).ToString() + match2;
+                var Url = GetWebConfigParameters("GoToProducerUserUrl");
+                var UrlRedirect = Url + "?SecureHash=" + i + "&AdminLogin=" + CurrentUser.Login + "&IdProducerUSer=" + produceruserid;
+                return Redirect(UrlRedirect);
+            }
         }
 
         public JsonResult GetListUser(long idproducer)
@@ -51,10 +57,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
             ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
             var UserList = h.GetProducerUserList(idproducer);
             return Json(UserList.Select(x=> new { value=x.Value, text= x.Text}), JsonRequestBehavior.AllowGet);
-        }
-
-
-  
-
+        }        
     }
 }

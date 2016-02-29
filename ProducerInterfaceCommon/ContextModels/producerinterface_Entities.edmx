@@ -243,17 +243,6 @@
           <Property Name="Status" Type="bool" Nullable="false" />
           <Property Name="ProducerAdminId" Type="uint" />
         </EntityType>
-        <EntityType Name="promotionsimage">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ImageName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="ImageFile" Type="longblob" Nullable="false" />
-          <Property Name="ImageType" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="ImageSize" Type="varchar" MaxLength="25" />
-          <Property Name="NewsOrPromotions" Type="bool" Nullable="false" />
-        </EntityType>
         <EntityType Name="promotionToDrug">
           <Key>
             <PropertyRef Name="DrugId" />
@@ -649,10 +638,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_promotions_to_fileid">
-          <End Role="promotionsimage" Type="Self.promotionsimage" Multiplicity="0..1" />
+          <End Role="MediaFiles" Type="Self.MediaFiles" Multiplicity="0..1" />
           <End Role="promotions" Type="Self.promotions" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="promotionsimage">
+            <Principal Role="MediaFiles">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="promotions">
@@ -747,7 +736,6 @@
           <EntitySet Name="NotificationToProducers" EntityType="Self.NotificationToProducers" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="profilenews" EntityType="Self.profilenews" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotions" EntityType="Self.promotions" Schema="producerinterface" store:Type="Tables" />
-          <EntitySet Name="promotionsimage" EntityType="Self.promotionsimage" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotionToDrug" EntityType="Self.promotionToDrug" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="ReportRunLog" EntityType="Self.ReportRunLog" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
@@ -928,7 +916,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           <AssociationSet Name="fk_promotions_to_fileid" Association="Self.fk_promotions_to_fileid">
-            <End Role="promotionsimage" EntitySet="promotionsimage" />
+            <End Role="MediaFiles" EntitySet="MediaFiles" />
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           <AssociationSet Name="FK_to_Group_controlpanel" Association="Self.FK_to_Group_controlpanel">
@@ -1140,19 +1128,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="DrugDescriptionRemark" EntityType="producerinterface_Model.DrugDescriptionRemark" />
           <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
           <EntitySet Name="NotificationToProducers" EntityType="producerinterface_Model.NotificationToProducers" />
-          <EntitySet Name="NewsChange" EntityType="producerinterface_Model.NewsChange" />
-          <AssociationSet Name="FK2_NewsChangeToNotification" Association="producerinterface_Model.FK2_NewsChangeToNotification">
-            <End Role="NotificationToProducers" EntitySet="NotificationToProducers" />
-            <End Role="NewsChange" EntitySet="NewsChange" />
-          </AssociationSet>
 					<EntitySet Name="catalognameswithuptime" EntityType="producerinterface_Model.catalognameswithuptime" />
           <EntitySet Name="ReportRunLog" EntityType="producerinterface_Model.ReportRunLog" />
           <EntitySet Name="reportrunlogwithuser" EntityType="producerinterface_Model.reportrunlogwithuser" />
-          <EntitySet Name="promotionsimage" EntityType="producerinterface_Model.promotionsimage" />
-          <AssociationSet Name="fk_promotions_to_fileid" Association="producerinterface_Model.fk_promotions_to_fileid">
-            <End Role="promotionsimage" EntitySet="promotionsimage" />
-            <End Role="promotions" EntitySet="promotions" />
-          </AssociationSet>
           <EntitySet Name="mailformwithfooter" EntityType="producerinterface_Model.mailformwithfooter" />
           <EntitySet Name="AccountGroup" EntityType="producerinterface_Model.AccountGroup" />
           <EntitySet Name="AccountPermission" EntityType="producerinterface_Model.AccountPermission" />
@@ -1177,10 +1155,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="Account" EntitySet="Account" />
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
-          <AssociationSet Name="FK1_NewsChangeToAccount" Association="producerinterface_Model.FK1_NewsChangeToAccount">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="NewsChange" EntitySet="NewsChange" />
-          </AssociationSet>
           <AssociationSet Name="AccountUserToGroup" Association="producerinterface_Model.AccountUserToGroup">
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="Account" EntitySet="Account" />
@@ -1195,7 +1169,15 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
           </AssociationSet>
-          <EntitySet Name="MediaFiles" EntityType="producerinterface_Model.MediaFiles" />
+          <EntitySet Name="NewsChange" EntityType="producerinterface_Model.NewsChange" />
+          <AssociationSet Name="FK1_NewsChangeToAccount" Association="producerinterface_Model.FK1_NewsChangeToAccount">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="NewsChange" EntitySet="NewsChange" />
+          </AssociationSet>
+          <AssociationSet Name="FK2_NewsChangeToNotification" Association="producerinterface_Model.FK2_NewsChangeToNotification">
+            <End Role="NotificationToProducers" EntitySet="NotificationToProducers" />
+            <End Role="NewsChange" EntitySet="NewsChange" />
+          </AssociationSet>
           <EntitySet Name="AccountAppointment" EntityType="producerinterface_Model.AccountAppointment" />
           <AssociationSet Name="Account_Appointment" Association="producerinterface_Model.Account_Appointment">
             <End Role="AccountAppointment" EntitySet="AccountAppointment" />
@@ -1204,6 +1186,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="FK1_Appointment_To_AccountCompany_Id" Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountAppointment" EntitySet="AccountAppointment" />
+          </AssociationSet>
+          <EntitySet Name="MediaFiles" EntityType="producerinterface_Model.MediaFiles" />
+          <AssociationSet Name="fk_promotions_to_fileid1" Association="producerinterface_Model.fk_promotions_to_fileid1">
+            <End Role="MediaFiles" EntitySet="MediaFiles" />
+            <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="LogForNet">
@@ -1297,9 +1284,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Status" Type="Boolean" Nullable="false" />
           <Property Name="ProducerAdminId" Type="Int64" />
           <NavigationProperty Name="promotionToDrug" Relationship="producerinterface_Model.FK_promotioncatalogs_supplierpromotions" FromRole="promotions" ToRole="promotionToDrug" />
-          <NavigationProperty Name="promotionsimage" Relationship="producerinterface_Model.fk_promotions_to_fileid" FromRole="promotions" ToRole="promotionsimage" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="promotions" ToRole="Account" />
           <NavigationProperty Name="Account1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="promotions" ToRole="Account" />
+          <NavigationProperty Name="MediaFiles" Relationship="producerinterface_Model.fk_promotions_to_fileid1" FromRole="promotions" ToRole="MediaFiles" />
           </EntityType>
         <Association Name="FK_promotioncatalogs_supplierpromotions">
           <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="1">
@@ -1359,35 +1346,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NotificationToProducers" ToRole="NewsChange" />
         </EntityType>
-        <EntityType Name="NewsChange">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="IdAccount" Type="Int64" Nullable="false" />
-          <Property Name="IdNews" Type="Int64" Nullable="false" />
-          <Property Name="TypeCnhange" Type="Byte" Nullable="false" />
-          <Property Name="DateChange" Type="DateTime" Nullable="false" />
-          <Property Name="NewsNewTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOldDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="NewsNewDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="NotificationToProducers" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NewsChange" ToRole="NotificationToProducers" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="NewsChange" ToRole="Account" />
-          <Property Name="IP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <Association Name="FK2_NewsChangeToNotification">
-          <End Type="producerinterface_Model.NotificationToProducers" Role="NotificationToProducers" Multiplicity="1" />
-          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NotificationToProducers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="NewsChange">
-              <PropertyRef Name="IdNews" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="catalognameswithuptime">
           <Key>
             <PropertyRef Name="Id" />
@@ -1424,30 +1382,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="RunNow" Type="Boolean" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="promotionsimage">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ImageFile" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="ImageType" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="ImageSize" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="NewsOrPromotions" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="promotions" Relationship="producerinterface_Model.fk_promotions_to_fileid" FromRole="promotionsimage" ToRole="promotions" />
-        </EntityType>
-        <Association Name="fk_promotions_to_fileid">
-          <End Type="producerinterface_Model.promotionsimage" Role="promotionsimage" Multiplicity="0..1" />
-          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="promotionsimage">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="promotions">
-              <PropertyRef Name="PromoFileId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="mailformwithfooter">
           <Key>
             <PropertyRef Name="Id" />
@@ -1516,9 +1450,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
-          <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
           <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
+          <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountAppointment1" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="Account" ToRole="AccountAppointment" />
         </EntityType>
@@ -1567,18 +1501,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Principal>
             <Dependent Role="promotions">
               <PropertyRef Name="ProducerAdminId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK1_NewsChangeToAccount">
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
-          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="NewsChange">
-              <PropertyRef Name="IdAccount" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1663,17 +1585,47 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="MediaFiles">
+        <EntityType Name="NewsChange">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ImageFile" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="ImageType" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="ImageSize" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="EntityType" Type="Int32" Nullable="false" />
+          <Property Name="IdAccount" Type="Int64" Nullable="false" />
+          <Property Name="IdNews" Type="Int64" Nullable="false" />
+          <Property Name="TypeCnhange" Type="Byte" Nullable="false" />
+          <Property Name="DateChange" Type="DateTime" Nullable="false" />
+          <Property Name="NewsNewTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldTema" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NewsOldDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="NewsNewDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="NewsChange" ToRole="Account" />
+          <NavigationProperty Name="NotificationToProducers" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NewsChange" ToRole="NotificationToProducers" />
         </EntityType>
+        <Association Name="FK1_NewsChangeToAccount">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
+          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsChange">
+              <PropertyRef Name="IdAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK2_NewsChangeToNotification">
+          <End Type="producerinterface_Model.NotificationToProducers" Role="NotificationToProducers" Multiplicity="1" />
+          <End Type="producerinterface_Model.NewsChange" Role="NewsChange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotificationToProducers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsChange">
+              <PropertyRef Name="IdNews" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="AccountAppointment">
           <Key>
             <PropertyRef Name="Id" />
@@ -1706,6 +1658,30 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Principal>
             <Dependent Role="AccountAppointment">
               <PropertyRef Name="IdAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MediaFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImageFile" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ImageType" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="ImageSize" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="EntityType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="promotions" Relationship="producerinterface_Model.fk_promotions_to_fileid1" FromRole="MediaFiles" ToRole="promotions" />
+        </EntityType>
+        <Association Name="fk_promotions_to_fileid1">
+          <End Type="producerinterface_Model.MediaFiles" Role="MediaFiles" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.promotions" Role="promotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MediaFiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="promotions">
+              <PropertyRef Name="PromoFileId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1980,22 +1956,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="NewsChange">
-            <EntityTypeMapping TypeName="producerinterface_Model.NewsChange">
-              <MappingFragment StoreEntitySet="NewsChange">
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NewsNewDescription" ColumnName="NewsNewDescription" />
-                <ScalarProperty Name="NewsOldDescription" ColumnName="NewsOldDescription" />
-                <ScalarProperty Name="NewsOldTema" ColumnName="NewsOldTema" />
-                <ScalarProperty Name="NewsNewTema" ColumnName="NewsNewTema" />
-                <ScalarProperty Name="DateChange" ColumnName="DateChange" />
-                <ScalarProperty Name="TypeCnhange" ColumnName="TypeCnhange" />
-                <ScalarProperty Name="IdNews" ColumnName="IdNews" />
-                <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="supplierregions">
             <EntityTypeMapping TypeName="producerinterface_Model.supplierregions">
               <MappingFragment StoreEntitySet="supplierregions">
@@ -2035,18 +1995,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />
                 <ScalarProperty Name="Ip" ColumnName="Ip" />
                 <ScalarProperty Name="JobName" ColumnName="JobName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="promotionsimage">
-            <EntityTypeMapping TypeName="producerinterface_Model.promotionsimage">
-              <MappingFragment StoreEntitySet="promotionsimage">
-                <ScalarProperty Name="NewsOrPromotions" ColumnName="NewsOrPromotions" />
-                <ScalarProperty Name="ImageSize" ColumnName="ImageSize" />
-                <ScalarProperty Name="ImageType" ColumnName="ImageType" />
-                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
-                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2184,15 +2132,19 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MediaFiles">
-            <EntityTypeMapping TypeName="producerinterface_Model.MediaFiles">
-              <MappingFragment StoreEntitySet="MediaFiles">
-                <ScalarProperty Name="EntityType" ColumnName="EntityType" />
-                <ScalarProperty Name="ImageSize" ColumnName="ImageSize" />
-                <ScalarProperty Name="ImageType" ColumnName="ImageType" />
-                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
-                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+          <EntitySetMapping Name="NewsChange">
+            <EntityTypeMapping TypeName="producerinterface_Model.NewsChange">
+              <MappingFragment StoreEntitySet="NewsChange">
+                <ScalarProperty Name="IP" ColumnName="IP" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NewsNewDescription" ColumnName="NewsNewDescription" />
+                <ScalarProperty Name="NewsOldDescription" ColumnName="NewsOldDescription" />
+                <ScalarProperty Name="NewsOldTema" ColumnName="NewsOldTema" />
+                <ScalarProperty Name="NewsNewTema" ColumnName="NewsNewTema" />
+                <ScalarProperty Name="DateChange" ColumnName="DateChange" />
+                <ScalarProperty Name="TypeCnhange" ColumnName="TypeCnhange" />
+                <ScalarProperty Name="IdNews" ColumnName="IdNews" />
+                <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2202,6 +2154,18 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
                 <ScalarProperty Name="GlobalEnabled" ColumnName="GlobalEnabled" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MediaFiles">
+            <EntityTypeMapping TypeName="producerinterface_Model.MediaFiles">
+              <MappingFragment StoreEntitySet="MediaFiles">
+                <ScalarProperty Name="EntityType" ColumnName="EntityType" />
+                <ScalarProperty Name="ImageSize" ColumnName="ImageSize" />
+                <ScalarProperty Name="ImageType" ColumnName="ImageType" />
+                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

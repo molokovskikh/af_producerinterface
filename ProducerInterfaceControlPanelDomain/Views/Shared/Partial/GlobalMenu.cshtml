@@ -45,12 +45,15 @@
                     <ul class="dropdown-menu">
                         <li><a href="~/LogForNet/Index">Логи ошибок</a></li>
                         <li><a href="~/LogUserChange/Index">Логи изменений</a></li>  
-                        <li><a href="@Url.Action("Index","GoToProducerInterface")">Вход в интерфейс производителя</a></li> 
-                        <li><a href="~/Feedback/Index">Обращения пользователей</a></li>  
+                        <li><a href="@Url.Action("Index","GoToProducerInterface")">Вход в интерфейс производителя</a></li>                    
                         <li><a href="~/ProducerInformation/domainlist">Управление доменами производителей</a></li> 
                         <li><a href="~/ProducerInformation/AppointmentNameList">Управление списком должностей</a></li> 
                     </ul>
                 </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="~/Feedback/Index"><span class="glyphicon glyphicon-envelope"></span>&nbsp; Обращения пользователей</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-left" role="navigation">
@@ -79,7 +82,7 @@
             </ul>                 
             <ul class="nav navbar-nav navbar-right" role="navigation">
                 <li class="dropdown" id="dropdownmenu">                  
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Управление правами (Интерфейс производителя)"><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Name</a>
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Мой профиль/Выход"><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Login</a>
                     <ul class="dropdown-menu">
                         <li><a href="~/AdminAccount/Index">Мой профиль</a></li>
                         <li><a href="~/Registration/LogOut">Выход</a></li>

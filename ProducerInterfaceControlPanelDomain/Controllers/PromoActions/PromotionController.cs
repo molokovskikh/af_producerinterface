@@ -114,7 +114,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public FileResult GetFile(int Id)
         {
-            var ReturnFile = cntx_.promotionsimage.Find(Id);
+            var ReturnFile = cntx_.MediaFiles.Find(Id);
             return File(ReturnFile.ImageFile, ReturnFile.ImageType, ReturnFile.ImageName);
 
         }

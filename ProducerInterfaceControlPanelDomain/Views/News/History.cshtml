@@ -1,0 +1,49 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model NewsChange
+
+@{
+    ViewBag.Title = "История изменений";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="row">
+    <div class="container">
+
+        <h4>@Model.GetDisplayNewsTypeChange @Model.DateChange.ToString("dd.MM.yyyy") </h4>
+
+        <div class="row">
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#NewsTab_New">Стало</a></li>
+                <li><a data-toggle="tab" href="#News_Tab_Old">Бало до внесения изменений</a></li>
+            </ul>
+            <div class="tab-content">
+
+                <div id="NewsTab_New" class="tab-pane fade in active">
+
+                    <br/>
+
+                    <label>Тема</label>
+                    <p>@Model.NewsNewTema</p>
+
+                    <label>Сообщение</label>
+                    <p>@Html.Raw(Model.NewsNewDescription)</p>
+
+                </div>
+
+                <div id="News_Tab_Old" class="tab-pane fade">
+
+                    <br />
+
+                    <label>Тема</label>
+                    <p>@Model.NewsOldTema</p>
+
+                    <label>Сообщение</label>
+                    <p>@Html.Raw(Model.NewsOldDescription)</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

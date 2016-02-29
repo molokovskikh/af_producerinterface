@@ -184,4 +184,48 @@ ALTER TABLE `AccountAppointment`
  CHANGE COLUMN `IdAccountCompany` `IdAccount` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `GlobalEnabled`,
  ADD CONSTRAINT `FK1_Appointment_To_AccountCompany_Id` FOREIGN KEY (`IdAccount`) REFERENCES `Account` (`Id`);
 
+ # не внесено на боевой БД
+
+ CREATE TABLE `MediaFiles` (
+	`Id` INT(10) NOT NULL AUTO_INCREMENT,
+	`ImageName` VARCHAR(50) NOT NULL,
+	`ImageFile` LONGBLOB NOT NULL,
+	`ImageType` VARCHAR(25) NOT NULL,
+	`ImageSize` VARCHAR(25) NULL DEFAULT NULL,
+	`EntityType` INT(10) NOT NULL,
+	PRIMARY KEY (`Id`)
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+
+
+insert into MediaFiles(	`Id`,
+	`ImageName`,
+	`ImageFile`,
+	`ImageType`,
+	`ImageSize`,
+	`EntityType`)
+select `Id`,
+	`ImageName`,
+	`ImageFile`,
+	`ImageType`,
+	`ImageSize`,
+	`NewsOrPromotions`
+	from promotionsimage;
+	
+	
+	update MediaFiles set EntityType = 2 where EntityType = 0;
+	
+	update promotions set PromoFileId = null;
+	
+alter TABLE `promotions` drop FOREIGN KEY `fk_promotions_to_fileid`;
+
+alter TABLE `promotions` add CONSTRAINT `fk_promotions_to_fileid` FOREIGN KEY (`PromoFileId`) REFERENCES `MediaFiles` (`Id`);
+
+delete from MediaFiles where EntityType = 2;
+
+drop table promotionsimage;
+
+
+
 
