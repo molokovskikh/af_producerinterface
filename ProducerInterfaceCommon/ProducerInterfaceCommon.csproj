@@ -176,6 +176,9 @@
     <Compile Include="ContextModels\drugfamilynames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\MediaFiles.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\NewsChange.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>

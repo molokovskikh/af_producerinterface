@@ -12,19 +12,13 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AccountCompany
+    public partial class MediaFiles
     {
-        public AccountCompany()
-        {
-            this.CompanyDomainName = new HashSet<CompanyDomainName>();
-            this.Account = new HashSet<Account>();
-        }
-    
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public Nullable<long> ProducerId { get; set; }
-    
-        public virtual ICollection<CompanyDomainName> CompanyDomainName { get; set; }
-        public virtual ICollection<Account> Account { get; set; }
+        public int Id { get; set; }
+        public string ImageName { get; set; }
+        public byte[] ImageFile { get; set; }
+        public string ImageType { get; set; }
+        public string ImageSize { get; set; }
+        public int EntityType { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string NewsOldDescription { get; set; }
         public string NewsNewDescription { get; set; }
         public long Id { get; set; }
+        public string IP { get; set; }
     
         public virtual NotificationToProducers NotificationToProducers { get; set; }
         public virtual Account Account { get; set; }

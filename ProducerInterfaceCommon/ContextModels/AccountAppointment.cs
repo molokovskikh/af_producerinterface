@@ -22,9 +22,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public int Id { get; set; }
         public string Name { get; set; }
         public Nullable<sbyte> GlobalEnabled { get; set; }
-        public Nullable<long> IdAccountCompany { get; set; }
+        public Nullable<long> IdAccount { get; set; }
     
-        public virtual AccountCompany AccountCompany { get; set; }
         public virtual ICollection<Account> Account { get; set; }
+        public virtual Account Account1 { get; set; }
     }
 }

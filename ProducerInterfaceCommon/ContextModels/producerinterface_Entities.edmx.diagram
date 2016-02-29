@@ -41,13 +41,10 @@
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" ManuallyRouted="false" >
         </AssociationConnector>
         <EntityTypeShape EntityType="producerinterface_Model.mailformwithfooter" Width="1.5" PointX="11.625" PointY="7.875" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountAppointment" Width="1.5" PointX="0.625" PointY="15" />
-        <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountGroup" Width="1.5" PointX="9.875" PointY="19.5" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountPermission" Width="1.5" PointX="11.875" PointY="19.5" />
         <AssociationConnector Association="producerinterface_Model.AccountGroupToPermission" />
         <EntityTypeShape EntityType="producerinterface_Model.Account" Width="4.5" PointX="4.5" PointY="16.375" />
-        <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
         <AssociationConnector Association="producerinterface_Model.Account_CompanyId" ManuallyRouted="false" >
         </AssociationConnector>
         <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
@@ -59,6 +56,10 @@
         <EntityTypeShape EntityType="producerinterface_Model.jobextend" Width="1.5" PointX="14.375" PointY="5.75" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="1.5" PointX="9.75" PointY="22.875" />
         <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
+        <EntityTypeShape EntityType="producerinterface_Model.MediaFiles" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountAppointment" Width="1.5" PointX="9.75" PointY="27.25" />
+        <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
+        <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

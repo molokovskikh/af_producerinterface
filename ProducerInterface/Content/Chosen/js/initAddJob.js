@@ -46,7 +46,7 @@
     // https://github.com/meltingice/ajax-chosen
 	$('#CatalogNamesId').ajaxChosen({
 	    type: 'GET',
-	    url: '/Report/GetCatalogDragFamalyNames',
+	    url: '/ProducerInterface/Report/GetCatalogDragFamalyNames',
 	    dataType: 'json',
 	    minTermLength: 2,
 	    afterTypeDelay: 300,

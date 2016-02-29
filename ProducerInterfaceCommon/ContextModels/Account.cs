@@ -22,6 +22,7 @@ namespace ProducerInterfaceCommon.ContextModels
             this.NewsChange = new HashSet<NewsChange>();
             this.AccountGroup = new HashSet<AccountGroup>();
             this.AccountFeedBack = new HashSet<AccountFeedBack>();
+            this.AccountAppointment1 = new HashSet<AccountAppointment>();
         }
     
         public long Id { get; set; }
@@ -41,7 +42,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<System.DateTime> LastUpdatePermisison { get; set; }
         public Nullable<decimal> RegionMask { get; set; }
     
-        public virtual AccountAppointment AccountAppointment { get; set; }
         public virtual AccountCompany AccountCompany { get; set; }
         public virtual ICollection<AccountEmail> AccountEmail { get; set; }
         public virtual ICollection<promotions> promotions { get; set; }
@@ -49,5 +49,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual ICollection<NewsChange> NewsChange { get; set; }
         public virtual ICollection<AccountGroup> AccountGroup { get; set; }
         public virtual ICollection<AccountFeedBack> AccountFeedBack { get; set; }
+        public virtual AccountAppointment AccountAppointment { get; set; }
+        public virtual ICollection<AccountAppointment> AccountAppointment1 { get; set; }
     }
 }

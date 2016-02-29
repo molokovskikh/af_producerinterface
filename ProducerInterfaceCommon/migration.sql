@@ -158,9 +158,7 @@ ALTER TABLE `Account`
  ADD COLUMN `Type` TINYINT(4) NULL AFTER `UrlString`,
  ADD COLUMN `Contacts` VARCHAR(50) NULL AFTER `Type`;
 
-#ниже не выполнено на боевой
-
- ALTER TABLE `jobextend`
+ALTER TABLE `jobextend`
 ADD COLUMN `CreatorId` INT(11) UNSIGNED NULL AFTER `ProducerId`;
 
 update jobextend j set CreatorId = (select a.Id from Account a where a.Name = j.Creator);
@@ -177,7 +175,13 @@ from jobextend j
 LEFT JOIN producernames p ON p.ProducerId = j.ProducerId 
 LEFT JOIN Account a ON a.Id = j.CreatorId;
 
+ALTER TABLE `NewsChange`
+ ADD COLUMN `IP` VARCHAR(50) NOT NULL AFTER `Id`;
 
-
+ ALTER TABLE `AccountAppointment`
+ DROP FOREIGN KEY `FK1_Appointment_To_AccountCompany_Id`;
+ALTER TABLE `AccountAppointment`
+ CHANGE COLUMN `IdAccountCompany` `IdAccount` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `GlobalEnabled`,
+ ADD CONSTRAINT `FK1_Appointment_To_AccountCompany_Id` FOREIGN KEY (`IdAccount`) REFERENCES `Account` (`Id`);
 
 
