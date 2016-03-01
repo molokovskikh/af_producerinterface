@@ -216,16 +216,14 @@ select `Id`,
 	
 	update MediaFiles set EntityType = 2 where EntityType = 0;
 	
-	update promotions set PromoFileId = null;
 	
 alter TABLE `promotions` drop FOREIGN KEY `fk_promotions_to_fileid`;
 
 alter TABLE `promotions` add CONSTRAINT `fk_promotions_to_fileid` FOREIGN KEY (`PromoFileId`) REFERENCES `MediaFiles` (`Id`);
 
-delete from MediaFiles where EntityType = 2;
-
 drop table promotionsimage;
 
-
+ ALTER TABLE `Account`
+ ADD COLUMN `SecureTime` DATETIME NULL DEFAULT NULL AFTER `RegionMask`;
 
 

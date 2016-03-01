@@ -1,40 +1,83 @@
-﻿@model ProducerInterfaceCommon.ContextModels.mailform
+﻿@using ProducerInterfaceCommon.Models
+@model ProducerInterfaceCommon.ContextModels.mailform
 
 @{
-    ViewBag.Title = "Изменение шаблона сообщения";
+    ViewBag.Title = "Изменение шаблона";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
+    var subjectHeader = "Тема сообщения";
+    var bodyHeader = "Текст сообщения";
+    if (Model.Id == (int)MailType.HeaderFooter) {
+        subjectHeader = "Шапка письма";
+        bodyHeader = "Подпись к письму";
+    }
 }
 
-<h2>Назначение сообщения  "@Html.DisplayFor(m=>m.Description)"</h2>
+<h2>Шаблон "@Html.DisplayFor(m=>m.Description)"</h2>
 
-<hr/>
+<hr />
 
-<div class="jumbotron">
+<div class="row">
+    <div class="col-md-6">
+        <div class="jumbotron">
+            @using (Html.BeginForm("Edit", "Mail")) {
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Description)
+                <div class="form-group">
+                    <p>@subjectHeader</p>
+                    @if (Model.Id == (int)MailType.HeaderFooter) {
+                        @Html.TextAreaFor(model => model.Subject, new { @class = "form-control", @rows = "10" })
+                    }
+                    else {
+                        @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+                    }
+                </div>
 
-    @using(Html.BeginForm("Edit", "Mail"))
-    {
+                <div class="form-group">
+                    <p>@bodyHeader</p>
+                    @Html.TextAreaFor(model => model.Body, new { @class = "form-control", @rows = "20" })
+                </div>
 
-        @Html.HiddenFor(model=>model.Id)
-        @Html.HiddenFor(model=>model.Description)
-        <div class="form-group">
-            <p>Тема сообщения</p>
-            @Html.TextBoxFor(model=>model.Subject, new {@class="form-control"})
+                <div class="form-group">
+                    <input hidden="hidden" id="IsBodyHtml" value="false" />
+                </div>
 
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
+                </div>
+            }
         </div>
-
-        <div class="form-group">
-            <p>Текст сообщения</p>
-            @Html.TextAreaFor(model=>model.Body, new {@class="form-control", @rows = "5" })
-        </div>
-
-        <div class="form-group">        
-            <input hidden="hidden" id="IsBodyHtml" value="false" /> 
-        </div>
-
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
-        </div>
-    }
+    </div>
+    <div class="col-md-6">
+        <h2>Расшифровка подставляемых значений</h2>
+        <ul>
+            <li>CreatorName - имя пользователя, создавшего отчет</li>
+            <li>DateTimeNow - текущее время</li>
+            <li>Http - ссылка на акцию</li>
+            <li>Password - пароль, генерируется</li>
+            <li>ProducerName - название производителя</li>
+            <li>PromotionName - имя акции, данное пользователем</li>
+            <li>ReportName - имя отчёта, данное пользователем</li>
+            <li>SiteName - название сайта, из конфигурации</li>
+            <li>Status - статус промоакции, устанавливается админом</li>
+            <li>UserLogin - email пользователя</li>
+            <li>UserName - имя пользователя, указанное им при регистрации</li>
+        </ul>
+    </div>
 </div>
+
+
+
+@section scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            $("#Subject").on("keypress", function (e) {
+                if (e.which == 13)
+                    return false;
+            });
+        });
+
+    </script>
+}
 
 
