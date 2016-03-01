@@ -1,0 +1,46 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<Account>
+
+@{
+    ViewBag.Title = "Пользователи без должности";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+    var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
+    var PostList = ViewBag.AccountAppointmentGlobalList as IEnumerable<AccountAppointment>;
+}
+
+<div class="container">
+
+    <h2>Пользователи без должности"</h2>
+
+    @foreach (var AccountItem in Model)
+    {
+        <div class="row">
+            <div class="col-xs-12">
+                <p>@AccountItem.Login</p>
+                <p>@AccountItem.Name</p>
+                
+                @if (AccountItem.AccountCompany.ProducerId != null)
+                {
+                    <p>@ProducerList.Where(x=>x.Value == AccountItem.AccountCompany.ProducerId.ToString()).First().Text</p>
+                }
+
+                @using (Html.BeginForm(new { FormMethod.Post }))
+                {
+
+                    <input hidden="hidden" id="AccountId" name="AccountId" value="@AccountItem.Id" />
+                <select id="IdPost" name="IdPost">
+                    <option value="0">не выбрано</option>
+                    @foreach (var PostItem in PostList)
+                    {
+                        <option value="@PostItem.Id">@PostItem.Name</option>
+                    }
+                </select>
+
+                <input type="submit" class="btn btn-primary" value="Применить" />
+                }
+
+            </div>
+        </div>
+    }
+
+</div>

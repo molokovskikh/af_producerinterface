@@ -1,0 +1,55 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<AccountAppointment>
+
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div><h3>Список должностей пуст</h3></div>
+}
+else
+{
+
+    <div class="row">
+        <div class="col-xs-4">
+            Наименование
+        </div>
+        <div class="col-xs-8">
+
+        </div>
+    </div>
+
+    foreach (var AppoinmentItem in Model)
+    {
+        <div class="row margin-top-025em">
+            <div class="col-xs-4">
+                @AppoinmentItem.Name
+            </div>
+            <div claas="col-xs-8">
+
+                @Ajax.ActionLink(" Удал. ", "DeleteCustomAppointment", "OfficePost",
+                                new { AccountId = ViewBag.AccountId, idDelAppointment = AppoinmentItem.Id.ToString() },
+                                new AjaxOptions { UpdateTargetId = "AppointmentAccountList", Confirm = "Вы уверены, что хотите удалить должность" },
+                                new { @class = "glyphicon glyphicon-trash btn btn-primary" })
+            </div>
+        </div>
+    }
+}
+
+
+<div class="row">
+    <div class="col-xs-12">
+        @using (Ajax.BeginForm("AddCustomAppointment", new AjaxOptions { UpdateTargetId = "AppointmentAccountList", HttpMethod = "POST" }))
+        {
+
+            <input hidden="hidden" id="AccountId" name="AccountId" value="@ViewBag.AccountId"/>
+
+            <div class="form-group">
+                <label>Введите название должности</label>
+                <input type="text" id="NewPostName" name="NewPostName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Добавить должность для данного пользователя" class="btn btn-primary"/>
+            </div>
+        }
+    </div>
+</div>

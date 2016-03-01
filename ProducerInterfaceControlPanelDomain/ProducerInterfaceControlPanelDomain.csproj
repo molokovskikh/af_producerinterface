@@ -184,9 +184,8 @@
     <Compile Include="Controllers\Global\MailController.cs" />
     <Compile Include="Controllers\Global\MasterBaseController.cs" />
     <Compile Include="Controllers\Global\MediaFilesController.cs" />
-    <Compile Include="Controllers\ProducersInformation\PR_partial_AccountAppointment.cs" />
+    <Compile Include="Controllers\Appointment\OfficePostController.cs" />
     <Compile Include="Controllers\ProducersInformation\PR_partial_CustomAcoount.cs" />
-    <Compile Include="Controllers\ProducersInformation\PR_partial_Appointment.cs" />
     <Compile Include="Controllers\ProducersInformation\PR_partial_Domain.cs" />
     <Compile Include="Controllers\Reports_News\NewsController.cs" />
     <Compile Include="Controllers\Permissions\PermissionController.cs" />
@@ -725,9 +724,7 @@
     <Content Include="Views\ProducerInformation\DomainList.cshtml" />
     <Content Include="Views\ProducerInformation\GetDomain.cshtml" />
     <Content Include="Views\ProducerInformation\AppointmentNameList.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\appointment.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\customapointment.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\producerappointment.cshtml" />
     <Content Include="Views\ProducerInformation\RequestAccount.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\producerinformation.cshtml" />
     <Content Include="Views\Report\Partial\Pager.cshtml" />
@@ -745,10 +742,13 @@
     <Content Include="Views\Permission\ListUsers.cshtml" />
     <Content Include="Views\News\History.cshtml" />
     <Content Include="Views\FeedBack\FeedBackSearch.cshtml" />
-    <Content Include="Views\ProducerInformation\PostnameList.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\ListAppointmentsToOneAccount.cshtml" />
     <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\PartialListAppointment.cshtml" />
+    <Content Include="Views\OfficePost\CustomAppointment.cshtml" />
+    <Content Include="Views\OfficePost\Index.cshtml" />
+    <Content Include="Views\OfficePost\Partial\ListAppointment.cshtml" />
+    <Content Include="Views\OfficePost\Partial\ListAccount.cshtml" />
+    <Content Include="Views\OfficePost\Partial\ListAccountAppointment.cshtml" />
+    <Content Include="Views\OfficePost\AccountNotPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

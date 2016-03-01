@@ -1,0 +1,33 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<Account>
+
+@using (Ajax.BeginForm("GetListAccountAppointment", new AjaxOptions { UpdateTargetId= "AppointmentAccountList" }))
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <select id="AccountId" name="AccountId" class="form-control">
+                    
+                    @foreach (var AccountItem in Model)
+                    {
+                    <option value="@AccountItem.Id">@(AccountItem.Login + " " + AccountItem.Name)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Выбрать"/>
+            </div>
+        </div>
+
+    </div>
+
+}
+
+<hr/>
+<br/>
+
+<div class="row">
+    <div class="col-xs-12" id="AppointmentAccountList">
+
+    </div>
+</div>
