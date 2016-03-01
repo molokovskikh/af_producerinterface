@@ -1,0 +1,77 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@using ProducerInterfaceCommon.Heap;
+@using ProducerInterfaceCommon.ViewModel.Interface.Global;
+@model FeedBack
+@{
+    ViewBag.Title = "Обратная связь";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var Account_ = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
+    var FeedBackTypeList = ViewBag.TypeMessage as IEnumerable<FeedBackType>;
+}
+
+
+<div class="container">
+    <h2>Обратная связь</h2>
+
+    @using (Html.BeginForm("Index","FeedBack")) { 
+    
+        <div class="form-group">
+            <label>Обращение</label>
+            <textarea id="Description" name="Description" class="form-control" rows="7" typeof="input"></textarea>   
+            @Html.ValidationMessageFor(m=>m.Description)                 
+        </div>
+
+        <div class="form-group">
+            <label>Выберите удобный способ для связи</label>
+            <select id="Contact" name="Contact" class="form-control">
+                <option value="@Account_.Login">@Account_.Login</option>
+                @if (@Account_.Phone != null)
+                {
+                    <option value="@Account_.Phone">@Account_.Phone</option>
+                }
+            </select>                     
+        </div>
+        <div class="form-group">
+            <label>Тип обращения</label>
+            <select id="FeedType" name="FeedType" class="form-control">
+                @foreach (var FeedBackItem in FeedBackTypeList)
+                {
+                    if (ViewBag.FBT == null)
+                    {
+
+                        if (FeedBackItem.ToString() == "Wish")
+                        {
+                        <option value="@((sbyte)FeedBackItem)" selected="selected">@AttributeHelper.DisplayName(FeedBackItem)</option>
+                        }
+                        else
+                        {
+                        <option value="@((sbyte)FeedBackItem)">@AttributeHelper.DisplayName(FeedBackItem)</option>
+                        }
+                    }
+                    else
+                    {
+                        if (FeedBackItem == ViewBag.FBT)
+                        {
+                            <option value="@((sbyte)FeedBackItem)" selected="selected">@AttributeHelper.DisplayName(FeedBackItem)</option>
+                        }
+                        else
+                        {
+                            <option value="@((sbyte)FeedBackItem)">@AttributeHelper.DisplayName(FeedBackItem)</option>
+                        }
+
+                    }
+                }
+            </select>          
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary"/>
+        </div>
+
+
+    }
+
+
+</div>
+
+

@@ -37,8 +37,8 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Registration
         public int EmailDomain { get; set; }
 
         [Display(Name = "Должность")]
-        [UIHint("IntApointment")]
-        [Required(ErrorMessage = "Должность")]
+        [UIHint("IntApointment")]    
+        [Required(ErrorMessage ="Выберите должность")]
         public int AppointmentId { get; set; }
 
         [UIHint("EditorStringPosition")]

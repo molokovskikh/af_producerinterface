@@ -34,8 +34,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Registration
         public string login { get; set; }
 
         [UIHint("EditorStringPosition")]
-        [Display(Name = "Должность")]
-        [Required(ErrorMessage = "Введите должность")]
+        [Display(Name = "Должность")]      
         public string Appointment { get; set; }
 
         [UIHint("EditorPhone")]

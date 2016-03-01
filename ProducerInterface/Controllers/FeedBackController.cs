@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
 using ProducerInterfaceCommon.ViewModel.Interface.Global;
+using ProducerInterfaceCommon.ContextModels;
+using System.Linq;
 
 namespace ProducerInterface.Controllers
 {
@@ -44,7 +46,50 @@ namespace ProducerInterface.Controllers
             }
 
         }
-              
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();        
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Index_Type(sbyte Id)
+        {
+            ViewBag.FBT = (FeedBackType)Id;
+
+            ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
+            return View("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Index(FeedBack FB)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
+                ViewBag.FBT = (FeedBackType)FB.FeedType;
+                return View(FB);
+            }
+            
+            var FB_Save = new ProducerInterfaceCommon.ContextModels.AccountFeedBack();
+            FB_Save.Description = FB.Description;
+            FB_Save.AccountId = CurrentUser.Id;
+            FB_Save.Type = FB.FeedType;
+            FB_Save.Contacts = FB.Contact;
+            FB_Save.DateAdd = System.DateTime.Now;
+            FB_Save.UrlString = "Обратная взязь в ЛК";
+            cntx_.AccountFeedBack.Add(FB_Save);
+            cntx_.SaveChanges();
+
+            SuccessMessage("Выша заявка принята к исполнению");
+
+            return RedirectToAction("Index", "Profile");
+        }
+
+
+
         public ActionResult GetView()
         {
             var ModelView = new FeedBack();

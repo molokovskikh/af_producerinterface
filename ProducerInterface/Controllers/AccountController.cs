@@ -62,7 +62,7 @@ namespace ProducerInterface.Controllers
             if (CompanyExsist)
             {
                 /* если ото данного производитля регистрировались, возвращаем форму для регистрации пользователя с моделью RegDomainViewModel */
-                ViewBagAppointmentList(ViewModel.ProducerId);
+                ViewBagAppointmentList();
 
                 var ModelDomainView = new RegDomainViewModel();
                 ModelDomainView.Producers = ViewModel.ProducerId;

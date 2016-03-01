@@ -7,14 +7,7 @@
 		
 		<br/>
 				<div class="form-group">
-		<label>Отсутствует? добавьте свой вариант</label>
-
-        <div class="input-group">
-	        <input type="text" id="newAppountName" placeholder="Свой вариант должности" class="form-control" />
-	        <div class="input-group-btn" style="min-width: 175px;">
-				<a class="btn btn-primary" onclick="AddAppointment()">Добавить в список</a>
-	        </div>
-        </div>		
+	            <a href="@Url.Action("Index_Type","FeedBack", new { Id= (sbyte) ProducerInterfaceCommon.ContextModels.FeedBackType.AddNewAppointment })" class="btn btn-primary">Отправить заявку для добавления моей должности</a>
 		</div>	
 
     </div>
