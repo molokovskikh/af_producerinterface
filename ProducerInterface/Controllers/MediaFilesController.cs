@@ -10,7 +10,7 @@ namespace ProducerInterface.Controllers
     {      
         public FileResult GetFile(int Id)
         {
-            var File_ = cntx_.promotionsimage.Find(Id);
+            var File_ = cntx_.MediaFiles.Find(Id);
             return File(File_.ImageFile, File_.ImageType);
         }
     }

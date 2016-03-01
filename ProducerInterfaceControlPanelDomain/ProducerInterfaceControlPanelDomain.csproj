@@ -743,12 +743,17 @@
     <Content Include="Views\News\History.cshtml" />
     <Content Include="Views\FeedBack\FeedBackSearch.cshtml" />
     <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\OfficePost\CustomAppointment.cshtml" />
     <Content Include="Views\OfficePost\Index.cshtml" />
     <Content Include="Views\OfficePost\Partial\ListAppointment.cshtml" />
     <Content Include="Views\OfficePost\Partial\ListAccount.cshtml" />
     <Content Include="Views\OfficePost\Partial\ListAccountAppointment.cshtml" />
     <Content Include="Views\OfficePost\AccountNotPost.cshtml" />
+=======
+    <Content Include="Views\ProducerInformation\Partial\PartialListAppointment.cshtml" />
+    <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
+>>>>>>> 8845c3854558f82ff1572b475af55223f57665e5
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

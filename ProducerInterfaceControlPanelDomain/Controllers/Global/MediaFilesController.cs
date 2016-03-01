@@ -4,62 +4,75 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class MediaFilesController : MasterBaseController
-    {
+	public class MediaFilesController : MasterBaseController
+	{
 
-        public ActionResult Index()
-        {
-            ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
+		public ActionResult Index()
+		{
+			ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
 
 #if DEBUG
-{
-                ViewBag.FullUrlStringFile = this.Request.Url.Segments[0] + @"mediafiles/";
-}
+			{
+				ViewBag.FullUrlStringFile = this.Request.Url.Segments[0] + @"mediafiles/";
+			}
 #endif
 
-            var Files = cntx_.promotionsimage.Where(xxx=>xxx.NewsOrPromotions == true).ToList();
-            return View(Files);
-        }
+			var files = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.News).Select(x => x.Id).ToList();
+			return View(files);
+		}
+
+		public ActionResult EmailFileList()
+		{
+			var files = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
+			return View(files);
+		}
 
 
-        public FileResult GetFile(int Id)
-        {
-            var File_ = cntx_.promotionsimage.Find(Id);
-            return File(File_.ImageFile, File_.ImageType);
-        }
-            
-        public ActionResult SaveFile()
-        {
-            var NewsFile = new ProducerInterfaceCommon.ContextModels.promotionsimage();
+		public FileResult GetFile(int Id)
+		{
+			var file = cntx_.MediaFiles.Find(Id);
+			return File(file.ImageFile, file.ImageType);
+		}
 
-            for (int i = 0; i < this.HttpContext.Request.Files.Count; i++)
-            {
-               
-                MemoryStream MS = new MemoryStream();
-                HttpPostedFileBase HPFB = this.HttpContext.Request.Files[i];
-                HPFB.InputStream.CopyTo(MS);
+		public ActionResult SaveNewsFile()
+		{
+			var file = this.HttpContext.Request.Files[0];
+			var fileId = SaveFile(file, EntityType.News);
+			string ckEditorFuncNum = HttpContext.Request["CKEditorFuncNum"];
+			string url = $"{GetWebConfigParameters("ImageFullUrlString")}/GetFile/{fileId}";
+			return Content($"<script>window.parent.CKEDITOR.tools.callFunction({ckEditorFuncNum}, \"{url}\");</script>");
+		}
 
-                NewsFile.ImageFile = MS.ToArray();
-                NewsFile.ImageName = HPFB.FileName.Split(new Char[] { '\\' }).Last();
-                NewsFile.ImageType = HPFB.ContentType;
-                NewsFile.ImageSize = MS.Length.ToString();
-                NewsFile.NewsOrPromotions = true; // false - promofile  true - news file
-                cntx_.promotionsimage.Add(NewsFile);
-                cntx_.SaveChanges();                
-            }
-            string CKEditorFuncNum = HttpContext.Request["CKEditorFuncNum"];
-                  
-          //  string url = "/mediafiles/GetFile/" + NewsFile.Id;
+		public JsonResult SaveEmailFile()
+		{
+			var file = this.HttpContext.Request.Files[0];
+			var fileId = SaveFile(file, EntityType.Email);
+			return Json(new
+			{
+				url = $"{GetWebConfigParameters("ImageFullUrlString")}/GetFile/{fileId}"
+			});
+		}
 
-            string url = GetWebConfigParameters("ImageFullUrlString");
-            url += "/GetFile/" + NewsFile.Id;
 
-            return Content("<script>window.parent.CKEDITOR.tools.callFunction(" + CKEditorFuncNum + ", \"" + url + "\");</script>");
-
-        }
-
-    }
+		private int SaveFile(HttpPostedFileBase file, EntityType type)
+		{
+			var dbFile = new MediaFiles();
+			dbFile.ImageName = file.FileName.Split(new Char[] { '\\' }).Last();
+			dbFile.ImageType = file.ContentType;
+			dbFile.EntityType = (int)type;
+			using (var ms = new MemoryStream())
+			{
+				file.InputStream.CopyTo(ms);
+				dbFile.ImageFile = ms.ToArray();
+				dbFile.ImageSize = ms.Length.ToString();
+			}
+			cntx_.MediaFiles.Add(dbFile);
+			cntx_.SaveChanges();
+			return dbFile.Id;
+		}
+	}
 }

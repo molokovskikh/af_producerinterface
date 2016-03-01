@@ -44,7 +44,7 @@ $(function () {
     // https://github.com/meltingice/ajax-chosen
     $('#mnn').ajaxChosen({
         type: 'GET',
-        url: '/Drug/GetMnn',
+        url: '/ProducerInterface/Drug/GetMnn',
         dataType: 'json',
         minTermLength: 2,
         afterTypeDelay: 300,

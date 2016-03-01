@@ -8,9 +8,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Example: Browsing Files</title>       
+    <title>Example: Browsing Files</title>
     <script>
-        function getUrlParam(paramName) {
+        @*function getUrlParam(paramName) {
             var reParam = new RegExp('(?:[\?&]|&)' + paramName + '=([^&]+)', 'i');
             var match = window.location.search.match(reParam);
             return (match && match.length > 1) ? match[1] : null;
@@ -25,18 +25,18 @@
             var Url = "@ViewBag.FullUrlStringFile";
             Url += "GetFile/" + Id;
             returnFileUrl(Url);
-        }
+        }*@
     </script>
 </head>
 
 <body>
 
-    <input id="globalUrl" value="@ViewBag.FullUrlStringFile" hidden="hidden"/>
+    @*<input id="globalUrl" value="@ViewBag.FullUrlStringFile" hidden="hidden" />*@
 
     @foreach (var id in Model)
     {
         <img src="@Url.Action("GetFile", "MediaFiles", new { Id = id})" style="max-height:50px;"
-             onclick="OnClickReturnHttp(@id)"/>
+             onclick="alert(@id)" />
     }
 </body>
 </html>

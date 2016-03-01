@@ -12,9 +12,9 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class promotionsimage
+    public partial class MediaFiles
     {
-        public promotionsimage()
+        public MediaFiles()
         {
             this.promotions = new HashSet<promotions>();
         }
@@ -24,7 +24,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public byte[] ImageFile { get; set; }
         public string ImageType { get; set; }
         public string ImageSize { get; set; }
-        public bool NewsOrPromotions { get; set; }
+        public int EntityType { get; set; }
     
         public virtual ICollection<promotions> promotions { get; set; }
     }

@@ -34,9 +34,9 @@
                         </td>
                         <td>@ProducerList.Where(xx=>xx.Value == Item.ProducerId.ToString()).First().Text</td>
                         <td>
-                            @if (Item.promotionsimage != null)
+                            @if (Item.MediaFiles != null)
                             {
-                                <a href="@Url.Action("GetFile",new { Id= Item.promotionsimage.Id})">@Item.promotionsimage.ImageName</a>
+                                <a href="@Url.Action("GetFile",new { Id= Item.MediaFiles.Id})">@Item.MediaFiles.ImageName</a>
                             }
                         </td>
                         <td>@Html.ActionLink("Подробно", "OnePromotion", new { id=Item.Id })</td>

@@ -35,9 +35,6 @@
         <EntityTypeShape EntityType="producerinterface_Model.catalognameswithuptime" Width="1.5" PointX="9.875" PointY="6.125" />
         <EntityTypeShape EntityType="producerinterface_Model.ReportRunLog" Width="1.5" PointX="4.5" PointY="3" />
         <EntityTypeShape EntityType="producerinterface_Model.reportrunlogwithuser" Width="1.625" PointX="8.125" PointY="2.625" />
-        <EntityTypeShape EntityType="producerinterface_Model.promotionsimage" Width="2.875" PointX="9.125" PointY="11" />
-        <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid" ManuallyRouted="false" >
-        </AssociationConnector>
         <EntityTypeShape EntityType="producerinterface_Model.mailformwithfooter" Width="1.5" PointX="11.625" PointY="7.875" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountGroup" Width="1.5" PointX="11.75" PointY="19" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountPermission" Width="1.5" PointX="14.25" PointY="19.125" />
@@ -59,6 +56,8 @@
         <EntityTypeShape EntityType="producerinterface_Model.AccountAppointment" Width="1.5" PointX="9.875" PointY="20.75" />
         <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
         <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
+        <EntityTypeShape EntityType="producerinterface_Model.MediaFiles" Width="1.5" PointX="10.375" PointY="0.75" />
+        <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
