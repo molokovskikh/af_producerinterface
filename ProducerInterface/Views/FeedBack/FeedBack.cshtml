@@ -1,8 +1,11 @@
 ﻿@using ProducerInterfaceCommon.ViewModel.Interface.Global;
+@using ProducerInterfaceCommon.ContextModels;
+@using ProducerInterfaceCommon.Heap;
 @model FeedBack
 
 @{
     var AccountUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
+    var FeedBackList = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
 }
 
 @using (Ajax.BeginForm("SaveFeedBack", "FeedBack", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "feedback_modal_content", OnSuccess = "InitPhone()" }))
@@ -69,9 +72,16 @@
         <div class="form-group">
             <label>Тип обращения</label>
             <select id="FeedType" name="FeedType" class="form-control">
-                <option value="0" selected="selected">Пожелания</option>
-                <option value="1">Ошибка</option>
-                <option value="2">Другое</option>
+
+                @foreach (var FeedBackTypeItem in FeedBackList)
+                {
+                    if (FeedBackTypeItem == FeedBackType.AddNewAppointment)
+                    { }
+                    else
+                    {
+                        <option value="@((int)FeedBackTypeItem)">@AttributeHelper.DisplayName((ProducerInterfaceCommon.ContextModels.FeedBackType)FeedBackTypeItem);</option>
+                    }
+                }             
             </select>
         </div>
 

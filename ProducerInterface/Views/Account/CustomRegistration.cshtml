@@ -7,7 +7,7 @@
 }
 
 <div class="container body-content">
-    <h2>Регистрация</h2>
+    <h3>Регистрация</h3>
 
     <hr />
 
@@ -22,12 +22,25 @@
         </div>
 
         @Html.EditorFor(m => m.LastName)
-        @Html.EditorFor(m => m.FirstName)
-        @Html.EditorFor(m => m.OtherName)
 
-        @Html.EditorFor(m => m.login)
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.EditorFor(m => m.FirstName)
+            </div>
+            <div class="col-xs-6">
+                @Html.EditorFor(m => m.OtherName)
+            </div>
+        </div>
 
-        @Html.EditorFor(m => m.PhoneNumber)
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.EditorFor(m => m.login)
+            </div>
+            <div class="col-xs-6">
+                @Html.EditorFor(m => m.PhoneNumber)
+            </div>
+        </div>
+             
         @Html.EditorFor(m => m.Appointment)
 
         <br />

@@ -6,15 +6,18 @@
     @Html.ValidationMessageFor(m => m)
 
     <br />
-    <div class="form-group">
+        <div class="form-group">
 
-        <a href="#postname" data-toggle="collapse">Отсутствует ваша должность</a>
-
-        <div id="postname" class="collapse">
-            <p> Выберите и существующих вариантов, после регистрации в личном кабинете заполните заявку на добавление вашей должности </p>
+            <a href="#postname" data-toggle="collapse">Отсутствует ваша должность</a>
             
-        </div>
-
+            <div class="collapse" id="postname">
+                <div class="input-group">
+                    <input type="text" id="newAppountName" placeholder="Свой вариант должности" class="form-control" />
+                    <div class="input-group-btn" style="min-width: 175px;">
+                        <a class="btn btn-primary" onclick="AddAppointment()">Добавить в список</a>
+                    </div>
+                </div>
+            </div>
     </div>
 
 </div>

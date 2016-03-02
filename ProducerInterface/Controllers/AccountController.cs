@@ -269,8 +269,18 @@ namespace ProducerInterface.Controllers
             NewAccount.AccountCompany = CompanyCreate;
             cntx_.Entry(NewAccount).State = EntityState.Modified;
             cntx_.SaveChanges();
-            
-            SuccessMessage("Ваша заявка принята. Ожидвйте с вами свяжутся");
+
+            var NewFeedBack = new AccountFeedBack();
+            NewFeedBack.Description = "Запрос на регистрацию";
+            NewFeedBack.DateAdd = DateTime.Now;
+            NewFeedBack.AccountId = NewAccount.Id;
+            NewFeedBack.UrlString = "~/Regisration/CustomRegistration";
+            NewFeedBack.Type = (sbyte) ProducerInterfaceCommon.ContextModels.FeedBackTypePrivate.Registration;
+
+            cntx_.AccountFeedBack.Add(NewFeedBack);
+            cntx_.SaveChanges();
+
+            SuccessMessage("Ваша заявка принята. Ожидайте с вами свяжутся");
             return RedirectToAction("Index", "Home");
         }
 
@@ -309,13 +319,19 @@ namespace ProducerInterface.Controllers
                 return RedirectToAction("index", "home");
             }
 
-            if (AccountAdminExsist && ProducerUserExsist)
+            if (AdminAccount.SecureTime.Value > DateTime.Now)
             {
-                return View("AdminAuth",new ProducerInterfaceCommon.ContextModels.AdminAutentification() { IdProducerUser = (long) IdProducerUSer, Login = AdminAccount.Login });
+                CurrentUser = cntx_.Account.Find(IdProducerUSer);
+                var AdminId = AdminAccount.Id.ToString();
+                Autentificate(this, true, AdminId);
+                return RedirectToAction("Index", "Profile");
+
             }
-
-            return RedirectToAction("index", "home");
-
+            else
+            {
+                ErrorMessage("Данная ссылка действительна три минуты, время истекло, просьба повторить авторизацию");
+                return View("AdminAuth", new ProducerInterfaceCommon.ContextModels.AdminAutentification() { IdProducerUser = (long)IdProducerUSer, Login = AdminAccount.Login });
+            }     
         }
 
         [HttpPost]     
@@ -381,6 +397,12 @@ namespace ProducerInterface.Controllers
 
             if (RegNotProducer_ViewModel != null)
             {
+                var NewPost = new AccountAppointment();
+                NewPost.Name = RegNotProducer_ViewModel.Appointment;      
+                cntx_.Entry(NewPost).State = EntityState.Added;
+                cntx_.SaveChanges();
+
+                NewAccount.AppointmentId = NewPost.Id;
                 NewAccount.Login = RegNotProducer_ViewModel.login;
                 NewAccount.Enabled = 0;
                 NewAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
@@ -388,7 +410,7 @@ namespace ProducerInterface.Controllers
                 NewAccount.LastName = RegNotProducer_ViewModel.LastName;
                 NewAccount.FirstName = RegNotProducer_ViewModel.FirstName;
                 NewAccount.OtherName = RegNotProducer_ViewModel.OtherName;
-                NewAccount.Appointment = RegNotProducer_ViewModel.Appointment;
+                NewAccount.Appointment = RegNotProducer_ViewModel.Appointment;    
                 NewAccount.Phone = RegNotProducer_ViewModel.PhoneNumber;
                 NewAccount.PasswordUpdated = DateTime.Now;
                 NewAccount.LastUpdatePermisison = DateTime.Now;             
