@@ -20,5 +20,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public System.DateTime RunStartTime { get; set; }
         public bool RunNow { get; set; }
         public string UserName { get; set; }
+        public string ProducerName { get; set; }
+        public string MailTo { get; set; }
     }
 }

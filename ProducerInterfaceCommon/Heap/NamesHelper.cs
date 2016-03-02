@@ -25,11 +25,6 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			var results = new List<OptionElement>();
 
-			//results.Add(new OptionElement() { Text = "g.maksimenko@analit.net", Value = "g.maksimenko@analit.net" });
-			//results.Add(new OptionElement() { Text = "y.borisov@analit.net", Value = "y.borisov@analit.net" });
-			//results.Add(new OptionElement() { Text = "michail@analit.net", Value = "michail@analit.net" });
-			//results.Add(new OptionElement() { Text = "r.kvasov@analit.net", Value = "r.kvasov@analit.net" });
-
 			// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
 			var u = _cntx.Account.SingleOrDefault(x => x.Id == _userId);
 			if (u != null)
@@ -37,25 +32,6 @@ namespace ProducerInterfaceCommon.Heap
 
 			return results;
 		}
-
-		// для UI ???
-		//public string GetMailOkReportSubject()
-		//{
-		//	// TODO: до переноса в ProducerInterface пользователя может и не быть, далее он обязан быть
-		//	var result = "Отчет пользователя *** производителя *** (будет указано после переноса в ProducerInterface)";
-		//	var u = _cntx.Account.SingleOrDefault(x => x.Id == _userId);
-		//	if (u != null)
-		//	{
-		//		var X = _cntx.producernames.Where(xxx => xxx.ProducerId == u.AccountCompany.ProducerId).FirstOrDefault();
-		//		string companyName = "";
-		//		if (X != null && X.ProducerId != 0) { companyName = X.ProducerName; }
-		//		else { companyName = u.AccountCompany.Name; }
-
-
-		//		result = $"Отчет пользователя {u.Name} {u.Login} производителя {companyName}";
-		//	}
-		//	return result;
-		//}
 
 		public string GetReportName(string jobName)
 		{
@@ -65,7 +41,6 @@ namespace ProducerInterfaceCommon.Heap
 			//var producerName = _cntx.producernames.Single(x => x.ProducerId == report.ProducerId).ProducerName;
 			return report.CustomName;
 		}
-
 
 		// для UI
 		public List<OptionElement> GetRegionList()
@@ -77,30 +52,30 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
-        private List<ulong> GetRegionListId(decimal RegionMask, List<regionnames> LisrRegions)
-        {
+		private List<ulong> GetRegionListId(decimal RegionMask, List<regionnames> LisrRegions)
+		{
 
-            var results = LisrRegions
-                .Where(x =>                            ((ulong)x.RegionCode & (ulong) RegionMask) > 0)
-                .OrderBy(x => x.RegionCode)
-                .Select(x => (ulong)x.RegionCode).ToList();         
-                     
-            return results;
-        }
+			var results = LisrRegions
+					.Where(x => ((ulong)x.RegionCode & (ulong)RegionMask) > 0)
+					.OrderBy(x => x.RegionCode)
+					.Select(x => (ulong)x.RegionCode).ToList();
 
-        public List<OptionElement> GetRegionList(decimal RegionMask)
-        {
+			return results;
+		}
 
-            if (RegionMask == 0)
-            {
-                return _cntx.regionnames.Where(x => x.RegionCode == 0).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
-            }
+		public List<OptionElement> GetRegionList(decimal RegionMask)
+		{
 
-            var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();      
-            var IdGetRegions = GetRegionListId(RegionMask, LisrRegions);
-            return LisrRegions.Where(x => IdGetRegions.Contains((ulong)x.RegionCode)).ToList()
-                            .Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
-        }
+			if (RegionMask == 0)
+			{
+				return _cntx.regionnames.Where(x => x.RegionCode == 0).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
+			}
+
+			var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();
+			var IdGetRegions = GetRegionListId(RegionMask, LisrRegions);
+			return LisrRegions.Where(x => IdGetRegions.Contains((ulong)x.RegionCode)).ToList()
+											.Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
+		}
 
 		// для UI
 		public List<OptionElement> GetCatalogList()
@@ -125,7 +100,7 @@ namespace ProducerInterfaceCommon.Heap
 					.ToList();
 			return results;
 		}
-        
+
 
 		public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
 		{
@@ -167,16 +142,16 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		public List<long> GetPromotionRegions(ulong? RegionMask)
-		{ 
+		{
 			if (RegionMask == null)
 			{
 				return new List<long>();
 			}
 
-            if (RegionMask == 0)
-            {
-                return new List<long>(){ 0 };
-            }
+			if (RegionMask == 0)
+			{
+				return new List<long>() { 0 };
+			}
 
 			var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();
 
@@ -188,39 +163,39 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
-        public List<OptionElement> GetPromotionRegionNames(ulong RegionMask)
-        {
-            var RegionLongList = GetPromotionRegions((ulong)RegionMask);
-            List<decimal> RLS = RegionLongList.Select(x => (decimal)x).ToList();
-            return _cntx.regionnames.Where(x => RLS.Contains(x.RegionCode)).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
-        }
+		public List<OptionElement> GetPromotionRegionNames(ulong RegionMask)
+		{
+			var RegionLongList = GetPromotionRegions((ulong)RegionMask);
+			List<decimal> RLS = RegionLongList.Select(x => (decimal)x).ToList();
+			return _cntx.regionnames.Where(x => RLS.Contains(x.RegionCode)).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
+		}
 
-        public List<OptionElement> RegisterListProducer()
-        {
-            var producerListLong =_cntx.AccountCompany.Where(zzz => zzz.ProducerId != null)
-                .GroupBy(x => x.ProducerId).Select(x => x.FirstOrDefault()).Select(xxx => xxx.ProducerId).ToList();
+		public List<OptionElement> RegisterListProducer()
+		{
+			var producerListLong = _cntx.AccountCompany.Where(zzz => zzz.ProducerId != null)
+					.GroupBy(x => x.ProducerId).Select(x => x.FirstOrDefault()).Select(xxx => xxx.ProducerId).ToList();
 
-          
-            var listProducer = _cntx.producernames
-                .Where(xxx => producerListLong.Contains(xxx.ProducerId))
-                .ToList().Select(v => new OptionElement { Text = v.ProducerName, Value = v.ProducerId.ToString() }).ToList();
-            return listProducer;
-        }
 
-        public List<OptionElement> GetDrugInPromotion(long PromotionId)
-        {
-            List<long> DrudIdList = _cntx.promotionToDrug.Where(x => x.PromotionId == PromotionId).Select(x => x.DrugId).ToList();
-            return _cntx.assortment.ToList().Where(x => DrudIdList.Contains(x.CatalogId)).ToList().Select(x => new OptionElement { Text = x.CatalogName, Value = x.CatalogId.ToString() }).ToList();
-        }
+			var listProducer = _cntx.producernames
+					.Where(xxx => producerListLong.Contains(xxx.ProducerId))
+					.ToList().Select(v => new OptionElement { Text = v.ProducerName, Value = v.ProducerId.ToString() }).ToList();
+			return listProducer;
+		}
 
-        public List<OptionElement> GetProducerUserList(long ProducerId)
-        {
-            return _cntx.Account.Where(xxx=>xxx.CompanyId != null).Where(xxx => xxx.AccountCompany.ProducerId == ProducerId)
-                .ToList().Select(xxx => new OptionElement { Text = xxx.Login + " " + xxx.Name, Value = xxx.Id.ToString() })
-                .ToList();
-        }
+		public List<OptionElement> GetDrugInPromotion(long PromotionId)
+		{
+			List<long> DrudIdList = _cntx.promotionToDrug.Where(x => x.PromotionId == PromotionId).Select(x => x.DrugId).ToList();
+			return _cntx.assortment.ToList().Where(x => DrudIdList.Contains(x.CatalogId)).ToList().Select(x => new OptionElement { Text = x.CatalogName, Value = x.CatalogId.ToString() }).ToList();
+		}
 
-        public List<OptionElement> GetProducerList()
+		public List<OptionElement> GetProducerUserList(long ProducerId)
+		{
+			return _cntx.Account.Where(xxx => xxx.CompanyId != null).Where(xxx => xxx.AccountCompany.ProducerId == ProducerId)
+					.ToList().Select(xxx => new OptionElement { Text = xxx.Login + " " + xxx.Name, Value = xxx.Id.ToString() })
+					.ToList();
+		}
+
+		public List<OptionElement> GetProducerList()
 		{
 			var X = _cntx.producernames.ToList().Select(xxx => new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList();
 			var Y = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };

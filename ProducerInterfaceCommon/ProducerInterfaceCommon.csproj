@@ -206,6 +206,7 @@
     <Compile Include="Controllers\AccountGroupPermissionChanges.cs" />
     <Compile Include="Controllers\Account_Statistics.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BaseReportController.cs" />
     <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="CustomHelpers\Func\SqlProcedure.cs" />

@@ -4,6 +4,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceCommon.Controllers
 {
@@ -31,7 +32,7 @@ namespace ProducerInterfaceCommon.Controllers
         protected long CurrentUserIdLog { get; set; }
 
         // Context DataBase       
-        protected ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
+        protected producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
         
         protected string controllerName;
         protected string actionName;
@@ -89,7 +90,6 @@ namespace ProducerInterfaceCommon.Controllers
             public static DateTime GetDefaultDate()
             {
                 return default(DateTime);
-
             }
 
         }

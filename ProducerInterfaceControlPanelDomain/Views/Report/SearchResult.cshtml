@@ -12,6 +12,7 @@
 <table class="table-bordered table-striped table-responsive" id="table-width-100prc">
     <tr>
         <th><label>Название</label></th>
+        <th><label>Активен</label></th>
         <th>
             <label>Тип</label>
         </th>
@@ -36,6 +37,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.CustomName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Enable)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ReportTypeEnum)

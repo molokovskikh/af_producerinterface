@@ -13,7 +13,7 @@
           <Property Name="Login" Type="varchar" MaxLength="50" />
           <Property Name="AppointmentId" Type="int" />
           <Property Name="TypeUser" Type="tinyint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="75" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
           <Property Name="LastName" Type="varchar" MaxLength="30" />
           <Property Name="FirstName" Type="varchar" MaxLength="30" />
           <Property Name="OtherName" Type="varchar" MaxLength="30" />
@@ -25,6 +25,7 @@
           <Property Name="Enabled" Type="tinyint" />
           <Property Name="LastUpdatePermisison" Type="datetime" Precision="0" />
           <Property Name="RegionMask" Type="ubigint" />
+          <Property Name="SecureTime" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="AccountAppointment">
           <Key>
@@ -261,6 +262,7 @@
           <Property Name="Ip" Type="varchar" MaxLength="50" />
           <Property Name="RunStartTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RunNow" Type="bool" Nullable="false" />
+          <Property Name="MailTo" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="reporttemplate">
           <Key>
@@ -385,7 +387,7 @@
           <Property Name="ReportType" Type="int" Nullable="false" />
           <Property Name="ProducerId" Type="bigint" Nullable="false" />
           <Property Name="CreatorId" Type="uint" Nullable="false" />
-          <Property Name="Creator" Type="varchar" MaxLength="75" />
+          <Property Name="Creator" Type="varchar" MaxLength="100" />
           <Property Name="CreationDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="DisplayStatus" Type="int" Nullable="false" />
@@ -476,7 +478,9 @@
           <Property Name="Ip" Type="varchar" MaxLength="50" />
           <Property Name="RunStartTime" Type="timestamp" Precision="0" Nullable="false" />
           <Property Name="RunNow" Type="bool" Nullable="false" />
-          <Property Name="UserName" Type="varchar" MaxLength="75" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" />
+          <Property Name="ProducerName" Type="varchar" MaxLength="255" />
+          <Property Name="MailTo" Type="varchar" MaxLength="1000" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.suppliernames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -506,7 +510,7 @@
             <PropertyRef Name="ProducerName" />
           </Key>
           <Property Name="UserId" Type="uint" Nullable="false" />
-          <Property Name="UserName" Type="varchar" MaxLength="75" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="ProducerId" Type="uint" Nullable="false" />
           <Property Name="ProducerName" Type="varchar" MaxLength="255" Nullable="false" />
@@ -850,7 +854,9 @@ FROM `regionnames` AS `regionnames`</DefiningQuery>
 `reportrunlogwithuser`.`Ip`, 
 `reportrunlogwithuser`.`RunStartTime`, 
 `reportrunlogwithuser`.`RunNow`, 
-`reportrunlogwithuser`.`UserName`
+`reportrunlogwithuser`.`UserName`, 
+`reportrunlogwithuser`.`ProducerName`, 
+`reportrunlogwithuser`.`MailTo`
 FROM `reportrunlogwithuser` AS `reportrunlogwithuser`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="suppliernames" EntityType="Self.suppliernames" store:Type="Views" store:Schema="producerinterface">
@@ -1130,7 +1136,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="NotificationToProducers" EntityType="producerinterface_Model.NotificationToProducers" />
 					<EntitySet Name="catalognameswithuptime" EntityType="producerinterface_Model.catalognameswithuptime" />
           <EntitySet Name="ReportRunLog" EntityType="producerinterface_Model.ReportRunLog" />
-          <EntitySet Name="reportrunlogwithuser" EntityType="producerinterface_Model.reportrunlogwithuser" />
           <EntitySet Name="mailformwithfooter" EntityType="producerinterface_Model.mailformwithfooter" />
           <EntitySet Name="AccountGroup" EntityType="producerinterface_Model.AccountGroup" />
           <EntitySet Name="AccountPermission" EntityType="producerinterface_Model.AccountPermission" />
@@ -1192,6 +1197,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="MediaFiles" EntitySet="MediaFiles" />
             <End Role="promotions" EntitySet="promotions" />
           </AssociationSet>
+          <EntitySet Name="reportrunlogwithuser" EntityType="producerinterface_Model.reportrunlogwithuser" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1367,20 +1373,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RunStartTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RunNow" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="reportrunlogwithuser">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="JobName" />
-            <PropertyRef Name="RunStartTime" />
-            <PropertyRef Name="RunNow" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RunStartTime" Type="DateTime" Nullable="false" />
-          <Property Name="RunNow" Type="Boolean" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="MailTo" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="mailformwithfooter">
           <Key>
@@ -1455,6 +1448,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountAppointment1" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="Account" ToRole="AccountAppointment" />
+          <Property Name="SecureTime" Type="DateTime" />
         </EntityType>
         <Association Name="Account_CompanyId">
           <End Type="producerinterface_Model.AccountCompany" Role="AccountCompany" Multiplicity="0..1" />
@@ -1685,6 +1679,22 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="reportrunlogwithuser">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JobName" />
+            <PropertyRef Name="RunStartTime" />
+            <PropertyRef Name="RunNow" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="JobName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RunStartTime" Type="DateTime" Nullable="false" />
+          <Property Name="RunNow" Type="Boolean" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MailTo" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1978,22 +1988,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="ReportRunLog">
             <EntityTypeMapping TypeName="producerinterface_Model.ReportRunLog">
               <MappingFragment StoreEntitySet="ReportRunLog">
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
                 <ScalarProperty Name="RunNow" ColumnName="RunNow" />
                 <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />
                 <ScalarProperty Name="Ip" ColumnName="Ip" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="JobName" ColumnName="JobName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="reportrunlogwithuser">
-            <EntityTypeMapping TypeName="producerinterface_Model.reportrunlogwithuser">
-              <MappingFragment StoreEntitySet="reportrunlogwithuser">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="RunNow" ColumnName="RunNow" />
-                <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />
-                <ScalarProperty Name="Ip" ColumnName="Ip" />
                 <ScalarProperty Name="JobName" ColumnName="JobName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2051,6 +2050,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="Account">
             <EntityTypeMapping TypeName="producerinterface_Model.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="SecureTime" ColumnName="SecureTime" />
                 <ScalarProperty Name="RegionMask" ColumnName="RegionMask" />
                 <ScalarProperty Name="LastUpdatePermisison" ColumnName="LastUpdatePermisison" />
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
@@ -2166,6 +2166,20 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="ImageType" ColumnName="ImageType" />
                 <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
                 <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reportrunlogwithuser">
+            <EntityTypeMapping TypeName="producerinterface_Model.reportrunlogwithuser">
+              <MappingFragment StoreEntitySet="reportrunlogwithuser">
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
+                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="RunNow" ColumnName="RunNow" />
+                <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />
+                <ScalarProperty Name="Ip" ColumnName="Ip" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

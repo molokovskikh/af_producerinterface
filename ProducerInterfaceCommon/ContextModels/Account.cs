@@ -41,6 +41,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<sbyte> Enabled { get; set; }
         public Nullable<System.DateTime> LastUpdatePermisison { get; set; }
         public Nullable<decimal> RegionMask { get; set; }
+        public Nullable<System.DateTime> SecureTime { get; set; }
     
         public virtual AccountCompany AccountCompany { get; set; }
         public virtual ICollection<AccountEmail> AccountEmail { get; set; }

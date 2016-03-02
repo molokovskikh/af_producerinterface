@@ -226,4 +226,35 @@ drop table promotionsimage;
  ALTER TABLE `Account`
  ADD COLUMN `SecureTime` DATETIME NULL DEFAULT NULL AFTER `RegionMask`;
 
+ALTER TABLE `Account`
+ CHANGE COLUMN `Name` `Name` VARCHAR(100) NULL DEFAULT NULL,
+ CHANGE COLUMN `LastName` `LastName` VARCHAR(30) NULL DEFAULT NULL COMMENT 'Фамилия',
+ CHANGE COLUMN `FirstName` `FirstName` VARCHAR(30) NULL DEFAULT NULL COMMENT 'Имя',
+ CHANGE COLUMN `OtherName` `OtherName` VARCHAR(30) NULL DEFAULT NULL COMMENT 'Отчество',
+ CHANGE COLUMN `Password` `Password` VARCHAR(50) NULL DEFAULT NULL,
+ CHANGE COLUMN `Appointment` `Appointment` VARCHAR(50) NULL DEFAULT NULL,
+ CHANGE COLUMN `Enabled` `Enabled` TINYINT(4) NULL DEFAULT NULL;
+ 
+ CREATE TABLE `AccountFeedBackComment` (
+ `Id` INT(10) NOT NULL AUTO_INCREMENT,
+ `IdFeedBack` INT(10) UNSIGNED NOT NULL,
+ `Comment` VARCHAR(250) NULL,
+ `DateAdd` DATETIME NULL DEFAULT NULL,
+ PRIMARY KEY (`Id`),
+ CONSTRAINT `FK1_Comment_To_Feedback` FOREIGN KEY (`IdFeedBack`) REFERENCES `AccountFeedBack` (`Id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+
+alter TABLE `ReportRunLog`
+ add column `MailTo` VARCHAR(1000) NULL DEFAULT NULL after `RunNow`;
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view reportrunlogwithuser as
+select rl.Id, rl.JobName, rl.Ip, rl.RunStartTime, rl.RunNow, a.Name as UserName, p.ProducerName, rl.MailTo
+from ReportRunLog rl
+left outer join Account a on a.Id = rl.AccountId 
+left outer join AccountCompany ac on ac.Id = a.CompanyId
+left outer join ProducerNames p on p.ProducerId = ac.ProducerId;
+
+
 

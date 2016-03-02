@@ -53,7 +53,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
         public DbSet<catalognameswithuptime> catalognameswithuptime { get; set; }
         public DbSet<ReportRunLog> ReportRunLog { get; set; }
-        public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
         public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountPermission> AccountPermission { get; set; }
@@ -64,6 +63,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<NewsChange> NewsChange { get; set; }
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<MediaFiles> MediaFiles { get; set; }
+        public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {

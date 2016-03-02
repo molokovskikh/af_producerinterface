@@ -7,53 +7,53 @@ using log4net;
 
 namespace ProducerInterfaceControlPanelDomain
 {
-    public class MvcApplication : System.Web.HttpApplication
-    {
-        protected void Application_Start()
-        {
-            ViewEngines.Engines.Add(new ProducerInterfaceCommon.Heap.MyViewEngine());
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-        }
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            if (Server != null)
-            {
-                Exception ex = Server.GetLastError();
+	public class MvcApplication : System.Web.HttpApplication
+	{
+		protected void Application_Start()
+		{
+			ViewEngines.Engines.Add(new ProducerInterfaceCommon.Heap.MyViewEngine());
+			AreaRegistration.RegisterAllAreas();
+			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+			RouteConfig.RegisterRoutes(RouteTable.Routes);
+			BundleConfig.RegisterBundles(BundleTable.Bundles);
+		}
 
-                log4net.Config.XmlConfigurator.Configure();
+		protected void Application_Error(object sender, EventArgs e)
+		{
+			if (Server != null)
+			{
+				Exception ex = Server.GetLastError();
 
-                ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
+				log4net.Config.XmlConfigurator.Configure();
 
-                _logger.Error(ex.Message.ToString());
+				ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
 
-                if (Response.StatusCode != 404)
-                {
+				_logger.Error(ex.Message.ToString());
 
-                }
-                ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
-                Response.Redirect("~/Home/Index");
-            }
-        }
+				if (Response.StatusCode != 404)
+				{
 
-        public void ErrorMessage(string message)
-        {
-            SetCookie("ErrorMessage", message);
-        }
-        public void SetCookie(string name, string value)
-        {
-            if (value == null)
-            {
-                Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
-                return;
-            }
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
-            var text = Convert.ToBase64String(plainTextBytes);
-            Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
-        }
+				}
+				ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
+				Response.Redirect("~/Home/Index");
+			}
+		}
 
+		public void ErrorMessage(string message)
+		{
+			SetCookie("ErrorMessage", message);
+		}
 
-    }
+		public void SetCookie(string name, string value)
+		{
+			if (value == null)
+			{
+				Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
+				return;
+			}
+			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
+			var text = Convert.ToBase64String(plainTextBytes);
+			Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
+		}
+	}
 }
