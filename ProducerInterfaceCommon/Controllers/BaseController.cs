@@ -240,7 +240,7 @@ namespace ProducerInterfaceCommon.Controllers
                 }
             }
 
-			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(10), Cache.NoSlidingExpiration);
+			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(0), Cache.NoSlidingExpiration);
 			return permissionList;
 		}
 
@@ -262,7 +262,7 @@ namespace ProducerInterfaceCommon.Controllers
                 DateList.Add(CurrentUser.LastUpdatePermisison.ToString());
             }
           
-            HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(1), Cache.NoSlidingExpiration);
+            HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(0), Cache.NoSlidingExpiration);
             return DateList;
         }       
          

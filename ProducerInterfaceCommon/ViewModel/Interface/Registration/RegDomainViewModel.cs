@@ -28,7 +28,8 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Registration
 
         [Display(Name = "Email")]
         [UIHint("EditorStringMail")]
-        [Required(ErrorMessage = "Заполните email")]
+        [RegularExpression(@"[-a-z0-9-_]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*", ErrorMessage ="Неккоректное имя пользователя")]
+        [Required(ErrorMessage = "Заполните имя пользователя")]
         public string Mailname { get; set; }
 
         [Display(Name = "Доменное имя")]

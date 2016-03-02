@@ -176,6 +176,7 @@
     <Compile Include="ContextModels\drugfamilynames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\Enums.cs" />
     <Compile Include="ContextModels\MediaFiles.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -213,6 +214,7 @@
     <Compile Include="CustomHelpers\Models\PromotionsInRegionMask.cs" />
     <Compile Include="CustomHelpers\Models\ReportsInRegionMask.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
+    <Compile Include="Heap\EmailSender.cs" />
     <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
@@ -226,7 +228,6 @@
     <Compile Include="ContextModels\catalognames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\Enums.cs" />
     <Compile Include="ContextModels\jobextend.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -286,7 +287,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Heap\AutoMapper.cs" />
-    <Compile Include="Heap\EmailSender.cs" />
     <Compile Include="Heap\ExcelCreator.cs" />
     <Compile Include="Heap\HeaderHelper.cs" />
     <Compile Include="Heap\NamesHelper.cs" />
@@ -396,6 +396,7 @@
     <Compile Include="SPAM\Enums.cs" />
     <Compile Include="SPAM\Mail_Send.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBack\SearchModel.cs" />
+    <Compile Include="ViewModel\ControlPanel\GlobalAccount\RegistrationCustomProfile.cs" />
     <Compile Include="ViewModel\ControlPanel\Permission\ListGroupView.cs" />
     <Compile Include="ViewModel\ControlPanel\Promotion\SearchProducerPromotion.cs" />
     <Compile Include="ViewModel\ControlPanel\Report\SearchProducerReportsModel.cs" />

@@ -36,6 +36,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
             var match = System.Text.RegularExpressions.Regex.Match(G1.ToString(), @"\-?\d+(\.\d{0,})?");
             var match2 = System.Text.RegularExpressions.Regex.Match(G2.ToString(), @"[0-9][0-9]+(?:\.[0-9]*)?");
 
+            var ThisAccount = cntx_.Account.Find(CurrentUser.Id);
+            ThisAccount.SecureTime = DateTime.Now.AddMinutes(5);
+
+            cntx_.Entry(ThisAccount).State = System.Data.Entity.EntityState.Modified;
+            cntx_.SaveChanges();
+
             if (CurrentUser.Name != null)
             {
                 var i = match + (CurrentUser.Name.Length * 19801112).ToString() + match2;

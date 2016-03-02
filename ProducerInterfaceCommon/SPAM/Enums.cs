@@ -10,11 +10,20 @@ namespace ProducerInterfaceCommon.SPAM
     {
         public enum TypeSpam
         {
-            Reporst = 0,
-            Promotion =1,
-            News =2,
-            Registration =3,
-            FeedBack =4
+            All =0,
+            Reports = 1,
+            CustomReports =2,
+            Promotion =3,
+            CustomPromotions =4,
+            News =5,
+            CustomNews =6,
+            Registration =7,
+            FeedBack =8,
+            CustomFeedBack=9,
+            Producer=10,
+            Drug=11            
         }
+
+
     }
 }

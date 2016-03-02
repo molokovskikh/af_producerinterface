@@ -26,8 +26,8 @@ namespace ProducerInterfaceCommon.ContextModels
 		Error = 4
 	}
 
-	public enum FeedBackType
-	{
+	public enum FeedBackType // UI FeedBackTypePrivate - нумерация пунктов должна совпадать (UI пользовательский интерфейс)
+    {
 		[Display(Name = "Пожелание")]
 		Wish = 0,
 		[Display(Name = "Ошибка")]
@@ -36,8 +36,24 @@ namespace ProducerInterfaceCommon.ContextModels
 		Other = 2,
 		[Display(Name = "Добавление должности")]
 		AddNewAppointment = 3
+        /*
+            как минимум 4й пункт  "xxx=4" должен отсутствовать        
+        */
 	}
 
+    public enum FeedBackTypePrivate // FeedBackType - нумерация должна совпадать   (UI админка)
+    {
+        [Display(Name = "Пожелание")]
+        Wish = 0,
+        [Display(Name = "Ошибка")]
+        Error = 1,
+        [Display(Name = "Другое")]
+        Other = 2,
+        [Display(Name = "Добавление должности")]
+        AddNewAppointment = 3,
+        [Display(Name ="Заявка на Регистрацию")]
+        Registration =4
+    }
 
 	public enum FeedBackStatus
 	{

@@ -138,8 +138,22 @@ namespace ProducerInterfaceCommon.Heap
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
 		}
 
-		// Универсальное на смену пароля, пользователю и расширенное сотрудникам
-		private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
+        public static void SendControlPanelRegistrationSuccessMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip, long AdminId)
+        {
+
+            var user = cntx.Account.Single(x => x.Id == userId);
+            var siteName = ConfigurationManager.AppSettings["SiteName"];
+            var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RegistrationSuccess);
+            var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
+            var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
+            EmailSender.SendEmail(user.Login, subject, body, null, true);
+            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), компания {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(MailType.RegistrationSuccess)}, Письмо отправлено из Панели управления, Администратором {cntx.Account.Find(AdminId).Login}";
+            var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+            EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, false);        
+        }
+
+        // Универсальное на смену пароля, пользователю и расширенное сотрудникам
+        private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
 		{
 			// TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
 			var user = cntx.Account.Single(x => x.Id == userId);
@@ -148,9 +162,8 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
 			EmailSender.SendEmail(user.Login, subject, body, null, true);
-
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+            var  bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
+            var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, false);
 		}
 

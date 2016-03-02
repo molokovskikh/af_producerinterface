@@ -39,25 +39,24 @@
         <EntityTypeShape EntityType="producerinterface_Model.AccountGroup" Width="1.5" PointX="11.75" PointY="19" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountPermission" Width="1.5" PointX="14.25" PointY="19.125" />
         <AssociationConnector Association="producerinterface_Model.AccountGroupToPermission" />
-        <EntityTypeShape EntityType="producerinterface_Model.Account" Width="4.5" PointX="4.5" PointY="16.375" />
-        <AssociationConnector Association="producerinterface_Model.Account_CompanyId" ManuallyRouted="false" >
-        </AssociationConnector>
-        <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
-        <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
-        <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
-        <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
         <EntityTypeShape EntityType="producerinterface_Model.jobextendwithproducer" Width="1.5" PointX="14.375" PointY="0.75" />
         <EntityTypeShape EntityType="producerinterface_Model.jobextend" Width="1.5" PointX="14.375" PointY="5.75" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="3" PointX="6" PointY="23" />
-        <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
         <EntityTypeShape EntityType="producerinterface_Model.NewsChange" Width="1.5" PointX="3.125" PointY="23" />
-        <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.FK2_NewsChangeToNotification" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountAppointment" Width="1.5" PointX="9.875" PointY="20.75" />
-        <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
-        <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
         <EntityTypeShape EntityType="producerinterface_Model.MediaFiles" Width="1.5" PointX="10.375" PointY="0.75" />
         <AssociationConnector Association="producerinterface_Model.fk_promotions_to_fileid1" />
+        <EntityTypeShape EntityType="producerinterface_Model.Account" Width="4.5" PointX="4.25" PointY="16.125" />
+        <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
+        <AssociationConnector Association="producerinterface_Model.Account_CompanyId" />
+        <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
+        <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
+        <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
+        <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
+        <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
+        <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

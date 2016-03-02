@@ -2,10 +2,6 @@
 
 <div class="form-group">
     <label>Email<strong class="required">*</strong></label>
-     @Html.TextBoxFor(model=> model, null, new { @Name="login", @class= "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12" })
+     @Html.TextBoxFor(model=> model, null, new { @Name="login", @class= "form-control col-xs-12" })
      @Html.ValidationMessageFor(model => model)
 </div>
-
-@*
-    col-sm-12 col-xs-12 col-md-12 col-lg-12
-*@

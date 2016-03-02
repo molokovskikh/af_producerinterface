@@ -9,13 +9,12 @@
 
 namespace ProducerInterfaceCommon.ContextModels
 {
-	using System;
-	using System.Data.Entity;
-	using System.Data.Entity.Core.Objects;
-	using System.Data.Entity.Infrastructure;
-	using System.Linq;
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Core.Objects;
+    using System.Data.Entity.Infrastructure;
 
-	public partial class producerinterface_Entities : DbContext
+    public partial class producerinterface_Entities : DbContext
     {
         public producerinterface_Entities()
             : base("name=producerinterface_Entities")
@@ -57,13 +56,13 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
         public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountPermission> AccountPermission { get; set; }
-        public DbSet<Account> Account { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<NewsChange> NewsChange { get; set; }
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<MediaFiles> MediaFiles { get; set; }
+        public DbSet<Account> Account { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {
