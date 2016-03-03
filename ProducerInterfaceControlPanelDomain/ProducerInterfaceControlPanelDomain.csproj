@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.min.css" />
+    <Content Include="Content\bootstrap-datepicker3.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Chosen\css\bootstrap-datepicker3.css" />
@@ -222,7 +223,7 @@
     <Content Include="Content\Chosen\css\loading.gif" />
     <Content Include="Content\Chosen\css\Site.css" />
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
-    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\ckeditor\InitCKEditor_News.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\dialogs\base64image.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\icons\base64image.png" />
@@ -751,6 +752,7 @@
     <Content Include="Views\OfficePost\AccountNotPost.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\PartialListAppointment.cshtml" />
     <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

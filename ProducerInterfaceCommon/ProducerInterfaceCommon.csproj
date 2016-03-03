@@ -468,6 +468,7 @@
       <DependentUpon>producerinterface_Entities.edmx</DependentUpon>
       <LastGenOutput>producerinterface_Entities.cs</LastGenOutput>
     </Content>
+    <Content Include="init.sql" />
     <Content Include="LoggerModels\Logger_Entities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Logger_Entities.edmx</DependentUpon>

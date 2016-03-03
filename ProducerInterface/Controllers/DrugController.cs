@@ -69,18 +69,6 @@ namespace ProducerInterface.Controllers
       return View(model);
 		}
 
-		//public ActionResult EditMnn(long id)
-		//{
-		//	var df = cntx_.drugfamily.Single(x => x.FamilyId == id && x.ProducerId == producerId);
-		//	ViewData["familyName"] = df.FamilyName;
-		//	ViewData["familyId"] = id;
-		//	var model = cntx_.drugmnn.SingleOrDefault(x => x.MnnId == df.MnnId);
-		//	if (model == null) {
-		//		model = new drugmnn();
-		//	}
-		//	return View(model);
-		//}
-
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
 			// есть ли данное семейство у данного производителя
@@ -93,8 +81,6 @@ namespace ProducerInterface.Controllers
 			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 			// формы данного лек.средства из ассортимента данного производителя
 			var model = ccntx.Catalog.Where(x => x.NameId == id && !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).ToList().OrderBy(x => x.Name);
-
-			//var model = cntx_.drugformproducer.Where(x => x.DrugFamilyId == id && x.ProducerId == producerId).OrderBy(x => x.CatalogName).ToList();
 			if (edit)
 				return View("EditForms", model);
 			return View(model);

@@ -108,7 +108,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var producers = cntx_.producernames.Where(x => producerIdList.Contains(x.ProducerId)).ToList()
 				.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList();
 
-			var model = new List<OptionElement>() { new OptionElement { Text = "(Ничего не выбрано)", Value = "" } };
+			var model = new List<OptionElement>() { new OptionElement { Text = "Все производители", Value = "" } };
 			model.AddRange(producers);
 			return model;
 		}

@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using System.Web.ModelBinding;
 using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.ContextModels
@@ -23,28 +18,28 @@ namespace ProducerInterfaceCommon.ContextModels
         public decimal RegionMask { get; set; }
     }
 
-    public class Producer
-	{
-		public virtual string Name { get; set; }
-		public virtual IList<Account> Users { get; set; }
-		public virtual List<Drug> Drugs { get; set; }
-	}
+ //   public class Producer
+	//{
+	//	public virtual string Name { get; set; }
+	//	public virtual IList<Account> Users { get; set; }
+	//	public virtual List<Drug> Drugs { get; set; }
+	//}
 
-	public class Drug
-	{
-		// drug NAME table assortment 
-		public virtual long Id { get; set; }
-		public virtual string Name { get; set; }
-		public virtual MNN MNN { get; set; }
-		public virtual DateTime UpdateTime { get; set; }
-	}
+	//public class Drug
+	//{
+	//	// drug NAME table assortment 
+	//	public virtual long Id { get; set; }
+	//	public virtual string Name { get; set; }
+	//	public virtual MNN MNN { get; set; }
+	//	public virtual DateTime UpdateTime { get; set; }
+	//}
 
-	public class MNN
-	{
-		public virtual string Value { get; set; }
-		public virtual string RussianValue { get; set; }
-		public virtual DateTime UpdateTime { get; set; }
-	}
+	//public class MNN
+	//{
+	//	public virtual string Value { get; set; }
+	//	public virtual string RussianValue { get; set; }
+	//	public virtual DateTime UpdateTime { get; set; }
+	//}
 
 	public class AdminAutentification
 	{

@@ -20,10 +20,12 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.Report
 		[Display(Name = "Тип")]
 		public int? ReportType { get; set; }
 
-		[Display(Name = "Запуск с...")]
+		[UIHint("Date")]
+		[Display(Name = "Запуск с")]
 		public DateTime? RunFrom { get; set; }
 
-		[Display(Name = "Запуск по...")]
+		[UIHint("Date")]
+		[Display(Name = "Запуск по")]
 		public DateTime? RunTo { get; set; }
 
 		[HiddenInput(DisplayValue = false)]
