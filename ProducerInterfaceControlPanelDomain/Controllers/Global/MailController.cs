@@ -29,8 +29,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (!id.HasValue)
 				return RedirectToAction("Index");
 
-			var model = cntx_.mailform.Single(xxx => xxx.Id == id);
-			return View(model);
+			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == id);
+			if (mailForm == null)
+				return RedirectToAction("Index");
+
+			var mediaFiles = mailForm.MediaFiles.Select(x => x.Id).ToList();
+			var model = new MailFormUi() { Body = mailForm.Body, Description = mailForm.Description, Id = mailForm.Id, Subject = mailForm.Subject, MediaFiles = mediaFiles };
+      return View(model);
 		}
 
 		/// <summary>
@@ -38,9 +43,27 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// </summary>
 		/// <returns>Принимает шаблон письма для сохранения в БД</returns>
 		[HttpPost]
-		public ActionResult Edit(mailform mailForm)
+		public ActionResult Edit(MailFormUi model)
 		{
-			cntx_.Entry(mailForm).State = System.Data.Entity.EntityState.Modified;
+			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == model.Id);
+			if (mailForm == null)
+				return RedirectToAction("Index");
+
+			mailForm.Body = model.Body;
+			mailForm.Subject = model.Subject;
+
+			if (model.AddMediaFiles != null && model.AddMediaFiles.Count > 0) {
+				var addMediaFiles = cntx_.MediaFiles.Where(x => model.AddMediaFiles.Contains(x.Id)).ToList();
+				foreach (var addMediaFile in addMediaFiles)
+					mailForm.MediaFiles.Add(addMediaFile);
+			}
+
+			if (model.RemoveMediaFiles != null && model.RemoveMediaFiles.Count > 0) {
+				var removeMediaFiles = cntx_.MediaFiles.Where(x => model.RemoveMediaFiles.Contains(x.Id)).ToList();
+				foreach (var removeMediaFile in removeMediaFiles)
+					mailForm.MediaFiles.Remove(removeMediaFile);
+			}
+
 			cntx_.SaveChanges();
 			SuccessMessage("Шаблон письма сохранен");
 			return RedirectToAction("Index");

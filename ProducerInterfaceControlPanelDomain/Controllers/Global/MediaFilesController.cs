@@ -40,21 +40,45 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult SaveNewsFile()
 		{
-			var file = this.HttpContext.Request.Files[0];
+			var file = Request.Files[0];
 			var fileId = SaveFile(file, EntityType.News);
 			string ckEditorFuncNum = HttpContext.Request["CKEditorFuncNum"];
 			string url = $"{GetWebConfigParameters("ImageFullUrlString")}/GetFile/{fileId}";
 			return Content($"<script>window.parent.CKEDITOR.tools.callFunction({ckEditorFuncNum}, \"{url}\");</script>");
 		}
 
-		public JsonResult SaveEmailFile()
+		[HttpPost]
+		public ActionResult SaveEmailFile(HttpPostedFileBase file)
 		{
-			var file = this.HttpContext.Request.Files[0];
-			var fileId = SaveFile(file, EntityType.Email);
-			return Json(new
+			if (file != null && file.ContentLength > 0) {
+				var fileId = SaveFile(file, EntityType.Email);
+				SuccessMessage("Файл успешно загружен");
+				return RedirectToAction("Index", "Mail");
+      }
+			else {
+				ErrorMessage("Файл не найден");
+				return RedirectToAction("Index", "Mail");
+			}
+		}
+
+		[HttpPost]
+		public void YourAction(IEnumerable<HttpPostedFileBase> files)
+		{
+			if (files != null)
 			{
-				url = $"{GetWebConfigParameters("ImageFullUrlString")}/GetFile/{fileId}"
-			});
+				foreach (var file in files)
+				{
+					// Verify that the user selected a file
+					if (file != null && file.ContentLength > 0)
+					{
+						// extract only the fielname
+						var fileName = Path.GetFileName(file.FileName);
+						// TODO: need to define destination
+						var path = Path.Combine(Server.MapPath("~/Upload"), fileName);
+						file.SaveAs(path);
+					}
+				}
+			}
 		}
 
 

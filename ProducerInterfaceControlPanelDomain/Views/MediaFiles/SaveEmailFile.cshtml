@@ -1,0 +1,7 @@
+﻿@model int
+@{
+    Layout = null;
+}
+
+<p>Файл успешно загружен</p>
+<img src="@Url.Action("GetFile", new { Id = Model})" style="max-height:50px;"/>

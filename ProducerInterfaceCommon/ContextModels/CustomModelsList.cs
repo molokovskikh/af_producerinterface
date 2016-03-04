@@ -12,34 +12,29 @@ namespace ProducerInterfaceCommon.ContextModels
 		public int CurrentPageIndex { get; set; }
 	}
 
-    public partial class PromotionsInRegionMask_Result
-    {
-        public long Id { get; set; }
-        public decimal RegionMask { get; set; }
-    }
+	public partial class PromotionsInRegionMask_Result
+	{
+		public long Id { get; set; }
+		public decimal RegionMask { get; set; }
+	}
 
- //   public class Producer
-	//{
-	//	public virtual string Name { get; set; }
-	//	public virtual IList<Account> Users { get; set; }
-	//	public virtual List<Drug> Drugs { get; set; }
-	//}
+	public class MailFormUi
+	{
+		public int Id { get; set; }
+		public string Subject { get; set; }
+		public string Body { get; set; }
+		public string Description { get; set; }
+		public List<int> MediaFiles { get; set; }
+		public List<int> AddMediaFiles { get; set; }
+		public List<int> RemoveMediaFiles { get; set; }
 
-	//public class Drug
-	//{
-	//	// drug NAME table assortment 
-	//	public virtual long Id { get; set; }
-	//	public virtual string Name { get; set; }
-	//	public virtual MNN MNN { get; set; }
-	//	public virtual DateTime UpdateTime { get; set; }
-	//}
-
-	//public class MNN
-	//{
-	//	public virtual string Value { get; set; }
-	//	public virtual string RussianValue { get; set; }
-	//	public virtual DateTime UpdateTime { get; set; }
-	//}
+		public MailFormUi()
+		{
+			MediaFiles = new List<int>();
+			AddMediaFiles = new List<int>();
+			RemoveMediaFiles = new List<int>();
+		}
+	}
 
 	public class AdminAutentification
 	{
@@ -48,29 +43,29 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Password { get; set; }
 	}
 
-    public class AdminAccountValidation
-    {
-        public long Id { get; set; }
+	public class AdminAccountValidation
+	{
+		public long Id { get; set; }
 
-        public string Name { get; set; }
+		public string Name { get; set; }
 
-        public sbyte TypeUser { get; set; }
+		public sbyte TypeUser { get; set; }
 
-        public decimal? RegionMask { get; set; }
+		public decimal? RegionMask { get; set; }
 
-        [Display(Name = "Список регионов")]
-        [UIHint("LongListRegion")]
-        [Required(ErrorMessage = "Выберите регионы")]
-        public List<long> RegionListId { get; set; }
+		[Display(Name = "Список регионов")]
+		[UIHint("LongListRegion")]
+		[Required(ErrorMessage = "Выберите регионы")]
+		public List<long> RegionListId { get; set; }
 
-        [Display(Name = "Список групп")]
-        [UIHint("IntListGroup")]
-        [Required(ErrorMessage = "Выберите группы")]
-        public List<int> GroupListId { get; set; }
+		[Display(Name = "Список групп")]
+		[UIHint("IntListGroup")]
+		[Required(ErrorMessage = "Выберите группы")]
+		public List<int> GroupListId { get; set; }
 
-        public virtual List<ProducerInterfaceCommon.ContextModels.AccountGroup> ListGroup{get;set;}
+		public virtual List<ProducerInterfaceCommon.ContextModels.AccountGroup> ListGroup { get; set; }
 
-    }
+	}
 
 
 	public class PromotionValidation
@@ -125,7 +120,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	public partial class promotions
 	{
 		public List<long> RegionList { get; set; }
-        public List<OptionElement> DrugList { get; set; }
+		public List<OptionElement> DrugList { get; set; }
 	}
 
 	public class PromotionFile
@@ -134,7 +129,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public int FileId { get; set; }
 		public string ImageFile { get; set; }
 	}
-            
+
 	public class ListUserView
 	{
 		public long Id { get; set; }
@@ -158,7 +153,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Required(ErrorMessage = "Введите пароль")]
 		public string password { get; set; }
 	}
-	
+
 	public class PasswordUpdate
 	{
 		[UIHint("EditorMail")]

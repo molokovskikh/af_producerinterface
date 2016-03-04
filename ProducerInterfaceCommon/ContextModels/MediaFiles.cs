@@ -17,6 +17,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public MediaFiles()
         {
             this.promotions = new HashSet<promotions>();
+            this.mailform = new HashSet<mailform>();
         }
     
         public int Id { get; set; }
@@ -27,5 +28,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public int EntityType { get; set; }
     
         public virtual ICollection<promotions> promotions { get; set; }
+        public virtual ICollection<mailform> mailform { get; set; }
     }
 }
