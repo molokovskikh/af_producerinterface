@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Обратная связь с пользователями сайта";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";   
+}
+
+<h2>Обращения пользователей</h2>
+<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#filterModal">Фильтр</button>
+<h4 data-bind="text: ErrorMessage"></h4>
+
+<table id="myTable" class="table table-striped table-bordered table-condensed">
+    <tr>      
+        <th>Id</th>
+        <th>Текст обращения</th>
+
+        <th>
+            <span data-bind="style: { display: SortTime}" class="col-xs-3 glyphicon glyphicon-filter"></span>
+            <span class="col-xs-9">Дата обращения</span>           
+        </th>
+
+        <th>          
+            <span data-bind="style:{display: SortStatus}" class="col-xs-3 glyphicon glyphicon-filter">
+            </span><span class="col-xs-9">Статус</span>
+        </th>
+
+        <th>         
+            <span data-bind="style:{display: SortType}" class="col-xs-3 glyphicon glyphicon-filter"></span>
+            <span class="col-xs-9">Тип</span>
+        </th>
+
+        <th>           
+            <span data-bind="style:{display: SortAccountName}" class="col-xs-3 glyphicon glyphicon-filter"></span>
+            <span class="col-xs-9">Логин Пользователя</span>
+        </th>
+
+        <th>           
+            <span data-bind="style:{display: SortProducerName}" class="col-xs-3 glyphicon glyphicon-filter"></span>
+            <span class="col-xs-9">Производитель</span>
+        </th>
+
+        <th>Адрес с которого сделан запрос</th>
+        <th>Контакты</th>
+    </tr>
+
+  
+    <tbody data-bind="foreach: Feedback">
+        <tr>
+            <td data-bind="text: Id"></td>
+            <td data-bind="text: Description"></td>
+            <td data-bind="text: DateTimeString"></td>
+            <td data-bind="text: StatusString"></td>
+            <td data-bind="text: TypeString"></td>
+            <td data-bind="text: AccountLogin"></td>
+            <td data-bind="text: Producername"></td>
+            <td data-bind="text: UrlString"></td>
+            <td data-bind="text: About"></td>    
+        </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-xs-12">
+        <ul class="pagination pagination-sm" data-bind="foreach: PaginatorLinks">
+            <li data-bind="css: { active: Counter === ($parent.PageIndex()) }">
+                <a data-bind="text: ViewCounter, click: FilterModel.Event_Pager_Search.bind($parent.PageIndex)"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@Html.Partial("Partial/FilterModal")
+
+
+
+@section scripts
+{  
+<script src="~/Scripts/knockout-3.4.0.js"></script>    
+<script src="~/Scripts/knockout-3.4.0.debug.js"></script>
+<script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+<script src="~/Scripts/WorkPlace/FeedBack_FeedBackList.js"></script>    
+ }

@@ -1,0 +1,16 @@
+﻿@{
+    var UserList = ViewBag.UserList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
+}
+
+<div claas="form-group">
+    <label>Пользователь</label>
+
+    <select id="AccountId" class="form-control">
+        <option value="0">Не учитывать пользователей</option>
+      @foreach (var AccountItem in UserList)
+      {
+          <option value="@AccountItem.Value">@AccountItem.Text</option>
+      }
+
+    </select>
+</div>

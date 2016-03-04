@@ -20,7 +20,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var CompanyList = cntx_.AccountCompany.ToList();
             var producerLongList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId != null).ToList().Select(xxx => xxx.ProducerId).ToList();
-            ViewBag.ProducerList = cntx_.producernames.Where(xxx=> producerLongList.Contains(xxx.ProducerId)).ToList();
+            try
+            {
+                ViewBag.ProducerList = cntx_.producernames.Where(xxx => producerLongList.Contains(xxx.ProducerId)).ToList();
+            }
+            catch
+            {
+                ViewBag.ProducerList = new List<producernames>();
+            }
+         
             ViewBag.ListPromotions = cntx_.promotions.ToList();
 
             return View(CompanyList);

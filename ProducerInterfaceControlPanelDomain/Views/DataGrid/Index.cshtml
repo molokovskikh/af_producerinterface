@@ -53,7 +53,8 @@
         $(function () {
             $('#search').click(function () {
                 var searchText = $('#txtsearch').val();
-                getEquipment(searchText);
+                GetTopHundred();
+                //getEquipment(searchText);
             })
             ko.applyBindings(EquipmentViewModel);
         })
@@ -88,6 +89,29 @@
                 }
             });
         }
+
+        function GetTopHundred()
+        {
+            var url = 'GetTopHundredList';
+
+            $.ajax({
+                url: url,
+                cache: false,
+                contentType: 'application/json',         
+                type: "POST",
+                success: function (result) {
+                    bindData(result);
+                },
+                error: function (jqXHR) {
+                    $('#message').html(jqXHR.statusText);
+                }
+            });
+
+
+
+
+        }
+
 
     </script>
 

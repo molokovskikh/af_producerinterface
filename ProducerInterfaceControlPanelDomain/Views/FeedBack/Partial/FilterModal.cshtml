@@ -1,0 +1,67 @@
+﻿<div id="filterModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">      
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                <h3>Фильтр сообщений</h3>        
+            </div>
+            <div class="modal-body">                
+                <div class="row">
+                    <div class="col-xs-12">                  
+                   
+                        <div class="form-group">
+                            <label>Производитель</label>
+                            <select data-bind="foreach:ProducerList, value: FilterModel.ProducerId,event:{ change: FilterModel.Event_SetProducer} , optionsCaption: 'Выберите производителя'" class="form-control">
+                                <option data-bind="value: Id, text: Name"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Пользователь</label>
+                            <select data-bind="foreach: AccountList, value: FilterModel.LoginId, event:{ change: FilterModel.Event_SetAccount}, optionsCaption: 'Выберите пользователя'  " class="form-control">
+                                <option data-bind="value: Id, text: Name"></option>                               
+                            </select>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>От</label>
+                                    <input type="text" id="DateBeginer" readonly data-bind="value: FilterModel.DateBegin" class="form-control pointer"/>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>До</label>
+                                    <input type="text" id="DateEnder" readonly data-bind="value: FilterModel.DateEnd" class="form-control pointer" />
+                                </div>
+                            </div>
+
+                        </div>
+                  
+                        <div class="form-group">
+                            <label>Количество записей на странице</label>
+                            <select data-bind="foreach: PagerCountList, value: FilterModel.Pager" class="form-control">
+                                <option data-bind="value: Id, text: Name"></option>       
+                            </select>                        
+                        </div>
+
+                    </div>
+                </div>        
+            </div>
+
+            <div class="modal-footer">
+                <h4 data-bind="text: ErrorMessage" class="pull-left"></h4>
+                <div class="btn btn-group btn-group-sm">                 
+                    <a data-bind="click : FilterModel.Event_ModalSearch" class="btn btn-primary">Поиск</a>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть без поиска</button>
+                </div>               
+            </div>
+        </div>
+
+    </div>
+</div>
+

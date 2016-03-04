@@ -175,12 +175,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminProfile\AdminAccountController.cs" />
     <Compile Include="Controllers\AdminProfile\GoToProducerInterfaceController.cs" />
-    <Compile Include="Controllers\LogForNet_LogChange\FeedBackController.cs" />
+    <Compile Include="Controllers\LogForNet_LogChange_FeedBack\FeedBackController.cs" />
+    <Compile Include="Controllers\LogForNet_LogChange_FeedBack\LogForNetController.cs" />
+    <Compile Include="Controllers\LogForNet_LogChange_FeedBack\LogUserChangeController.cs" />
     <Compile Include="Controllers\Permissions\BasePermissionController.cs" />
     <Compile Include="Controllers\AdminProfile\GlobalAccountController.cs" />
     <Compile Include="Controllers\Global\HomeController.cs" />
-    <Compile Include="Controllers\LogForNet_LogChange\LogForNetController.cs" />
-    <Compile Include="Controllers\LogForNet_LogChange\LogUserChangeController.cs" />
     <Compile Include="Controllers\Global\MailController.cs" />
     <Compile Include="Controllers\Global\MasterBaseController.cs" />
     <Compile Include="Controllers\Global\MediaFilesController.cs" />
@@ -296,8 +296,11 @@
     <Content Include="Scripts\ckeditor\plugins\filebrowser\plugin.js" />
     <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
     <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Scripts\knockout-3.4.0.debug.js" />
+    <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
     <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
+    <Content Include="Scripts\WorkPlace\FeedBack_FeedBackList.js" />
     <Content Include="Scripts\WorkPlace\FeedBack_Index.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
@@ -720,7 +723,6 @@
     <Content Include="Views\GoToProducerInterface\Index.cshtml" />
     <Content Include="Views\GoToProducerInterface\GetListUser.cshtml" />
     <Content Include="Views\MediaFiles\Index.cshtml" />
-    <Content Include="Views\FeedBack\Index.cshtml" />
     <Content Include="Views\ProducerInformation\DomainList.cshtml" />
     <Content Include="Views\ProducerInformation\GetDomain.cshtml" />
     <Content Include="Views\ProducerInformation\AppointmentNameList.cshtml" />
@@ -741,19 +743,19 @@
     <Content Include="Views\Permission\EditorTemplates\LongListRegion.cshtml" />
     <Content Include="Views\Permission\ListUsers.cshtml" />
     <Content Include="Views\News\History.cshtml" />
-    <Content Include="Views\FeedBack\FeedBackSearch.cshtml" />
     <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
-
     <Content Include="Views\OfficePost\CustomAppointment.cshtml" />
     <Content Include="Views\OfficePost\Index.cshtml" />
     <Content Include="Views\OfficePost\Partial\ListAppointment.cshtml" />
     <Content Include="Views\OfficePost\Partial\ListAccount.cshtml" />
     <Content Include="Views\OfficePost\Partial\ListAccountAppointment.cshtml" />
     <Content Include="Views\OfficePost\AccountNotPost.cshtml" />
-
     <Content Include="Views\ProducerInformation\Partial\PartialListAppointment.cshtml" />
     <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
-    
+    <Content Include="Views\FeedBack\FeedBackList.cshtml" />
+    <Content Include="Views\FeedBack\Partial\ProducerFilter.cshtml" />
+    <Content Include="Views\FeedBack\Partial\AccountFilter.cshtml" />
+    <Content Include="Views\FeedBack\Partial\FilterModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
