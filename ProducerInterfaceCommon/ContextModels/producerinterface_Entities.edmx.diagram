@@ -57,6 +57,7 @@
         <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
         <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
+        <AssociationConnector Association="producerinterface_Model.mailformToMediaFiles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

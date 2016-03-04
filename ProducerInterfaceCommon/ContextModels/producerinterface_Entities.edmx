@@ -176,6 +176,14 @@
           <Property Name="IsBodyHtml" Type="bool" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="250" />
         </EntityType>
+        <EntityType Name="mailformToMediaFiles">
+          <Key>
+            <PropertyRef Name="MailFormId" />
+            <PropertyRef Name="MediaFilesId" />
+          </Key>
+          <Property Name="MailFormId" Type="int" Nullable="false" />
+          <Property Name="MediaFilesId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="MediaFiles">
           <Key>
             <PropertyRef Name="Id" />
@@ -667,6 +675,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_to_mailform">
+          <End Role="mailform" Type="Self.mailform" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="mailformToMediaFiles" Type="Self.mailformToMediaFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mailform">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="mailformToMediaFiles">
+              <PropertyRef Name="MailFormId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_to_MediaFiles">
+          <End Role="MediaFiles" Type="Self.MediaFiles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="mailformToMediaFiles" Type="Self.mailformToMediaFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MediaFiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="mailformToMediaFiles">
+              <PropertyRef Name="MediaFilesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_to_Permission_controlpanel">
           <End Role="AccountPermission" Type="Self.AccountPermission" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -735,6 +771,7 @@
           <EntitySet Name="jobextend" EntityType="Self.jobextend" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="LogForNet" EntityType="Self.LogForNet" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="mailform" EntityType="Self.mailform" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="mailformToMediaFiles" EntityType="Self.mailformToMediaFiles" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="MediaFiles" EntityType="Self.MediaFiles" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="NewsChange" EntityType="Self.NewsChange" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="NotificationToProducers" EntityType="Self.NotificationToProducers" Schema="producerinterface" store:Type="Tables" />
@@ -929,6 +966,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="AccountGroupToPermission" EntitySet="AccountGroupToPermission" />
           </AssociationSet>
+          <AssociationSet Name="fk_to_mailform" Association="Self.fk_to_mailform">
+            <End Role="mailform" EntitySet="mailform" />
+            <End Role="mailformToMediaFiles" EntitySet="mailformToMediaFiles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_to_MediaFiles" Association="Self.fk_to_MediaFiles">
+            <End Role="MediaFiles" EntitySet="MediaFiles" />
+            <End Role="mailformToMediaFiles" EntitySet="mailformToMediaFiles" />
+          </AssociationSet>
           <AssociationSet Name="FK_to_Permission_controlpanel" Association="Self.FK_to_Permission_controlpanel">
             <End Role="AccountPermission" EntitySet="AccountPermission" />
             <End Role="AccountGroupToPermission" EntitySet="AccountGroupToPermission" />
@@ -959,6 +1004,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Body" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
           <Property Name="IsBodyHtml" Type="Boolean" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MediaFiles" Relationship="producerinterface_Model.mailformToMediaFiles" FromRole="mailform" ToRole="MediaFiles" />
         </EntityType>
         <EntityType Name="profilenews">
           <Key>
@@ -1197,6 +1243,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="AccountUserToGroup" Association="producerinterface_Model.AccountUserToGroup">
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="mailformToMediaFiles" Association="producerinterface_Model.mailformToMediaFiles">
+            <End Role="mailform" EntitySet="mailform" />
+            <End Role="MediaFiles" EntitySet="MediaFiles" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="LogForNet">
@@ -1550,6 +1600,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="ImageSize" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="EntityType" Type="Int32" Nullable="false" />
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.fk_promotions_to_fileid1" FromRole="MediaFiles" ToRole="promotions" />
+          <NavigationProperty Name="mailform" Relationship="producerinterface_Model.mailformToMediaFiles" FromRole="MediaFiles" ToRole="mailform" />
         </EntityType>
         <Association Name="fk_promotions_to_fileid1">
           <End Type="producerinterface_Model.MediaFiles" Role="MediaFiles" Multiplicity="0..1" />
@@ -1693,6 +1744,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
         <Association Name="AccountUserToGroup">
           <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
+        </Association>
+        <Association Name="mailformToMediaFiles">
+          <End Type="producerinterface_Model.mailform" Role="mailform" Multiplicity="*" />
+          <End Type="producerinterface_Model.MediaFiles" Role="MediaFiles" Multiplicity="*" />
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -2181,6 +2236,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </EndProperty>
             <EndProperty Name="AccountGroup">
               <ScalarProperty Name="Id" ColumnName="IdGroup" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="mailformToMediaFiles" TypeName="producerinterface_Model.mailformToMediaFiles" StoreEntitySet="mailformToMediaFiles">
+            <EndProperty Name="MediaFiles">
+              <ScalarProperty Name="Id" ColumnName="MediaFilesId" />
+            </EndProperty>
+            <EndProperty Name="mailform">
+              <ScalarProperty Name="Id" ColumnName="MailFormId" />
             </EndProperty>
           </AssociationSetMapping>
           </EntityContainerMapping>

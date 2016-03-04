@@ -7,7 +7,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
 using System.Web.Mvc.Html;
-using System.Web.Mvc;
+using System.IO;
 
 namespace ProducerInterfaceCommon.Heap
 {
@@ -16,13 +16,13 @@ namespace ProducerInterfaceCommon.Heap
 
 		// https://msdn.microsoft.com/ru-ru/library/x5x13z6h(v=vs.110).aspx - async
 
-		public static void SendEmail(List<string> to, string subject, string body, string path)
+		public static void SendEmail(List<string> to, string subject, string body, List<Attachment> attachments)
 		{
 			foreach (var s in to)
-				SendEmail(s, subject, body, path);
+				SendEmail(s, subject, body, attachments);
 		}
 
-		public static void SendEmail(string to, string subject, string body, string path, bool HtmlBody = false)
+		public static void SendEmail(string to, string subject, string body, List<Attachment> attachments, bool HtmlBody = false)
 		{
 			var maFrom = new MailAddress(ConfigurationManager.AppSettings["MailFrom"], ConfigurationManager.AppSettings["MailFromSubscription"], System.Text.Encoding.UTF8);
 			var maTo = new MailAddress(to);
@@ -36,15 +36,13 @@ namespace ProducerInterfaceCommon.Heap
 				message.IsBodyHtml = false;
 
 				if (HtmlBody)
-				{
 					message.IsBodyHtml = HtmlBody;
-				}
 
-				if (!String.IsNullOrEmpty(path))
-				{
-					var a = new Attachment(path);
-					message.Attachments.Add(a);
-				}
+				if (attachments != null)
+					foreach (var attachment in attachments)
+					{
+						message.Attachments.Add(attachment);
+					}
 				var smtpPort = int.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
 				using (var client = new SmtpClient(ConfigurationManager.AppSettings["SmtpHost"], smtpPort))
 				{
@@ -65,11 +63,13 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.AutoPostReport);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
-      EmailSender.SendEmail(mailTo, subject, body, path);
+			var attachments = GetAttachments(cntx, MailType.AutoPostReport);
+			attachments.Add(new Attachment(path));
+      EmailSender.SendEmail(mailTo, subject, body, attachments);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, bodyExtended, path);
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
 		}
 
 		// Ручная рассылка отчетов, пользователю и расширенное сотрудникам
@@ -83,11 +83,13 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ManualPostReport);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
-			EmailSender.SendEmail(mailTo, subject, body, path);
+			var attachments = GetAttachments(cntx, MailType.ManualPostReport);
+			attachments.Add(new Attachment(path));
+			EmailSender.SendEmail(mailTo, subject, body, attachments);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, bodyExtended, path);
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
 		}
 
 		// Нет данных для формировании отчета, пользователю и расширенное сотрудникам
@@ -98,11 +100,12 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.EmptyReport);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
-			EmailSender.SendEmail(user.Login, subject, body, null);
+			var attachments = GetAttachments(cntx, MailType.EmptyReport);
+			EmailSender.SendEmail(user.Login, subject, body, attachments);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{reportName}\", задача {jobName}";
 			var mailError = ConfigurationManager.AppSettings["MailError"];
-			EmailSender.SendEmail(mailError, subject, bodyExtended, null);
+			EmailSender.SendEmail(mailError, subject, bodyExtended, attachments);
 		}
 
 		// Ошибка при формировании отчета, пользователю и расширенное сотрудникам
@@ -113,11 +116,12 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ReportError);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
-			EmailSender.SendEmail(user.Login, subject, body, null);
+			var attachments = GetAttachments(cntx, MailType.ReportError);
+			EmailSender.SendEmail(user.Login, subject, body, attachments);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{reportName}\", задача {jobName}, сообщение об ошибке {errorMessage}";
 			var mailError = ConfigurationManager.AppSettings["MailError"];
-			EmailSender.SendEmail(mailError, subject, bodyExtended, null);
+			EmailSender.SendEmail(mailError, subject, bodyExtended, attachments);
 		}
 
 		// Регистрация в системе, пользователю и расширенное сотрудникам
@@ -138,22 +142,24 @@ namespace ProducerInterfaceCommon.Heap
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
 		}
 
-        public static void SendControlPanelRegistrationSuccessMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip, long AdminId)
-        {
+		public static void SendControlPanelRegistrationSuccessMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip, long AdminId)
+		{
 
-            var user = cntx.Account.Single(x => x.Id == userId);
-            var siteName = ConfigurationManager.AppSettings["SiteName"];
-            var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RegistrationSuccess);
-            var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-            var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
-            EmailSender.SendEmail(user.Login, subject, body, null, true);
-            var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), компания {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(MailType.RegistrationSuccess)}, Письмо отправлено из Панели управления, Администратором {cntx.Account.Find(AdminId).Login}";
-            var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-            EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, false);        
-        }
+			var user = cntx.Account.Single(x => x.Id == userId);
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RegistrationSuccess);
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
+			var attachments = GetAttachments(cntx, MailType.RegistrationSuccess);
+			EmailSender.SendEmail(user.Login, subject, body, attachments, true);
 
-        // Универсальное на смену пароля, пользователю и расширенное сотрудникам
-        private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), компания {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(MailType.RegistrationSuccess)}, Письмо отправлено из Панели управления, Администратором {cntx.Account.Find(AdminId).Login}";
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments, false);
+		}
+
+		// Универсальное на смену пароля, пользователю и расширенное сотрудникам
+		private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
 		{
 			// TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
 			var user = cntx.Account.Single(x => x.Id == userId);
@@ -161,10 +167,12 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)type);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
-			EmailSender.SendEmail(user.Login, subject, body, null, true);
-            var  bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
-            var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, bodyExtended, null, false);
+			var attachments = GetAttachments(cntx, type);
+			EmailSender.SendEmail(user.Login, subject, body, attachments, true);
+
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments, false);
 		}
 
 		// Изменение описания препарата, сотрудникам
@@ -192,78 +200,64 @@ namespace ProducerInterfaceCommon.Heap
 		// Создание акции, пользователю и расширенное сотрудникам
 		public static void SendNewPromotion(producerinterface_Entities cntx, long userId, long PromotionId, string ip)
 		{
-			var User_ = cntx.Account.Where(x => x.Id == userId).First();
+			var mailType = MailType.CreatePromotion;
+      var User_ = cntx.Account.Where(x => x.Id == userId).First();
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var Promotion = cntx.promotions.Where(x => x.Id == PromotionId).First();
 			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
-
-			MailType Type = MailType.CreatePromotion;
-
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-
-			//     Акция { PromotionName}
-			//     изменена { UserName}. Посмотреть статус и изменить акцию { Http}
-
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-			EmailSender.SendEmail(User_.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
+			var attachments = GetAttachments(cntx, mailType);
+			EmailSender.SendEmail(User_.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(mailType)}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
+			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", attachments, true);
 		}
 
 		// Изменение акции, пользователю и расширенное сотрудникам
 		public static void SendChangePromotion(producerinterface_Entities cntx, long userId, long PromotionId, string ip)
 		{
-			var User_ = cntx.Account.Where(x => x.Id == userId).First();
-
+			var mailType = MailType.EditPromotion;
+      var User_ = cntx.Account.Where(x => x.Id == userId).First();
 			long UserCreatePromotionID = cntx.promotions.Where(xxx => xxx.Id == PromotionId).First().ProducerUserId;
 			var SendEmailOnCreateUserPromotion = cntx.Account.Where(xxx => xxx.Id == UserCreatePromotionID).First();
-
 			var EmailCreateUser = cntx.promotions.Where(xxx => xxx.Id == PromotionId).Select(yyy => yyy.ProducerUserId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var Promotion = cntx.promotions.Where(x => x.Id == PromotionId).First();
 			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
-
-			MailType Type = MailType.EditPromotion;
-
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = SendEmailOnCreateUserPromotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-			EmailSender.SendEmail(SendEmailOnCreateUserPromotion.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
+			var attachments = GetAttachments(cntx, mailType);
+			EmailSender.SendEmail(SendEmailOnCreateUserPromotion.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(mailType)}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
+			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", attachments, true);
 		}
 
 		// Подтверждение акции, пользователю и расширенное сотрудникам
 		public static void SendPromotionStatus(producerinterface_Entities cntx, long userId, long PromotionId, string ip)
 		{
-			var User_ = cntx.Account.Where(x => x.Id == userId).First();
-
+			var mailType = MailType.StatusPromotion;
+      var User_ = cntx.Account.Where(x => x.Id == userId).First();
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var Promotion = cntx.promotions.Where(x => x.Id == PromotionId).First();
 			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
 			var SendEmailOnCreateUserPromotion = cntx.Account.Where(xxx => xxx.CompanyId == cntx.promotions.Where(yyy => yyy.Id == PromotionId).First().ProducerUserId).Select(zzz => zzz.Login).First();
-
-			MailType Type = MailType.StatusPromotion;
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)Type);
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-
 			string StatusPromotion = "Деактивирована";
 			if (Promotion.Status) { StatusPromotion = "Подтверждена"; }
-
-
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-			EmailSender.SendEmail(SendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", null, true);
+			var attachments = GetAttachments(cntx, mailType);
+			EmailSender.SendEmail(SendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(Type)}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {User_.Name} ({User_.Login}), изготовитель {GetCompanyname(User_.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(mailType)}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", null, true);
-
+			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + bodyExtended + "</p>", attachments, true);
 		}
 
 		private static string GetEnumDisplayName(MailType type)
@@ -288,6 +282,30 @@ namespace ProducerInterfaceCommon.Heap
 			{
 				return cntx.producernames.Where(xxx => xxx.ProducerId == X.ProducerId).First().ProducerName;
 			}
+		}
+
+		private static List<Attachment> GetAttachments(producerinterface_Entities cntx, MailType mailType)
+		{
+			var result = new List<Attachment>();
+
+			//var dir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "MediaFiles");
+			//if (!Directory.Exists(dir))
+			//	Directory.CreateDirectory(dir);
+
+			//var subdir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "MediaFiles", mailType.ToString());
+			//if (!Directory.Exists(subdir))
+			//	Directory.CreateDirectory(subdir);
+
+			//var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName, x.ImageType }).ToList();
+			//foreach (var mediaFile in mediaFiles) {
+			//	var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
+			//	if (!file.Exists) {
+			//		var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
+			//		File.WriteAllBytes(file.FullName, bdFile);
+			//	}
+			//	result.Add(new Attachment(file.FullName, mediaFile.ImageType));
+			//}
+			return result;
 		}
 	}
 }

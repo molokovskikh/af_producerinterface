@@ -753,6 +753,7 @@
     <Content Include="Views\ProducerInformation\Partial\PartialListAppointment.cshtml" />
     <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\MediaFiles\SaveEmailFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

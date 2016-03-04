@@ -14,10 +14,17 @@ namespace ProducerInterfaceCommon.ContextModels
     
     public partial class mailform
     {
+        public mailform()
+        {
+            this.MediaFiles = new HashSet<MediaFiles>();
+        }
+    
         public int Id { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
         public bool IsBodyHtml { get; set; }
         public string Description { get; set; }
+    
+        public virtual ICollection<MediaFiles> MediaFiles { get; set; }
     }
 }
