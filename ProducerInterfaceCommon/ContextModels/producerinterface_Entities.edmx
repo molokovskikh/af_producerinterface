@@ -262,6 +262,7 @@
           <Property Name="Ip" Type="varchar" MaxLength="50" />
           <Property Name="RunStartTime" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RunNow" Type="bool" Nullable="false" />
+          <Property Name="MailTo" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="reporttemplate">
           <Key>
@@ -478,6 +479,8 @@
           <Property Name="RunStartTime" Type="timestamp" Precision="0" Nullable="false" />
           <Property Name="RunNow" Type="bool" Nullable="false" />
           <Property Name="UserName" Type="varchar" MaxLength="100" />
+          <Property Name="ProducerName" Type="varchar" MaxLength="255" />
+          <Property Name="MailTo" Type="varchar" MaxLength="1000" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.suppliernames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -851,7 +854,9 @@ FROM `regionnames` AS `regionnames`</DefiningQuery>
 `reportrunlogwithuser`.`Ip`, 
 `reportrunlogwithuser`.`RunStartTime`, 
 `reportrunlogwithuser`.`RunNow`, 
-`reportrunlogwithuser`.`UserName`
+`reportrunlogwithuser`.`UserName`, 
+`reportrunlogwithuser`.`ProducerName`, 
+`reportrunlogwithuser`.`MailTo`
 FROM `reportrunlogwithuser` AS `reportrunlogwithuser`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="suppliernames" EntityType="Self.suppliernames" store:Type="Views" store:Schema="producerinterface">
@@ -1368,6 +1373,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Ip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RunStartTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RunNow" Type="Boolean" Nullable="false" />
+          <Property Name="MailTo" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="reportrunlogwithuser">
           <Key>
@@ -1382,6 +1388,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="RunStartTime" Type="DateTime" Nullable="false" />
           <Property Name="RunNow" Type="Boolean" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MailTo" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="mailformwithfooter">
           <Key>
@@ -1979,6 +1987,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="ReportRunLog">
             <EntityTypeMapping TypeName="producerinterface_Model.ReportRunLog">
               <MappingFragment StoreEntitySet="ReportRunLog">
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
                 <ScalarProperty Name="RunNow" ColumnName="RunNow" />
                 <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />
                 <ScalarProperty Name="Ip" ColumnName="Ip" />
@@ -1991,6 +2000,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="reportrunlogwithuser">
             <EntityTypeMapping TypeName="producerinterface_Model.reportrunlogwithuser">
               <MappingFragment StoreEntitySet="reportrunlogwithuser">
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
+                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="RunNow" ColumnName="RunNow" />
                 <ScalarProperty Name="RunStartTime" ColumnName="RunStartTime" />

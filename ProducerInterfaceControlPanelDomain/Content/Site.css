@@ -155,7 +155,7 @@ min-width:100%;
         }     
 .pointer { cursor: pointer !important; }
 
-.form-group #Begin,.form-group #End {
+.form-group #Begin,.form-group #End, .form-group #RunFrom, .form-group #RunTo {
 cursor:pointer;
 max-width: 15em;
 }

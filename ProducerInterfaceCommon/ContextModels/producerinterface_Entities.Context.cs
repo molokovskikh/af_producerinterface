@@ -9,12 +9,13 @@
 
 namespace ProducerInterfaceCommon.ContextModels
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Core.Objects;
-    using System.Data.Entity.Infrastructure;
+	using System;
+	using System.Data.Entity;
+	using System.Data.Entity.Core.Objects;
+	using System.Data.Entity.Infrastructure;
+	using System.Linq;
 
-    public partial class producerinterface_Entities : DbContext
+	public partial class producerinterface_Entities : DbContext
     {
         public producerinterface_Entities()
             : base("name=producerinterface_Entities")

@@ -1,40 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Web.Mvc;
 using Quartz;
-using Quartz.Impl;
 using ProducerInterfaceCommon.Heap;
-using System.Configuration;
 using Common.Logging;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
 using System.Data;
 using System.IO;
-using System.Net;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterface.Controllers
 {
-	public class ReportController : MasterBaseController
+	public class ReportController : ProducerInterfaceCommon.Controllers.BaseReportController
 	{
-		//
 		// GET: /Report/
-
-		protected static readonly Common.Logging.ILog logger = LogManager.GetLogger(typeof(ReportController));
-
-		protected ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
-		protected NamesHelper h;
-		protected long userId;
-		protected long producerId;
-
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
+			TypeLoginUser = TypeUsers.ProducerUser;
 			base.OnActionExecuting(filterContext);
 
-			cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
-			//  TODO: берётся у юзера            
 			try
 			{
 				userId = CurrentUser.ID_LOG;
@@ -45,28 +31,15 @@ namespace ProducerInterface.Controllers
 				// Ignore
 			}
 
-			h = new NamesHelper(cntx, userId);
+			h = new NamesHelper(cntx_, userId);
+
 		}
 
-		private IScheduler GetScheduler()
-		{
-#if DEBUG
-			return GetDebagSheduler();
-#else
-			return GetRemoteSheduler();
-#endif
-		}
+		protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
 
-		private string GetSchedulerName()
-		{
-#if DEBUG
-			return "TestScheduler";
-#else
-			return "ServerScheduler";
-#endif
-		}
-
-
+		protected NamesHelper h;
+		protected long userId;
+		protected long producerId;
 
 		/// <summary>
 		/// Возвращает форму указанного типа для заполнения параметров отчета, проверяет их, сохраняет задание в шедулере Quartz
@@ -85,7 +58,6 @@ namespace ProducerInterface.Controllers
 			var model = (Report)Activator.CreateInstance(type);
 			model.Id = Id.Value;
 			model.ProducerId = producerId;
-			//model.MailSubject = h.GetMailOkReportSubject();
 
 			// при GET - отправили её пользователю на заполнение
 			if (HttpContext.Request.HttpMethod == "GET")
@@ -142,8 +114,8 @@ namespace ProducerInterface.Controllers
 				Scheduler = "Расписание не задано"
 			};
 
-			cntx.jobextend.Add(jext);
-			cntx.SaveChanges(CurrentUser, "Добавление отчета");
+			cntx_.jobextend.Add(jext);
+			cntx_.SaveChanges(CurrentUser, "Добавление отчета");
 			SuccessMessage("Отчет успешно добавлен");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -183,7 +155,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = false;
-			cntx.SaveChanges(CurrentUser, "Удаление отчета");
+			cntx_.SaveChanges(CurrentUser, "Удаление отчета");
 			SuccessMessage("Задача удалена");
 			return RedirectToAction("JobList", "Report");
 
@@ -224,7 +196,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = true;
-			cntx.SaveChanges(CurrentUser, "Восстановление отчета");
+			cntx_.SaveChanges(CurrentUser, "Восстановление отчета");
 			SuccessMessage("Задача восстановлена");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -301,7 +273,7 @@ namespace ProducerInterface.Controllers
 			// вносим изменения в расширенные параметры
 			jext.LastModified = DateTime.Now;
 			jext.CustomName = model.CastomName;
-			cntx.SaveChanges(CurrentUser, "Редактирование отчета");
+			cntx_.SaveChanges(CurrentUser, "Редактирование отчета");
 			SuccessMessage("Отчет успешно изменен");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -314,14 +286,14 @@ namespace ProducerInterface.Controllers
 		{
 			var schedulerName = GetSchedulerName();
 			// вытащили всех создателей, создававших отчеты этого производителя
-			var creatorIds = cntx.jobextend
+			var creatorIds = cntx_.jobextend
 				.Where(x => x.ProducerId == producerId && x.SchedName == schedulerName && x.Enable == true)
 				.Select(x => x.CreatorId)
 				.Distinct().ToList();
-			ViewData["creators"] = cntx.Account.Where(x => creatorIds.Contains(x.Id)).
+			ViewData["creators"] = cntx_.Account.Where(x => creatorIds.Contains(x.Id)).
 				Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
-			var query = cntx.jobextendwithproducer.Where(x => x.ProducerId == producerId
+			var query = cntx_.jobextendwithproducer.Where(x => x.ProducerId == producerId
 																												&& x.SchedName == schedulerName
 																												&& x.Enable == true);
 			if (cid.HasValue)
@@ -398,9 +370,12 @@ namespace ProducerInterface.Controllers
 			trigger.JobDataMap["tparam"] = model;
 
 			// записали в историю запусков
-			var reportRunLog = new ReportRunLog() { AccountId = userId, Ip = CurrentUser.IP, JobName = key.Name, RunNow = true };
-			cntx.ReportRunLog.Add(reportRunLog);
-			cntx.SaveChanges();
+			string mailTo = null;
+			if (model.MailTo != null && model.MailTo.Count > 0)
+				mailTo = string.Join(",", model.MailTo);
+      var reportRunLog = new ReportRunLog() { AccountId = userId, Ip = CurrentUser.IP, JobName = key.Name, RunNow = true, MailTo = mailTo };
+			cntx_.ReportRunLog.Add(reportRunLog);
+			cntx_.SaveChanges();
 
 			try
 			{
@@ -416,7 +391,7 @@ namespace ProducerInterface.Controllers
 			// отправили статус, что отчет готовится
 			jext.DisplayStatusEnum = DisplayStatus.Processed;
 			jext.LastRun = DateTime.Now;
-			cntx.SaveChanges();
+			cntx_.SaveChanges();
 
 			var message = "АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же появится в списке отчетов";
 			if (model.MailTo != null && model.MailTo.Count > 0)
@@ -435,7 +410,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult RunHistory(string jobName)
 		{
 			ViewData["repName"] = $"История запусков отчета \"{h.GetReportName(jobName)}\"";
-			var model = cntx.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
 			return View(model);
 		}
 
@@ -531,7 +506,7 @@ namespace ProducerInterface.Controllers
 			}
 			// меняем человекочитаемое описание в доп. параметрах задачи
 			jext.Scheduler = model.CronHumanText;
-			cntx.SaveChanges(CurrentUser, "Установка расписания отчета");
+			cntx_.SaveChanges(CurrentUser, "Установка расписания отчета");
 			SuccessMessage("Расписание успешно установлено");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -544,7 +519,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult DisplayReport(SendReport model)
 		{
 			// вытащили отчет
-			var jxml = cntx.reportxml.SingleOrDefault(x => x.JobName == model.jobName);
+			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == model.jobName);
 			if (jxml == null)
 			{
 				ErrorMessage("Отчет не найден");
@@ -574,9 +549,9 @@ namespace ProducerInterface.Controllers
 			// если POST и модель валидна - отправляем
 			if (HttpContext.Request.HttpMethod == "POST" && ModelState.IsValid)
 			{
-				var jext = cntx.jobextend.Single(x => x.JobName == model.jobName);
+				var jext = cntx_.jobextend.Single(x => x.JobName == model.jobName);
 				var file = GetExcel(jext);
-				EmailSender.ManualPostReportMessage(cntx, userId, jext, file.FullName, model.MailTo);
+				EmailSender.ManualPostReportMessage(cntx_, userId, jext, file.FullName, model.MailTo);
 				SuccessMessage("Отчет отправлен на указанные email");
 			}
 			return View(model);
@@ -623,60 +598,13 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		protected jobextend GetJobExtend(string jobName)
 		{
-			return cntx.jobextend.SingleOrDefault(x => x.JobName == jobName);
+			return cntx_.jobextend.SingleOrDefault(x => x.JobName == jobName);
 		}
 
 		public JsonResult GetCatalogDragFamalyNames(string term)
 		{
 			var ret = Json(h.GetSearchCatalogFamalyName(term).ToList().Select(x => new { value = x.Value, text = x.Text }), JsonRequestBehavior.AllowGet);
 			return ret;
-		}
-
-		/// <summary>
-		/// Возвращает отчет в виде excel-файла
-		/// </summary>
-		/// <param name="jobName">Имя задания в Quartz</param>
-		/// <returns></returns>
-		public FileResult GetFile(string jobName)
-		{
-			var jext = cntx.jobextend.Single(x => x.JobName == jobName);
-			var file = GetExcel(jext);
-
-			// вернули файл
-			byte[] fileBytes = System.IO.File.ReadAllBytes(file.FullName);
-			var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-			return File(fileBytes, contentType, file.Name);
-		}
-
-		private FileInfo GetExcel(jobextend jext)
-		{
-			var jxml = cntx.reportxml.Single(x => x.JobName == jext.JobName);
-
-			// вытащили сохраненный отчет
-			var ds = new DataSet();
-			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
-
-			// создали процессор для этого типа отчетов
-			var type = GetModelType(jext.ReportType);
-			var report = (Report)Activator.CreateInstance(type);
-			var processor = report.GetProcessor();
-
-			// создали excel-файл
-			return processor.CreateExcel(jext.JobGroup, jext.JobName, ds);
-		}
-
-		/// <summary>
-		/// Возвращает тип отчета по идентификатору типа отчета
-		/// </summary>
-		/// <param name="id">Идентификатор типа отчета</param>
-		/// <returns></returns>
-		protected Type GetModelType(int id)
-		{
-			var typeName = ((Reports)id).ToString();
-			var type = Type.GetType($"ProducerInterfaceCommon.Models.{typeName}, {typeof(Report).Assembly.FullName}");
-			if (type == null)
-				throw new NotSupportedException($"Не удалось создать тип {typeName} по идентификатору {id}");
-			return type;
 		}
 
 		/// <summary>
@@ -714,55 +642,6 @@ namespace ProducerInterface.Controllers
 		{
 			foreach (var item in model.ViewDataValues(h))
 				ViewData[item.Key] = item.Value;
-		}
-
-
-		//	logger.Debug($"Start setting job {model.JobGroup} {model.JobName}");
-
-		/// <summary>
-		/// Возвращает ссылку на локальный шедулер (запускаемый одновременно с сайтом на той же машине)
-		/// </summary>
-		/// <returns></returns>
-		protected IScheduler GetDebagSheduler()
-		{
-			var props = (NameValueCollection)ConfigurationManager.GetSection("quartzDebug");
-			var sf = new StdSchedulerFactory(props);
-			var scheduler = sf.GetScheduler();
-
-			// проверяем имя шедулера
-			if (scheduler.SchedulerName != "TestScheduler")
-				throw new NotSupportedException("Должен использоваться TestScheduler");
-
-			// проверяем локальный ли шедулер
-			var metaData = scheduler.GetMetaData();
-			if (metaData.SchedulerRemote)
-				throw new NotSupportedException("Должен использоваться локальный TestScheduler");
-
-			if (!scheduler.IsStarted)
-				scheduler.Start();
-			return scheduler;
-		}
-
-		/// <summary>
-		/// Возвращает удалённый шедулер (инсталлированный отдельно как win-служба)
-		/// </summary>
-		/// <returns></returns>
-		protected IScheduler GetRemoteSheduler()
-		{
-			var props = (NameValueCollection)ConfigurationManager.GetSection("quartzRemote");
-			var sf = new StdSchedulerFactory(props);
-			var scheduler = sf.GetScheduler();
-
-			// проверяем имя шедулера
-			if (scheduler.SchedulerName != "ServerScheduler")
-				throw new NotSupportedException("Должен использоваться ServerScheduler");
-
-			// проверяем удалённый ли шедулер
-			var metaData = scheduler.GetMetaData();
-			if (!metaData.SchedulerRemote)
-				throw new NotSupportedException("Должен использоваться удаленный ServerScheduler");
-
-			return scheduler;
 		}
 	}
 }

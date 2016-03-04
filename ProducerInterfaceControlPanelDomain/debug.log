@@ -81,3 +81,5 @@ System.Web.Mvc.ActionResult ChangeAccount(ProducerInterfaceCommon.ContextModels.
 25.02.2016 17:49:30.965 [20] ERROR MySqlAdoNetAppender - Сбой при проверке одной или нескольких сущностей. Более подробные сведения см. в свойстве "EntityValidationErrors".
 25.02.2016 18:03:09.114 [6] ERROR MySqlAdoNetAppender - C:\Users\alegusov\projects\producerinterface\ProducerInterfaceControlPanelDomain\Views\Permission\ChangeAccount.cshtml(24): error CS1061: 'Account' does not contain a definition for 'RegionListId' and no extension method 'RegionListId' accepting a first argument of type 'Account' could be found (are you missing a using directive or an assembly reference?)
 25.02.2016 18:44:54.255 [41] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "ChangeUser" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionController".
+02.03.2016 15:59:55.857 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/WebForm/Reports" не найден или не реализует интерфейс IController.
+02.03.2016 16:00:18.659 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/webForms/reports.aspx" не найден или не реализует интерфейс IController.

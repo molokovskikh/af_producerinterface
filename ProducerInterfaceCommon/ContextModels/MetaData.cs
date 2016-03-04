@@ -210,6 +210,17 @@ namespace ProducerInterfaceCommon.ContextModels
 	[MetadataType(typeof(reportrunlogwithuserMetaData))]
 	public partial class reportrunlogwithuser
 	{
+		[Display(Name = "Запуск")]
+		public string NowOrShed
+		{
+			get
+			{
+				if (RunNow)
+					return "вручную";
+				else
+					return "по расписанию";
+			}
+		}
 	}
 
 	public partial class reportrunlogwithuserMetaData
@@ -228,6 +239,12 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		[Display(Name = "Пользователь")]
 		public string UserName { get; set; }
+
+		[Display(Name = "Производитель")]
+		public string ProducerName { get; set; }
+
+		[Display(Name = "Список рассылки")]
+		public string MailTo { get; set; }
 	}
 
 	[MetadataType(typeof(JobExtendWithProducerMetaData))]

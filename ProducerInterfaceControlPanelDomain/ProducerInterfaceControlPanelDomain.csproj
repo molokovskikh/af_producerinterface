@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.min.css" />
+    <Content Include="Content\bootstrap-datepicker3.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Chosen\css\bootstrap-datepicker3.css" />
@@ -222,7 +223,7 @@
     <Content Include="Content\Chosen\css\loading.gif" />
     <Content Include="Content\Chosen\css\Site.css" />
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
-    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\ckeditor\InitCKEditor_News.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\dialogs\base64image.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\icons\base64image.png" />
@@ -296,11 +297,8 @@
     <Content Include="Scripts\ckeditor\plugins\filebrowser\plugin.js" />
     <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
     <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
-    <Content Include="Scripts\knockout-3.4.0.debug.js" />
-    <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
     <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
-    <Content Include="Scripts\WorkPlace\FeedBack_FeedBackList.js" />
     <Content Include="Scripts\WorkPlace\FeedBack_Index.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
@@ -723,6 +721,7 @@
     <Content Include="Views\GoToProducerInterface\Index.cshtml" />
     <Content Include="Views\GoToProducerInterface\GetListUser.cshtml" />
     <Content Include="Views\MediaFiles\Index.cshtml" />
+    <Content Include="Views\FeedBack\Index.cshtml" />
     <Content Include="Views\ProducerInformation\DomainList.cshtml" />
     <Content Include="Views\ProducerInformation\GetDomain.cshtml" />
     <Content Include="Views\ProducerInformation\AppointmentNameList.cshtml" />
@@ -743,6 +742,7 @@
     <Content Include="Views\Permission\EditorTemplates\LongListRegion.cshtml" />
     <Content Include="Views\Permission\ListUsers.cshtml" />
     <Content Include="Views\News\History.cshtml" />
+    <Content Include="Views\FeedBack\FeedBackSearch.cshtml" />
     <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
     <Content Include="Views\OfficePost\CustomAppointment.cshtml" />
     <Content Include="Views\OfficePost\Index.cshtml" />
@@ -752,10 +752,7 @@
     <Content Include="Views\OfficePost\AccountNotPost.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\PartialListAppointment.cshtml" />
     <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
-    <Content Include="Views\FeedBack\FeedBackList.cshtml" />
-    <Content Include="Views\FeedBack\Partial\ProducerFilter.cshtml" />
-    <Content Include="Views\FeedBack\Partial\AccountFilter.cshtml" />
-    <Content Include="Views\FeedBack\Partial\FilterModal.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

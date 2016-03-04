@@ -9,16 +9,13 @@ using ProducerInterfaceCommon.ViewModel.ControlPanel.Report;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class ReportController : MasterBaseController
-	{        // GET: Report
-
-		private string shedName_ = ""; // DebugShedulerName(); 
+	public class ReportController : ProducerInterfaceCommon.Controllers.BaseReportController
+	{
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
+			TypeLoginUser = TypeUsers.ControlPanelUser;
 			base.OnActionExecuting(filterContext);
-			// ViewBag.currentUser = User.Identity.Name;
-			shedName_ = DebugShedulerName();
 		}
 
 		[HttpGet]
@@ -41,9 +38,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult SearchResult(SearchProducerReportsModel param)
 		{
-			var query = cntx_.jobextendwithproducer.Where(x => x.SchedName == shedName_ && x.Enable == param.Enable);
+			var schedulerName = GetSchedulerName();
+			var query = cntx_.jobextendwithproducer.Where(x => x.SchedName == schedulerName);
+			if (param.Enable.HasValue)
+				query = query.Where(x => x.Enable == param.Enable);
 			if (param.Producer.HasValue)
 				query = query.Where(x => x.ProducerId == param.Producer);
+			if (param.ReportType.HasValue)
+				query = query.Where(x => x.ReportType == param.ReportType);
+			if (!string.IsNullOrEmpty(param.ReportName))
+				query = query.Where(x => x.CustomName.Contains(param.ReportName));
+			if (param.RunFrom.HasValue)
+				query = query.Where(x => x.LastRun >= param.RunFrom);
+			if (param.RunTo.HasValue)
+				query = query.Where(x => x.LastRun <= param.RunTo);
 
 			var itemCount = query.Count();
 			var itemsOnPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
@@ -52,9 +60,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			var model = query.OrderBy(x => x.CreationDate).Skip(skip).Take(itemsOnPage).ToList();
 			return View(model);
-		}
+	}
 
-		private void SetPager(int itemCount, int page, int itemsOnPage)
+	private void SetPager(int itemCount, int page, int itemsOnPage)
 		{
 			var info = new SortingPagingInfo();
 			info.CurrentPageIndex = page;
@@ -70,7 +78,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult RunHistory(string jobName)
 		{
 			var reportName = cntx_.jobextend.Single(x => x.JobName == jobName).CustomName;
-			ViewData["repName"] = $"История запусков отчета \"{reportName}\"";
+			ViewBag.Title = $"История запусков отчета \"{reportName}\"";
 			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
 			return View(model);
 		}
@@ -86,20 +94,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (jxml == null)
 				return View("Error", (object)"Отчет не найден");
 
+			ViewData["jobName"] = jobName;
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
 			return View(ds);
 		}
 
-
 		public List<OptionElement> GetProducerList()
 		{
+			var schedulerName = GetSchedulerName();
 			// возвращаем только производителей, у которых есть отчёты
-			var producerIdList = cntx_.jobextend.Where(x => x.SchedName == shedName_).Select(x => x.ProducerId).Distinct().ToList();
+			var producerIdList = cntx_.jobextend.Where(x => x.SchedName == schedulerName).Select(x => x.ProducerId).Distinct().ToList();
 			var producers = cntx_.producernames.Where(x => producerIdList.Contains(x.ProducerId)).ToList()
 				.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList();
 
-			var model = new List<OptionElement>() { new OptionElement { Text = "(Ничего не выбрано)", Value = "" } };
+			var model = new List<OptionElement>() { new OptionElement { Text = "Все производители", Value = "" } };
 			model.AddRange(producers);
 			return model;
 		}

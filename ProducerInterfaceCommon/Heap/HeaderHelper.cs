@@ -7,12 +7,12 @@ namespace ProducerInterfaceCommon.Heap
 {
 	public class HeaderHelper
 	{
-		
+
 		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
 
 		public HeaderHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx)
 		{
-            _cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+			_cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
 		}
 
 		public string GetDateHeader(DateTime dateFrom, DateTime dateTo)
@@ -32,14 +32,13 @@ namespace ProducerInterfaceCommon.Heap
 			return $"В отчет включены следующие препараты: {String.Join(", ", products)}";
 		}
 
-        public string GetDragFamalyNames(List<long> DrugFamalies)
-        {         
-            var ListGrugsNames = _cntx.drugfamilynames.Where(x => DrugFamalies.Contains(x.FamilyId)).Select(xxx => xxx.FamilyName).ToList();
-            return  $"В отчет включены следующие препараты: {String.Join(", ", ListGrugsNames)}";
-        }
+		public string GetDragFamalyNames(List<long> DrugFamalies)
+		{
+			var drugNames = _cntx.drugfamilynames.Where(x => DrugFamalies.Contains(x.FamilyId)).Select(xxx => xxx.FamilyName).ToList();
+			return $"В отчет включены следующие препараты: {String.Join(", ", drugNames)}";
+		}
 
-
-        public string GetNotSupplierHeader(List<long> supplierIds)
+		public string GetNotSupplierHeader(List<long> supplierIds)
 		{
 			var notSuppliers = _cntx.suppliernames.Where(x => supplierIds.Contains(x.SupplierId)).Select(x => x.SupplierName).OrderBy(x => x).ToList();
 			return $"Из отчета исключены следующие поставщики: {String.Join(", ", notSuppliers)}";

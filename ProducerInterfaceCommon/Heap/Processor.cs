@@ -30,7 +30,8 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			// записали в историю запусков только для крона. При запуске вручную - пишем на странице запуска, потому что знаем пользователя
 			if (tparam is CronParam) {
-				var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false };
+				var	mailTo = string.Join(",", tparam.MailTo);
+				var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false, MailTo = mailTo };
 				_cntx.ReportRunLog.Add(reportRunLog);
 				_cntx.SaveChanges();
 			}
