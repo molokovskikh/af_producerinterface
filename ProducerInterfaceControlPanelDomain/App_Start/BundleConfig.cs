@@ -16,21 +16,21 @@ namespace ProducerInterfaceControlPanelDomain
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/datepicker").Include(
-                "~/Scripts/bootstrap-datepicker.js",
-								"~/Scripts/locales/bootstrap-datepicker.ru.min.js"));
+                        "~/Scripts/bootstrap-datepicker.js",
+					    "~/Scripts/locales/bootstrap-datepicker.ru.min.js"));
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство сборки на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                        "~/Scripts/bootstrap.js",
+                        "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/bootstrap-datepicker.min.css",
-                      "~/Content/site.css"));
+                        "~/Content/bootstrap.css",
+                        "~/Content/bootstrap-datepicker.min.css",
+                        "~/Content/site.css"));
         }
     }
 }

@@ -11,7 +11,7 @@
 @Html.Partial("Partial/Pager")
 <table class="table-bordered table-striped table-responsive" id="table-width-100prc">
     <tr>
-        <th><label>Название</label></th>
+        <th class="th_200"><label>Название</label></th>
         <th><label>Активен</label></th>
         <th>
             <label>Тип</label>
@@ -35,7 +35,7 @@
     @foreach (var item in Model)
     {
     <tr>
-        <td>
+        <td class="td_200">
             @Html.DisplayFor(modelItem => item.CustomName)
         </td>
         <td>
