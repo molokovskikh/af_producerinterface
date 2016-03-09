@@ -9,94 +9,169 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
     {
         private producerinterface_Entities cntx_;
         private Account CurrentUser;
+        ProducerInterfaceCommon.Heap.NamesHelper h;
 
         public FeedBackFunction(Account currentUser)
         {
             cntx_ = new producerinterface_Entities();
             CurrentUser = currentUser;
+            h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
         }
 
-        public FeedBackFilterView GetModelView(FeedBackFilter FeedFilter = null)
-        {
-            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
+        public FeedBackFilter GetFilter()
+        {        
+            FeedBackFilter FBF = new FeedBackFilter();
+            FBF.DateBegin = DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy");
+            FBF.DateEnd = DateTime.Now.AddDays(1).ToString("dd.MM.yyyy");
+            FBF.PageIndex = 0;
+            FBF.AccountId = 0;
+            FBF.ProducerId = 0;
+            FBF.ProducerList = GetProducerList(h);
+            FBF.AccountList = GetAccountList(h);
+            FBF.PageCountList = GetPageCountList();
+            FBF.PageCount = 1;
+
+            return FBF;
+        }
           
-            var Ret = new FeedBackFilterView();
-            if (FeedFilter == null)
+        public FeedBackList GetFeedBackList(FeedBackFilter feedBackFilter)
+        {
+            FeedBackList FBL_result = new FeedBackList();
+
+            int MaxCount = 0;
+
+            FBL_result.FeedList = GetFeedBackListItems(feedBackFilter,ref MaxCount);
+
+            if (FBL_result.FeedList.Count() == 0)
             {
-                return GetDefaultFeedBackFilterView(h);
+                return FBL_result;
             }
-            else
-            {
-                return GetFeedBackFilterView(h, FeedFilter);
-            }          
+
+            FBL_result.PageIndex = feedBackFilter.PageIndex;
+            FBL_result.PaginatorLinks = GetPaginator(MaxCount, feedBackFilter.PageIndex);
+            SetViewFilter(ref FBL_result, feedBackFilter);        
+
+            return FBL_result;
         }
 
-        public FeedBackFilterView GetFeedBackFilterView(Heap.NamesHelper h, FeedBackFilter FeedFilter)
+        public FeedBackItemSelect GetOneFeedBack(int Id)
+        {          
+            var cntx_FeedBackItem = cntx_.AccountFeedBack.Where(x => x.Id == Id).ToList();
+            var ListFeedBack = new List<FeedBackItem>();
+            AccountFeedBackToFeedBackViewModelConverter(ref ListFeedBack, cntx_FeedBackItem);
+
+
+            FeedBackItemSelect FeedBackModelView = (FeedBackItemSelect)ListFeedBack.Select(x => new FeedBackItemSelect
+            {
+                About = x.About,
+                AccountId = x.AccountId,
+                CreateDate = x.CreateDate,
+                Id = x.Id,
+                Description = x.Description,
+                Message = x.Message,
+                Producername = x.Producername,
+                TypeFeedBack = x.TypeFeedBack,
+                AccountLogin = x.AccountLogin,
+                UrlString = x.UrlString,
+                FeedBackStatus = x.FeedBackStatus
+            }).First();
+
+            var FeedBackCommentItems = new List<FeedBackComment>();
+
+            foreach (var CommentItem in cntx_FeedBackItem.First().AccountFeedBackComment)
+            {
+                FeedBackCommentItems.Add(new FeedBackComment { AdminName = cntx_.Account.Where(x => x.Id == CommentItem.AdminId).First().Login, Id = CommentItem.Id, DateAdd = (DateTime)CommentItem.DateAdd, Description = CommentItem.Comment, IdAccount = CommentItem.AdminId });
+            }
+
+            FeedBackModelView.Comments = FeedBackCommentItems;
+
+            FeedBackModelView.FeedStatusId = cntx_FeedBackItem.First().Status;
+
+            List<OptionElement> StatusList = Enum.GetValues(typeof(Enums.FeedBackStatus)).Cast<Enums.FeedBackStatus>().ToList().Select(x =>
+            new OptionElement
+            {
+                Text = ProducerInterfaceCommon.Heap.AttributeHelper.DisplayName(x),
+                Value = ((int)x).ToString()
+            }).ToList();
+
+            FeedBackModelView.StatusList = StatusList;
+
+
+            return FeedBackModelView;
+
+        }
+
+        private List<FeedBackItem> GetFeedBackListItems(FeedBackFilter feedBackFilter, ref int MaxCount)
         {
-            var ModelView = new List<FeedBackViewModel>(); /* лист обращений */
+            var ret = new List<FeedBackItem>();
+
+            var DateBegin = Convert.ToDateTime(feedBackFilter.DateBegin);
+            var DateEnd = Convert.ToDateTime(feedBackFilter.DateEnd);
+
+            var cntx_list = cntx_.AccountFeedBack.Where(x => x.DateAdd >= DateBegin && x.DateAdd <= DateEnd).ToList().OrderByDescending(x=>x.Id).ToList();
+
+            if (cntx_list == null || cntx_list.Count() == 0)
+            {
+                return ret;
+            }
+
+            if (feedBackFilter.AccountId != 0)
+            {
+                cntx_list = cntx_list.Where(x => x.AccountId == feedBackFilter.AccountId).ToList();
+            }
+
+            if (cntx_list == null || cntx_list.Count() == 0)
+            {
+                return ret;
+            }
+
+            if (feedBackFilter.ProducerId != 0)
+            {
+                cntx_list = cntx_list.Where(x => x.Account != null).Where(x=>x.Account.AccountCompany != null).Where(x=>x.Account.AccountCompany.ProducerId != null)
+                    .Where(x=>x.Account.AccountCompany.ProducerId == feedBackFilter.ProducerId).ToList();
+            }
+
+            MaxCount = cntx_list.Count();
+            MaxCount = (int) Math.Ceiling((decimal)MaxCount / PagerCount(feedBackFilter.PageCount));
+
+            cntx_list = cntx_list.Skip(feedBackFilter.PageIndex * PagerCount(feedBackFilter.PageCount)).ToList().Take(PagerCount(feedBackFilter.PageCount)).ToList();
+
+            AccountFeedBackToFeedBackViewModelConverter(ref ret, cntx_list);
+                    
+            return ret;
+        }
+            
+        
+        public FeedBackList GetFeedBackFilterView(Heap.NamesHelper h, FeedBackFilter FeedFilter)
+        {
+            var ModelView = new List<FeedBackItem>(); /* лист обращений */
 
             int MaxListCount = 0;    /*  количество сторок по данному фильтру необходимо для посторение Пагинатора */
 
             ModelView = GetListFeedBackModel(ref MaxListCount,FeedFilter); /* заполняем лист обращений по фильтру */
             if (ModelView == null || ModelView.Count() == 0)
             {
-                return new FeedBackFilterView();  /* если обращений по данному фильтру не найдено, возвращаем незаполненую модель для передачи на клиент сообщения об неуспешности фильтрации */
+                return new FeedBackList();  /* если обращений по данному фильтру не найдено, возвращаем незаполненую модель для передачи на клиент сообщения об неуспешности фильтрации */
             }
 
-            var ReturnModel = new FeedBackFilterView();  /* Модель отправляемая клиенту */
+            var ReturnModel = new FeedBackList();  /* Модель отправляемая клиенту */
 
             SetViewFilter(ref ReturnModel, FeedFilter);  /* отображение по каким столбцам фильтруется таблица */
 
-            ReturnModel.FeedBackList = ModelView; /* FeedBackList - список обращений */
+         
 
-            ReturnModel.PaginatorLinks = GetPaginator(MaxListCount, FeedFilter.PagerIndex); /* заполняем пагинатор */
+            ReturnModel.PaginatorLinks = GetPaginator(MaxListCount, FeedFilter.PageIndex); /* заполняем пагинатор */
 
-            ReturnModel.PageIndex = FeedFilter.PagerIndex; /* текущий индех пагинатора */
+            ReturnModel.PageIndex = FeedFilter.PageIndex; /* текущий индех пагинатора */
 
-            ReturnModel.FeedBackFilter = FeedFilter;
+         
             
-            int MaxPager = (int)Math.Ceiling((double)(Convert.ToInt32(GetPageCountList().Where(x=>x.Id == FeedFilter.Pager).First().Name) / 50));
+            int MaxPager = (int)Math.Ceiling((double)(Convert.ToInt32(GetPageCountList().Where(x=>x.Value == FeedFilter.PageCountList[FeedFilter.PageCount].Value).First().Value) / 50));
                  
             return ReturnModel;
         }
-
-
-        public FeedBackFilterView GetDefaultFeedBackFilterView(Heap.NamesHelper h)
-        {
-            var ModelView = new List<FeedBackViewModel>();
-            var cntx_model = cntx_.AccountFeedBack.OrderByDescending(x => x.DateAdd).Take(50).ToList();
-
-            AccountFeedBackToFeedBackViewModelConverter(ref ModelView, cntx_model);
-              
-            var ReturnModel = new FeedBackFilterView();
-
-            SetViewFilter(ref ReturnModel); // устанавливаем CSS параметр Display: ???
-
-            ReturnModel.FeedBackList = ModelView;
-                  
-            int MaxPager = (int) Math.Ceiling((double)(ModelView.Count() / 50));
-
-            ReturnModel.PaginatorLinks = GetPaginator(MaxPager, 1);
-            ReturnModel.PageIndex = 1;
-            ReturnModel.MaxPageCount = MaxPager;
-            ReturnModel.FeedBackFilter = new FeedBackFilter
-            {
-                DateBegin = DateTime.Now.AddYears(-1).ToString("dd.MM.yyyy"),
-                DateEnd = DateTime.Now.AddDays(1).ToString("dd.MM.yyyy"),
-                LoginId = 0,
-                ProducerId = 0,
-                PagerIndex = 1,
-                Pager = 1
-            };
-
-            ReturnModel.PageCount = GetPageCountList();
-            ReturnModel.ProducerList = GetProducerList(h);
-            ReturnModel.AccountList = GetAccountList(h);
-
-            return ReturnModel;
-        }
-
-        private void SetViewFilter(ref FeedBackFilterView ModelView, FeedBackFilter FeedFilter = null)
+             
+        private void SetViewFilter(ref FeedBackList ModelView, FeedBackFilter FeedFilter = null)
         {
             ModelView.SortTime = "block";
             ModelView.SortProducerName = "none";
@@ -110,7 +185,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
             }
             else
             {
-                if (FeedFilter.LoginId != 0)
+                if (FeedFilter.AccountId != 0)
                 { ModelView.SortAccountName = "block"; }            
 
 
@@ -119,10 +194,11 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
               
             }
         }
+              
 
-        private List<FeedBackViewModel> GetListFeedBackModel(ref int MaxListCount,FeedBackFilter FeedFilter)
+        private List<FeedBackItem> GetListFeedBackModel(ref int MaxListCount,FeedBackFilter FeedFilter)
         {
-            List<FeedBackViewModel> ret = new List<FeedBackViewModel>();       
+            List<FeedBackItem> ret = new List<FeedBackItem>();       
             var AccountFeedBackList = GetFeedBackList(ref MaxListCount, FeedFilter);
 
             if (AccountFeedBackList == null || AccountFeedBackList.Count() == 0)
@@ -135,9 +211,9 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
             return ret;
         }
 
-        private void AccountFeedBackToFeedBackViewModelConverter(ref List<FeedBackViewModel> FB_ViewModel, List<AccountFeedBack> Account_FB_List)
+        private void AccountFeedBackToFeedBackViewModelConverter(ref List<FeedBackItem> FB_ViewModel, List<AccountFeedBack> Account_FB_List)
         {
-            FB_ViewModel = Account_FB_List.Select(x => new FeedBackViewModel
+            FB_ViewModel = Account_FB_List.Select(x => new FeedBackItem
             {
                 About = x.Contacts,
                 AccountId = x.AccountId,
@@ -152,33 +228,39 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
             }).ToList();
         }
 
-        private List<ViewAccount> GetAccountList(Heap.NamesHelper h)
+        private List<OptionElement> GetAccountList(Heap.NamesHelper h)
         {
-            var AccountList = new List<ViewAccount>() { new ViewAccount { Id = "0", Name = "Выберите пользователя" } };
-            AccountList.AddRange(cntx_.Account.Where(x => x.TypeUser == (sbyte)TypeUsers.ProducerUser && x.Enabled == 1).ToList().Select(x => new ViewAccount { Name = x.Login + " " + x.Name, Id = x.Id.ToString() }).ToList());
+            var AccountList = new List<OptionElement>() { new OptionElement { Value = "0", Text = "Выберите пользователя" } };
+            AccountList.AddRange(cntx_.Account.Where(x => x.TypeUser == (sbyte)TypeUsers.ProducerUser && x.Enabled == 1).ToList().Select(x => new OptionElement { Text = x.Login + " " + x.Name, Value = x.Id.ToString() }).ToList());
 
             return AccountList;
         }
 
-        private List<PageCount> GetPageCountList()
+        private List<OptionElement> GetPageCountList()
         {
-            return new List<PageCount>()
+            return new List<OptionElement>()
             {
-                new PageCount { Id = 0, Name = "20" },
-                new PageCount { Id = 1, Name = "50" },
-                new PageCount { Id = 2, Name = "100" },
-                new PageCount { Id = 3, Name = "1" }
+                new OptionElement { Value = "0", Text = "20" },
+                new OptionElement { Value = "1", Text = "50" },
+                new OptionElement { Value = "2", Text = "100" },
+                new OptionElement { Value = "3", Text = "1" }
             };
         }
 
-        private List<ViewProducer> GetProducerList(ProducerInterfaceCommon.Heap.NamesHelper h)
+        private int PagerCount(int Value)
         {
-            var ProducerList = new List<ViewProducer>() { new ViewProducer
+            var ret = GetPageCountList().Where(x => x.Value == Value.ToString()).First().Text;
+            return Convert.ToInt32(ret);
+        }
+
+        private List<OptionElement> GetProducerList(ProducerInterfaceCommon.Heap.NamesHelper h)
+        {
+            var ProducerList = new List<OptionElement>() { new OptionElement
             {
-                 Name = "Выберите производителя", Id = "0"
+                 Text = "Выберите производителя", Value = "0"
             } };
 
-            ProducerList.AddRange(h.RegisterListProducer().ToList().Select(x => new ViewProducer { Id = x.Value, Name = x.Text }).ToList());
+            ProducerList.AddRange(h.RegisterListProducer().ToList());
 
             return ProducerList;
         }
@@ -210,9 +292,9 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
                 {
                     return ret;
                 }
-                if (feedFilter.LoginId != 0)
+                if (feedFilter.AccountId != 0)
                 {
-                    ret = ret.Where(xx => xx.Account != null).Where(xx => xx.AccountId == feedFilter.LoginId).ToList();
+                    ret = ret.Where(xx => xx.Account != null).Where(xx => xx.AccountId == feedFilter.AccountId).ToList();
                 }
                 if (ret == null || ret.Count() == 0)
                 {
@@ -221,19 +303,19 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
                 var PageCountList = GetPageCountList();
 
-                var OnePageListLeght = Convert.ToInt32(PageCountList.Where(x => x.Id == feedFilter.Pager).First().Name);
+            //    var OnePageListLeght = Convert.ToInt32(PageCountList.Where(x => x.Id == feedFilter.Pager).First().Name);
 
                 ret = ret.OrderByDescending(x => x.Id).ToList();
 
-                if (ret.Count() <= OnePageListLeght)
-                {
-                    return ret;
-                }
-                if (ret.Count() > OnePageListLeght)
-                {
-                    MaxCount = ret.Count();                 
-                    ret = ret.ToList().Skip((OnePageListLeght)* feedFilter.PagerIndex).Take(OnePageListLeght).ToList();                  
-                }
+                //if (ret.Count() <= OnePageListLeght)
+                //{
+                //    return ret;
+                //}
+                //if (ret.Count() > OnePageListLeght)
+                //{
+                //    MaxCount = ret.Count();                 
+                //    ret = ret.ToList().Skip((OnePageListLeght)* feedFilter.PageIndex).Take(OnePageListLeght).ToList();                  
+                //}
 
                 return ret;
             }

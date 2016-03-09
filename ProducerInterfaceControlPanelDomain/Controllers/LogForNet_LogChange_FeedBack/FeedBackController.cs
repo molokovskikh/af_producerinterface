@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack;
-using System;
 using System.Collections.Generic;
+using System;
 using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -11,32 +11,47 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
     {
         public ActionResult Index()
         {       
-            return View("FeedBackList");
+            return View("Index");
         }
 
-        public JsonResult FeedbackFilter(FeedBackFilter FBF)
+        public JsonResult GetFilter()
         {
             FeedBackFunction FeedBackFunc = new FeedBackFunction(currentUser: CurrentUser);
-            var ModelView = FeedBackFunc.GetModelView(FBF);
 
-            if (ModelView.FeedBackList == null || ModelView.FeedBackList.Count() == 0)
+            FeedBackFilter FBF = FeedBackFunc.GetFilter();
+
+            return Json(FBF, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult FeedBackSearch(FeedBackFilter feedBackFilter)
+        {
+            FeedBackFunction FeedBackFunc = new FeedBackFunction(currentUser: CurrentUser);          
+            var FeedBackListRet = FeedBackFunc.GetFeedBackList(feedBackFilter);
+
+            if (FeedBackListRet.FeedList.Count() == 0)
             {
                 return Json("0", JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                return Json(ModelView, JsonRequestBehavior.AllowGet);
-            }
+
+            return Json(FeedBackListRet, JsonRequestBehavior.AllowGet);
         }
-        
-        public JsonResult GetTopHundredList()
+
+        public JsonResult FeedBackGetItem(int Id)
         {
             FeedBackFunction FeedBackFunc = new FeedBackFunction(currentUser: CurrentUser);
-            
-            var ModelView = FeedBackFunc.GetModelView();
-            return Json(ModelView, JsonRequestBehavior.AllowGet);
+            FeedBackItemSelect FeedBackModelView = FeedBackFunc.GetOneFeedBack(Id);
+
+            return Json(FeedBackModelView, JsonRequestBehavior.AllowGet);
         }
-             
-    
+
+        public JsonResult AddCommentToFeedBack(int IdFeedBack, string CommentAdd, int StatusFeedBack)
+        {
+            var NewComment = new AccountFeedBackComment();
+            NewComment.
+
+
+            return Json("0", JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

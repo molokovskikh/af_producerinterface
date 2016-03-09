@@ -5,7 +5,6 @@
     FeedBackDate: ko.observable(),
     FeedbackType: ko.observable(),
     FeedBackContact: ko.observable()
-
 }
 /* модель для поиска и пагинатор */
 var FilterModel =
