@@ -504,10 +504,16 @@ namespace ProducerInterface.Controllers
 				ErrorMessage(e.Message);
 				return RedirectToAction("JobList", "Report");
 			}
+
+			var nextFireTimeUtc = trigger.GetNextFireTimeUtc();
+			var nextGen = "";
+			if (nextFireTimeUtc.HasValue)
+				nextGen = $". Время ближайшей автоматической генерации отчета {nextFireTimeUtc.Value.LocalDateTime}";
+
 			// меняем человекочитаемое описание в доп. параметрах задачи
 			jext.Scheduler = model.CronHumanText;
 			cntx_.SaveChanges(CurrentUser, "Установка расписания отчета");
-			SuccessMessage("Расписание успешно установлено");
+			SuccessMessage($"Расписание успешно установлено{nextGen}");
 			return RedirectToAction("JobList", "Report");
 		}
 

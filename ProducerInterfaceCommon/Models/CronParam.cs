@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using System.Web.Mvc;
@@ -18,7 +19,7 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("CronExpression")]
 		[Required(ErrorMessage = "Не задано расписание")]
 		public string CronExpressionUi {
-			get { return CronExpression.Substring(2).Replace("?", "*"); }
+			get { return QuartzToUi(CronExpression); }
 			set { CronExpression = UiToQuartz(value); }
 		}
 
@@ -72,9 +73,9 @@ namespace ProducerInterfaceCommon.Models
 			return viewDataValues;
 		}
 
-		private string UiToQuartz(string cronExprUi)
+		private string UiToQuartz(string cron)
 		{
-			var arrInput = cronExprUi.Split(' ');
+			var arrInput = cron.Split(' ');
 
 			var arrOutput = new string[6];
 			arrOutput[0] = "0";					// секунды
@@ -82,15 +83,40 @@ namespace ProducerInterfaceCommon.Models
 			arrOutput[2] = arrInput[1]; // часы
 			arrOutput[3] = arrInput[2]; // дни месяца
 			arrOutput[4] = arrInput[3]; // месяцы
-			arrOutput[5] = "?";					// дни недели
+			arrOutput[5] = "?";         // дни недели
 
+			// если указаны дни недели - не указываем дни месяца
 			if (arrInput[4] != "*") {
 				arrOutput[3] = "?";
-				arrOutput[5] = arrInput[4];
+				arrOutput[5] = DowUiToQuartz(arrInput[4]);
 			}
 
 			return string.Join(" ", arrOutput);
 		}
 
+		// в Quartz 1 = sun, в UI 1 = mnd
+		private string DowUiToQuartz(string dow)
+		{
+			var map = new int[] { -1, 2, 3, 4, 5, 6, 7, 1 };
+			var result = dow.Split(',').Select(x => map[int.Parse(x)]).ToList();
+			return string.Join(",", result);
+		}
+
+		private string QuartzToUi(string cron)
+		{
+			var arrInput = cron.Substring(2).Replace("?", "*").Split(' ');
+			// если указаны дни недели - не указываем дни месяца
+			if (arrInput[4] != "*")
+				arrInput[4] = DowQuartzToUi(arrInput[4]);
+			return string.Join(" ", arrInput);
+		}
+
+		// в Quartz 1 = sun, в UI 1 = mnd
+		private string DowQuartzToUi(string dow)
+		{
+			var map = new int[] { -1, 7, 1, 2, 3, 4, 5, 6 };
+			var result = dow.Split(',').Select(x => map[int.Parse(x)]).ToList();
+			return string.Join(",", result);
+		}
 	}
 }

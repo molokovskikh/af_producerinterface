@@ -16,13 +16,13 @@ namespace ProducerInterfaceCommon.Heap
 
 		// https://msdn.microsoft.com/ru-ru/library/x5x13z6h(v=vs.110).aspx - async
 
-		public static void SendEmail(List<string> to, string subject, string body, List<Attachment> attachments)
+		public static void SendEmail(List<string> to, string subject, string body, List<string> attachments)
 		{
 			foreach (var s in to)
 				SendEmail(s, subject, body, attachments);
 		}
 
-		public static void SendEmail(string to, string subject, string body, List<Attachment> attachments, bool HtmlBody = false)
+		public static void SendEmail(string to, string subject, string body, List<string> attachments, bool HtmlBody = false)
 		{
 			var maFrom = new MailAddress(ConfigurationManager.AppSettings["MailFrom"], ConfigurationManager.AppSettings["MailFromSubscription"], System.Text.Encoding.UTF8);
 			var maTo = new MailAddress(to);
@@ -38,10 +38,10 @@ namespace ProducerInterfaceCommon.Heap
 				if (HtmlBody)
 					message.IsBodyHtml = HtmlBody;
 
-				if (attachments != null)
+				if (attachments != null && attachments.Count > 0)
 					foreach (var attachment in attachments)
 					{
-						message.Attachments.Add(attachment);
+						message.Attachments.Add(new Attachment(attachment));
 					}
 				var smtpPort = int.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
 				using (var client = new SmtpClient(ConfigurationManager.AppSettings["SmtpHost"], smtpPort))
@@ -64,7 +64,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.AutoPostReport);
-			attachments.Add(new Attachment(path));
+			attachments.Add(path);
       EmailSender.SendEmail(mailTo, subject, body, attachments);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
@@ -84,7 +84,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.ManualPostReport);
-			attachments.Add(new Attachment(path));
+			attachments.Add(path);
 			EmailSender.SendEmail(mailTo, subject, body, attachments);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
@@ -284,27 +284,32 @@ namespace ProducerInterfaceCommon.Heap
 			}
 		}
 
-		private static List<Attachment> GetAttachments(producerinterface_Entities cntx, MailType mailType)
+		private static List<string> GetAttachments(producerinterface_Entities cntx, MailType mailType)
 		{
-			var result = new List<Attachment>();
+			var result = new List<string>();
 
-			//var dir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "MediaFiles");
-			//if (!Directory.Exists(dir))
-			//	Directory.CreateDirectory(dir);
+			// общая директория медиафайлов
+			var dir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "MediaFiles");
+			if (!Directory.Exists(dir))
+				Directory.CreateDirectory(dir);
 
-			//var subdir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "MediaFiles", mailType.ToString());
-			//if (!Directory.Exists(subdir))
-			//	Directory.CreateDirectory(subdir);
+			// поддиректория для хранения файлов данного типа писем
+			var subdir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "MediaFiles", mailType.ToString());
+			if (!Directory.Exists(subdir))
+				Directory.CreateDirectory(subdir);
 
-			//var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName, x.ImageType }).ToList();
-			//foreach (var mediaFile in mediaFiles) {
-			//	var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
-			//	if (!file.Exists) {
-			//		var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
-			//		File.WriteAllBytes(file.FullName, bdFile);
-			//	}
-			//	result.Add(new Attachment(file.FullName, mediaFile.ImageType));
-			//}
+			// записали файлы в директорию
+			var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName }).ToList();
+			foreach (var mediaFile in mediaFiles)
+			{
+				var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
+				if (!file.Exists)
+				{
+					var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
+					File.WriteAllBytes(file.FullName, bdFile);
+				}
+				result.Add(file.FullName);
+			}
 			return result;
 		}
 	}
