@@ -46,8 +46,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public JsonResult AddCommentToFeedBack(int IdFeedBack, string CommentAdd, int StatusFeedBack)
         {
-            var NewComment = new AccountFeedBackComment();
-            NewComment.
+            //var NewComment = new AccountFeedBackComment();
+            //NewComment.
 
 
             return Json("0", JsonRequestBehavior.AllowGet);
