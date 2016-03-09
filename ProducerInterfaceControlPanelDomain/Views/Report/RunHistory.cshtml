@@ -17,10 +17,7 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.UserName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ProducerName)
-                    </th>
+                    </th>                 
                     <th>
                         @Html.DisplayNameFor(model => model.NowOrShed)
                     </th>
@@ -35,7 +32,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.RunStartTime)
+                          @item.RunStartTime.ToString("dd.MM.yyyy HH:mm:ss")                     
                         </td>
                         <td>
                             @if (item.RunNow)
@@ -46,10 +43,7 @@
                         {
                                 <span>Робот</span>
                         }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProducerName)
-                        </td>
+                        </td>                   
                         <td>
                             @Html.DisplayFor(modelItem => item.NowOrShed)
                         </td>

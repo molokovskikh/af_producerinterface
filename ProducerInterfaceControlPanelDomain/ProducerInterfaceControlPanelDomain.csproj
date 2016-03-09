@@ -306,6 +306,7 @@
     <Content Include="Scripts\semantic_ui\dropdown.js" />
     <Content Include="Scripts\semantic_ui\dropdown.min.js" />
     <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
+    <Content Include="Scripts\WorkPlace\FeedBackModel.js" />
     <Content Include="Scripts\WorkPlace\FeedBack_Index.js" />
     <Content Include="Scripts\WorkPlace\Feedback_Index_BindData.js" />
     <Content Include="Scripts\WorkPlace\FeedBack_Index_Model.js" />
@@ -763,6 +764,9 @@
     <Content Include="Views\FeedBack\Partial\FilterModal.cshtml" />
     <Content Include="Views\FeedBack\FeedBackList.cshtml" />
     <Content Include="Views\FeedBack\Partial\ViewFeedBackModal.cshtml" />
+    <Content Include="Views\FeedBack\Index.cshtml" />
+    <Content Include="Views\FeedBack\Partial\ModalFilter.cshtml" />
+    <Content Include="Views\FeedBack\Partial\ModalFeedBackItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

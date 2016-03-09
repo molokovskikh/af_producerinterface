@@ -11,7 +11,7 @@
 @Html.Partial("Partial/Pager")
 <table class="table-bordered table-striped table-responsive" id="table-width-100prc">
     <tr>
-        <th class="th_200"><label>Название</label></th>
+        <th class="th_275"><label>Название</label></th>
         <th><label>Активен</label></th>
         <th>
             <label>Тип</label>
@@ -29,13 +29,14 @@
             <label>Запуск</label>
         </th>
         <th><label>История запусков</label></th>
-        <th><label>Посл. отчет</label></th>
+        <th colspan="2"><label>Посл.отчет</label></th>
+      
     </tr>
 
     @foreach (var item in Model)
     {
     <tr>
-        <td class="td_200">
+        <td class="td_275">
             @Html.DisplayFor(modelItem => item.CustomName)
         </td>
         <td>
@@ -57,8 +58,8 @@
             @Html.DisplayFor(modelItem => item.LastRun)
         </td>
         <td>@Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })</td>
-        <td>@Html.ActionLink("Посл. отчет", "DisplayReport", new { jobName = item.JobName })</td>
-    </tr>
+        <td> @Html.ActionLink("Просмотр", "DisplayReport", new { jobName = item.JobName })</td>
+        <td> @Html.ActionLink("Загрузить", "GetFile", new { jobName = item.JobName })</tr>
     }
 </table>
 <br />

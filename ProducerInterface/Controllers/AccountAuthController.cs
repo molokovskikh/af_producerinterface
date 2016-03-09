@@ -21,7 +21,7 @@ namespace ProducerInterface.Controllers
             {
                 ErrorMessage("Некорректно введены данные.  Вашим логином является Email, указанный при регистрации. Пароль при регистрации был выслан на ваш Email");
                 ViewBag.CurrentUser = null;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Auth", "Account");
             }
 
             // валидация
@@ -32,7 +32,7 @@ namespace ProducerInterface.Controllers
             {
                 ErrorMessage("Пользователь с данным Логином не существует. Вашим логином является Email, указанный при регистрации.");
                 ViewBag.CurrentUser = null;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Auth", "Account");
             }
 
             // проверка наличия в БД
@@ -44,7 +44,7 @@ namespace ProducerInterface.Controllers
             {
                 ErrorMessage("Неправильно введен пароль.");
                 ViewBag.CurrentUser = null;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Auth", "Account");
             }
 
             // проверка пароля

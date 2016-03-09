@@ -431,6 +431,7 @@
     <Content Include="Views\FeedBack\FeedBack.cshtml" />
     <Content Include="Views\FeedBack\Success.cshtml" />
     <Content Include="Views\FeedBack\Index.cshtml" />
+    <Content Include="Views\Account\Auth.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

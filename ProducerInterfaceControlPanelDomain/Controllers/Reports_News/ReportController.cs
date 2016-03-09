@@ -76,11 +76,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <returns></returns>
 		public ActionResult RunHistory(string jobName)
-		{
+		{          
 			var reportName = cntx_.jobextend.Single(x => x.JobName == jobName).CustomName;
-			ViewBag.Title = $"История запусков отчета \"{reportName}\"";
-			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
-			return View(model);
+            var ProducerId = cntx_.jobextend.Where(y => y.JobName == jobName).First().ProducerId;
+            var ProducerName = cntx_.producernames.Where(x => x.ProducerId == ProducerId).First().ProducerName;
+
+            ViewBag.Title = $"История запусков отчета: \"{reportName}\", Производитель : \"{ProducerName}\"";
+            var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+        
+            return View(model);
 		}
 
 		/// <summary>

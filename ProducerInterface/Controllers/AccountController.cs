@@ -10,6 +10,13 @@ namespace ProducerInterface.Controllers
 {
     public class AccountController : AccountAuthController
     {
+
+        public ActionResult Auth()
+        {
+            var ModelView = new LoginValidation();
+            return View(ModelView);
+        }
+
         /* заполняет ViewBag.AppointmentList списком должностей (если передан ID производителя, добавляются должности данного производителя) */
         private void ViewBagAppointmentList(long ProducerId = 0)
         {

@@ -6,28 +6,37 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 {
-    public class FeedBackFilterView
+    public class FeedBackList
     {
+        public List<FeedBackItem> FeedList { get; set; }
+        public List<Paginator> PaginatorLinks { get; set; }
+
+        public int PageIndex { get; set; }
+
         public string SortTime { get; set; }
         public string SortProducerName { get; set; }
         public string SortAccountName { get; set; }
         public string SortType { get; set; }
         public string SortStatus { get; set; }
-
-        public int PageIndex { get; set; }
-        public int MaxPageCount { get; set; }
-
-        public List<PageCount> PageCount { get; set; }
-
-        public FeedBackFilter FeedBackFilter { get; set; }
-        public List<Paginator> PaginatorLinks { get; set; }
-        public List<FeedBackViewModel> FeedBackList { get; set; }
-
-        public List<ViewProducer> ProducerList { get; set; }
-        public List<ViewAccount> AccountList { get; set; }
     }
 
-    public class FeedBackViewModel
+    public class FeedBackItemSelect : FeedBackItem
+    {
+        public List<FeedBackComment> Comments{get;set;}
+        public int FeedStatusId { get; set; }
+        public List<OptionElement> StatusList { get; set; }
+    }
+
+    public class FeedBackComment
+    {
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public DateTime DateAdd { get; set; }
+        public long IdAccount { get; set; }
+        public string AdminName { get; set; }
+    }
+
+    public class FeedBackItem
     {
         public long Id { get; set; }
       
@@ -66,14 +75,16 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
     {    
         public string DateBegin { get; set; }    
         public string DateEnd { get; set; }
-        public int PagerIndex { get; set; }
+        public int PageIndex { get; set; }
         public long ProducerId { get; set; }
-        public long LoginId { get; set; }
-        public int Pager { get; set; }
+        public long AccountId { get; set; }
+        public int PageCount { get; set; }
+
+        public List<OptionElement> ProducerList { get; set; }
+        public List<OptionElement> AccountList { get; set; }
+        public List<OptionElement> PageCountList { get; set;}       
     }
-
-
-    // List для построения пейджера на клиенте
+       
     public class Paginator
     {
         public int Counter { get; set; }
@@ -81,24 +92,10 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
         public string ClassName { get; set; }             
     }
 
-    // для списка зарегистрированных производителей 
-    public class ViewProducer
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }      
-    }
+  
 
-    // для списка пользователей
-    public class ViewAccount
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }      
-    }
+   
 
-    public class PageCount
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-
+ 
+  
 }

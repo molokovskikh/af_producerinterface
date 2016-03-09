@@ -83,3 +83,44 @@ System.Web.Mvc.ActionResult ChangeAccount(ProducerInterfaceCommon.ContextModels.
 25.02.2016 18:44:54.255 [41] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "ChangeUser" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.PermissionController".
 02.03.2016 15:59:55.857 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/WebForm/Reports" не найден или не реализует интерфейс IController.
 02.03.2016 16:00:18.659 [10] ERROR MySqlAdoNetAppender - Контроллер для пути "/webForms/reports.aspx" не найден или не реализует интерфейс IController.
+09.03.2016 12:10:02.337 [33] ERROR MySqlAdoNetAppender - Контроллер для пути "/__browserLink/requestData/ba2300081b6e48febefccdaf48ce1ef1" не найден или не реализует интерфейс IController.
+09.03.2016 12:13:53.731 [33] ERROR MySqlAdoNetAppender - Не удалось найти общедоступный метод действия "Report" на контроллере "ProducerInterfaceControlPanelDomain.Controllers.ReportController".
+09.03.2016 12:59:02.898 [50] ERROR MySqlAdoNetAppender - Контроллер для пути "/__browserLink/requestData/e2b7910b624b4baeac942d1229129e22" не найден или не реализует интерфейс IController.
+09.03.2016 14:20:46.495 [8] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.DateTime ToDateTime(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+09.03.2016 14:21:24.486 [7] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.DateTime ToDateTime(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+09.03.2016 14:21:27.625 [17] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.DateTime ToDateTime(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+09.03.2016 14:25:36.456 [24] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.DateTime ToDateTime(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+09.03.2016 14:27:14.536 [30] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.DateTime ToDateTime(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+09.03.2016 14:28:35.124 [29] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.DateTime ToDateTime(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+09.03.2016 14:29:31.024 [7] ERROR MySqlAdoNetAppender - Выражению LINQ to Entities не удается распознать метод "System.DateTime ToDateTime(System.String)", поэтому его нельзя преобразовать в выражение хранилища.
+09.03.2016 14:57:24.698 [26] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:57:28.703 [12] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:57:35.133 [5] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:57:52.239 [30] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:58:19.061 [39] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:58:19.833 [12] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:58:20.428 [17] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:58:21.071 [30] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:58:21.659 [17] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:58:31.433 [12] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: Id.
+09.03.2016 14:59:30.901 [30] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 14:59:36.280 [12] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 14:59:36.816 [25] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 14:59:37.314 [22] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:00:55.229 [17] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:01:05.240 [17] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:01:06.830 [22] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:01:07.550 [29] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:03:15.944 [8] ERROR MySqlAdoNetAppender - Недопустимый примитив JSON: object.
+09.03.2016 15:05:11.299 [29] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.JsonResult FeedBackGetItem(Int32)" в "ProducerInterfaceControlPanelDomain.Controllers.FeedBackController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+09.03.2016 15:07:06.086 [29] ERROR MySqlAdoNetAppender - Словарь параметров содержит запись со значением NULL для параметра "Id" типа "System.Int32", не допускающего значение NULL, для метода "System.Web.Mvc.JsonResult FeedBackGetItem(Int32)" в "ProducerInterfaceControlPanelDomain.Controllers.FeedBackController". Необязательный параметр должен иметь ссылочный тип, тип, допускающий значение NULL, либо он должен быть объявлен как необязательный параметр.
+Имя параметра: parameters
+09.03.2016 15:20:36.705 [16] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:22:23.501 [8] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:25:46.332 [49] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:25:47.839 [48] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:25:58.623 [43] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:26:30.890 [43] ERROR MySqlAdoNetAppender - При сериализации объекта типа "System.Data.Entity.DynamicProxies.Account_469E30AC2DF6A715724F2CFEC944778848A1167D7BC46D3935D1F84A2CFA988E" обнаружена циклическая ссылка.
+09.03.2016 15:56:10.053 [34] ERROR MySqlAdoNetAppender - Не удалось привести тип объекта "ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack.FeedBackItem" к типу "ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack.FeedBackItemSelect".
+09.03.2016 16:29:06.162 [27] ERROR MySqlAdoNetAppender - Путь '/Views/FeedBack/Partial/ModalFeedBackItem.cshtml' не найден.
