@@ -1,8 +1,8 @@
 ﻿@model ProducerInterfaceCommon.Models.ProductRatingReport
 
+@Html.EditorFor(m => m.AllCatalog)
 <div id="HideCatalog">
     @Html.EditorFor(m => m.CatalogIdEqual)
 </div>
-@Html.EditorFor(m => m.AllCatalog)
 @Html.EditorFor(m => m.RegionCodeEqual)
 @Html.EditorFor(m => m.SupplierIdNonEqual)

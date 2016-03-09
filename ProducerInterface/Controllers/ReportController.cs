@@ -332,8 +332,10 @@ namespace ProducerInterface.Controllers
 			ViewBag.Title = $"Запуск \"{param.CastomName}\"";
 
 			RunNowParam model;
-			if (param is IInterval)
+			if (param is IInterval) {
 				model = new RunNowIntervalParam();
+				model.MailTo = new List<string>() { CurrentUser.Login };
+			}
 			// TODO при появлении неинтервальных отчетов добавить код
 			else
 			{

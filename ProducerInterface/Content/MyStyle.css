@@ -265,6 +265,14 @@ width:100%;
 .profile_submenu a {
     text-align: left;
 }
-    .profile_submenu a span {
-        margin-right: 1em;
-    }
+.profile_submenu a span {
+    margin-right: 1em;
+}
+
+span.chosen-comment {
+    display: block;
+    margin-top: 3px;
+    color: grey;
+    font-size: 10px;
+    font-style: italic;
+}

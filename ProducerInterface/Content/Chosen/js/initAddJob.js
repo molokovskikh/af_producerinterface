@@ -2,7 +2,7 @@
 
 	$('#RegionCodeEqual').chosen({ width: '95%' });
 	$('#CatalogIdEqual').chosen({ width: '95%' });
-	$('#SupplierIdNonEqual').chosen({ width: '95%' });
+	$('#SupplierIdNonEqual').chosen({ width: '95%', placeholder_text_multiple: 'Выберите поставщиков, если вы хотите исключить их из отчета' });
 
 	var ac = $('#AllCatalog');
     var hc = $('#HideCatalog');

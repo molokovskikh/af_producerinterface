@@ -27,17 +27,22 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("LongList")]
 		public List<long> CatalogIdEqual { get; set; }
 
-		[Display(Name = "По всем товарам производителя")]
+		[Display(Name = "По всем нашим товарам")]
 		[UIHint("Bool")]
 		public bool AllCatalog { get; set; }
+
+		public ProductRatingReport()
+		{
+			AllCatalog = true;
+		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
 		{
 			var result = new List<string>();
 			result.Add(h.GetDateHeader(DateFrom, DateTo));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
-			
-			// если выбрано По всем товарам производителя
+
+			// если выбрано По всем нашим товарам
 			if (AllCatalog)
 				result.Add("В отчет включены все товары производителя");
 			else
