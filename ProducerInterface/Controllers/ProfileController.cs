@@ -21,7 +21,7 @@ namespace ProducerInterface.Controllers
         {
             ViewBag.Pager = 1;
 
-            var NewsAll = cntx_.NotificationToProducers.ToList();
+            var NewsAll = cntx_.NotificationToProducers.Where(x=>x.Enabled==true).ToList();
             NewsAll.Reverse();
 
             ViewBag.News = NewsAll.Take(PagerCount).ToList();

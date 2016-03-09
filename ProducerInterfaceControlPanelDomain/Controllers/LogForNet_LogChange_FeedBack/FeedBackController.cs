@@ -16,8 +16,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public JsonResult FeedbackFilter(FeedBackFilter FBF)
         {
-            return Json("0", JsonRequestBehavior.AllowGet);
+            FeedBackFunction FeedBackFunc = new FeedBackFunction(currentUser: CurrentUser);
+            var ModelView = FeedBackFunc.GetModelView(FBF);
 
+            if (ModelView.FeedBackList == null || ModelView.FeedBackList.Count() == 0)
+            {
+                return Json("0", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(ModelView, JsonRequestBehavior.AllowGet);
+            }
         }
         
         public JsonResult GetTopHundredList()

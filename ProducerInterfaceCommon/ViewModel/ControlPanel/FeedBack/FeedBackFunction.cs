@@ -19,7 +19,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
         public FeedBackFilterView GetModelView(FeedBackFilter FeedFilter = null)
         {
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-
+          
             var Ret = new FeedBackFilterView();
             if (FeedFilter == null)
             {
@@ -33,42 +33,59 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
         public FeedBackFilterView GetFeedBackFilterView(Heap.NamesHelper h, FeedBackFilter FeedFilter)
         {
-            var ModelView = new List<FeedBackViewModel>();
-            /* лист обращений */
-          
+            var ModelView = new List<FeedBackViewModel>(); /* лист обращений */
 
+            int MaxListCount = 0;    /*  количество сторок по данному фильтру необходимо для посторение Пагинатора */
 
+            ModelView = GetListFeedBackModel(ref MaxListCount,FeedFilter); /* заполняем лист обращений по фильтру */
+            if (ModelView == null || ModelView.Count() == 0)
+            {
+                return new FeedBackFilterView();  /* если обращений по данному фильтру не найдено, возвращаем незаполненую модель для передачи на клиент сообщения об неуспешности фильтрации */
+            }
 
-            return new FeedBackFilterView();
+            var ReturnModel = new FeedBackFilterView();  /* Модель отправляемая клиенту */
+
+            SetViewFilter(ref ReturnModel, FeedFilter);  /* отображение по каким столбцам фильтруется таблица */
+
+            ReturnModel.FeedBackList = ModelView; /* FeedBackList - список обращений */
+
+            ReturnModel.PaginatorLinks = GetPaginator(MaxListCount, FeedFilter.PagerIndex); /* заполняем пагинатор */
+
+            ReturnModel.PageIndex = FeedFilter.PagerIndex; /* текущий индех пагинатора */
+
+            ReturnModel.FeedBackFilter = FeedFilter;
+            
+            int MaxPager = (int)Math.Ceiling((double)(Convert.ToInt32(GetPageCountList().Where(x=>x.Id == FeedFilter.Pager).First().Name) / 50));
+                 
+            return ReturnModel;
         }
 
 
         public FeedBackFilterView GetDefaultFeedBackFilterView(Heap.NamesHelper h)
         {
             var ModelView = new List<FeedBackViewModel>();
-            var cntx_model = cntx_.AccountFeedBack.OrderByDescending(x => x.DateAdd).Take(100).ToList();
+            var cntx_model = cntx_.AccountFeedBack.OrderByDescending(x => x.DateAdd).Take(50).ToList();
 
             AccountFeedBackToFeedBackViewModelConverter(ref ModelView, cntx_model);
               
-
             var ReturnModel = new FeedBackFilterView();
 
             SetViewFilter(ref ReturnModel); // устанавливаем CSS параметр Display: ???
 
             ReturnModel.FeedBackList = ModelView;
-
+                  
             int MaxPager = (int) Math.Ceiling((double)(ModelView.Count() / 50));
 
             ReturnModel.PaginatorLinks = GetPaginator(MaxPager, 1);
-            ReturnModel.PageIndex = 3;
-            ReturnModel.MaxPageCount = 6;
+            ReturnModel.PageIndex = 1;
+            ReturnModel.MaxPageCount = MaxPager;
             ReturnModel.FeedBackFilter = new FeedBackFilter
             {
                 DateBegin = DateTime.Now.AddYears(-1).ToString("dd.MM.yyyy"),
                 DateEnd = DateTime.Now.AddDays(1).ToString("dd.MM.yyyy"),
                 LoginId = 0,
                 ProducerId = 0,
-                PagerIndex = 3,
+                PagerIndex = 1,
                 Pager = 1
             };
 
@@ -81,35 +98,31 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
         private void SetViewFilter(ref FeedBackFilterView ModelView, FeedBackFilter FeedFilter = null)
         {
+            ModelView.SortTime = "block";
+            ModelView.SortProducerName = "none";
+            ModelView.SortAccountName = "none";
+            ModelView.SortType = "none";
+            ModelView.SortStatus = "none";
+
             if (FeedFilter == null) // если фильтр не был передан, по умолчанию фильтруется по дате от начала к концу
             {
-                ModelView.SortTime = "block";
-                ModelView.SortProducerName = "none";
-                ModelView.SortAccountName = "none";
-                ModelView.SortType = "none";
-                ModelView.SortStatus = "none";
+                ModelView.SortTime = "block";             
             }
             else
             {
                 if (FeedFilter.LoginId != 0)
-                { ModelView.SortProducerName = "block"; }
-                else
-                { ModelView.SortProducerName = "none"; }
+                { ModelView.SortAccountName = "block"; }            
+
+
                 if (FeedFilter.ProducerId != 0)
-                { ModelView.SortProducerName = "block"; }
-                else
-                { ModelView.SortProducerName = "none"; }
-                if (FeedFilter.DateBegin != DateTime.MinValue.ToString("dd.MM.yyyy") || FeedFilter.DateEnd != DateTime.MinValue.ToString("dd.MM.yyyy"))
-                { ModelView.SortTime = "block"; }
-                else
-                { ModelView.SortTime = "none"; }
+                { ModelView.SortProducerName = "block"; }     
+              
             }
         }
 
-        private List<FeedBackViewModel> GetListFeedBackModel(FeedBackFilter FeedFilter)
+        private List<FeedBackViewModel> GetListFeedBackModel(ref int MaxListCount,FeedBackFilter FeedFilter)
         {
-            List<FeedBackViewModel> ret = new List<FeedBackViewModel>();
-            int MaxListCount = 0;
+            List<FeedBackViewModel> ret = new List<FeedBackViewModel>();       
             var AccountFeedBackList = GetFeedBackList(ref MaxListCount, FeedFilter);
 
             if (AccountFeedBackList == null || AccountFeedBackList.Count() == 0)
@@ -119,13 +132,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
             AccountFeedBackToFeedBackViewModelConverter(ref ret, AccountFeedBackList);
 
-            
-
-
-
-
-
-            return new List<FeedBackViewModel>();
+            return ret;
         }
 
         private void AccountFeedBackToFeedBackViewModelConverter(ref List<FeedBackViewModel> FB_ViewModel, List<AccountFeedBack> Account_FB_List)
@@ -159,7 +166,8 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
             {
                 new PageCount { Id = 0, Name = "20" },
                 new PageCount { Id = 1, Name = "50" },
-                new PageCount { Id = 2, Name = "100" }
+                new PageCount { Id = 2, Name = "100" },
+                new PageCount { Id = 3, Name = "1" }
             };
         }
 
@@ -188,9 +196,9 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
                 DateTime FeedDateBegin = Convert.ToDateTime(feedFilter.DateBegin);
                 DateTime FeedDateEnd = Convert.ToDateTime(feedFilter.DateEnd);
 
-                var ret = cntx_.AccountFeedBack.Where(xx => xx.DateAdd >= FeedDateBegin || xx.DateAdd <= FeedDateEnd).ToList();
+                var ret = cntx_.AccountFeedBack.Where(xx => xx.DateAdd >= FeedDateBegin && xx.DateAdd <= FeedDateEnd).ToList();
 
-                if (ret != null || ret.Count() == 0)
+                if (ret == null || ret.Count() == 0)
                 {
                     return ret;
                 }
@@ -198,7 +206,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
                 {
                     ret = ret.Where(x => x.Account != null).ToList().Where(xx => xx.Account.AccountCompany.ProducerId != null).ToList().Where(xx => xx.Account.AccountCompany.ProducerId == feedFilter.ProducerId).ToList();
                 }
-                if (ret != null || ret.Count() == 0)
+                if (ret == null || ret.Count() == 0)
                 {
                     return ret;
                 }
@@ -206,7 +214,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
                 {
                     ret = ret.Where(xx => xx.Account != null).Where(xx => xx.AccountId == feedFilter.LoginId).ToList();
                 }
-                if (ret != null || ret.Count() == 0)
+                if (ret == null || ret.Count() == 0)
                 {
                     return ret;
                 }
@@ -215,14 +223,16 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
                 var OnePageListLeght = Convert.ToInt32(PageCountList.Where(x => x.Id == feedFilter.Pager).First().Name);
 
+                ret = ret.OrderByDescending(x => x.Id).ToList();
+
                 if (ret.Count() <= OnePageListLeght)
                 {
                     return ret;
                 }
                 if (ret.Count() > OnePageListLeght)
                 {
-                    MaxCount = ret.Count();
-                    ret = ret.ToList().Skip((OnePageListLeght - 1)* feedFilter.PagerIndex).Take(OnePageListLeght).ToList();                  
+                    MaxCount = ret.Count();                 
+                    ret = ret.ToList().Skip((OnePageListLeght)* feedFilter.PagerIndex).Take(OnePageListLeght).ToList();                  
                 }
 
                 return ret;
@@ -240,7 +250,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
                     var Y = X + 1;
                     if (X == CurrentPage)
                     {
-                        var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "Active" };
+                        var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "active primary" };
                         Pag.Add(PagAdd);
                     }
                     else
@@ -260,7 +270,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
                         var Y = X + 1;
                         if (X == CurrentPage)
                         {
-                            var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "Active" };
+                            var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "active primary" };
                             Pag.Add(PagAdd);
                         }
                         else
@@ -273,20 +283,25 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
                 if (CurrentPage > 3)
                 {
-                    var X_Max = CurrentPage + 10;
-                    var X_Start = CurrentPage - 2;
-                    for (var I = X_Start; I < X_Max ; I++)
+                    var CurrentPageLocal = CurrentPage - 3;
+                    int Off = 0;
+                    for (var X = CurrentPageLocal; X < PageMax; X++)
                     {
-                        var Y = I + 1;
-                        if (I == CurrentPage)
+                        Off++;
+                        var Y = X + 1;
+                        if (X == CurrentPage)
                         {
-                            var PagAdd = new Paginator { Counter = I, ViewCounter = Y, ClassName = "Active" };
+                            var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "active primary" };
                             Pag.Add(PagAdd);
                         }
                         else
                         {
-                            var PagAdd = new Paginator { Counter = I, ViewCounter = Y };
+                            var PagAdd = new Paginator { Counter = X, ViewCounter = Y };
                             Pag.Add(PagAdd);
+                        }
+                        if (Off > 10)
+                        {
+                            break;
                         }
                     }
                 }

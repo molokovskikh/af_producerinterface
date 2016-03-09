@@ -223,6 +223,8 @@
     <Content Include="Content\Chosen\css\loading.gif" />
     <Content Include="Content\Chosen\css\Site.css" />
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
+    <Content Include="Content\semantic_ui\dropdown.css" />
+    <Content Include="Content\semantic_ui\dropdown.min.css" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\ckeditor\InitCKEditor_News.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\dialogs\base64image.js" />
@@ -297,10 +299,18 @@
     <Content Include="Scripts\ckeditor\plugins\filebrowser\plugin.js" />
     <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
     <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Scripts\jquery.maskedinput.min.js" />
+    <Content Include="Scripts\knockout-3.4.0.debug.js" />
+    <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\semantic_ui\dropdown.js" />
+    <Content Include="Scripts\semantic_ui\dropdown.min.js" />
     <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
     <Content Include="Scripts\WorkPlace\FeedBack_FeedBackList.js" />
     <Content Include="Scripts\WorkPlace\FeedBack_Index.js" />
+    <Content Include="Scripts\WorkPlace\Feedback_Index_BindData.js" />
+    <Content Include="Scripts\WorkPlace\FeedBack_Index_Model.js" />
+    <Content Include="Scripts\WorkPlace\GlobalAccount_AccountVerification.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
@@ -722,7 +732,6 @@
     <Content Include="Views\GoToProducerInterface\Index.cshtml" />
     <Content Include="Views\GoToProducerInterface\GetListUser.cshtml" />
     <Content Include="Views\MediaFiles\Index.cshtml" />
-    <Content Include="Views\FeedBack\Index.cshtml" />
     <Content Include="Views\ProducerInformation\DomainList.cshtml" />
     <Content Include="Views\ProducerInformation\GetDomain.cshtml" />
     <Content Include="Views\ProducerInformation\AppointmentNameList.cshtml" />
@@ -743,7 +752,6 @@
     <Content Include="Views\Permission\EditorTemplates\LongListRegion.cshtml" />
     <Content Include="Views\Permission\ListUsers.cshtml" />
     <Content Include="Views\News\History.cshtml" />
-    <Content Include="Views\FeedBack\FeedBackSearch.cshtml" />
     <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
     <Content Include="Views\OfficePost\CustomAppointment.cshtml" />
     <Content Include="Views\OfficePost\Index.cshtml" />
@@ -751,9 +759,9 @@
     <Content Include="Views\OfficePost\Partial\ListAccount.cshtml" />
     <Content Include="Views\OfficePost\Partial\ListAccountAppointment.cshtml" />
     <Content Include="Views\OfficePost\AccountNotPost.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\PartialListAppointment.cshtml" />
     <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\FeedBack\Partial\ViewFeedBackModal.cshtml" />
     <Content Include="Views\MediaFiles\SaveEmailFile.cshtml" />
     <Content Include="Views\FeedBack\FeedBackList.cshtml" />
     <Content Include="Views\FeedBack\Partial\AccountFilter.cshtml" />

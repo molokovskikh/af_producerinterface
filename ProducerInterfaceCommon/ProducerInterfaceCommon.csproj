@@ -154,6 +154,9 @@
     <Compile Include="ContextModels\AccountFeedBack.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\AccountFeedBackComment.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\AccountGroup.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>

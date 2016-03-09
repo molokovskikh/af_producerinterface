@@ -177,3 +177,6 @@ max-width:45em;
 .row .margin-top-025em {
     margin-top:0.25em;
 }
+.th_200, .td_200 {
+    min-width:200px;
+} 
