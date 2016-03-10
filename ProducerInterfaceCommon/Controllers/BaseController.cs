@@ -350,7 +350,7 @@ namespace ProducerInterfaceCommon.Controllers
 			{
 				UserLoginName = thisUser.Login;
 				SetUserCookiesName(UserLoginName);
-
+                SetCookie("AccountName", thisUser.Login, false);
 				RedirectToAction("Index", "Profile");
 			}
 

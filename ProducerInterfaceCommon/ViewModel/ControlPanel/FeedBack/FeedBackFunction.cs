@@ -55,13 +55,14 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
         }
 
         public FeedBackItemSelect GetOneFeedBack(int Id)
-        {          
+        {
             var cntx_FeedBackItem = cntx_.AccountFeedBack.Where(x => x.Id == Id).ToList();
             var ListFeedBack = new List<FeedBackItem>();
             AccountFeedBackToFeedBackViewModelConverter(ref ListFeedBack, cntx_FeedBackItem);
 
+            FeedBackItemSelect FeedBackModelView = new FeedBackItemSelect();
 
-            FeedBackItemSelect FeedBackModelView = (FeedBackItemSelect)ListFeedBack.Select(x => new FeedBackItemSelect
+            FeedBackModelView = (FeedBackItemSelect)ListFeedBack.Select(x => new FeedBackItemSelect
             {
                 About = x.About,
                 AccountId = x.AccountId,
@@ -95,8 +96,7 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
             }).ToList();
 
             FeedBackModelView.StatusList = StatusList;
-
-
+            
             return FeedBackModelView;
 
         }

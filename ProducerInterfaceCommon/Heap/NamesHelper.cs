@@ -121,11 +121,30 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
-			// если регионы не указаны - возвращаем пустой лист
-			if (regionList == null)
-				return new List<OptionElement>();
+            bool GetAllTwo = false;
 
-			var suppliersInRegions = _cntx.supplierregions.Where(x => regionList.Contains(x.RegionCode.Value)).Select(x => x.SupplierId).ToList();
+            if (regionList != null && regionList.Contains(0))
+            {
+                GetAllTwo = true;
+            }
+
+            if (regionList == null || GetAllTwo)
+            {
+                if (GetAllTwo)
+                {
+                    var suppliersInRegions_ = _cntx.supplierregions.Select(x => x.SupplierId).Distinct().ToList();
+
+                    var result = _cntx.suppliernames.Where(x => suppliersInRegions_.Contains(x.SupplierId))
+                        .OrderBy(x => x.SupplierName)
+                        .Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
+                        .ToList();
+                    return result;
+                }
+
+                return new List<OptionElement>();
+            }
+            
+            var suppliersInRegions = _cntx.supplierregions.Where(x => regionList.Contains(x.RegionCode.Value)).Select(x => x.SupplierId).Distinct().ToList();
 			var results = _cntx.suppliernames
 				.Where(x => suppliersInRegions.Contains(x.SupplierId))
 				.OrderBy(x => x.SupplierName)

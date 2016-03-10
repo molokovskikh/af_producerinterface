@@ -12,17 +12,11 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AccountFeedBackComment
+    public partial class PromotionsToSupplier
     {
-        public int Id { get; set; }
-        public long IdFeedBack { get; set; }
-        public string Comment { get; set; }
-        public Nullable<System.DateTime> DateAdd { get; set; }
-        public long AdminId { get; set; }
-        public sbyte StatusOld { get; set; }
-        public sbyte StatusNew { get; set; }
+        public long PromotionId { get; set; }
+        public long SupplierId { get; set; }
     
-        public virtual Account Account { get; set; }
-        public virtual AccountFeedBack AccountFeedBack { get; set; }
+        public virtual promotions promotions { get; set; }
     }
 }

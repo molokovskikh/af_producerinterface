@@ -17,6 +17,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public promotions()
         {
             this.promotionToDrug = new HashSet<promotionToDrug>();
+            this.PromotionsToSupplier = new HashSet<PromotionsToSupplier>();
         }
     
         public long Id { get; set; }
@@ -40,5 +41,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual MediaFiles MediaFiles { get; set; }
         public virtual Account Account { get; set; }
         public virtual Account Account1 { get; set; }
+        public virtual ICollection<PromotionsToSupplier> PromotionsToSupplier { get; set; }
     }
 }

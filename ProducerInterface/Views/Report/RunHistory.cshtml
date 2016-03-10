@@ -33,7 +33,7 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.RunStartTime)
+                                <p>@item.RunStartTime.ToString("dd.MM.yyyy HH:mm:ss")</p>                            
                             </td>
                             <td>
                                 @if (item.RunNow) {
