@@ -5,6 +5,7 @@
     string x = "text-info";
     var DrugList_ = ViewBag.GrugList as IEnumerable<OptionElement>;
     var RegionList = ViewBag.RegionList as IEnumerable<OptionElement>;
+    var SupplierList = ViewBag.SupplierList as IEnumerable<OptionElement>;
     ViewBag.Classs = "";
 }
 <div class="panel panel-default panel-sm">
@@ -24,7 +25,7 @@
 
     <div id="collapse_@Model.Id" class="panel-collapse collapse @ViewBag.Classs">
         <div class="panel-body">
-        
+
             <div class="form-group col-xs-12">
                 <h4>Аннотация</h4>
                 <p>'@Model.Annotation'</p>
@@ -37,7 +38,7 @@
             <div class="form-group col-xs-6">
                 <h4>Дата окончания акции</h4>
                 <p>'@Model.End.Value.ToString("dd.MM.yyyy")'</p>
-            </div>                 
+            </div>
 
             <!--                    Прикрепленный файл          -->
             <div class="form-group col-xs-12">
@@ -54,27 +55,27 @@
                     @*@Html.Action("ChangeFile", new { Id = Model.Id })*@
                 }
             </div>
-                <!--                Список лекарств            -->
+            <!--                Список лекарств            -->
 
-                <hr />
+            <hr />
 
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <a class="panel-title" data-toggle="collapse" href="#collapse__@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список препаратов <p class="pull-right">@Model.promotionToDrug.Count()</p></a>
-                    </div>
-                    <div id="collapse__@Model.Id" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            @foreach (var DrugItem in Model.promotionToDrug)
-                            {
-                                <p>@DrugList_.Where(xxx => xxx.Value == DrugItem.DrugId.ToString()).First().Text</p>
-                            }
-                        </div>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <a class="panel-title" data-toggle="collapse" href="#collapse__@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список препаратов <p class="pull-right">@Model.promotionToDrug.Count()</p></a>
+                </div>
+                <div id="collapse__@Model.Id" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        @foreach (var DrugItem in Model.promotionToDrug)
+                        {
+                            <p>@DrugList_.Where(xxx => xxx.Value == DrugItem.DrugId.ToString()).First().Text</p>
+                        }
                     </div>
                 </div>
+            </div>
 
-                <!--                Список регионов            -->
+            <!--                Список регионов            -->
 
-          
+
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     <a class="panel-title" data-toggle="collapse" href="#collapse___@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список регионов <p class="pull-right">@Model.RegionList.Count()</p></a>
@@ -90,17 +91,34 @@
             </div>
 
 
+            <!--                Список Поставщиков            -->
 
-                <!--                 Управление акцией (ссылки (btn btn-primary) на редактирование, удаление, активацию/деактивацию, копирование)            -->
-
-                <hr />
-
-                <div class="from-group col-xs-12">
-                    <h4>Управление акцией</h4>
-
-                    @Html.Partial("Partial/PromotionItemActionLink", Model)
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <a class="panel-title" data-toggle="collapse" href="#collapse_supplier___@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список Поставщиков <p class="pull-right">@Model.PromotionsToSupplier.Count()</p></a>
+                </div>
+                <div id="collapse_supplier___@Model.Id" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        @foreach (var SupplierItem in Model.PromotionsToSupplier)
+                        {
+                            <p>@SupplierList.Where(xxx => xxx.Value == SupplierItem.SupplierId.ToString()).First().Text</p>
+                        }
+                    </div>
                 </div>
             </div>
+
+            <!--                 Управление акцией (ссылки (btn btn-primary) на редактирование, удаление, активацию/деактивацию, копирование)            -->
+
+            <hr />
+
+            <div class="from-group col-xs-12">
+                <h4>Управление акцией</h4>
+
+                @Html.Partial("Partial/PromotionItemActionLink", Model)
+            </div>
+        </div>
+
+
 
     </div>
 </div>

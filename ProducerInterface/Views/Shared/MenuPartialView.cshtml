@@ -72,7 +72,7 @@
                 <li><a href="@Url.Action("Index", "Account")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
 
                 <li class="dropdown">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="menulogin_href" onclick="SetLoginNames()">
                         <span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
                     </a>
                     @Html.Partial("LoginPartialView", new ProducerInterfaceCommon.ViewModel.Interface.Registration.AuthViewModel())

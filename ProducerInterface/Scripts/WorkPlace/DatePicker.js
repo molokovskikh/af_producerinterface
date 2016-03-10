@@ -3,12 +3,12 @@
         format: 'dd.mm.yyyy',
         language: 'ru',
         weekStart: 1,
-        autoclose: true,
+        autoclose: true,     
             onRender: function (date) {
             return date.valueOf() > Date.now() ? 'disabled' : '';
         }
-    }).on('changeDate', function (ev) {
-        //$('#DateToUI')[0].focus();
+    }).on('changeDate', function () {
+        dateTo.setStartDate(dateFrom.getDate());
     }).data('datepicker');
 
     var dateTo = $('#End').datepicker({
@@ -21,6 +21,9 @@
             return date.valueOf() > Date.now() ? 'disabled' : '';
         }
     }).data('datepicker');
+
+    dateFrom.setStartDate(Date().toLocaleString());
+
 });
 
 function KyUp() {

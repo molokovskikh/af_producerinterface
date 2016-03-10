@@ -44,13 +44,34 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return Json(FeedBackModelView, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddCommentToFeedBack(int IdFeedBack, string CommentAdd, int StatusFeedBack)
+        public JsonResult AddCommentToFeedBack(int IdFeedBack, string CommentAdd, int StatusFeedBack = 1000000)
         {
+
+            var FeedBackItem = cntx_.AccountFeedBack.Find(IdFeedBack);
+            
             var NewComment = new AccountFeedBackComment();
-            NewComment.
+            NewComment.IdFeedBack = IdFeedBack;
+            NewComment.Comment = CommentAdd;
+            NewComment.DateAdd = DateTime.Now;
+            NewComment.AdminId = CurrentUser.Id;
 
+            if (StatusFeedBack != 1980)
+            {
+                NewComment.StatusNew = (sbyte)StatusFeedBack;
+            }
+            NewComment.StatusOld = FeedBackItem.Status;
+            
+            cntx_.Entry(NewComment).State = System.Data.Entity.EntityState.Added;
+            cntx_.SaveChanges(CurrentUser,"Добавление комментария к обращению пользователя");
 
-            return Json("0", JsonRequestBehavior.AllowGet);
+            if (StatusFeedBack != 1000000)
+            {
+                FeedBackItem.Status = (sbyte)StatusFeedBack;
+                cntx_.Entry(FeedBackItem).State = System.Data.Entity.EntityState.Modified;
+                cntx_.SaveChanges(CurrentUser, "Изменение статуса обращения пользователя");
+            }
+            
+            return Json("1", JsonRequestBehavior.AllowGet);
         }
 
     }

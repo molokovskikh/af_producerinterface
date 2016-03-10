@@ -111,6 +111,11 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Required(ErrorMessage = "Выберите регион")]
 		public List<long> RegionList { get; set; }
 
+        [UIHint("LongList")]
+        [Required(ErrorMessage = "Выберите поставщиков")]
+        public List<long> SuppierRegions { get; set; }
+
+
 		public int? PromotionFileId { get; set; }
 		public string PromotionFileName { get; set; }
 

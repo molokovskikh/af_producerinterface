@@ -195,6 +195,12 @@
     <Compile Include="ContextModels\PromotionsInRegionMask_Result.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\PromotionsToSupplier.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\ReportDescription.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\ReportRunLog.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>

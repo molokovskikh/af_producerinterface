@@ -101,7 +101,8 @@ var FeedBackList =
         
         Event_SelectItem: function (data)
         {
-            AjaxGetOneFeedBack(data.Id);
+            var JsonSendData = "{\"Id\":\"" + data.Id + "\"}";
+            AjaxGetOneFeedBack("FeedBackGetItem", JsonSendData);
         }
     }
 
@@ -160,9 +161,8 @@ function AjaxSearch()
 
 }
 
-function AjaxGetOneFeedBack(IdKey)
-{
-    var JsonSendData = "{\"Id\":\"" + IdKey + "\"}";
+function AjaxGetOneFeedBack(Url, JsonSendData)
+{  
     $.ajax({
         url: "FeedBackGetItem",
         cache: false,
@@ -186,8 +186,8 @@ function AjaxGetOneFeedBack(IdKey)
 
 function AjaxAddComment()
 {
-    var Comment = ko.toJSON(FeedBackItem);
-    var StatusId = FeedBackItem.FeedStatusId;
+    var JsonSendData = ko.toJSON(FeedBackItem);
+    AjaxGetOneFeedBack("AddCommentToFeedBack", JsonSendData);
 }
 
 function bindFilter(result)

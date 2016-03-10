@@ -117,5 +117,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return model;
 		}
 
-	}
+        [HttpGet]
+        public ActionResult ReportDescription()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ReportDescription(int Id)
+        {
+            return View();
+        }
+
+    }
 }

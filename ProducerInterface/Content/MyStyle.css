@@ -268,3 +268,6 @@ width:100%;
     .profile_submenu a span {
         margin-right: 1em;
     }
+.th_275, .td_275 {
+    min-width:275px;
+} 

@@ -155,15 +155,24 @@ namespace ProducerInterfaceCommon.Controllers
             Response.Cookies.Set(cookie);
         }
 
-        public void SetCookie(string name, string value)
+        public void SetCookie(string name, string value, bool IsCoding = true)
         {
+            var ExpiresDate = DateTime.Now.AddSeconds(15);
+
+            if (name == "AccountName")
+            {
+                ExpiresDate.AddYears(1);
+            }
+            
             if (value == null)
             {
                 Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
                 return;
             }
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
-            var text = Convert.ToBase64String(plainTextBytes);
+            var text = "";
+            if (IsCoding){ text = Convert.ToBase64String(plainTextBytes); }
+            else { text = value; }
             Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
         }
 
@@ -192,7 +201,6 @@ namespace ProducerInterfaceCommon.Controllers
                     Response.SetCookie(currentUserCookie);
                 }
             }
-
         }
 
         public void SuccessMessage(string message)

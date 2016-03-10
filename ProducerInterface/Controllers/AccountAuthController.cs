@@ -181,31 +181,34 @@ namespace ProducerInterface.Controllers
 
         public string Autentificates(Controller CRT, string username, bool shouldRemember, string userData = "")
         {
-            string CoockieName = GetWebConfigParameters("CookiesName");
+            var currentUser = cntx_.Account.Where(x => x.Login == username && x.TypeUser == (sbyte)TypeUsers.ProducerUser).First();
+            AutorizeCurrentUser(currentUser, TypeUsers.ProducerUser);
 
-            var redirectAfterAuthentication = "Home/Index";
-            string[] url = redirectAfterAuthentication.Split('/');
-            var controller = url[0];
-            var action = url.Length > 1 ? url[1] : "Index";
+            //string CoockieName = GetWebConfigParameters("CookiesName");
 
-            var ticket = new FormsAuthenticationTicket(
-                1,
-                this.CurrentUser.Login,
-                SystemTime.Now(),
-                SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
-                shouldRemember,
-                userData,
-                FormsAuthentication.FormsCookiePath
-                );
+            //var redirectAfterAuthentication = "Home/Index";
+            //string[] url = redirectAfterAuthentication.Split('/');
+            //var controller = url[0];
+            //var action = url.Length > 1 ? url[1] : "Index";
 
-            var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
+            //var ticket = new FormsAuthenticationTicket(
+            //    1,
+            //    this.CurrentUser.Login,
+            //    SystemTime.Now(),
+            //    SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
+            //    shouldRemember,
+            //    userData,
+            //    FormsAuthentication.FormsCookiePath
+            //    );
 
-            if (shouldRemember)
-            {
-                cookie.Expires = SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
-            }
-            FormsAuthentication.SetAuthCookie(CurrentUser.Name, false);
-            Response.Cookies.Set(cookie);
+            //var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
+
+            //if (shouldRemember)
+            //{
+            //    cookie.Expires = SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
+            //}
+            //FormsAuthentication.SetAuthCookie(currentUser.Name, false);
+            //Response.Cookies.Set(cookie);
 
             return "Profile/index";
         }

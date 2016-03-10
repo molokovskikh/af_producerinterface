@@ -21,7 +21,10 @@
     <div class="col-xs-12">
         @using (Html.BeginForm("Manage", "Promotion", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            @* некорректно отрабатывает при копировании акции, поэтому тег формариется ручками если Id==0 *@
+                    @* 
+                        некорректно отрабатывает при копировании акции, поэтому тег формариется ручками если Id==0
+                        , onsubmit = "return Validate(this);"
+                    *@
 
         if (Model.Id != 0)
         {@Html.HiddenFor(s => s.Id)}
@@ -32,8 +35,8 @@
             <div class="row">
                 <div class="form-group">
                     <label class="control-label">Наименование акции:</label>
-                    @Html.TextBoxFor(s => s.Name, new { @Class = "form-control", @Placeholder = "Заголовок" })
-                    @Html.ValidationMessageFor(s => s.Name)
+                    @Html.TextBoxFor(Model => Model.Name, new { @Class = "form-control", @Placeholder = "Заголовок" })
+                    @Html.ValidationMessageFor(Model => Model.Name)
                 </div>
             </div>
           
@@ -41,7 +44,7 @@
                 <div class="form-group">
                     <label class="control-label">Аннотация</label>
                     @Html.TextAreaFor(Model => Model.Annotation, new { @Class = "form-control", @Rows = "7", @onkeyup= "KyUp()" })
-                    @Html.ValidationMessageFor(s => s.Annotation)
+                    @Html.ValidationMessageFor(Model => Model.Annotation)
                    <p id="counter">Количество оставшихся для ввода знаков 500</p>
                 </div>
             </div>
@@ -50,6 +53,7 @@
                 <div class="form-group">
                     <label>Список лекарств, участвующих в акции </label>
                     @Html.EditorFor(Model => Model.DrugList)
+                 
                 </div>
             </div>
 
@@ -57,7 +61,20 @@
                 <div class="form-group">
                     <label>Список регионов </label>
                     @Html.EditorFor(Model => Model.RegionList)
-                    <span>По умолчанию выбран пунк, все регионы. Можете удалить и выбрать нужные из списка</span>
+                    <span>По умолчанию выбран пункт, все регионы. Можете удалить и выбрать нужные из списка</span>
+                 
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Список поставщиков</label>
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="AllRegionSelected" onchange="SelectAll()" />Выбрать всех поставщиков в выбранных регионах</label>
+                    </div>
+                   
+                    @Html.EditorFor(Model=>Model.SuppierRegions)
+                
                 </div>
             </div>
 
@@ -65,12 +82,12 @@
             <div class="row">
                 <div class="form-group">
                     <div class="form-group col-xs-6">
-                        @Html.EditorFor(m => m.Begin, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Begin)
+                        @Html.EditorFor(Model => Model.Begin, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(Model => Model.Begin)
                     </div>
                     <div class="form-group col-xs-6">
-                        @Html.EditorFor(m => m.End, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.End)
+                        @Html.EditorFor(Model => Model.End, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(Model => Model.End)
                     </div>
                 </div>
             </div>
@@ -78,11 +95,12 @@
             <div class="row">
                 <div class="form-group">
                     @if (Model.PromotionFileId > 0)
-                {
+                    {
                         <label>Прикрепленный файл</label>
                         <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />
                     }
 
+                    <label>Выберете файл для загрузки в форматах (.jpg, .jpeg, .txt) Максимальный размер файла 500КБ</label>
                     @Html.Partial("Partial/FileUpload")
                 </div>
             </div>

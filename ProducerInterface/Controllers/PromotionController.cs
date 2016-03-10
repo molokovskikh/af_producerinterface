@@ -36,10 +36,14 @@ namespace ProducerInterface.Controllers
 
 			ViewBag.GrugList = h.GetCatalogListPromotion();
 			ViewBag.RegionList = h.GetRegionList();
+            var SupplierList = h.GetSupplierList(new List<decimal>() { 0 });
+            SupplierList.Add(new OptionElement() { Text = "Все поставщики в выбранных регионах", Value = "0" });
+            ViewBag.SupplierList = SupplierList;
 
-			foreach (var list_item in list)
+            foreach (var list_item in list)
 			{
 				list_item.RegionList = h.GetPromotionRegions((ulong)list_item.RegionMask);
+                
 			}
 
 			return View(list);
@@ -58,6 +62,8 @@ namespace ProducerInterface.Controllers
 
 			ViewData["DrugList"] = h.GetCatalogList();
 			ViewData["RegionList"] = h.GetRegionList();
+            ViewData["SuppierRegions"] = h.GetSupplierList(new List<decimal>() { 0 });
+
 			if (id.HasValue)
 			{
 				//ViewBag.CurrentPromotion = DbSession.Query<Promotion>().FirstOrDefault(s => s.Id == id);
@@ -73,19 +79,29 @@ namespace ProducerInterface.Controllers
 					Status = xxx.Status,
 					PromotionFileId = xxx.PromoFileId,
 					PromotionFileName = xxx.PromoFile,
-					RegionList = h.GetPromotionRegions(Convert.ToUInt64(xxx.RegionMask))
+					RegionList = h.GetPromotionRegions(Convert.ToUInt64(xxx.RegionMask)),
+                    SuppierRegions = cntx_.PromotionsToSupplier.Where(z => z.PromotionId == xxx.Id).ToList().Select(v=>v.SupplierId).ToList()
 				}).FirstOrDefault();
 
-				//ViewPromotion = _BD_.promotions.Where(xxx=>xxx.Id == id).ToList().Select(xxx=> new PromotionValidation {Id=xxx.Id, Name= xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, DrugList = xxx.DrugList, Status = xxx.Status}).FirstOrDefault();
-				ViewPromotion.DrugList = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == id).ToList().Select(xxx => xxx.DrugId).ToList();
+                var SuppierRegionsList = h.GetSupplierList(ViewPromotion.RegionList.Select(x => (decimal)x).ToList());
+
+                if (ViewPromotion.SuppierRegions.Contains(0))
+                {
+                    SuppierRegionsList.Add(new OptionElement() { Value = "0", Text = "Все поставщики в выбранных регионах" });
+                }
+                ViewData["SuppierRegions"] = SuppierRegionsList;
+
+                //ViewPromotion = _BD_.promotions.Where(xxx=>xxx.Id == id).ToList().Select(xxx=> new PromotionValidation {Id=xxx.Id, Name= xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, DrugList = xxx.DrugList, Status = xxx.Status}).FirstOrDefault();
+                ViewPromotion.DrugList = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == id).ToList().Select(xxx => xxx.DrugId).ToList();
 			}
 			else
 			{
 
 				ViewPromotion.RegionList = h.GetRegionList().Where(xxx => xxx.Text == "Все регионы").Select(xxx => (long)Convert.ToInt64(xxx.Value)).ToList();
-				// Создание новой акции нужное значение уже присвоено
-				//var CurrentPromotion = new promotions();
-			}
+                ViewData["SuppierRegions"] = h.GetSupplierList(new List<decimal>() { 0 });
+                // Создание новой акции нужное значение уже присвоено
+                //var CurrentPromotion = new promotions();
+            }
 			return View(ViewPromotion);
 		}
 
@@ -101,7 +117,12 @@ namespace ProducerInterface.Controllers
 				h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, CurrentUser.Id);
 				ViewData["DrugList"] = h.GetCatalogList();
 				ViewData["RegionList"] = h.GetRegionList();
-				return View(PromoAction);
+
+                var regList = PromoAction.RegionList?.Select(x => (decimal)x).ToList();
+
+
+                ViewData["SuppierRegions"] = h.GetSupplierList(regList);    
+                return View(PromoAction);
 			}
 
 			var PromotionSave = new ProducerInterfaceCommon.ContextModels.promotions();
@@ -164,10 +185,23 @@ namespace ProducerInterface.Controllers
 			PromotionSave.Begin = PromoAction.Begin;
 			PromotionSave.End = PromoAction.End;
 			PromotionSave.ProducerId = (long)CurrentUser.AccountCompany.ProducerId;
-			//    PromotionSave.UpdateTime = DateTime.Now;
+            //PromotionSave.UpdateTime = DateTime.Now;
 
+            var SullierOldList = cntx_.PromotionsToSupplier.Where(x => x.PromotionId == PromoAction.Id).ToList();
+
+            // адаляем удаленных постовщиков из акции в БД
+            foreach (var SupplierDelete in SullierOldList)
+            {
+                var SupplierExsist = PromoAction.SuppierRegions.Any(x => x == SupplierDelete.SupplierId);
+                if (!SupplierExsist)
+                {
+                    cntx_.Entry(SupplierDelete).State = EntityState.Deleted;
+                    cntx_.SaveChanges(CurrentUser, "удаление поставщиков из акции");
+                }
+            }
+          
 			var ListOldDrugInPromotion = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == PromoAction.Id).ToList();
-
+            
 			if (PromoAction.Id != 0)
 			{
 				foreach (var OneDrugItem in ListOldDrugInPromotion)
@@ -191,7 +225,7 @@ namespace ProducerInterface.Controllers
 				cntx_.Entry(PromotionSave).State = EntityState.Added;
 				cntx_.SaveChanges(CurrentUser);
 			}
-
+            
 			foreach (var GrugItem in PromoAction.DrugList)
 			{
 
@@ -206,9 +240,27 @@ namespace ProducerInterface.Controllers
 			}
 			cntx_.SaveChanges(CurrentUser);
 
-			// отправляем ссобщение пользователю об добавлении или изменении акции
+            // добавляем выбранных поставщиков в БД
 
-			if (PromotionNewOrOld)
+            foreach (var SupplierAdd in PromoAction.SuppierRegions)
+            {
+                bool ExsistSupplier = SullierOldList.Any(x => x.SupplierId == SupplierAdd);
+
+                if (!ExsistSupplier)
+                {
+                    var NewSupplierItemToDB = new PromotionsToSupplier();
+                    NewSupplierItemToDB.SupplierId = SupplierAdd;
+                    NewSupplierItemToDB.promotions  = PromotionSave;
+
+                    cntx_.Entry(NewSupplierItemToDB).State = EntityState.Added;
+                    cntx_.SaveChanges(CurrentUser, "Привязка поставщиков к акции");
+
+                }
+            }
+
+            // отправляем ссобщение пользователю об добавлении или изменении акции
+
+            if (PromotionNewOrOld)
 			{
 				// старая изменена
 				SuccessMessage("Акция изменена");
@@ -247,7 +299,10 @@ namespace ProducerInterface.Controllers
 				AddFile = false;
 			}
 
-			return (Name && Annotation && DataBegin && DataEnd && !ListDrugsInPromotion && AddFile);
+            var SupplierListLong = OldPromotion.PromotionsToSupplier.ToList().Select(x => x.SupplierId).ToList();
+            bool ChangeSupplierList = SupplierListLong.Any(x => NewPromotion.SuppierRegions.Contains(x));
+            
+            return (Name && Annotation && DataBegin && DataEnd && !ListDrugsInPromotion && AddFile && ChangeSupplierList);
 		}
 
 		[HttpGet]
@@ -366,5 +421,20 @@ namespace ProducerInterface.Controllers
 			SuccessMessage("Акция удалена");
 			return RedirectToAction("Index");
 		}
-	}
+            
+        public JsonResult GetSupplierJson(List<decimal> RegionList, List<long> SuppierRegions)
+        {
+            var h = new NamesHelper(cntx_, CurrentUser.Id);
+
+            if (SuppierRegions == null)
+                SuppierRegions = new List<long>();
+
+            var supplierStringList = SuppierRegions.Select(x => x.ToString()).ToList();
+            return Json(new
+            {
+                results = (h.GetSupplierList(RegionList).Select(x => new { value = x.Value, text = x.Text, selected = supplierStringList.Contains(x.Value) }))
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+    }
 }

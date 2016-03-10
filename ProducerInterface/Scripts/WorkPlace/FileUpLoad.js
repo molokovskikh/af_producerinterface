@@ -45,3 +45,36 @@
             var r = e(t.target).closest('[data-dismiss="fileupload"],[data-trigger="fileupload"]'); r.length > 0 && (r.trigger("click.fileupload"), t.preventDefault())
         })
 }(window.jQuery)
+
+$("#file").change(function () {
+
+    var _validFileExtensions = [".jpg", ".jpeg", ".txt"]; 
+
+    var elem = $("#file");
+
+    var sFileName = $("#file").val();
+    if (sFileName.length > 0) {
+        var blnValid = false;
+        for (var j = 0; j < _validFileExtensions.length; j++) {
+            var sCurExtension = _validFileExtensions[j];
+            if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                blnValid = true;
+                break;
+            }
+        }
+
+        if (!blnValid) {
+            alert("Простите, файл " + sFileName + " не соответствует требованиям: " + _validFileExtensions.join(", "));
+            $("#file").val("");
+        }
+
+        if (this.files[0].size > 500000)
+        {
+            alert("Простите, файл " + sFileName + " весит более 500КБ ");
+            $("#file").val("");
+        }
+
+    }
+
+    console.log(this.files);
+});

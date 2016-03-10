@@ -64,6 +64,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<Account> Account { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<AccountFeedBackComment> AccountFeedBackComment { get; set; }
+        public DbSet<ReportDescription> ReportDescription { get; set; }
+        public DbSet<PromotionsToSupplier> PromotionsToSupplier { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {
