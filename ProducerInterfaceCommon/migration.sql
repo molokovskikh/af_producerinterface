@@ -283,6 +283,67 @@ ALTER TABLE `AccountFeedBackComment`
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB;
 
+ALTER TABLE `ReportDescription`
+ ADD PRIMARY KEY (`Id`),
+ ADD INDEX `Id` (`Id`);
+
+ drop PROCEDURE `ProductRatingReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `ProductRatingReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `SupplierId` VARCHAR(255), IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select c.CatalogName, T.ProducerId,
+if(c.IsPharmacie = 1, p.ProducerName, \'Нелекарственный ассортимент\') as ProducerName,
+r.RegionName, 
+T.Summ, CAST(T.PosOrder as SIGNED INTEGER) as PosOrder, 
+T.MinCost, T.AvgCost, T.MaxCost, T.DistinctOrderId, T.DistinctAddressId
+from
+	(select CatalogId, RegionCode, ProducerId,
+	Sum(Cost*Quantity) as Summ,
+	Sum(Quantity) as PosOrder,
+	Min(Cost) as MinCost,
+	Avg(Cost) as AvgCost,
+	Max(Cost) as MaxCost,
+	Count(distinct OrderId) as DistinctOrderId,
+	Count(distinct AddressId) as DistinctAddressId
+	from producerinterface.RatingReportOrderItems
+	where IsLocal = 0
+	and CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and SupplierId not in (', SupplierId, ')
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by CatalogId,ProducerId,RegionCode
+	order by Summ desc) as T
+left join producerinterface.CatalogNames c on c.CatalogId = T.CatalogId
+left join producerinterface.ProducerNames p on p.ProducerId = T.ProducerId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
+
+CREATE TABLE `PromotionsToSupplier` (
+ `PromotionId` INT(10) UNSIGNED NOT NULL,
+ `SupplierId` INT(10) UNSIGNED NOT NULL,
+ INDEX `PromotionId_SupplierId` (`PromotionId`, `SupplierId`),
+ CONSTRAINT `FK1_This_To_PromotionId` FOREIGN KEY (`PromotionId`) REFERENCES `promotions` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+
+ALTER TABLE `PromotionsToSupplier`
+ ADD PRIMARY KEY (`PromotionId`, `SupplierId`);
+
 
 
 

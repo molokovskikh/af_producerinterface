@@ -31,9 +31,14 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("Bool")]
 		public bool AllCatalog { get; set; }
 
+		[Display(Name = "По всему ассортименту")]
+		[UIHint("Bool")]
+		public bool AllAssortiment { get; set; }
+
 		public ProductRatingReport()
 		{
 			AllCatalog = true;
+			AllAssortiment = false;
 		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
@@ -42,8 +47,11 @@ namespace ProducerInterfaceCommon.Models
 			result.Add(h.GetDateHeader(DateFrom, DateTo));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
 
+			// если выбрано По всему ассортименту
+			if (AllAssortiment)
+				result.Add("В отчет включены все товары всех производителей");
 			// если выбрано По всем нашим товарам
-			if (AllCatalog)
+			else if (AllCatalog)
 				result.Add("В отчет включены все товары производителя");
 			else
 				result.Add(h.GetProductHeader(CatalogIdEqual));
@@ -61,7 +69,10 @@ namespace ProducerInterfaceCommon.Models
 		public override Dictionary<string, object> GetSpParams()
 		{
 			var spparams = new Dictionary<string, object>();
-			if (AllCatalog) {
+			if (AllAssortiment) {
+				spparams.Add("@CatalogId", "select CatalogId from Catalogs.assortment");
+			}
+			else if(AllCatalog) {
 				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
 			}
 			else {
@@ -92,7 +103,7 @@ namespace ProducerInterfaceCommon.Models
 		public override List<ErrorMessage> Validate()
 		{
 			var errors = base.Validate();
-			if (!AllCatalog && (CatalogIdEqual == null || CatalogIdEqual.Count == 0))
+			if (!AllAssortiment && !AllCatalog && (CatalogIdEqual == null || CatalogIdEqual.Count == 0))
         errors.Add(new ErrorMessage("CatalogIdEqual", "Не выбраны товары"));
       return errors;
 		}

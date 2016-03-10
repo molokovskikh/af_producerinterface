@@ -4,20 +4,37 @@
 	$('#CatalogIdEqual').chosen({ width: '95%' });
 	$('#SupplierIdNonEqual').chosen({ width: '95%', placeholder_text_multiple: 'Выберите поставщиков, если вы хотите исключить их из отчета' });
 
+	var aa = $('#AllAssortiment');
 	var ac = $('#AllCatalog');
-    var hc = $('#HideCatalog');
-	if (ac.prop('checked'))
-	    hc.hide();
+	var hc = $('#HideCatalog');
 
-	ac.click(function () {
-	    if (ac.prop('checked'))
+	aa.click(function () {
+	    if (aa.prop('checked')) {
+	        ac.prop('checked', false);
+	        hc.hide();
+	    } else {
+	        ac.prop('checked', true);
+	        hc.hide();
+	    }
+	});
+
+    if (ac.prop('checked')) {
+        //ac.prop('checked', false);
+        hc.hide();
+    }
+
+    ac.click(function () {
+        if (ac.prop('checked')) {
             hc.hide();
-        else
+            //ac.prop('checked', false);
+        } else
             hc.show();
     });
 
 	// при изменении регионов загружаем список поставщиков из этих регионов
 	$('#RegionCodeEqual').on('change', function () {
+        // для установки выбранных регионов по алфавиту
+	    $(this).trigger("chosen:updated");
 		var sup = $('#SupplierIdNonEqual');
 		var prm = $(this).serialize() + "&" + sup.serialize();
 		var stringPathName = document.location.pathname;

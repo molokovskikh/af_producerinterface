@@ -69,7 +69,7 @@ namespace ProducerInterfaceCommon.Heap
 			}
 
 			var instance = (ReportRow)Activator.CreateInstance(_type);
-			querySort = instance.Treatment<T>(querySort);
+			querySort = instance.Treatment<T>(querySort, jparam).ToList();
 
 			var shredder = new ObjectShredder<T>();
 			var dataTable = shredder.Shred(querySort);
