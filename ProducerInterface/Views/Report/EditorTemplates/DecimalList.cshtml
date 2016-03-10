@@ -19,6 +19,7 @@
         </div>
         <div class="@("feditor col-md-8" + errorClass)">
             @Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new { style = "display: none;" })
+            <span class="chosen-comment">Для удаления элемента из списка выбранных кликните по знаку "X" элемента</span>
             @Html.ValidationMessageFor(m => m)
         </div>
     </div>

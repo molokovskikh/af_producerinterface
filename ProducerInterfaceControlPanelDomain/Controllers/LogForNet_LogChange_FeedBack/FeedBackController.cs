@@ -70,7 +70,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 cntx_.Entry(FeedBackItem).State = System.Data.Entity.EntityState.Modified;
                 cntx_.SaveChanges(CurrentUser, "Изменение статуса обращения пользователя");
             }
-            
+
             return Json("1", JsonRequestBehavior.AllowGet);
         }
 

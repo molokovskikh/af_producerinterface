@@ -266,6 +266,24 @@ CREATE TABLE `mailformToMediaFiles` (
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB;
 
+ALTER TABLE `AccountFeedBackComment`
+ ADD COLUMN `AdminId` INT(11) UNSIGNED NOT NULL,
+ ADD CONSTRAINT `FK2_Comment_AccountAdminId` FOREIGN KEY (`AdminId`) REFERENCES `Account` (`Id`);
+
+ ALTER TABLE `AccountFeedBackComment`
+ ADD COLUMN `StatusOld` TINYINT(4) NOT NULL,
+ ADD COLUMN `StatusNew` TINYINT(4) NOT NULL;
+
+ CREATE TABLE `ReportDescription` (
+ `Id` INT NOT NULL,
+ `Name` VARCHAR(250) NOT NULL,
+ `ClassName` VARCHAR(250) NOT NULL,
+ `Description` VARCHAR(250) NOT NULL
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+
+
 
 
 
