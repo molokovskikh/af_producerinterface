@@ -14,7 +14,7 @@
 }
 <div class="row margin5">  
     <div class="@("feditor col-md-8" + errorClass)">
-        @Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new {style = "display: none;"})
+        @Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new {style = "display: none;", required= "required" })
         @Html.ValidationMessageFor(m => m)
     </div>
 </div>

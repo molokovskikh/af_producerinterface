@@ -13,7 +13,7 @@ using System.Collections.Specialized;
 using System.Data.Entity;
 using System.IO;
 using ProducerInterface.Controllers;
-
+using ProducerInterfaceCommon.ViewModel.Interface.Promotion;
 namespace ProducerInterface.Controllers
 {
 	public class PromotionController : MasterBaseController
@@ -48,6 +48,77 @@ namespace ProducerInterface.Controllers
 
 			return View(list);
 		}
+
+        [HttpGet]
+        public ActionResult Edit(long Id = 0)
+        {
+            ViewBag.PromotionId = Id;
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult EditGetPromotion(long Id = 0)
+        {
+            PromotionEdit ViewModel = new PromotionEdit();
+
+            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
+
+            ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x=> new TextValue {  Text = x.Text, Value = (long) Convert.ToInt64(x.Value) }).ToList();
+            ViewModel.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
+
+            if (Id == 0)
+            {
+                // возвращаем новую промо акцию
+                ViewModel.Id = 0;
+                ViewModel.Title = "Новая промоакция";
+                ViewModel.Name = "";
+                ViewModel.Annotation = "";
+                ViewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
+                ViewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
+                ViewModel.SuppierRegionsList = h.GetSupplierList(new List<decimal>() { 0 }).Select(x => new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
+                ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(0));
+            }
+            else
+            {
+                var ChangePromo = cntx_.promotions.Find(Id);
+
+                ViewModel.SuppierRegions = ChangePromo.PromotionsToSupplier.ToList().Select(x =>(decimal)x.SupplierId).ToList();
+                ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.SuppierRegions).Select(x => new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
+                ViewModel.Name = ChangePromo.Name;
+                ViewModel.Title ="Редактирование промоакции: " + ChangePromo.Name;
+                ViewModel.PromotionFileName = ChangePromo.MediaFiles?.ImageName;
+
+                ViewModel.Begin = ChangePromo.Begin.Value.ToString("dd.MM.yyyy");
+                ViewModel.End = ChangePromo.End.Value.ToString("dd.MM.yyyy");
+                ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(ChangePromo.RegionMask));
+
+                ViewModel.PromotionFileUrl = Url.Action("GetFile", new { id = ChangePromo.MediaFiles?.Id });
+                ViewModel.Annotation = ChangePromo.Annotation;  
+            }
+
+            ViewModel.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value=0 });
+
+            return Json(ViewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetUpdateSupplierList(List<decimal> Id)
+        {
+
+            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
+            var SupplierList = h.GetSupplierList(Id).ToList()
+                .Select(x => new TextValue { Text = x.Text, Value = Convert.ToInt64(x.Value) })
+                .ToList();
+           
+            SupplierList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = 0 });
+            return Json(SupplierList, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(PromotionEdit PE)
+        {
+            return RedirectToAction("Index", new { Id = PE.Id });
+        }
 
 		[HttpGet]
 		public ActionResult Manage(long? id)
@@ -91,13 +162,16 @@ namespace ProducerInterface.Controllers
                 }
                 ViewData["SuppierRegions"] = SuppierRegionsList;
 
-                //ViewPromotion = _BD_.promotions.Where(xxx=>xxx.Id == id).ToList().Select(xxx=> new PromotionValidation {Id=xxx.Id, Name= xxx.Name, Annotation = xxx.Annotation, Begin = xxx.Begin, End = xxx.End, DrugList = xxx.DrugList, Status = xxx.Status}).FirstOrDefault();
                 ViewPromotion.DrugList = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == id).ToList().Select(xxx => xxx.DrugId).ToList();
 			}
 			else
 			{
 
 				ViewPromotion.RegionList = h.GetRegionList().Where(xxx => xxx.Text == "Все регионы").Select(xxx => (long)Convert.ToInt64(xxx.Value)).ToList();
+
+                ViewPromotion.Begin = DateTime.Now;
+                ViewPromotion.End = DateTime.Now;
+
                 ViewData["SuppierRegions"] = h.GetSupplierList(new List<decimal>() { 0 });
                 // Создание новой акции нужное значение уже присвоено
                 //var CurrentPromotion = new promotions();
@@ -120,8 +194,17 @@ namespace ProducerInterface.Controllers
 
                 var regList = PromoAction.RegionList?.Select(x => (decimal)x).ToList();
 
+                try
+                {
+                    ViewBag.PromoFile = PromoAction.File?.FileName;
+                    var PromoFilePreview = PromoAction.File?.FileName.ToString().Split(new Char[] { '\\' }).ToList();
+                    PromoFilePreview.Reverse();
+                    ViewBag.PromoFilePreview = PromoFilePreview.First();
 
-                ViewData["SuppierRegions"] = h.GetSupplierList(regList);    
+                   
+                }
+                catch { }
+                ViewData["SuppierRegions"] = h.GetSupplierList(regList);
                 return View(PromoAction);
 			}
 
@@ -369,8 +452,8 @@ namespace ProducerInterface.Controllers
 			{
 				Name = ModelPromoAction.Name,
 				Annotation = ModelPromoAction.Annotation,
-				Begin = ModelPromoAction.Begin,
-				End = ModelPromoAction.End,
+				Begin = DateTime.Now,
+				End = DateTime.Now,
 				Status = ModelPromoAction.Status,
 				RegionList = h.GetPromotionRegions(Convert.ToUInt64(ModelPromoAction.RegionMask))
 			};

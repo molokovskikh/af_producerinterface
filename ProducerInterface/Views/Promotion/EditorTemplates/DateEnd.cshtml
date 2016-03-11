@@ -1,0 +1,9 @@
+﻿@model Nullable<DateTime>
+<div class="form-group row">       
+        @Html.LabelFor(m => m, new { @id="label-time" })      
+    <div class="col-sm-9">
+        <input name="End" id="End" value="@Model.Value.ToString("dd.MM.yyyy")" readonly = "readonly" class= "form-control" style="max-width:175px;" data-lang="ru"/>
+    </div>
+</div>
+
+ 

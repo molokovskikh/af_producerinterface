@@ -2,9 +2,9 @@
         <span class="form-control btn btn-default btn-file" style="max-width:25em;">
             <span class="fileupload-new">Разместить файл-листовку</span>
             <span class="fileupload-exists">Файл добавлен / Выбрать другой</span>   
-            <input type="file" id="file" name="file" accept="image/jpeg,image/png,text/plain" hidden="hidden"/>
+            <input type="file" id="file" name="file" accept="image/jpeg,image/png,text/plain" hidden="hidden" value="@ViewBag.PromoFile"/>
         </span>
-        <span class="fileupload-preview"></span>
+        <span class="fileupload-preview">@ViewBag.PromoFilePreview</span>
         <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
     </div>
 

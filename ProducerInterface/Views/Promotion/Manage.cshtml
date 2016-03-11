@@ -52,29 +52,28 @@
             <div class="row">
                 <div class="form-group">
                     <label>Список лекарств, участвующих в акции </label>
-                    @Html.EditorFor(Model => Model.DrugList)
-                 
+                    @Html.EditorFor(Model => Model.DrugList)       
+                    @Html.ValidationMessageFor(Model => Model.DrugList)          
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group">
                     <label>Список регионов </label>
-                    @Html.EditorFor(Model => Model.RegionList)
+                    @Html.EditorFor(Model => Model.RegionList)                
                     <span>По умолчанию выбран пункт, все регионы. Можете удалить и выбрать нужные из списка</span>
-                 
+                    @Html.ValidationMessageFor(Model => Model.RegionList)
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group">
-                    <label>Список поставщиков</label>
+                    <label>Список поставщиков</label>     
+                    @Html.EditorFor(Model=>Model.SuppierRegions)     
+                    @Html.ValidationMessageFor(Model => Model.SuppierRegions)            
                     <div class="checkbox">
                         <label><input type="checkbox" id="AllRegionSelected" onchange="SelectAll()" />Выбрать всех поставщиков в выбранных регионах</label>
                     </div>
-                   
-                    @Html.EditorFor(Model=>Model.SuppierRegions)
-                
                 </div>
             </div>
 
@@ -123,6 +122,7 @@
 
         @section JavaScript
         {         
+
             <script src="~/Scripts/WorkPlace/CountAlfavit.js"></script>
       
             <script src="~/Content/Chosen/js/InitPromotion.js"></script> 
@@ -131,6 +131,8 @@
             <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
             <script src="~/Scripts/WorkPlace/DatePicker.js"></script>
      
+            <script src="~/Scripts/jquery.validate.min.js"></script>
+            <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
             <script src="~/Scripts/WorkPlace/FileUpLoad.js"></script>                        
            
 
