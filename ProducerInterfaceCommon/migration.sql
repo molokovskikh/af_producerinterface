@@ -344,6 +344,71 @@ ENGINE=InnoDB;
 ALTER TABLE `PromotionsToSupplier`
  ADD PRIMARY KEY (`PromotionId`, `SupplierId`);
 
+drop procedure SupplierRatingReport;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `SupplierRatingReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select s.SupplierName, T.Summ
+from
+	(select SupplierId, 
+	Sum(Cost*Quantity) as Summ
+	from producerinterface.RatingReportOrderItems
+	where IsLocal = 0
+	and CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and ProducerId = ', ProducerId, '
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by SupplierId
+	order by Summ desc) as T
+left join producerinterface.SupplierNames s on s.SupplierId = T.SupplierId');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
+
+drop PROCEDURE `PharmacyRatingReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `PharmacyRatingReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select ph.PharmacyName, T.Summ
+from
+	(select PharmacyId,
+	Sum(Cost*Quantity) as Summ
+	from producerinterface.RatingReportOrderItems
+	where IsLocal = 0
+	and CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and ProducerId = ', ProducerId, '
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by PharmacyId
+	order by Summ desc) as T
+left join producerinterface.PharmacyNames ph on ph.PharmacyId = T.PharmacyId');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
 
 
 

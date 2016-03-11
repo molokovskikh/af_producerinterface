@@ -4,6 +4,6 @@ namespace ProducerInterfaceCommon.Models
 {
 	public abstract class ReportRow
 	{
-		public abstract IEnumerable<T> Treatment<T>(IEnumerable<T> list, Report param) where T : ReportRow;
+		public abstract List<T> Treatment<T>(List<T> list, Report param) where T : ReportRow;
 	}
 }

@@ -46,7 +46,7 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Кол-во адресов доставки, заказавших препарат")]
 		public long? DistinctAddressId { get; set; }
 
-		public override IEnumerable<T> Treatment<T>(IEnumerable<T> list, Report param)
+		public override List<T> Treatment<T>(List<T> list, Report param)
 		{
 			var clist = list.Cast<RatingReportRow>();
 

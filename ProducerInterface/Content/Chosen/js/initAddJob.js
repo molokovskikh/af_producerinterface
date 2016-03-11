@@ -19,14 +19,13 @@
 	});
 
     if (ac.prop('checked')) {
-        //ac.prop('checked', false);
         hc.hide();
     }
 
     ac.click(function () {
         if (ac.prop('checked')) {
             hc.hide();
-            //ac.prop('checked', false);
+            aa.prop('checked', false);
         } else
             hc.show();
     });
@@ -35,7 +34,9 @@
 	$('#RegionCodeEqual').on('change', function () {
         // для установки выбранных регионов по алфавиту
 	    $(this).trigger("chosen:updated");
-		var sup = $('#SupplierIdNonEqual');
+	    var sup = $('#SupplierIdNonEqual');
+	    if (!sup.length)
+	        return;
 		var prm = $(this).serialize() + "&" + sup.serialize();
 		var stringPathName = document.location.pathname;
 		stringPathName = (stringPathName.substring(0, stringPathName.length - 4));

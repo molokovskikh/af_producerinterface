@@ -23,7 +23,7 @@ namespace ProducerInterfaceCommon.Models
 		//[Display(Name = "Поставщик")]
 		//public string SupplierName { get; set; }
 
-		public override IEnumerable<T> Treatment<T>(IEnumerable<T> list, Report param)
+		public override List<T> Treatment<T>(List<T> list, Report param)
 		{
 			var clist = list.Cast<ProductRatingReportRow>();
 			var cparam = (ProductRatingReport)param;
@@ -49,7 +49,7 @@ namespace ProducerInterfaceCommon.Models
 				item.PosOrderPercent = Convert.ToDecimal(item.PosOrder) * 100 / or;
 			}
 
-			return clist.Cast<T>();
+			return clist.Cast<T>().ToList();
 		}
 	}
 }

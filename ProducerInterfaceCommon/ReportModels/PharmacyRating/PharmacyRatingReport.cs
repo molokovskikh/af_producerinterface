@@ -23,9 +23,14 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("LongList")]
 		public List<long> CatalogIdEqual { get; set; }
 
-		[Display(Name = "По всем товарам производителя")]
+		[Display(Name = "По всем нашим товарам")]
 		[UIHint("Bool")]
 		public bool AllCatalog { get; set; }
+
+		public PharmacyRatingReport()
+		{
+			AllCatalog = true;
+		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
 		{
@@ -33,7 +38,7 @@ namespace ProducerInterfaceCommon.Models
 			result.Add(h.GetDateHeader(DateFrom, DateTo));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
 
-			// если выбрано По всем товарам производителя
+			// если выбрано По всем нашим товарам
 			if (AllCatalog)
 				result.Add("В отчет включены все товары производителя");
 			else
@@ -55,6 +60,7 @@ namespace ProducerInterfaceCommon.Models
 			else {
 				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
 			}
+			spparams.Add("@ProducerId", ProducerId);
 			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
 			spparams.Add("@DateFrom", DateFrom);
 			spparams.Add("@DateTo", DateTo);
@@ -64,10 +70,8 @@ namespace ProducerInterfaceCommon.Models
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
 		{
 			var viewDataValues = new Dictionary<string, object>();
-
 			viewDataValues.Add("RegionCodeEqual", h.GetRegionList());
 			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
-
 			return viewDataValues;
 		}
 
@@ -83,6 +87,5 @@ namespace ProducerInterfaceCommon.Models
 		{
 			return new Processor<PharmacyRatingReportRow>();
 		}
-
 	}
 }
