@@ -240,6 +240,12 @@
     <Content Include="Content\Image\aflogo.png" />
     <Content Include="Content\Image\logo_temp.jpg" />
     <Content Include="Content\MyStyle.css" />
+    <Content Include="Content\SemanticUI\icon.min.css" />
+    <Content Include="Content\SemanticUI\item.min.css" />
+    <Content Include="Content\SemanticUI\label.min.css" />
+    <Content Include="Content\themes\default\assets\fonts\icons.svg" />
+    <Content Include="Content\themes\default\assets\images\flags.png" />
+    <Content Include="Content\SemanticUI\transition.min.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -281,6 +287,11 @@
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\themes\default\assets\fonts\icons.eot" />
+    <Content Include="Content\themes\default\assets\fonts\icons.otf" />
+    <Content Include="Content\themes\default\assets\fonts\icons.ttf" />
+    <Content Include="Content\themes\default\assets\fonts\icons.woff" />
+    <Content Include="Content\themes\default\assets\fonts\icons.woff2" />
     <None Include="Properties\PublishProfiles\TEST.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -306,10 +317,16 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-3.4.0.debug.js" />
+    <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Content\SemanticUI\dropdown.min.css" />
+    <Content Include="Scripts\SemanticUI\dropdown.min.js" />
+    <Content Include="Scripts\SemanticUI\reset.min.css" />
+    <Content Include="Scripts\SemanticUI\transition.min.js" />
     <Content Include="Scripts\WorkPlace\Analit.js" />
     <Content Include="Scripts\WorkPlace\Paginator.js" />
     <Content Include="Scripts\WorkPlace\CountAlfavit.js" />
@@ -317,6 +334,7 @@
     <Content Include="Scripts\WorkPlace\FileUpLoad.js" />
     <Content Include="Scripts\WorkPlace\GradientText.js" />
     <Content Include="Scripts\WorkPlace\ModalView.js" />
+    <Content Include="Scripts\WorkPlace\Promotion_Edit.js" />
     <Content Include="Scripts\WorkPlace\ZAnalit.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Report\AddJob.cshtml" />
@@ -371,7 +389,7 @@
     </Content>
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\Manage.cshtml" />
-    <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Promotion\EditorTemplates\DateBegin.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\LongList.cshtml" />
     <Content Include="Views\Permission\Index.cshtml" />
     <Content Include="Views\Permission\Change.cshtml" />
@@ -433,6 +451,8 @@
     <Content Include="Views\FeedBack\Index.cshtml" />
     <Content Include="Views\Account\Auth.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\SuppierRegionsList.cshtml" />
+    <Content Include="Views\Promotion\EditorTemplates\DateEnd.cshtml" />
+    <Content Include="Views\Promotion\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

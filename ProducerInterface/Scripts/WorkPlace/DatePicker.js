@@ -9,6 +9,9 @@
         }
     }).on('changeDate', function () {
         dateTo.setStartDate(dateFrom.getDate());
+        if (dateFrom.getDate() > dateTo.getDate()){
+            dateTo.setDate(dateFrom.getDate());
+        }
     }).data('datepicker');
 
     var dateTo = $('#End').datepicker({

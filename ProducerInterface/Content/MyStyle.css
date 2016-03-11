@@ -278,4 +278,7 @@ span.chosen-comment {
 }
 .th_275, .td_275 {
     min-width:275px;
-} 
+}
+.menu .item {
+font-size:5.8em;
+}
