@@ -11,12 +11,12 @@ namespace ProducerInterfaceCommon.Models
 
 		[Format(Value = "0.00")]
 		[Round(Precision = 2)]
-		[Display(Name = "Доля в %")]
+		[Display(Name = "Доля в % (рубли)")]
 		public decimal? SummPercent { get; set; }
 
 		[Format(Value = "0.00")]
 		[Round(Precision = 2)]
-		[Display(Name = "Сумма")]
+		[Display(Name = "Сумма, руб.")]
 		public decimal? Summ { get; set; }
 
 		public override List<T> Treatment<T>(List<T> list, Report param)

@@ -26,15 +26,20 @@
                             @*@Html.ActionLink("К списку отчетов", "JobList", new { r = Guid.NewGuid(), @class = "btn btn-primary" })*@
                         </div>
                         <div class="feditor col-md-8">
-                            <input id="btn" type="submit" value="Сохранить" class="btn btn-primary"/>
+                            <input id="btn" type="submit" value="Сохранить" class="btn btn-primary" />
                         </div>
                     </div>
                 </fieldset>
             }
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.ActionLink("Отменить", "JobList", new { r = Guid.NewGuid() }, new { @class = "btn btn-primary" })
+        </div>
+    </div>
 </div>
-    @section JavaScript {   
-        <script src="~/Content/Chosen/js/ajax-chosen.g.js"></script>
-        <script src="~/Content/Chosen/js/initAddJob.js"></script>
-    }
+        @section JavaScript {
+            <script src="~/Content/Chosen/js/ajax-chosen.g.js"></script>
+            <script src="~/Content/Chosen/js/initAddJob.js"></script>
+        }

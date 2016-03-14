@@ -2,6 +2,7 @@
 using ProducerInterfaceCommon.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.Heap
@@ -12,11 +13,13 @@ namespace ProducerInterfaceCommon.Heap
 		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
 
 		private long _userId;
+		private HttpContextBase _httpContext;
 
-		public NamesHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId)
+		public NamesHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, HttpContextBase httpContext = null)
 		{
 			_cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
 			_userId = userId;
+			_httpContext = httpContext;
 		}
 
 		// TODO почта откуда-то берётся
@@ -121,42 +124,29 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
-            bool GetAllTwo = false;
+			// если регионы не заданы - пустой лист
+			if (regionList == null)
+				return new List<OptionElement>();
 
-            if (regionList != null && regionList.Contains(0))
-            {
-                GetAllTwo = true;
-            }
+			var suppliers = _cntx.supplierregions.ToList();
+			List<long> supplierIds = null;
 
-            if (regionList == null || GetAllTwo)
-            {
-                if (GetAllTwo)
-                {
-                    var suppliersInRegions_ = _cntx.supplierregions.Select(x => x.SupplierId).Distinct().ToList();
+			// если список регионов содержит 0 (все регионы) - возвращаем всех поставщиков
+			if (regionList.Contains(0))
+			{
+				supplierIds = suppliers.Select(x => x.SupplierId).ToList();
+			}
+			else {
+				var regionMask = regionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
+				supplierIds = suppliers.Where(x => ((ulong)x.RegionMask & regionMask) > 0).Select(x => x.SupplierId).ToList();
+			}
 
-                    var result = _cntx.suppliernames.Where(x => suppliersInRegions_.Contains(x.SupplierId))
-                        .OrderBy(x => x.SupplierName)
-                        .Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
-                        .ToList();
-                    return result;
-                }
-
-                return new List<OptionElement>();
-            }
-            
-            var suppliersInRegions = _cntx.supplierregions.Where(x => regionList.Contains(x.RegionCode.Value)).Select(x => x.SupplierId).Distinct().ToList();
 			var results = _cntx.suppliernames
-				.Where(x => suppliersInRegions.Contains(x.SupplierId))
+				.Where(x => supplierIds.Contains(x.SupplierId))
 				.OrderBy(x => x.SupplierName)
 				.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
 				.ToList();
 
-			//var regionMask = regionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
-			//var suppliers = _cntx.suppliernames.ToList();
-			//var results = suppliers
-			//	.Where(x => ((ulong)x.HomeRegion.Value & regionMask) > 0)
-			//	.OrderBy(x => x.SupplierName)
-			//	.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName }).ToList();
 			return results;
 		}
 

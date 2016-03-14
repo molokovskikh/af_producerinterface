@@ -15,6 +15,6 @@ namespace ProducerInterfaceCommon.ContextModels
     public partial class supplierregions
     {
         public long SupplierId { get; set; }
-        public Nullable<decimal> RegionCode { get; set; }
+        public decimal RegionMask { get; set; }
     }
 }

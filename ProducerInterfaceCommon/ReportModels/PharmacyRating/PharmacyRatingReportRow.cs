@@ -12,12 +12,13 @@ namespace ProducerInterfaceCommon.Models
 
 		[Format(Value = "0.00")]
 		[Round(Precision = 2)]
-		[Display(Name = "Доля в %")]
+		[Display(Name = "Доля в % (рубли)")]
 		public decimal? SummPercent { get; set; }
 
+		[Hidden]
 		[Format(Value = "0.00")]
 		[Round(Precision = 2)]
-		[Display(Name = "Сумма")]
+		[Display(Name = "Сумма, руб.")]
 		public decimal? Summ { get; set; }
 
 		public override List<T> Treatment<T>(List<T> list, Report param)
@@ -33,8 +34,8 @@ namespace ProducerInterfaceCommon.Models
 				item.SummPercent = item.Summ.GetValueOrDefault() * 100 / sm;
 			}
 
-			if (clist.Count > 0)
-				clist.Add(new PharmacyRatingReportRow() { PharmacyName = "Итоговая сумма", Summ = sm });
+			//if (clist.Count > 0)
+			//	clist.Add(new PharmacyRatingReportRow() { PharmacyName = "Итоговая сумма", Summ = sm });
 
 			return clist.Cast<T>().ToList();
 		}

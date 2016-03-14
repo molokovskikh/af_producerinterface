@@ -411,6 +411,13 @@ left join producerinterface.PharmacyNames ph on ph.PharmacyId = T.PharmacyId');
 END$$
 
 
+# не внесено на боевой
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view supplierregions as 	
+select distinct s.Id as SupplierId, s.RegionMask
+from Customers.Suppliers s
+inner join usersettings.PricesData pd on pd.FirmCode = s.Id
+where pd.Enabled = 1 and pd.IsLocal = 0 and pd.AgencyEnabled = 1 and s.Disabled = 0;
+
 
 
 

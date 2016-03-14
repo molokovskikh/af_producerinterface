@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ProducerInterfaceCommon.Heap;
-using Quartz;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterfaceCommon.Models
@@ -12,6 +8,11 @@ namespace ProducerInterfaceCommon.Models
 	[Serializable]
 	public class ProductPriceDynamicsReport : IntervalReport
 	{
+		public override string Name
+		{
+			get { return "Динамика цен по товару за период"; }
+		}
+
 		[Display(Name = "Регион")]
 		[Required(ErrorMessage = "Не указаны регионы")]
 		[UIHint("DecimalList")]
@@ -22,17 +23,28 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("LongList")]
 		public List<long> CatalogIdEqual { get; set; }
 
-		public override string Name
+		[Display(Name = "По всем нашим товарам")]
+		[UIHint("Bool")]
+		public bool AllCatalog { get; set; }
+
+		public ProductPriceDynamicsReport()
 		{
-			get { return "Динамика цен по товару за период"; }
+			AllCatalog = true;
 		}
+
 
 		public override List<string> GetHeaders(HeaderHelper h)
 		{
 			var result = new List<string>();
 			result.Add(h.GetDateHeader(DateFrom, DateTo));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
-			result.Add(h.GetProductHeader(CatalogIdEqual));
+
+			// если выбрано По всем нашим товарам
+			if (AllCatalog)
+				result.Add("В отчет включены все товары производителя");
+			else
+				result.Add(h.GetProductHeader(CatalogIdEqual));
+
 			return result;
 		}
 
@@ -44,9 +56,17 @@ namespace ProducerInterfaceCommon.Models
 		public override Dictionary<string, object> GetSpParams()
 		{
 			var spparams = new Dictionary<string, object>();
-			spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
-			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
 
+			if (AllCatalog)
+			{
+				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
+			}
+			else
+			{
+				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
+			}
+			spparams.Add("@ProducerId", ProducerId);
+			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
 			spparams.Add("@DateFrom", DateFrom);
 			spparams.Add("@DateTo", DateTo);
 			return spparams;
@@ -60,6 +80,14 @@ namespace ProducerInterfaceCommon.Models
 			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
 
 			return viewDataValues;
+		}
+
+		public override List<ErrorMessage> Validate()
+		{
+			var errors = base.Validate();
+			if (!AllCatalog && (CatalogIdEqual == null || CatalogIdEqual.Count == 0))
+				errors.Add(new ErrorMessage("CatalogIdEqual", "Не выбраны товары"));
+			return errors;
 		}
 
 		public override IProcessor GetProcessor()
