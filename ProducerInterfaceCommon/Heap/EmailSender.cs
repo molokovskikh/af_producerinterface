@@ -61,8 +61,9 @@ namespace ProducerInterfaceCommon.Heap
 
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.AutoPostReport);
-			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.AutoPostReport);
 			attachments.Add(path);
       EmailSender.SendEmail(mailTo, subject, body, attachments);
@@ -81,8 +82,9 @@ namespace ProducerInterfaceCommon.Heap
 
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ManualPostReport);
-			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.ManualPostReport);
 			attachments.Add(path);
 			EmailSender.SendEmail(mailTo, subject, body, attachments);
@@ -98,8 +100,9 @@ namespace ProducerInterfaceCommon.Heap
 			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.EmptyReport);
-			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { ReportName = reportName, SiteName = siteName });
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.EmptyReport);
 			EmailSender.SendEmail(user.Login, subject, body, attachments);
 
@@ -114,8 +117,9 @@ namespace ProducerInterfaceCommon.Heap
 			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ReportError);
-			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { ReportName = reportName, SiteName = siteName });
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.ReportError);
 			EmailSender.SendEmail(user.Login, subject, body, attachments);
 
@@ -149,7 +153,8 @@ namespace ProducerInterfaceCommon.Heap
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RegistrationSuccess);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.RegistrationSuccess);
 			EmailSender.SendEmail(user.Login, subject, body, attachments, true);
 
@@ -166,7 +171,8 @@ namespace ProducerInterfaceCommon.Heap
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)type);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, type);
 			EmailSender.SendEmail(user.Login, subject, body, attachments, true);
 
@@ -206,8 +212,9 @@ namespace ProducerInterfaceCommon.Heap
 			var Promotion = cntx.promotions.Where(x => x.Id == PromotionId).First();
 			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
-			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { PromotionName = Promotion.Name, SiteName = siteName });
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = User_.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = User_.Name, UserLogin = User_.Login, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, mailType);
 			EmailSender.SendEmail(User_.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
@@ -228,8 +235,9 @@ namespace ProducerInterfaceCommon.Heap
 			var Promotion = cntx.promotions.Where(x => x.Id == PromotionId).First();
 			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
-			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = SendEmailOnCreateUserPromotion.Name, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { PromotionName = Promotion.Name, SiteName = siteName });
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = User_.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, UserName = User_.Name, UserLogin = User_.Login, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, mailType);
 			EmailSender.SendEmail(SendEmailOnCreateUserPromotion.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
@@ -248,10 +256,11 @@ namespace ProducerInterfaceCommon.Heap
 			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
 			var SendEmailOnCreateUserPromotion = cntx.Account.Where(xxx => xxx.CompanyId == cntx.promotions.Where(yyy => yyy.Id == PromotionId).First().ProducerUserId).Select(zzz => zzz.Login).First();
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
-			var subject = TokenStringFormat.Format(mailForm.Subject, new { SiteName = siteName });
+			var subject = TokenStringFormat.Format(mailForm.Subject, new { PromotionName = Promotion.Name, SiteName = siteName });
 			string StatusPromotion = "Деактивирована";
 			if (Promotion.Status) { StatusPromotion = "Подтверждена"; }
-			var body = $"{mailForm.Header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
+			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = User_.Name });
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { PromotionName = Promotion.Name, Status = StatusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + Promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, mailType);
 			EmailSender.SendEmail(SendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
