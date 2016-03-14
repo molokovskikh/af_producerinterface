@@ -103,6 +103,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation
             var NewAppointment = new AccountAppointment();
             NewAppointment.Name = NewPostName;
             NewAppointment.IdAccount = AccountId;
+            NewAppointment.GlobalEnabled = 0;
 
             cntx_.AccountAppointment.Add(NewAppointment);
             cntx_.SaveChanges();
@@ -138,42 +139,35 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.ProducersInformation
         }
 
         [HttpGet]
-        public ActionResult AccountNotPost()
+        public ActionResult AccountCustomPost()
         {
+
+            var AccountListModel = cntx_.Account.Where(x => x.TypeUser == (sbyte)TypeUsers.ProducerUser).ToList().Where(x => x.AppointmentId == null || x.AccountAppointment.GlobalEnabled == 0 ).ToList();
+            ViewBag.AppointmentList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1).ToList();
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
             ViewBag.ProducerList = h.RegisterListProducer();
 
-            ViewBag.AccountAppointmentGlobalList = cntx_.AccountAppointment.Where(x => x.IdAccount == null).ToList();
-
-            var AccountListModel = cntx_.Account.Where(x => x.AppointmentId == null && x.TypeUser == (sbyte) TypeUsers.ProducerUser).ToList();
             return View(AccountListModel);
         }
+
         [HttpPost]
-        public ActionResult AccountNotPost(long AccountId, int IdPost)
+        public ActionResult AccountCustomPost(long Account_Id, int post_id)
         {
 
-            if (IdPost != 0)
-            {
-                var AccountChange = cntx_.Account.Find(AccountId);
-                AccountChange.AppointmentId = IdPost;
+            var Account_ = cntx_.Account.Find(Account_Id);
+            Account_.AppointmentId = post_id;
 
-                cntx_.Entry(AccountChange).State = System.Data.Entity.EntityState.Modified;
-                cntx_.SaveChanges();
-                SuccessMessage("Должность добавлена пользователю " + AccountChange.Login + " " + AccountChange.Name);
-            }
-            else
-            {
-                ErrorMessage("Не выбрана должность");
-            }
+            cntx_.Entry(Account_).State = System.Data.Entity.EntityState.Modified;
+            cntx_.SaveChanges();
+
+            var AccountListModel = cntx_.Account.Where(x => x.TypeUser == (sbyte)TypeUsers.ProducerUser).ToList().Where(x => x.AppointmentId == null || x.AccountAppointment.GlobalEnabled == 0).ToList();
+            ViewBag.AppointmentList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1).ToList();
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
             ViewBag.ProducerList = h.RegisterListProducer();
 
-            ViewBag.AccountAppointmentGlobalList = cntx_.AccountAppointment.Where(x => x.IdAccount == null).ToList();
-
-            var AccountListModel = cntx_.Account.Where(x => x.AppointmentId == null && x.TypeUser == (sbyte)TypeUsers.ProducerUser).ToList();
+            SuccessMessage("у пользователя " + Account_.Login + " должность изменена на " + Account_.AccountAppointment.Name);
             return View(AccountListModel);
         }
-
 
     }
 }

@@ -105,6 +105,11 @@ namespace ProducerInterface.Controllers
         public JsonResult GetUpdateSupplierList(List<decimal> Id)
         {
 
+            if (Id == null || Id.Count() == 0)
+            {
+                return Json(new List<TextValue>(), JsonRequestBehavior.AllowGet);
+            }
+
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
             var SupplierList = h.GetSupplierList(Id).ToList()
                 .Select(x => new TextValue { Text = x.Text, Value = Convert.ToInt64(x.Value) })
