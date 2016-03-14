@@ -22,7 +22,28 @@ function UpdateSupplierList()
             else {
                 
                 Promotion.SuppierRegionsList(result);
-                Promotion.SuppierRegionsList.valueHasMutated();
+                Promotion.SuppierRegionsList.valueHasMutated();                
+                var X = 0;
+                var Array_ = Promotion.SuppierRegions();
+                $('#SuppierRegions').dropdown('clear');
+                Promotion.SuppierRegions([]);
+                var NewRegions = new Array()
+                for (var I = 0; I < result.length; I++)
+                {
+                    var SearchElem = result[I].Value;
+                
+                    X = GetIndex(SearchElem, Array_);                  
+
+                    if (X > 0)
+                    {
+                        NewRegions.push(X);
+                    }    
+                }
+                       
+                var EEE = NewRegions;
+
+                Promotion.SuppierRegions.valueHasMutated(EEE);      
+
                 $('#SuppierRegions').dropdown('destroy').dropdown();
             }
         },
@@ -178,7 +199,7 @@ var Promotion =
 
         AllSupplier:ko.observable(),   
         Event_AllSupplier: function () {
-            CheckAllSupplier();
+            setTimeout(CheckAllSupplier, 1000)          
         },
 
         PromotionFileId: ko.observable(),
@@ -290,3 +311,10 @@ function InitDatePicker() {
     dateFrom.setStartDate(Date().toLocaleString());
     dateTo.setStartDate(Date().toLocaleString());
 }
+
+GetIndex = function (value, strict) {
+    for (var i = 0; i < strict.length; i++) {
+        if (strict[i] === value) return i;
+        }
+        return -1;  
+};

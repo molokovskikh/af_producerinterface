@@ -282,3 +282,13 @@ span.chosen-comment {
 .menu .item {
 font-size:5.8em;
 }
+.text_align_bottom {
+    margin-top:15px;
+}
+#News_Item
+{
+    background-color:transparent;
+}
+    #News_Item :hover {
+    background-color:#ead8d8;
+    }

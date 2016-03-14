@@ -1,0 +1,82 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<Account>
+
+@{
+    ViewBag.Title = "Список пользователей с индивидуальной должностью";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+
+    var GlobalAppointmentList = ViewBag.AppointmentList as IEnumerable<AccountAppointment>;
+    var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h2>@ViewBag.Title</h2>
+        <a class="btn btn-primary" href="@Url.Action("Index")">К списку должностей</a> 
+        <table class="table-bordered table-striped table-custom">
+            <tr>
+                <th>Логин</th>
+                <th>ФИО</th>
+                <th>Приозводитель</th>
+                <th>Текущая должность</th>
+                <th>Изменение должности</th>
+            </tr>
+
+            @foreach (var AccountItem in Model)
+            {
+                <tr>
+                    <td>
+                        @AccountItem.Login
+                    </td>
+                    <td>
+                        @AccountItem.Name
+                    </td>
+                    <td>
+                        @if (AccountItem.AccountCompany != null && AccountItem.AccountCompany.ProducerId != null)
+                        {
+                            @ProducerList.ToList().Where(x => x.Value == AccountItem.AccountCompany.ProducerId?.ToString()).First().Text;
+                        }
+                        else
+                        {
+                            <p>Частное лицо (@AccountItem.AccountCompany.Name)</p>
+                        }
+                    </td>
+                    <td>
+                        @if (AccountItem.AppointmentId != null)
+                        {
+                        @AccountItem.AccountAppointment.Name
+                        }
+                    </td>
+                    <td>
+                        <div class="row">
+                           @using (Html.BeginForm(FormMethod.Post))
+                           {
+                                <input hidden="hidden" id="Account_Id" name="Account_Id" value="@AccountItem.Id" />
+                                <div class="col-xs-9">
+                                    <select id="post_id" name="post_id" typeof="input" class="form-control">
+                                        @foreach (var PostItem in GlobalAppointmentList)
+                                        {
+                                            <option value="@PostItem.Id">@PostItem.Name</option>
+                                        }
+                                        @if (AccountItem.AccountAppointment1 != null && AccountItem.AccountAppointment1.Count() != 0)
+                                        {
+                                            foreach (var CustomPostItem in AccountItem.AccountAppointment1)
+                                            {
+                                                <option value="@CustomPostItem.Id">@CustomPostItem.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-xs-3">
+                                    <input type="submit" value="Сохранить" class="btn btn-primary" style="min-width:100%;" />
+                                </div>   
+                           }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>   
+</div>
+
+
