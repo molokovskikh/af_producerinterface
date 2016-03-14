@@ -1,13 +1,13 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
 @model int?
-    <div class="form-group">        
-            @Html.LabelFor(m => m)             
+    <div class="form-group"> 
+            <label>@Html.LabelFor(m => m)<strong>*</strong></label> 
             @Html.DropDownListFor(m => m, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m)       
 		
 		<br/>
 				<div class="form-group">
-	            <a href="@Url.Action("Index_Type","FeedBack", new { Id= (sbyte) ProducerInterfaceCommon.ContextModels.FeedBackType.AddNewAppointment })" class="btn btn-primary">Отправить заявку для добавления моей должности</a>
+	            <a href="@Url.Action("Index_Type","FeedBack", new { Id= (sbyte) ProducerInterfaceCommon.ContextModels.FeedBackType.AddNewAppointment })">Моей должности нет в списке, отправить заявку на ее добавление</a>
 		</div>	
 
     </div>

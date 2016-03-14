@@ -23,7 +23,8 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Profile
         public string CompanyName { get; set; }
 
         [Display(Name = "Email")]
-        [UIHint("EditorStringMail")]
+        [UIHint("EditorStringMail")]       
+        [RegularExpression(@"[-a-z0-9-_]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*", ErrorMessage = "Неккоректное имя пользователя")]
         [Required(ErrorMessage = "Заполните email")]
         public string Mailname { get; set; }
 

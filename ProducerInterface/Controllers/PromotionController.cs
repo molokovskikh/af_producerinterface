@@ -22,12 +22,24 @@ namespace ProducerInterface.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
-		}
-		public ActionResult Index(string Id = null)
+
+            if (HttpContext != null)
+            {
+                h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id, HttpContext);
+            }
+            else
+            {
+                h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
+            }
+        }
+
+        private ProducerInterfaceCommon.Heap.NamesHelper h; 
+            
+        public ActionResult Index(string Id = null)
 		{
 			//var list = _BD_.promotions.Where(xxx => xxx.ProducerId == currentUser.ProducerId && xxx.Status).ToList();
 			IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).ToList();
-			var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
+		
 
 			if (Id != null)
 			{
@@ -42,8 +54,7 @@ namespace ProducerInterface.Controllers
 
             foreach (var list_item in list)
 			{
-				list_item.RegionList = h.GetPromotionRegions((ulong)list_item.RegionMask);
-                
+				list_item.RegionList = h.GetPromotionRegions((ulong)list_item.RegionMask);                
 			}
 
 			return View(list);
@@ -109,12 +120,13 @@ namespace ProducerInterface.Controllers
             {
                 return Json(new List<TextValue>(), JsonRequestBehavior.AllowGet);
             }
-
-            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-            var SupplierList = h.GetSupplierList(Id).ToList()
+              
+            var SupplierListOptionElements = h.GetSupplierList(Id).ToList();
+                            
+            var SupplierList = SupplierListOptionElements
                 .Select(x => new TextValue { Text = x.Text, Value = Convert.ToInt64(x.Value) })
                 .ToList();
-           
+
             SupplierList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = 0 });
             return Json(SupplierList, JsonRequestBehavior.AllowGet);
         }

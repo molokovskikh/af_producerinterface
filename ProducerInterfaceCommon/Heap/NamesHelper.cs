@@ -1,7 +1,10 @@
 ﻿using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.Heap
@@ -10,13 +13,14 @@ namespace ProducerInterfaceCommon.Heap
 	{
 
 		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
-
+        private HttpContextBase httpContextBase;
 		private long _userId;
 
-		public NamesHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId)
+		public NamesHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, HttpContextBase HC = null)
 		{
 			_cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
-			_userId = userId;
+            httpContextBase = HC;
+            _userId = userId;
 		}
 
 		// TODO почта откуда-то берётся
@@ -121,12 +125,30 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
+
             bool GetAllTwo = false;
 
             if (regionList != null && regionList.Contains(0))
             {
                 GetAllTwo = true;
             }
+
+            if (httpContextBase != null)
+            {
+                if (regionList == null)
+                {
+                    return new List<OptionElement>();
+                }
+                var AllList = GetSuppliersInRegions(regionList).ToList();
+             
+                var ret = _cntx.suppliernames.Where(x => AllList.Contains(x.SupplierId))
+                        .OrderBy(x => x.SupplierName)
+                        .Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
+                        .ToList();
+               
+                return ret;
+            }   
+                    
 
             if (regionList == null || GetAllTwo)
             {
@@ -150,15 +172,35 @@ namespace ProducerInterfaceCommon.Heap
 				.OrderBy(x => x.SupplierName)
 				.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
 				.ToList();
-
-			//var regionMask = regionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
-			//var suppliers = _cntx.suppliernames.ToList();
-			//var results = suppliers
-			//	.Where(x => ((ulong)x.HomeRegion.Value & regionMask) > 0)
-			//	.OrderBy(x => x.SupplierName)
-			//	.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName }).ToList();
+			
 			return results;
 		}
+
+
+
+        public HashSet<long> GetSuppliersInRegions(List<decimal> regionList)
+        {
+            var key = $"SuppliersInReg";
+                             
+            var DateList = httpContextBase.Cache.Get(key) as HashSet<long>;
+          
+            if (DateList != null)
+            {
+                return DateList;              
+            }
+
+            DateList = new HashSet<long>();
+                        
+            var Data = _cntx.supplierregions.Select(x => x.SupplierId).Distinct().ToList();                
+
+            foreach (var DataItem in Data)
+            {
+                DateList.Add(DataItem);
+            }
+
+            httpContextBase.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
+            return DateList;
+        }
 
 		public List<long> GetPromotionRegions(ulong? RegionMask)
 		{

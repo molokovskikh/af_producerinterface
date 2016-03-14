@@ -342,14 +342,14 @@ namespace ProducerInterfaceCommon.Controllers
 
 		#region /*Аторизация*/
 
-		protected void AutorizeCurrentUser(Account thisUser, TypeUsers TypeUser_)
+		protected void AutorizeCurrentUser(Account thisUser, TypeUsers TypeUser_, string UserData = null)
 		{
 			var UserLoginName = "";
 
 			if (TypeUser_ == TypeUsers.ProducerUser)
 			{
 				UserLoginName = thisUser.Login;
-				SetUserCookiesName(UserLoginName);
+				SetUserCookiesName(UserLoginName, true, UserData);
                 SetCookie("AccountName", thisUser.Login, false);
 				RedirectToAction("Index", "Profile");
 			}

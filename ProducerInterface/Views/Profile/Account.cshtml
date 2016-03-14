@@ -7,18 +7,23 @@
         <h3>Компания : @Model.CompanyName</h3>
         <hr/>
 		  
-		<div class="form-group">
-		<label>Email (введите имя и выберите доменное имя)</label>
-        <div class="input-group">
-	         @Html.EditorFor(m => m.Mailname)
-	        <div class="input-group-btn" style="min-width: 175px;">
-		       @Html.EditorFor(m => m.EmailDomain)
-	        </div>
-        </div>
-		  @Html.ValidationMessageFor(model => model.Mailname)
-		  @Html.ValidationMessageFor(model => model.EmailDomain)
-		</div>
-	 
+		<div class="form-group jumbotron">
+            <div class="row">
+                <div class="col-xs-12">
+                    <label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
+                    <div class="input-group">
+                        @Html.EditorFor(m => m.Mailname)
+                        <div class="input-group-btn" style="min-width: 175px;">
+                            @Html.EditorFor(m => m.EmailDomain)
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Mailname)
+                    @Html.ValidationMessageFor(model => model.EmailDomain)
+                </div>
+                </div>
+            </div>	 
+        <hr />
+
     @Html.EditorFor(m => m.LastName)
     @Html.EditorFor(m => m.FirstName)
     @Html.EditorFor(m => m.OtherName)

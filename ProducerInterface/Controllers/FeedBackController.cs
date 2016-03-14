@@ -60,7 +60,15 @@ namespace ProducerInterface.Controllers
             ViewBag.FBT = (FeedBackType)Id;
 
             ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
-            return View("Index");
+            var FeedModel = new FeedBack();
+
+            if (Id == (sbyte)FeedBackType.AddNewAppointment)
+            {
+                FeedModel.Description = "Просьба добавить мою должность: ";
+            }
+
+         
+            return View("Index", FeedModel);
         }
 
         [HttpPost]
