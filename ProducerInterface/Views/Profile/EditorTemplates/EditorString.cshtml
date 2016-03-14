@@ -1,7 +1,10 @@
 ﻿@model String
 
 <div class="form-group">
-    <label>@Html.LabelFor(m=>m)<strong class="required">*</strong></label>
+    <label>@Html.LabelFor(m=>m)    
+        @if (ViewData.ModelMetadata.IsRequired)
+        {<strong class="required">*</strong>}   
+    </label>
     @Html.TextBoxFor(model => model, null, new { @class = "form-control col-sm-12 col-xs-12 col-md-12 col-lg-12" })
     @Html.ValidationMessageFor(model => model)
 </div>

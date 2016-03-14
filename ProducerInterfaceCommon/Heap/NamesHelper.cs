@@ -1,8 +1,10 @@
 ﻿using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.Heap
@@ -11,7 +13,7 @@ namespace ProducerInterfaceCommon.Heap
 	{
 
 		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
-
+		private HttpContextBase httpContextBase;
 		private long _userId;
 		private HttpContextBase _httpContext;
 
@@ -136,7 +138,8 @@ namespace ProducerInterfaceCommon.Heap
 			{
 				supplierIds = suppliers.Select(x => x.SupplierId).ToList();
 			}
-			else {
+			else
+			{
 				var regionMask = regionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
 				supplierIds = suppliers.Where(x => ((ulong)x.RegionMask & regionMask) > 0).Select(x => x.SupplierId).ToList();
 			}
@@ -146,8 +149,31 @@ namespace ProducerInterfaceCommon.Heap
 				.OrderBy(x => x.SupplierName)
 				.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
 				.ToList();
-
 			return results;
+		}
+
+		private HashSet<long> GetSuppliersInRegions(List<decimal> regionList)
+		{
+			var key = $"SuppliersInReg";
+
+			var DateList = httpContextBase.Cache.Get(key) as HashSet<long>;
+
+			if (DateList != null)
+			{
+				return DateList;
+			}
+
+			DateList = new HashSet<long>();
+
+			var Data = _cntx.supplierregions.Select(x => x.SupplierId).Distinct().ToList();
+
+			foreach (var DataItem in Data)
+			{
+				DateList.Add(DataItem);
+			}
+
+			httpContextBase.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
+			return DateList;
 		}
 
 		public List<long> GetPromotionRegions(ulong? RegionMask)

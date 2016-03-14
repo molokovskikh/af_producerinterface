@@ -5,7 +5,7 @@
 
 @{
     var AccountUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
-    var FeedBackList = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
+    var FeedBackList = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>(); 
 }
 
 @using (Ajax.BeginForm("SaveFeedBack", "FeedBack", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "feedback_modal_content", OnSuccess = "InitPhone()" }))
@@ -79,7 +79,7 @@
                     { }
                     else
                     {
-                        <option value="@((int)FeedBackTypeItem)">@AttributeHelper.DisplayName((ProducerInterfaceCommon.ContextModels.FeedBackType)FeedBackTypeItem);</option>
+                        <option value="@((int)FeedBackTypeItem)">@AttributeHelper.DisplayName((ProducerInterfaceCommon.ContextModels.FeedBackType)FeedBackTypeItem)</option>
                     }
                 }             
             </select>

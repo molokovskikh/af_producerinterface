@@ -4,10 +4,8 @@
     AjaxLoadModel();
 });
 
-function UpdateSupplierList()
-{
-    var RegionListJson = ko.toJSON(Promotion.RegionList());
-
+function UpdateSupplierList() {
+    var RegionListJson = ko.toJSON(Promotion.RegionList());   
     $.ajax({
         url: "GetUpdateSupplierList",
         cache: false,
@@ -20,31 +18,7 @@ function UpdateSupplierList()
 
             }
             else {
-                
-                Promotion.SuppierRegionsList(result);
-                Promotion.SuppierRegionsList.valueHasMutated();                
-                var X = 0;
-                var Array_ = Promotion.SuppierRegions();
-                $('#SuppierRegions').dropdown('clear');
-                Promotion.SuppierRegions([]);
-                var NewRegions = new Array()
-                for (var I = 0; I < result.length; I++)
-                {
-                    var SearchElem = result[I].Value;
-                
-                    X = GetIndex(SearchElem, Array_);                  
-
-                    if (X > 0)
-                    {
-                        NewRegions.push(X);
-                    }    
-                }
-                       
-                var EEE = NewRegions;
-
-                Promotion.SuppierRegions.valueHasMutated(EEE);      
-
-                $('#SuppierRegions').dropdown('destroy').dropdown();
+                bindSupplierList(result);
             }
         },
         error: function (jqXHR) {
@@ -53,6 +27,7 @@ function UpdateSupplierList()
     });
 
 }
+
 function AjaxLoadModel()
 {
     var SendId = $('#PromotionId').val();
@@ -79,6 +54,37 @@ function AjaxLoadModel()
             $('#message').html(jqXHR.statusText);
         }
     });
+}
+
+function bindSupplierList(JsonList)
+{
+    var Array_ = Promotion.SuppierRegions();
+    $('#SuppierRegions').dropdown('clear');
+    Promotion.SuppierRegions([]);
+
+    Promotion.SuppierRegionsList(JsonList);
+    Promotion.SuppierRegionsList.valueHasMutated();
+
+    if (Array_ != null) {
+        var X = 0;
+        var NewRegions = new Array();
+
+        for (var I = 0; I < JsonList.length; I++) {
+            var SearchElem = JsonList[I].Value;
+
+            X = GetIndex(SearchElem, Array_);
+
+            if (X > 0) {
+                NewRegions.push(X);
+            }
+        }
+
+        var EEE = NewRegions;
+        Promotion.SuppierRegions(EEE);
+        Promotion.SuppierRegions.valueHasMutated();
+        $('#SuppierRegions').dropdown('destroy').dropdown();
+        $('#RegionList').dropdown("onHide").dropdown();
+    }
 }
 
 function bindModel(JsonModel)
@@ -124,7 +130,7 @@ function bindModel(JsonModel)
          
     var X = Promotion.RegionList();
 
-    $('.ui.dropdown').dropdown();
+    $('.ui.dropdown').dropdown();  
     InitDatePicker();
 }
 
@@ -176,13 +182,13 @@ var Promotion =
 
         RegionList: ko.observableArray(), /* List Long */
         Event_RegionList: function()
-        {
+        {        
             if (Promotion.RegionList() != null) {
+                $('#RegionList').dropdown('hide').dropdown();
                 Promotion.RegionListError("");
-                Promotion.RegionListError.valueHasMutated();
-
-                UpdateSupplierList();
-            }        
+                Promotion.RegionListError.valueHasMutated();                
+                setTimeout(UpdateSupplierList, 10);                
+            }           
         },
 
         SuppierRegions: ko.observableArray(), /* List Long */
@@ -199,7 +205,7 @@ var Promotion =
 
         AllSupplier:ko.observable(),   
         Event_AllSupplier: function () {
-            setTimeout(CheckAllSupplier, 1000)          
+            setTimeout(CheckAllSupplier, 1000);
         },
 
         PromotionFileId: ko.observable(),
@@ -269,16 +275,14 @@ function CheckAllSupplier()
 {
     var X = Promotion.AllSupplier();
     if (X) {
-        $('#SuppierRegions').dropdown('clear');
-        $('#SuppierRegions').dropdown('destroy');
+        $('#SuppierRegions').dropdown('clear');     
         Promotion.SuppierRegions([0]);
         Promotion.SuppierRegions.valueHasMutated();
         $('#SuppierRegions').dropdown('destroy').dropdown();      
     }
     else {
         $('#SuppierRegions').dropdown('clear');
-        $('#SuppierRegions').dropdown('destroy').dropdown();
-        $('#SuppierRegions').dropdown();
+        $('#SuppierRegions').dropdown('destroy').dropdown();    
     }
 }
 
@@ -314,7 +318,7 @@ function InitDatePicker() {
 
 GetIndex = function (value, strict) {
     for (var i = 0; i < strict.length; i++) {
-        if (strict[i] === value) return i;
+        if (strict[i] === value) return value;
         }
         return -1;  
 };

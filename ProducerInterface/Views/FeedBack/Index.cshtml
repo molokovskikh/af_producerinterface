@@ -13,11 +13,12 @@
 <div class="container">
     <h2>Обратная связь</h2>
 
-    @using (Html.BeginForm("Index","FeedBack")) { 
-    
+    @using (Html.BeginForm("Index","FeedBack")) {
+
         <div class="form-group">
             <label>Обращение</label>
-            <textarea id="Description" name="Description" class="form-control" rows="7" typeof="input"></textarea>   
+            @Html.TextAreaFor(m => m.Description, new { @class ="form-control" ,@rows="7"})
+            @*<textarea id="Description" name="Description" class="form-control" rows="7" typeof="input"></textarea>*@   
             @Html.ValidationMessageFor(m=>m.Description)                 
         </div>
 

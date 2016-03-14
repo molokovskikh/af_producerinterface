@@ -182,7 +182,7 @@ namespace ProducerInterface.Controllers
         public string Autentificates(Controller CRT, string username, bool shouldRemember, string userData = "")
         {
             var currentUser = cntx_.Account.Where(x => x.Login == username && x.TypeUser == (sbyte)TypeUsers.ProducerUser).First();
-            AutorizeCurrentUser(currentUser, TypeUsers.ProducerUser);
+            AutorizeCurrentUser(currentUser, TypeUsers.ProducerUser, userData);
 
             //string CoockieName = GetWebConfigParameters("CookiesName");
 
