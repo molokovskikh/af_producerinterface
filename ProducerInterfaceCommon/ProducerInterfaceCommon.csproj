@@ -491,6 +491,7 @@
       <DependentUpon>Logger_Entities.edmx</DependentUpon>
       <LastGenOutput>Logger_Entities.cs</LastGenOutput>
     </Content>
+    <Content Include="migration.sql" />
     <Content Include="ReportModels\Reports_Entities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Reports_Entities.edmx</DependentUpon>
