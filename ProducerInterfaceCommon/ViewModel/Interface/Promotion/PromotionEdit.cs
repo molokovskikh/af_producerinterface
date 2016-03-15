@@ -16,7 +16,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
         public string Annotation { get; set; }
         public string Begin { get; set; } /* DateTime Begin */
         public string End { get; set; } /* DateTime End*/
-        public byte[] File { get; set; }
+        public System.Web.HttpPostedFileBase[] File { get; set; }
 
         public List<long> DrugList { get; set; }
         public List<long> RegionList { get; set; }

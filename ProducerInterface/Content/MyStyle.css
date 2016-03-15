@@ -1,7 +1,7 @@
 ﻿body {
     background-color: #EEE;
     font-family: Arial, Helvetica, sans-serif;
-}
+   }
 
 .image-brand {
     height: 30px;
@@ -18,31 +18,31 @@
 .navbar-brand {
     padding: 10px;
     margin: 0px;
-    display: block;
-    max-height: 32px;
-    position: relative;
-    margin-right: 36px;
-    margin-left: 18px;
+display: block;
+max-height: 32px;
+position: relative;
+margin-right: 36px;
+margin-left: 18px;
     left: 10px;
 }
 
 #main_container {
-    height: 100%;
+ height: 100%;
 }
 
 .form-control-mycontrol {
-    min-width: 0;
-    width: 100% !important;
-    display: inline;
+min-width: 0;
+width: 100% !important;
+display: inline;
 }
 
 .body-content {
     height: 100%;
-    /*    background-color: red;  */
-    background-color: white;
-    padding: 50px;
-    height: 100%;
-    border: 1px solid #ccc !important;
+/*    background-color: red;  */
+background-color:white;
+padding:25px;
+height:100%;
+border:1px solid #ccc !important;
 }
 
 .form-refactoring-w400 {
@@ -75,20 +75,20 @@
     background-color: white;
     position: fixed;
     top: -220px; /* По умолчанию окно над сайтом и его не видно. */
-    left: 50%;
+    left: 50%;  
     margin-left: -190px;
     z-index: 9999; /* Слой. Нужен для того, чтобы окно было над всеми объектами */
-    /* Тень для окна авторизации, в трех вариантах для разных браузеров*/
-    -moz-box-shadow: 0 0 10px #C0C0C0;
-    -webkit-box-shadow: 0 0 10px #C0C0C0;
-    box-shadow: 0 0 10px #C0C0C0;
+   /* Тень для окна авторизации, в трех вариантах для разных браузеров*/
+   -moz-box-shadow: 0 0 10px #C0C0C0;
+   -webkit-box-shadow: 0 0 10px #C0C0C0;
+    box-shadow: 0 0 10px #C0C0C0;  
 }
 
     #modal-auth h3 {
-        font: 22px sans-serif;
-        margin-left: 20px;
-        margin-top: 23px;
-    }
+    font: 22px sans-serif;
+    margin-left: 20px;
+    margin-top: 23px;
+}
 
 #modal-close {
     display: inline-block;
@@ -123,11 +123,11 @@
 }
 
     #modal-email-pass input#modal-email:focus, #modal-email-pass input#modal-pass:focus {
-        border: 1px solid #D6CCB4;
-        -moz-box-shadow: 0 0 12px #FFF3D6;
-        -webkit-box-shadow: 0 0 12px #FFF3D6;
-        box-shadow: 0 0 12px #FFF3D6;
-    }
+    border: 1px solid #D6CCB4;
+   -moz-box-shadow: 0 0 12px #FFF3D6;
+   -webkit-box-shadow: 0 0 12px #FFF3D6;
+    box-shadow: 0 0 12px #FFF3D6; 
+}
 
 #modal-remind {
     color: #264C7B;
@@ -146,19 +146,19 @@
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-    cursor: pointer;
-    margin-left: 100px;
+    cursor: pointer; 
+    margin-left: 100px; 
 }
 
     #modal-enter:hover {
-        background: url(grd-button-auth-hover.png) repeat-x;
-    }
+    background: url(grd-button-auth-hover.png) repeat-x;
+}
 
 #modal-reg {
     color: #264C7B;
     font: 13px sans-serif;
-    margin-left: 10px;
-    text-decoration: none;
+    margin-left: 10px;   
+    text-decoration: none; 
 }
 
 #modal-click {
@@ -177,7 +177,7 @@
         min-width: 75px;
     }
 
-    #autentificationForm #login {
+      #autentificationForm #login {
         min-width: 205px;
     }
 
@@ -191,11 +191,11 @@
 
 #myCarousel3 {
     background-color: rgba(34, 0, 255, 0.49);
-    min-height: 500px;
+    min-height: 500px; 
 }
 
     #myCarousel3 a {
-        text-decoration: none;
+        text-decoration: none;       
     }
 
     #myCarousel3 .item {
@@ -206,12 +206,12 @@
         margin: 5em;
     }
 
-    #myCarousel3 .carousel-control {
+    #myCarousel3 .carousel-control {     
         background-color: transparent;
         background-image: none;
     }
 
-        #myCarousel3 .carousel-control span {
+        #myCarousel3 .carousel-control span {     
             background-color: transparent;
             font-size: 1em;
         }
@@ -231,7 +231,7 @@
     #promotionpanel #promotionpanel-btn {
         padding: 1em;
     }
-
+      
 #date-form-group {
     max-width: 16em;
 }
@@ -255,19 +255,19 @@ input {
 }
 
 .pointer {
-    cursor: pointer;
+     cursor: pointer; 
 }
 
 hr {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: #fff -moz-use-text-color #FFFFFF;
-    border-style: solid none;
-    border-width: 1px 0;
-    margin: 18px 0;
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #fff -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 18px 0;
 }
 
 .navbar-fixed-bottom {
@@ -297,13 +297,13 @@ hr {
     width: 100%;
 }
 
-    .profile_submenu a {
-        text-align: left;
-    }
+.profile_submenu a {
+    text-align: left;
+}
 
-        .profile_submenu a span {
-            margin-right: 1em;
-        }
+    .profile_submenu a span {
+        margin-right: 1em;
+    }
 
 span.chosen-comment {
     display: block;
@@ -329,10 +329,10 @@ span.chosen-comment {
     background-color: transparent;
 }
 
-#News_Item :hover {
+    #News_Item :hover {
     background-color: #ead8d8;
 }
 
 .w150 {
     width: 150px;
-}
+    }

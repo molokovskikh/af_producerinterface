@@ -40,7 +40,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return PartialView("GetDomain",ListDomain);
         }
 
-        [HttpPost]
         public ActionResult DeleteDomain(long Id)
         {           
             var CompanyDomainNameDel = cntx_.CompanyDomainName.Find(Id);

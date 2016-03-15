@@ -46,13 +46,13 @@
         })
 }(window.jQuery)
 
-$("#file").change(function () {
-
+$("#File").change(function () {
     var _validFileExtensions = [".jpg", ".jpeg", ".txt"]; 
+    var elem = $("#File");
 
-    var elem = $("#file");
+    var ErrorText = "";
 
-    var sFileName = $("#file").val();
+    var sFileName = $("#File").val();
     if (sFileName.length > 0) {
         var blnValid = false;
         for (var j = 0; j < _validFileExtensions.length; j++) {
@@ -64,17 +64,21 @@ $("#file").change(function () {
         }
 
         if (!blnValid) {
-            alert("Простите, файл " + sFileName + " не соответствует требованиям: " + _validFileExtensions.join(", "));
-            $("#file").val("");
+           
+            ErrorText = "Простите, файл " + sFileName + " не соответствует требованиям: " + _validFileExtensions.join(", ");
+            $("#File").val("");
+        }
+        
+        if (sFileName.size > 500000)
+        {         
+            ErrorText ="Простите, файл " + sFileName + " весит более 500КБ ";
+            $("#File").val("");
         }
 
-        if (this.files[0].size > 500000)
-        {
-            alert("Простите, файл " + sFileName + " весит более 500КБ ");
-            $("#file").val("");
-        }
+        Promotion.FileError(ErrorText);
+        Promotion.FileError.valueHasMutated();
 
     }
 
-    console.log(this.files);
+   
 });
