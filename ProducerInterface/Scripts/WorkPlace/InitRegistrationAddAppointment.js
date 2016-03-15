@@ -18,3 +18,18 @@
             }      
         });
     }
+
+
+    function FeedBackAddDomainName()
+    {
+
+        //http://producerinterface/feedBack/Index_Type?Id=5&IdProducer=10
+        var ProducerId = document.getElementById("Producers").value;      
+        var Url = "/FeedBack/Index_Type";
+        var SendString =Url + "?Id=5" + "&" + "IdProducer=" + ProducerId;
+        
+        location.href = Url;
+      
+    }
+
+

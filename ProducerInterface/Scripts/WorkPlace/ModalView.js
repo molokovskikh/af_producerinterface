@@ -10,8 +10,9 @@ $(document).ready()
 
 function InitPhone()
 {
-    var PhoneNumElem = $('#PhoneNum');
-    PhoneNumElem.mask("(999) 999-99-99");
+    $('#PhoneNum').each(function () {
+        $(this).mask("(999) 999-99-99");
+    });
 
     $('#PhoneNumber').each(function () {
             $(this).mask("(999) 999-99-99");

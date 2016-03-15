@@ -12,8 +12,7 @@ namespace ProducerInterfaceCommon.Heap
 	public class NamesHelper
 	{
 
-		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
-		private HttpContextBase httpContextBase;
+		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;		
 		private long _userId;
 		private HttpContextBase _httpContext;
 
@@ -130,7 +129,16 @@ namespace ProducerInterfaceCommon.Heap
 			if (regionList == null)
 				return new List<OptionElement>();
 
-			var suppliers = _cntx.supplierregions.ToList();
+            List<supplierregions> suppliers = new List<supplierregions>();
+
+            if (_httpContext != null)
+            {
+                suppliers = GetSuppliersInRegions().ToList();
+            }
+            else
+            {
+                suppliers = _cntx.supplierregions.ToList();
+            }
 			List<long> supplierIds = null;
 
 			// если список регионов содержит 0 (все регионы) - возвращаем всех поставщиков
@@ -152,27 +160,27 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
-		private HashSet<long> GetSuppliersInRegions(List<decimal> regionList)
+		private HashSet<supplierregions> GetSuppliersInRegions()
 		{
 			var key = $"SuppliersInReg";
 
-			var DateList = httpContextBase.Cache.Get(key) as HashSet<long>;
+			var DateList = _httpContext.Cache.Get(key) as HashSet<supplierregions>;
 
 			if (DateList != null)
 			{
 				return DateList;
 			}
 
-			DateList = new HashSet<long>();
+			DateList = new HashSet<supplierregions>();
 
-			var Data = _cntx.supplierregions.Select(x => x.SupplierId).Distinct().ToList();
+			var Data = _cntx.supplierregions.Distinct().ToList();
 
 			foreach (var DataItem in Data)
 			{
 				DateList.Add(DataItem);
 			}
 
-			httpContextBase.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
+            _httpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
 			return DateList;
 		}
 

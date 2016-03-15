@@ -6,8 +6,7 @@ using System.Linq;
 namespace ProducerInterface.Controllers
 {
     public class FeedBackController : MasterBaseController
-    {      
-
+    {
         [HttpPost]
         public ActionResult SaveFeedBack(FeedBack Model_View)
         {
@@ -22,7 +21,7 @@ namespace ProducerInterface.Controllers
                     ViewBag.ErrorMessageModal = "Укажите контакты для связи. Email или номер телефона";
                     return PartialView("FeedBack", Model_View);
                 }
-
+             
                 var FeedBackAdd = new ProducerInterfaceCommon.ContextModels.AccountFeedBack();
 
                 if (CurrentUser != null)
@@ -55,19 +54,24 @@ namespace ProducerInterface.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index_Type(sbyte Id)
+        public ActionResult Index_Type(sbyte Id, long IdProducer = 0)
         {
-            ViewBag.FBT = (FeedBackType)Id;
+            ViewBag.FBT = (FeedBackTypePrivate)Id;
 
-            ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
+            ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackTypePrivate)).Cast<FeedBackTypePrivate>();
             var FeedModel = new FeedBack();
 
-            if (Id == (sbyte)FeedBackType.AddNewAppointment)
+            if (Id == (sbyte)FeedBackTypePrivate.AddNewAppointment)
             {
                 FeedModel.Description = "Просьба добавить мою должность: ";
             }
 
-         
+            if (Id == (sbyte)FeedBackTypePrivate.AddNewDomainName)
+            {             
+                var ProducerName = cntx_.producernames.Where(x => x.ProducerId == IdProducer).First().ProducerName;
+                FeedModel.Description = "Я являясь сотрудником компании " + ProducerName + ", не могу зарегистрироваться в связи с отсутствием домена моего почтового ящика, прошу добавить возможность регистрации с моим eMail";
+            }
+            
             return View("Index", FeedModel);
         }
 
@@ -80,14 +84,42 @@ namespace ProducerInterface.Controllers
                 ViewBag.FBT = (FeedBackType)FB.FeedType;
                 return View(FB);
             }
-            
+
+            if (CurrentUser == null && string.IsNullOrEmpty(FB.Email) && FB.FeedType == (sbyte)FeedBackTypePrivate.AddNewDomainName)
+            {
+                ViewBag.FBT = (FeedBackTypePrivate)FB.FeedType;
+                ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackTypePrivate)).Cast<FeedBackTypePrivate>();
+
+                ViewBag.ErrorMessageModal = "поле Email является обязательным для заполнения";
+
+                return View("Index", FB);              
+            }
+                    
             var FB_Save = new ProducerInterfaceCommon.ContextModels.AccountFeedBack();
+
+            if (FB.FeedType == (sbyte)FeedBackTypePrivate.AddNewAppointment)
+            {
+                FB_Save.UrlString = "Обратная взязь в ЛК";
+            }
+            if (FB.FeedType == (sbyte)FeedBackTypePrivate.AddNewDomainName)
+            {
+                FB_Save.UrlString = "Регистрация нового пользователя для зарегистированного производителя";
+            }
+            if (string.IsNullOrEmpty(FB_Save.UrlString))
+            {
+                FB_Save.UrlString = "~/FeedBack/Index_Type/";
+            }
+
             FB_Save.Description = FB.Description;
-            FB_Save.AccountId = CurrentUser.Id;
+
+            if (CurrentUser != null)
+            {
+                FB_Save.AccountId = CurrentUser.Id;
+            }
+      
             FB_Save.Type = FB.FeedType;
             FB_Save.Contacts = FB.Contact;
-            FB_Save.DateAdd = System.DateTime.Now;
-            FB_Save.UrlString = "Обратная взязь в ЛК";
+            FB_Save.DateAdd = System.DateTime.Now;         
             cntx_.AccountFeedBack.Add(FB_Save);
             cntx_.SaveChanges();
 

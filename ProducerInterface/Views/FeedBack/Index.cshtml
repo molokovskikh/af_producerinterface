@@ -6,7 +6,7 @@
     ViewBag.Title = "Обратная связь";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var Account_ = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
-    var FeedBackTypeList = ViewBag.TypeMessage as IEnumerable<FeedBackType>;
+    var FeedBackTypeList = ViewBag.TypeMessage as IEnumerable<FeedBackTypePrivate>;
 }
 
 
@@ -15,12 +15,15 @@
 
     @using (Html.BeginForm("Index","FeedBack")) {
 
-        <div class="form-group">
-            <label>Обращение</label>
-            @Html.TextAreaFor(m => m.Description, new { @class ="form-control" ,@rows="7"})
-            @*<textarea id="Description" name="Description" class="form-control" rows="7" typeof="input"></textarea>*@   
-            @Html.ValidationMessageFor(m=>m.Description)                 
-        </div>
+        @Html.ValidationSummary(true)
+     
+        if (Account_ != null)
+        {
+            <div class="form-group">
+                <label>Сообщение</label>
+                @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
 
         <div class="form-group">
             <label>Выберите удобный способ для связи</label>
@@ -32,6 +35,29 @@
                 }
             </select>                     
         </div>
+        }
+
+        else
+        {
+            <div class="form-group">
+                <label>Сообщение</label>
+                @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
+            <div class="form-group">
+                <h4 class="text-danger">@ViewBag.ErrorMessageModal</h4>
+            </div>
+            <div class="form-group">
+                <label>Номер телефона</label>
+                @Html.TextBoxFor(m => m.PhoneNum, new { @class = "form-control", @placeholder = "(999) 999-99-99" })
+                @Html.ValidationMessageFor(m => m.PhoneNum)
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Укажите Email, для регистрации" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+        }
         <div class="form-group">
             <label>Тип обращения</label>
             <select id="FeedType" name="FeedType" class="form-control">

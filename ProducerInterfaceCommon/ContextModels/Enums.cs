@@ -35,10 +35,11 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Другое")]
 		Other = 2,
 		[Display(Name = "Добавление должности")]
-		AddNewAppointment = 3
+		AddNewAppointment = 3,
         /*
-            как минимум 4й пункт  "xxx=4" должен отсутствовать        
+            как минимум 4й - 5й пункт  "4" должен отсутствовать        
         */
+       
 	}
 
     public enum FeedBackTypePrivate // FeedBackType - нумерация должна совпадать   (UI админка)
@@ -52,7 +53,9 @@ namespace ProducerInterfaceCommon.ContextModels
         [Display(Name = "Добавление должности")]
         AddNewAppointment = 3,
         [Display(Name ="Заявка на Регистрацию")]
-        Registration =4
+        Registration =4,
+        [Display(Name = "Добавление домена")]
+        AddNewDomainName = 5
     }
 
 	public enum FeedBackStatus
