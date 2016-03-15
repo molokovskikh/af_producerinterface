@@ -351,11 +351,9 @@
     <Content Include="Views\Report\EditorTemplates\String.cshtml" />
     <Content Include="Views\Report\EditorTemplates\StringList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\SupplierRatingReport.cshtml" />
-    <Content Include="Views\Report\Error.cshtml" />
     <Content Include="Views\Report\JobList.cshtml" />
     <Content Include="Views\Report\RunNow.cshtml" />
     <Content Include="Views\Report\ScheduleJob.cshtml" />
-    <Content Include="Views\Report\Success.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\LongList.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -445,7 +443,6 @@
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
     <Content Include="Views\Account\AdminAuth.cshtml" />
     <Content Include="Views\Report\RunHistory.cshtml" />
-    <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\FeedBack\FeedBack.cshtml" />
     <Content Include="Views\FeedBack\Success.cshtml" />
     <Content Include="Views\FeedBack\Index.cshtml" />
@@ -453,6 +450,7 @@
     <Content Include="Views\Promotion\EditorTemplates\SuppierRegionsList.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\DateEnd.cshtml" />
     <Content Include="Views\Promotion\Edit.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

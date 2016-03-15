@@ -12,6 +12,7 @@
       var newMail = Model.Where(x => !propListVal.Contains(x)).Select(x => new OptionElement() { Value = x, Text = x }).ToList();
       // добавили к сохранённым email новые
       propList.AddRange(newMail);
+      var asd = new MultiSelectList(propList, "Value", "Text", Model);
   }
   // класс для ошибки валидации, если есть
   var errorClass = "";

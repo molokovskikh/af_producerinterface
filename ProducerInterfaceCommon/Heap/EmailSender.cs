@@ -84,12 +84,12 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ManualPostReport);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
 			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = jext.LastRun, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.ManualPostReport);
 			attachments.Add(path);
 			EmailSender.SendEmail(mailTo, subject, body, attachments);
 
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {jext.LastRun}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
 		}

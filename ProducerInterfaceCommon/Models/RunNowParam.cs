@@ -10,20 +10,6 @@ namespace ProducerInterfaceCommon.Models
 	[SuppressMessage("ReSharper", "Mvc.TemplateNotResolved")] // баг решарпера - не может разрешить шаблоны в абстрактных классах
 	public abstract class RunNowParam : TriggerParam
 	{
-		//[Display(Name = "Отправить по email")]
-		//[UIHint("Bool")]
-		//public bool ByEmail { get; set; }
-
-		//[Display(Name = "Отобразить на экране")]
-		//[UIHint("Bool")]
-		//public bool ByDisplay { get; set; }
-
-		//protected RunNowParam()
-		//{
-		//	ByEmail = true;
-		//	ByDisplay = true;
-		//}
-
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
 		{
 			var viewDataValues = new Dictionary<string, object>();

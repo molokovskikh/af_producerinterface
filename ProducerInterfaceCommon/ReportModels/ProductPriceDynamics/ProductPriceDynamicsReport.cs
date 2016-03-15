@@ -19,7 +19,6 @@ namespace ProducerInterfaceCommon.Models
 		public List<decimal> RegionCodeEqual { get; set; }
 
 		[Display(Name = "Товар")]
-		[Required(ErrorMessage = "Не выбраны товары")]
 		[UIHint("LongList")]
 		public List<long> CatalogIdEqual { get; set; }
 
