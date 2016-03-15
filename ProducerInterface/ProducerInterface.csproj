@@ -335,6 +335,7 @@
     <Content Include="Scripts\WorkPlace\GradientText.js" />
     <Content Include="Scripts\WorkPlace\ModalView.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Edit.js" />
+    <Content Include="Scripts\WorkPlace\Promotion_Edit_Model.js" />
     <Content Include="Scripts\WorkPlace\ZAnalit.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Report\AddJob.cshtml" />

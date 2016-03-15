@@ -125,9 +125,11 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
-			// если регионы не заданы - пустой лист
-			if (regionList == null)
-				return new List<OptionElement>();
+            // если регионы не заданы - пустой лист
+            if (regionList == null || regionList.Count() == 0)
+            {
+                return new List<OptionElement>();
+            }
 
             List<supplierregions> suppliers = new List<supplierregions>();
 

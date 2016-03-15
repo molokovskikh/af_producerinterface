@@ -23,14 +23,10 @@ namespace ProducerInterface.Controllers
 		{
 			base.OnActionExecuting(filterContext);
 
-            if (HttpContext != null)
+            if (HttpContext != null && CurrentUser != null)
             {
                 h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id, HttpContext);
-            }
-            else
-            {
-                h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-            }
+            }        
         }
 
         private ProducerInterfaceCommon.Heap.NamesHelper h; 
@@ -98,7 +94,7 @@ namespace ProducerInterface.Controllers
                 ViewModel.Name = ChangePromo.Name;
                 ViewModel.Title ="Редактирование промоакции: " + ChangePromo.Name;
                 ViewModel.PromotionFileName = ChangePromo.MediaFiles?.ImageName;
-
+                ViewModel.DrugList = ChangePromo.promotionToDrug.ToList().Select(x => x.DrugId).ToList();             
                 ViewModel.Begin = ChangePromo.Begin.Value.ToString("dd.MM.yyyy");
                 ViewModel.End = ChangePromo.End.Value.ToString("dd.MM.yyyy");
                 ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(ChangePromo.RegionMask));
