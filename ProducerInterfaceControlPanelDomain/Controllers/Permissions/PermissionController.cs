@@ -153,7 +153,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
         public ActionResult ListUsers()
         {
+            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id, this.HttpContext);       
             var AccountList = cntx_.Account.Where(X => X.TypeUser == (sbyte)TypeUsers.ControlPanelUser).ToList();
+
+            foreach (var AccountItem in AccountList)
+            {
+                AccountItem.ListPermission = h.GetRegionList((decimal)AccountItem.RegionMask);
+            }
             return View(AccountList);
         }
 

@@ -389,12 +389,10 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Promotion\Index.cshtml" />
-    <Content Include="Views\Promotion\Manage.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\DateBegin.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\LongList.cshtml" />
     <Content Include="Views\Permission\Index.cshtml" />
     <Content Include="Views\Permission\Change.cshtml" />
-    <Content Include="Views\Promotion\Delete.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Drug\EditorTemplates\TextBox.cshtml" />
     <Content Include="Views\Drug\EditForms.cshtml" />
@@ -434,7 +432,6 @@
     <Content Include="Views\Profile\EditorTemplates\EditorStringPosition.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\Editor_Password.cshtml" />
-    <Content Include="Views\Promotion\AddFile.cshtml" />
     <Content Include="Views\Promotion\Partial\PromotionItem.cshtml" />
     <Content Include="Views\Promotion\Partial\PromotionItemHeading.cshtml" />
     <Content Include="Views\Promotion\Partial\PromotionItemActionLink.cshtml" />
@@ -454,6 +451,7 @@
     <Content Include="Views\Promotion\EditorTemplates\SuppierRegionsList.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\DateEnd.cshtml" />
     <Content Include="Views\Promotion\Edit.cshtml" />
+    <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

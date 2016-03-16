@@ -2,7 +2,7 @@
 @model IEnumerable<Account>
 @{
     ViewBag.Title = "Список пользователей панели управления";
-    Layout = "~/Views/Shared/_MasterPage.cshtml";
+    Layout = "~/Views/Shared/_MasterPage.cshtml"; 
 }
 
 <div class="row">
@@ -46,13 +46,16 @@
                     </td>
 
                     <td>
-                        <a href="#Account_regions_@UserItem.Id" data-toggle="collapse">подробнее (@UserItem.AccountGroup.Count())</a>
+                        @if (UserItem.ListPermission != null)
+                        {
+                        <a href="#Account_regions_@UserItem.Id" data-toggle="collapse">подробнее (@UserItem.ListPermission.Count())</a>
                         <div id="Account_regions_@UserItem.Id" class="collapse">
-                            @foreach (var GroupItem in UserItem.AccountGroup)
+                            @foreach (var RegionItem in UserItem.ListPermission)
                             {
-                                <p>@GroupItem.Name @GroupItem.Description</p>
+                                <p>@RegionItem.Text</p>
                             }
                         </div>
+                        }
                     </td>
 
                 </tr>

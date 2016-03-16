@@ -6,11 +6,11 @@
     @if(Model.Status == false)
     {
         <!-- редактирование -->
-        <a href="@Url.Action("Manage", new { Id = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
+        <a href="@Url.Action("Edit", new { IdKey = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
     }
 
     <!-- копия акции (сразу открывается для редактирования) -->
-    <a href="@Url.Action("CopyPaste", new { Id = Model.Id })" title="Создать копию акции" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
+    <a href="@Url.Action("Edit", new { IdKey = Model.Id, Copy = true })" title="Создать копию акции" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
 
     @if (Model.Enabled == true && Model.Status == true)
     {
@@ -25,20 +25,5 @@
     }  
 
     <a href="@Url.Action("DeletePromo", new { Id = Model.Id })" title="Создать копию акции" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn  btn-default glyphicon glyphicon-trash"></a>
-
-
-    <!-- Добавить / заменить файл -->
-
-    @*
-    @if (Model.PromoFileId == null)  
-    {
-        
-        <a href="@Url.Action("AddFile", new { Id = Model.Id })" title="Прикрепить к акции файл" class="btn btn-default glyphicon glyphicon-file"></a>   
-    }
-    else
-    {
-        <a href="@Url.Action("AddFile", new { Id=Model.Id })" title="Прикрепить другой файл к акции" class="btn btn-default glyphicon glyphicon-file"></a>
-    }
-    *@
 
 </div>

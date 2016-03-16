@@ -18,8 +18,8 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="row">
-                <form action="@Url.Action("Edit")" method="post" data-bind="event:{submit: Validation}" enctype="multipart/form-data">
-                    <input type="text" id="Id" name="Name" hidden="hidden" data-bind="value: Id" />
+                <form action="@Url.Action("EditSave")" method="post" data-bind="event:{submit: Validation}" enctype="multipart/form-data">
+                    <input type="text" id="Id" name="Id" data-bind="value: Id" hidden="hidden"/>
 
                     <div class="col-xs-12">
                         <div class="form-group">
@@ -39,7 +39,7 @@
 
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <label>Список лекарств, участвующих в акции</label>
+                            <label>Список препаратов</label>
                             <select typeod="input" id="DrugList" name="DrugList" multiple="" hidden="hidden" data-bind="foreach: DrugCatalogList, selectedOptions: DrugList, event: {change: Event_DrudList}" class="drop">
                                 <option data-bind="text: Text, value: Value"></option>
                             </select>
@@ -107,7 +107,8 @@
 
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="Добавить/Сохранить изменения" />
+
+                            <input type="submit" class="btn btn-primary" data-bind="value: SubmitText" />
                         </div>
                     </div>
 

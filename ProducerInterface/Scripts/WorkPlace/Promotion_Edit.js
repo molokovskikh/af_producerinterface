@@ -40,7 +40,7 @@ function AjaxLoadModel()
 {
     var SendId = $('#PromotionId').val();
    
-    var JsonSendData =  "{'Id'" +":"+ "'"+ SendId + "'}";
+    var JsonSendData = "{'IdKey'" + ":" + "'" + SendId + "'}";
 
     $.ajax({
         url: "EditGetPromotion",
@@ -97,6 +97,18 @@ function bindModel(JsonModel)
     Promotion.Title(JsonModel.Title);
     Promotion.Title.valueHasMutated();
 
+    if (JsonModel.Title == "Новая промоакция") {
+        Promotion.SubmitText("Добавить и отправить запрос на подтверждение");
+    }
+    else
+    {
+        Promotion.SubmitText("Сохранить изменения и отправить запрос на подтверждение");
+    }
+
+    Promotion.Id(JsonModel.Id);
+    Promotion.Id.valueHasMutated();
+
+    Promotion.SubmitText.valueHasMutated();
     Promotion.Name(JsonModel.Name);
     Promotion.Name.valueHasMutated();
 
