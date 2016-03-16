@@ -9,7 +9,7 @@
 
 
   // лист всех вариантов для построения селекта
-  var propList = (List<OptionElement>)ViewData["MailTo"];
+  var propList = (List<OptionElement>)ViewData["MailToList"];
   if (Model.MailTo != null && Model.MailTo.Count > 0)
   {
       // сохранённые email
@@ -19,20 +19,15 @@
       // добавили к сохранённым email новые
       propList.AddRange(newMail);
   }
-  var asd = new MultiSelectList(propList, "Value", "Text", new List<string>() {"g.maksimenko@analit.net"});
-  //var asd = new MultiSelectList(propList, "Value", "Text", Model.MailTo);
 
-  // класс для ошибки валидации, если есть
-  var errorClass = "";
-  var state = ViewData.ModelState["MailTo"];
-  if (state != null && state.Errors.Count > 0)
-  {
-      errorClass = " input-validation-error";
-  }
-
+    // класс для ошибки валидации, если есть
+    var errorClass = "";
+    var state = ViewData.ModelState["MailTo"];
+    if (state != null && state.Errors.Count > 0)
+    {
+        errorClass = " input-validation-error";
+    }
 }
-
-
 
 <div class="body-content">
     <h2>@ViewBag.Title</h2>
@@ -46,8 +41,8 @@
                 @Html.EditorFor(m => m.jobName)
                 <div class="form-group form-group-otstup">
                     <label>Отправить на email</label>
-                    <div class="input-group" class="@("input-group" + errorClass)">
-                        @Html.ListBox("MailTo", asd@*, new { style = "display: none;" }*@)
+                    <div class="@("input-group" + errorClass)">
+                        @Html.ListBoxFor(m => Model.MailTo, new MultiSelectList(propList, "Value", "Text", Model.MailTo), new { style = "display: none;" })
                         <span class="input-group-btn">
                             <input type="submit" value="Отправить" class="btn btn-primary w150" />
                         </span>

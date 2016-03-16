@@ -335,4 +335,12 @@ span.chosen-comment {
 
 .w150 {
     width: 150px;
-    }
+}
+
+.w10p {
+    width: 10%;
+}
+
+.w20p {
+    width: 20%;
+}

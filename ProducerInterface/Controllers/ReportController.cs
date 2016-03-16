@@ -539,7 +539,7 @@ namespace ProducerInterface.Controllers
 			// вытащили заголовок отчета
 			ViewBag.Title = ds.Tables["Titles"].Rows[0][0].ToString();
 			// добавили список адресов для выбора
-			ViewData["MailTo"] = h.GetMailList();
+			ViewData["MailToList"] = h.GetMailList();
 
 			// по умолчанию выделен email пользователя
 			var model = new SendReport();
@@ -573,7 +573,7 @@ namespace ProducerInterface.Controllers
 			// вытащили заголовок отчета
 			ViewBag.Title = ds.Tables["Titles"].Rows[0][0].ToString();
 			// добавили список адресов для выбора
-			ViewData["MailTo"] = h.GetMailList();
+			ViewData["MailToList"] = h.GetMailList();
 
 			foreach (var error in model.Validate())
 				ModelState.AddModelError(error.PropertyName, error.Message);

@@ -11,7 +11,8 @@
 <div class="row">
     <div class="col-md-12">
         <h4>@title</h4>
-    </div>
+        @Html.Partial("FeedBack")
+   </div>
 </div>
 <hr />
 <div class="row">
@@ -24,6 +25,7 @@
                 @Html.Hidden("familyId", ViewData["familyId"])
                 @Html.Hidden("url", Url.Action("EditDescriptionField", "Drug"))
                 @Html.Hidden("urlMnn", Url.Action("EditMnnField", "Drug"))
+                @Html.Hidden("urlGetMnn", Url.Action("GetMnn", "Drug"))
             </fieldset>
         }
     </div>
