@@ -109,19 +109,18 @@ namespace ProducerInterface.Controllers
 	        var catalogId = long.Parse(regex.Match(name).Groups["catalogId"].Value);
 					var field = regex.Match(name).Groups["field"].Value;
 	        var newValue = bool.Parse(Request.Form.GetValues(i)[0]);
-	        var row = model.Single(x => x.Id == catalogId);
+					// одна строка из каталога, модель - коллекция строк
+					var row = model.Single(x => x.Id == catalogId);
 					var propertyInfo = row.GetType().GetProperty(field);
 	        var oldValue = (bool)propertyInfo.GetValue(row);
-					// если изменилось TODO где-то сохранять
 					if (newValue != oldValue) {
 						propertyInfo.SetValue(row, newValue);
 						ccntx.SaveChanges(CurrentUser, "Редактирование лек. форм");
-						//var value = newValue;
+						EmailSender.SendCatalogChangeMessage(cntx_, CurrentUser, propertyInfo.Name, row.Name, oldValue.ToString(), newValue.ToString());
 					}
-        }
+				}
 			}
-			return View(model);
-			//return null;
+			return View("DisplayForms", model);
 		}
 
 		public JsonResult EditDescriptionField(long familyId, string field, string value)
@@ -141,9 +140,8 @@ namespace ProducerInterface.Controllers
 			var propertyInfo = model.GetType().GetProperty(field);
 			var before = (string)propertyInfo.GetValue(model);
 			propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
-			// TODO где-то сохранять
 			ccntx.SaveChanges(CurrentUser, "Изменение описания препарата");
-			EmailSender.SendCatalogChangeMessage(cntx_, CurrentUser, propertyInfo.Name, df.DescriptionId, before, value);
+			EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, propertyInfo.Name, df.Name, before, value);
       return Json(new { field = field, value = value });
 		}
 

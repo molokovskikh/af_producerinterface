@@ -111,7 +111,7 @@ namespace ProducerInterface.Controllers
 				ProducerId = producerId,
 				ReportType = model.Id,
 				SchedName = scheduler.SchedulerName,
-				Scheduler = "Расписание не задано"
+				Scheduler = "Время формирования не задано"
 			};
 
 			cntx_.jobextend.Add(jext);
@@ -334,7 +334,6 @@ namespace ProducerInterface.Controllers
 			RunNowParam model;
 			if (param is IInterval) {
 				model = new RunNowIntervalParam();
-				model.MailTo = new List<string>() { CurrentUser.Login };
 			}
 			// TODO при появлении неинтервальных отчетов добавить код
 			else
@@ -346,6 +345,8 @@ namespace ProducerInterface.Controllers
 			// при GET возвращаем пустую модель для заполнения
 			if (HttpContext.Request.HttpMethod == "GET")
 			{
+				// по умолчанию выделен email пользователя
+				model.MailTo = new List<string>() { CurrentUser.Login };
 				SetViewData(model);
 				return View(model);
 			}
@@ -417,7 +418,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// Возвращает форму для заполнения параметров запуска отчетов, включая расписание, устанавливает исполнение задания по расписанию
+		/// Возвращает форму для заполнения параметров запуска отчетов, устанавливает исполнение задания
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <param name="jobGroup">Группа задания в Quartz</param>
@@ -442,7 +443,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			var param = (Report)job.JobDataMap["param"];
-			ViewBag.Title = $"Расписание для \"{param.CastomName}\"";
+			ViewBag.Title = $"Установка времени формирования для отчета \"{param.CastomName}\"";
 
 			CronParam model;
 			if (param is IInterval)
@@ -450,7 +451,7 @@ namespace ProducerInterface.Controllers
 			// TODO при появлении неинтервальных отчетов добавить код
 			else
 			{
-				ErrorMessage("Для отчета этого невозможно задать расписание");
+				ErrorMessage("Для этого отчета невозможно задать время формирования");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -514,16 +515,46 @@ namespace ProducerInterface.Controllers
 
 			// меняем человекочитаемое описание в доп. параметрах задачи
 			jext.Scheduler = model.CronHumanText;
-			cntx_.SaveChanges(CurrentUser, "Установка расписания отчета");
-			SuccessMessage($"Расписание успешно установлено{nextGen}");
+			cntx_.SaveChanges(CurrentUser, "Установка времени формирования отчета");
+			SuccessMessage($"Время формирования отчета успешно установлено{nextGen}");
 			return RedirectToAction("JobList", "Report");
 		}
+
+		[HttpGet]
+		public ActionResult DisplayReport(string jobName)
+		{
+			// вытащили отчет
+			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
+			if (jxml == null)
+			{
+				ErrorMessage("Отчет не найден");
+				return RedirectToAction("JobList", "Report");
+			}
+
+			// добавили отчет для вывода
+			var ds = new DataSet();
+			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
+			ViewData["ds"] = ds;
+
+			// вытащили заголовок отчета
+			ViewBag.Title = ds.Tables["Titles"].Rows[0][0].ToString();
+			// добавили список адресов для выбора
+			ViewData["MailToList"] = h.GetMailList();
+
+			// по умолчанию выделен email пользователя
+			var model = new SendReport();
+			model.MailTo = new List<string>() { CurrentUser.Login };
+			model.jobName = jobName;
+			return View(model);
+		}
+
 
 		/// <summary>
 		/// Возвращает последнюю версию указанного отчета для отображения пользователю в веб-интерфейсе
 		/// </summary>
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <returns></returns>
+		[HttpPost]
 		public ActionResult DisplayReport(SendReport model)
 		{
 			// вытащили отчет
@@ -533,35 +564,28 @@ namespace ProducerInterface.Controllers
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
+			
+			// добавили отчет для вывода
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
+			ViewData["ds"] = ds;
 
 			// вытащили заголовок отчета
 			ViewBag.Title = ds.Tables["Titles"].Rows[0][0].ToString();
 			// добавили список адресов для выбора
-			ViewData["MailTo"] = h.GetMailList();
-			// добавили отчет для вывода
-			ViewData["ds"] = ds;
+			ViewData["MailToList"] = h.GetMailList();
 
-			// если указаны email - проверяем
-			if (model.MailTo != null && model.MailTo.Count > 0)
-			{
-				var ea = new EmailAddressAttribute();
-				var ok = true;
-				foreach (var mail in model.MailTo)
-					ok = ok && ea.IsValid(mail);
-				if (!ok)
-					ModelState.AddModelError("MailTo", "Неверный формат email");
-			}
+			foreach (var error in model.Validate())
+				ModelState.AddModelError(error.PropertyName, error.Message);
 
-			// если POST и модель валидна - отправляем
-			if (HttpContext.Request.HttpMethod == "POST" && ModelState.IsValid)
-			{
-				var jext = cntx_.jobextend.Single(x => x.JobName == model.jobName);
-				var file = GetExcel(jext);
-				EmailSender.ManualPostReportMessage(cntx_, userId, jext, file.FullName, model.MailTo);
-				SuccessMessage("Отчет отправлен на указанные email");
-			}
+			// если модель невалидна - возвращаем пользователю
+			if (!ModelState.IsValid)
+				return View(model);
+
+			var jext = cntx_.jobextend.Single(x => x.JobName == model.jobName);
+			var file = GetExcel(jext);
+			EmailSender.ManualPostReportMessage(cntx_, userId, jext, file.FullName, model.MailTo);
+			SuccessMessage("Отчет отправлен на указанные email");
 			return View(model);
 		}
 

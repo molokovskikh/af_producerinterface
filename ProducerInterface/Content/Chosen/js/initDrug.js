@@ -40,11 +40,11 @@ function EditMnn() {
 };
 
 $(function () {
-
+    
     // https://github.com/meltingice/ajax-chosen
     $('#mnn').ajaxChosen({
         type: 'GET',
-        url: '/ProducerInterface/Drug/GetMnn',
+        url: $('#urlGetMnn').val(),
         dataType: 'json',
         minTermLength: 2,
         afterTypeDelay: 300,

@@ -352,11 +352,9 @@
     <Content Include="Views\Report\EditorTemplates\String.cshtml" />
     <Content Include="Views\Report\EditorTemplates\StringList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\SupplierRatingReport.cshtml" />
-    <Content Include="Views\Report\Error.cshtml" />
     <Content Include="Views\Report\JobList.cshtml" />
     <Content Include="Views\Report\RunNow.cshtml" />
     <Content Include="Views\Report\ScheduleJob.cshtml" />
-    <Content Include="Views\Report\Success.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\LongList.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -397,7 +395,7 @@
     <Content Include="Views\Drug\EditorTemplates\TextBox.cshtml" />
     <Content Include="Views\Drug\EditForms.cshtml" />
     <Content Include="Views\Drug\DisplayForms.cshtml" />
-    <Content Include="Views\Drug\EditMnn.cshtml" />
+    <Content Include="Views\Drug\EditMnn_.cshtml" />
     <Content Include="Views\Permission\EditorTemplates\LongListPermission.cshtml" />
     <Content Include="Views\Shared\MenuPartialView.cshtml" />
     <Content Include="Views\general_reports\Details.cshtml" />
@@ -451,6 +449,8 @@
     <Content Include="Views\Promotion\EditorTemplates\SuppierRegionsList.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\DateEnd.cshtml" />
     <Content Include="Views\Promotion\Edit.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
+    <Content Include="Views\Drug\Partial\FeedBack.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>

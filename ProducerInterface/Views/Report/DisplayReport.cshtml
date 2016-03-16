@@ -9,7 +9,7 @@
 
 
   // лист всех вариантов для построения селекта
-  var propList = (List<OptionElement>)ViewData["MailTo"];
+  var propList = (List<OptionElement>)ViewData["MailToList"];
   if (Model.MailTo != null && Model.MailTo.Count > 0)
   {
       // сохранённые email
@@ -19,24 +19,19 @@
       // добавили к сохранённым email новые
       propList.AddRange(newMail);
   }
-  // класс для ошибки валидации, если есть
-  var errorClass = "";
-  var state = ViewData.ModelState["MailTo"];
-  if (state != null && state.Errors.Count > 0)
-  {
-      errorClass = " input-validation-error";
-  }
 
+    // класс для ошибки валидации, если есть
+    var errorClass = "";
+    var state = ViewData.ModelState["MailTo"];
+    if (state != null && state.Errors.Count > 0)
+    {
+        errorClass = " input-validation-error";
+    }
 }
-
-
 
 <div class="body-content">
     <h2>@ViewBag.Title</h2>
     <div class="row">
-        @*<div class="col-md-6">
-                @Html.ActionLink("К списку отчетов", "JobList", new { r = Guid.NewGuid() })
-            </div>*@
         <div class="col-md-6">
             @Html.ActionLink("Сохранить в Excel", "GetFile", new { jobName = Model.jobName })
         </div>
@@ -46,24 +41,22 @@
                 @Html.EditorFor(m => m.jobName)
                 <div class="form-group form-group-otstup">
                     <label>Отправить на email</label>
-                    <div class="@(errorClass)">
+                    <div class="@("input-group" + errorClass)">
                         @Html.ListBoxFor(m => Model.MailTo, new MultiSelectList(propList, "Value", "Text", Model.MailTo), new { style = "display: none;" })
-                        @Html.ValidationMessageFor(m => Model.MailTo)
+                        <span class="input-group-btn">
+                            <input type="submit" value="Отправить" class="btn btn-primary w150" />
+                        </span>
                     </div>
+                    @Html.ValidationMessageFor(m => Model.MailTo)
                 </div>
-
                 <div class="form-group form-group-otstup">
                     <label>Дополнительные email-адреса</label>
                     <div class="input-group">
                         @Html.TextBox("addMail", null, new { @class = "form-control", @placeholder = "Email" })
                         <span class="input-group-btn">
-                            <input id="addBtn" name="addBtn" value="Добавить" class="btn btn-primary" />
+                            <input id="addBtn" name="addBtn" type="button" value="Добавить" class="btn btn-primary w150" />
                         </span>
                     </div>
-                </div>
-
-                <div class="form-group form-group-otstup">
-                    <input type="submit" class="btn btn-primary" value="Отправить"/>
                 </div>
             }
         </div>
@@ -95,12 +88,6 @@
                 </tbody>
             </table>
     </div>
-
-    @*<div class="row">
-            <div class="col-md-12">
-                @Html.ActionLink("К списку отчетов", "JobList", new {r = Guid.NewGuid()})
-            </div>
-        </div>*@
 </div>
 
 @section JavaScript {

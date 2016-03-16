@@ -84,12 +84,12 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ManualPostReport);
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
 			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
+			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = jext.LastRun, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.ManualPostReport);
 			attachments.Add(path);
 			EmailSender.SendEmail(mailTo, subject, body, attachments);
 
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {producerName} (id={user.AccountCompany.ProducerId}), время {jext.LastRun}, отчет \"{jext.CustomName}\", задача {jext.JobName}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
 		}
@@ -181,13 +181,24 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments, false);
 		}
 
+		// Изменение ПКУ, сотрудникам
+		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string field, string catalogName, string before, string after)
+		{
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
+			var subject = $"Изменение ПКУ препарата на сайте {siteName}";
+			var body = $"Изменено свойство {field} формы выпуска {catalogName}\r\n\r\nБыло: {before}\r\n\r\nСтало: {after}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {user.IP}";
+			EmailSender.SendEmail(catalogChangeEmail, subject, bodyExtended, null, false);
+		}
+
 		// Изменение описания препарата, сотрудникам
-		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string field, long? id, string before, string after)
+		public static void SendDescriptionChangeMessage(producerinterface_Entities cntx, Account user, string field, string drugFamilyName, string before, string after)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			var subject = $"Изменение описания препарата на сайте {siteName}";
-			var body = $"Изменено поле {field} записи {id}\r\n\r\nБыло:\r\n\r\n{before}\r\n\r\nСтало:\r\n\r\n{after}";
+			var body = $"Изменено поле {field} препарата {drugFamilyName}\r\n\r\nБыло:\r\n\r\n{before}\r\n\r\nСтало:\r\n\r\n{after}";
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {user.IP}";
 			EmailSender.SendEmail(catalogChangeEmail, subject, bodyExtended, null, false);
 		}

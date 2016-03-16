@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProducerInterfaceCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
@@ -174,14 +175,24 @@ namespace ProducerInterfaceCommon.ContextModels
 		[HiddenInput(DisplayValue = false)]
 		public string jobName { get; set; }
 
-		[UIHint("MailTo")]
 		[Display(Name = "Email")]
-		[Required(ErrorMessage = "Введите email")]
+		[Required(ErrorMessage = "Не указан email")]
 		public List<string> MailTo { get; set; }
 
-		public SendReport()
+		public List<ErrorMessage> Validate()
 		{
-			MailTo = new List<string>();
+			var errors = new List<ErrorMessage>();
+			if (MailTo != null && MailTo.Count > 0)
+			{
+				var ea = new EmailAddressAttribute();
+				var ok = true;
+				foreach (var mail in MailTo)
+					ok = ok && ea.IsValid(mail);
+				if (!ok)
+					errors.Add(new ErrorMessage("MailTo", "Неверный формат email"));
+			}
+
+			return errors;
 		}
 	}
 

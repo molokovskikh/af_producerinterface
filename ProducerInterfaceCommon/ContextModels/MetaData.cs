@@ -218,7 +218,7 @@ namespace ProducerInterfaceCommon.ContextModels
 				if (RunNow)
 					return "вручную";
 				else
-					return "по расписанию";
+					return "автоматически";
 			}
 		}
 	}

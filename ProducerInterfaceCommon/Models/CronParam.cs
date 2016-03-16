@@ -15,9 +15,9 @@ namespace ProducerInterfaceCommon.Models
 	{
 		private string _cronHumanText;
 
-		[Display(Name = "Расписание")]
+		[Display(Name = "Формировать отчет")]
 		[UIHint("CronExpression")]
-		[Required(ErrorMessage = "Не задано расписание")]
+		[Required(ErrorMessage = "Время формирования отчета не задано")]
 		public string CronExpressionUi {
 			get { return QuartzToUi(CronExpression); }
 			set { CronExpression = UiToQuartz(value); }
