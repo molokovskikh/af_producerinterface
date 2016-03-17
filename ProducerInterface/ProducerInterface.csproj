@@ -453,6 +453,7 @@
     <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\Drug\Partial\FeedBack.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Report\GetReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
