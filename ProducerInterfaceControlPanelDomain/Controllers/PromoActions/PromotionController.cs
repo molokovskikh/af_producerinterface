@@ -36,8 +36,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
             SqlProcedure<ProducerInterfaceCommon.CustomHelpers.Models.PromotionsInRegionMask> CH = new SqlProcedure<ProducerInterfaceCommon.CustomHelpers.Models.PromotionsInRegionMask>((ulong)CurrentUser.RegionMask);
             var ListId = CH.GetPromotionId();
+                    
             PromotionList = cntx_.promotions.Where(x => ListId.Contains(x.Id)).ToList();
-
+                       
             if (!Filter.EnabledDateTime)
             {
                 PromotionList = PromotionList.Where(x=> x.Begin > Filter.Begin && x.End < Filter.End).ToList();
@@ -160,7 +161,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var ReturnFile = cntx_.MediaFiles.Find(Id);
             return File(ReturnFile.ImageFile, ReturnFile.ImageType, ReturnFile.ImageName);
-
         }
     }
 }

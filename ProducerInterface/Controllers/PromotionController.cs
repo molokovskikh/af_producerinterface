@@ -193,7 +193,7 @@ namespace ProducerInterface.Controllers
         {
             var PromoDB = cntx_.promotions.Find(newPromo.Id);
 
-            var promotion_to_Drug = PromoDB.promotionToDrug;
+            var promotion_to_Drug = PromoDB.promotionToDrug.ToList();
 
             foreach (var DrugItem in promotion_to_Drug)
             {
@@ -226,7 +226,7 @@ namespace ProducerInterface.Controllers
 
             cntx_.SaveChanges(CurrentUser, "Препарат добавлен в акцию");
 
-            var Promo_PromotionsToSupplier = PromoDB.PromotionsToSupplier;
+            var Promo_PromotionsToSupplier = PromoDB.PromotionsToSupplier.ToList();
 
             foreach (var SupplierItem in Promo_PromotionsToSupplier)
             {

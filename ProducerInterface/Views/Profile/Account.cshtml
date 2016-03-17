@@ -5,24 +5,7 @@
 <div class="container body-content">
   @using(Html.BeginForm("Account", "Profile", FormMethod.Post)){
         <h3>Компания : @Model.CompanyName</h3>
-        <hr/>
-		  
-		<div class="form-group jumbotron">
-            <div class="row">
-                <div class="col-xs-12">
-                    <label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
-                    <div class="input-group">
-                        @Html.EditorFor(m => m.Mailname)
-                        <div class="input-group-btn" style="min-width: 175px;">
-                            @Html.EditorFor(m => m.EmailDomain)
-                        </div>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Mailname)
-                    @Html.ValidationMessageFor(model => model.EmailDomain)
-                </div>
-                </div>
-            </div>	 
-        <hr />
+        <hr/>     
 
     @Html.EditorFor(m => m.LastName)
     @Html.EditorFor(m => m.FirstName)
@@ -32,6 +15,27 @@
 	        @Html.EditorFor(m => m.AppointmentId)
 
 	        <br/>
+
+            <hr/>
+            <a href="#LoginChange" data-toggle="collapse">Смена логина</a>
+
+            <div class="form-group collapse" id="LoginChange">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
+                        <div class="input-group">
+                            @Html.EditorFor(m => m.Mailname)
+                            <div class="input-group-btn" style="min-width: 175px;">
+                                @Html.EditorFor(m => m.EmailDomain)
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Mailname)
+                        @Html.ValidationMessageFor(model => model.EmailDomain)
+                    </div>
+                </div>
+            </div>
+
+            <hr />
 
 	        <div class="form-group">
 		        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Сохранить изменения"/>
