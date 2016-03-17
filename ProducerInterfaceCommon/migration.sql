@@ -410,13 +410,78 @@ left join producerinterface.PharmacyNames ph on ph.PharmacyId = T.PharmacyId');
 
 END$$
 
-
-# не внесено на боевой
 create or replace DEFINER=`RootDBMS`@`127.0.0.1` view supplierregions as 	
 select distinct s.Id as SupplierId, s.RegionMask
 from Customers.Suppliers s
 inner join usersettings.PricesData pd on pd.FirmCode = s.Id
 where pd.Enabled = 1 and pd.IsLocal = 0 and pd.AgencyEnabled = 1 and s.Disabled = 0;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `PromotionsInRegionMask`(IN `RGM` bigint(20) UNSIGNED)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+ IF(RGM <= 0) THEN
+ 	select ps.Id, ps.RegionMask
+	from promotions ps;
+ ELSE  
+   select ps.Id Id, ps.RegionMask
+ 	from promotions ps
+ 	where RGM & ps.RegionMask; 
+ END IF;
+ 
+END$$
+
+
+drop PROCEDURE `ProductConcurentRatingReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `ProductConcurentRatingReport`(IN `CatalogId` VARCHAR(1000), IN `RegionCode` VARCHAR(1000), IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select c.CatalogName,
+if(c.IsPharmacie = 1, p.ProducerName, \'Нелекарственный ассортимент\') as ProducerName,
+r.RegionName,
+T.Summ, CAST(T.PosOrder as SIGNED INTEGER) as PosOrder, 
+T.MinCost, T.AvgCost, T.MaxCost, T.DistinctOrderId, T.DistinctAddressId
+from
+	(select CatalogId, ProducerId, RegionCode,
+	Sum(Cost*Quantity) as Summ,
+	Sum(Quantity) as PosOrder,
+	Min(Cost) as MinCost,
+	Avg(Cost) as AvgCost,
+	Max(Cost) as MaxCost,
+	Count(distinct OrderId) as DistinctOrderId,
+	Count(distinct AddressId) as DistinctAddressId
+	from producerinterface.RatingReportOrderItems
+	where IsLocal = 0
+	and CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by CatalogId,ProducerId,RegionCode
+	order by Summ desc) as T
+left join producerinterface.CatalogNames c on c.CatalogId = T.CatalogId
+left join producerinterface.ProducerNames p on p.ProducerId = T.ProducerId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
+
+
+
 
 
 

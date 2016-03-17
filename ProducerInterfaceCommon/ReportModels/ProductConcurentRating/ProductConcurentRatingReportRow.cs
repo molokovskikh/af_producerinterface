@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterfaceCommon.Models
 {
-    class ProductConcurentRatingReportRow : RatingReportRow
-    {
-        [Display(Name = "Наименование")]
-        public string CatalogName { get; set; }
-    }
+	class ProductConcurentRatingReportRow : RatingReportRow
+	{
+		[Display(Name = "Наименование и форма выпуска")]
+		public string CatalogName { get; set; }
+
+		[Display(Name = "Производитель")]
+		public string ProducerName { get; set; }
+
+		[Display(Name = "Регион")]
+		public string RegionName { get; set; }
+	}
 }

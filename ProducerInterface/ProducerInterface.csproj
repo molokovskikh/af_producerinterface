@@ -442,7 +442,6 @@
     <Content Include="Views\Drug\EditorTemplates\Mnn.cshtml" />
     <Content Include="Views\Account\AdminAuth.cshtml" />
     <Content Include="Views\Report\RunHistory.cshtml" />
-    <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\FeedBack\FeedBack.cshtml" />
     <Content Include="Views\FeedBack\Success.cshtml" />
     <Content Include="Views\FeedBack\Index.cshtml" />
@@ -450,10 +449,10 @@
     <Content Include="Views\Promotion\EditorTemplates\SuppierRegionsList.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\DateEnd.cshtml" />
     <Content Include="Views\Promotion\Edit.cshtml" />
-    <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\Drug\Partial\FeedBack.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Report\GetReport.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
