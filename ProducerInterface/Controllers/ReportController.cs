@@ -524,20 +524,22 @@ namespace ProducerInterface.Controllers
 		public ActionResult DisplayReport(string jobName)
 		{
 			// вытащили отчет
-			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
+			var jxml = cntx_.reportxml.Where(x => x.JobName == jobName).Select(x => x.JobName).SingleOrDefault();
 			if (jxml == null)
 			{
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
-			// добавили отчет для вывода
-			var ds = new DataSet();
-			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
-			ViewData["ds"] = ds;
+			var jext = GetJobExtend(jobName);
+			if (jext == null)
+			{
+				ErrorMessage("Дополнительные параметры задачи не найдены");
+				return RedirectToAction("JobList", "Report");
+			}
 
-			// вытащили заголовок отчета
-			ViewBag.Title = ds.Tables["Titles"].Rows[0][0].ToString();
+			ViewBag.Title = jext.CustomName;
+
 			// добавили список адресов для выбора
 			ViewData["MailToList"] = h.GetMailList();
 
@@ -548,6 +550,20 @@ namespace ProducerInterface.Controllers
 			return View(model);
 		}
 
+		[HttpGet]
+		public ActionResult GetReport(string jobName)
+		{
+			// вытащили отчет
+			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
+			if (jxml == null)
+				Content("<h3>Отчет не найден</h3>");
+
+			// добавили отчет для вывода
+			var model = new DataSet();
+			model.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
+
+			return View(model);
+		}
 
 		/// <summary>
 		/// Возвращает последнюю версию указанного отчета для отображения пользователю в веб-интерфейсе
@@ -558,20 +574,23 @@ namespace ProducerInterface.Controllers
 		public ActionResult DisplayReport(SendReport model)
 		{
 			// вытащили отчет
-			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == model.jobName);
+			var jxml = cntx_.reportxml.Where(x => x.JobName == model.jobName).Select(x => x.JobName).SingleOrDefault();
 			if (jxml == null)
 			{
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
-			
-			// добавили отчет для вывода
-			var ds = new DataSet();
-			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
-			ViewData["ds"] = ds;
 
+			var jext = GetJobExtend(model.jobName);
+			if (jext == null)
+			{
+				ErrorMessage("Дополнительные параметры задачи не найдены");
+				return RedirectToAction("JobList", "Report");
+			}
+			
 			// вытащили заголовок отчета
-			ViewBag.Title = ds.Tables["Titles"].Rows[0][0].ToString();
+			ViewBag.Title = jext.CustomName;
+
 			// добавили список адресов для выбора
 			ViewData["MailToList"] = h.GetMailList();
 
@@ -582,7 +601,6 @@ namespace ProducerInterface.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			var jext = cntx_.jobextend.Single(x => x.JobName == model.jobName);
 			var file = GetExcel(jext);
 			EmailSender.ManualPostReportMessage(cntx_, userId, jext, file.FullName, model.MailTo);
 			SuccessMessage("Отчет отправлен на указанные email");

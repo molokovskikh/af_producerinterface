@@ -16,4 +16,10 @@
 	    mailList.trigger("chosen:updated");
 	});
 
+	var url = $('#url').val();
+	$.get(url, function (data) {
+	    $('#report').html(data);
+	});
+
+
 });

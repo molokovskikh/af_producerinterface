@@ -279,7 +279,7 @@ namespace ProducerInterface.Controllers
                         }
                         else
                         {
-                            ErrorMessage("Ваша учетная запись Заблокирована, для обращений используйте email " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
+                            ErrorMessage("Ваша учетная запись Заблокирована, для обращений используйте email " + System.Configuration.ConfigurationManager.AppSettings["MailFrom"].ToString());
                             return RedirectToAction("Index", "Home");
                         }
                     }
@@ -289,7 +289,7 @@ namespace ProducerInterface.Controllers
                     // пользователь не найден
                     // отсылаем на домашнюю, с ошибкой
 
-                    ErrorMessage("Пользователь с email " + login + " не найден в базе или заблокирован , для обращений используйте email " + System.Configuration.ConfigurationManager.AppSettings["ProducerInterfaceForwardEmail"].ToString());
+                    ErrorMessage("Пользователь с email " + login + " не найден в базе или заблокирован , для обращений используйте email " + System.Configuration.ConfigurationManager.AppSettings["MailFrom"].ToString());
                     return RedirectToAction("PasswordRecovery", "Registration");
 
                 }

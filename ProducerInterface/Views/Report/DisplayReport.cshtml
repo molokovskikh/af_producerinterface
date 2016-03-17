@@ -1,13 +1,7 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
-@using System.Data
 @model SendReport
 
 @{
-  var ds = (DataSet)ViewData["ds"];
-  var headers = ds.Tables["Headers"];
-  var data = ds.Tables["Data"];
-
-
   // лист всех вариантов для построения селекта
   var propList = (List<OptionElement>)ViewData["MailToList"];
   if (Model.MailTo != null && Model.MailTo.Count > 0)
@@ -38,6 +32,7 @@
         <div class="col-md-6">
             @using (Html.BeginForm())
             {
+                @Html.Hidden("url", Url.Action("GetReport", "Report", new { jobName = Model.jobName }))
                 @Html.EditorFor(m => m.jobName)
                 <div class="form-group form-group-otstup">
                     <label>Отправить на email</label>
@@ -62,31 +57,7 @@
         </div>
     </div>
     <hr/>
-    <div class="row">
-        <ul>
-            @foreach (System.Data.DataRow row in headers.Rows)
-            {
-            <li>@row[0].ToString()</li>}
-        </ul>
-
-        <table border="1">
-                <thead>
-                    <tr>
-                        @foreach (System.Data.DataColumn col in data.Columns)
-                        {
-                        <th>@col.Caption</th>}
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (System.Data.DataRow row in data.Rows)
-                    {
-                    <tr>
-                        @foreach (var cell in row.ItemArray)
-                        {
-                        <td>@cell.ToString()</td>}
-                    </tr>}
-                </tbody>
-            </table>
+    <div class="row" id="report">
     </div>
 </div>
 
