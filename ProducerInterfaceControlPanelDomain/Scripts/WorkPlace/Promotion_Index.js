@@ -35,6 +35,8 @@ function LoadingResultCompleted()
 {
     $('#loadingdata').css('display', 'none');
     $('#replacecontent').css('display', 'block');
+
+    $('#FilterModal').modal('hide');
 }
 
 function ShowOrHideDateTime() {

@@ -84,9 +84,7 @@ namespace ProducerInterface.Controllers
             ModelView.ProducerId = ViewModel.ProducerId;
             ModelView.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ViewModel.ProducerId).First().ProducerName;
 
-            return View(ModelView);
-            
-            
+            return View(ModelView);   
                         
         }
         [HttpPost]

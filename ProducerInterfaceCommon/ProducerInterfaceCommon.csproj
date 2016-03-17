@@ -413,6 +413,7 @@
     <Compile Include="ViewModel\ControlPanel\Promotion\SearchProducerPromotion.cs" />
     <Compile Include="ViewModel\ControlPanel\Report\SearchProducerReportsModel.cs" />
     <Compile Include="ViewModel\Interface\Global\FeedBack.cs" />
+    <Compile Include="ViewModel\Interface\Profile\ChangePassword.cs" />
     <Compile Include="ViewModel\Interface\Profile\ProfileValidation.cs" />
     <Compile Include="ViewModel\Interface\Promotion\PromotionEdit.cs" />
     <Compile Include="ViewModel\Interface\Registration\AuthViewModel.cs" />

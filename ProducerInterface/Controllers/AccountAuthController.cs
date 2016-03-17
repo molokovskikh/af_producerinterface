@@ -184,32 +184,6 @@ namespace ProducerInterface.Controllers
             var currentUser = cntx_.Account.Where(x => x.Login == username && x.TypeUser == (sbyte)TypeUsers.ProducerUser).First();
             AutorizeCurrentUser(currentUser, TypeUsers.ProducerUser, userData);
 
-            //string CoockieName = GetWebConfigParameters("CookiesName");
-
-            //var redirectAfterAuthentication = "Home/Index";
-            //string[] url = redirectAfterAuthentication.Split('/');
-            //var controller = url[0];
-            //var action = url.Length > 1 ? url[1] : "Index";
-
-            //var ticket = new FormsAuthenticationTicket(
-            //    1,
-            //    this.CurrentUser.Login,
-            //    SystemTime.Now(),
-            //    SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
-            //    shouldRemember,
-            //    userData,
-            //    FormsAuthentication.FormsCookiePath
-            //    );
-
-            //var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
-
-            //if (shouldRemember)
-            //{
-            //    cookie.Expires = SystemTime.Now().AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
-            //}
-            //FormsAuthentication.SetAuthCookie(currentUser.Name, false);
-            //Response.Cookies.Set(cookie);
-
             return "Profile/index";
         }
         
@@ -296,22 +270,36 @@ namespace ProducerInterface.Controllers
             }
         }
 
-        public ActionResult ChangePassword()
+        [HttpPost]
+        public ActionResult ChangePassword(ProducerInterfaceCommon.ViewModel.Interface.Profile.ChangePassword NewPassword)
         {
-            var User = cntx_.Account.Where(xxx => xxx.Login == CurrentUser.Login && xxx.TypeUser == 0).FirstOrDefault();
-            string password = GetRandomPassword();
-            User.Password = Md5HashHelper.GetHash(password);
 
+            if (!ModelState.IsValid)
+            {
+                return View(NewPassword);
+            }
+
+       
+
+            var User = cntx_.Account.Where(xxx => xxx.Login == CurrentUser.Login && xxx.TypeUser == 0).FirstOrDefault();
+            User.Password = Md5HashHelper.GetHash(NewPassword.Pass);
+         
             cntx_.Entry(User).State = System.Data.Entity.EntityState.Modified;
             cntx_.SaveChanges();
 
-            SuccessMessage("Новый пароль отправлен на ваш email: " + User.Login);
+            SuccessMessage("Новый пароль сохранен и отправлен на ваш email: " + User.Login);
 
-            ProducerInterfaceCommon.Heap.EmailSender.SendPasswordChangeMessage(cntx: cntx_, userId: User.Id, password: password, ip: Request.UserHostAddress);
+            ProducerInterfaceCommon.Heap.EmailSender.SendPasswordChangeMessage(cntx: cntx_, userId: User.Id, password: NewPassword.Pass, ip: Request.UserHostAddress);
 
             return RedirectToAction("Index", "Profile");
         }
-        
+
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View(new ProducerInterfaceCommon.ViewModel.Interface.Profile.ChangePassword());
+        }
+
         public ActionResult LogOut()
         {
             // зануляем куки регистрации формой

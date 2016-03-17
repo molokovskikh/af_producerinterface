@@ -6,6 +6,7 @@
 
     var RegionList = ViewBag.RegionList as IEnumerable<OptionElement>;
     var DrugList = ViewBag.DrugList as IEnumerable<OptionElement>;
+    var SupplierList = ViewBag.SupplierList as IEnumerable<OptionElement>;
 }
 
 <div class="container body-content">
@@ -30,6 +31,16 @@
         <label>Аннотация</label>
         <p>@Model.Annotation</p>
     </div>
+    
+    <div class="form-group">
+        <p><label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></p>
+        <div id="promotiondruglist" class="collapse">
+            @foreach (var DrugItem in DrugList)
+            {
+                <p>@DrugItem.Text</p>
+            }
+        </div>
+    </div>
 
     <div class="form-group">
         <p><label>Список регионов  <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
@@ -42,11 +53,11 @@
     </div>
 
     <div class="form-group">
-        <p><label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></p>
-        <div id="promotiondruglist" class="collapse">
-            @foreach (var DrugItem in DrugList)
+        <p><label>Список поствщиков  <a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
+        <div id="promotionSupplierList" class="collapse">
+            @foreach (var SupplierItem in SupplierList)
             {
-                <p>@DrugItem.Text</p>
+                <p>@SupplierItem.Text</p>
             }
         </div>
     </div>
@@ -78,7 +89,7 @@
     <div class="form-group">
         @if (Model.Status)
         {
-            <a class="btn btn-primary" href="@Url.Action("UnSuccessPromotion", "promotion", new { Id = Model.Id })"> Отмена подтверждения промоакцию</a>
+            <a class="btn btn-primary" href="@Url.Action("UnSuccessPromotion", "promotion", new { Id = Model.Id })"> Отмена подтверждения промоакции</a>
         }
         else
         {

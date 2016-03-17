@@ -133,8 +133,46 @@ namespace ProducerInterfaceCommon.Heap
 			return result;
 		}
 
-		// для UI
-		public List<OptionElement> GetSupplierList(List<decimal> regionList)
+        public List<OptionElement> GetSupplierList(List<ulong> regionList)
+        {
+            if (regionList == null || regionList.Count() == 0)
+            {
+                return new List<OptionElement>();
+            }
+
+            List<supplierregions> suppliers = new List<supplierregions>();
+
+            if (_httpContext != null)
+            {
+                suppliers = GetSuppliersInRegions().ToList();
+            }
+            else
+            {
+                suppliers = _cntx.supplierregions.ToList();
+            }
+            List<long> supplierIds = null;
+
+            // если список регионов содержит 0 (все регионы) - возвращаем всех поставщиков
+            if (regionList.Contains(0))
+            {
+                supplierIds = suppliers.Select(x => x.SupplierId).ToList();
+            }
+            else
+            {
+                var regionMask = regionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
+                supplierIds = suppliers.Where(x => ((ulong)x.RegionMask & regionMask) > 0).Select(x => x.SupplierId).ToList();
+            }
+
+            var results = _cntx.suppliernames
+                .Where(x => supplierIds.Contains(x.SupplierId))
+                .OrderBy(x => x.SupplierName)
+                .Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
+                .ToList();
+            return results;
+        }
+
+        // для UI
+        public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
             // если регионы не заданы - пустой лист
             if (regionList == null || regionList.Count() == 0)
