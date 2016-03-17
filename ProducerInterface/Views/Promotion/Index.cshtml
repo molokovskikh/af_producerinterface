@@ -7,7 +7,7 @@
 <div class="container body-content">
 
     <div class="content panel-body">
-        <h3 class="title">Акции<a href="@Url.Action("Manage")" class="btn btn-primary pull-right">Добавить акцию</a>
+        <h3 class="title">Акции<a href="@Url.Action("Edit")" class="btn btn-primary pull-right">Добавить акцию</a>
         </h3> 
     </div>
 
@@ -33,18 +33,3 @@
         </div>
     }
 </div>
-
-@*
-        @section JavaScript
-        {
-        <link href="~/Content/FileUpload.css" rel="stylesheet" />
-        <script src="~/Scripts/WorkPlace/FileUpLoad.js"></script>
-        <script type="text/javascript">
-            function ViewDivFileUpdate(id)
-            {
-                var DivId = "#File_" + id;
-                $(DivId).css("display", "block");
-            }
-        </script>
-    }
-*@

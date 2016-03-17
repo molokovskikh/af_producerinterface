@@ -46,17 +46,14 @@
 
                 @if (Model.PromoFileId != null)
                 {
-                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromoFileId })">@Model.MediaFiles.ImageName (скачать)</a> <br />
-                    @*@Html.Action("ChangeFile", new { Id= Model.Id})*@
+                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromoFileId })">@Model.MediaFiles.ImageName (скачать)</a> <br />                 
                 }
                 else
                 {
-                    <p>Отсутствует файл</p> <br />
-                    @*@Html.Action("ChangeFile", new { Id = Model.Id })*@
+                    <p>Отсутствует файл</p> <br />                 
                 }
             </div>
             <!--                Список лекарств            -->
-
             <hr />
 
             <div class="panel panel-danger">
@@ -72,10 +69,7 @@
                     </div>
                 </div>
             </div>
-
             <!--                Список регионов            -->
-
-
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     <a class="panel-title" data-toggle="collapse" href="#collapse___@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список регионов <p class="pull-right">@Model.RegionList.Count()</p></a>
@@ -89,10 +83,7 @@
                     </div>
                 </div>
             </div>
-
-
             <!--                Список Поставщиков            -->
-
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     <a class="panel-title" data-toggle="collapse" href="#collapse_supplier___@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список Поставщиков <p class="pull-right">@Model.PromotionsToSupplier.Count()</p></a>
@@ -106,14 +97,11 @@
                     </div>
                 </div>
             </div>
-
             <!--                 Управление акцией (ссылки (btn btn-primary) на редактирование, удаление, активацию/деактивацию, копирование)            -->
-
             <hr />
 
             <div class="from-group col-xs-12">
                 <h4>Управление акцией</h4>
-
                 @Html.Partial("Partial/PromotionItemActionLink", Model)
             </div>
         </div>

@@ -330,7 +330,7 @@ span.chosen-comment {
 }
 
     #News_Item :hover {
-    background-color: #ead8d8;
+    background-color: #ead8d8;.
 }
 
 .w150 {
@@ -343,4 +343,10 @@ span.chosen-comment {
 
 .w20p {
     width: 20%;
+}
+.text-size-09em {
+font-size:0.9em;
+}
+.text-style-italic {
+font-style:italic;
 }
