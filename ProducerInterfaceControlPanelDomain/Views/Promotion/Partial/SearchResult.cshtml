@@ -13,6 +13,7 @@
                     <th>Дата начала</th>
                     <th>Дата окончания</th>
                     <th>Препараты</th>
+                    <th>Поствщики</th>
                     <th>Производитель</th>
                     <th>Файл</th>
                     <th></th>                 
@@ -26,12 +27,8 @@
                         <td>@Item.Annotation</td>
                         <td>@Item.Begin.Value.ToString("dd.MM.yyyy")</td>
                         <td>@Item.End.Value.ToString("dd.MM.yyyy")</td>
-                        <td>@Item.promotionToDrug.Count()
-                        @*@foreach (var ItemGrug in Item.promotionToDrug)
-                        {
-                             
-                        }*@
-                        </td>
+                        <td>@Item.promotionToDrug.Count()</td>
+                        <td>@Item.PromotionsToSupplier.Count()</td>
                         <td>@ProducerList.Where(xx=>xx.Value == Item.ProducerId.ToString()).First().Text</td>
                         <td>
                             @if (Item.MediaFiles != null)
@@ -46,9 +43,3 @@
             </table>
         </div>
     </div>
-
-<h2>All @ViewBag.ListCount</h2>
-<h2>All List @ViewBag.ListCount2</h2>
-<h2>Date @ViewBag.ListCount3</h2>
-<h2>Producer @ViewBag.ListCount4</h2>
-<h2>Status @ViewBag.ListCount5</h2>

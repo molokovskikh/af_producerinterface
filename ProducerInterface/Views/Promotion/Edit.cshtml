@@ -42,7 +42,7 @@
 
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <label>Список препаратов</label>
+                            <label>Список препаратов, участвующие в акции</label>
                             <select typeod="input" id="DrugList" name="DrugList" multiple="" hidden="hidden" data-bind="foreach: DrugCatalogList, selectedOptions: DrugList, event: {change: Event_DrudList}" class="drop">
                                 <option data-bind="text: Text, value: Value"></option>
                             </select>
@@ -103,14 +103,26 @@
                             <label>Прикреплённый файл</label>
                             <a data-bind="text: PromotionFileName, attr: { href: PromotionFileUrl} "></a>
                             <br />  <label>Добавление файла</label>
-                            <input name="File" id="File" type="file" accept="image/jpeg,image/png,text/plain" class="form-control">
+                            <p>Выберете файл для загрузки в форматах .jpg, .jpeg, .txt. Максимальный размер файла 500КБ</p>
+                            @*<input name="File" id="File" type="file" accept="image/jpeg,image/png,text/plain" class="form-control">*@
+
+                            <div class="row">
+                                <div class="fileupload fileupload-new col-xs-12" data-provides="fileupload">
+                                    <span class="form-control btn btn-default btn-file" style="max-width:25em;">
+                                        <span class="fileupload-new">Разместить файл-листовку</span>
+                                        <span class="fileupload-exists">Файл добавлен / Выбрать другой</span>
+                                        <input type="file" id="File" name="File" accept="image/jpeg,image/png,text/plain" hidden="hidden" value="@ViewBag.PromoFile" />
+                                    </span>
+                                    <span class="fileupload-preview"></span>
+                                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                                </div>                               
+                            </div>   
                             <span class="field-validation-error" data-bind="text: FileError"></span>
                         </div>
                     </div>
 
                     <div class="col-xs-12">
                         <div class="form-group">
-
                             <input type="submit" class="btn btn-primary" data-bind="value: SubmitText" />
                         </div>
                     </div>
@@ -125,6 +137,7 @@
         {
     <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
     <link href="~/Content/FileUpload.css" rel="stylesheet" />
+
 }
 
 @section JavaScript

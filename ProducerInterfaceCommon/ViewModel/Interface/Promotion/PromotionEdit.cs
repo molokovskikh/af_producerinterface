@@ -20,7 +20,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
 
         public List<long> DrugList { get; set; }
         public List<long> RegionList { get; set; }
-        public List<decimal> SuppierRegions { get; set; }
+        public List<ulong> SuppierRegions { get; set; }
 
         public List<TextValue> DrugCatalogList { get; set; }
         public List<TextValue> RegionGlobalList { get; set; }
@@ -33,7 +33,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
 
     public class TextValue
     {
-        public long Value { get; set; }
+        public string Value { get; set; }
         public string Text { get; set; }
     }
 }

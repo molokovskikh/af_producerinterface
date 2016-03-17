@@ -11,119 +11,126 @@
     listStatus.AddRange(EnumHelper.GetSelectList(typeof(PromotionStatus)));
 
     var RegionList = ViewBag.RegionList as IEnumerable<OptionElement>;
-    var ProducerList =  ViewBag.ProducerList as IEnumerable<OptionElement>;
+    var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
 }
 
-<h2>Промо-Акции</h2>
+<div class="row">
+    <h2 class="col-xs-2">Промо-Акции</h2>
+    <a data-toggle="modal" data-target="#FilterModal" class="pointer col-xs-2 btn btn-primary btn-sm" style="margin-top:2em;">Фильтр</a>
+</div>
 
 <div class="body-content">
-    <div class="row">
-        <div class="row">
+    <div class="row">  
+        <div id="loadingdata" class="row" style="display:none;">
             <div class="col-xs-12">
-                <a href="#FiltersMenu" data-toggle="collapse" class="btn btn-primary btn-sm">Фильтр</a>
-                <hr />
-                <div id="FiltersMenu" class="collapse">
-                    
-                    @using (Ajax.BeginForm("SearchResult", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "replacecontent", OnBegin = "LoadingResult", OnSuccess = "LoadingResultCompleted" }))
-                    {
+                <h3><span class="glyphicon glyphicon-time"></span>&nbsp; Ожидайте, осуществляется поиск</h3>
+            </div>
+        </div>
 
-                   
-                        
+        <div class="row">
+            <div class="col-xs-12" id="replacecontent">
+                @Html.Action("SearchResult", Model);
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="FilterModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" id="feedback_modal_content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">Закрыть</button>
+                <h4 class="modal-title">Фильтр</h4>
+            </div>
+
+            <div class="modal-body" id="ModalBodyId">
+                @using (Ajax.BeginForm("SearchResult", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "replacecontent", OnBegin = "LoadingResult", OnSuccess = "LoadingResultCompleted" }))
+                {
+                    <div class="col-xs-12">
                         <div class="col-xs-12">
-                            <div class="col-xs-8">                              
-                                <div class="form-group">
-                                    <label>Производитель</label>
+                            <div class="form-group">
+                                <label>Производитель</label>
 
-                                    <select id="Producer" name="Producer" class="form-control">
-                                        @foreach (var Item in ProducerList)
+                                <select id="Producer" name="Producer" class="form-control">
+                                    @foreach (var Item in ProducerList)
+                                    {
+                                        <option value="@Item.Value">@Item.Text</option>
+                                    }
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label>Статус</label>
+
+                                <select id="Status" name="Status" class="form-control">
+                                    @foreach (var Item in listStatus)
+                                    {
+                                        if (Item.Value == "5")
+                                        {
+                                            <option value="@Item.Value" selected="selected">@Item.Text</option>
+                                        }
+                                        else
                                         {
                                             <option value="@Item.Value">@Item.Text</option>
                                         }
-                                    </select>
+                                    }
+                                </select>
 
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox-inline">
+                                    @Html.CheckBoxFor(m => m.EnabledDateTime, new { @onchange = "ShowOrHideDateTime()" })
+                                    <span>Не учитывать даты от-до</span>
+                                </label>
+                            </div>
+
+                            <div class="row" id="datepickers">
+
+                                <div class="col-xs-12">
+                                    <label>Периуд действия акции входит в заданный деапазон дат</label>
                                 </div>
-                             
-                                <div class="form-group">
-                                    <label>Статус</label>
 
-                                    <select id="Status" name="Status" class="form-control">
-                                        @foreach (var Item in listStatus)
-                                        {
-                                            if (Item.Value == "5")
-                                            {
-                                                <option value="@Item.Value" selected="selected">@Item.Text</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@Item.Value">@Item.Text</option>
-                                            }
-                                        }
-                                    </select>
-
-                                </div>
-                              
-                                <div class="form-group">
-                                    <label class="checkbox-inline" >
-                                        @Html.CheckBoxFor(m=> m.EnabledDateTime, new { @onchange="ShowOrHideDateTime()" })                                     
-                                    <span>Не учитывать даты от-до</span>                                    
-                                    </label>
-                                </div>
-                             
-                                <div class="row" id="datepickers">
-
-                                    <div class="col-xs-12">
-                                        <label>Периуд действия акции входит в заданный деапазон дат</label>
-                                    </div>
-
-                                    <div class="col-xs-6 col-md-4 col-sm-4 col-lg-2">
-                                        <div class="form-group">
-                                            <label>Дата начала</label>
-                                            <input type="text" id="Begin" name="Begin" class="form-control" readonly style="max-width:15em; cursor:pointer;" value="@Model.Begin.ToString("dd.MM.yyyy")" />
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 col-md-4 col-sm-4 col-lg-2">
-                                        <div class="form-group">
-                                            <label>Дата окончания</label>
-                                            <input type="text" id="End" name="End" class="form-control" readonly style="max-width:15em; cursor:pointer;" value="@Model.End.ToString("dd.MM.yyyy")" />
-                                        </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Дата начала</label>
+                                        <input type="text" id="Begin" name="Begin" class="form-control" readonly style="max-width:15em; cursor:pointer;" value="@Model.Begin.ToString("dd.MM.yyyy")" />
                                     </div>
                                 </div>
-                              
-                                <div class="form-group">
-                                    <input value="Применить" class="btn btn-primary btn-sm" type="submit" />
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Дата окончания</label>
+                                        <input type="text" id="End" name="End" class="form-control" readonly style="max-width:15em; cursor:pointer;" value="@Model.End.ToString("dd.MM.yyyy")" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-xs-4">
-                                @if (RegionList != null && RegionList.Count() > 0)
-                                {
-                                    <label>Список регионов, по которым осуществляется поиск</label>
-                                    <p>
-                                    @foreach (var ItemRegion in RegionList)
-                                    {
-                                    <span>@ItemRegion.Text</span>
-                                    }
-                                  </p>
-                                }
-                            </div>                            
-                            
+                            <div class="form-group">
+                                <input value="Применить" class="btn btn-primary btn-sm" type="submit" />
+                            </div>
                         </div>
-                    }
-                </div>
-            </div>
+
+                        <div class="col-xs-12">
+                            @if (RegionList != null && RegionList.Count() > 0)
+                            {
+                                <label>Список регионов, по которым осуществляется поиск</label>
+                                        <p>
+                                            @foreach (var ItemRegion in RegionList)
+                                            {
+                                                <span>@ItemRegion.Text</span>
+                                            }
+                                        </p>
+                            }
+                        </div>
+
+                    </div>
+                }
+            </div>      
         </div>
-    </div>
-</div>
-
-<div id="loadingdata" class="row" style="display:none;">
-    <div class="col-xs-12">
-        <h3><span class="glyphicon glyphicon-time"></span>&nbsp; Ожидайте, осуществляется поиск</h3>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-xs-12" id="replacecontent">
-        @Html.Action("SearchResult", Model);
     </div>
 </div>
 

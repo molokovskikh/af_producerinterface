@@ -82,9 +82,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             PromotionList = PromotionList.OrderByDescending(x => x.UpdateTime).ToList();
 
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-
+           
             ViewBag.ProducerList = h.RegisterListProducer();
-         
+       
             return PartialView("Partial/SearchResult",PromotionList);
         }
 
@@ -107,6 +107,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             ViewBag.ProducerName = h.GetProducerList().Where(x => x.Value == promotionModel.ProducerId.ToString()).First().Text;
             ViewBag.RegionList = h.GetPromotionRegionNames((ulong)promotionModel.RegionMask);
             ViewBag.DrugList = h.GetDrugInPromotion(promotionModel.Id);
+            ViewBag.SupplierList = h.GetSupplierList(promotionModel.PromotionsToSupplier.ToList().Select(x=>(decimal)x.SupplierId).ToList());         
 
             return View(promotionModel);
         }

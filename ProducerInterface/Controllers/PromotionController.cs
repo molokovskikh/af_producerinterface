@@ -82,8 +82,8 @@ namespace ProducerInterface.Controllers
             var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
 
           
-            ViewModel.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
-            ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
+            ViewModel.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+            ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
             if (IdKey == "0")
             {
@@ -94,9 +94,9 @@ namespace ProducerInterface.Controllers
                 ViewModel.Annotation = "";
                 ViewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
                 ViewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
-                ViewModel.SuppierRegionsList = h.GetSupplierList(new List<decimal>() { 0 }).Select(x => new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
+                ViewModel.SuppierRegionsList = h.GetSupplierList(new List<decimal>() { 0 }).Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
                 ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(0));
-                ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x=> new TextValue {  Text = x.Text, Value = (long) Convert.ToInt64(x.Value) }).ToList();
+                ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x=> new TextValue {  Text = x.Text, Value = x.Value }).ToList();
             }
             else
             {
@@ -104,8 +104,8 @@ namespace ProducerInterface.Controllers
 
                 var ChangePromo = cntx_.promotions.Find(ID_Promo);
                 ViewModel.Id = ID;
-                ViewModel.SuppierRegions = ChangePromo.PromotionsToSupplier.ToList().Select(x =>(decimal)x.SupplierId).ToList();
-                ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.SuppierRegions).Select(x => new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
+                ViewModel.SuppierRegions = ChangePromo.PromotionsToSupplier.ToList().Select(x =>(ulong)x.SupplierId).ToList();
+                ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.SuppierRegions).Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
                 ViewModel.Name = ChangePromo.Name;
                 if (ID == 0)
                 {
@@ -138,14 +138,16 @@ namespace ProducerInterface.Controllers
                
                 ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(ChangePromo.RegionMask));             
                 ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.RegionList.Select(x => (decimal)x).ToList()).ToList()
-                    .Select(x=> new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
+                    .Select(x=> new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
                 ViewModel.PromotionFileUrl = Url.Action("GetFile", new { id = ChangePromo.MediaFiles?.Id });
                 ViewModel.Annotation = ChangePromo.Annotation;  
             }
 
-            ViewModel.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value=0 });
+            ViewModel.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value="0" });
 
+            var JsonModel = Json(ViewModel);
+            
             return Json(ViewModel, JsonRequestBehavior.AllowGet);
         }
 
@@ -161,10 +163,10 @@ namespace ProducerInterface.Controllers
             var SupplierListOptionElements = h.GetSupplierList(Id).ToList();
                             
             var SupplierList = SupplierListOptionElements
-                .Select(x => new TextValue { Text = x.Text, Value = Convert.ToInt64(x.Value) })
+                .Select(x => new TextValue { Text = x.Text, Value = x.Value })
                 .ToList();
 
-            SupplierList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = 0 });
+            SupplierList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
             return Json(SupplierList, JsonRequestBehavior.AllowGet);
         }
 
@@ -230,7 +232,7 @@ namespace ProducerInterface.Controllers
 
             foreach (var SupplierItem in Promo_PromotionsToSupplier)
             {
-                bool SupllierExsist = newPromo.SuppierRegions.Any(x => x == SupplierItem.SupplierId);
+                bool SupllierExsist = newPromo.SuppierRegions.Any(x =>(ulong) x ==(ulong) SupplierItem.SupplierId);
 
                 if (!SupllierExsist)
                 {
@@ -242,7 +244,7 @@ namespace ProducerInterface.Controllers
 
             foreach (var SupplierItem in newPromo.SuppierRegions)
             {
-                bool SupllierExsist = PromoDB.PromotionsToSupplier.Any(x => x.SupplierId == SupplierItem);
+                bool SupllierExsist = PromoDB.PromotionsToSupplier.Any(x =>(ulong) x.SupplierId ==(ulong) SupplierItem);
 
                 if (!SupllierExsist)
                 {
@@ -254,7 +256,16 @@ namespace ProducerInterface.Controllers
 
             cntx_.SaveChanges(CurrentUser, "Поставщик добавлен в акцию");
 
-            var regionMask = newPromo.RegionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
+            ulong regionMask = 0;
+
+            if (newPromo.RegionList.Count() == 1)
+            {
+                regionMask = (ulong) newPromo.RegionList.First();
+            }
+            else
+            {
+                regionMask = newPromo.RegionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
+            }
             PromoDB.RegionMask = regionMask;
             PromoDB.Name = newPromo.Name;
             PromoDB.Annotation = newPromo.Annotation;
