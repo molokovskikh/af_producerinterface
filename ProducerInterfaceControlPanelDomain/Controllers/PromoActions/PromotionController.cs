@@ -110,7 +110,51 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             return View(promotionModel);
         }
 
+        public ActionResult SuccessPromotion(int Id = 0)
+        {
+            if (Id == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            var promotionModel = cntx_.promotions.Where(xxx=>xxx.Id == Id).First();
 
+            if (promotionModel == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                promotionModel.Status = true;
+                cntx_.Entry(promotionModel).State = System.Data.Entity.EntityState.Modified;
+                cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
+
+                SuccessMessage("Промоакция подтверждена");
+                return RedirectToAction("Index");
+            }
+        }
+
+        public ActionResult UnSuccessPromotion(int Id = 0)
+        {
+            if (Id == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            var promotionModel = cntx_.promotions.Where(xxx => xxx.Id == Id).First();
+
+            if (promotionModel == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                promotionModel.Status = false;
+                cntx_.Entry(promotionModel).State = System.Data.Entity.EntityState.Modified;
+                cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
+
+                SuccessMessage("Промоакция отменено подтверждение");
+                return RedirectToAction("Index");
+            }
+        }
 
         public FileResult GetFile(int Id)
         {

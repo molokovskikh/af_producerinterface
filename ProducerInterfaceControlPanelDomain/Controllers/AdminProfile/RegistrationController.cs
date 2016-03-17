@@ -20,6 +20,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpPost]
         public ActionResult Index(string login, string password)
         {
+            var Login_ = login.Split(new Char[] { '@' }).First();
+            login = Login_;
+
             var DomainAuth = new ProducerInterfaceCommon.Controllers.DomainAutentification();
             
             if (DomainAuth.IsAuthenticated(login, password))
@@ -35,7 +38,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 SetLoginCookie((object)login);    
                 return RedirectToAction("Index", "Home");                
             }
-            ErrorMessage(ErrorMessageString);
+            ErrorMessage("Неверно введён логин или пароль");
             return RedirectToAction("Index", "Registration");
         }
 

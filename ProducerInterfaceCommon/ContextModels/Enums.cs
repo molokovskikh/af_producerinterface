@@ -149,4 +149,17 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Рассылка")]
 		Email = 3
 	}
+
+    public enum PromotionTypeChange
+    {
+        [Display(Name = "Добавлено")]
+        AddPromo = 0,
+        [Display(Name = "Удалено")]
+        DeletePromo = 1,
+        [Display(Name = "Изменено")]
+        ModifiedPromo = 2,
+        [Display(Name = "Подтверждена/Отменена")]
+        Modified_Activate =3
+    }
+
 }

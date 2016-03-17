@@ -117,9 +117,25 @@ namespace ProducerInterface.Controllers
                     ViewModel.Title = "Редактирование промоакции: " + ChangePromo.Name;
                 }            
                 ViewModel.PromotionFileName = ChangePromo.MediaFiles?.ImageName;
-                ViewModel.DrugList = ChangePromo.promotionToDrug.ToList().Select(x => x.DrugId).ToList();             
-                ViewModel.Begin = ChangePromo.Begin.Value.ToString("dd.MM.yyyy");
-                ViewModel.End = ChangePromo.End.Value.ToString("dd.MM.yyyy");
+                ViewModel.DrugList = ChangePromo.promotionToDrug.ToList().Select(x => x.DrugId).ToList();
+                if (ChangePromo.Begin < DateTime.Now)
+                {
+                    ViewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
+                }
+                else
+                {
+                    ViewModel.Begin = ChangePromo.Begin.Value.ToString("dd.MM.yyyy");
+                }
+
+                if (ChangePromo.End < DateTime.Now)
+                {
+                    ViewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
+                }
+                else
+                {
+                    ViewModel.End = ChangePromo.End.Value.ToString("dd.MM.yyyy");
+                }
+               
                 ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(ChangePromo.RegionMask));             
                 ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.RegionList.Select(x => (decimal)x).ToList()).ToList()
                     .Select(x=> new TextValue { Text = x.Text, Value = (long)Convert.ToInt64(x.Value) }).ToList();
@@ -176,8 +192,10 @@ namespace ProducerInterface.Controllers
         private long ChangePromotion(PromotionEdit newPromo)
         {
             var PromoDB = cntx_.promotions.Find(newPromo.Id);
-           
-            foreach (var DrugItem in PromoDB.promotionToDrug)
+
+            var promotion_to_Drug = PromoDB.promotionToDrug;
+
+            foreach (var DrugItem in promotion_to_Drug)
             {
                 bool DrugExsist = newPromo.DrugList.Any(x => x== DrugItem.DrugId);
 
@@ -208,7 +226,9 @@ namespace ProducerInterface.Controllers
 
             cntx_.SaveChanges(CurrentUser, "Препарат добавлен в акцию");
 
-            foreach (var SupplierItem in PromoDB.PromotionsToSupplier)
+            var Promo_PromotionsToSupplier = PromoDB.PromotionsToSupplier;
+
+            foreach (var SupplierItem in Promo_PromotionsToSupplier)
             {
                 bool SupllierExsist = newPromo.SuppierRegions.Any(x => x == SupplierItem.SupplierId);
 
@@ -263,8 +283,13 @@ namespace ProducerInterface.Controllers
                 cntx_.Entry(PromoDB).State = EntityState.Modified;
                 cntx_.SaveChanges();
 
-                cntx_.MediaFiles.Remove(PromoFileRemove);
-                cntx_.SaveChanges();
+                if (PromoFileRemove != null)
+                {
+                //    cntx_.MediaFiles.Remove(PromoFileRemove);
+                //    cntx_.SaveChanges();
+
+                //    для лоигрования действий решил не удалять файл для возможности восстановления промоакции
+                }
 
                 PromoDB.PromoFileId = FileID;
                 cntx_.SaveChanges();

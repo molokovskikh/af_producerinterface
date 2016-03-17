@@ -4,26 +4,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <div class="container" id="PromotionEditDiv" name="PromotionEditDiv">
 
     <div class="row">
-        <div class="col-xs-12">
-            <h3 data-bind="text: Title"></h3>
+        <div class="col-xs-12">  
+          <h3>
+            <img data-bind="visible: LoadingImageVisible" src="~/Content/Image/Loading_icon.gif" style="max-height:1.3em;" />
+            <span data-bind="text: Title"></span>
+          </h3>
         </div>
     </div>
-
-    <input hidden="hidden" id="PromotionId" name="PromotionId" value="@ViewBag.PromotionId" />
-    
+  
+    <input hidden="hidden" id="PromotionId" name="PromotionId" value="@ViewBag.PromotionId" />  
+  
     <div class="row">
         <div class="col-xs-12">
             <div class="row">
                 <form action="@Url.Action("EditSave")" method="post" data-bind="event:{submit: Validation}" enctype="multipart/form-data">
                     <input type="text" id="Id" name="Id" data-bind="value: Id" hidden="hidden"/>
-
+                                 
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <label>Наименование акции <strong data-bind="text: NameLight" class="text-info"></strong></label>
+                            
+                            <label>Наименование акции <strong data-bind="text: NameLight" class="text-info text-size-09em text-style-italic"></strong></label>
                             <input type="text" data-bind="value: Name, valueUpdate: 'afterkeydown', event:{keyup: Event_Name}" id="Name" name="Name" class="form-control" />
                             <span class="field-validation-error" data-bind="text: NameError"></span>
                         </div>
@@ -31,7 +34,7 @@
 
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <label>Аннотация <strong class="text-info" data-bind="text: AnnotationLight"></strong></label>
+                            <label>Аннотация <strong class="text-info text-size-09em text-style-italic" data-bind="text: AnnotationLight"></strong></label>
                             <textarea rows="5" id="Annotation" name="Annotation" data-bind="value: Annotation, valueUpdate: 'afterkeydown', event:{keyup: Event_Annotation}" class="form-control" typeof="input"></textarea>
                             <span class="field-validation-error" data-bind="text: AnnotationError"></span>
                         </div>

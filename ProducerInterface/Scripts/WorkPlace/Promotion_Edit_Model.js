@@ -1,6 +1,7 @@
 ﻿
 var Promotion =
     {
+        LoadingImageVisible: ko.observable(),
         Title: ko.observable(),
         SubmitText: ko.observable(),
         Enabled: ko.observable(),

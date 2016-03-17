@@ -51,21 +51,38 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label>Дата начала</label>
-        <p>@Model.Begin.Value.ToString("dd.MM.yyyy")</p>
-    </div>
-
-    <div class="form-group">
-        <label>Дата окончания</label>
-        <p>@Model.End.Value.ToString("dd.MM.yyyy")</p>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label>Дата начала</label>
+                <p>@Model.Begin.Value.ToString("dd.MM.yyyy")</p>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label>Дата окончания</label>
+                <p>@Model.End.Value.ToString("dd.MM.yyyy")</p>
+            </div>
+        </div>
     </div>
 
     @if (Model.PromoFileId != null)
     {
         <div class="form-group">
             <label>Прикреплен файл</label>
-            <a href="@Url.Action("GetFile", "MediaFiles", new { Id = Model.PromoFileId })">Скачать (@Model.MediaFiles.ImageName)</a>
+            <a href="@Url.Action("GetFile", "promotion", new { Id = Model.PromoFileId })">Скачать (@Model.MediaFiles.ImageName)</a>
 
         </div>
     }
+
+    <div class="form-group">
+        @if (Model.Status)
+        {
+            <a class="btn btn-primary" href="@Url.Action("UnSuccessPromotion", "promotion", new { Id = Model.Id })"> Отмена подтверждения промоакцию</a>
+        }
+        else
+        {
+            <a class="btn btn-primary" href="@Url.Action("SuccessPromotion", "promotion", new { Id = Model.Id })"> Подтвердить промоакцию</a>
+        }
+    </div>
+</div>

@@ -4,7 +4,8 @@
     $("form").hide();
     Promotion.Title("Загрузка информации, ожидайте");
     Promotion.Title.valueHasMutated();
-
+    Promotion.LoadingImageVisible(1);
+    Promotion.LoadingImageVisible.valueHasMutated();
     $('.drop').each(function () {
         $(this).chosen({ width: '100%' });
     });
@@ -94,6 +95,9 @@ function bindSupplierList(JsonList)
 
 function bindModel(JsonModel)
 {
+    Promotion.LoadingImageVisible(0);
+    Promotion.LoadingImageVisible.valueHasMutated();
+
     Promotion.Title(JsonModel.Title);
     Promotion.Title.valueHasMutated();
 

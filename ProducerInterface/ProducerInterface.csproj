@@ -238,6 +238,7 @@
     <None Include="Content\Chosen\js\_references.js" />
     <Content Include="Content\FileUpload.css" />
     <Content Include="Content\Image\aflogo.png" />
+    <Content Include="Content\Image\Loading_icon.gif" />
     <Content Include="Content\Image\logo_temp.jpg" />
     <Content Include="Content\MyStyle.css" />
     <Content Include="Content\SemanticUI\icon.min.css" />
