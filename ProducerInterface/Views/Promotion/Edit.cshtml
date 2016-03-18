@@ -25,8 +25,16 @@
                                  
                     <div class="col-xs-12">
                         <div class="form-group">
-                            
-                            <label>Наименование акции <strong data-bind="text: NameLight" class="text-info text-size-09em text-style-italic"></strong></label>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label>Наименование акции </label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <p data-bind="text: NameLight" class="text-size-09em text-style-italic pull-right"></p>
+                                </div>
+                            </div>
+                            @*<label>Наименование акции <strong data-bind="text: NameLight" class="text-size-09em text-style-italic"></strong></label>*@
+
                             <input type="text" data-bind="value: Name, valueUpdate: 'afterkeydown', event:{keyup: Event_Name}" id="Name" name="Name" class="form-control" />
                             <span class="field-validation-error" data-bind="text: NameError"></span>
                         </div>
@@ -34,7 +42,17 @@
 
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <label>Аннотация <strong class="text-info text-size-09em text-style-italic" data-bind="text: AnnotationLight"></strong></label>
+
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label>Аннотация</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <p class="text-size-09em text-style-italic pull-right" data-bind="text: AnnotationLight"></p>
+                                </div>
+                            </div>
+                            @*<label>Аннотация <strong class="text-size-09em text-style-italic" data-bind="text: AnnotationLight"></strong></label>*@
+
                             <textarea rows="5" id="Annotation" name="Annotation" data-bind="value: Annotation, valueUpdate: 'afterkeydown', event:{keyup: Event_Annotation}" class="form-control" typeof="input"></textarea>
                             <span class="field-validation-error" data-bind="text: AnnotationError"></span>
                         </div>
@@ -64,14 +82,14 @@
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label>Список поставщиков</label>
-                            <label class="checkbox text-info">
+                            <label class="checkbox">
                                 <input type="checkbox" data-bind="checked: AllSupplier, event: {change: Event_AllSupplier}" /> Отметить всех поставщиков в выбранных регионах
                             </label>                           
 
                             <select multiple="" hidden="hidden" data-bind="foreach: SuppierRegionsList, selectedOptions: SuppierRegions, event: {change: Event_SuppierRegions}" id="SuppierRegions" name="SuppierRegions" class="drop">                               
                                 <option data-bind="text: Text, value: Value"></option>
                             </select>
-                            <span class="field-validation-error" data-bind="text: SuppierRegionsError"></span>
+                            <span class="field-validation-error" data-bind="text: SuppierRegionsError"></span>                          
                         </div>
                     </div>
 
@@ -100,30 +118,36 @@
 
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <label>Прикреплённый файл</label>
-                            <a data-bind="text: PromotionFileName, attr: { href: PromotionFileUrl} "></a>
-                            <br />  <label>Добавление файла</label>
-                            <p>Выберете файл для загрузки в форматах .jpg, .jpeg, .txt. Максимальный размер файла 500КБ</p>
-                            @*<input name="File" id="File" type="file" accept="image/jpeg,image/png,text/plain" class="form-control">*@
-
                             <div class="row">
-                                <div class="fileupload fileupload-new col-xs-12" data-provides="fileupload">
-                                    <span class="form-control btn btn-default btn-file" style="max-width:25em;">
-                                        <span class="fileupload-new">Разместить файл-листовку</span>
-                                        <span class="fileupload-exists">Файл добавлен / Выбрать другой</span>
-                                        <input type="file" id="File" name="File" accept="image/jpeg,image/png,text/plain" hidden="hidden" value="@ViewBag.PromoFile" />
-                                    </span>
-                                    <span class="fileupload-preview"></span>
-                                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
-                                </div>                               
+                                <div class="col-xs-12" data-bind="visible: OldFileVisible">
+                                    <label>Ранее добавленный файл <a data-bind="text: PromotionFileName, attr: { href: PromotionFileUrl, class: PromoFileClass} "></a></label>    
+                                    <input hidden="hidden" id="PromotionFileId" name="PromotionFileId" data-bind="value: PromotionFileId"/>                                
+                                </div>                            
+                            </div>  
+                                 <label>Добавление файла к промоакции</label>           
+                                 <p class="text-size-09em text-style-italic"> Выберете файл для загрузки в форматах .jpg, .jpeg, .txt. Максимальный размер файла 500КБ</p>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <span class="btn btn-default btn-file">
+                                            <span class="fileupload-new">Выбрать файл</span>
+                                            <span class="fileupload-exists">Файл выбран / изменить выбор</span>
+                                            <input type="file" id="File" name="File" accept="image/jpeg,text/plain" hidden="hidden" value="@ViewBag.PromoFile" />
+                                        </span>
+                                        <span class="fileupload-preview"></span>
+                                        <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                                    </div>      
+                                </div>                                                       
                             </div>   
+                          
                             <span class="field-validation-error" data-bind="text: FileError"></span>
                         </div>
                     </div>
 
+
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary" data-bind="value: SubmitText" />
+                            <input type="submit" class="btn btn-primary pull-right" data-bind="value: SubmitText" />
                         </div>
                     </div>
 
@@ -134,7 +158,7 @@
 </div>
 
 @section styles
-        {
+{
     <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
     <link href="~/Content/FileUpload.css" rel="stylesheet" />
 
@@ -145,7 +169,8 @@
     <script src="~/Scripts/knockout-3.4.0.js"></script>
     <script src="~/Scripts/knockout-3.4.0.debug.js"></script>
     <script src="~/Scripts/bootstrap-datepicker.min.js"></script> 
-<script src="~/Scripts/WorkPlace/Promotion_Edit_Model.js"></script>
-    <script src="~/Scripts/WorkPlace/Promotion_Edit.js"></script>
-<script src="~/Scripts/WorkPlace/FileUpLoad.js"></script>
+    <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js"></script>
+    <script src="~/Scripts/WorkPlace/Promotion_Edit_Model_v.2.js"></script>
+    <script src="~/Scripts/WorkPlace/Promotion_Edit_v.2.js"></script>
+    <script src="~/Scripts/WorkPlace/FileUpLoad.js"></script>
 }

@@ -18,15 +18,15 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
         public string End { get; set; } /* DateTime End*/
         public System.Web.HttpPostedFileBase File { get; set; }
 
-        public List<long> DrugList { get; set; }
-        public List<long> RegionList { get; set; }
-        public List<ulong> SuppierRegions { get; set; }
+        public List<string> DrugList { get; set; }
+        public List<string> RegionList { get; set; }
+        public List<string> SuppierRegions { get; set; }
 
         public List<TextValue> DrugCatalogList { get; set; }
         public List<TextValue> RegionGlobalList { get; set; }
         public List<TextValue> SuppierRegionsList { get; set; }
 
-        public long PromotionFileId { get; set; }
+        public long? PromotionFileId { get; set; }
         public string PromotionFileName { get; set; }
         public string PromotionFileUrl { get; set; }     
     }

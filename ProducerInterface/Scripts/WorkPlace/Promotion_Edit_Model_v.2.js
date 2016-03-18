@@ -2,6 +2,7 @@
 var Promotion =
     {
         LoadingImageVisible: ko.observable(),
+        ValiedationOnOff: ko.observable(),
         Title: ko.observable(),
         SubmitText: ko.observable(),
         Enabled: ko.observable(),
@@ -38,14 +39,18 @@ var Promotion =
 
         AllSupplier: ko.observable(),
         Event_AllSupplier: function () {
-            setTimeout(Event_AllSupplier_Change, 10); /* задержка нужна для корректной работы во всех браузерах */
+            setTimeout(Event_AllSupplier_Change, 50); /* задержка нужна для корректной работы во всех браузерах */
         },
 
         PromotionFileId: ko.observable(),
         PromotionFileName: ko.observable(),
         PromotionFileUrl: ko.observable(),
+        OldFileVisible: ko.observable(),
+        PromoFileClass: ko.observable(),
 
         Validation: function () {
+            Promotion.ValiedationOnOff(true);
+            Promotion.ValiedationOnOff.valueHasMutated();
             var ret = SubmitValidationForm();
             return ret;
         },
@@ -65,42 +70,42 @@ function Event_SupplierRegion_Change()
     if (Promotion.SuppierRegions() != null) {
         Promotion.SuppierRegionsError("");
         Promotion.SuppierRegionsError.valueHasMutated();
-      
-        var _index = GetIndex(0, Promotion.SuppierRegions());
+
+        var _index = GetIndex("0", Promotion.SuppierRegions());
 
         if (_index != -1) {
-            Promotion.SuppierRegions([0]);
+            Promotion.SuppierRegions(["0"]);
             Promotion.SuppierRegions.valueHasMutated();
-        }        
-    }   
+        }
+    }
+  
+    if (Promotion.SuppierRegions().length == 0)
+    {
+        Promotion.AllSupplier(false);
+        Promotion.AllSupplier.valueHasMutated();
+    }
+
     DropdownReinit();
     SubmitValidationForm();
 }
 
 function Event_RegionList_Change()
 {
-
-
     if (Promotion.RegionList() != null) {
         Promotion.RegionListError("");
         Promotion.RegionListError.valueHasMutated();
         setTimeout(UpdateSupplierList, 10);
-       
-        var _index = GetIndex(0,Promotion.RegionList());
 
-        if(_index != -1)
-        {
-            Promotion.RegionList([0]);
-            Promotion.RegionList.valueHasMutated();            
+        var _index = GetIndex("0", Promotion.RegionList());
+
+        if (_index != -1) {
+            Promotion.RegionList(["0"]);
+            Promotion.RegionList.valueHasMutated();
         }
-    }
-   
-  
-
+    }   
 
     DropdownReinit();
     SubmitValidationForm();
-
 }
 
 function Event_Name_Change(data, event) {
@@ -117,16 +122,19 @@ function Event_Name_Change(data, event) {
 
         Promotion.NameLight(OST);
         Promotion.NameLight.valueHasMutated();
-        var keyCode_ = event.which || event.keyCode;
-        if (Promotion.Name().length >= 150) {           
-            if (keyCode_ != 8) {
-                var newstr = Promotion.Name().substring(0, 149);
-                Promotion.Name(newstr);
-                Promotion.Name.valueHasMutated();
+        if (event != null)       
+        {
+            var keyCode_ = event.which || event.keyCode;
+            if (Promotion.Name().length >= 150) {
+                if (keyCode_ != 8) {
+                    var newstr = Promotion.Name().substring(0, 149);
+                    Promotion.Name(newstr);
+                    Promotion.Name.valueHasMutated();
+                }
+                else { }
             }
-            else {  }
+            else { }
         }
-        else {  }
     }
     setTimeout(SubmitValidationForm, 10);
 }
@@ -146,16 +154,18 @@ function Event_Annotation_Change(data, event)
 
         Promotion.AnnotationLight(OST);
         Promotion.AnnotationLight.valueHasMutated();
-        var keyCode_ = event.which || event.keyCode;
-        if (Promotion.Annotation().length >= 500) {       
-            if (keyCode_ != 8) {
-                var newstr = Promotion.Annotation().substring(0, 499);
-                Promotion.Annotation(newstr);
-                Promotion.Annotation.valueHasMutated();
+        if (event != null) {
+            var keyCode_ = event.which || event.keyCode;
+            if (Promotion.Annotation().length >= 500) {
+                if (keyCode_ != 8) {
+                    var newstr = Promotion.Annotation().substring(0, 499);
+                    Promotion.Annotation(newstr);
+                    Promotion.Annotation.valueHasMutated();
+                }
+                else { }
             }
-            else {  }
+            else { }
         }
-        else { }
     }
     setTimeout(SubmitValidationForm, 10);
 }
@@ -163,6 +173,16 @@ function Event_Annotation_Change(data, event)
 function SubmitValidationForm() {
     var ValidReturn = true;
 
+    if (Promotion.ValiedationOnOff() == false)
+    {
+        return ValidReturn;
+    }
+
+    Promotion.NameError("");
+    Promotion.AnnotationError("");
+    Promotion.DrugListError("");
+    Promotion.RegionListError("");
+    Promotion.SuppierRegionsError("");
 
     if (Promotion.Name().length == 0) {
         Promotion.NameError("Заполните описание промоакции");
@@ -241,16 +261,21 @@ GetIndex = function (value, strict) {
 function Event_AllSupplier_Change() {
     var X = Promotion.AllSupplier();
     if (X) {
-
-        Promotion.SuppierRegions([0]);
-        Promotion.SuppierRegions.valueHasMutated();
+        if (Promotion.SuppierRegionsList() != null) {
+            Promotion.SuppierRegions(["0"]);
+            Promotion.SuppierRegions.valueHasMutated();
+        }
+        else {
+            Promotion.AllSupplier(false);
+            Promotion.AllSupplier.valueHasMutated();
+        }
     }
     else {
         var X = [];
         Promotion.SuppierRegions(X);
         Promotion.SuppierRegions.valueHasMutated();
-    }
-    SubmitValidationForm();
+    }    
     DropdownReinit();
+    SubmitValidationForm();
 }
 

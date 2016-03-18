@@ -2,7 +2,7 @@
     var elem = document.getElementById("PromotionEditDiv");
     ko.applyBindings(Promotion, elem);
     $("form").hide();
-    Promotion.Title("Загрузка информации, ожидайте");
+    Promotion.Title("Загрузка ...");
     Promotion.Title.valueHasMutated();
     Promotion.LoadingImageVisible(1);
     Promotion.LoadingImageVisible.valueHasMutated();
@@ -66,7 +66,7 @@ function AjaxLoadModel()
 
 function bindSupplierList(JsonList)
 {
-    var Array_ = Promotion.SuppierRegions();
+    var Array_ = Promotion.SuppierRegions();  
     Promotion.SuppierRegions([]);
     Promotion.SuppierRegionsList(JsonList);
     Promotion.SuppierRegionsList.valueHasMutated();
@@ -80,7 +80,7 @@ function bindSupplierList(JsonList)
 
             X = GetIndex(SearchElem, Array_);
 
-            if (X > 0) {
+            if (X > -1) {
                 NewRegions.push(X);
             }
         }
@@ -88,6 +88,13 @@ function bindSupplierList(JsonList)
         var EEE = NewRegions;
         Promotion.SuppierRegions(EEE);
         Promotion.SuppierRegions.valueHasMutated();
+
+        if (EEE.length == 0)
+        {   
+            Promotion.AllSupplier(false);
+            Promotion.AllSupplier.valueHasMutated();
+        }
+        
         DropdownReinit();
         SubmitValidationForm();
     }
@@ -143,12 +150,44 @@ function bindModel(JsonModel)
     Promotion.SuppierRegions(JsonModel.SuppierRegions);
     Promotion.SuppierRegions.valueHasMutated();
  
-    Promotion.PromotionFileName(JsonModel.PromotionFileName);
-    Promotion.PromotionFileName.valueHasMutated();
+    if (JsonModel.PromotionFileName == null || JsonModel.PromotionFileName == "") {
+        if (JsonModel.Id > 0) {
+            Promotion.PromotionFileName("Файлы не добавлялись ранее");         
+            Promotion.PromotionFileName.valueHasMutated();
+            Promotion.OldFileVisible(1);
+            Promotion.OldFileVisible.valueHasMutated();
+            Promotion.PromoFileClass("href_decoration_off");
+            Promotion.PromoFileClass.valueHasMutated();
 
-    Promotion.PromotionFileUrl(JsonModel.PromotionFileUrl);
-    Promotion.PromotionFileUrl.valueHasMutated();
-         
+        }
+        else
+        {
+            Promotion.OldFileVisible(0);
+            Promotion.OldFileVisible.valueHasMutated();
+        }
+    }
+    else
+    {
+        Promotion.PromotionFileName(JsonModel.PromotionFileName);
+        Promotion.PromotionFileName.valueHasMutated();
+        Promotion.PromotionFileId(JsonModel.PromotionFileId);
+        Promotion.PromotionFileId.valueHasMutated();
+
+        Promotion.PromotionFileUrl(JsonModel.PromotionFileUrl);
+        Promotion.PromotionFileUrl.valueHasMutated();
+        Promotion.OldFileVisible(1);
+        Promotion.OldFileVisible.valueHasMutated();
+    }
+           
+    Promotion.ValiedationOnOff(false);
+    Promotion.ValiedationOnOff.valueHasMutated();
+
+    Event_Name_Change();
+    Event_Annotation_Change();
+
+  //  Promotion.Event_Name();
+  //  Promotion.Event_Annotation();
+    
     var X = Promotion.RegionList();
 
     $("form").show();

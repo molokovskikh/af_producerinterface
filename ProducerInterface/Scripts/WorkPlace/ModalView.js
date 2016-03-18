@@ -4,8 +4,7 @@
 }
 $(document).ready()
 {
-    InitPhone();
-   
+    InitPhone();   
 }
 
 function InitPhone()
