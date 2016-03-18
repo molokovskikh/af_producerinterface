@@ -99,7 +99,10 @@ namespace ProducerInterfaceCommon.ContextModels
 		ProductConcurentRatingReport = 4,
 
 		[Display(Name = "Динамика цен по товару за период")]
-		ProductPriceDynamicsReport = 5
+		ProductPriceDynamicsReport = 5,
+
+		[Display(Name = "Продажи вторичных дистрибьюторов")]
+    SecondarySalesReport = 6
 	}
 
 	public enum TypeUsers

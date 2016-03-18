@@ -480,9 +480,122 @@ left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
 
 END$$
 
+drop PROCEDURE `SupplierRatingReport`;
 
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `SupplierRatingReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
 
+  SET @sql = CONCAT('select s.SupplierName, r.RegionName, T.Summ
+from
+	(select SupplierId, RegionCode, 
+	Sum(Cost*Quantity) as Summ
+	from producerinterface.RatingReportOrderItems
+	where IsLocal = 0
+	and CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and ProducerId = ', ProducerId, '
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by SupplierId,RegionCode
+	order by Summ desc) as T
+left join producerinterface.SupplierNames s on s.SupplierId = T.SupplierId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
 
+END$$
 
+drop PROCEDURE `PharmacyRatingReport`;
 
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `PharmacyRatingReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select ph.PharmacyName, r.RegionName, T.Summ
+from
+	(select PharmacyId, RegionCode,
+	Sum(Cost*Quantity) as Summ
+	from producerinterface.RatingReportOrderItems
+	where IsLocal = 0
+	and CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and ProducerId = ', ProducerId, '
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by PharmacyId,RegionCode
+	order by Summ desc) as T
+left join producerinterface.PharmacyNames ph on ph.PharmacyId = T.PharmacyId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
+
+ALTER TABLE `AccountEmail` DROP FOREIGN KEY `Email_AccountId`;
+ALTER TABLE `AccountEmail` ALTER `AccountId` DROP DEFAULT;
+ALTER TABLE `AccountEmail`
+ CHANGE COLUMN `AccountId` `AccountId` INT(10) UNSIGNED NOT NULL AFTER `eMail`,
+ ADD CONSTRAINT `Email_AccountId` FOREIGN KEY (`AccountId`) REFERENCES `Account` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+drop PROCEDURE `SecondarySalesReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `SecondarySalesReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `RegionMask` BIGINT(20) UNSIGNED, IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select c.CatalogName, p.ProducerName, r.RegionName, 
+T.Summ, CAST(T.PosOrder as SIGNED INTEGER) as PosOrder, 
+T.DistinctOrderId, T.DistinctAddressId
+from
+	(select CatalogId, RegionCode, ProducerId,
+	Sum(Cost*Quantity) as Summ,
+	Sum(Quantity) as PosOrder,
+	Count(distinct OrderId) as DistinctOrderId,
+	Count(distinct AddressId) as DistinctAddressId
+	from producerinterface.RatingReportOrderItems
+	where CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and SupplierId not in 
+		(select s.Id
+		from Customers.Suppliers s
+		inner join usersettings.PricesData pd on pd.FirmCode = s.Id
+		where pd.Enabled = 1 and pd.IsLocal = 1 and pd.AgencyEnabled = 1 and s.Disabled = 0 
+		and s.RegionMask & ', RegionMask, ')
+	and ProducerId = ', ProducerId, '
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by CatalogId,ProducerId,RegionCode
+	order by Summ desc) as T
+left join producerinterface.CatalogNames c on c.CatalogId = T.CatalogId
+left join producerinterface.ProducerNames p on p.ProducerId = T.ProducerId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
 

@@ -453,6 +453,7 @@
     <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Report\GetReport.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\SecondarySalesReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
