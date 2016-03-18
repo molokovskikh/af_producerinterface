@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ProducerInterfaceCommon.Heap;
-using Quartz;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterfaceCommon.Models
@@ -17,10 +13,15 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("DecimalList")]
 		public List<decimal> RegionCodeEqual { get; set; }
 
-		[Display(Name = "Товар")]
+		[Display(Name = "Выберите собственные товары")]
 		[Required(ErrorMessage = "Не выбраны товары")]
 		[UIHint("LongList")]
-		public List<long> CatalogNamesId { get; set; }
+		public List<long> CatalogIdEqual { get; set; }
+
+		[Display(Name = "Выберите товары, конкурирующие с вашими (не более 50)")]
+		[Required(ErrorMessage = "Не выбраны товары")]
+		[UIHint("LongList")]
+		public List<long> CatalogIdEqual2 { get; set; }
 
 		public override string Name
 		{
@@ -32,7 +33,10 @@ namespace ProducerInterfaceCommon.Models
 			var result = new List<string>();
 			result.Add(h.GetDateHeader(DateFrom, DateTo));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
-			result.Add(h.GetDragFamalyNames(CatalogNamesId));
+			var c = new List<long>();
+			c.AddRange(CatalogIdEqual);
+			c.AddRange(CatalogIdEqual2);
+			result.Add(h.GetProductHeader(c));
 			return result;
 		}
 
@@ -44,7 +48,10 @@ namespace ProducerInterfaceCommon.Models
 		public override Dictionary<string, object> GetSpParams()
 		{
 			var spparams = new Dictionary<string, object>();
-			spparams.Add("@CatalogNamesId", String.Join(",", CatalogNamesId));
+			var c = new List<long>();
+			c.AddRange(CatalogIdEqual);
+			c.AddRange(CatalogIdEqual2);
+			spparams.Add("@CatalogId", String.Join(",", c));
 			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
 			spparams.Add("@DateFrom", DateFrom);
 			spparams.Add("@DateTo", DateTo);
@@ -56,9 +63,18 @@ namespace ProducerInterfaceCommon.Models
 			var viewDataValues = new Dictionary<string, object>();
 
 			viewDataValues.Add("RegionCodeEqual", h.GetRegionList());
-			viewDataValues.Add("CatalogNamesId", h.GetDrugList(CatalogNamesId));
+			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
+			viewDataValues.Add("CatalogIdEqual2", h.GetCatalogList(CatalogIdEqual2));
 
 			return viewDataValues;
+		}
+
+		public override List<ErrorMessage> Validate()
+		{
+			var errors = base.Validate();
+			if (CatalogIdEqual2 != null && CatalogIdEqual2.Count > 50)
+				errors.Add(new ErrorMessage("CatalogIdEqual2", "Можно выбрать не более 50 товаров конкурентов"));
+			return errors;
 		}
 
 		public override IProcessor GetProcessor()

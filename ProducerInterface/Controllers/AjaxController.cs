@@ -31,5 +31,15 @@ namespace ProducerInterface.Controllers
 			});
 		}
 
+		public JsonResult GetCatalogAllList(string term, long p)
+		{
+			var cntx = new producerinterface_Entities();
+			var results = cntx.assortment
+				.Where(x => x.ProducerId != p && x.CatalogName.Contains(term))
+				.Take(20).ToList()
+				.Select(x => new { value = x.CatalogId, text = x.CatalogName })
+				.Distinct().Take(10).ToList();
+			return Json(results, JsonRequestBehavior.AllowGet);
+		}
 	}
 }

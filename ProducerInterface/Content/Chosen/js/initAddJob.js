@@ -38,16 +38,17 @@
 	    if (!sup.length)
 	        return;
 		var prm = $(this).serialize() + "&" + sup.serialize();
-		var stringPathName = document.location.pathname;
-		stringPathName = (stringPathName.substring(0, stringPathName.length - 4));
-		if (stringPathName.substring(stringPathName.length - 2, stringPathName.length) == 'Ad') {
-		    stringPathName = stringPathName.substring(0, stringPathName.length - 2) + '/GetSupplierJson';
-		}
-		else
-		{
-		    stringPathName = stringPathName + '/GetSupplierJson';
-		}
-		$.getJSON(stringPathName, prm, function (data) {
+		//var stringPathName = document.location.pathname;
+		//stringPathName = (stringPathName.substring(0, stringPathName.length - 4));
+		//if (stringPathName.substring(stringPathName.length - 2, stringPathName.length) == 'Ad') {
+		//    stringPathName = stringPathName.substring(0, stringPathName.length - 2) + '/GetSupplierJson';
+		//}
+		//else
+		//{
+		//    stringPathName = stringPathName + '/GetSupplierJson';
+	    //}
+	    var supurl = $('#supurl').val();
+	    $.getJSON(supurl, prm, function (data) {
 			sup.children().remove();
 			$.each(data.results, function(index, item) {
 				var op = $('<option></option>')
@@ -62,9 +63,10 @@
 	});
 
     // https://github.com/meltingice/ajax-chosen
-	$('#CatalogNamesId').ajaxChosen({
+	var caturl = $('#caturl').val();
+	$('#CatalogIdEqual2').ajaxChosen({
 	    type: 'GET',
-	    url: '/ProducerInterface/Report/GetCatalogDragFamalyNames',
+	    url: caturl,
 	    dataType: 'json',
 	    minTermLength: 2,
 	    afterTypeDelay: 300,

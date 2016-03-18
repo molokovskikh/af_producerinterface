@@ -556,7 +556,10 @@ namespace ProducerInterface.Controllers
 			// вытащили отчет
 			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
 			if (jxml == null)
-				Content("<h3>Отчет не найден</h3>");
+				return Content("<p>Отчет не найден</p>");
+
+			if (jxml.Xml.Length > 50000)
+				return Content("<p>Отчет имеет слишком большой объем для отображения. Сохраните в Excel или отправьте на email</p>");
 
 			// добавили отчет для вывода
 			var model = new DataSet();

@@ -8,22 +8,22 @@ namespace ProducerInterfaceCommon.Models
 	public abstract class RatingReportRow : ReportRow
 	{
 		[Hidden]
-		[Display(Name = "Сумма")]
-		public decimal? Summ { get; set; }
-
-		[Format(Value = "0.00")]
-		[Round(Precision = 2)]
-		[Display(Name = "Доля рынка в %")]
-		public decimal? SummPercent { get; set; }
-
-		[Hidden]
 		[Display(Name = "Заказ")]
 		public long? PosOrder { get; set; }
 
 		[Format(Value = "0.00")]
 		[Round(Precision = 2)]
-		[Display(Name = "Доля от общего заказа в %")]
+		[Display(Name = "Доля в % (упаковки)")]
 		public decimal? PosOrderPercent { get; set; }
+
+		[Hidden]
+		[Display(Name = "Сумма")]
+		public decimal? Summ { get; set; }
+
+		[Format(Value = "0.00")]
+		[Round(Precision = 2)]
+		[Display(Name = "Доля в % (рубли)")]
+		public decimal? SummPercent { get; set; }
 
 		[Format(Value = "# ##0.00\"р.\";-# ##0.00\"р.\"")]
 		[Round(Precision = 2)]
@@ -43,7 +43,7 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Кол-во заявок по препарату")]
 		public long? DistinctOrderId { get; set; }
 
-		[Display(Name = "Кол-во адресов доставки, заказавших препарат")]
+		[Display(Name = "Количество точек доставки")]
 		public long? DistinctAddressId { get; set; }
 
 		public override List<T> Treatment<T>(List<T> list, Report param)

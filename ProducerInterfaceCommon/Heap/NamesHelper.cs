@@ -93,6 +93,18 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
+		public List<OptionElement> GetCatalogList(List<long> list)
+		{
+			if (list == null || list.Count == 0)
+				return new List<OptionElement>();
+			var results = _cntx.catalognames
+				.Where(x => list.Contains(x.CatalogId))
+				.OrderBy(x => x.CatalogName)
+				.Select(x => new OptionElement { Value = x.CatalogId.ToString(), Text = x.CatalogName })
+				.ToList();
+			return results;
+		}
+
 		public List<OptionElement> GetCatalogListPromotion()
 		{
 			var producerId = _cntx.Account.Single(x => x.Id == _userId).AccountCompany.ProducerId;
@@ -104,7 +116,6 @@ namespace ProducerInterfaceCommon.Heap
 					.ToList();
 			return results;
 		}
-
 
 		public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
 		{
