@@ -79,7 +79,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td class="td_275">                              
+                            <td class="td_275">
                                 @Html.DisplayFor(modelItem => item.CustomName)
                             </td>
                             <td>
@@ -110,11 +110,21 @@
                                     @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
                                 }
                             </td>
-                            <td>@Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })</td>
-                        <td><a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" onclick="confirm('Вы уверены что хотите удалить отчет?')"><span class="glyphicon glyphicon-trash" title="Удалить отчет"></span></a>
-</td>
-                        </tr>}
-
+                            <td>
+                                @if (item.DisplayStatusEnum == DisplayStatus.New) {
+                                    @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
+                                }
+                                else {
+                                    @Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })
+                                }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" onclick="confirm('Вы уверены что хотите удалить отчет?')">
+                                    <span class="glyphicon glyphicon-trash" title="Удалить отчет"></span>
+                                </a>
+                            </td>
+                        </tr>
+                     }
                 </table>
             </div>
         </div>

@@ -360,6 +360,8 @@
     <Compile Include="Models\RoundAttribute.cs" />
     <Compile Include="Models\RunNowIntervalParam.cs" />
     <Compile Include="Models\RunNowParam.cs" />
+    <Compile Include="ReportModels\SecondarySales\SecondarySalesReport.cs" />
+    <Compile Include="ReportModels\SecondarySales\SecondarySalesReportRow.cs" />
     <Compile Include="ReportModels\SupplierRating\SupplierRatingReport.cs" />
     <Compile Include="ReportModels\SupplierRating\SupplierRatingReportRow.cs" />
     <Compile Include="Models\TriggerParam.cs" />

@@ -5,12 +5,11 @@ namespace ProducerInterfaceCommon.Models
 {
 	[Serializable]
 	public abstract class IntervalReport : Report, IInterval
-	{    
-        [ScaffoldColumn(false)]
+	{
+		[ScaffoldColumn(false)]
 		public DateTime DateFrom { get; set; }
-           
-        [ScaffoldColumn(false)]
-		public DateTime DateTo { get; set; }
 
+		[ScaffoldColumn(false)]
+		public DateTime DateTo { get; set; }
 	}
 }
