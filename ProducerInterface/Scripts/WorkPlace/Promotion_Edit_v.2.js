@@ -152,7 +152,7 @@ function bindModel(JsonModel)
  
     if (JsonModel.PromotionFileName == null || JsonModel.PromotionFileName == "") {
         if (JsonModel.Id > 0) {
-            Promotion.PromotionFileName("Файлы не добавлялись ранее");         
+            Promotion.PromotionFileName("Файл ранее не добавляли");         
             Promotion.PromotionFileName.valueHasMutated();
             Promotion.OldFileVisible(1);
             Promotion.OldFileVisible.valueHasMutated();

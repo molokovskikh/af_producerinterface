@@ -33,7 +33,19 @@ namespace ProducerInterface.Controllers
 
 			h = new NamesHelper(cntx_, userId);
 
-		}
+            if (CurrentUser != null)
+            {
+                if (CurrentUser.AccountCompany.ProducerId != null)
+                {
+                    ViewBag.Producernames = cntx_.producernames.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).First().ProducerName;
+                }
+                else
+                {
+                    ViewBag.Producernames = "Физическое лицо";
+                }
+            }
+
+        }
 
 		protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
 

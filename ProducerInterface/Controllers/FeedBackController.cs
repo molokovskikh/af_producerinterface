@@ -131,17 +131,18 @@ namespace ProducerInterface.Controllers
             return RedirectToAction("Index", "Profile");
         }
 
-        public ActionResult FeedBakcAddNewDomain(string FIO, string Email, string NumPhone, string CompanyNames)
+        public ActionResult FeedBakcAddNewDomain(string FIO, string Email, string PhoneNum, string CompanyNames)
         {
 
             AccountFeedBack AFB = new AccountFeedBack();
 
-            AFB.Contacts = NumPhone + "," + Email;
+            AFB.Contacts = PhoneNum + "," + Email;
             AFB.Type = (sbyte)FeedBackTypePrivate.AddNewDomainName;
             AFB.Status =(sbyte) FeedBackStatus.FeedBack_New;
             AFB.UrlString = "Заявка подана при невозможности зарегистрироватся с другим доменом для производителя: " + CompanyNames;
-            AFB.Description = "Я, " + FIO + ", являясь сотрудником компании " + CompanyNames + ", использую в своей деятельности E-mail: " + Email + " Однако система не позволяет мне зарегистрироваться с этим E-mail. Прошу решить возникшую  проблему. Телефон для связи: " + NumPhone;
-
+            AFB.Description = "Я, " + FIO + ", являясь сотрудником компании " + CompanyNames + ", использую в своей деятельности E-mail: " + Email + " Однако система не позволяет мне зарегистрироваться с этим E-mail. Прошу решить возникшую  проблему. Телефон для связи: " + PhoneNum;
+            AFB.DateAdd = System.DateTime.Now;
+            
             cntx_.AccountFeedBack.Add(AFB);
             cntx_.SaveChanges();
             
