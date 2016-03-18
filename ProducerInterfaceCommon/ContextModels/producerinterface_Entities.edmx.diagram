@@ -22,7 +22,6 @@
         <EntityTypeShape EntityType="producerinterface_Model.LogForNet" Width="1.5" PointX="8.125" PointY="8.375" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamilynames" Width="1.5" PointX="0.75" PointY="2.875" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountCompany" Width="3.875" PointX="4.875" PointY="13.625" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountEmail" Width="1.875" PointX="0.5" PointY="20.5" />
         <EntityTypeShape EntityType="producerinterface_Model.CompanyDomainName" Width="3.125" PointX="0.5" PointY="12.875" />
         <AssociationConnector Association="producerinterface_Model.CompanyId_AccountCompanyId" />
         <EntityTypeShape EntityType="producerinterface_Model.usernames" Width="1.5" PointX="2.75" PointY="2.875" />
@@ -48,7 +47,6 @@
         <EntityTypeShape EntityType="producerinterface_Model.Account" Width="4.5" PointX="4.25" PointY="16.125" />
         <AssociationConnector Association="producerinterface_Model.Account_Appointment" />
         <AssociationConnector Association="producerinterface_Model.Account_CompanyId" />
-        <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
         <AssociationConnector Association="producerinterface_Model.FK_promotions_AccountId" />
         <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
         <AssociationConnector Association="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" />
@@ -64,6 +62,8 @@
         <EntityTypeShape EntityType="producerinterface_Model.PromotionsToSupplier" Width="1.5" PointX="14.625" PointY="15.75" />
         <AssociationConnector Association="producerinterface_Model.FK1_This_To_PromotionId" />
         <EntityTypeShape EntityType="producerinterface_Model.supplierregions" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountEmail" Width="1.5" PointX="9.5" PointY="27.375" />
+        <AssociationConnector Association="producerinterface_Model.Email_AccountId" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

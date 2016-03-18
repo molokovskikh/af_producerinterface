@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
             var NewsAll = cntx_.NotificationToProducers.Where(x=>x.Enabled==true).ToList();
             NewsAll.Reverse();
 
-            ViewBag.News = NewsAll.Take(PagerCount).ToList();
+            ViewBag.News = NewsAll.OrderByDescending(x=>x.DatePublication).Take(PagerCount).ToList();
             ViewBag.MaxCount = NewsAll.Count();
             return View();
         }
@@ -111,14 +111,14 @@ namespace ProducerInterface.Controllers
 
         public ActionResult GetOldNews(int Pages)
         {
-            var News = cntx_.NotificationToProducers.Skip(Pages * 10).Take(10).ToList();
+            var News = cntx_.NotificationToProducers.OrderByDescending(x=>x.DatePublication).Skip(Pages * 10).Take(10).ToList();
             return PartialView(News);
         }
 
         public ActionResult GetNextList(int Pager)
         {
             ViewBag.Pager = Pager + 1;
-            var ListNews10 = cntx_.NotificationToProducers.OrderByDescending(xxx => xxx.Id).ToList().Skip(PagerCount * Pager).Take(PagerCount).ToList();
+            var ListNews10 = cntx_.NotificationToProducers.OrderByDescending(xxx => xxx.DatePublication).ToList().Skip(PagerCount * Pager).Take(PagerCount).ToList();
 
             ViewBag.MaxCount = cntx_.NotificationToProducers.Count() / (PagerCount * Pager);
             return PartialView("GetNextList", ListNews10);

@@ -174,7 +174,7 @@ namespace ProducerInterfaceCommon.Heap
 			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, type);
-			EmailSender.SendEmail(user.Login, subject, body, attachments, true);
+			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
 			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} ({user.Login}), изготовитель {GetCompanyname(user.Id, cntx)}, время {DateTime.Now}, IP {ip}, действие {GetEnumDisplayName(type)}";
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];

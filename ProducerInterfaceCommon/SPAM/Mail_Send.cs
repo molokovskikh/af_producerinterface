@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,68 +10,85 @@ namespace ProducerInterfaceCommon.SPAM
 {
     public class Mail_Send
     {
-        private void SendEmail(string to, string subject, string body, string path, bool HtmlBody = false)
+        private Enums.TypeSpam _typeSpam;
+        private MailAddress _maFrom;
+        private bool _isBodyHtml;
+        private string _ip;
+        public Mail_Send(Enums.TypeSpam TS, bool isBodyHtml, string IP)
         {
+            _typeSpam = TS;
+            _maFrom = new MailAddress(ConfigurationManager.AppSettings["MailFrom"], ConfigurationManager.AppSettings["MailFromSubscription"], Encoding.UTF8);
+            _isBodyHtml = isBodyHtml;
+            _ip = IP;
+        }
+
+        public void SendMessage(ContextModels.Account currentUser, List<Attribute> Attributes)
+        {
+
+
+
 
         }
 
-        public void SendEmail(List<string> to, string subject, string body, string path)
+        private void SendMessageRegistration()
         {
-            foreach (var toItem in to)
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private void SendEmail(List<string> to, string messageBody, string messageSubject, List<string> Attachments)
+        {
+            foreach (var _to in to)
             {
-                SendEmail(toItem, subject, body, path);
+                SendEmail(_to, messageBody, messageSubject, Attachments);
             }
         }
 
-        private ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx__ = new ContextModels.producerinterface_Entities();
-
-        private List<string> GetSpamMailList(Enums.TypeSpam typeSpam)
+        private void SendEmail(string to, string messageBody, string messageSubject, List<string> attachments)
         {
-            int TS_ID = (int)typeSpam;
+            MailAddress maTo = new MailAddress(to);
 
-            List<string> SpamMailList = new List<string>();
-
-            switch (TS_ID)
+            using (var message = new MailMessage(_maFrom, maTo))
             {
-                case (int)Enums.TypeSpam.All:
-                    break;
-                case (int)Enums.TypeSpam.Reports:
-                    break;
-                case (int)Enums.TypeSpam.CustomReports:
-                    break;
-                case (int)Enums.TypeSpam.Promotion:
-                    break;
-                case (int)Enums.TypeSpam.CustomPromotions:
-                    break;
-                case (int)Enums.TypeSpam.News:
-                    break;
-                case (int)Enums.TypeSpam.CustomNews:
-                    break;
-                case (int)Enums.TypeSpam.Registration:
-                    break;
-                case (int)Enums.TypeSpam.FeedBack:
-                    break;
-                case (int)Enums.TypeSpam.CustomFeedBack:
-                    break;
-                case (int)Enums.TypeSpam.Producer:
-                    break;
-                case (int)Enums.TypeSpam.Drug:
-                    break;
-            }
+                message.Subject = messageSubject;
+                message.SubjectEncoding = System.Text.Encoding.UTF8;
+                message.Body = messageBody;
+                message.BodyEncoding = System.Text.Encoding.UTF8;
+                message.IsBodyHtml = false;
 
-            return SpamMailList.ToList().Select(v => v.ToLower()).GroupBy(x => x).Select(x => x.First()).ToList();
+                if (_isBodyHtml)
+                    message.IsBodyHtml = _isBodyHtml;
+
+                if (attachments != null && attachments.Count > 0)
+                    foreach (var attachment in attachments)
+                    {
+                        message.Attachments.Add(new Attachment(attachment));
+                    }
+                var smtpPort = int.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
+                using (var client = new SmtpClient(ConfigurationManager.AppSettings["SmtpHost"], smtpPort))
+                {
+                    client.UseDefaultCredentials = false;
+                    client.Send(message);
+                }
+            }
         }
+
+        
     }
-
-
-
-
-
-
-
-
-
-
-
 }
 

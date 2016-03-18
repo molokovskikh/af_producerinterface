@@ -16,7 +16,6 @@ namespace ProducerInterfaceCommon.ContextModels
     {
         public Account()
         {
-            this.AccountEmail = new HashSet<AccountEmail>();
             this.promotions = new HashSet<promotions>();
             this.promotions1 = new HashSet<promotions>();
             this.AccountAppointment1 = new HashSet<AccountAppointment>();
@@ -24,6 +23,7 @@ namespace ProducerInterfaceCommon.ContextModels
             this.AccountGroup = new HashSet<AccountGroup>();
             this.AccountFeedBack = new HashSet<AccountFeedBack>();
             this.AccountFeedBackComment = new HashSet<AccountFeedBackComment>();
+            this.AccountEmail = new HashSet<AccountEmail>();
         }
     
         public long Id { get; set; }
@@ -46,7 +46,6 @@ namespace ProducerInterfaceCommon.ContextModels
     
         public virtual AccountAppointment AccountAppointment { get; set; }
         public virtual AccountCompany AccountCompany { get; set; }
-        public virtual ICollection<AccountEmail> AccountEmail { get; set; }
         public virtual ICollection<promotions> promotions { get; set; }
         public virtual ICollection<promotions> promotions1 { get; set; }
         public virtual ICollection<AccountAppointment> AccountAppointment1 { get; set; }
@@ -54,5 +53,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual ICollection<AccountGroup> AccountGroup { get; set; }
         public virtual ICollection<AccountFeedBack> AccountFeedBack { get; set; }
         public virtual ICollection<AccountFeedBackComment> AccountFeedBackComment { get; set; }
+        public virtual ICollection<AccountEmail> AccountEmail { get; set; }
     }
 }

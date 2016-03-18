@@ -16,7 +16,7 @@ namespace ProducerInterfaceCommon.ContextModels
     {
         public long Id { get; set; }
         public string eMail { get; set; }
-        public Nullable<long> AccountId { get; set; }
+        public long AccountId { get; set; }
     
         public virtual Account Account { get; set; }
     }

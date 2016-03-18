@@ -329,14 +329,15 @@
     <Content Include="Scripts\SemanticUI\reset.min.css" />
     <Content Include="Scripts\SemanticUI\transition.min.js" />
     <Content Include="Scripts\WorkPlace\Analit.js" />
+    <Content Include="Scripts\WorkPlace\FeedBack_AddNewDomain.js" />
     <Content Include="Scripts\WorkPlace\Paginator.js" />
     <Content Include="Scripts\WorkPlace\CountAlfavit.js" />
     <Content Include="Scripts\WorkPlace\DatePicker.js" />
     <Content Include="Scripts\WorkPlace\FileUpLoad.js" />
     <Content Include="Scripts\WorkPlace\GradientText.js" />
     <Content Include="Scripts\WorkPlace\ModalView.js" />
-    <Content Include="Scripts\WorkPlace\Promotion_Edit.js" />
-    <Content Include="Scripts\WorkPlace\Promotion_Edit_Model.js" />
+    <Content Include="Scripts\WorkPlace\Promotion_Edit_v.2.js" />
+    <Content Include="Scripts\WorkPlace\Promotion_Edit_Model_v.2.js" />
     <Content Include="Scripts\WorkPlace\ZAnalit.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Report\AddJob.cshtml" />
@@ -453,6 +454,7 @@
     <Content Include="Views\Promotion\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Report\GetReport.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\FeedBack\FeedBackNewDomain.cshtml" />
     <Content Include="Views\Report\EditorTemplates\SecondarySalesReport.cshtml" />
   </ItemGroup>
   <ItemGroup>

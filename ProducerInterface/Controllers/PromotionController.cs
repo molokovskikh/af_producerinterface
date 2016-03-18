@@ -95,7 +95,7 @@ namespace ProducerInterface.Controllers
                 ViewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
                 ViewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
                 ViewModel.SuppierRegionsList = h.GetSupplierList(new List<decimal>() { 0 }).Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
-                ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(0));
+                ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(0)).ToList().Select(x => x.ToString()).ToList();
                 ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x=> new TextValue {  Text = x.Text, Value = x.Value }).ToList();
             }
             else
@@ -104,8 +104,8 @@ namespace ProducerInterface.Controllers
 
                 var ChangePromo = cntx_.promotions.Find(ID_Promo);
                 ViewModel.Id = ID;
-                ViewModel.SuppierRegions = ChangePromo.PromotionsToSupplier.ToList().Select(x =>(ulong)x.SupplierId).ToList();
-                ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.SuppierRegions).Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+                ViewModel.SuppierRegions = ChangePromo.PromotionsToSupplier.ToList().Select(x => (string)x.SupplierId.ToString()).ToList();
+                ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.SuppierRegions.ToList().Select(x=>(ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
                 ViewModel.Name = ChangePromo.Name;
                 if (ID == 0)
                 {
@@ -115,9 +115,13 @@ namespace ProducerInterface.Controllers
                 else
                 {
                     ViewModel.Title = "Редактирование промоакции: " + ChangePromo.Name;
-                }            
-                ViewModel.PromotionFileName = ChangePromo.MediaFiles?.ImageName;
-                ViewModel.DrugList = ChangePromo.promotionToDrug.ToList().Select(x => x.DrugId).ToList();
+                }
+                if (ChangePromo.PromoFileId != null)
+                {
+                    ViewModel.PromotionFileId = (long)ChangePromo.PromoFileId;
+                    ViewModel.PromotionFileName = ChangePromo.MediaFiles?.ImageName;
+                }
+                ViewModel.DrugList = ChangePromo.promotionToDrug.ToList().Select(x => x.DrugId.ToString()).ToList();
                 if (ChangePromo.Begin < DateTime.Now)
                 {
                     ViewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
@@ -136,8 +140,8 @@ namespace ProducerInterface.Controllers
                     ViewModel.End = ChangePromo.End.Value.ToString("dd.MM.yyyy");
                 }
                
-                ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(ChangePromo.RegionMask));             
-                ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.RegionList.Select(x => (decimal)x).ToList()).ToList()
+                ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(ChangePromo.RegionMask)).ToList().Select(x=>x.ToString()).ToList();             
+                ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.RegionList.Select(x => (decimal)Convert.ToUInt64(x)).ToList()).ToList()
                     .Select(x=> new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
                 ViewModel.PromotionFileUrl = Url.Action("GetFile", new { id = ChangePromo.MediaFiles?.Id });
@@ -199,7 +203,7 @@ namespace ProducerInterface.Controllers
 
             foreach (var DrugItem in promotion_to_Drug)
             {
-                bool DrugExsist = newPromo.DrugList.Any(x => x== DrugItem.DrugId);
+                bool DrugExsist = newPromo.DrugList.Any(x => Convert.ToInt64(x) == DrugItem.DrugId);
 
                 if (!DrugExsist)
                 {
@@ -212,13 +216,13 @@ namespace ProducerInterface.Controllers
 
             foreach (var DrugItem in newPromo.DrugList)
             {
-                bool DrugExsist = PromoDB.promotionToDrug.Any(x => x.DrugId == DrugItem); 
+                bool DrugExsist = PromoDB.promotionToDrug.Any(x => x.DrugId == Convert.ToInt64(DrugItem)); 
 
                 if (!DrugExsist)
                 {
                     promotionToDrug newAddDrug = new promotionToDrug()
                     {
-                        DrugId = DrugItem, PromotionId = PromoDB.Id
+                        DrugId = Convert.ToInt64(DrugItem), PromotionId = PromoDB.Id
                     };
 
                     cntx_.promotionToDrug.Add(newAddDrug);
@@ -232,7 +236,7 @@ namespace ProducerInterface.Controllers
 
             foreach (var SupplierItem in Promo_PromotionsToSupplier)
             {
-                bool SupllierExsist = newPromo.SuppierRegions.Any(x =>(ulong) x ==(ulong) SupplierItem.SupplierId);
+                bool SupllierExsist = newPromo.SuppierRegions.Any(x =>(ulong)Convert.ToInt64(x) ==(ulong) SupplierItem.SupplierId);
 
                 if (!SupllierExsist)
                 {
@@ -244,12 +248,12 @@ namespace ProducerInterface.Controllers
 
             foreach (var SupplierItem in newPromo.SuppierRegions)
             {
-                bool SupllierExsist = PromoDB.PromotionsToSupplier.Any(x =>(ulong) x.SupplierId ==(ulong) SupplierItem);
+                bool SupllierExsist = PromoDB.PromotionsToSupplier.Any(x =>(ulong) x.SupplierId ==(ulong)Convert.ToInt64(SupplierItem));
 
                 if (!SupllierExsist)
                 {
                     PromotionsToSupplier AddNew = new PromotionsToSupplier()
-                    { SupplierId = (long) SupplierItem, PromotionId = PromoDB.Id };
+                    { SupplierId = (long)Convert.ToInt64(SupplierItem), PromotionId = PromoDB.Id };
                     PromoDB.PromotionsToSupplier.Add(AddNew);
                 }
             }
@@ -260,11 +264,11 @@ namespace ProducerInterface.Controllers
 
             if (newPromo.RegionList.Count() == 1)
             {
-                regionMask = (ulong) newPromo.RegionList.First();
+                regionMask = (ulong)Convert.ToInt64(newPromo.RegionList.First());
             }
             else
             {
-                regionMask = newPromo.RegionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
+                regionMask = newPromo.RegionList.Select(x => (ulong)Convert.ToInt64(x)).Aggregate((y, z) => y | z);
             }
             PromoDB.RegionMask = regionMask;
             PromoDB.Name = newPromo.Name;
@@ -296,15 +300,25 @@ namespace ProducerInterface.Controllers
 
                 if (PromoFileRemove != null)
                 {
-                //    cntx_.MediaFiles.Remove(PromoFileRemove);
-                //    cntx_.SaveChanges();
+                    //    cntx_.MediaFiles.Remove(PromoFileRemove);
+                    //    cntx_.SaveChanges();
 
-                //    для лоигрования действий решил не удалять файл для возможности восстановления промоакции
+                    //    для лоигрования действий решил не удалять файл для возможности восстановления промоакции
                 }
 
-                PromoDB.PromoFileId = FileID;
-                cntx_.SaveChanges();
+                PromoDB.PromoFileId = FileID;               
             }
+            else
+            {
+                if (newPromo.PromotionFileId != null)
+                {
+                    FileID = (int)newPromo.PromotionFileId;
+                    PromoDB.PromoFileId = FileID;
+                }
+            }
+
+            cntx_.SaveChanges();
+
             return PromoDB.Id;    
         }
 
@@ -312,7 +326,15 @@ namespace ProducerInterface.Controllers
         {
 
             int? FileId = SaveFile(newPromo.File);
-            var regionMask = newPromo.RegionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
+            var regionMask = newPromo.RegionList.Select(x => (ulong)Convert.ToInt64(x)).Aggregate((y, z) => y | z);
+
+            if (FileId == null)
+            {
+                if (newPromo.PromotionFileId != null)
+                {
+                    FileId = (int)newPromo.PromotionFileId;                  
+                }
+            }
 
             promotions promotionToDataBase = new promotions()
             {
@@ -342,7 +364,7 @@ namespace ProducerInterface.Controllers
 
             foreach (var DrugItem in newPromo.DrugList)
             {
-                var X = new  promotionToDrug(){ DrugId = DrugItem, PromotionId = promotionToDataBase.Id };
+                var X = new  promotionToDrug(){ DrugId = Convert.ToInt64(DrugItem), PromotionId = promotionToDataBase.Id };
                 cntx_.promotionToDrug.Add(X);
             }
         //    cntx_.SaveChanges();
@@ -350,7 +372,7 @@ namespace ProducerInterface.Controllers
 
             foreach (var SupplierItem in newPromo.SuppierRegions)
             {
-                var X = new PromotionsToSupplier() { PromotionId = promotionToDataBase.Id, SupplierId =(long)SupplierItem };
+                var X = new PromotionsToSupplier() { PromotionId = promotionToDataBase.Id, SupplierId =(long)Convert.ToInt64(SupplierItem) };
                 cntx_.PromotionsToSupplier.Add(X);
             }
        //     cntx_.SaveChanges();

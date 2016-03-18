@@ -354,3 +354,13 @@ font-size:0.9em;
 .text-style-italic {
 font-style:italic;
 }
+.href_decoration_off {
+text-decoration: none;
+color: #232121;
+font-weight: normal;
+font-size:0.9em;
+}
+    .href_decoration_off:hover {
+        text-decoration: none;
+        color: #232121;
+    }

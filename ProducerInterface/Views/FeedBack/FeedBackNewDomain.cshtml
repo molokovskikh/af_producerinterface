@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Обратная связь";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Обратная связь</h2>
+
+
+    <form action="@Url.Action("FeedBakcAddNewDomain")" method="post" data-bind="event: {submit: Event_Submit}" id="FeedbackForm">
+        <div class="from-group">
+            <label>Обращение</label>
+            <p data-bind="text: FullText"></p>
+        </div>
+
+        <input value="@ViewBag.ProducerName" hidden="hidden" id="CompanyNames" name="CompanyNames" />
+
+        <div class="form-group">
+            <label>ФИО*</label>
+            <input class="form-control" id="FIO" name="FIO" placeholder="укажите здесь Ваши ФИО" data-bind="value: FIO, valueUpdate: 'afterkeydown', event: {keyup: Event_Change }" />
+            <p class="field-validation-error" data-bind="text: ErrorFIO"></p>
+        </div>
+
+        <div class="form-group">
+            <label>Email*</label>
+            <input type="text" name="Email" id="Email" class="form-control" placeholder="укажите Ваш E-mail" data-bind="value: Email, valueUpdate: 'afterkeydown', event: {keyup: Event_Change }" />
+            <p class="field-validation-error" data-bind="text: ErrorEmail"></p>
+        </div>
+
+        <div class="form-group">
+            <label>Телефон*</label>
+            <input type="text" name="PhoneNum" id="PhoneNum" class="form-control" placeholder="(999) 999-99-99" data-bind="value: Phone, valueUpdate: 'afterkeydown', event: {keyup: Event_Change }" />
+            <p class="field-validation-error" data-bind="text: ErrorPhone"></p>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Отправить" />
+        </div>
+    </form>
+</div>
+
+@section JavaScript
+{
+<script src="~/Scripts/knockout-3.4.0.js"></script>
+<script src="~/Scripts/knockout-3.4.0.debug.js"></script>   
+<script src="~/Scripts/WorkPlace/FeedBack_AddNewDomain.js"></script>
+}

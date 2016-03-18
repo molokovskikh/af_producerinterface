@@ -50,7 +50,7 @@
           </Key>
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="eMail" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="AccountId" Type="uint" />
+          <Property Name="AccountId" Type="uint" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountFeedBack">
           <Key>
@@ -590,7 +590,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Email_AccountId">
-          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="AccountEmail" Type="Self.AccountEmail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Account">
@@ -1248,7 +1248,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="LogForNet" EntityType="producerinterface_Model.LogForNet" />
           <EntitySet Name="drugfamilynames" EntityType="producerinterface_Model.drugfamilynames" />
           <EntitySet Name="AccountCompany" EntityType="producerinterface_Model.AccountCompany" />
-          <EntitySet Name="AccountEmail" EntityType="producerinterface_Model.AccountEmail" />
           <EntitySet Name="CompanyDomainName" EntityType="producerinterface_Model.CompanyDomainName" />
           <AssociationSet Name="CompanyId_AccountCompanyId" Association="producerinterface_Model.CompanyId_AccountCompanyId">
             <End Role="AccountCompany" EntitySet="AccountCompany" />
@@ -1297,10 +1296,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountCompany" EntitySet="AccountCompany" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
-          <AssociationSet Name="Email_AccountId" Association="producerinterface_Model.Email_AccountId">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="AccountEmail" EntitySet="AccountEmail" />
-          </AssociationSet>
           <AssociationSet Name="FK_promotions_AccountId" Association="producerinterface_Model.FK_promotions_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="promotions" EntitySet="promotions" />
@@ -1346,6 +1341,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="PromotionsToSupplier" EntitySet="PromotionsToSupplier" />
           </AssociationSet>
           <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
+          <EntitySet Name="AccountEmail" EntityType="producerinterface_Model.AccountEmail" />
+          <AssociationSet Name="Email_AccountId" Association="producerinterface_Model.Email_AccountId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountEmail" EntitySet="AccountEmail" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1374,15 +1374,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="ProducerId" Type="Int64" />
           <NavigationProperty Name="CompanyDomainName" Relationship="producerinterface_Model.CompanyId_AccountCompanyId" FromRole="AccountCompany" ToRole="CompanyDomainName" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.Account_CompanyId" FromRole="AccountCompany" ToRole="Account" />
-        </EntityType>
-        <EntityType Name="AccountEmail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="eMail" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AccountId" Type="Int64" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.Email_AccountId" FromRole="AccountEmail" ToRole="Account" />
         </EntityType>
         <EntityType Name="CompanyDomainName">
           <Key>
@@ -1715,7 +1706,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="SecureTime" Type="DateTime" />
           <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountCompany" Relationship="producerinterface_Model.Account_CompanyId" FromRole="Account" ToRole="AccountCompany" />
-          <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="AccountAppointment1" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="Account" ToRole="AccountAppointment" />
@@ -1723,6 +1713,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
           <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
           <NavigationProperty Name="AccountFeedBackComment" Relationship="producerinterface_Model.FK2_Comment_AccountAdminId" FromRole="Account" ToRole="AccountFeedBackComment" />
+          <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
         </EntityType>
         <Association Name="Account_Appointment">
           <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
@@ -1745,18 +1736,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Principal>
             <Dependent Role="Account">
               <PropertyRef Name="CompanyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Email_AccountId">
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
-          <End Type="producerinterface_Model.AccountEmail" Role="AccountEmail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AccountEmail">
-              <PropertyRef Name="AccountId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1921,6 +1900,27 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="SupplierId" Type="Int64" Nullable="false" />
           <Property Name="RegionMask" Type="Decimal" Nullable="false" />
         </EntityType>
+        <EntityType Name="AccountEmail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="eMail" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccountId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.Email_AccountId" FromRole="AccountEmail" ToRole="Account" />
+        </EntityType>
+        <Association Name="Email_AccountId">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
+          <End Type="producerinterface_Model.AccountEmail" Role="AccountEmail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountEmail">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2099,15 +2099,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <MappingFragment StoreEntitySet="AccountCompany">
                 <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AccountEmail">
-            <EntityTypeMapping TypeName="producerinterface_Model.AccountEmail">
-              <MappingFragment StoreEntitySet="AccountEmail">
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="eMail" ColumnName="eMail" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2446,6 +2437,15 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <MappingFragment StoreEntitySet="supplierregions">
                 <ScalarProperty Name="RegionMask" ColumnName="RegionMask" />
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountEmail">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountEmail">
+              <MappingFragment StoreEntitySet="AccountEmail">
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="eMail" ColumnName="eMail" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
