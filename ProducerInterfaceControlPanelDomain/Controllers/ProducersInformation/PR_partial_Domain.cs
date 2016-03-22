@@ -29,6 +29,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpPost]
         public ActionResult AddDomain(long AccountCompanyId, string NewDomainName)
         {
+
+            var DomainProduceList = cntx_.CompanyDomainName.Where(x => x.CompanyId == AccountCompanyId).ToList().Where(x=>x.Name == NewDomainName).ToList();
+            var ListDomain = new List<ProducerInterfaceCommon.ContextModels.CompanyDomainName>();
+
+            if (DomainProduceList.Count() >= 1)
+            {
+                ListDomain = cntx_.CompanyDomainName.Where(xxx => xxx.AccountCompany.Id == AccountCompanyId).ToList();             
+                ViewBag.ErrorAdd = "Данный домен уже есть в списке данного производителя";
+                return PartialView("GetDomain", ListDomain);
+            }
+            
             var CompanyDomainNameNew = new ProducerInterfaceCommon.ContextModels.CompanyDomainName();
             CompanyDomainNameNew.CompanyId = AccountCompanyId;
             CompanyDomainNameNew.Name = NewDomainName;
@@ -36,7 +47,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             cntx_.CompanyDomainName.Add(CompanyDomainNameNew);
             cntx_.SaveChanges();
 
-            var ListDomain = cntx_.CompanyDomainName.Where(xxx => xxx.AccountCompany.Id == AccountCompanyId).ToList();
+            ListDomain = cntx_.CompanyDomainName.Where(xxx => xxx.AccountCompany.Id == AccountCompanyId).ToList();
             return PartialView("GetDomain",ListDomain);
         }
 
@@ -44,19 +55,19 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {           
             var CompanyDomainNameDel = cntx_.CompanyDomainName.Find(Id);
             var CompanyId = CompanyDomainNameDel.AccountCompany.Id;
+                    
+            var DomainList = cntx_.CompanyDomainName.Where(x => x.CompanyId == CompanyId).ToList();
 
-            var AccountBAN = cntx_.Account.Where(xxx => xxx.Login.Contains(CompanyDomainNameDel.Name) && xxx.CompanyId == CompanyId).ToList();
-            foreach (var AccountItem in AccountBAN)
+            if (DomainList.Count() != 1)
             {
-                AccountItem.Enabled = 0;
-                AccountItem.PasswordUpdated = DateTime.Now;
-                cntx_.Entry(AccountItem).State = System.Data.Entity.EntityState.Modified;
+                cntx_.CompanyDomainName.Remove(CompanyDomainNameDel);
+                cntx_.SaveChanges();
+                ViewBag.Delete = CompanyDomainNameDel.Name;
             }
-
-            cntx_.CompanyDomainName.Remove(CompanyDomainNameDel);
-            cntx_.SaveChanges();                      
-
-            ViewBag.Delete = CompanyDomainNameDel.Name;
+            else
+            {
+                ViewBag.Delete = CompanyDomainNameDel.Name + " не ";
+            }           
 
             var ListDomain = cntx_.CompanyDomainName.Where(xxx => xxx.AccountCompany.Id == CompanyId).ToList();
             return PartialView("GetDomain", ListDomain);

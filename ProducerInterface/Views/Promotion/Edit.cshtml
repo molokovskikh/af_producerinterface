@@ -120,18 +120,18 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-xs-12" data-bind="visible: OldFileVisible">
-                                    <label>Ранее добавленный файл <a data-bind="text: PromotionFileName, attr: { href: PromotionFileUrl, class: PromoFileClass} "></a></label>    
+                                    <label>Ранее добавленный файл-листовка: <a data-bind="text: PromotionFileName, attr: { href: PromotionFileUrl, class: PromoFileClass} "></a></label>    
                                     <input hidden="hidden" id="PromotionFileId" name="PromotionFileId" data-bind="value: PromotionFileId"/>                                
                                 </div>                            
                             </div>  
-                                 <label>Добавление файла к промоакции</label>           
+                                 <label>Добавление файла-листовки к промоакции</label>           
                                  <p class="text-size-09em text-style-italic"> Выберете файл для загрузки в форматах .jpg, .jpeg, .txt. Максимальный размер файла 500КБ</p>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="fileupload fileupload-new" data-provides="fileupload">
                                         <span class="form-control btn btn-default btn-sm btn-file" style="max-width:300px;">
-                                            <span class="fileupload-new">Выбрать файл</span>
-                                            <span class="fileupload-exists">Файл выбран / изменить выбор</span>
+                                            <span class="fileupload-new">Выбрать файл-листовку</span>
+                                            <span class="fileupload-exists">Файл-листовка выбран / изменить выбор</span>
                                             <input type="file" id="File" name="File" accept="image/jpeg,text/plain" hidden="hidden" value="@ViewBag.PromoFile" />
                                         </span>
                                         <span class="fileupload-preview"></span>
@@ -146,11 +146,10 @@
 
 
                     <div class="col-xs-12">
-                        <div class="form-group">
+                        <div class="form-group" style="min-height:50px;">
                             <input type="submit" class="btn btn-primary pull-right" data-bind="value: SubmitText" />
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -172,5 +171,5 @@
     <script src="~/Scripts/locales/bootstrap-datepicker.ru.min.js"></script>
     <script src="~/Scripts/WorkPlace/Promotion_Edit_Model_v.2.js"></script>
     <script src="~/Scripts/WorkPlace/Promotion_Edit_v.2.js"></script>
-    <script src="~/Scripts/WorkPlace/FileUpLoad.js"></script>
+    <script src="~/Scripts/WorkPlace/FileUpLoad_v.2.0.js"></script>
 }

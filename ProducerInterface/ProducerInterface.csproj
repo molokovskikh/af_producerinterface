@@ -333,7 +333,7 @@
     <Content Include="Scripts\WorkPlace\Paginator.js" />
     <Content Include="Scripts\WorkPlace\CountAlfavit.js" />
     <Content Include="Scripts\WorkPlace\DatePicker.js" />
-    <Content Include="Scripts\WorkPlace\FileUpLoad.js" />
+    <Content Include="Scripts\WorkPlace\FileUpLoad_v.2.0.js" />
     <Content Include="Scripts\WorkPlace\GradientText.js" />
     <Content Include="Scripts\WorkPlace\ModalView.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Edit_v.2.js" />

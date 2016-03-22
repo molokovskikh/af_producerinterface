@@ -262,7 +262,14 @@ namespace ProducerInterface.Controllers
             {
                 return View(AccountModel);
             }
-            
+
+            var Temp = cntx_.Account.Where(x => x.Login == AccountModel.login).ToList().Where(y=>y.TypeUser == (sbyte)TypeUsers.ProducerUser).ToList();
+            if (Temp != null && Temp.Count() >= 1)
+            {
+                ErrorMessage("Данный eMail уже зарегистрирован в нашей базе");
+                return View(AccountModel);
+            }
+                        
             var CompanyCreate = new AccountCompany();
 
             CompanyCreate.Name = AccountModel.CompanyName; // Комментарий пользователя, далее название компании
@@ -280,7 +287,7 @@ namespace ProducerInterface.Controllers
             NewFeedBack.DateAdd = DateTime.Now;
             NewFeedBack.AccountId = NewAccount.Id;
             NewFeedBack.UrlString = "~/Regisration/CustomRegistration";
-            NewFeedBack.Type = (sbyte) ProducerInterfaceCommon.ContextModels.FeedBackTypePrivate.Registration;
+            NewFeedBack.Type = (sbyte)ProducerInterfaceCommon.ContextModels.FeedBackTypePrivate.Registration;
 
             cntx_.AccountFeedBack.Add(NewFeedBack);
             cntx_.SaveChanges();
@@ -365,8 +372,7 @@ namespace ProducerInterface.Controllers
         private Account SaveAccount(RegViewModel Reg_ViewModel = null, RegDomainViewModel RegDomain_ViewModel = null, RegNotProducerViewModel RegNotProducer_ViewModel = null, string Pass = null, AccountCompany AC = null)
         {
             
-            var NewAccount = new Account();
-
+            var NewAccount = new Account();          
             if (Reg_ViewModel != null)
             {
                 NewAccount.Enabled = 0;
@@ -381,7 +387,7 @@ namespace ProducerInterface.Controllers
                 NewAccount.Phone = Reg_ViewModel.PhoneNumber;
                 NewAccount.AppointmentId = Reg_ViewModel.AppointmentId;
                 NewAccount.Appointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == Reg_ViewModel.AppointmentId).First().Name;
-                NewAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;  
+                NewAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;                
             }
 
             if (RegDomain_ViewModel != null)
@@ -398,28 +404,37 @@ namespace ProducerInterface.Controllers
                 NewAccount.CompanyId = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == RegDomain_ViewModel.Producers).First().Id;
                 NewAccount.Password = Md5HashHelper.GetHash(Pass);
                 NewAccount.Phone = RegDomain_ViewModel.PhoneNumber;  
+
             }
 
             if (RegNotProducer_ViewModel != null)
             {
                 var NewPost = new AccountAppointment();
-                NewPost.Name = RegNotProducer_ViewModel.Appointment;      
+                NewPost.Name = RegNotProducer_ViewModel.Appointment;
+                NewPost.GlobalEnabled = 0;            
                 cntx_.Entry(NewPost).State = EntityState.Added;
                 cntx_.SaveChanges();
 
-                NewAccount.AppointmentId = NewPost.Id;
-                NewAccount.Login = RegNotProducer_ViewModel.login;
-                NewAccount.Enabled = 0;
-                NewAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
-                NewAccount.Name = RegNotProducer_ViewModel.LastName + " " + RegNotProducer_ViewModel.FirstName + " " + RegNotProducer_ViewModel.OtherName;
-                NewAccount.LastName = RegNotProducer_ViewModel.LastName;
-                NewAccount.FirstName = RegNotProducer_ViewModel.FirstName;
-                NewAccount.OtherName = RegNotProducer_ViewModel.OtherName;
-                NewAccount.Appointment = RegNotProducer_ViewModel.Appointment;    
-                NewAccount.Phone = RegNotProducer_ViewModel.PhoneNumber;
-                NewAccount.PasswordUpdated = DateTime.Now;
-                NewAccount.LastUpdatePermisison = DateTime.Now;             
+                NewAccount = new Account()
+                {
+                    LastName = RegNotProducer_ViewModel.LastName,
+                    FirstName = RegNotProducer_ViewModel.FirstName,
+                    OtherName = RegNotProducer_ViewModel.OtherName,
+                    Name = RegNotProducer_ViewModel.LastName + " " + RegNotProducer_ViewModel.FirstName + " " + RegNotProducer_ViewModel.OtherName,
+
+                    AppointmentId = NewPost.Id,
+                    CompanyId = AC.Id,
+                    Login = RegNotProducer_ViewModel.login,
+                    LastUpdatePermisison = DateTime.Now,
+                    PasswordUpdated = DateTime.Now,
+                    Phone = RegNotProducer_ViewModel.PhoneNumber,
+
+                    Enabled = 0,                   
+                    UserType =(sbyte) TypeUsers.ProducerUser   
+                };               
             }
+            NewAccount.RegionMask = 0;
+
             cntx_.Entry(NewAccount).State = System.Data.Entity.EntityState.Added;
             cntx_.SaveChanges();
             return NewAccount;

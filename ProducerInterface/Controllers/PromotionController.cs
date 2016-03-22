@@ -435,55 +435,6 @@ namespace ProducerInterface.Controllers
 			return RedirectToAction("Index", new { Id = Id.ToString() });
 		}
 
-		public ActionResult CopyPaste(long? Id)
-		{
-
-			if (Id == null && Id == 0)
-			{
-				return RedirectToAction("Index");
-			}
-
-			var ModelPromoAction = cntx_.promotions.Where(xxx => xxx.Id == Id).FirstOrDefault();
-
-			if (ModelPromoAction == null && ModelPromoAction.Id == 0)
-			{
-				ErrorMessage("Акция не найдена");
-				return RedirectToAction("Index");
-			}
-
-			if (ModelPromoAction.ProducerId != CurrentUser.AccountCompany.ProducerId)
-			{
-				ErrorMessage("У вас нет прав копировать акцию другого производителя");
-				return RedirectToAction("Index");
-			}
-
-			ModelPromoAction.Name += " Копия!";
-
-			ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx;
-			ProducerInterfaceCommon.Heap.NamesHelper h;
-			cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
-			h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, CurrentUser.Id);
-
-			var ModelView = new PromotionValidation
-			{
-				Name = ModelPromoAction.Name,
-				Annotation = ModelPromoAction.Annotation,
-				Begin = DateTime.Now,
-				End = DateTime.Now,
-				Status = ModelPromoAction.Status,
-				RegionList = h.GetPromotionRegions(Convert.ToUInt64(ModelPromoAction.RegionMask))
-			};
-
-			ModelPromoAction = null;
-
-			ViewData["DrugList"] = h.GetCatalogList();
-			ViewData["RegionList"] = h.GetRegionList();
-
-			ModelView.DrugList = cntx_.promotionToDrug.Where(xxx => xxx.PromotionId == Id).ToList().Select(xxx => xxx.DrugId).ToList();
-
-			return View("Manage", ModelView);
-		}
-
 		public FileResult GetFile(int Id)
 		{
 			var Image = cntx_.MediaFiles.Find(Id);

@@ -297,7 +297,8 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Creator { get; set; }
 
 		[ScaffoldColumn(false)]
-		public System.DateTime CreationDate { get; set; }
+        [Display(Name = "Дата создания")]
+        public System.DateTime CreationDate { get; set; }
 
 		[Display(Name = "Изменен")]
 		public System.DateTime LastModified { get; set; }

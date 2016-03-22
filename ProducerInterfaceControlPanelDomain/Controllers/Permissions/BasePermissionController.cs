@@ -251,7 +251,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         [HttpGet]
         public ActionResult ListPermission()
         {
-            var ListPermission = cntx_.AccountPermission.Where(xxx => xxx.TypePermission == FilterSbyte).ToList();
+            var ListPermission = cntx_.AccountPermission.Where(xxx => xxx.TypePermission == FilterSbyte).OrderBy(x=>x.ControllerAction).ToList();
             return View(ListPermission);
         }
 
@@ -275,6 +275,29 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 
             SuccessMessage("Описание сохранено");
+            return RedirectToAction("ListPermission");
+        }     
+        public ActionResult DeletePermission(int Id = 0)
+        {
+            if (Id != 0)
+            {
+                var permissionItem = cntx_.AccountPermission.Where(x => x.Id == Id).First();
+
+                var GroupList = cntx_.AccountGroup.Where(x => x.AccountPermission.Any(z=>z.Id == permissionItem.Id)).ToList();
+
+                foreach (var GroupItem in GroupList)
+                {
+                    GroupItem.AccountPermission.Remove(permissionItem);
+                }
+                cntx_.SaveChanges();
+
+                cntx_.AccountPermission.Remove(permissionItem);
+                cntx_.SaveChanges();
+
+                SuccessMessage("Доступ удален, если доступ данный есть то он будет снова добавлен при следующем открытии страницы. И автоматически добавится в группу 'Администраторы'");
+                return RedirectToAction("ListPermission");
+            }
+
             return RedirectToAction("ListPermission");
         }
     }
