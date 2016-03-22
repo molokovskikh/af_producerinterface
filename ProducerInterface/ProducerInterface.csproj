@@ -333,7 +333,7 @@
     <Content Include="Scripts\WorkPlace\Paginator.js" />
     <Content Include="Scripts\WorkPlace\CountAlfavit.js" />
     <Content Include="Scripts\WorkPlace\DatePicker.js" />
-    <Content Include="Scripts\WorkPlace\FileUpLoad.js" />
+    <Content Include="Scripts\WorkPlace\FileUpLoad_v.2.0.js" />
     <Content Include="Scripts\WorkPlace\GradientText.js" />
     <Content Include="Scripts\WorkPlace\ModalView.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Edit_v.2.js" />
@@ -456,6 +456,7 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\FeedBack\FeedBackNewDomain.cshtml" />
     <Content Include="Views\Report\EditorTemplates\SecondarySalesReport.cshtml" />
+    <Content Include="Views\Report\DisplayReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

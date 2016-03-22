@@ -62,6 +62,7 @@ namespace ProducerInterface.Controllers
 		{
 			if (!Id.HasValue)
 			{
+                ErrorMessage("Выберите тип отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -303,7 +304,7 @@ namespace ProducerInterface.Controllers
 				.Select(x => x.CreatorId)
 				.Distinct().ToList();
 			ViewData["creators"] = cntx_.Account.Where(x => creatorIds.Contains(x.Id)).
-				Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToList();
+				Select(x => new SelectListItem() { Text = x.Name + "(" + x.Login + ")", Value = x.Id.ToString() }).ToList();
 
 			var query = cntx_.jobextendwithproducer.Where(x => x.ProducerId == producerId
 																												&& x.SchedName == schedulerName

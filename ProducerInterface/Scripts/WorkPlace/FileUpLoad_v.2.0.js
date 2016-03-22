@@ -68,13 +68,15 @@ $("#File").change(function () {
             ErrorText = "Простите, файл " + sFileName + " не соответствует требованиям: " + _validFileExtensions.join(", ");
             $("#File").val("");
             document.getElementById("File").innerHTML = document.getElementById("File").innerHTML;
+       
         }
-        
-        if (sFileName.size > 500000)
+        var Sizes = this.files[0].size;
+        if (Sizes > 500000)
         {         
             ErrorText ="Простите, файл " + sFileName + " весит более 500КБ ";
             $("#File").val("");
             document.getElementById("File").innerHTML = document.getElementById("File").innerHTML;
+        
         }
 
         Promotion.FileError(ErrorText);
