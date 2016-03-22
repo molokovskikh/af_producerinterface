@@ -21,17 +21,17 @@ namespace ProducerInterfaceCommon.Controllers
 			base.OnActionExecuting(filterContext);
 			CurrentUser = GetCurrentUser(TypeLoginUser);
 
-            ViewBag.UrlString = HttpContext.Request.Url;
+			ViewBag.UrlString = HttpContext.Request.Url;
 
 			if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
 			{
 				CurrentUser.IP = Request.UserHostAddress.ToString();
 				ViewBag.CurrentUser = CurrentUser;
-                if (CurrentUserIdLog != CurrentUser.Id)
-                {
-                    ViewBag.AdminUser = cntx_.Account.Find(CurrentUserIdLog);
-                }
-            }      
+				if (CurrentUserIdLog != CurrentUser.Id)
+				{
+					ViewBag.AdminUser = cntx_.Account.Find(CurrentUserIdLog);
+				}
+			}
 			CheckGlobalPermission(); // проверка наличия пермишена для данного экшена в БД  
 			CheckUserPermission(filterContext); // проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)       
 		}
@@ -64,47 +64,47 @@ namespace ProducerInterfaceCommon.Controllers
 				{
 					GroupAddPermission = new AccountGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
 					cntx_.AccountGroup.Add(GroupAddPermission);
-                    cntx_.SaveChanges();
-                }
+					cntx_.SaveChanges();
+				}
 				else
 				{
 					GroupAddPermission = cntx_.AccountGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
 				}
 
 				var NewPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
-                // добавляем новый доступ
-                cntx_.AccountPermission.Add(NewPermission);
+				// добавляем новый доступ
+				cntx_.AccountPermission.Add(NewPermission);
 				cntx_.SaveChanges();
 
 
-                // добавляем его к группе Администраторы
-                AddPermissionToGroup(GroupAddPermission.Id, NewPermission.Id);            
+				// добавляем его к группе Администраторы
+				AddPermissionToGroup(GroupAddPermission.Id, NewPermission.Id);
 			}
 			// пермишен есть в БД, добавлять ничего не требуется                  
 		}
-        
-        private void AddPermissionToGroup(int GroupId, int PermissionId)
-        {
-            var GroupItem = cntx_.AccountGroup.Find(GroupId);
-            var PermissionItem = cntx_.AccountPermission.Find(PermissionId);
-            GroupItem.AccountPermission.Add(PermissionItem);
-            cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
-            cntx_.SaveChanges();
 
-         
-        }
+		private void AddPermissionToGroup(int GroupId, int PermissionId)
+		{
+			var GroupItem = cntx_.AccountGroup.Find(GroupId);
+			var PermissionItem = cntx_.AccountPermission.Find(PermissionId);
+			GroupItem.AccountPermission.Add(PermissionItem);
+			cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
+			cntx_.SaveChanges();
 
-        protected void AccountLastUpdatePermission(int GroupId)
-        {
-					//var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).Distinct().ToList();
 
-					//foreach (var AccountItem in AccountList)
-					//{
-					//	AccountItem.LastUpdatePermisison = DateTime.Now;
-					//}
+		}
 
-					//cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
-					//cntx_.SaveChanges();
+		protected void AccountLastUpdatePermission(int GroupId)
+		{
+			//var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).Distinct().ToList();
+
+			//foreach (var AccountItem in AccountList)
+			//{
+			//	AccountItem.LastUpdatePermisison = DateTime.Now;
+			//}
+
+			//cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
+			//cntx_.SaveChanges();
 		}
 
 
@@ -114,76 +114,52 @@ namespace ProducerInterfaceCommon.Controllers
 
 		public void CheckUserPermission(ActionExecutingContext filterContext)
 		{
-			var PermissionExsist = false;
-			// проверяем список игнорируемых маршрутов
-			PermissionExsist = IgnoreRoutePermission(permissionName);
+			// если в списке игнорируемых маршрутов
+			if (IgnoreRoutePermission(permissionName))
+				return;
 
-			if (CurrentUser == null)
-			{
-				if (TypeLoginUser == TypeUsers.ProducerUser)
-				{
-					if (!PermissionExsist)
-					{
-						filterContext.Result = RedirectToAction("Index", "Home");
-					}
-				}
-				if (TypeLoginUser == TypeUsers.ControlPanelUser)
-				{
-					if (!PermissionExsist)
-					{
-						filterContext.Result = RedirectToAction("Index", "Registration");
-					}
-				}
-				if (TypeLoginUser == TypeUsers.UserNotProducer)
-				{
-					if (!PermissionExsist)
-					{
-						filterContext.Result = RedirectToAction("Index", "Home");
-					}
-				}
-			}
-			else
-			{
-				if (!PermissionExsist)
-				{
-					// проверяем в БД доступ для текущего пользователя         
+			// если пользователя нет, но он пришёл из панели управления - на регистрацию
+			if (CurrentUser == null && TypeLoginUser == TypeUsers.ControlPanelUser)
+				filterContext.Result = RedirectToAction("Index", "Registration");
 
-					PermissionExsist = PermissionUserExsist();
+			// если пользователя нет - на главную
+			else if (CurrentUser == null)
+				filterContext.Result = RedirectToAction("Index", "Home");
 
-					if (!PermissionExsist) // если нет доступа, редиректим на стартовую страницу
-					{
-						ErrorMessage("У вас нет прав доступа к запрашиваемой странице. Или для изменения данных");
-						filterContext.Result = RedirectToAction("Index", "Home");
-					}
-				}
+			// если есть пользователь и права доступа
+			else if (PermissionUserExsist())
+				return;
+
+			// если есть пользователь и нет прав доступа
+			else {
+				ErrorMessage("У вас нет прав доступа к запрашиваемой странице или для изменения данных");
+				var refferer = filterContext.HttpContext.Request.UrlReferrer;
+				if (refferer != null && !String.IsNullOrEmpty(refferer.OriginalString))
+					filterContext.Result = Redirect(refferer.OriginalString);
 				else
-				{
-					//   ErrorMessage("У вас нет прав доступа к запрашиваемой странице. Или для изменения данных");
-					//   filterContext.Result = RedirectToAction("Index", "Registration");
-				}
+					filterContext.Result = RedirectToAction("Index", "Home");
 			}
-
 		}
 
 		private bool IgnoreRoutePermission(string ThisRoute)
-		{          
+		{
 			try
 			{
 
 
-                List<string> IgnoreRoute = IgnoreRouteForPermission();
+				List<string> IgnoreRoute = IgnoreRouteForPermission();
 
-                foreach (var ItemIgnore in IgnoreRoute)
-                {
-                    if (ItemIgnore == ThisRoute || ItemIgnore.ToLower() == (controllerName + "_*").ToLower())
-                    {                      
-                        return true;
-                    }
-                }    
+				foreach (var ItemIgnore in IgnoreRoute)
+				{
+					if (ItemIgnore == ThisRoute || ItemIgnore.ToLower() == (controllerName + "_*").ToLower())
+					{
+						return true;
+					}
+				}
 			}
 			catch { return false; }
 
-            return false;
+			return false;
 		}
 
 		public List<string> IgnoreRouteForPermission()
@@ -210,66 +186,66 @@ namespace ProducerInterfaceCommon.Controllers
 			var key = $"permission{CurrentUser.Id}";
 			var permissionList = HttpContext.Cache.Get(key) as HashSet<string>;
 			if (permissionList != null)
-            {
-                var lastUpdatePermissiion = GetLastDate();
-                if (lastUpdatePermissiion.First().ToLower() == permissionList.First().ToLower())
-                {
-                    return permissionList;
-                }
-            }
-            permissionList = new HashSet<string>();
+			{
+				var lastUpdatePermissiion = GetLastDate();
+				if (lastUpdatePermissiion.First().ToLower() == permissionList.First().ToLower())
+				{
+					return permissionList;
+				}
+			}
+			permissionList = new HashSet<string>();
 
-            if (CurrentUser.LastUpdatePermisison == null)
-            {
-                permissionList.Add(DateTime.MinValue.Year.ToString());              
-            }
-            else
-            {
-                permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());              
-            }
+			if (CurrentUser.LastUpdatePermisison == null)
+			{
+				permissionList.Add(DateTime.MinValue.Year.ToString());
+			}
+			else
+			{
+				permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());
+			}
 
-            permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());
+			permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());
 
-            foreach (var group in CurrentUser.AccountGroup)
-            {
-                foreach (var permission in group.AccountPermission)
-                {
-                    var permissionKey = $"{permission.ControllerAction}_{permission.ActionAttributes}";
-                    if (permission.Enabled && !permissionList.Contains(permissionKey))
-                        permissionList.Add(permissionKey);
-                }
-            }
+			foreach (var group in CurrentUser.AccountGroup)
+			{
+				foreach (var permission in group.AccountPermission)
+				{
+					var permissionKey = $"{permission.ControllerAction}_{permission.ActionAttributes}";
+					if (permission.Enabled && !permissionList.Contains(permissionKey))
+						permissionList.Add(permissionKey);
+				}
+			}
 
 			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(0), Cache.NoSlidingExpiration);
 			return permissionList;
 		}
 
-        public HashSet<string> GetLastDate()
-        {
-            var key = $"date{CurrentUser.Id}";
-            var DateList = HttpContext.Cache.Get(key) as HashSet<string>;
+		public HashSet<string> GetLastDate()
+		{
+			var key = $"date{CurrentUser.Id}";
+			var DateList = HttpContext.Cache.Get(key) as HashSet<string>;
 
-            if (DateList != null) { return DateList; }
+			if (DateList != null) { return DateList; }
 
-            DateList = new HashSet<string>();
+			DateList = new HashSet<string>();
 
-            if (CurrentUser.LastUpdatePermisison == null)
-            {
-                DateList.Add(DateTime.MinValue.Year.ToString());
-            }
-            else
-            {
-                DateList.Add(CurrentUser.LastUpdatePermisison.ToString());
-            }
-          
-            HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(0), Cache.NoSlidingExpiration);
-            return DateList;
-        }       
-         
+			if (CurrentUser.LastUpdatePermisison == null)
+			{
+				DateList.Add(DateTime.MinValue.Year.ToString());
+			}
+			else
+			{
+				DateList.Add(CurrentUser.LastUpdatePermisison.ToString());
+			}
 
-        #region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
+			HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(0), Cache.NoSlidingExpiration);
+			return DateList;
+		}
 
-        protected Account GetCurrentUser(TypeUsers TypeUser_)
+
+		#region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
+
+		protected Account GetCurrentUser(TypeUsers TypeUser_)
 		{
 			var retUser = new Account();
 			TypeLoginUser = TypeUser_;
@@ -285,21 +261,21 @@ namespace ProducerInterfaceCommon.Controllers
 
 				retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == EmailUser && xxx.Enabled == 1).FirstOrDefault();
 
-                if (retUser == null || String.IsNullOrEmpty(retUser.Login))
-                {
-                    retUser = null;
-                }
-                else
-                {
-                    if (CurrentUserIdLog > 0)
-                    {
-                        retUser.ID_LOG = CurrentUserIdLog;
-                    }
-                    else
-                    {
-                        retUser.ID_LOG = retUser.Id;
-                    }
-                }
+				if (retUser == null || String.IsNullOrEmpty(retUser.Login))
+				{
+					retUser = null;
+				}
+				else
+				{
+					if (CurrentUserIdLog > 0)
+					{
+						retUser.ID_LOG = CurrentUserIdLog;
+					}
+					else
+					{
+						retUser.ID_LOG = retUser.Id;
+					}
+				}
 			}
 
 			if (TypeUser_ == TypeUsers.ControlPanelUser)
@@ -350,7 +326,7 @@ namespace ProducerInterfaceCommon.Controllers
 			{
 				UserLoginName = thisUser.Login;
 				SetUserCookiesName(UserLoginName, true, UserData);
-                SetCookie("AccountName", thisUser.Login, false);
+				SetCookie("AccountName", thisUser.Login, false);
 				RedirectToAction("Index", "Profile");
 			}
 

@@ -14,6 +14,8 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Регион")]
 		public string RegionName { get; set; }
 
+		[Format(Value = "0.00")]
+		[Round(Precision = 2)]
 		[Display(Name = "Сумма")]
 		public decimal? Summ { get; set; }
 
