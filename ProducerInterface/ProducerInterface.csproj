@@ -457,6 +457,7 @@
     <Content Include="Views\FeedBack\FeedBackNewDomain.cshtml" />
     <Content Include="Views\Report\EditorTemplates\SecondarySalesReport.cshtml" />
     <Content Include="Views\Report\DisplayReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CatalogVar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

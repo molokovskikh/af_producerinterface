@@ -14,6 +14,9 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Регион")]
 		public string RegionName { get; set; }
 
+		[Display(Name = "Поставщик")]
+		public string SupplierName { get; set; }
+
 		[Format(Value = "0.00")]
 		[Round(Precision = 2)]
 		[Display(Name = "Сумма")]

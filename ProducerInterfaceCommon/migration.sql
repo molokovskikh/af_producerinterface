@@ -599,3 +599,49 @@ left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
 
 END$$
 
+drop PROCEDURE `SecondarySalesReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `SecondarySalesReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `RegionMask` BIGINT(20) UNSIGNED, IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select c.CatalogName, p.ProducerName, r.RegionName, s.SupplierName,
+T.Summ, CAST(T.PosOrder as SIGNED INTEGER) as PosOrder, 
+T.DistinctOrderId, T.DistinctAddressId
+from
+	(select CatalogId, ProducerId, RegionCode, SupplierId,
+	Sum(Cost*Quantity) as Summ,
+	Sum(Quantity) as PosOrder,
+	Count(distinct OrderId) as DistinctOrderId,
+	Count(distinct AddressId) as DistinctAddressId
+	from producerinterface.RatingReportOrderItems
+	where CatalogId in (', CatalogId, ')
+	and RegionCode in (', RegionCode, ')
+	and SupplierId not in 
+		(select s.Id
+		from Customers.Suppliers s
+		inner join usersettings.PricesData pd on pd.FirmCode = s.Id
+		where pd.Enabled = 1 and pd.IsLocal = 1 and pd.AgencyEnabled = 1 and s.Disabled = 0 
+		and s.RegionMask & ', RegionMask, ')
+	and ProducerId = ', ProducerId, '
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by CatalogId,ProducerId,RegionCode,SupplierId
+	order by Summ desc) as T
+left join producerinterface.CatalogNames c on c.CatalogId = T.CatalogId
+left join producerinterface.ProducerNames p on p.ProducerId = T.ProducerId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode
+left join producerinterface.SupplierNames s on s.SupplierId = T.SupplierId');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
+

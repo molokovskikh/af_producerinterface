@@ -1,5 +1,4 @@
 ﻿using ProducerInterfaceCommon.Heap;
-using Quartz;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,18 +26,26 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("LongList")]
 		public List<long> CatalogIdEqual { get; set; }
 
-		[Display(Name = "По всем нашим товарам")]
-		[UIHint("Bool")]
-		public bool AllCatalog { get; set; }
-
-		[Display(Name = "По всему ассортименту")]
-		[UIHint("Bool")]
-		public bool AllAssortiment { get; set; }
+		[Display(Name = "Отчет готовится по")]
+		[Required(ErrorMessage = "Не указан вариант подготовки отчета")]
+		[UIHint("CatalogVar")]
+		public CatalogVar Var { get; set; }
 
 		public ProductRatingReport()
 		{
-			AllCatalog = true;
-			AllAssortiment = false;
+			Var = CatalogVar.AllCatalog;
+		}
+
+		public enum CatalogVar
+		{
+			[Display(Name = "всему ассортименту")]
+			AllAssortiment = 1,
+
+			[Display(Name = "всем нашим товарам")]
+			AllCatalog = 2,
+
+			[Display(Name = "выбранным товарам")]
+			SelectedProducts = 3,
 		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
@@ -48,10 +55,10 @@ namespace ProducerInterfaceCommon.Models
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
 
 			// если выбрано По всему ассортименту
-			if (AllAssortiment)
+			if (Var == CatalogVar.AllAssortiment)
 				result.Add("В отчет включены все товары всех производителей");
 			// если выбрано По всем нашим товарам
-			else if (AllCatalog)
+			else if (Var == CatalogVar.AllCatalog)
 				result.Add("В отчет включены все товары производителя");
 			else
 				result.Add(h.GetProductHeader(CatalogIdEqual));
@@ -69,10 +76,10 @@ namespace ProducerInterfaceCommon.Models
 		public override Dictionary<string, object> GetSpParams()
 		{
 			var spparams = new Dictionary<string, object>();
-			if (AllAssortiment) {
+			if (Var == CatalogVar.AllAssortiment) {
 				spparams.Add("@CatalogId", "select CatalogId from Catalogs.assortment");
 			}
-			else if(AllCatalog) {
+			else if(Var == CatalogVar.AllCatalog) {
 				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
 			}
 			else {
@@ -103,9 +110,11 @@ namespace ProducerInterfaceCommon.Models
 		public override List<ErrorMessage> Validate()
 		{
 			var errors = base.Validate();
-			if (!AllAssortiment && !AllCatalog && (CatalogIdEqual == null || CatalogIdEqual.Count == 0))
+			if (Var == CatalogVar.SelectedProducts && (CatalogIdEqual == null || CatalogIdEqual.Count == 0))
         errors.Add(new ErrorMessage("CatalogIdEqual", "Не выбраны товары"));
-      return errors;
+			if (Var == 0)
+				errors.Add(new ErrorMessage("Var", "Не указан вариант подготовки отчета"));
+			return errors;
 		}
 
 		public override IProcessor GetProcessor()

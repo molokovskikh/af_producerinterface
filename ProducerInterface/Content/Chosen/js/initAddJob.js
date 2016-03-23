@@ -4,31 +4,34 @@
 	$('#CatalogIdEqual').chosen({ width: '95%' });
 	$('#SupplierIdNonEqual').chosen({ width: '95%', placeholder_text_multiple: 'Выберите поставщиков, если вы хотите исключить их из отчета' });
 
-	var aa = $('#AllAssortiment');
-	var ac = $('#AllCatalog');
+	var aa = $('input[name="Var"]');
 	var hc = $('#HideCatalog');
 
+	if (aa.filter(':checked').val() == '3') {
+	    hc.show();
+	} else
+	    hc.hide();
+
 	aa.click(function () {
-	    if (aa.prop('checked')) {
-	        ac.prop('checked', false);
+	    if (aa.filter(':checked').val() == '3') {
+	        hc.show();
+	    } else
 	        hc.hide();
-	    } else {
-	        ac.prop('checked', true);
-	        hc.hide();
-	    }
 	});
 
-    if (ac.prop('checked')) {
-        hc.hide();
-    }
+	var ac = $('#AllCatalog');
+	if (ac.prop('checked')) {
+	    hc.hide();
+	} else
+	    hc.show();
 
-    ac.click(function () {
-        if (ac.prop('checked')) {
-            hc.hide();
-            aa.prop('checked', false);
-        } else
-            hc.show();
-    });
+	ac.click(function () {
+	    if (ac.prop('checked')) {
+	        hc.hide();
+	    } else
+	        hc.show();
+	});
+
 
 	// при изменении регионов загружаем список поставщиков из этих регионов
 	$('#RegionCodeEqual').on('change', function () {
@@ -38,15 +41,6 @@
 	    if (!sup.length)
 	        return;
 		var prm = $(this).serialize() + "&" + sup.serialize();
-		//var stringPathName = document.location.pathname;
-		//stringPathName = (stringPathName.substring(0, stringPathName.length - 4));
-		//if (stringPathName.substring(stringPathName.length - 2, stringPathName.length) == 'Ad') {
-		//    stringPathName = stringPathName.substring(0, stringPathName.length - 2) + '/GetSupplierJson';
-		//}
-		//else
-		//{
-		//    stringPathName = stringPathName + '/GetSupplierJson';
-	    //}
 	    var supurl = $('#supurl').val();
 	    $.getJSON(supurl, prm, function (data) {
 			sup.children().remove();
