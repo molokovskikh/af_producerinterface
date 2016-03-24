@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Reflection;
+using System.Linq;
 
 namespace ProducerInterfaceCommon.Heap
 {
@@ -44,7 +45,12 @@ namespace ProducerInterfaceCommon.Heap
 			}
 			table.EndLoadData();
 
-			// Return the table.
+			foreach (PropertyInfo p in _pi)
+			{
+				if (Attribute.IsDefined(p, typeof(HiddenAttribute)))
+					table.Columns[p.Name].ColumnMapping = MappingType.Hidden;
+			}
+
 			return table;
 		}
 
@@ -63,8 +69,8 @@ namespace ProducerInterfaceCommon.Heap
 			Object[] values = new object[table.Columns.Count];
 
 			foreach (PropertyInfo p in pi) {
-				if (Attribute.IsDefined(p, typeof(HiddenAttribute)))
-					continue;
+				//if (Attribute.IsDefined(p, typeof(HiddenAttribute)))
+				//	continue;
 
 				var val = p.GetValue(instance, null);
 				var rd = p.GetCustomAttribute<RoundAttribute>();
@@ -82,7 +88,8 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			// Extend the table schema if the input table was null or if the value 
 			foreach (PropertyInfo p in type.GetProperties()) {
-				if (!_ordinalMap.ContainsKey(p.Name) && !Attribute.IsDefined(p, typeof(HiddenAttribute))) {
+				//if (!_ordinalMap.ContainsKey(p.Name) && !Attribute.IsDefined(p, typeof(HiddenAttribute))) {
+				if (!_ordinalMap.ContainsKey(p.Name)) {
 					// Add the property as a column in the table if it doesn't exist
 					// already.
 					DataColumn dc = table.Columns.Contains(p.Name) ? table.Columns[p.Name]

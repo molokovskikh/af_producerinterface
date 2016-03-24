@@ -15,16 +15,16 @@ namespace ProducerInterfaceCommon.Heap
 	{
 		private Type _type;
 
-		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
+		private producerinterface_Entities _cntx;
 
 		private HeaderHelper _helper;
 
 		public Processor()
 		{
 			_type = typeof(T);
-      _cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+      _cntx = new producerinterface_Entities();
       _helper = new HeaderHelper(_cntx);
-		}
+    }
 
 		public void Process(JobKey key, Report jparam, TriggerParam tparam)
 		{
@@ -74,27 +74,11 @@ namespace ProducerInterfaceCommon.Heap
 			var shredder = new ObjectShredder<T>();
 			var dataTable = shredder.Shred(querySort);
 
+			//var gggg = _objectShredder.UnShred(dataTable);
+
 			var headers = jparam.GetHeaders(_helper);
 
-			// чтобы показать на экране
-			var ds = new DataSet();
-			// добавили название страницы
-			var dtt = ds.Tables.Add("Titles");
-			dtt.Columns.Add("Title", typeof(string));
-			var tr = dtt.NewRow();
-			tr["Title"] = jparam.CastomName;
-			dtt.Rows.Add(tr);
-			// добавили заголовки
-			var dth = ds.Tables.Add("Headers");
-			dth.Columns.Add("Header", typeof(string));
-			foreach (var header in headers) {
-				var r = dth.NewRow();
-				r["Header"] = header;
-				dth.Rows.Add(r);
-			}
-			// добавили данные
-			dataTable.TableName = "Data";
-			ds.Tables.Add(dataTable);
+			var ds = CreateDataSet(jparam.CastomName, headers, dataTable);
 			// записали XML
 			var sw = new StringWriter();
 			ds.WriteXml(sw, XmlWriteMode.WriteSchema);
@@ -151,6 +135,31 @@ namespace ProducerInterfaceCommon.Heap
 			ecreator.Create(file, title, headers, data);
 
 			return file;
+		}
+
+		private DataSet CreateDataSet(string title, List<string> headers, DataTable data)
+		{
+			// чтобы показать на экране
+			var ds = new DataSet();
+			// добавили название страницы
+			var dtt = ds.Tables.Add("Titles");
+			dtt.Columns.Add("Title", typeof(string));
+			var tr = dtt.NewRow();
+			tr["Title"] = title;
+			dtt.Rows.Add(tr);
+			// добавили заголовки
+			var dth = ds.Tables.Add("Headers");
+			dth.Columns.Add("Header", typeof(string));
+			foreach (var header in headers)
+			{
+				var r = dth.NewRow();
+				r["Header"] = header;
+				dth.Rows.Add(r);
+			}
+			// добавили данные
+			data.TableName = "Data";
+			ds.Tables.Add(data);
+			return ds;
 		}
 	}
 }

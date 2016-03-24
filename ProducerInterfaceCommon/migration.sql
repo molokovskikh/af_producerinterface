@@ -645,3 +645,41 @@ left join producerinterface.SupplierNames s on s.SupplierId = T.SupplierId');
 
 END$$
 
+#не внесено на боевую
+
+drop PROCEDURE `ProductPriceDynamicsReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `ProductPriceDynamicsReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select cn.CatalogName, p.ProducerName, r.RegionName, TT.Date, TT.AvgCost from
+	(select p.CatalogId, T.ProducerId, T.RegionId, T.Date, Avg(T.AvgCost) as AvgCost from
+		(select ProductId, ProducerId, RegionId, Date, Avg(Cost) as AvgCost
+		from reports.AverageCosts
+		where Date >= \'', DateFrom, '\'
+		and Date < \'', DateTo, '\'
+		and RegionId in (', RegionCode, ')
+		and ProducerId = ', ProducerId, '
+		and ProductId in (select Id 
+								from catalogs.Products pp
+								where pp.CatalogId in (', CatalogId, '))
+		group by ProductId, ProducerId, RegionId, Date) as T
+	inner join catalogs.Products p on p.Id = T.ProductId
+	group by p.CatalogId, T.ProducerId, T.RegionId, T.Date
+	order by p.CatalogId, T.ProducerId, T.RegionId, T.Date) as TT
+left outer join producerinterface.regionnames r on r.RegionCode = TT.RegionId
+left outer join producerinterface.catalognames cn on cn.CatalogId = TT.CatalogId
+left outer join producerinterface.producernames p on p.ProducerId = TT.ProducerId');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$

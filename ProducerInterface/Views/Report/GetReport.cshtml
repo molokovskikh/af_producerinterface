@@ -7,7 +7,7 @@
 }
 
 <ul>
-    @foreach (System.Data.DataRow row in headers.Rows) {
+    @foreach (DataRow row in headers.Rows) {
         <li>@row[0].ToString()</li>
     }
 </ul>
@@ -15,16 +15,22 @@
 <table border="1">
     <thead>
         <tr>
-            @foreach (System.Data.DataColumn col in data.Columns) {
-                <th>@col.Caption</th>
+            @foreach (DataColumn col in data.Columns) {
+                if (col.ColumnMapping != MappingType.Hidden) {
+                    <th>@col.Caption</th>
+                }
             }
         </tr>
     </thead>
     <tbody>
-        @foreach (System.Data.DataRow row in data.Rows) {
+        @foreach (DataRow row in data.Rows) {
             <tr>
-                @foreach (var cell in row.ItemArray) {
-                    <td>@cell.ToString()</td>
+                @foreach (DataColumn col in data.Columns)
+                {
+                    if (col.ColumnMapping != MappingType.Hidden)
+                    {
+                        <td>@row[col].ToString()</td>
+                    }
                 }
             </tr>
         }
