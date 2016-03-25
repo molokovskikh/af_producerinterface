@@ -106,5 +106,27 @@ namespace ProducerInterfaceCommon.Heap
 			// Return the table.
 			return table;
 		}
+
+		public List<T> UnShred(DataTable table)
+		{
+			List<T> result = new List<T>();
+			foreach (DataRow dr in table.Rows)
+				result.Add(Conversion(dr));
+
+			return result;
+		}
+
+		private T Conversion(DataRow dr)
+		{
+			var instance = (T)Activator.CreateInstance(_type);
+			foreach (PropertyInfo p in _pi)
+			{
+				var f = dr[p.Name];
+				if (f != null)
+					p.SetValue(instance, Convert.ChangeType(f, Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType));
+			}
+			return instance;
+		}
+
 	}
 }

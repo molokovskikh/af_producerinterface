@@ -225,6 +225,7 @@
     <Compile Include="CustomHelpers\Models\ReportsInRegionMask.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
     <Compile Include="Heap\EmailSender.cs" />
+    <Compile Include="Heap\IWriteExcelData.cs" />
     <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />

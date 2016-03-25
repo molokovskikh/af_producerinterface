@@ -37,9 +37,6 @@ namespace ProducerInterfaceCommon.Models
 				item.SummPercent = item.Summ.GetValueOrDefault() * 100 / sm;
 			}
 
-			//if (clist.Count > 0)
-			//	clist.Add(new PharmacyRatingReportRow() { PharmacyName = "Итоговая сумма", Summ = sm });
-
 			return clist.Cast<T>().ToList();
 		}
 	}
