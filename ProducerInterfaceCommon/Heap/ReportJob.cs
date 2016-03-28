@@ -23,11 +23,8 @@ namespace ProducerInterfaceCommon.Heap
 				((IInterval)jparam).DateFrom = ((IInterval)tparam).DateFrom;
 				((IInterval)jparam).DateTo = ((IInterval)tparam).DateTo;
 			}
-			// TODO при появлении неинтервальных отчетов написать код здесь
-			else {
-				logger.Error($"Job {key.Group} {key.Name} is not interval report. Mast to be upgrade");
-				return;
-			}
+			else
+				((INotInterval)jparam).DateFrom = ((INotInterval)tparam).DateFrom;
 
 			logger.Info($"Start running job {key.Group} {key.Name}");
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
@@ -102,7 +97,22 @@ namespace ProducerInterfaceCommon.ContextModels
 		ProductPriceDynamicsReport = 5,
 
 		[Display(Name = "Продажи вторичных дистрибьюторов")]
-    SecondarySalesReport = 6
+    SecondarySalesReport = 6,
+
+		[Display(Name = "Мониторинг остатков у дистрибьюторов")]
+		ProductResidueReport = 7
+	}
+
+	public enum CatalogVar
+	{
+		[Display(Name = "всему ассортименту")]
+		AllAssortiment = 1,
+
+		[Display(Name = "всем нашим товарам")]
+		AllCatalog = 2,
+
+		[Display(Name = "выбранным товарам")]
+		SelectedProducts = 3,
 	}
 
 	public enum TypeUsers

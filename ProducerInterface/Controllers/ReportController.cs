@@ -335,15 +335,10 @@ namespace ProducerInterface.Controllers
 			ViewBag.Title = $"Запуск \"{param.CastomName}\"";
 
 			RunNowParam model;
-			if (param is IInterval) {
+			if (param is IInterval)
 				model = new RunNowIntervalParam();
-			}
-			// TODO при появлении неинтервальных отчетов добавить код
 			else
-			{
-				ErrorMessage("Отчет этого типа невозможно запустить вручную");
-				return RedirectToAction("JobList", "Report");
-			}
+				model = new RunNowNotIntervalParam();
 
 			// при GET возвращаем пустую модель для заполнения
 			if (HttpContext.Request.HttpMethod == "GET")
@@ -451,12 +446,8 @@ namespace ProducerInterface.Controllers
 			CronParam model;
 			if (param is IInterval)
 				model = new CronIntervalParam();
-			// TODO при появлении неинтервальных отчетов добавить код
 			else
-			{
-				ErrorMessage("Для этого отчета невозможно задать время формирования");
-				return RedirectToAction("JobList", "Report");
-			}
+				model = new CronNotIntervalParam();
 
 			// триггер вставлялся с идентификатором задачи
 			var oldTriggerKey = new TriggerKey(key.Name, key.Group);

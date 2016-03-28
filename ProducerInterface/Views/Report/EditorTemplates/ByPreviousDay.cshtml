@@ -1,0 +1,16 @@
+﻿@model bool
+
+<div class="row margin5">
+    <div class="form-group form-group-otstup">
+        <div class="flabel col-md-4">
+            @Html.LabelFor(m => m)
+        </div>
+        <div class="feditor col-md-8">
+            @Html.RadioButton("", true, Model)
+            <span>за предыдущий день</span>
+            <br/>
+            @Html.RadioButton("", false, !Model)
+            <span>на момент запуска</span>
+        </div>
+    </div>
+</div>

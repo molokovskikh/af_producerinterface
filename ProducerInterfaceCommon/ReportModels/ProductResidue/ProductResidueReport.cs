@@ -7,16 +7,12 @@ using System.ComponentModel.DataAnnotations;
 namespace ProducerInterfaceCommon.Models
 {
 	[Serializable]
-	public class ProductRatingReport : IntervalReport
+	public class ProductResidueReport : NotIntervalReport
 	{
 		public override string Name
 		{
-			get { return "Рейтинг товаров"; }
+			get { return "Мониторинг остатков у дистрибьюторов"; }
 		}
-
-		[Display(Name = "Все поставщики, кроме")]
-		[UIHint("LongList")]
-		public List<long> SupplierIdNonEqual { get; set; }
 
 		[Display(Name = "Регион")]
 		[Required(ErrorMessage = "Не указаны регионы")]
@@ -32,7 +28,7 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("CatalogVar")]
 		public CatalogVar Var { get; set; }
 
-		public ProductRatingReport()
+		public ProductResidueReport()
 		{
 			Var = CatalogVar.AllCatalog;
 		}
@@ -40,7 +36,7 @@ namespace ProducerInterfaceCommon.Models
 		public override List<string> GetHeaders(HeaderHelper h)
 		{
 			var result = new List<string>();
-			result.Add(h.GetDateHeader(DateFrom, DateTo));
+			result.Add(h.GetDateHeader(DateFrom));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
 
 			// если выбрано По всему ассортименту
@@ -51,15 +47,18 @@ namespace ProducerInterfaceCommon.Models
 				result.Add("В отчет включены все товары производителя");
 			else
 				result.Add(h.GetProductHeader(CatalogIdEqual));
-
-			if (SupplierIdNonEqual != null)
-				result.Add(h.GetNotSupplierHeader(SupplierIdNonEqual));
 			return result;
 		}
 
 		public override string GetSpName()
 		{
-			return "ProductRatingReport";
+			var now = DateTime.Now;
+			// если на момент запуска
+			if (DateFrom == new DateTime(now.Year, now.Month, now.Day))
+				return "ProductResidueReportNow";
+			// если на другой день
+			else
+				return "ProductResidueReport";
 		}
 
 		public override Dictionary<string, object> GetSpParams()
@@ -75,13 +74,7 @@ namespace ProducerInterfaceCommon.Models
 				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
 			}
 			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
-			// чтоб правильно работала хп при отсутствии ограничений на поставщиков, заведомо несуществующий Id
-			if (SupplierIdNonEqual == null)
-				spparams.Add("@SupplierId", -1);
-			else
-				spparams.Add("@SupplierId", String.Join(",", SupplierIdNonEqual));
 			spparams.Add("@DateFrom", DateFrom);
-			spparams.Add("@DateTo", DateTo);
 			return spparams;
 		}
 
@@ -91,7 +84,6 @@ namespace ProducerInterfaceCommon.Models
 
 			viewDataValues.Add("RegionCodeEqual", h.GetRegionList());
 			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
-			viewDataValues.Add("SupplierIdNonEqual", h.GetSupplierList(RegionCodeEqual));
 
 			return viewDataValues;
 		}
@@ -108,7 +100,7 @@ namespace ProducerInterfaceCommon.Models
 
 		public override IProcessor GetProcessor()
 		{
-			return new Processor<ProductRatingReportRow>();
+			return new Processor<ProductResidueReportRow>();
 		}
 	}
 }

@@ -20,6 +20,11 @@ namespace ProducerInterfaceCommon.Heap
 			return $"Период дат: {dateFrom} - {dateTo}";
 		}
 
+		public string GetDateHeader(DateTime dateFrom)
+		{
+			return $"Отчет создан на дату: {dateFrom}";
+		}
+
 		public string GetRegionHeader(List<decimal> regionCodes)
 		{
 			var regions = _cntx.regionnames.Where(x => regionCodes.Contains(x.RegionCode)).Select(x => x.RegionName).OrderBy(x => x).ToList();

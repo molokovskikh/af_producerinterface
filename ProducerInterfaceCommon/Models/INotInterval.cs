@@ -3,12 +3,10 @@ using System;
 namespace ProducerInterfaceCommon.Models
 {
 	/// <summary>
-	/// Interface for interval reports
+	/// Interface for notinterval reports
 	/// </summary>
-	public interface IInterval
+	public interface INotInterval
 	{
 		DateTime DateFrom { get; set; }
-
-		DateTime DateTo { get; set; }
 	}
 }

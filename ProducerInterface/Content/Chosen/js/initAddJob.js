@@ -7,33 +7,37 @@
 	var aa = $('input[name="Var"]');
 	var hc = $('#HideCatalog');
 
-	if (aa.filter(':checked').val() == '3') {
-	    hc.show();
-	} else
-	    hc.hide();
+	if (aa.length) {
+        if (aa.filter(':checked').val() == '3') {
+            hc.show();
+        } else
+            hc.hide();
 
-	aa.click(function () {
-	    if (aa.filter(':checked').val() == '3') {
-	        hc.show();
-	    } else
-	        hc.hide();
-	});
+        aa.click(function() {
+            if (aa.filter(':checked').val() == '3') {
+                hc.show();
+            } else
+                hc.hide();
+        });
+    }
 
-	var ac = $('#AllCatalog');
-	if (ac.prop('checked')) {
-	    hc.hide();
-	} else
-	    hc.show();
+    var ac = $('#AllCatalog');
+    if (ac.length) {
+        if (ac.prop('checked')) {
+            hc.hide();
+        } else
+            hc.show();
 
-	ac.click(function () {
-	    if (ac.prop('checked')) {
-	        hc.hide();
-	    } else
-	        hc.show();
-	});
+        ac.click(function() {
+            if (ac.prop('checked')) {
+                hc.hide();
+            } else
+                hc.show();
+        });
+    }
 
 
-	// при изменении регионов загружаем список поставщиков из этих регионов
+    // при изменении регионов загружаем список поставщиков из этих регионов
 	$('#RegionCodeEqual').on('change', function () {
         // для установки выбранных регионов по алфавиту
 	    $(this).trigger("chosen:updated");

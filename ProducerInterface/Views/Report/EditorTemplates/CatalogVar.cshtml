@@ -1,14 +1,13 @@
-﻿@using ProducerInterfaceCommon.Models
-@model ProductRatingReport.CatalogVar
-@{
-}
+﻿@using ProducerInterfaceCommon.ContextModels
+@model CatalogVar
+
 <div class="row margin5">
     <div class="form-group form-group-otstup">
         <div class="flabel col-md-4">
             @Html.LabelFor(m => m)
         </div>
         <div class="feditor col-md-8">
-            @foreach (SelectListItem item in EnumHelper.GetSelectList(typeof(ProductRatingReport.CatalogVar), Model)) {
+            @foreach (SelectListItem item in EnumHelper.GetSelectList(typeof(CatalogVar), Model)) {
                 @Html.RadioButton("", item.Value, item.Selected, new { id = "var" + item.Value})
                 <span>@item.Text</span>
                 <br/>

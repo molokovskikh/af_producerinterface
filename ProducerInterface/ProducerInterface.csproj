@@ -458,6 +458,10 @@
     <Content Include="Views\Report\EditorTemplates\SecondarySalesReport.cshtml" />
     <Content Include="Views\Report\DisplayReport.cshtml" />
     <Content Include="Views\Report\EditorTemplates\CatalogVar.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductResidueReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CronNotIntervalParam.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\RunNowNotIntervalParam.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ByPreviousDay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

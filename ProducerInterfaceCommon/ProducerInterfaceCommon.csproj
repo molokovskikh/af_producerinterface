@@ -337,16 +337,20 @@
     <Compile Include="LoggerModels\propertychangeview.cs">
       <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CronNotIntervalParam.cs" />
     <Compile Include="Models\CronIntervalParam.cs" />
     <Compile Include="Models\CronParam.cs" />
     <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\FormatAttribute.cs" />
     <Compile Include="Models\HiddenAttribute.cs" />
+    <Compile Include="Models\INotInterval.cs" />
     <Compile Include="Models\IInterval.cs" />
+    <Compile Include="Models\NotIntervalReport.cs" />
     <Compile Include="Models\IntervalReport.cs" />
     <Compile Include="Models\MailTypeEnum.cs" />
     <Compile Include="Models\NotMinDateAttribute.cs" />
     <Compile Include="Models\PastDateAttribute.cs" />
+    <Compile Include="Models\RunNowNotIntervalParam.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReportRow.cs" />
     <Compile Include="ReportModels\ProductConcurentRating\ProductConcurentRatingReport.cs" />
@@ -355,12 +359,13 @@
     <Compile Include="ReportModels\ProductPriceDynamics\ProductPriceDynamicsReportRow.cs" />
     <Compile Include="ReportModels\ProductRating\ProductRatingReport.cs" />
     <Compile Include="ReportModels\ProductRating\ProductRatingReportRow.cs" />
-    <Compile Include="Models\RatingReportRow.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\ReportRow.cs" />
     <Compile Include="Models\RoundAttribute.cs" />
     <Compile Include="Models\RunNowIntervalParam.cs" />
     <Compile Include="Models\RunNowParam.cs" />
+    <Compile Include="ReportModels\ProductResidue\ProductResidueReport.cs" />
+    <Compile Include="ReportModels\ProductResidue\ProductResidueReportRow.cs" />
     <Compile Include="ReportModels\SecondarySales\SecondarySalesReport.cs" />
     <Compile Include="ReportModels\SecondarySales\SecondarySalesReportRow.cs" />
     <Compile Include="ReportModels\SupplierRating\SupplierRatingReport.cs" />
