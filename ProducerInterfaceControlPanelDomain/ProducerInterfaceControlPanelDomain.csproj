@@ -225,6 +225,7 @@
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
     <Content Include="Content\semantic_ui\dropdown.css" />
     <Content Include="Content\semantic_ui\dropdown.min.css" />
+    <Content Include="migration.sql" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\ckeditor\InitCKEditor_News.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\dialogs\base64image.js" />
@@ -312,7 +313,7 @@
     <Content Include="Scripts\WorkPlace\FeedBack_Index_Model.js" />
     <Content Include="Scripts\WorkPlace\GlobalAccount_AccountVerification.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
-    <Content Include="Scripts\WorkPlace\ProducerInfermation_DomainList.js" />
+    <Content Include="Scripts\WorkPlace\ProducerInfermation_DomainList.v2.0.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
     <Content Include="Views\FeedBack\FeedBackList.cshtml" />

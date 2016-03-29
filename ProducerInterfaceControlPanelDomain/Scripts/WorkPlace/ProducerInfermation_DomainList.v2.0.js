@@ -1,4 +1,4 @@
-﻿$('#idproducer').on('change', function () {
+﻿function LoadProducerDomainList() {
     var sup = $('#idproducer');
     var prm = "idproducer=" + $('#idproducer').val();
 
@@ -14,6 +14,5 @@
                 $('#replacecontent').html(data);
             }
         });
-});
-
+}
     

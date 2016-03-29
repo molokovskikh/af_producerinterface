@@ -74,6 +74,7 @@ namespace ProducerInterfaceCommon.Models
 				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
 			}
 			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
+			spparams.Add("@ProducerId", ProducerId);
 			spparams.Add("@DateFrom", DateFrom);
 			return spparams;
 		}

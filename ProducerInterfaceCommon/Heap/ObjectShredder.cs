@@ -122,7 +122,7 @@ namespace ProducerInterfaceCommon.Heap
 			foreach (PropertyInfo p in _pi)
 			{
 				var f = dr[p.Name];
-				if (f != null)
+				if (f != null && f != DBNull.Value)
 					p.SetValue(instance, Convert.ChangeType(f, Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType));
 			}
 			return instance;

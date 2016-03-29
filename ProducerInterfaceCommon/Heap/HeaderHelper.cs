@@ -8,11 +8,11 @@ namespace ProducerInterfaceCommon.Heap
 	public class HeaderHelper
 	{
 
-		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
+		private producerinterface_Entities _cntx;
 
-		public HeaderHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx)
+		public HeaderHelper(producerinterface_Entities cntx)
 		{
-			_cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+			_cntx = new producerinterface_Entities();
 		}
 
 		public string GetDateHeader(DateTime dateFrom, DateTime dateTo)

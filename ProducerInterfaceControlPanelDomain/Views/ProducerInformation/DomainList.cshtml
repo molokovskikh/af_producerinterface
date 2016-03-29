@@ -12,11 +12,15 @@
         <div class="form-group">
             <select id="idproducer" class="form-control">
                 @foreach (var ProducerItem in ProducerList)
-            {
+                {
                     <option value="@ProducerItem.Value">@ProducerItem.Text</option>
                 }
             </select>
         </div>     
+
+        <div class="form-group">
+            <input type="button" id="select" onclick="LoadProducerDomainList()" class="btn btn-primary" value="Выбрать" />
+        </div>
     </div>
     <div class="row" id="replacecontent">
 
@@ -27,5 +31,5 @@
 
 @section scripts
 {
-<script src="~/Scripts/WorkPlace/ProducerInfermation_DomainList.js"></script>
+<script src="~/Scripts/WorkPlace/ProducerInfermation_DomainList.v2.0.js"></script>
 }

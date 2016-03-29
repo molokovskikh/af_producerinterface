@@ -4,7 +4,7 @@ using System;
 using ProducerInterfaceCommon.ContextModels;
 using System.Linq;
 using Quartz;
-using ProducerInterfaceCommon.Heap;
+
 namespace ProducerInterfaceCommon.Heap
 {
 	public class ReportJob : IJob
