@@ -98,7 +98,7 @@ namespace ProducerInterfaceCommon.Heap
 			// если указаны email - отправляем
 			if (tparam.MailTo != null && tparam.MailTo.Count > 0) {
 				// создали excel-файл
-				var file = CreateExcel(key.Group, key.Name, ds);
+				var file = CreateExcel(key.Group, key.Name, ds, jparam);
 
 				// при автоматическом и ручном запуске разное содержимое письма
 				if (tparam is CronParam)
@@ -108,7 +108,7 @@ namespace ProducerInterfaceCommon.Heap
 			}
 		}
 
-		public FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds)
+		public FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds, Report param)
 		{
 			var dir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Reports");
 			if (!Directory.Exists(dir))
@@ -132,7 +132,7 @@ namespace ProducerInterfaceCommon.Heap
 
 			// TODO именование листов. Сейчас лист называется именем, данным отчету пользователем
 			var ecreator = new ExcelCreator<T>();
-			ecreator.Create(file, title, headers, data);
+			ecreator.Create(file, title, headers, data, param);
 
 			return file;
 		}

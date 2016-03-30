@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ProducerInterfaceCommon.Heap;
 using System.ComponentModel.DataAnnotations;
+using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -10,7 +11,7 @@ namespace ProducerInterfaceCommon.Models
 	{
 		public override string Name
 		{
-			get { return "Динамика цен по товару за период"; }
+			get { return "Динамика цен и остатков по товару за период"; }
 		}
 
 		[Display(Name = "Регион")]
@@ -26,9 +27,15 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("Bool")]
 		public bool AllCatalog { get; set; }
 
+		[Display(Name = "Отображать")]
+		[Required(ErrorMessage = "Не указан вариант подготовки отчета")]
+		[UIHint("CostOrQuantity")]
+		public CostOrQuantity VarCostOrQuantity { get; set; }
+
 		public ProductPriceDynamicsReport()
 		{
 			AllCatalog = true;
+			VarCostOrQuantity = CostOrQuantity.WithCostAndQuantity;
 		}
 
 

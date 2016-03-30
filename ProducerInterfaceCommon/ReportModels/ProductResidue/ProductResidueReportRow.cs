@@ -35,7 +35,7 @@ namespace ProducerInterfaceCommon.Models
 			return list;
 		}
 
-		public ExcelAddressBase WriteExcelData(ExcelWorksheet ws, int dataStartRow, DataTable dataTable)
+		public ExcelAddressBase WriteExcelData(ExcelWorksheet ws, int dataStartRow, DataTable dataTable, Report param)
 		{
 			// DataTable -> List
 			var shredder = new ObjectShredder<ProductResidueReportRow>();

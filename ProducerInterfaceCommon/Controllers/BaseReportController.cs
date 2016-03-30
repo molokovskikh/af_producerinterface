@@ -51,6 +51,18 @@ namespace ProducerInterfaceCommon.Controllers
 
 		protected FileInfo GetExcel(jobextend jext)
 		{
+
+			var key = JobKey.Create(jext.JobName, jext.JobGroup);
+			var scheduler = GetScheduler();
+			// нашли задачу
+			var job = scheduler.GetJobDetail(key);
+			//if (job == null)
+			//{
+			//	ErrorMessage("Задача не найдена");
+			//	return RedirectToAction("JobList", "Report");
+			//}
+
+			var param = (Report)job.JobDataMap["param"];
 			var jxml = cntx_.reportxml.Single(x => x.JobName == jext.JobName);
 
 			// вытащили сохраненный отчет
@@ -58,12 +70,12 @@ namespace ProducerInterfaceCommon.Controllers
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
 
 			// создали процессор для этого типа отчетов
-			var type = GetModelType(jext.ReportType);
-			var report = (Report)Activator.CreateInstance(type);
-			var processor = report.GetProcessor();
+			//var type = GetModelType(jext.ReportType);
+			//var report = (Report)Activator.CreateInstance(type);
+			var processor = param.GetProcessor();
 
 			// создали excel-файл
-			return processor.CreateExcel(jext.JobGroup, jext.JobName, ds);
+			return processor.CreateExcel(jext.JobGroup, jext.JobName, ds, param);
 		}
 
 		/// <summary>

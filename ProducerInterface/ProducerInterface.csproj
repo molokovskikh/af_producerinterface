@@ -462,6 +462,7 @@
     <Content Include="Views\Report\EditorTemplates\CronNotIntervalParam.cshtml" />
     <Content Include="Views\Report\EditorTemplates\RunNowNotIntervalParam.cshtml" />
     <Content Include="Views\Report\EditorTemplates\ByPreviousDay.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CostOrQuantity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

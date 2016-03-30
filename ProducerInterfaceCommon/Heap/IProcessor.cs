@@ -9,7 +9,7 @@ namespace ProducerInterfaceCommon.Heap
 	{
 		void Process(JobKey key, Report jparam, TriggerParam tparam);
 
-		FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds);
+		FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds, Report param);
 	}
 }
 

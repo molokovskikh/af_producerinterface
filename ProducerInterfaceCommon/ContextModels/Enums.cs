@@ -93,7 +93,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Рейтинг товаров в конкурентной группе")]
 		ProductConcurentRatingReport = 4,
 
-		[Display(Name = "Динамика цен по товару за период")]
+		[Display(Name = "Динамика цен и остатков по товару за период")]
 		ProductPriceDynamicsReport = 5,
 
 		[Display(Name = "Продажи вторичных дистрибьюторов")]
@@ -113,6 +113,18 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		[Display(Name = "выбранным товарам")]
 		SelectedProducts = 3,
+	}
+
+	public enum CostOrQuantity
+	{
+		[Display(Name = "цену и остаток")]
+		WithCostAndQuantity = 1,
+
+		[Display(Name = "только цену")]
+		WithCost = 2,
+
+		[Display(Name = "только остаток")]
+		WithQuantity = 3,
 	}
 
 	public enum TypeUsers

@@ -22,7 +22,7 @@ namespace ProducerInterfaceCommon.Heap
 			_pi = _type.GetProperties();
 		}
 
-		public void Create(FileInfo file, string sheetName, List<string> headers, DataTable dataTable)
+		public void Create(FileInfo file, string sheetName, List<string> headers, DataTable dataTable, Report param)
 		{
 			using (var pck = new ExcelPackage(file)) {
 				var ws = pck.Workbook.Worksheets.Add(sheetName);
@@ -34,11 +34,11 @@ namespace ProducerInterfaceCommon.Heap
 				// если определён загрузчик
 				if (_type.GetInterfaces().Contains(typeof(IWriteExcelData))) {
 					var instance = (IWriteExcelData)Activator.CreateInstance(_type);
-					dataAddress = instance.WriteExcelData(ws, dataStartRow, dataTable);
+					dataAddress = instance.WriteExcelData(ws, dataStartRow, dataTable, param);
 				}
 				// иначе - общий
 				else {
-					dataAddress = WriteExcelData(ws, dataStartRow, dataTable);
+					dataAddress = WriteExcelData(ws, dataStartRow, dataTable, param);
 				}
 
 				// установили автофильтры
@@ -67,7 +67,7 @@ namespace ProducerInterfaceCommon.Heap
 			}
 		}
 
-		private ExcelAddressBase WriteExcelData(ExcelWorksheet ws, int dataStartRow, DataTable dataTable)
+		private ExcelAddressBase WriteExcelData(ExcelWorksheet ws, int dataStartRow, DataTable dataTable, Report param)
 		{
 			// установили форматы для открытых колонок, скрытые удалили
 			int j = 1;
