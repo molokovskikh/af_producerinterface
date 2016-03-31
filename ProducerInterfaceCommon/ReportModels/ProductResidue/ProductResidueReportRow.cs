@@ -1,5 +1,6 @@
 ﻿using OfficeOpenXml;
 using ProducerInterfaceCommon.Heap;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -40,8 +41,10 @@ namespace ProducerInterfaceCommon.Models
 			// DataTable -> List
 			var shredder = new ObjectShredder<ProductResidueReportRow>();
 			var querySort = shredder.UnShred(dataTable);
-			// вытащили различных поставщиков из набора
-			var suppliers = querySort.Select(x => x.SupplierName).Distinct().OrderBy(x => x).ToArray();
+			// вытащили различных поставщиков из набора. Сортировка - по количеству позиций в порядке убывания
+			var suppliers = querySort.GroupBy(x => x.SupplierName)
+				.Select(x => new { SupplierName = x.Key, PosCount = x.Sum(y => y.Quantity)})
+				.OrderByDescending(x => x.PosCount).Select(x => x.SupplierName).ToArray(); 
 			var dd = new Dictionary<string, int>();
 			for (int i = 0; i < suppliers.Length; i++)
 				dd.Add(suppliers[i], i + 1);
@@ -63,26 +66,38 @@ namespace ProducerInterfaceCommon.Models
 			var pCost = _type.GetProperty("Cost");
 			var costFormat = pCost.GetCustomAttribute<FormatAttribute>().Value;
 
+			// показываем цены, если есть цены
+			var showCost = querySort.Any(x => x.Cost.HasValue);
+
 			// вставили заголовки рассчитываемых колонок
-			ws.Column(startCol).Style.Numberformat.Format = costFormat;
-			ws.SetValue(startRow, startCol++, "Мин. цена");
+			if (showCost) {
+				ws.Column(startCol).Style.Numberformat.Format = costFormat;
+				ws.SetValue(startRow, startCol++, "Мин. цена");
 
-			ws.Column(startCol).Style.Numberformat.Format = costFormat;
-			ws.SetValue(startRow, startCol++, "Средн. цена");
+				ws.Column(startCol).Style.Numberformat.Format = costFormat;
+				ws.SetValue(startRow, startCol++, "Средн. цена");
 
-			ws.Column(startCol).Style.Numberformat.Format = costFormat;
-			ws.SetValue(startRow, startCol++, "Макс. цена");
+				ws.Column(startCol).Style.Numberformat.Format = costFormat;
+				ws.SetValue(startRow, startCol++, "Макс. цена");
+			}
 
 			ws.SetValue(startRow, startCol++, "Лидер");
 
 			// записали поставщиков в имена колонок
       foreach (var s in suppliers)
 			{
-				ws.Column(startCol).Style.Numberformat.Format = costFormat;
-				ws.SetValue(startRow-1, startCol, s);
-				ws.Cells[startRow - 1, startCol, startRow - 1, startCol + 1].Merge = true;
-				ws.SetValue(startRow, startCol, "Цена");
-				ws.SetValue(startRow, ++startCol, "Кол-во");
+				ws.SetValue(startRow - 1, startCol, s);
+				if (showCost) {
+					ws.Column(startCol).Style.Numberformat.Format = costFormat;
+					ws.Cells[startRow - 1, startCol, startRow - 1, startCol + 1].Merge = true;
+					ws.SetValue(startRow, startCol, "Цена");
+					ws.SetValue(startRow, ++startCol, "Кол-во");
+				}
+				else {
+					// мёрдж одной ячейки, чтобы была одинаковая ширина колонок вне зависимости от длины названия поставщика потому что слитые ячейки не участвуют в алгоритме автоопределения оптимальной ширины столбца
+					ws.Cells[startRow - 1, startCol, startRow - 1, startCol].Merge = true;
+					ws.SetValue(startRow, startCol, "Кол-во");
+				}
 				startCol++;
 			}
 			startRow++;
@@ -97,26 +112,35 @@ namespace ProducerInterfaceCommon.Models
 			select grouping;
 
 			// строка для каждого уникального ключа
-			foreach (var group in orderGrouping)
+      foreach (var group in orderGrouping)
 			{
+				startCol = 1;
 				var key = group.Key;
-				ws.SetValue(startRow, 1, key.CatalogName);
-				ws.SetValue(startRow, 2, key.ProducerName);
-				ws.SetValue(startRow, 3, key.RegionName);
-				ws.SetValue(startRow, 4, group.Min(x => x.Cost));
-				ws.SetValue(startRow, 5, group.Average(x => x.Cost));
-				ws.SetValue(startRow, 6, group.Max(x => x.Cost));
+				ws.SetValue(startRow, startCol++, key.CatalogName);
+				ws.SetValue(startRow, startCol++, key.ProducerName);
+				ws.SetValue(startRow, startCol++, key.RegionName);
+	      if (showCost) {
+		      ws.SetValue(startRow, startCol++, group.Min(x => x.Cost));
+		      ws.SetValue(startRow, startCol++, group.Average(x => x.Cost));
+		      ws.SetValue(startRow, startCol++, group.Max(x => x.Cost));
+	      }
 
-				var maxQuantity = group.Max(x => x.Quantity);
+	      var maxQuantity = group.Max(x => x.Quantity);
 				var liderName = group.Where(x => x.Quantity == maxQuantity).Select(x => x.SupplierName).FirstOrDefault();
-        ws.SetValue(startRow, 7, liderName);
+        ws.SetValue(startRow, startCol, liderName);
 
 				// записываем данные под соответствующим поставщиком
 				foreach (var item in group)
 				{
-					var col = 7 + 2 * dd[item.SupplierName] - 1;
-					ws.SetValue(startRow, col, item.Cost);
-					ws.SetValue(startRow, ++col, item.Quantity);
+					if (showCost) {
+						var col = startCol + 2 * dd[item.SupplierName] - 1;
+						ws.SetValue(startRow, col, item.Cost);
+						ws.SetValue(startRow, ++col, item.Quantity);
+					}
+					else {
+						var col = startCol + dd[item.SupplierName];
+						ws.SetValue(startRow, col, item.Quantity);
+					}
 				}
 				++startRow;
 			}

@@ -3,6 +3,7 @@ using ProducerInterfaceCommon.Heap;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -28,6 +29,14 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("CatalogVar")]
 		public CatalogVar Var { get; set; }
 
+		[Display(Name = "Только указанные поставщики")]
+		[UIHint("LongList")]
+		public List<long> SupplierIdEqual { get; set; }
+
+		[Display(Name = "Игнорируемые поставщики")]
+		[UIHint("LongList")]
+		public List<long> SupplierIdNonEqual { get; set; }
+
 		public ProductResidueReport()
 		{
 			Var = CatalogVar.AllCatalog;
@@ -47,6 +56,13 @@ namespace ProducerInterfaceCommon.Models
 				result.Add("В отчет включены все товары производителя");
 			else
 				result.Add(h.GetProductHeader(CatalogIdEqual));
+
+			if (SupplierIdEqual != null)
+				result.Add(h.GetSupplierHeader(SupplierIdEqual));
+
+			if (SupplierIdNonEqual != null)
+				result.Add(h.GetNotSupplierHeader(SupplierIdNonEqual));
+
 			return result;
 		}
 
@@ -74,8 +90,20 @@ namespace ProducerInterfaceCommon.Models
 			else {
 				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
 			}
-			spparams.Add("@ProducerId", ProducerId);
+			//spparams.Add("@ProducerId", ProducerId);
 			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
+
+			if (SupplierIdEqual == null)
+				spparams.Add("@SupplierId", "select Id from Customers.Suppliers");
+			else
+				spparams.Add("@SupplierId", String.Join(",", SupplierIdEqual));
+
+			// чтоб правильно работала хп при отсутствии ограничений на поставщиков, заведомо несуществующий Id
+			if (SupplierIdNonEqual == null)
+				spparams.Add("@NotSupplierId", -1);
+			else
+				spparams.Add("@NotSupplierId", String.Join(",", SupplierIdNonEqual));
+
 			spparams.Add("@DateFrom", DateFrom);
 			return spparams;
 		}
@@ -86,6 +114,8 @@ namespace ProducerInterfaceCommon.Models
 
 			viewDataValues.Add("RegionCodeEqual", h.GetRegionList());
 			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
+			viewDataValues.Add("SupplierIdEqual", h.GetSupplierList(RegionCodeEqual));
+			viewDataValues.Add("SupplierIdNonEqual", h.GetSupplierList(RegionCodeEqual));
 
 			return viewDataValues;
 		}
@@ -93,6 +123,10 @@ namespace ProducerInterfaceCommon.Models
 		public override List<ErrorMessage> Validate()
 		{
 			var errors = base.Validate();
+			if (SupplierIdEqual != null && SupplierIdNonEqual != null && SupplierIdEqual.Intersect(SupplierIdNonEqual).Any()) {
+				errors.Add(new ErrorMessage("SupplierIdEqual", "Один и тот же поставщик не может одновременно входить в список выбранных и игнорируемых"));
+				errors.Add(new ErrorMessage("SupplierIdNonEqual", "Один и тот же поставщик не может одновременно входить в список выбранных и игнорируемых"));
+			}
 			if (Var == CatalogVar.SelectedProducts && (CatalogIdEqual == null || CatalogIdEqual.Count == 0))
         errors.Add(new ErrorMessage("CatalogIdEqual", "Не выбраны товары"));
 			if (Var == 0)

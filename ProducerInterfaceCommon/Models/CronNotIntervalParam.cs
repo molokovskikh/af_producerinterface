@@ -7,7 +7,7 @@ namespace ProducerInterfaceCommon.Models
 	public class CronNotIntervalParam : CronParam, INotInterval
 	{
 
-		[Display(Name = "Отчет готовится по данным:")]
+		[Display(Name = "Отчет готовится по данным")]
 		[UIHint("ByPreviousDay")]
 		public bool ByPreviousDay { get; set; }
 

@@ -22,7 +22,7 @@ namespace ProducerInterfaceCommon.Heap
 
 		public string GetDateHeader(DateTime dateFrom)
 		{
-			return $"Отчет создан на дату: {dateFrom}";
+			return $"Отчет создан на дату: {dateFrom.ToShortDateString()}";
 		}
 
 		public string GetRegionHeader(List<decimal> regionCodes)
@@ -45,8 +45,14 @@ namespace ProducerInterfaceCommon.Heap
 
 		public string GetNotSupplierHeader(List<long> supplierIds)
 		{
-			var notSuppliers = _cntx.suppliernames.Where(x => supplierIds.Contains(x.SupplierId)).Select(x => x.SupplierName).OrderBy(x => x).ToList();
-			return $"Из отчета исключены следующие поставщики: {String.Join(", ", notSuppliers)}";
+			var suppliers = _cntx.suppliernames.Where(x => supplierIds.Contains(x.SupplierId)).Select(x => x.SupplierName).OrderBy(x => x).ToList();
+			return $"Из отчета исключены следующие поставщики: {String.Join(", ", suppliers)}";
+		}
+
+		public string GetSupplierHeader(List<long> supplierIds)
+		{
+			var suppliers = _cntx.suppliernames.Where(x => supplierIds.Contains(x.SupplierId)).Select(x => x.SupplierName).OrderBy(x => x).ToList();
+			return $"В отчет включены следующие поставщики: {String.Join(", ", suppliers)}";
 		}
 	}
 }

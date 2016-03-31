@@ -7,10 +7,10 @@
         </div>
         <div class="feditor col-md-8">
             @Html.RadioButton("", true, Model)
-            <span>за предыдущий день</span>
+            <span>за предыдущий день (с указанием средневзвешенных цен)</span>
             <br/>
             @Html.RadioButton("", false, !Model)
-            <span>на момент запуска</span>
+            <span>на момент запуска (без указания средневзвешенных цен)</span>
         </div>
     </div>
 </div>

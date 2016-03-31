@@ -14,9 +14,10 @@ namespace ProducerInterfaceCommon.Models
 
 		public RunNowNotIntervalParam()
 		{
-			// по умолчанию - за сегодня
+			// по умолчанию - за вчера
 			var now = DateTime.Now;
-			DateFrom = new DateTime(now.Year, now.Month, now.Day);
+			var yesterday = now.AddDays(-1);
+      DateFrom = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day);
 		}
 	}
 }

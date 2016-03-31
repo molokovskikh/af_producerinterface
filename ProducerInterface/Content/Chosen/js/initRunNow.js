@@ -15,7 +15,8 @@
 		autoclose: true,
 		endDate: '-0d'
     }).on('changeDate', function () {
-        dateTo.setStartDate(dateFrom.getDate());
+        if (dateTo)
+            dateTo.setStartDate(dateFrom.getDate());
     }).data('datepicker');
 
 	$('#MailTo').chosen({ width: '100%' });
