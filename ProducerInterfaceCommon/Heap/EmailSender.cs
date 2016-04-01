@@ -95,7 +95,7 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Нет данных для формировании отчета, пользователю и расширенное сотрудникам
-		public static void SendEmptyReportMessage(producerinterface_Entities cntx, long userId, string reportName, string jobName)
+		public static void SendEmptyReportMessage(producerinterface_Entities cntx, long userId, string reportName, string jobName, string Ip)
 		{
 			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
@@ -103,13 +103,14 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = TokenStringFormat.Format(mailForm.Subject, new { ReportName = reportName, SiteName = siteName });
 			var header = TokenStringFormat.Format(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{TokenStringFormat.Format(mailForm.Body, new { ReportName = reportName })}\r\n\r\n{mailForm.Footer}";
+			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now},  IP {Ip}, отчет \"{reportName}\", задача {jobName}";
 			var attachments = GetAttachments(cntx, MailType.EmptyReport);
-			EmailSender.SendEmail(user.Login, subject, body, attachments);
+			// #48817 пользователю Дополнительная информация высылается также
+			EmailSender.SendEmail(user.Login, subject, bodyExtended, attachments);
 
-			var bodyExtended = $"{body}\r\n\r\nДополнительная информация:\r\nпользователь {user.Name} (id={user.Id}, {user.Login}), изготовитель {GetCompanyname(user.Id, cntx)} (id={user.AccountCompany.ProducerId}), время {DateTime.Now}, отчет \"{reportName}\", задача {jobName}";
-			var mailError = ConfigurationManager.AppSettings["MailError"];
-			EmailSender.SendEmail(mailError, subject, bodyExtended, attachments);
-		}
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
+    }
 
 		// Ошибка при формировании отчета, пользователю и расширенное сотрудникам
 		public static void SendReportErrorMessage(producerinterface_Entities cntx, long userId, string reportName, string jobName, string errorMessage)

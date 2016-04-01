@@ -1,6 +1,5 @@
 ﻿using OfficeOpenXml;
 using ProducerInterfaceCommon.Heap;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -147,6 +146,5 @@ namespace ProducerInterfaceCommon.Models
 			var rowCount = startRow - 1;
 			return new ExcelAddressBase(dataStartRow, 1, rowCount, colCount);
 		}
-
 	}
 }

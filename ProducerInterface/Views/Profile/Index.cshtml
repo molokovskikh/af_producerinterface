@@ -1,12 +1,10 @@
-﻿@*@using ProducerInterfaceCommon.Models
-    @model List<ProducerInterfaceCommon.ContextModels.jobextend>*@
-
+﻿@using ProducerInterfaceCommon.ContextModels
 
 @{
-    var currentUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
+    var currentUser = ViewBag.CurrentUser as Account;
     ViewBag.Title = "Кабинет производителя";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var NewsList = ViewBag.News as IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>;
+    var NewsList = ViewBag.News as IEnumerable<NotificationToProducers>;
 }
 
 <div class="row">
@@ -16,8 +14,8 @@
                 <h3 style="margin:0.5em;">Меню</h3>
                 <hr/>
                 <div class="btn-group-vertical profile_submenu" style="width:100%;">
-                    <a href="@Url.Action("Index", "Promotion")" class="btn btn-default" style="width:100%;"><span class="glyphicon glyphicon-star-empty"></span> Акции</a>
                     <a href="@Url.Action("JobList", "Report")" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Отчеты</a>
+                    <a href="@Url.Action("Index", "Promotion")" class="btn btn-default" style="width:100%;"><span class="glyphicon glyphicon-star-empty"></span> Акции</a>
                     <a href="@Url.Action("Index", "Drug")" class="btn btn-default"><span class="glyphicon glyphicon-align-justify"></span> Препараты</a>
                     <a data-toggle="modal" data-target="#myModal" class="pointer btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
                 </div>             
@@ -72,12 +70,10 @@
                 }
 
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
 
 @section JavaScript
 {

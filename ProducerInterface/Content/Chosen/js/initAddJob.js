@@ -44,14 +44,19 @@
 	    $(this).trigger("chosen:updated");
 	    var supY = $('#SupplierIdEqual');
 	    var supN = $('#SupplierIdNonEqual');
-	    if (!supY.length && !supN.length)
-	        return;
-		var prm = $(this).serialize() + "&" + supN.serialize();
 	    var supurl = $('#supurl').val();
-	    $.getJSON(supurl, prm, function (data) {
-	        AppendToChosen(supY, data);
-	        AppendToChosen(supN, data);
-	    });
+	    if (supY.length) {
+	        var prmY = $(this).serialize() + "&" + supY.serialize();
+	        $.getJSON(supurl, prmY, function (data) {
+	            AppendToChosen(supY, data);
+	        });
+	    }
+	    if (supN.length) {
+	        var prmN = $(this).serialize() + "&" + supN.serialize();
+	        $.getJSON(supurl, prmN, function (data) {
+	            AppendToChosen(supN, data);
+	        });
+	    }
 	});
 
     // https://github.com/meltingice/ajax-chosen

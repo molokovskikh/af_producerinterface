@@ -353,6 +353,7 @@ namespace ProducerInterface.Controllers
 			Bind(model, model.GetType());
 
 			model.UserId = userId;
+			model.Ip = CurrentUser.IP;
 
 			foreach (var error in model.Validate())
 				ModelState.AddModelError(error.PropertyName, error.Message);
@@ -371,12 +372,12 @@ namespace ProducerInterface.Controllers
 			trigger.JobDataMap["tparam"] = model;
 
 			// записали в историю запусков
-			string mailTo = null;
-			if (model.MailTo != null && model.MailTo.Count > 0)
-				mailTo = string.Join(",", model.MailTo);
-      var reportRunLog = new ReportRunLog() { AccountId = userId, Ip = CurrentUser.IP, JobName = key.Name, RunNow = true, MailTo = mailTo };
-			cntx_.ReportRunLog.Add(reportRunLog);
-			cntx_.SaveChanges();
+			//string mailTo = null;
+			//if (model.MailTo != null && model.MailTo.Count > 0)
+			//	mailTo = string.Join(",", model.MailTo);
+			//var reportRunLog = new ReportRunLog() { AccountId = userId, Ip = CurrentUser.IP, JobName = key.Name, RunNow = true, MailTo = mailTo };
+			//cntx_.ReportRunLog.Add(reportRunLog);
+			//cntx_.SaveChanges();
 
 			try
 			{
@@ -610,12 +611,15 @@ namespace ProducerInterface.Controllers
 		/// <param name="RegionCodeEqual">Битовые маски регионов</param>
 		/// <param name="SupplierIdNonEqual">Список поставшиков</param>
 		/// <returns></returns>
-		public JsonResult GetSupplierJson(List<decimal> RegionCodeEqual, List<long> SupplierIdNonEqual)
+		public JsonResult GetSupplierJson(List<decimal> RegionCodeEqual, List<long> SupplierIdNonEqual, List<long> SupplierIdEqual)
 		{
-			if (SupplierIdNonEqual == null)
-				SupplierIdNonEqual = new List<long>();
+			var supplierStringList = new List<string>();
 
-			var supplierStringList = SupplierIdNonEqual.Select(x => x.ToString()).ToList();
+			if (SupplierIdNonEqual != null)
+				supplierStringList = SupplierIdNonEqual.Select(x => x.ToString()).ToList();
+			else if (SupplierIdEqual != null)
+				supplierStringList = SupplierIdEqual.Select(x => x.ToString()).ToList();
+
 			return Json(new
 			{
 				results = (h.GetSupplierList(RegionCodeEqual).Select(x => new { value = x.Value, text = x.Text, selected = supplierStringList.Contains(x.Value) }))

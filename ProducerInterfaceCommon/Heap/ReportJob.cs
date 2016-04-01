@@ -35,7 +35,7 @@ namespace ProducerInterfaceCommon.Heap
 			catch (Exception e) {
 				logger.Error($"Job {key.Group} {key.Name} run failed:" + e.Message, e);
 
-				var cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+				var cntx = new producerinterface_Entities();
 				SetErrorStatus(cntx, key);
 				EmailSender.SendReportErrorMessage(cntx, tparam.UserId, jparam.CastomName, key.Name, e.Message);
 
@@ -44,7 +44,7 @@ namespace ProducerInterfaceCommon.Heap
 			logger.Info($"Job {key.Group} {key.Name} run finished");
 		}
 
-		private void SetErrorStatus(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, JobKey key)
+		private void SetErrorStatus(producerinterface_Entities cntx, JobKey key)
 		{
 				// вытащили расширенные параметры задачи
 				var jext = cntx.jobextend.Single(x => x.JobName == key.Name

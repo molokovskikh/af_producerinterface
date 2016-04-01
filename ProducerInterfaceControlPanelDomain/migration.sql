@@ -854,8 +854,6 @@ order by cn.CatalogName, p.ProducerName, r.RegionName, s.SupplierName, TT.Date')
 
 END$$
 
-# ниже не внесено на боевую базу
-
 drop PROCEDURE `ProductResidueReport`;
 
 CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `ProductResidueReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `SupplierId` VARCHAR(255), IN `NotSupplierId` VARCHAR(255), IN `DateFrom` datetime)
@@ -875,8 +873,8 @@ BEGIN
 		and ProductId in (select Id 
 								from catalogs.Products pp
 								where pp.CatalogId in (', CatalogId, '))
-		and SupplierId in (', RegionCode, ')
-		and SupplierId not in (', RegionCode, ')) as T
+		and SupplierId in (', SupplierId, ')
+		and SupplierId not in (', NotSupplierId, ')) as T
 	inner join catalogs.Products p on p.Id = T.ProductId
 	group by p.CatalogId, T.ProducerId, T.RegionId, T.SupplierId) as TT
 left outer join producerinterface.regionnames r on r.RegionCode = TT.RegionId
@@ -892,7 +890,6 @@ order by cn.CatalogName, p.ProducerName, r.RegionName');
   #select @sql;
 
 END$$
-
 
 drop PROCEDURE `ProductResidueReportNow`;
 
@@ -941,7 +938,44 @@ order by cn.CatalogName, p.ProducerName, r.RegionName');
 
 END$$
 
+drop PROCEDURE `ProductPriceDynamicsReport`;
 
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `ProductPriceDynamicsReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `ProducerId` INT(10) UNSIGNED, IN `SupplierId` VARCHAR(255), IN `NotSupplierId` VARCHAR(255), IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select cn.CatalogName, p.ProducerName, r.RegionName, s.SupplierName, TT.Date, TT.Cost, CAST(TT.Quantity as SIGNED INTEGER) as Quantity from
+	(select p.CatalogId, T.ProducerId, T.RegionId, T.SupplierId, T.Date, AVG(T.Cost) as Cost, SUM(Quantity) as Quantity from
+		(select ProductId, ProducerId, RegionId, SupplierId, Date, Cost, Quantity
+		from reports.AverageCosts
+		where Date >= \'', DateFrom, '\'
+		and Date < \'', DateTo, '\'
+		and RegionId in (', RegionCode, ')
+		and ProducerId = ', ProducerId, '
+		and ProductId in (select Id 
+								from catalogs.Products pp
+								where pp.CatalogId in (', CatalogId, '))
+		and SupplierId in (', SupplierId, ')
+		and SupplierId not in (', NotSupplierId, ')) as T
+	inner join catalogs.Products p on p.Id = T.ProductId
+	group by p.CatalogId, T.ProducerId, T.RegionId, T.SupplierId, T.Date) as TT
+left outer join producerinterface.regionnames r on r.RegionCode = TT.RegionId
+left outer join producerinterface.catalognames cn on cn.CatalogId = TT.CatalogId
+left outer join producerinterface.producernames p on p.ProducerId = TT.ProducerId
+left outer join producerinterface.suppliernames s on s.SupplierId = TT.SupplierId
+order by cn.CatalogName, p.ProducerName, r.RegionName, s.SupplierName, TT.Date');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
 
 
 

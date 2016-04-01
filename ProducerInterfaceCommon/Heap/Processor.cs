@@ -28,13 +28,19 @@ namespace ProducerInterfaceCommon.Heap
 
 		public void Process(JobKey key, Report jparam, TriggerParam tparam)
 		{
-			// записали в историю запусков только для крона. При запуске вручную - пишем на странице запуска, потому что знаем пользователя
-			if (tparam is CronParam) {
-				var	mailTo = string.Join(",", tparam.MailTo);
-				var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false, MailTo = mailTo };
-				_cntx.ReportRunLog.Add(reportRunLog);
-				_cntx.SaveChanges();
+			// записали в историю запусков
+			string mailTo = null;
+			if (tparam.MailTo != null && tparam.MailTo.Count > 0)
+				mailTo = string.Join(",", tparam.MailTo);
+			var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false, MailTo = mailTo, AccountId = tparam.UserId };
+			// записали IP только для ручного запуска 
+			var Ip = "неизвестен (авт. запуск)";
+			if (tparam is RunNowParam) {
+				Ip = ((RunNowParam)tparam).Ip;
+				reportRunLog.Ip = Ip;
 			}
+			_cntx.ReportRunLog.Add(reportRunLog);
+			_cntx.SaveChanges();
 
 			// вытащили расширенные параметры задачи
 			var jext = _cntx.jobextend.Single(x => x.JobName == key.Name
@@ -64,7 +70,7 @@ namespace ProducerInterfaceCommon.Heap
 			if (querySort.Count == 0) {
 				jext.DisplayStatusEnum = DisplayStatus.Empty;
 				_cntx.SaveChanges();
-				EmailSender.SendEmptyReportMessage(_cntx, tparam.UserId, jparam.CastomName, key.Name);
+				EmailSender.SendEmptyReportMessage(_cntx, tparam.UserId, jparam.CastomName, key.Name, Ip);
 				return;
 			}
 
