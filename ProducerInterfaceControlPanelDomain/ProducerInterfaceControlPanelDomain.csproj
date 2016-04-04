@@ -225,7 +225,6 @@
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
     <Content Include="Content\semantic_ui\dropdown.css" />
     <Content Include="Content\semantic_ui\dropdown.min.css" />
-    <Content Include="migration.sql" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\ckeditor\InitCKEditor_News.js" />
     <Content Include="Scripts\ckeditor\plugins\base64image\dialogs\base64image.js" />

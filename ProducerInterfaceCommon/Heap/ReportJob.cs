@@ -36,16 +36,6 @@ namespace ProducerInterfaceCommon.Heap
 				logger.Error($"Job {key.Group} {key.Name} run failed:" + e.Message, e);
 
 				var cntx = new producerinterface_Entities();
-				SetErrorStatus(cntx, key);
-				EmailSender.SendReportErrorMessage(cntx, tparam.UserId, jparam.CastomName, key.Name, e.Message);
-
-				return;
-			}
-			logger.Info($"Job {key.Group} {key.Name} run finished");
-		}
-
-		private void SetErrorStatus(producerinterface_Entities cntx, JobKey key)
-		{
 				// вытащили расширенные параметры задачи
 				var jext = cntx.jobextend.Single(x => x.JobName == key.Name
 																							&& x.JobGroup == key.Group
@@ -55,6 +45,17 @@ namespace ProducerInterfaceCommon.Heap
 				jext.DisplayStatusEnum = DisplayStatus.Error;
 				jext.LastRun = DateTime.Now;
 				cntx.SaveChanges();
+
+				var ip = "неизвестен (авт. запуск)";
+				if (tparam is RunNowParam)
+					ip = ((RunNowParam)tparam).Ip;
+
+				EmailSender.SendReportErrorMessage(cntx, tparam.UserId, jext, e.Message, ip);
+
+				return;
+			}
+			logger.Info($"Job {key.Group} {key.Name} run finished");
 		}
+
 	}
 }

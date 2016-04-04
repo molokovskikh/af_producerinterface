@@ -371,14 +371,6 @@ namespace ProducerInterface.Controllers
 					.Build();
 			trigger.JobDataMap["tparam"] = model;
 
-			// записали в историю запусков
-			//string mailTo = null;
-			//if (model.MailTo != null && model.MailTo.Count > 0)
-			//	mailTo = string.Join(",", model.MailTo);
-			//var reportRunLog = new ReportRunLog() { AccountId = userId, Ip = CurrentUser.IP, JobName = key.Name, RunNow = true, MailTo = mailTo };
-			//cntx_.ReportRunLog.Add(reportRunLog);
-			//cntx_.SaveChanges();
-
 			try
 			{
 				scheduler.ScheduleJob(trigger);
@@ -600,7 +592,7 @@ namespace ProducerInterface.Controllers
 				return View(model);
 
 			var file = GetExcel(jext);
-			EmailSender.ManualPostReportMessage(cntx_, userId, jext, file.FullName, model.MailTo);
+			EmailSender.ManualPostReportMessage(cntx_, userId, jext, file.FullName, model.MailTo, CurrentUser.IP);
 			SuccessMessage("Отчет отправлен на указанные email");
 			return View(model);
 		}

@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,10 @@ namespace ProducerInterfaceCommon.Models
 	{
 		[Display(Name = "Наименование и форма выпуска")]
 		public string CatalogName { get; set; }
+
+		[Hidden]
+		[Display(Name = "Идентификатор производителя")]
+		public long ProducerId { get; set; }
 
 		[Display(Name = "Производитель")]
 		public string ProducerName { get; set; }
@@ -32,7 +37,14 @@ namespace ProducerInterfaceCommon.Models
 
 		public override List<T> Treatment<T>(List<T> list, Report param)
 		{
-			return list;
+			var clist = list.Cast<ProductResidueReportRow>();
+			var cparam = (ProductResidueReport)param;
+
+			// фильтрация по производителю, если не выбрана опция "По всему ассортименту"
+			if (cparam.Var != CatalogVar.AllAssortiment)
+				clist = clist.Where(x => x.ProducerId == cparam.ProducerId).ToList();
+
+			return clist.Cast<T>().ToList();
 		}
 
 		public ExcelAddressBase WriteExcelData(ExcelWorksheet ws, int dataStartRow, DataTable dataTable, Report param)
@@ -42,7 +54,7 @@ namespace ProducerInterfaceCommon.Models
 			var querySort = shredder.UnShred(dataTable);
 			// вытащили различных поставщиков из набора. Сортировка - по количеству позиций в порядке убывания
 			var suppliers = querySort.GroupBy(x => x.SupplierName)
-				.Select(x => new { SupplierName = x.Key, PosCount = x.Sum(y => y.Quantity)})
+				.Select(x => new { SupplierName = x.Key, PosCount = x.Count()})
 				.OrderByDescending(x => x.PosCount).Select(x => x.SupplierName).ToArray(); 
 			var dd = new Dictionary<string, int>();
 			for (int i = 0; i < suppliers.Length; i++)

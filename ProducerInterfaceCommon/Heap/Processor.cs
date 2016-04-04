@@ -34,10 +34,10 @@ namespace ProducerInterfaceCommon.Heap
 				mailTo = string.Join(",", tparam.MailTo);
 			var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false, MailTo = mailTo, AccountId = tparam.UserId };
 			// записали IP только для ручного запуска 
-			var Ip = "неизвестен (авт. запуск)";
+			var ip = "неизвестен (авт. запуск)";
 			if (tparam is RunNowParam) {
-				Ip = ((RunNowParam)tparam).Ip;
-				reportRunLog.Ip = Ip;
+				ip = ((RunNowParam)tparam).Ip;
+				reportRunLog.Ip = ip;
 			}
 			_cntx.ReportRunLog.Add(reportRunLog);
 			_cntx.SaveChanges();
@@ -70,7 +70,7 @@ namespace ProducerInterfaceCommon.Heap
 			if (querySort.Count == 0) {
 				jext.DisplayStatusEnum = DisplayStatus.Empty;
 				_cntx.SaveChanges();
-				EmailSender.SendEmptyReportMessage(_cntx, tparam.UserId, jparam.CastomName, key.Name, Ip);
+				EmailSender.SendEmptyReportMessage(_cntx, tparam.UserId, jext, ip);
 				return;
 			}
 
@@ -108,9 +108,9 @@ namespace ProducerInterfaceCommon.Heap
 
 				// при автоматическом и ручном запуске разное содержимое письма
 				if (tparam is CronParam)
-					EmailSender.AutoPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo);
+					EmailSender.AutoPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo, ip);
 				else if (tparam is RunNowParam)
-					EmailSender.ManualPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo);
+					EmailSender.ManualPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo, ip);
 			}
 		}
 

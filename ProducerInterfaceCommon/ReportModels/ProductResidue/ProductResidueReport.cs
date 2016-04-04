@@ -82,7 +82,6 @@ namespace ProducerInterfaceCommon.Models
 			var spparams = new Dictionary<string, object>();
 			if (Var == CatalogVar.AllAssortiment) {
 				spparams.Add("@CatalogId", "select CatalogId from Catalogs.assortment");
-				//spparams.Add("@ProducerId", "select Id from catalogs.Producers");
 			}
 			else if(Var == CatalogVar.AllCatalog) {
 				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
@@ -90,7 +89,6 @@ namespace ProducerInterfaceCommon.Models
 			else {
 				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
 			}
-			//spparams.Add("@ProducerId", ProducerId);
 			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
 
 			if (SupplierIdEqual == null)
