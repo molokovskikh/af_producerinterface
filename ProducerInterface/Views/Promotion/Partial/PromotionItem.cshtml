@@ -90,13 +90,22 @@
                 </div>
                 <div id="collapse_supplier___@Model.Id" class="panel-collapse collapse">
                     <div class="panel-body">
-                        @foreach (var SupplierItem in Model.PromotionsToSupplier)
+                        @if (Model.PromotionsToSupplier.Any(x => x.SupplierId == 0))
                         {
-                            <p>@SupplierList.Where(xxx => xxx.Value == SupplierItem.SupplierId.ToString()).First().Text</p>
+                        <p>Все поставщики</p>
                         }
+                        else
+                        {
+                            foreach (var SupplierItem in Model.PromotionsToSupplier)
+                            {
+                             <p> @SupplierList.Where(xxx => xxx.Value == SupplierItem.SupplierId.ToString()).First().Text </p>
+                            }
+                        }
+
                     </div>
                 </div>
             </div>
+
             <!--                 Управление акцией (ссылки (btn btn-primary) на редактирование, удаление, активацию/деактивацию, копирование)            -->
             <hr />
 
