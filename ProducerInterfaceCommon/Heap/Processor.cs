@@ -80,8 +80,6 @@ namespace ProducerInterfaceCommon.Heap
 			var shredder = new ObjectShredder<T>();
 			var dataTable = shredder.Shred(querySort);
 
-			//var gggg = _objectShredder.UnShred(dataTable);
-
 			var headers = jparam.GetHeaders(_helper);
 
 			var ds = CreateDataSet(jparam.CastomName, headers, dataTable);

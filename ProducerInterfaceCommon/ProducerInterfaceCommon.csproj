@@ -83,6 +83,8 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
@@ -224,6 +226,7 @@
     <Compile Include="CustomHelpers\Models\PromotionsInRegionMask.cs" />
     <Compile Include="CustomHelpers\Models\ReportsInRegionMask.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
+    <Compile Include="Heap\Class1.cs" />
     <Compile Include="Heap\EmailSender.cs" />
     <Compile Include="Heap\IWriteExcelData.cs" />
     <Compile Include="Heap\IProcessor.cs" />
