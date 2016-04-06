@@ -1,15 +1,12 @@
 ﻿using OfficeOpenXml.Drawing.Chart;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml;
 
 namespace ProducerInterfaceCommon.Heap
 {
-	static class Class1
+	static class ExcelPieChartExtended
 	{
 		public static void SetDataPointStyle(this ExcelPieChart chart, int dataPointIndex, Color color)
 		{
@@ -38,6 +35,36 @@ namespace ProducerInterfaceCommon.Heap
 			valattrib.Value = color.ToHex().Substring(1);
 			dPt.AppendChild(spPr);
 		}
+
+		public static void SetLegendWidth(this ExcelPieChart chart, decimal width)
+		{
+			SetLayout(chart, "c:chartSpace/c:chart/c:legend", width);
+		}
+
+		public static void SetPlotAreaWidth(this ExcelPieChart chart, decimal width)
+		{
+			SetLayout(chart, "c:chartSpace/c:chart/c:plotArea", width);
+		}
+
+
+		private static void SetLayout(ExcelPieChart chart, string path, decimal width)
+		{
+			var nsm = chart.WorkSheet.Drawings.NameSpaceManager;
+			var nschart = nsm.LookupNamespace("c");
+			var nsa = nsm.LookupNamespace("a");
+			var node = chart.ChartXml.SelectSingleNode(path, nsm);
+			var doc = chart.ChartXml;
+
+			var layout = doc.CreateElement("c:layout", nschart);
+			var manualLayout = layout.AppendChild(doc.CreateElement("c:manualLayout", nschart));
+
+			var xMode = manualLayout.AppendChild(doc.CreateElement("c:w", nschart));
+			var valattrib = xMode.Attributes.Append(doc.CreateAttribute("val"));
+			valattrib.Value = width.ToString(CultureInfo.InvariantCulture);
+
+			node.AppendChild(layout);
+		}
+
 
 		public static String ToHex(this Color c)
 		{

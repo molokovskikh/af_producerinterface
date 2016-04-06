@@ -226,7 +226,7 @@
     <Compile Include="CustomHelpers\Models\PromotionsInRegionMask.cs" />
     <Compile Include="CustomHelpers\Models\ReportsInRegionMask.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
-    <Compile Include="Heap\Class1.cs" />
+    <Compile Include="Heap\ExcelPieChartExtended.cs" />
     <Compile Include="Heap\EmailSender.cs" />
     <Compile Include="Heap\IWriteExcelData.cs" />
     <Compile Include="Heap\IProcessor.cs" />

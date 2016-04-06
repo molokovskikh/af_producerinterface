@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using OfficeOpenXml.Drawing;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -78,66 +79,46 @@ namespace ProducerInterfaceCommon.Models
 			}
 			ws.Cells[dataStartRow, 1].LoadFromDataTable(dataTable, true);
 
-			//var xs = new ExcelAddressBase(dataStartRow + 1, 1, dataStartRow + dataTable.Rows.Count - 1, 1);
-			//var s = new ExcelAddressBase(dataStartRow + 1, 3, dataStartRow + dataTable.Rows.Count - 1, 3);
 
-			//var chart = ws.Drawings.AddChart("chart", eChartType.Pie);
-			//chart.SetPosition(dataStartRow, 20, 5, 10);
-			////chart.SetSize((800, 600);
-			//var series = chart.Series.Add(ws.Cells["C6:C16"], ws.Cells["A6:A16"]);
-
-			//var pieSeries = (ExcelPieChartSerie)series;
-			//pieSeries.Explosion = 5;
-
-			////Format the labels
-			//pieSeries.DataLabel.Font.Size = 10;
-
-			//Add the chart to the sheet
-			var pieChart = (ExcelPieChart)ws.Drawings.AddChart("Chart1", eChartType.Pie);
-			pieChart.SetPosition(dataStartRow, 0, 0, 0);
-			pieChart.Title.Text = "Test Chart";
-			pieChart.Title.Font.Bold = true;
-			pieChart.Title.Font.Size = 10;
+			var pieChart = (ExcelPieChart)ws.Drawings.AddChart("PieChart", eChartType.Pie);
+			pieChart.SetPosition(dataStartRow - 1, 0, 5, 0);
+			pieChart.SetSize(700, 330);
+			pieChart.Fill.Color = Color.White;
+			pieChart.Border.LineStyle = eLineStyle.Solid;
+			pieChart.Border.Width = 1;
+			pieChart.Border.Fill.Color = Color.Black;
+			//pieChart.SetPlotAreaWidth(0.49m);
 
 			//Set the data range
-			var series = pieChart.Series.Add(ws.Cells[5, 3, 16, 3], ws.Cells[5, 1, 16, 1]);
+			var s = new ExcelAddressBase(dataStartRow + 1, 3, dataStartRow + dataTable.Rows.Count - 1, 3);
+			var xs = new ExcelAddressBase(dataStartRow + 1, 1, dataStartRow + dataTable.Rows.Count - 1, 1);
+			var series = pieChart.Series.Add(ws.Cells[s.Address], ws.Cells[xs.Address]);
 			var pieSeries = (ExcelPieChartSerie)series;
-
-			pieSeries.Explosion = 5;
-			pieSeries.DataLabel.Fill.Color = Color.BlueViolet;
-
-			//Format the labels
-			pieSeries.DataLabel.Font.Bold = true;
-			pieSeries.DataLabel.ShowValue = true;
-			pieSeries.DataLabel.ShowPercent = true;
-			pieSeries.DataLabel.ShowLeaderLines = true;
-			pieSeries.DataLabel.Separator = ";";
-			pieSeries.DataLabel.Position = eLabelPosition.BestFit;
+			pieSeries.DataLabel.ShowValue = false;
 
 			//Format the legend
 			pieChart.Legend.Add();
 			pieChart.Legend.Border.Width = 0;
-			pieChart.Legend.Font.Size = 10;
-			pieChart.Legend.Font.Bold = true;
+			pieChart.Legend.Font.SetFromFont(new Font("Calibry", 9));
 			pieChart.Legend.Position = eLegendPosition.Right;
+			//pieChart.SetLegendWidth(0.49m);
 
-			pieChart.SetDataPointStyle(dataPointIndex: 2, color: Color.FromArgb(254, 0, 0));
-
-
-			//ExcelChart chart = ws.Drawings.AddChart("FindingsChart", OfficeOpenXml.Drawing.Chart.eChartType.ColumnClustered);
-			//chart.Title.Text = "Category Chart";
-			//chart.SetPosition(1, 0, 5, 0);
-			//chart.SetSize(800, 300);
-			//var ser1 = (ExcelChartSerie)(chart.Series.Add(ws.Cells["C6:C16"], ws.Cells["A6:A16"]));
-			//ser1.Header = "Category";
-			//Color colFromHex = System.Drawing.ColorTranslator.FromHtml("#B7DEE8");
-			//chart.Fill.Color = colFromHex;
+			// установили цвета сегментов, сами не устанавливаются
+			for (int i = 0; i < dataTable.Rows.Count; i++)
+				pieChart.SetDataPointStyle(dataPointIndex: i, color: GetColor(i));
 
 			// диапазон, занимаемый данными
 			return new ExcelAddressBase(dataStartRow, 1, dataStartRow + dataTable.Rows.Count, dataTable.Columns.Count);
 		}
 
-
+		private Color GetColor(int index)
+		{
+			var colorArray = new string[] { "#004586", "#FF420E", "#FFD320", "#579D1C", "#7E0021", "#83CAFF", "#314004", "#AECF00", "#4B1F6F", "#FF950E", "#C5000B", "#0084D1" };
+			// цвета повторяются по кругу
+			index = index % colorArray.Length;
+			var hex = colorArray[index];
+			return ColorTranslator.FromHtml(hex);
+		}
 
 	}
 }

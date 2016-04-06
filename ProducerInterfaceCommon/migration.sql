@@ -1068,6 +1068,23 @@ order by cn.CatalogName, p.ProducerName, r.RegionName');
 END
 
 
+insert into ReportDescription (Id, Name, ClassName, Description)
+values (1, 'Рейтинг товаров', 'ProductRatingReport', 'Описание 1');
+insert into ReportDescription (Id, Name, ClassName, Description)
+values (2, 'Рейтинг аптек', 'PharmacyRatingReport', 'Описание 2');
+insert into ReportDescription (Id, Name, ClassName, Description)
+values (3, 'Рейтинг поставщиков', 'SupplierRatingReport', 'Описание 3');
+insert into ReportDescription (Id, Name, ClassName, Description)
+values (4, 'Рейтинг товаров в конкурентной группе', 'ProductConcurentRatingReport', 'Описание 4');
+insert into ReportDescription (Id, Name, ClassName, Description)
+values (5, 'Динамика цен и остатков по товару за период', 'ProductPriceDynamicsReport', 'Описание 5');
+insert into ReportDescription (Id, Name, ClassName, Description)
+values (6, 'Продажи вторичных дистрибьюторов', 'SecondarySalesReport', 'Описание 6');
+insert into ReportDescription (Id, Name, ClassName, Description)
+values (7, 'Мониторинг остатков у дистрибьюторов', 'ProductResidueReport', 'Описание 7');
+
+
+
 
 
 

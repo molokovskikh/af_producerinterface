@@ -1,0 +1,28 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+@model ReportDescription
+
+@{
+    ViewBag.Title = "Изменение описания отчета";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<h2>Отчет "@Html.DisplayFor(m=>m.Name)"</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm()) {
+            @Html.HiddenFor(model => model.Id)
+            <div class="form-group">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "20" })
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
+            </div>
+        }
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+

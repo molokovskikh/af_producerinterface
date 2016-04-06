@@ -1,6 +1,12 @@
 ﻿$(function () {
 	// запрос статуса каждые 10 сек
-	setInterval(ajaxCall, 10000);
+    setInterval(ajaxCall, 10000);
+
+    $('#id').on('change', function() {
+        $('div.descr').hide();
+        var selector = '#d' + $(this).val();
+        $(selector).show();
+    });
 });
 
 function ajaxCall() {
@@ -22,8 +28,6 @@ function ajaxCall() {
 		                break;
 		            case 2:
 		                location.reload();
-		                //el.html('<a href="' + data.url + '">Посмотреть отчет</a>');
-		                //el.removeClass('processed');
 		                break;
 		            case 3:
 		                el.text('Нет данных для построения отчета');
@@ -37,28 +41,6 @@ function ajaxCall() {
 		    }
 		});
 
-		//$.getJSON(url, null, function (data) {
-		//	switch (data.status) {
-		//		case 0:
-		//			el.text('Не запускался');
-		//			break;
-		//		case 1:
-		//	  	el.text('Отчет готовится');
-		//	  	break;
-		//		case 2:
-		//			el.html('<a href="' + data.url + '">Посмотреть отчет</a>');
-		//			el.removeClass('processed');
-		//			break;
-		//		case 3:
-		//			el.text('Нет данных для построения отчета');
-		//			break;
-		//		case 4:
-		//			el.text('В процессе подготовки произошла ошибка');
-		//			break;
-		//		default:
-		//			el.text('Неизвестный статус');
-		//	}		
-		//});
 	});
 };
 

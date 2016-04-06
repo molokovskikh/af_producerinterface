@@ -60,9 +60,32 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			var model = query.OrderBy(x => x.CreationDate).Skip(skip).Take(itemsOnPage).ToList();
 			return View(model);
-	}
+		}
 
-	private void SetPager(int itemCount, int page, int itemsOnPage)
+		public ActionResult ReportDescription()
+		{
+			var model = cntx_.ReportDescription.ToList();
+			return View(model);
+		}
+
+		[HttpGet]
+		public ActionResult EditReportDescription(int id)
+		{
+			var model = cntx_.ReportDescription.Single(x => x.Id == id);
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult EditReportDescription(ReportDescription model)
+		{
+			var d = cntx_.ReportDescription.Single(x => x.Id == model.Id);
+			d.Description = model.Description;
+			cntx_.SaveChanges();
+			SuccessMessage("Описание отчета сохранено");
+			return RedirectToAction("ReportDescription");
+		}
+
+		private void SetPager(int itemCount, int page, int itemsOnPage)
 		{
 			var info = new SortingPagingInfo();
 			info.CurrentPageIndex = page;
@@ -76,15 +99,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <param name="jobName">Имя задания в Quartz</param>
 		/// <returns></returns>
 		public ActionResult RunHistory(string jobName)
-		{          
+		{
 			var reportName = cntx_.jobextend.Single(x => x.JobName == jobName).CustomName;
-            var ProducerId = cntx_.jobextend.Where(y => y.JobName == jobName).First().ProducerId;
-            var ProducerName = cntx_.producernames.Where(x => x.ProducerId == ProducerId).First().ProducerName;
+			var ProducerId = cntx_.jobextend.Where(y => y.JobName == jobName).First().ProducerId;
+			var ProducerName = cntx_.producernames.Where(x => x.ProducerId == ProducerId).First().ProducerName;
 
-            ViewBag.Title = $"История запусков отчета: \"{reportName}\", Производитель : \"{ProducerName}\"";
-            var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
-        
-            return View(model);
+			ViewBag.Title = $"История запусков отчета: \"{reportName}\", Производитель : \"{ProducerName}\"";
+			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+
+			return View(model);
 		}
 
 		/// <summary>
@@ -117,17 +140,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return model;
 		}
 
-        [HttpGet]
-        public ActionResult ReportDescription()
-        {
-            return View();
-        }
 
-        [HttpPost]
-        public ActionResult ReportDescription(int Id)
-        {
-            return View();
-        }
-
-    }
+	}
 }

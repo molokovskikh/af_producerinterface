@@ -281,11 +281,30 @@ namespace ProducerInterface.Controllers
 			return RedirectToAction("JobList", "Report");
 		}
 
+		[HttpGet]
+		public ActionResult JobList(long? cid)
+		{
+			ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
+			return View(cid);
+		}
+
+		[HttpPost]
+		public ActionResult JobList(int? id)
+		{
+			if (id.HasValue)
+				return RedirectToAction("AddJob", "Report", new { id = id.Value });
+			else {
+				ModelState.AddModelError("id", "Выберите тип отчета, который хотите создать");
+				ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
+				return View();
+			}
+		}
+
 		/// <summary>
 		/// Выводит список заданий производителя
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult JobList(long? cid)
+		public ActionResult SearchResult(long? cid)
 		{
 			var schedulerName = GetSchedulerName();
 			// вытащили всех создателей, создававших отчеты этого производителя
