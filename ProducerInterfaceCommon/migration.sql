@@ -981,8 +981,6 @@ END$$
 ALTER TABLE `promotions`
  ADD COLUMN `AllSuppliers` TINYINT(1) UNSIGNED NULL DEFAULT NULL;
 
-# не внесено на боевую
-
 drop PROCEDURE `ProductResidueReport`;
 
 CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `ProductResidueReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `SupplierId` VARCHAR(255), IN `NotSupplierId` VARCHAR(255), IN `DateFrom` datetime)
@@ -1008,8 +1006,8 @@ BEGIN
 	group by p.CatalogId, T.ProducerId, T.RegionId, T.SupplierId) as TT
 left outer join producerinterface.regionnames r on r.RegionCode = TT.RegionId
 left outer join producerinterface.catalognames cn on cn.CatalogId = TT.CatalogId
-left outer join producerinterface.producernames p on p.ProducerId = TT.ProducerId
-left outer join producerinterface.SupplierNames s on s.SupplierId = TT.SupplierId
+inner join producerinterface.producernames p on p.ProducerId = TT.ProducerId
+inner join producerinterface.SupplierNames s on s.SupplierId = TT.SupplierId
 order by cn.CatalogName, p.ProducerName, r.RegionName');
   
   PREPARE stmt FROM @sql;
@@ -1018,7 +1016,7 @@ order by cn.CatalogName, p.ProducerName, r.RegionName');
   
   #select @sql;
 
-END
+END$$
 
 drop PROCEDURE `ProductResidueReportNow`;
 
@@ -1056,7 +1054,7 @@ BEGIN
 left outer join producerinterface.regionnames r on r.RegionCode = TTT.RegionCode
 left outer join producerinterface.catalognames cn on cn.CatalogId = TTT.CatalogId
 inner join producerinterface.producernames p on p.ProducerId = TTT.ProducerId
-left outer join producerinterface.suppliernames s on s.SupplierId = TTT.SupplierId
+inner join producerinterface.suppliernames s on s.SupplierId = TTT.SupplierId
 order by cn.CatalogName, p.ProducerName, r.RegionName');
   
   PREPARE stmt FROM @sql;
@@ -1065,8 +1063,7 @@ order by cn.CatalogName, p.ProducerName, r.RegionName');
   
   #select @sql;
 
-END
-
+END$$
 
 insert into ReportDescription (Id, Name, ClassName, Description)
 values (1, 'Рейтинг товаров', 'ProductRatingReport', 'Описание 1');
@@ -1082,6 +1079,38 @@ insert into ReportDescription (Id, Name, ClassName, Description)
 values (6, 'Продажи вторичных дистрибьюторов', 'SecondarySalesReport', 'Описание 6');
 insert into ReportDescription (Id, Name, ClassName, Description)
 values (7, 'Мониторинг остатков у дистрибьюторов', 'ProductResidueReport', 'Описание 7');
+
+# ниже не внесено в базу
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view regionsnamesleaf as 
+select rr.ReportId, rr.RegionCode, r.Region as RegionName
+from ReportRegion rr  
+inner join farm.regions r on r.RegionCode = rr.RegionCode
+left join farm.regions r2 on r.RegionCode = r2.Parent
+where r2.RegionCode is null
+and r.DrugsSearchRegion = 0 
+and r.RegionCode not in (524288); 
+
+CREATE TABLE `ReportRegion` (
+	`ReportId` INT(11) NOT NULL,
+	`RegionCode` BIGINT(20) UNSIGNED NOT NULL,
+	PRIMARY KEY (`RegionCode`, `ReportId`),
+	INDEX `IDX_ReportId` (`ReportId`),
+	CONSTRAINT `FK_ReportRegion_To_Report` FOREIGN KEY (`ReportId`) REFERENCES `ReportDescription` (`Id`)
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+
+insert into ReportRegion(ReportId, RegionCode)
+select 7, RegionCode 
+from farm.Regions r
+where r.DrugsSearchRegion = 0 
+and r.RegionCode not in (524288, 0); 
+
+# добавить во все процедуры
+
+	and (RegionCode in (', RegionCode, ')
+		or RegionCode in (select RegionCode from farm.Regions where Parent in (', RegionCode, ')))
 
 
 

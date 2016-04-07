@@ -5,6 +5,7 @@
         var listCreator = new List<SelectListItem>();
         listCreator.Add(new SelectListItem() { Text = "Выберите создателя", Selected = true });
         listCreator.AddRange((List<SelectListItem>)ViewData["creators"]);
+        Layout = null;
 }
 
 

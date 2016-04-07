@@ -67,6 +67,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }
         public DbSet<promotions> promotions { get; set; }
+        public DbSet<ReportRegion> ReportRegion { get; set; }
+        public DbSet<regionsnamesleaf> regionsnamesleaf { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {

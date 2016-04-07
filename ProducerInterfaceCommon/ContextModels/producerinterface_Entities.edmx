@@ -290,6 +290,14 @@
           <Property Name="ClassName" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="1000" Nullable="false" />
         </EntityType>
+        <EntityType Name="ReportRegion">
+          <Key>
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="RegionCode" />
+          </Key>
+          <Property Name="ReportId" Type="int" Nullable="false" />
+          <Property Name="RegionCode" Type="ubigint" Nullable="false" />
+        </EntityType>
         <EntityType Name="ReportRunLog">
           <Key>
             <PropertyRef Name="Id" />
@@ -503,6 +511,17 @@
           <Property Name="RegionName" Type="varchar" MaxLength="30" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.regionsnamesleaf" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="regionsnamesleaf">
+          <Key>
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="RegionCode" />
+          </Key>
+          <Property Name="ReportId" Type="int" Nullable="false" />
+          <Property Name="RegionCode" Type="ubigint" Nullable="false" />
+          <Property Name="RegionName" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.reportrunlogwithuser" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="reportrunlogwithuser">
           <Key>
@@ -692,6 +711,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ReportRegion_To_Report">
+          <End Role="ReportDescription" Type="Self.ReportDescription" Multiplicity="1" />
+          <End Role="ReportRegion" Type="Self.ReportRegion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReportDescription">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportRegion">
+              <PropertyRef Name="ReportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_to_Group_controlpanel">
           <End Role="AccountGroup" Type="Self.AccountGroup" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -850,6 +881,7 @@
           <EntitySet Name="PromotionsToSupplier" EntityType="Self.PromotionsToSupplier" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="promotionToDrug" EntityType="Self.promotionToDrug" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="ReportDescription" EntityType="Self.ReportDescription" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="ReportRegion" EntityType="Self.ReportRegion" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="ReportRunLog" EntityType="Self.ReportRunLog" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reporttemplate" EntityType="Self.reporttemplate" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="reportxml" EntityType="Self.reportxml" Schema="producerinterface" store:Type="Tables" />
@@ -956,6 +988,13 @@ FROM `ratingreportorderitems` AS `ratingreportorderitems`</DefiningQuery>
 `regionnames`.`RegionName`
 FROM `regionnames` AS `regionnames`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="regionsnamesleaf" EntityType="Self.regionsnamesleaf" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`regionsnamesleaf`.`ReportId`, 
+`regionsnamesleaf`.`RegionCode`, 
+`regionsnamesleaf`.`RegionName`
+FROM `regionsnamesleaf` AS `regionsnamesleaf`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="reportrunlogwithuser" EntityType="Self.reportrunlogwithuser" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `reportrunlogwithuser`.`Id`, 
@@ -1033,6 +1072,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="fk_promotions_to_fileid" Association="Self.fk_promotions_to_fileid">
             <End Role="MediaFiles" EntitySet="MediaFiles" />
             <End Role="promotions" EntitySet="promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportRegion_To_Report" Association="Self.FK_ReportRegion_To_Report">
+            <End Role="ReportDescription" EntitySet="ReportDescription" />
+            <End Role="ReportRegion" EntitySet="ReportRegion" />
           </AssociationSet>
           <AssociationSet Name="FK_to_Group_controlpanel" Association="Self.FK_to_Group_controlpanel">
             <End Role="AccountGroup" EntitySet="AccountGroup" />
@@ -1347,6 +1390,12 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="promotions" EntitySet="promotions" />
             <End Role="PromotionsToSupplier" EntitySet="PromotionsToSupplier" />
           </AssociationSet>
+          <EntitySet Name="ReportRegion" EntityType="producerinterface_Model.ReportRegion" />
+          <AssociationSet Name="FK_ReportRegion_To_Report" Association="producerinterface_Model.FK_ReportRegion_To_Report">
+            <End Role="ReportDescription" EntitySet="ReportDescription" />
+            <End Role="ReportRegion" EntitySet="ReportRegion" />
+          </AssociationSet>
+          <EntitySet Name="regionsnamesleaf" EntityType="producerinterface_Model.regionsnamesleaf" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1795,6 +1844,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="ClassName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ReportRegion" Relationship="producerinterface_Model.FK_ReportRegion_To_Report" FromRole="ReportDescription" ToRole="ReportRegion" />
         </EntityType>
         <EntityType Name="PromotionsToSupplier">
           <Key>
@@ -1923,6 +1973,36 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ReportRegion">
+          <Key>
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="RegionCode" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+          <Property Name="RegionCode" Type="Decimal" Nullable="false" />
+          <NavigationProperty Name="ReportDescription" Relationship="producerinterface_Model.FK_ReportRegion_To_Report" FromRole="ReportRegion" ToRole="ReportDescription" />
+        </EntityType>
+        <Association Name="FK_ReportRegion_To_Report">
+          <End Type="producerinterface_Model.ReportDescription" Role="ReportDescription" Multiplicity="1" />
+          <End Type="producerinterface_Model.ReportRegion" Role="ReportRegion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReportDescription">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportRegion">
+              <PropertyRef Name="ReportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="regionsnamesleaf">
+          <Key>
+            <PropertyRef Name="RegionCode" />
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="RegionCode" Type="Decimal" Nullable="false" />
+          <Property Name="RegionName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2449,6 +2529,23 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportRegion">
+            <EntityTypeMapping TypeName="producerinterface_Model.ReportRegion">
+              <MappingFragment StoreEntitySet="ReportRegion">
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="regionsnamesleaf">
+            <EntityTypeMapping TypeName="producerinterface_Model.regionsnamesleaf">
+              <MappingFragment StoreEntitySet="regionsnamesleaf">
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="RegionName" ColumnName="RegionName" />
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

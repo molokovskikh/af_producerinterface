@@ -62,7 +62,7 @@ namespace ProducerInterfaceCommon.Models
 		{
 			var viewDataValues = new Dictionary<string, object>();
 
-			viewDataValues.Add("RegionCodeEqual", h.GetRegionList());
+			viewDataValues.Add("RegionCodeEqual", h.GetRegionList(Id));
 			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
 			viewDataValues.Add("CatalogIdEqual2", h.GetCatalogList(CatalogIdEqual2));
 

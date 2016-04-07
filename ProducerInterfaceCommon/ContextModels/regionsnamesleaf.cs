@@ -12,18 +12,10 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class ReportDescription
+    public partial class regionsnamesleaf
     {
-        public ReportDescription()
-        {
-            this.ReportRegion = new HashSet<ReportRegion>();
-        }
-    
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string ClassName { get; set; }
-        public string Description { get; set; }
-    
-        public virtual ICollection<ReportRegion> ReportRegion { get; set; }
+        public decimal RegionCode { get; set; }
+        public string RegionName { get; set; }
+        public int ReportId { get; set; }
     }
 }

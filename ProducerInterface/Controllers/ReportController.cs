@@ -52,7 +52,7 @@ namespace ProducerInterface.Controllers
 		{
 			if (!Id.HasValue)
 			{
-                ErrorMessage("Выберите тип отчета");
+        ErrorMessage("Выберите тип отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 

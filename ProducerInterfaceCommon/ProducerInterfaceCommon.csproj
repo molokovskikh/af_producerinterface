@@ -84,7 +84,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
@@ -200,7 +199,13 @@
     <Compile Include="ContextModels\PromotionsToSupplier.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\regionsnamesleaf.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\ReportDescription.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContextModels\ReportRegion.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\ReportRunLog.cs">
