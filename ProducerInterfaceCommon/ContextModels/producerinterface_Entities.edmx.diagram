@@ -66,6 +66,7 @@
         <AssociationConnector Association="producerinterface_Model.FK1_This_To_PromotionId" />
         <EntityTypeShape EntityType="producerinterface_Model.ReportRegion" Width="1.5" PointX="0.75" PointY="18.375" />
         <AssociationConnector Association="producerinterface_Model.FK_ReportRegion_To_Report" />
+        <EntityTypeShape EntityType="producerinterface_Model.regionsnamesleaftoreport" Width="1.5" PointX="16.375" PointY="6.75" />
         <EntityTypeShape EntityType="producerinterface_Model.regionsnamesleaf" Width="1.5" PointX="16.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>

@@ -7,6 +7,22 @@ using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+	public class ReportDescriptionUI
+	{
+		public int Id { get; set; }
+
+		[Display(Name = "Отчет")]
+		public string Name { get; set; }
+
+		[Display(Name = "Описание")]
+		[Required(ErrorMessage = "Добавьте описание отчета")]
+		public string Description { get; set; }
+
+		[Display(Name = "Доступные регионы")]
+		[Required(ErrorMessage = "Добавьте регионы")]
+		public List<decimal> RegionList { get; set; }
+	}
+
 	public class SortingPagingInfo
 	{
 		public int PageCount { get; set; }
@@ -112,10 +128,9 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Required(ErrorMessage = "Выберите регион")]
 		public List<long> RegionList { get; set; }
 
-        [UIHint("LongList")]
-        [Required(ErrorMessage = "Выберите поставщиков")]
-        public List<long> SuppierRegions { get; set; }
-
+		[UIHint("LongList")]
+		[Required(ErrorMessage = "Выберите поставщиков")]
+		public List<long> SuppierRegions { get; set; }
 
 		public int? PromotionFileId { get; set; }
 		public string PromotionFileName { get; set; }

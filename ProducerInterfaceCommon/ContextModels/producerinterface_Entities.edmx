@@ -514,6 +514,15 @@
 предупреждение 6002: В таблице или представлении "def.producerinterface.regionsnamesleaf" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="regionsnamesleaf">
           <Key>
+            <PropertyRef Name="RegionCode" />
+          </Key>
+          <Property Name="RegionCode" Type="ubigint" Nullable="false" />
+          <Property Name="RegionName" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.regionsnamesleaftoreport" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="regionsnamesleaftoreport">
+          <Key>
             <PropertyRef Name="ReportId" />
             <PropertyRef Name="RegionCode" />
           </Key>
@@ -990,10 +999,16 @@ FROM `regionnames` AS `regionnames`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="regionsnamesleaf" EntityType="Self.regionsnamesleaf" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
-`regionsnamesleaf`.`ReportId`, 
 `regionsnamesleaf`.`RegionCode`, 
 `regionsnamesleaf`.`RegionName`
 FROM `regionsnamesleaf` AS `regionsnamesleaf`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="regionsnamesleaftoreport" EntityType="Self.regionsnamesleaftoreport" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`regionsnamesleaftoreport`.`ReportId`, 
+`regionsnamesleaftoreport`.`RegionCode`, 
+`regionsnamesleaftoreport`.`RegionName`
+FROM `regionsnamesleaftoreport` AS `regionsnamesleaftoreport`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="reportrunlogwithuser" EntityType="Self.reportrunlogwithuser" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -1395,6 +1410,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="ReportDescription" EntitySet="ReportDescription" />
             <End Role="ReportRegion" EntitySet="ReportRegion" />
           </AssociationSet>
+          <EntitySet Name="regionsnamesleaftoreport" EntityType="producerinterface_Model.regionsnamesleaftoreport" />
           <EntitySet Name="regionsnamesleaf" EntityType="producerinterface_Model.regionsnamesleaf" />
           </EntityContainer>
         <EntityType Name="LogForNet">
@@ -1994,14 +2010,21 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="regionsnamesleaftoreport">
+          <Key>
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="RegionCode" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+          <Property Name="RegionCode" Type="Decimal" Nullable="false" />
+          <Property Name="RegionName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="regionsnamesleaf">
           <Key>
             <PropertyRef Name="RegionCode" />
-            <PropertyRef Name="ReportId" />
           </Key>
           <Property Name="RegionCode" Type="Decimal" Nullable="false" />
           <Property Name="RegionName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ReportId" Type="Int32" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2540,10 +2563,18 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="regionsnamesleaftoreport">
+            <EntityTypeMapping TypeName="producerinterface_Model.regionsnamesleaftoreport">
+              <MappingFragment StoreEntitySet="regionsnamesleaftoreport">
+                <ScalarProperty Name="RegionName" ColumnName="RegionName" />
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="regionsnamesleaf">
             <EntityTypeMapping TypeName="producerinterface_Model.regionsnamesleaf">
               <MappingFragment StoreEntitySet="regionsnamesleaf">
-                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
                 <ScalarProperty Name="RegionName" ColumnName="RegionName" />
                 <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
               </MappingFragment>

@@ -1,21 +1,28 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
-@model ReportDescription
+@model ReportDescriptionUI
 
 @{
-    ViewBag.Title = "Изменение описания отчета";
-    Layout = "~/Views/Shared/_MasterPage.cshtml";
+  ViewBag.Title = "Изменение свойств отчета";
+  Layout = "~/Views/Shared/_MasterPage.cshtml";
+  var propList = (List<OptionElement>)ViewData["Regions"];
 }
 
 <h2>Отчет "@Html.DisplayFor(m=>m.Name)"</h2>
 
-<hr />
-
 <div class="row">
     <div class="col-md-6">
         @using (Html.BeginForm()) {
-            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.Name)
+            <div>@Html.LabelFor(m => m.Description)</div>
             <div class="form-group">
-                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "20" })
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = "10", @cols = "30" })
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
+            <div>@Html.LabelFor(m => m.RegionList)</div>
+            <div class="form-group">
+                @Html.ListBoxFor(m => m.RegionList, new MultiSelectList(propList, "Value", "Text", Model.RegionList), new { style = "display: none;" })
+                @Html.ValidationMessageFor(m => m.RegionList)
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
@@ -26,3 +33,13 @@
     </div>
 </div>
 
+
+@section scripts {
+    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#RegionList').chosen({ width: '100%' });
+        });
+    </script>
+}

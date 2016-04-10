@@ -202,6 +202,9 @@
     <Compile Include="ContextModels\regionsnamesleaf.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\regionsnamesleaftoreport.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\ReportDescription.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>

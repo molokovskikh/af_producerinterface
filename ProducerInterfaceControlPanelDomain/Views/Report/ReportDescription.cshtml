@@ -2,24 +2,25 @@
 @model IEnumerable<ReportDescription>
 
 @{
-    ViewBag.Title = "Описания отчетов";
+    ViewBag.Title = "Свойства отчетов";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Описания отчетов</h2>
+<h2>Свойства отчетов</h2>
 
 <div class="row">
     <div class="col-md-4">
-        @using (Html.BeginForm("EditReportDescription", "Report", FormMethod.Get)) {
+        @using (Html.BeginForm()) {
             <div class="form-group">
                 <select id="id" name="id" class="form-control">
                     <option selected="selected"></option>
                     @if (Model != null) {
                         foreach (var item in Model) {
-                        <option value="@item.Id">@item.Name</option>
+                            <option value="@item.Id">@item.Name</option>
                         }
                     }
                 </select>
+                @Html.ValidationMessage("id")
             </div>
             <div class="form-group">
                 <input type="submit" value="Редактировать" class="btn btn-primary" />

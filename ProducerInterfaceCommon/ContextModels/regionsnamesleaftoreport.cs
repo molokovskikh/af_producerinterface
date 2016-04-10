@@ -12,8 +12,9 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class regionsnamesleaf
+    public partial class regionsnamesleaftoreport
     {
+        public int ReportId { get; set; }
         public decimal RegionCode { get; set; }
         public string RegionName { get; set; }
     }

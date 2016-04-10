@@ -62,8 +62,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(model);
 		}
 
+		[HttpGet]
 		public ActionResult ReportDescription()
 		{
+			var model = cntx_.ReportDescription.ToList();
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult ReportDescription(int? id)
+		{
+			if (id.HasValue)
+				return RedirectToAction("EditReportDescription", new {id = id.Value});
+
+			ModelState.AddModelError("id", "Выберите тип отчета, который хотите изменить");
 			var model = cntx_.ReportDescription.ToList();
 			return View(model);
 		}
@@ -71,17 +83,47 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult EditReportDescription(int id)
 		{
+			ViewData["Regions"] = cntx_.regionsnamesleaf
+				.ToList()
+				.OrderBy(x => x.RegionName)
+				.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
+				.ToList();
+
 			var model = cntx_.ReportDescription.Single(x => x.Id == id);
-			return View(model);
+			var modelUI = new ReportDescriptionUI() {
+				Id = model.Id,
+				Name = model.Name,
+				Description = model.Description,
+				RegionList = model.ReportRegion.Select(x => x.RegionCode).ToList()
+			};
+			return View(modelUI);
 		}
 
 		[HttpPost]
-		public ActionResult EditReportDescription(ReportDescription model)
+		public ActionResult EditReportDescription(ReportDescriptionUI modelUI)
 		{
-			var d = cntx_.ReportDescription.Single(x => x.Id == model.Id);
-			d.Description = model.Description;
+			if (!ModelState.IsValid)
+			{
+				ViewData["Regions"] = cntx_.regionsnamesleaf
+					.ToList()
+					.OrderBy(x => x.RegionName)
+					.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
+					.ToList();
+				return View(modelUI);
+			}
+			var model = cntx_.ReportDescription.Single(x => x.Id == modelUI.Id);
+			model.Description = modelUI.Description;
+			var rr = new List<ReportRegion>();
+			foreach (var r in modelUI.RegionList)
+				rr.Add(new ReportRegion() { RegionCode = r, ReportId = modelUI.Id });
+
+			foreach (var child in model.ReportRegion.ToList())
+				model.ReportRegion.Remove(child);
 			cntx_.SaveChanges();
-			SuccessMessage("Описание отчета сохранено");
+
+			model.ReportRegion = rr;
+      cntx_.SaveChanges();
+			SuccessMessage("Свойства отчета сохранены");
 			return RedirectToAction("ReportDescription");
 		}
 
