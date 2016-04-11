@@ -11,21 +11,15 @@
         subjectHeader = "Шапка письма";
         bodyHeader = "Подпись к письму";
     }
-
-    var mediaFiles = new List<SelectListItem>();
 }
 
 <h2>Шаблон "@Html.DisplayFor(m=>m.Description)"</h2>
-
-<hr />
 
 <div class="row">
     <div class="col-md-6">
         <div class="jumbotron">
             @using (Html.BeginForm("Edit", "Mail")) {
                 @Html.HiddenFor(model => model.Id)
-                @Html.DropDownList("AddMediaFiles", mediaFiles, new { style = "display: none;" })
-                @Html.DropDownList("RemoveMediaFiles", mediaFiles, new { style = "display: none;" })
                 <div class="form-group">
                     <p>@subjectHeader</p>
                     @if (Model.Id == (int)MailType.HeaderFooter) {
@@ -79,6 +73,37 @@
         </div>
     </div>
 }
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postFile">Добавить файл</button>
+
+<div id="postFile" class="modal fade" role="dialog">
+    @using (Html.BeginForm("AttachFile", "Mail", FormMethod.Post)) {
+        @Html.HiddenFor(model => model.Id)
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3>Добавить файл</h3>
+                </div>
+                <div class="modal-body" id="result">
+                    <div class="row">
+                        @foreach(var id in Model.AllMediaFiles){
+                        <div class="col-md-3">
+                            <img style="margin-top:10px" src="@Url.Action("GetFile", "MediaFiles", new { Id = id })" height="50" />
+                            <input name="fileId" type="checkbox" value="@id" />
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-group btn-group-sm">
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 @section scripts {
     <script type="text/javascript">

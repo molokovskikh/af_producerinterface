@@ -25,12 +25,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(files);
 		}
 
-		public ActionResult EmailFileList()
-		{
-			var files = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
-			return View(files);
-		}
-
+		//public ActionResult EmailFileList()
+		//{
+		//	var files = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
+		//	return View(files);
+		//}
 
 		public FileResult GetFile(int Id)
 		{

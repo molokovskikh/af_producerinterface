@@ -1449,7 +1449,18 @@ left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode');
 
 END$$
 
+drop table mailformToMediaFiles;
 
+CREATE TABLE `mailformToMediaFiles` (
+	`MailFormId` INT(10) NOT NULL,
+	`MediaFilesId` INT(10) NOT NULL,
+	PRIMARY KEY (`MailFormId`, `MediaFilesId`),
+	INDEX `IDX_MailFormId` (`MailFormId`),
+	CONSTRAINT `fk_to_mailform` FOREIGN KEY (`MailFormId`) REFERENCES `mailform` (`Id`) ON DELETE CASCADE,
+	CONSTRAINT `fk_to_MediaFiles` FOREIGN KEY (`MediaFilesId`) REFERENCES `MediaFiles` (`Id`) ON DELETE CASCADE
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
 
 
 

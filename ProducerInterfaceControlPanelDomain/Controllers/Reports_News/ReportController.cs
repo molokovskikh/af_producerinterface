@@ -73,7 +73,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult ReportDescription(int? id)
 		{
 			if (id.HasValue)
-				return RedirectToAction("EditReportDescription", new {id = id.Value});
+				return RedirectToAction("EditReportDescription", new { id = id.Value });
 
 			ModelState.AddModelError("id", "Выберите тип отчета, который хотите изменить");
 			var model = cntx_.ReportDescription.ToList();
@@ -83,18 +83,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult EditReportDescription(int id)
 		{
+			var model = cntx_.ReportDescription.Single(x => x.Id == id);
+			var regionCode = model.ReportRegion.Select(x => x.RegionCode).ToList();
+
 			ViewData["Regions"] = cntx_.regionsnamesleaf
 				.ToList()
 				.OrderBy(x => x.RegionName)
-				.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
+				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionCode.Contains(x.RegionCode) })
 				.ToList();
 
-			var model = cntx_.ReportDescription.Single(x => x.Id == id);
-			var modelUI = new ReportDescriptionUI() {
+			var modelUI = new ReportDescriptionUI()
+			{
 				Id = model.Id,
 				Name = model.Name,
 				Description = model.Description,
-				RegionList = model.ReportRegion.Select(x => x.RegionCode).ToList()
+				RegionList = regionCode
 			};
 			return View(modelUI);
 		}
@@ -102,16 +105,18 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult EditReportDescription(ReportDescriptionUI modelUI)
 		{
+			var model = cntx_.ReportDescription.Single(x => x.Id == modelUI.Id);
+			var regionCode = model.ReportRegion.Select(x => x.RegionCode).ToList();
+
 			if (!ModelState.IsValid)
 			{
 				ViewData["Regions"] = cntx_.regionsnamesleaf
 					.ToList()
 					.OrderBy(x => x.RegionName)
-					.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
+					.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionCode.Contains(x.RegionCode) })
 					.ToList();
 				return View(modelUI);
 			}
-			var model = cntx_.ReportDescription.Single(x => x.Id == modelUI.Id);
 			model.Description = modelUI.Description;
 			var rr = new List<ReportRegion>();
 			foreach (var r in modelUI.RegionList)
@@ -122,7 +127,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			cntx_.SaveChanges();
 
 			model.ReportRegion = rr;
-      cntx_.SaveChanges();
+			cntx_.SaveChanges();
 			SuccessMessage("Свойства отчета сохранены");
 			return RedirectToAction("ReportDescription");
 		}

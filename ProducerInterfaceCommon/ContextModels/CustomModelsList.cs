@@ -42,14 +42,12 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Body { get; set; }
 		public string Description { get; set; }
 		public List<int> MediaFiles { get; set; }
-		public List<int> AddMediaFiles { get; set; }
-		public List<int> RemoveMediaFiles { get; set; }
+		public List<int> AllMediaFiles { get; set; }
 
 		public MailFormUi()
 		{
 			MediaFiles = new List<int>();
-			AddMediaFiles = new List<int>();
-			RemoveMediaFiles = new List<int>();
+			AllMediaFiles = new List<int>();
 		}
 	}
 

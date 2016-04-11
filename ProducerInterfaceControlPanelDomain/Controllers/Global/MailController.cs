@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using System;
+using System.Collections.Generic;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -16,8 +15,23 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns>Возвращает список шаблонов писем</returns>
 		public ActionResult Index()
 		{
-			return View();
+			var model = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email)
+				.Select(x => new { x.Id, x.ImageName }).ToList()
+				.Select(x => Tuple.Create(x.Id, x.ImageName)).ToList();
+			return View(model);
 		}
+
+		public ActionResult DeleteFile(int Id)
+		{
+			var file = cntx_.MediaFiles.Find(Id);
+			if (file != null)
+			{
+				cntx_.MediaFiles.Remove(file);
+				cntx_.SaveChanges();
+      }
+			return RedirectToAction("Index");
+		}
+
 
 		/// <summary>
 		/// 
@@ -33,9 +47,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (mailForm == null)
 				return RedirectToAction("Index");
 
-			var mediaFiles = mailForm.MediaFiles.Select(x => x.Id).ToList();
-			var model = new MailFormUi() { Body = mailForm.Body, Description = mailForm.Description, Id = mailForm.Id, Subject = mailForm.Subject, MediaFiles = mediaFiles };
-      return View(model);
+			var allMediaFiles = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
+      var mediaFiles = mailForm.MediaFiles.Select(x => x.Id).ToList();
+			var model = new MailFormUi() { Body = mailForm.Body, Description = mailForm.Description, Id = mailForm.Id, Subject = mailForm.Subject, MediaFiles = mediaFiles, AllMediaFiles = allMediaFiles };
+			return View(model);
+		}
+
+		public ActionResult AttachFile(int Id, List<int> fileId)
+		{
+			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == Id);
+			var mediaFiles = cntx_.MediaFiles.Where(x => fileId.Contains(x.Id)).ToList();
+			foreach (var f in mediaFiles)
+				mailForm.MediaFiles.Add(f);
+			cntx_.SaveChanges();
+
+			return RedirectToAction("Index");
 		}
 
 		/// <summary>
@@ -51,18 +77,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			mailForm.Body = model.Body;
 			mailForm.Subject = model.Subject;
-
-			if (model.AddMediaFiles != null && model.AddMediaFiles.Count > 0) {
-				var addMediaFiles = cntx_.MediaFiles.Where(x => model.AddMediaFiles.Contains(x.Id)).ToList();
-				foreach (var addMediaFile in addMediaFiles)
-					mailForm.MediaFiles.Add(addMediaFile);
-			}
-
-			if (model.RemoveMediaFiles != null && model.RemoveMediaFiles.Count > 0) {
-				var removeMediaFiles = cntx_.MediaFiles.Where(x => model.RemoveMediaFiles.Contains(x.Id)).ToList();
-				foreach (var removeMediaFile in removeMediaFiles)
-					mailForm.MediaFiles.Remove(removeMediaFile);
-			}
 
 			cntx_.SaveChanges();
 			SuccessMessage("Шаблон письма сохранен");
