@@ -30,7 +30,7 @@ namespace ProducerInterface
             {
                 Exception ex = Server.GetLastError();
 
-                log4net.Config.XmlConfigurator.Configure();
+                //log4net.Config.XmlConfigurator.Configure();
 
                 ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
 

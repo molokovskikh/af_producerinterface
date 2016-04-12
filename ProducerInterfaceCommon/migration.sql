@@ -1080,8 +1080,6 @@ values (6, 'Продажи вторичных дистрибьюторов', 'Se
 insert into ReportDescription (Id, Name, ClassName, Description)
 values (7, 'Мониторинг остатков у дистрибьюторов', 'ProductResidueReport', 'Описание 7');
 
-# ниже не внесено в базу
-
 create or replace DEFINER=`RootDBMS`@`127.0.0.1` view regionsnamesleaftoreport as 
 select rr.ReportId, rr.RegionCode, r.Region as RegionName
 from ReportRegion rr  

@@ -43,28 +43,24 @@
     }
 </div>
 
+<hr/>
+<h4>Прикрепленные файлы</h4>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postFile">Загрузить файл</button>
 
-<h4>Файлы</h4>
-
-@using (Html.BeginForm("DeleteFile", "Mail", FormMethod.Post)) {
+@if (Model != null && Model.Count > 0) {
+    using (Html.BeginForm("DeleteFile", "Mail", FormMethod.Post)) {
+    <hr />
     <div class="row">
         @foreach (var item in Model) {
             <div class="col-md-3">
-                <img style="margin-top:10px" src="@Url.Action("GetFile", "MediaFiles", new { Id = item.Item1 })" height="50"/>
+                <img style="max-height:50px; margin:10px 0;" src="@Url.Action("GetFile", "MediaFiles", new { Id = item.Item1 })"/>
                 <input name="Id" type="checkbox" value="@item.Item1"/>
                 <span>@item.Item2</span>
             </div>
         }
     </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-md-2">
-            <input type="submit" value="Удалить файл из системы" class="btn btn-primary" />
-        </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postFile">Загрузить файл</button>
-        </div>
-    </div>
+    <input type="submit" value="Удалить файл из системы" class="btn btn-primary" />
+    }
 }
 
 <div id="postFile" class="modal fade" role="dialog">

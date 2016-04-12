@@ -32,6 +32,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return RedirectToAction("Index");
 		}
 
+		public ActionResult DeleteLinksToFile(int Id, List<int> fileId)
+		{
+			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == Id);
+			var mediaFiles = cntx_.MediaFiles.Where(x => fileId.Contains(x.Id)).ToList();
+			foreach (var f in mediaFiles)
+				mailForm.MediaFiles.Remove(f);
+			cntx_.SaveChanges();
+			return RedirectToAction("Edit", new { id = Id });
+		}
 
 		/// <summary>
 		/// 
@@ -47,8 +56,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (mailForm == null)
 				return RedirectToAction("Index");
 
-			var allMediaFiles = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
-      var mediaFiles = mailForm.MediaFiles.Select(x => x.Id).ToList();
+			// файлы, присоединенные к форме
+			var mediaFiles = mailForm.MediaFiles.Select(x => x.Id).ToList();
+			// все доступные файлы, кроме уже присоединенных
+			var allMediaFiles = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email && !mediaFiles.Contains(x.Id)).Select(x => x.Id).ToList();
 			var model = new MailFormUi() { Body = mailForm.Body, Description = mailForm.Description, Id = mailForm.Id, Subject = mailForm.Subject, MediaFiles = mediaFiles, AllMediaFiles = allMediaFiles };
 			return View(model);
 		}
@@ -61,7 +72,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				mailForm.MediaFiles.Add(f);
 			cntx_.SaveChanges();
 
-			return RedirectToAction("Index");
+			return RedirectToAction("Edit", new { id = Id });
 		}
 
 		/// <summary>
@@ -77,10 +88,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			mailForm.Body = model.Body;
 			mailForm.Subject = model.Subject;
-
 			cntx_.SaveChanges();
-			SuccessMessage("Шаблон письма сохранен");
-			return RedirectToAction("Index");
+
+			return RedirectToAction("Edit", new { id = model.Id });
 		}
 
 	}

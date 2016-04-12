@@ -148,7 +148,7 @@ namespace ProducerInterfaceCommon.Controllers
 
             if (shouldRemember)
             {
-                cookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
+							cookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
             }
 
             FormsAuthentication.SetAuthCookie(UserLoginOrEmail, false);

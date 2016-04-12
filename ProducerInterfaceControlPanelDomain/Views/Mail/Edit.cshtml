@@ -36,17 +36,17 @@
                 </div>
 
                 <div class="form-group">
-                    <input hidden="hidden" id="IsBodyHtml" value="false"/>
+                    <input hidden="hidden" id="IsBodyHtml" value="false" />
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Сохранить изменения"/>
+                    <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
                 </div>
             }
         </div>
     </div>
     <div class="col-md-6">
-        <h2>Расшифровка подставляемых значений</h2>
+        <h4>Расшифровка подставляемых значений</h4>
         <ul>
             <li>CreatorName - имя пользователя, создавшего отчет</li>
             <li>DateTimeNow - текущее время</li>
@@ -60,21 +60,26 @@
             <li>UserLogin - email пользователя</li>
             <li>UserName - имя пользователя, указанное им при регистрации</li>
         </ul>
+        <hr/>
+        <h4>Прикрепленные файлы</h4>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postFile">Добавить файл</button>
+        @if (Model.MediaFiles != null && Model.MediaFiles.Count > 0) {
+            using (Html.BeginForm("DeleteLinksToFile", "Mail", FormMethod.Post)) {
+            <hr />
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="row">
+                @foreach(var id in Model.MediaFiles){
+                    <div class="col-md-4">
+                        <img src="@Url.Action("GetFile", "MediaFiles", new { Id = id })" style="max-height:100px; margin:10px 0;" />
+                        <input name="fileId" type="checkbox" value="@id" />
+                    </div>
+                }
+            </div>
+            <input type="submit" value="Удалить файл из сообщения" class="btn btn-primary" />
+            }
+        }
     </div>
 </div>
-
-@if (Model.MediaFiles != null && Model.MediaFiles.Count > 0) {
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Прикрепленные файлы</h2>
-            @foreach(var id in Model.MediaFiles){
-                <img src="@Url.Action("GetFile", "MediaFiles", new { Id = id })" style="max-height:50px;" onclick="alert(@id)" />
-            }
-        </div>
-    </div>
-}
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postFile">Добавить файл</button>
 
 <div id="postFile" class="modal fade" role="dialog">
     @using (Html.BeginForm("AttachFile", "Mail", FormMethod.Post)) {
@@ -88,10 +93,10 @@
                 <div class="modal-body" id="result">
                     <div class="row">
                         @foreach(var id in Model.AllMediaFiles){
-                        <div class="col-md-3">
-                            <img style="margin-top:10px" src="@Url.Action("GetFile", "MediaFiles", new { Id = id })" height="50" />
-                            <input name="fileId" type="checkbox" value="@id" />
-                        </div>
+                            <div class="col-md-3">
+                                <img style="margin-top:10px" src="@Url.Action("GetFile", "MediaFiles", new { Id = id })" height="50" />
+                                <input name="fileId" type="checkbox" value="@id" />
+                            </div>
                         }
                     </div>
                 </div>

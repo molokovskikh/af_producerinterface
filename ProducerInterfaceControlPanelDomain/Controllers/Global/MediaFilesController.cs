@@ -51,7 +51,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			if (file != null && file.ContentLength > 0) {
 				var fileId = SaveFile(file, EntityType.Email);
-				SuccessMessage("Файл успешно загружен");
 				return RedirectToAction("Index", "Mail");
       }
 			else {

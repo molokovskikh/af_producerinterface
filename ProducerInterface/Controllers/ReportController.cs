@@ -9,39 +9,34 @@ using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
 using System.Data;
 using System.IO;
-using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterface.Controllers
 {
 	public class ReportController : ProducerInterfaceCommon.Controllers.BaseReportController
 	{
-		// GET: /Report/
+
+		protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
+		protected NamesHelper h;
+		protected long userId;
+		protected long producerId;
+
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			TypeLoginUser = TypeUsers.ProducerUser;
 			base.OnActionExecuting(filterContext);
-			userId = CurrentUser.Id;
-			producerId = (long)CurrentUser.AccountCompany.ProducerId;
-			h = new NamesHelper(cntx_, userId);
 
 			if (CurrentUser != null)
 			{
+				userId = CurrentUser.Id;
+				producerId = (long)CurrentUser.AccountCompany.ProducerId;
+				h = new NamesHelper(cntx_, userId);
+
 				if (CurrentUser.AccountCompany.ProducerId != null)
-				{
-					ViewBag.Producernames = cntx_.producernames.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).First().ProducerName;
-				}
+					ViewBag.Producernames = cntx_.producernames.Where(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId).First().ProducerName;
 				else
-				{
 					ViewBag.Producernames = "Физическое лицо";
-				}
 			}
 		}
-
-		protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
-
-		protected NamesHelper h;
-		protected long userId;
-		protected long producerId;
 
 		/// <summary>
 		/// Возвращает форму указанного типа для заполнения параметров отчета, проверяет их, сохраняет задание в шедулере Quartz
@@ -284,6 +279,13 @@ namespace ProducerInterface.Controllers
 		[HttpGet]
 		public ActionResult JobList(long? cid)
 		{
+			//try {
+				throw new NotSupportedException("Искусственно вызванная ошибка");
+			//}
+			//catch (Exception e)
+			//{
+			//	logger.Error(e.Message);
+   //   }
 			ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
 			return View(cid);
 		}
