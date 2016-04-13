@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Web
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerInterface", "ProducerInterface\ProducerInterface.csproj", "{2A3AAF08-E77F-4337-BA73-3E67E0E166F5}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quartz.Server", "Quartz.Server\Quartz.Server.csproj", "{889D775F-A54D-4DDE-8FA0-E61D02B44A0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerInterfaceCommon", "ProducerInterfaceCommon\ProducerInterfaceCommon.csproj", "{01558158-99B8-4F25-98E7-B2EDEADB987A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerInterface.Test", "ProducerInterface.Test\ProducerInterface.Test.csproj", "{8BD1AC2A-40C6-4528-9E59-396708707477}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,22 @@ Global
 		{01558158-99B8-4F25-98E7-B2EDEADB987A}.Test|Any CPU.Build.0 = Release|Any CPU
 		{01558158-99B8-4F25-98E7-B2EDEADB987A}.Test|x86.ActiveCfg = Release|Any CPU
 		{01558158-99B8-4F25-98E7-B2EDEADB987A}.Test|x86.Build.0 = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Debug|x86.Build.0 = Debug|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Release|x86.ActiveCfg = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Release|x86.Build.0 = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Relise|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Relise|Any CPU.Build.0 = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Relise|x86.ActiveCfg = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Relise|x86.Build.0 = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Test|Any CPU.Build.0 = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Test|x86.ActiveCfg = Release|Any CPU
+		{8BD1AC2A-40C6-4528-9E59-396708707477}.Test|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
