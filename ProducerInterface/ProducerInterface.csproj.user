@@ -12,6 +12,8 @@
     <NameOfLastUsedPublishProfile>TEST</NameOfLastUsedPublishProfile>
     <WebStackScaffolding_DbContextTypeFullName>ProducerInterfaceCommon.ReportModels.reportsEntities</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
+    <ToolsVersionPromptShown>1.8</ToolsVersionPromptShown>
+    <UseIISExpress>true</UseIISExpress>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
