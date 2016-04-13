@@ -280,7 +280,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult JobList(long? cid)
 		{
 			//try {
-				throw new NotSupportedException("Искусственно вызванная ошибка");
+				//throw new NotSupportedException("Искусственно вызванная ошибка");
 			//}
 			//catch (Exception e)
 			//{
