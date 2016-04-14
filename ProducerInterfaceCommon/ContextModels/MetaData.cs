@@ -4,9 +4,41 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using System.Linq;
+using System.Text;
+using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+
+	public partial class AccountFeedBack
+	{
+		public FeedBackTypePrivate TypeEnum {
+			get { return (FeedBackTypePrivate)Type; }
+			set { Type = (sbyte)value; }
+		}
+
+		public FeedBackStatus StatusEnum
+		{
+			get { return (FeedBackStatus)Status; }
+			set { Status = (sbyte)value; }
+		}
+
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+			sb.AppendLine(Description);
+			sb.AppendLine();
+			sb.AppendLine($"тип сообщения: {TypeEnum.DisplayName()}");
+			sb.AppendLine($"адрес страницы: {UrlString}");
+			sb.AppendLine($"идентификатор сообщения: {Id}");
+			sb.AppendLine($"контакты: {Contacts}");
+			//sb.AppendLine($"Дата: {DateAdd}");
+			//sb.AppendLine($"Статус сообщения: {StatusEnum.DisplayName()}");
+
+			return sb.ToString();
+		}
+
+	}
 
 	public partial class NewsChange
 	{
@@ -23,7 +55,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	[MetadataType(typeof(NotificationToProducersMetaData))]
 	public partial class NotificationToProducers
 	{
-   
+
 	}
 
 	public class NotificationToProducersMetaData
@@ -108,8 +140,8 @@ namespace ProducerInterfaceCommon.ContextModels
 	}
 
 
-    [MetadataType(typeof(AccountMetaData))]
-    public partial class Account
+	[MetadataType(typeof(AccountMetaData))]
+	public partial class Account
 	{
 		[Display(Name = "IP-адрес")]
 		public string IP { get; set; }
@@ -132,21 +164,24 @@ namespace ProducerInterfaceCommon.ContextModels
 			set { TypeUser = (SByte)value; }
 		}
 
-        public long ID_LOG {
-            get
-            {
-                if (_id_log > 0) return _id_log;
-                else return Id;
-            } set { _id_log = value; } }
+		public long ID_LOG
+		{
+			get
+			{
+				if (_id_log > 0) return _id_log;
+				else return Id;
+			}
+			set { _id_log = value; }
+		}
 
-        private long _id_log { get; set; }
-            
+		private long _id_log { get; set; }
+
 	}
 
-    public class AccountMetaData
-    {
+	public class AccountMetaData
+	{
 
-    }
+	}
 
 	public partial class AccountGroup
 	{
@@ -160,18 +195,14 @@ namespace ProducerInterfaceCommon.ContextModels
 	public partial class promotions
 	{
 		public List<OptionElement> GlobalDrugList { get; set; }
-        public List<OptionElement> RegionnamesList
-        {
-            get; set;
-        }
+		public List<OptionElement> RegionnamesList { get; set; }
 
-        public void GetRegionnamesList()
-        {
-            var cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
-            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, cntx.Account.Where(xxx => xxx.Id == this.Account.Id).First().Id);
-            RegionnamesList = h.GetPromotionRegionNames(Convert.ToUInt64(this.RegionMask));
-        }
-
+		public void GetRegionnamesList()
+		{
+			var cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+			var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, cntx.Account.Where(xxx => xxx.Id == this.Account.Id).First().Id);
+			RegionnamesList = h.GetPromotionRegionNames(Convert.ToUInt64(this.RegionMask));
+		}
 	}
 
 	[MetadataType(typeof(promotionsMetaData))]
@@ -193,7 +224,6 @@ namespace ProducerInterfaceCommon.ContextModels
 		public bool AgencyDisabled { get; set; }
 		public string Name { get; set; }
 		public decimal RegionMask { get; set; }
-
 
 		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
 		public Nullable<System.DateTime> Begin { get; set; }
@@ -261,7 +291,6 @@ namespace ProducerInterfaceCommon.ContextModels
 			get { return (DisplayStatus)DisplayStatus; }
 			set { DisplayStatus = (int)value; }
 		}
-
 	}
 
 	public class JobExtendWithProducerMetaData
@@ -297,8 +326,8 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Creator { get; set; }
 
 		[ScaffoldColumn(false)]
-        [Display(Name = "Дата создания")]
-        public System.DateTime CreationDate { get; set; }
+		[Display(Name = "Дата создания")]
+		public System.DateTime CreationDate { get; set; }
 
 		[Display(Name = "Изменен")]
 		public System.DateTime LastModified { get; set; }

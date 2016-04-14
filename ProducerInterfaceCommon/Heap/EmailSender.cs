@@ -225,6 +225,18 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
 
+		// Обратная связь, сотрудникам
+		public static void SendFeedBackMessage(producerinterface_Entities cntx, Account user, string message, string Ip)
+		{
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			var subject = $"Сообщение пользователя с сайта {siteName}";
+
+			var di = new DiagnosticInformation() { Body = message, User = user, UserIp = Ip, ActionName = "Обратная связь" };
+			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
+		}
+
+
 		// Создание акции, пользователю и расширенное сотрудникам
 		public static void SendNewPromotion(producerinterface_Entities cntx, long userId, long promotionId, string ip)
 		{
@@ -375,20 +387,24 @@ namespace ProducerInterfaceCommon.Heap
 			{
 				var sb = new StringBuilder();
 
-				// у админов AccountCompany is null
-				var ac = User.AccountCompany;
-        if (ProducerId == null && ac != null && ac.ProducerId != null)
-	        ProducerId = ac.ProducerId;
+				// может быть незарегистрированный пользователь
+				if (User != null)
+				{ 
+					// у админов AccountCompany is null
+					var ac = User.AccountCompany;
+					if (ProducerId == null && ac != null && ac.ProducerId != null)
+						ProducerId = ac.ProducerId;
 
-				if (string.IsNullOrEmpty(ProducerName) && ProducerId != null) {
-					var producer = cntx.producernames.SingleOrDefault(x => x.ProducerId == ac.ProducerId);
-					if (producer != null)
-						ProducerName = producer.ProducerName;
+					if (string.IsNullOrEmpty(ProducerName) && ProducerId != null) {
+						var producer = cntx.producernames.SingleOrDefault(x => x.ProducerId == ac.ProducerId);
+						if (producer != null)
+							ProducerName = producer.ProducerName;
+					}
+
+					// у новых пользоватей может не быть производителя, если они не нашли его в системе, а указали его
+					if (string.IsNullOrEmpty(ProducerName) && ProducerId == null && ac != null)
+						ProducerName = ac.Name;
 				}
-
-				// у новых пользоватей может не быть производителя, если они не нашли его в системе, а указали его
-				if (string.IsNullOrEmpty(ProducerName) && ProducerId == null && ac != null)
-					ProducerName = ac.Name;
 
 				if (!ActionDate.HasValue)
 					ActionDate = DateTime.Now;
@@ -397,8 +413,13 @@ namespace ProducerInterfaceCommon.Heap
 				sb.AppendLine();
 				sb.AppendLine();
 				sb.AppendLine("Дополнительная информация");
-				sb.AppendLine($"пользователь: {User.Name} (id={User.Id}, {User.Login}, IP {UserIp})");
-				sb.AppendLine($"производитель: {ProducerName} (id={ProducerId})");
+				if (User != null)
+				{
+					sb.AppendLine($"пользователь: {User.Name} (id={User.Id}, {User.Login}, IP {UserIp})");
+					sb.AppendLine($"производитель: {ProducerName} (id={ProducerId})");
+				}
+				else
+					sb.AppendLine($"Незарегистрированный пользователь (IP {UserIp})");
 				sb.AppendLine($"действие: {ActionName}, время {ActionDate}");
 				if (!string.IsNullOrEmpty(ReportId))
 					sb.AppendLine($"отчет: {ReportName} (id={ReportId})");

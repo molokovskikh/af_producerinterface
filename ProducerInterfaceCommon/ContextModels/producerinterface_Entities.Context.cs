@@ -61,7 +61,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<MediaFiles> MediaFiles { get; set; }
         public DbSet<Account> Account { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
-        public DbSet<AccountFeedBackComment> AccountFeedBackComment { get; set; }
         public DbSet<ReportDescription> ReportDescription { get; set; }
         public DbSet<PromotionsToSupplier> PromotionsToSupplier { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }

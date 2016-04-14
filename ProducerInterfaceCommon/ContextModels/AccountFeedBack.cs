@@ -14,11 +14,6 @@ namespace ProducerInterfaceCommon.ContextModels
     
     public partial class AccountFeedBack
     {
-        public AccountFeedBack()
-        {
-            this.AccountFeedBackComment = new HashSet<AccountFeedBackComment>();
-        }
-    
         public long Id { get; set; }
         public sbyte Status { get; set; }
         public string Description { get; set; }
@@ -27,8 +22,10 @@ namespace ProducerInterfaceCommon.ContextModels
         public string UrlString { get; set; }
         public Nullable<sbyte> Type { get; set; }
         public string Contacts { get; set; }
+        public string Comment { get; set; }
+        public Nullable<long> AdminId { get; set; }
+        public Nullable<System.DateTime> DateEdit { get; set; }
     
         public virtual Account Account { get; set; }
-        public virtual ICollection<AccountFeedBackComment> AccountFeedBackComment { get; set; }
     }
 }

@@ -22,19 +22,19 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
     public class FeedBackItemSelect : FeedBackItem
     {
-        public List<FeedBackComment> Comments{get;set;}
+        //public List<FeedBackComment> Comments{get;set;}
         public int FeedStatusId { get; set; }
         public List<OptionElement> StatusList { get; set; }
     }
 
-    public class FeedBackComment
-    {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public DateTime DateAdd { get; set; }
-        public long IdAccount { get; set; }
-        public string AdminName { get; set; }
-    }
+    //public class FeedBackComment
+    //{
+    //    public int Id { get; set; }
+    //    public string Description { get; set; }
+    //    public DateTime DateAdd { get; set; }
+    //    public long IdAccount { get; set; }
+    //    public string AdminName { get; set; }
+    //}
 
     public class FeedBackItem
     {

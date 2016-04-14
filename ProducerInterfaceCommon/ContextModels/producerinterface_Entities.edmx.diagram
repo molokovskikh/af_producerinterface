@@ -50,9 +50,6 @@
         <AssociationConnector Association="producerinterface_Model.mailformToMediaFiles" />
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="1.5" PointX="6.125" PointY="23.75" />
         <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBackComment" Width="1.5" PointX="8" PointY="23.375" />
-        <AssociationConnector Association="producerinterface_Model.FK2_Comment_AccountAdminId" />
-        <AssociationConnector Association="producerinterface_Model.FK1_Comment_To_Feedback" />
         <EntityTypeShape EntityType="producerinterface_Model.ReportDescription" Width="1.5" PointX="0.75" PointY="15.75" />
         <EntityTypeShape EntityType="producerinterface_Model.PromotionsToSupplier" Width="1.5" PointX="14.625" PointY="15.75" />
         <EntityTypeShape EntityType="producerinterface_Model.supplierregions" Width="1.5" PointX="16.375" PointY="0.75" />

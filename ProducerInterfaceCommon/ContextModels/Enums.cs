@@ -22,7 +22,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	}
 
 	public enum FeedBackType // UI FeedBackTypePrivate - нумерация пунктов должна совпадать (UI пользовательский интерфейс)
-    {
+	{
 		[Display(Name = "Пожелание")]
 		Wish = 0,
 		[Display(Name = "Ошибка")]
@@ -31,40 +31,44 @@ namespace ProducerInterfaceCommon.ContextModels
 		Other = 2,
 		[Display(Name = "Добавление должности")]
 		AddNewAppointment = 3,
-        /*
-            как минимум 4й - 5й пункт  "4" должен отсутствовать        
-        */
-       
+		/*
+				как минимум 4й - 5й пункт  "4" должен отсутствовать        
+		*/
+
 	}
 
-    public enum FeedBackTypePrivate // FeedBackType - нумерация должна совпадать   (UI админка)
-    {
-        [Display(Name = "Пожелание")]
-        Wish = 0,
-        [Display(Name = "Ошибка")]
-        Error = 1,
-        [Display(Name = "Другое")]
-        Other = 2,
-        [Display(Name = "Добавление должности")]
-        AddNewAppointment = 3,
-        [Display(Name ="Заявка на Регистрацию")]
-        Registration =4,
-        [Display(Name = "Добавление домена")]
-        AddNewDomainName = 5
-    }
+	public enum FeedBackTypePrivate // FeedBackType - нумерация должна совпадать   (UI админка)
+	{
+		[Display(Name = "Пожелание")]
+		Wish = 0,
+		[Display(Name = "Ошибка")]
+		Error = 1,
+		[Display(Name = "Другое")]
+		Other = 2,
+		[Display(Name = "Добавление должности")]
+		AddNewAppointment = 3,
+		[Display(Name = "Заявка на Регистрацию")]
+		Registration = 4,
+		[Display(Name = "Добавление домена")]
+		AddNewDomainName = 5
+	}
 
 	public enum FeedBackStatus
 	{
 		[Display(Name = "Новое обращение")]
 		FeedBack_New = 0,
-		[Display(Name = "В работе")]
-		FeedBack_Work = 1,
-		[Display(Name = "Успешно выполнено")]
-		FeedBack_End_Success = 2,
-		[Display(Name = "Необходимы дополнительные действия")]
-		FeedBack_End_Error = 3,
-		[Display(Name = "Удалена")]
-		FeedBack_delete = 4
+
+		[Display(Name = "Обработано")]
+		FeedBack_Work = 1
+
+		//[Display(Name = "Успешно выполнено")]
+		//FeedBack_End_Success = 2,
+
+		//[Display(Name = "Необходимы дополнительные действия")]
+		//FeedBack_End_Error = 3,
+
+		//[Display(Name = "Удалена")]
+		//FeedBack_delete = 4
 	}
 
 	public enum NewsChanges
@@ -97,7 +101,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		ProductPriceDynamicsReport = 5,
 
 		[Display(Name = "Продажи вторичных дистрибьюторов")]
-    SecondarySalesReport = 6,
+		SecondarySalesReport = 6,
 
 		[Display(Name = "Мониторинг остатков у дистрибьюторов")]
 		ProductResidueReport = 7
@@ -175,16 +179,16 @@ namespace ProducerInterfaceCommon.ContextModels
 		Email = 3
 	}
 
-    public enum PromotionTypeChange
-    {
-        [Display(Name = "Добавлено")]
-        AddPromo = 0,
-        [Display(Name = "Удалено")]
-        DeletePromo = 1,
-        [Display(Name = "Изменено")]
-        ModifiedPromo = 2,
-        [Display(Name = "Подтверждена/Отменена")]
-        Modified_Activate =3
-    }
+	public enum PromotionTypeChange
+	{
+		[Display(Name = "Добавлено")]
+		AddPromo = 0,
+		[Display(Name = "Удалено")]
+		DeletePromo = 1,
+		[Display(Name = "Изменено")]
+		ModifiedPromo = 2,
+		[Display(Name = "Подтверждена/Отменена")]
+		Modified_Activate = 3
+	}
 
 }
