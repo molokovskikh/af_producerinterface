@@ -3,6 +3,7 @@ using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 {
@@ -20,21 +21,12 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
         public string SortStatus { get; set; }
     }
 
-    public class FeedBackItemSelect : FeedBackItem
+    public class FeedBackItemSelect : AccountFeedBack
     {
         //public List<FeedBackComment> Comments{get;set;}
-        public int FeedStatusId { get; set; }
-        public List<OptionElement> StatusList { get; set; }
+        //public int FeedStatusId { get; set; }
+        public List<SelectListItem> StatusList { get; set; }
     }
-
-    //public class FeedBackComment
-    //{
-    //    public int Id { get; set; }
-    //    public string Description { get; set; }
-    //    public DateTime DateAdd { get; set; }
-    //    public long IdAccount { get; set; }
-    //    public string AdminName { get; set; }
-    //}
 
     public class FeedBackItem
     {
@@ -64,10 +56,10 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 
         public string Message { get; set; }
 
-        public Enums.FeedBackStatus FeedBackStatus
-        { get { return (Enums.FeedBackStatus)Status; } set { Status = (int)value; } }
+        public FeedBackStatus FeedBackStatus
+        { get { return (FeedBackStatus)Status; } set { Status = (int)value; } }
         public string StatusString
-        { get{ return AttributeHelper.DisplayName((Enums.FeedBackStatus)Status); } }    
+        { get{ return AttributeHelper.DisplayName((FeedBackStatus)Status); } }    
     }
 
     // данная модель будет возвращатся при поиске результатов с клиента
@@ -92,10 +84,4 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
         public string ClassName { get; set; }             
     }
 
-  
-
-   
-
- 
-  
 }

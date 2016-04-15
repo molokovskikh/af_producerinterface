@@ -315,7 +315,7 @@
     <Compile Include="ContextModels\user_logs.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Heap\AutoMapper.cs" />
+    <Compile Include="Heap\MyAutoMapper.cs" />
     <Compile Include="Heap\ExcelCreator.cs" />
     <Compile Include="Heap\HeaderHelper.cs" />
     <Compile Include="Heap\NamesHelper.cs" />
@@ -431,7 +431,6 @@
     </Compile>
     <Compile Include="SPAM\Enums.cs" />
     <Compile Include="SPAM\Mail_Send.cs" />
-    <Compile Include="ViewModel\ControlPanel\FeedBack\Enums.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBack\FeedBackFilterView.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBack\FeedBackFunction.cs" />
     <Compile Include="ViewModel\ControlPanel\GlobalAccount\RegistrationCustomProfile.cs" />

@@ -136,7 +136,7 @@ namespace ProducerInterface.Controllers
 
             AFB.Contacts = PhoneNum + "," + Email;
             AFB.Type = (sbyte)FeedBackTypePrivate.AddNewDomainName;
-            AFB.Status =(sbyte) FeedBackStatus.FeedBack_New;
+            AFB.Status =(sbyte) FeedBackStatus.New;
             AFB.UrlString = "Заявка подана при невозможности зарегистрироватся с другим доменом для производителя: " + CompanyNames;
             AFB.Description = "Я, " + FIO + ", являясь сотрудником компании " + CompanyNames + ", использую в своей деятельности E-mail: " + Email + " Однако система не позволяет мне зарегистрироваться с этим E-mail. Прошу решить возникшую  проблему. Телефон для связи: " + PhoneNum;
             AFB.DateAdd = System.DateTime.Now;

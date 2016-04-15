@@ -15,27 +15,17 @@
                         </div>
                         <div class="form-group">
                             <label>Статус</label>
-                            <select data-bind="foreach: StatusList, value: FeedStatusId" class="form-control">
-                                <option data-bind="text: Text, value: Value"></option>
+                            <select data-bind="foreach: StatusList, value: Status" class="form-control">
+                                <option data-bind="text: Text, value: Value, selected: Selected"></option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Введите комментарий</label>
-                            <textarea class="form-control" rows="3" data-bind="value: CommentString"></textarea>
+                            <textarea class="form-control" rows="3" data-bind="value: Comment"></textarea>
                         </div>
                         <div class="form-group">                         
                             <a class="btn btn-primary" data-bind="click: Event_ChangeStatus">Добавить комментарий / изменить статус обращения</a>
                         </div>
-                        <div class="form-group">
-                            <div data-bind="foreach: CommentList">
-                                <p data-bind="text: Id"></p>
-                                <p data-bind="text: Description"></p>
-                                <p data-bind="text: DateAdd"></p>
-                                <p data-bind="text: AdminName"></p>
-                            </div>
-                        </div>
-
-
                     </div>
                 </div>
                

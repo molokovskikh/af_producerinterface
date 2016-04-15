@@ -1,117 +1,118 @@
-﻿$(function () {
-    InitDatePicker(); /* инициализация датепикеров */
+﻿$(function() {
+    // инициализация датепикеров
+    InitDatePicker();
     var elem1 = document.getElementById("FeedBackListForm");
-    var elem2 = document.getElementById("FeedBackPaginationForm")
+    var elem2 = document.getElementById("FeedBackPaginationForm");
     var elem3 = document.getElementById("ModalFilterForm");
     var elem4 = document.getElementById("ModalFeedBackItem");
 
-    ko.applyBindings(FeedBackList, elem1);  /* запуск отслеживания изменений в модели обращений пользователей */
-    ko.applyBindings(FeedBackPagination, elem2); /* запуск отслеживания изменений в модели пагинатора */
-    ko.applyBindings(FeedBackFilter, elem3); /* запуск отслеживания изменений в модели фильтра */
-    ko.applyBindings(FeedBackItem, elem4); /* запуск отслеживания изменений в модели выбранного обращения */
+    // отслеживание изменений в модели списка обращений пользователей
+    ko.applyBindings(FeedBackList, elem1);
+    // отслеживание изменений в модели пагинатора
+    ko.applyBindings(FeedBackPagination, elem2);
+    // отслеживание изменений в модели фильтра
+    ko.applyBindings(FeedBackFilter, elem3);
+    // отслеживаниt изменений в модели выбранного обращения
+    ko.applyBindings(FeedBackItem, elem4);
 
     AjaxGetFilter();
-})
+});
 
+// модель фильтра
 var FeedBackFilter =
-    {
-        DateBegin: ko.observable(),
-        DateEnd: ko.observable(),
-        ListProducer: ko.observableArray(),
-        ListAccount: ko.observableArray(),
+{
+    DateBegin: ko.observable(),
+    DateEnd: ko.observable(),
+    ListProducer: ko.observableArray(),
+    ListAccount: ko.observableArray(),
 
-        ProducerId: ko.observable(),
-        AccountId: ko.observable(),
+    ProducerId: ko.observable(),
+    AccountId: ko.observable(),
 
-        PageIndex: ko.observable(),
+    PageIndex: ko.observable(),
 
-        PageCountList: ko.observableArray(),
-        PageCount: ko.observable(),
+    PageCountList: ko.observableArray(),
+    PageCount: ko.observable(),
 
-        Event_SelectProducer: function ()
-        {
+    Event_SelectProducer: function() {
 
-        },
-        Event_SelectAccount: function()
-        {
-        
-        },
-        Event_Search: function ()
-        {
-            FeedBackFilter.PageIndex(0);
+    },
+    Event_SelectAccount: function() {
+
+    },
+    Event_Search: function() {
+        FeedBackFilter.PageIndex(0);
+        FeedBackFilter.PageIndex.valueHasMutated();
+        AjaxSearch();
+    }
+}
+
+// модель пагинатора
+var FeedBackPagination =
+{
+    PageIndex: ko.observable(),
+    PageList: ko.observableArray(),
+
+    Event_SelectedPage: function(data) {
+        var pageIndex = FeedBackFilter.PageIndex();
+        var counter = data.Counter;
+
+        if (pageIndex != counter) {
+            FeedBackFilter.PageIndex(data.Counter);
             FeedBackFilter.PageIndex.valueHasMutated();
             AjaxSearch();
         }
     }
-var FeedBackPagination = 
-    {
-        PageIndex: ko.observable(),
-        PageList: ko.observableArray(),
+}
 
-        Event_SelectedPage: function (data)
-        {
-            var pageIndex = FeedBackFilter.PageIndex();
-            var counter = data.Counter
-
-            if (pageIndex != counter)
-            {
-                FeedBackFilter.PageIndex(data.Counter);
-                FeedBackFilter.PageIndex.valueHasMutated();
-                AjaxSearch();
-            }        
-        }
-    }
-
+// модель выбранного сообщения
 var FeedBackItem =
-    {
-        Id: ko.observable(),
-        Description: ko.observable(),
-        Date: ko.observable(),
-        Type: ko.observable(),
-        Contact: ko.observable(),
-        CommentList: ko.observableArray(),
-        FeedStatusId: ko.observable(),
-        StatusList:ko.observableArray(),
-        CommentString: ko.observable(),
-      
-        Event_ChangeStatus: function ()
-        {
-            AjaxAddComment();
-        }
+{
+    Id: ko.observable(),
+    Description: ko.observable(),
+    //Date: ko.observable(),
+    //Type: ko.observable(),
+    //Contact: ko.observable(),
+    Status: ko.observable(),
+    StatusList: ko.observableArray(),
+    Comment: ko.observable(),
+
+    Event_ChangeStatus: function() {
+        AjaxAddComment();
     }
+}
 
-var FeedBackList = 
-    {
-        /*список обращений*/
-        FeedList: ko.observableArray(),
+// модель списка сообщений
+var FeedBackList =
+{
+    /*список обращений*/
+    FeedList: ko.observableArray(),
 
-        /*выбранное обращение*/
-        FeedSelectedItem: ko.observable(),
+    /*выбранное обращение*/
+    FeedSelectedItem: ko.observable(),
 
-        /*сообщение для пользователя об ошибках/ожидании/обновлении и загрузке информации*/
-        Message: ko.observable(),
-        MessageView: ko.observable(), /*block or none   css display param*/
+    /*сообщение для пользователя об ошибках/ожидании/обновлении и загрузке информации*/
+    Message: ko.observable(),
+    MessageView: ko.observable(), /*block or none   css display param*/
 
-        /* Для отображения информации об фильтрации запроса */
-        SortTime: ko.observable(),
-        SortProducerName: ko.observable(),
-        SortAccountName: ko.observable(),
-        SortType: ko.observable(),
-        SortStatus: ko.observable(),
-        
-        Event_SelectItem: function (data)
-        {
-            var JsonSendData = "{\"Id\":\"" + data.Id + "\"}";
-            AjaxGetOneFeedBack("FeedBackGetItem", JsonSendData);
-        }
+    /* Для отображения информации об фильтрации запроса */
+    SortTime: ko.observable(),
+    SortProducerName: ko.observable(),
+    SortAccountName: ko.observable(),
+    SortType: ko.observable(),
+    SortStatus: ko.observable(),
+
+    Event_SelectItem: function(data) {
+        var JsonSendData = "{\"Id\":\"" + data.Id + "\"}";
+        AjaxGetOneFeedBack("FeedBackGetItem", JsonSendData);
     }
+}
 
-
+// получение фильтра
 function AjaxGetFilter()
 {
-    var Url_ = "GetFilter";
     $.ajax({
-        url: Url_, 
+        url: "GetFilter", 
         cache: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",      
@@ -133,6 +134,7 @@ function AjaxGetFilter()
 
 }
 
+// получение списка сообщений по фильтру
 function AjaxSearch()
 {
     var JsonSendData = ko.toJSON(FeedBackFilter);
@@ -157,14 +159,13 @@ function AjaxSearch()
             $('#message').html(jqXHR.statusText);
         }
     });
-
-
 }
 
+// получение выбранного сообщения / изменение выбранного сообщения
 function AjaxGetOneFeedBack(Url, JsonSendData)
 {  
     $.ajax({
-        url: "FeedBackGetItem",
+        url: Url,
         cache: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -172,7 +173,7 @@ function AjaxGetOneFeedBack(Url, JsonSendData)
         type: "POST",
         success: function (result) {
             if (result == "0") {
-             
+                $("#ModalFeedBackItem").modal('hide');
             }
             else {
                 bindFeddBackItem(result);              
@@ -184,12 +185,14 @@ function AjaxGetOneFeedBack(Url, JsonSendData)
     });
 }
 
+// изменение выбранного сообщения
 function AjaxAddComment()
 {
     var JsonSendData = ko.toJSON(FeedBackItem);
     AjaxGetOneFeedBack("AddCommentToFeedBack", JsonSendData);
 }
 
+// биндинг фильтра
 function bindFilter(result)
 {
     FeedBackFilter.DateBegin(result.DateBegin);
@@ -215,6 +218,7 @@ function bindFilter(result)
     AjaxSearch();
 }
 
+// биндинг списка сообщений и пагинатора
 function bindFeedBackList(result)
 {
     /* биндим пагинатор */
@@ -245,33 +249,23 @@ function bindFeedBackList(result)
     FeedBackList.SortStatus.valueHasMutated();
 }
 
+// биндинг выбранного сообщения
 function bindFeddBackItem(result)
 {
     FeedBackItem.Id(result.Id);
     FeedBackItem.Id.valueHasMutated();
-    FeedBackItem.CommentList(result.Comments);
-    FeedBackItem.CommentList.valueHasMutated();
 
     FeedBackItem.Description(result.Description);
     FeedBackItem.Description.valueHasMutated();
 
-    FeedBackItem.Date(result.DateAdd);
-    FeedBackItem.Date.valueHasMutated();
-
-    FeedBackItem.Type(result.TypeString);
-    FeedBackItem.Type.valueHasMutated();
-
-    FeedBackItem.Contact(result.About);
-    FeedBackItem.Contact.valueHasMutated();
-    
-    FeedBackItem.FeedStatusId(result.FeedStatusId);
-    FeedBackItem.FeedStatusId.valueHasMutated();
+    FeedBackItem.Status(result.Status);
+    FeedBackItem.Status.valueHasMutated();
 
     FeedBackItem.StatusList(result.StatusList);
     FeedBackItem.StatusList.valueHasMutated();
     
-    FeedBackItem.CommentString("Комментарий к заявке");
-    FeedBackItem.CommentString.valueHasMutated();
+    FeedBackItem.Comment(result.Comment);
+    FeedBackItem.Comment.valueHasMutated();
     
     $("#ModalFeedBackItem").modal('show');
 }

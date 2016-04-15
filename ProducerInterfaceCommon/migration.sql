@@ -1461,10 +1461,9 @@ COLLATE='cp1251_general_ci'
 ENGINE=InnoDB;
 
 
+#ниже не внесено на боевую БД
 
-
-
-
-
-
+alter TABLE `AccountFeedBack` add column `Comment` VARCHAR(1000) NULL DEFAULT NULL after Contacts;
+alter TABLE `AccountFeedBack` add column `AdminId` INT(11) UNSIGNED NULL DEFAULT NULL after `Comment`;
+alter TABLE `AccountFeedBack` add column `DateEdit` DATETIME NULL DEFAULT NULL after `AdminId`;
 

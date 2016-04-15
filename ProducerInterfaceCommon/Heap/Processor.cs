@@ -60,7 +60,7 @@ namespace ProducerInterfaceCommon.Heap
 						command.Parameters.AddWithValue(spparam.Key, spparam.Value);
 					conn.Open();
 					using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection)) {
-						var mapper = new AutoMapper<T>();
+						var mapper = new MyAutoMapper<T>();
 						querySort = mapper.Map(reader);
 					}
 				}

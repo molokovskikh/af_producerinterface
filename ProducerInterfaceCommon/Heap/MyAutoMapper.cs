@@ -6,13 +6,13 @@ using MySql.Data.MySqlClient;
 
 namespace ProducerInterfaceCommon.Heap
 {
-	public class AutoMapper<T>
+	public class MyAutoMapper<T>
 	{
 		private Type _type;
 		private PropertyInfo[] _pi;
 
 
-		public AutoMapper()
+		public MyAutoMapper()
 		{
 			_type = typeof(T);
 			_pi = _type.GetProperties();

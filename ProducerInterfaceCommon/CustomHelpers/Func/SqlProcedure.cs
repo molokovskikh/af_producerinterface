@@ -14,14 +14,14 @@ namespace ProducerInterfaceCommon.CustomHelpers.Func
     public class SqlProcedure<T>
     {
         private List<T> ret;
-        private Heap.AutoMapper<T> AM;
+        private Heap.MyAutoMapper<T> AM;
         private ulong regionMask;
 
         public SqlProcedure(ulong RegionMask)
         {
             this.regionMask = RegionMask;
             ret = new List<T>();
-            AM = new Heap.AutoMapper<T>();
+            AM = new Heap.MyAutoMapper<T>();
         }
         
         public List<long> GetPromotionId()

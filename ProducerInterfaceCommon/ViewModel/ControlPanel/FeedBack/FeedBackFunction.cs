@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
@@ -19,160 +21,107 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 			h = new NamesHelper(cntx_, CurrentUser.Id);
 		}
 
+		// инициализирует модель фильтра
 		public FeedBackFilter GetFilter()
 		{
-			FeedBackFilter FBF = new FeedBackFilter();
-			FBF.DateBegin = DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy");
-			FBF.DateEnd = DateTime.Now.AddDays(1).ToString("dd.MM.yyyy");
-			FBF.PageIndex = 0;
-			FBF.AccountId = 0;
-			FBF.ProducerId = 0;
-			FBF.ProducerList = GetProducerList(h);
-			FBF.AccountList = GetAccountList(h);
-			FBF.PageCountList = GetPageCountList();
-			FBF.PageCount = 1;
+			var filter = new FeedBackFilter();
+			filter.DateBegin = GetMinDate();
+			filter.DateEnd = GetMaxDate();
+			filter.PageIndex = 0;
+			filter.AccountId = 0;
+			filter.ProducerId = 0;
+			filter.ProducerList = GetProducerList();
+			filter.AccountList = GetAccountList();
+			filter.PageCountList = GetItemsToPage();
+			filter.PageCount = 1;
 
-			return FBF;
+			return filter;
+		}
+
+		// возвращает минимальную дату получения сообщений обратной связи
+		private string GetMinDate()
+		{
+			var res = DateTime.Now;
+			var dt = cntx_.AccountFeedBack.Min(x => x.DateAdd);
+			if (dt.HasValue)
+				res = dt.Value;
+			return res.ToString("dd.MM.yyyy");
+		}
+
+		// возвращает максимальную дату получения сообщений обратной связи
+		private string GetMaxDate()
+		{
+			var res = DateTime.Now;
+			var dt = cntx_.AccountFeedBack.Max(x => x.DateAdd);
+			if (dt.HasValue)
+				res = dt.Value.AddDays(1);
+			return res.ToString("dd.MM.yyyy");
 		}
 
 		public FeedBackList GetFeedBackList(FeedBackFilter feedBackFilter)
 		{
-			FeedBackList FBL_result = new FeedBackList();
+			var result = new FeedBackList();
+			var pageCount = 0;
 
-			int MaxCount = 0;
+			result.FeedList = GetFeedBackFiltered(feedBackFilter, ref pageCount);
+			if (!result.FeedList.Any())
+				return result;
 
-			FBL_result.FeedList = GetFeedBackListItems(feedBackFilter, ref MaxCount);
+			result.PageIndex = feedBackFilter.PageIndex;
+			result.PaginatorLinks = GetPaginator(pageCount, feedBackFilter.PageIndex);
+			SetViewFilter(ref result, feedBackFilter);
 
-			if (FBL_result.FeedList.Count() == 0)
-			{
-				return FBL_result;
-			}
-
-			FBL_result.PageIndex = feedBackFilter.PageIndex;
-			FBL_result.PaginatorLinks = GetPaginator(MaxCount, feedBackFilter.PageIndex);
-			SetViewFilter(ref FBL_result, feedBackFilter);
-
-			return FBL_result;
+			return result;
 		}
 
+		// возвращает один элемент
 		public FeedBackItemSelect GetOneFeedBack(int Id)
 		{
-			var cntx_FeedBackItem = cntx_.AccountFeedBack.Where(x => x.Id == Id).ToList();
-			var ListFeedBack = new List<FeedBackItem>();
-			AccountFeedBackToFeedBackViewModelConverter(ref ListFeedBack, cntx_FeedBackItem);
+			var modelDb = cntx_.AccountFeedBack.Single(x => x.Id == Id);
+			var modelUi = new FeedBackItemSelect() {
+				Id					= modelDb.Id,
+				Description = modelDb.Description,
+				Status			= modelDb.Status,
+				Comment			= modelDb.Comment,
+				Type				= modelDb.Type,
+				StatusList = EnumHelper.GetSelectList(typeof(FeedBackStatus), modelDb.StatusEnum).ToList()
+			};
 
-			FeedBackItemSelect FeedBackModelView = new FeedBackItemSelect();
-
-			FeedBackModelView = (FeedBackItemSelect)ListFeedBack.Select(x => new FeedBackItemSelect
-			{
-				About = x.About,
-				AccountId = x.AccountId,
-				CreateDate = x.CreateDate,
-				Id = x.Id,
-				Description = x.Description,
-				Message = x.Message,
-				Producername = x.Producername,
-				TypeFeedBack = x.TypeFeedBack,
-				AccountLogin = x.AccountLogin,
-				UrlString = x.UrlString,
-				FeedBackStatus = x.FeedBackStatus
-			}).First();
-
-			//var FeedBackCommentItems = new List<FeedBackComment>();
-
-			//foreach (var CommentItem in cntx_FeedBackItem.First().AccountFeedBackComment)
-			//{
-			//    FeedBackCommentItems.Add(new FeedBackComment { AdminName = cntx_.Account.Where(x => x.Id == CommentItem.AdminId).First().Login, Id = CommentItem.Id, DateAdd = (DateTime)CommentItem.DateAdd, Description = CommentItem.Comment, IdAccount = CommentItem.AdminId });
-			//}
-
-			//FeedBackModelView.Comments = FeedBackCommentItems;
-
-			FeedBackModelView.FeedStatusId = cntx_FeedBackItem.First().Status;
-
-			List<OptionElement> StatusList = Enum.GetValues(typeof(Enums.FeedBackStatus)).Cast<Enums.FeedBackStatus>().ToList().Select(x =>
-			new OptionElement
-			{
-				Text = ProducerInterfaceCommon.Heap.AttributeHelper.DisplayName(x),
-				Value = ((int)x).ToString()
-			}).ToList();
-
-			FeedBackModelView.StatusList = StatusList;
-
-			return FeedBackModelView;
-
+			return modelUi;
 		}
 
-		private List<FeedBackItem> GetFeedBackListItems(FeedBackFilter feedBackFilter, ref int MaxCount)
+		// возвращает коллекцию сообщений обратной связи с учетом фильтра
+		private List<FeedBackItem> GetFeedBackFiltered(FeedBackFilter filter, ref int pageCount)
 		{
 			var ret = new List<FeedBackItem>();
 
-			var DateBegin = Convert.ToDateTime(feedBackFilter.DateBegin);
-			var DateEnd = Convert.ToDateTime(feedBackFilter.DateEnd);
+			var dateBegin = Convert.ToDateTime(filter.DateBegin);
+			var dateEnd = Convert.ToDateTime(filter.DateEnd);
 
-			var cntx_list = cntx_.AccountFeedBack.Where(x => x.DateAdd >= DateBegin && x.DateAdd <= DateEnd).ToList().OrderByDescending(x => x.Id).ToList();
+			var query = cntx_.AccountFeedBack.Where(x => x.DateAdd >= dateBegin && x.DateAdd <= dateEnd);
+			if (filter.AccountId != 0)
+				query = query.Where(x => x.AccountId == filter.AccountId);
+			if (filter.ProducerId != 0)
+				query = query.Where(x => x.Account != null && x.Account.AccountCompany != null && x.Account.AccountCompany.ProducerId == filter.ProducerId);
 
-			if (cntx_list == null || cntx_list.Count() == 0)
-			{
+			var itemsCount = query.Count();
+			if (itemsCount == 0)
 				return ret;
-			}
 
-			if (feedBackFilter.AccountId != 0)
-			{
-				cntx_list = cntx_list.Where(x => x.AccountId == feedBackFilter.AccountId).ToList();
-			}
+			var itemsToPage = PagerCount(filter.PageCount);
+			pageCount = (int)Math.Ceiling((decimal)itemsCount / itemsToPage);
 
-			if (cntx_list == null || cntx_list.Count() == 0)
-			{
-				return ret;
-			}
+			var cntxList = query.OrderByDescending(x => x.Id)
+				.Skip(filter.PageIndex * itemsToPage)
+				.Take(itemsToPage).ToList();
 
-			if (feedBackFilter.ProducerId != 0)
-			{
-				cntx_list = cntx_list.Where(x => x.Account != null).Where(x => x.Account.AccountCompany != null).Where(x => x.Account.AccountCompany.ProducerId != null)
-						.Where(x => x.Account.AccountCompany.ProducerId == feedBackFilter.ProducerId).ToList();
-			}
-
-			MaxCount = cntx_list.Count();
-			MaxCount = (int)Math.Ceiling((decimal)MaxCount / PagerCount(feedBackFilter.PageCount));
-
-			cntx_list = cntx_list.Skip(feedBackFilter.PageIndex * PagerCount(feedBackFilter.PageCount)).ToList().Take(PagerCount(feedBackFilter.PageCount)).ToList();
-
-			AccountFeedBackToFeedBackViewModelConverter(ref ret, cntx_list);
+			// переложили из модели БД в модель для UI
+			MapDbToUi(ref ret, cntxList);
 
 			return ret;
 		}
 
-
-		public FeedBackList GetFeedBackFilterView(Heap.NamesHelper h, FeedBackFilter FeedFilter)
-		{
-			var ModelView = new List<FeedBackItem>(); /* лист обращений */
-
-			int MaxListCount = 0;    /*  количество сторок по данному фильтру необходимо для посторение Пагинатора */
-
-			ModelView = GetListFeedBackModel(ref MaxListCount, FeedFilter); /* заполняем лист обращений по фильтру */
-			if (ModelView == null || ModelView.Count() == 0)
-			{
-				return new FeedBackList();  /* если обращений по данному фильтру не найдено, возвращаем незаполненую модель для передачи на клиент сообщения об неуспешности фильтрации */
-			}
-
-			var ReturnModel = new FeedBackList();  /* Модель отправляемая клиенту */
-
-			SetViewFilter(ref ReturnModel, FeedFilter);  /* отображение по каким столбцам фильтруется таблица */
-
-
-
-			ReturnModel.PaginatorLinks = GetPaginator(MaxListCount, FeedFilter.PageIndex); /* заполняем пагинатор */
-
-			ReturnModel.PageIndex = FeedFilter.PageIndex; /* текущий индех пагинатора */
-
-
-
-			int MaxPager = (int)Math.Ceiling((double)(Convert.ToInt32(GetPageCountList().Where(x => x.Value == FeedFilter.PageCountList[FeedFilter.PageCount].Value).First().Value) / 50));
-
-			return ReturnModel;
-		}
-
-		private void SetViewFilter(ref FeedBackList ModelView, FeedBackFilter FeedFilter = null)
+		private void SetViewFilter(ref FeedBackList ModelView, FeedBackFilter filter = null)
 		{
 			ModelView.SortTime = "block";
 			ModelView.SortProducerName = "none";
@@ -180,48 +129,33 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 			ModelView.SortType = "none";
 			ModelView.SortStatus = "none";
 
-			if (FeedFilter == null) // если фильтр не был передан, по умолчанию фильтруется по дате от начала к концу
+			if (filter == null) // если фильтр не был передан, по умолчанию фильтруется по дате от начала к концу
 			{
 				ModelView.SortTime = "block";
 			}
 			else
 			{
-				if (FeedFilter.AccountId != 0)
+				if (filter.AccountId != 0)
 				{ ModelView.SortAccountName = "block"; }
 
 
-				if (FeedFilter.ProducerId != 0)
+				if (filter.ProducerId != 0)
 				{ ModelView.SortProducerName = "block"; }
 
 			}
 		}
 
-
-		private List<FeedBackItem> GetListFeedBackModel(ref int MaxListCount, FeedBackFilter FeedFilter)
+		// 
+		private void MapDbToUi(ref List<FeedBackItem> modelUi, List<AccountFeedBack> modelDb)
 		{
-			List<FeedBackItem> ret = new List<FeedBackItem>();
-			var AccountFeedBackList = GetFeedBackList(ref MaxListCount, FeedFilter);
-
-			if (AccountFeedBackList == null || AccountFeedBackList.Count() == 0)
-			{
-				return ret;
-			}
-
-			AccountFeedBackToFeedBackViewModelConverter(ref ret, AccountFeedBackList);
-
-			return ret;
-		}
-
-		private void AccountFeedBackToFeedBackViewModelConverter(ref List<FeedBackItem> FB_ViewModel, List<AccountFeedBack> Account_FB_List)
-		{
-			FB_ViewModel = Account_FB_List.Select(x => new FeedBackItem
+			modelUi = modelDb.Select(x => new FeedBackItem
 			{
 				About = x.Contacts,
 				AccountId = x.AccountId,
 				CreateDate = (DateTime)x.DateAdd,
 				Description = x.Description,
-				FeedBackStatus = (Enums.FeedBackStatus)x.Status,
-				TypeFeedBack = (int)(FeedBackType)x.Type,
+				FeedBackStatus = x.StatusEnum,
+				TypeFeedBack = (int)x.TypeEnum,
 				Id = x.Id,
 				UrlString = x.UrlString,
 				AccountLogin = x.Account?.Login,
@@ -229,15 +163,21 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 			}).ToList();
 		}
 
-		private List<OptionElement> GetAccountList(Heap.NamesHelper h)
+		// возвращает список пользователей, от которых есть сообщения в обратной связи
+		private List<OptionElement> GetAccountList()
 		{
-			var AccountList = new List<OptionElement>() { new OptionElement { Value = "0", Text = "Выберите пользователя" } };
-			AccountList.AddRange(cntx_.Account.Where(x => x.TypeUser == (sbyte)TypeUsers.ProducerUser && x.Enabled == 1).ToList().Select(x => new OptionElement { Text = x.Login + " " + x.Name, Value = x.Id.ToString() }).ToList());
+			var accountList = new List<OptionElement>() { new OptionElement { Value = "0", Text = "Выберите пользователя" } };
+			var accIds = cntx_.AccountFeedBack.Select(x => x.AccountId).Distinct().ToList();
+			var acc = cntx_.Account
+				.Where(x => accIds.Contains(x.Id))
+				.Select(x => new OptionElement { Text = x.Login + " " + x.Name, Value = x.Id.ToString() })
+				.OrderBy(x => x.Text).ToList();
 
-			return AccountList;
+			accountList.AddRange(acc);
+			return accountList;
 		}
 
-		private List<OptionElement> GetPageCountList()
+		private List<OptionElement> GetItemsToPage()
 		{
 			return new List<OptionElement>()
 						{
@@ -248,148 +188,70 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 						};
 		}
 
-		private int PagerCount(int Value)
+		// возвращает количество элементов на страницу в зависимости от номера выбранной опции TODO: удалить
+		private int PagerCount(int value)
 		{
-			var ret = GetPageCountList().Where(x => x.Value == Value.ToString()).First().Text;
+			var ret = GetItemsToPage().Single(x => x.Value == value.ToString()).Text;
 			return Convert.ToInt32(ret);
 		}
 
-		private List<OptionElement> GetProducerList(NamesHelper h)
+		// возвращает список производителей, от пользователей которых есть сообщения в обратной связи
+		private List<OptionElement> GetProducerList()
 		{
-			var ProducerList = new List<OptionElement>() { new OptionElement
-						{
-								 Text = "Выберите производителя", Value = "0"
-						} };
+			var cIds = cntx_.AccountFeedBack.Where(x => x.AccountId.HasValue).Select(x => x.Account.AccountCompany.Id).Distinct().ToList();
+			var pIds = cntx_.AccountCompany.Where(x => cIds.Contains(x.Id)).Select(x => x.ProducerId).Distinct().ToList();
+			var pr = cntx_.producernames
+				.Where(x => pIds.Contains(x.ProducerId))
+				.Select(x => new OptionElement() { Text = x.ProducerName, Value = x.ProducerId.ToString() })
+				.OrderBy(x => x.Text).ToList();
 
-			ProducerList.AddRange(h.RegisterListProducer().ToList());
+			var producerList = new List<OptionElement>() { new OptionElement { Text = "Выберите производителя", Value = "0" } };
+			producerList.AddRange(pr);
 
-			return ProducerList;
+			return producerList;
 		}
 
-		private List<AccountFeedBack> GetFeedBackList(ref int MaxCount, FeedBackFilter feedFilter = null)
+		private List<Paginator> GetPaginator(int pageCount, int pageIndex)
 		{
-			if (feedFilter == null)
+			var pag = new List<Paginator>();
+
+			if (pageCount < 10)
 			{
-				MaxCount = cntx_.AccountFeedBack.Count();
-				return cntx_.AccountFeedBack.OrderByDescending(x => x.DateAdd).Take(100).ToList();
-			}
-			else
-			{
-
-				DateTime FeedDateBegin = Convert.ToDateTime(feedFilter.DateBegin);
-				DateTime FeedDateEnd = Convert.ToDateTime(feedFilter.DateEnd);
-
-				var ret = cntx_.AccountFeedBack.Where(xx => xx.DateAdd >= FeedDateBegin && xx.DateAdd <= FeedDateEnd).ToList();
-
-				if (ret == null || ret.Count() == 0)
+				for (var i = 0; i < pageCount; i++)
 				{
-					return ret;
-				}
-				if (feedFilter.ProducerId != 0)
-				{
-					ret = ret.Where(x => x.Account != null).ToList().Where(xx => xx.Account.AccountCompany.ProducerId != null).ToList().Where(xx => xx.Account.AccountCompany.ProducerId == feedFilter.ProducerId).ToList();
-				}
-				if (ret == null || ret.Count() == 0)
-				{
-					return ret;
-				}
-				if (feedFilter.AccountId != 0)
-				{
-					ret = ret.Where(xx => xx.Account != null).Where(xx => xx.AccountId == feedFilter.AccountId).ToList();
-				}
-				if (ret == null || ret.Count() == 0)
-				{
-					return ret;
-				}
-
-				var PageCountList = GetPageCountList();
-
-				//    var OnePageListLeght = Convert.ToInt32(PageCountList.Where(x => x.Id == feedFilter.Pager).First().Name);
-
-				ret = ret.OrderByDescending(x => x.Id).ToList();
-
-				//if (ret.Count() <= OnePageListLeght)
-				//{
-				//    return ret;
-				//}
-				//if (ret.Count() > OnePageListLeght)
-				//{
-				//    MaxCount = ret.Count();                 
-				//    ret = ret.ToList().Skip((OnePageListLeght)* feedFilter.PageIndex).Take(OnePageListLeght).ToList();                  
-				//}
-
-				return ret;
-			}
-		}
-
-		private List<Paginator> GetPaginator(int PageMax, int CurrentPage)
-		{
-			List<Paginator> Pag = new List<Paginator>();
-
-			if (PageMax < 10)
-			{
-				for (var X = 0; X < PageMax; X++)
-				{
-					var Y = X + 1;
-					if (X == CurrentPage)
-					{
-						var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "active primary" };
-						Pag.Add(PagAdd);
-					}
-					else
-					{
-						var PagAdd = new Paginator { Counter = X, ViewCounter = Y };
-						Pag.Add(PagAdd);
-					}
+					var pagAdd = new Paginator { Counter = i, ViewCounter = i + 1 };
+					if (i == pageIndex)
+						pagAdd.ClassName = "active primary";
+					pag.Add(pagAdd);
 				}
 			}
-
-			if (PageMax >= 10)
-			{
-				if (CurrentPage < 3)
+			else {
+				if (pageIndex <= 3)
 				{
-					for (var X = 0; X < 10; X++)
+					for (var i = 0; i < 10; i++)
 					{
-						var Y = X + 1;
-						if (X == CurrentPage)
-						{
-							var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "active primary" };
-							Pag.Add(PagAdd);
-						}
-						else
-						{
-							var PagAdd = new Paginator { Counter = X, ViewCounter = Y };
-							Pag.Add(PagAdd);
-						}
+						var pagAdd = new Paginator { Counter = i, ViewCounter = i + 1 };
+						if (i == pageIndex)
+							pagAdd.ClassName = "active primary";
+						pag.Add(pagAdd);
 					}
 				}
-
-				if (CurrentPage > 3)
-				{
-					var CurrentPageLocal = CurrentPage - 3;
-					int Off = 0;
-					for (var X = CurrentPageLocal; X < PageMax; X++)
+			else {
+					var currentPageLocal = pageIndex - 3;
+					int off = 0;
+					for (var i = currentPageLocal; i < pageCount; i++)
 					{
-						Off++;
-						var Y = X + 1;
-						if (X == CurrentPage)
-						{
-							var PagAdd = new Paginator { Counter = X, ViewCounter = Y, ClassName = "active primary" };
-							Pag.Add(PagAdd);
-						}
-						else
-						{
-							var PagAdd = new Paginator { Counter = X, ViewCounter = Y };
-							Pag.Add(PagAdd);
-						}
-						if (Off > 10)
-						{
+						off++;
+						var pagAdd = new Paginator { Counter = i, ViewCounter = i + 1 };
+						if (i == pageIndex)
+							pagAdd.ClassName = "active primary";
+						pag.Add(pagAdd);
+						if (off > 10)
 							break;
-						}
 					}
 				}
 			}
-			return Pag;
+			return pag;
 		}
 
 		private string GetProducerName(AccountFeedBack feedaccount)

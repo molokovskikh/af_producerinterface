@@ -56,19 +56,10 @@ namespace ProducerInterfaceCommon.ContextModels
 	public enum FeedBackStatus
 	{
 		[Display(Name = "Новое обращение")]
-		FeedBack_New = 0,
+		New = 0,
 
 		[Display(Name = "Обработано")]
-		FeedBack_Work = 1
-
-		//[Display(Name = "Успешно выполнено")]
-		//FeedBack_End_Success = 2,
-
-		//[Display(Name = "Необходимы дополнительные действия")]
-		//FeedBack_End_Error = 3,
-
-		//[Display(Name = "Удалена")]
-		//FeedBack_delete = 4
+		Processed = 1
 	}
 
 	public enum NewsChanges
