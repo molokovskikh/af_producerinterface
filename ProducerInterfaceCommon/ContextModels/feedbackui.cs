@@ -12,20 +12,18 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AccountFeedBack
+    public partial class feedbackui
     {
         public long Id { get; set; }
-        public sbyte Status { get; set; }
-        public string Description { get; set; }
-        public System.DateTime DateAdd { get; set; }
         public Nullable<long> AccountId { get; set; }
+        public string Login { get; set; }
+        public Nullable<long> ProducerId { get; set; }
+        public string ProducerName { get; set; }
+        public string Contacts { get; set; }
+        public System.DateTime DateAdd { get; set; }
+        public string Description { get; set; }
+        public sbyte Status { get; set; }
         public string UrlString { get; set; }
         public sbyte Type { get; set; }
-        public string Contacts { get; set; }
-        public string Comment { get; set; }
-        public Nullable<long> AdminId { get; set; }
-        public Nullable<System.DateTime> DateEdit { get; set; }
-    
-        public virtual Account Account { get; set; }
     }
 }

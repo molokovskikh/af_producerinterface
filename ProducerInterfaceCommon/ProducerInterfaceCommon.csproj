@@ -188,6 +188,9 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\Enums.cs" />
+    <Compile Include="ContextModels\feedbackui.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\MediaFiles.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -519,7 +522,6 @@
       <DependentUpon>Logger_Entities.edmx</DependentUpon>
       <LastGenOutput>Logger_Entities.cs</LastGenOutput>
     </Content>
-    <Content Include="migration.sql" />
     <Content Include="ReportModels\Reports_Entities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Reports_Entities.edmx</DependentUpon>

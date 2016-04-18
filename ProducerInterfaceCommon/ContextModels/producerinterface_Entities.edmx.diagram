@@ -14,7 +14,7 @@
         <EntityTypeShape EntityType="producerinterface_Model.assortment" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.catalognames" Width="1.5" PointX="6.375" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.drugfamily" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="producerinterface_Model.pharmacynames" Width="1.5" PointX="8.125" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="producerinterface_Model.pharmacynames" Width="1.5" PointX="10" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.producernames" Width="1.5" PointX="8.125" PointY="6.625" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.ratingreportorderitems" Width="2.25" PointX="11.625" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="producerinterface_Model.regionnames" Width="1.5" PointX="9.875" PointY="8.375" IsExpanded="true" />
@@ -48,8 +48,6 @@
         <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
         <AssociationConnector Association="producerinterface_Model.mailformToMediaFiles" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="1.5" PointX="6.125" PointY="23.75" />
-        <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
         <EntityTypeShape EntityType="producerinterface_Model.ReportDescription" Width="1.5" PointX="0.75" PointY="15.75" />
         <EntityTypeShape EntityType="producerinterface_Model.PromotionsToSupplier" Width="1.5" PointX="14.625" PointY="15.75" />
         <EntityTypeShape EntityType="producerinterface_Model.supplierregions" Width="1.5" PointX="16.375" PointY="0.75" />
@@ -65,6 +63,9 @@
         <AssociationConnector Association="producerinterface_Model.FK_ReportRegion_To_Report" />
         <EntityTypeShape EntityType="producerinterface_Model.regionsnamesleaftoreport" Width="1.5" PointX="16.375" PointY="6.75" />
         <EntityTypeShape EntityType="producerinterface_Model.regionsnamesleaf" Width="1.5" PointX="16.375" PointY="3.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="1.5" PointX="6.375" PointY="25" />
+        <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
+        <EntityTypeShape EntityType="producerinterface_Model.feedbackui" Width="1.5" PointX="16.375" PointY="9.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

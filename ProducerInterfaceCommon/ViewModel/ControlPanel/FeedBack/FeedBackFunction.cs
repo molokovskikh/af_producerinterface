@@ -2,23 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 {
 	public class FeedBackFunction
 	{
 		private producerinterface_Entities cntx_;
-		private Account CurrentUser;
-		NamesHelper h;
 
-		public FeedBackFunction(Account currentUser)
+		public FeedBackFunction()
 		{
 			cntx_ = new producerinterface_Entities();
-			CurrentUser = currentUser;
-			h = new NamesHelper(cntx_, CurrentUser.Id);
 		}
 
 		// инициализирует модель фильтра
@@ -32,8 +26,8 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 			filter.ProducerId = 0;
 			filter.ProducerList = GetProducerList();
 			filter.AccountList = GetAccountList();
-			filter.PageCountList = GetItemsToPage();
-			filter.PageCount = 1;
+			filter.ItemsPerPageList = GetItemsPerPageList();
+			filter.ItemsPerPage = 50;
 
 			return filter;
 		}
@@ -41,20 +35,14 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 		// возвращает минимальную дату получения сообщений обратной связи
 		private string GetMinDate()
 		{
-			var res = DateTime.Now;
-			var dt = cntx_.AccountFeedBack.Min(x => x.DateAdd);
-			if (dt.HasValue)
-				res = dt.Value;
+			var res = cntx_.AccountFeedBack.Min(x => x.DateAdd);
 			return res.ToString("dd.MM.yyyy");
 		}
 
 		// возвращает максимальную дату получения сообщений обратной связи
 		private string GetMaxDate()
 		{
-			var res = DateTime.Now;
-			var dt = cntx_.AccountFeedBack.Max(x => x.DateAdd);
-			if (dt.HasValue)
-				res = dt.Value.AddDays(1);
+			var res = cntx_.AccountFeedBack.Max(x => x.DateAdd);
 			return res.ToString("dd.MM.yyyy");
 		}
 
@@ -84,41 +72,36 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 				Status			= modelDb.Status,
 				Comment			= modelDb.Comment,
 				Type				= modelDb.Type,
-				StatusList = EnumHelper.GetSelectList(typeof(FeedBackStatus), modelDb.StatusEnum).ToList()
+				StatusList = EnumHelper.GetSelectList(typeof(FeedBackStatus)).ToList()
 			};
 
 			return modelUi;
 		}
 
 		// возвращает коллекцию сообщений обратной связи с учетом фильтра
-		private List<FeedBackItem> GetFeedBackFiltered(FeedBackFilter filter, ref int pageCount)
+		private List<feedbackui> GetFeedBackFiltered(FeedBackFilter filter, ref int pageCount)
 		{
-			var ret = new List<FeedBackItem>();
-
 			var dateBegin = Convert.ToDateTime(filter.DateBegin);
 			var dateEnd = Convert.ToDateTime(filter.DateEnd);
 
-			var query = cntx_.AccountFeedBack.Where(x => x.DateAdd >= dateBegin && x.DateAdd <= dateEnd);
+			var query = cntx_.feedbackui.Where(x => x.DateAdd >= dateBegin && x.DateAdd <= dateEnd);
 			if (filter.AccountId != 0)
 				query = query.Where(x => x.AccountId == filter.AccountId);
 			if (filter.ProducerId != 0)
-				query = query.Where(x => x.Account != null && x.Account.AccountCompany != null && x.Account.AccountCompany.ProducerId == filter.ProducerId);
+				query = query.Where(x => x.ProducerId == filter.ProducerId);
 
 			var itemsCount = query.Count();
 			if (itemsCount == 0)
-				return ret;
+				return new List<feedbackui>();
 
-			var itemsToPage = PagerCount(filter.PageCount);
+			var itemsToPage = filter.ItemsPerPage; //PagerCount(filter.PageCount);
 			pageCount = (int)Math.Ceiling((decimal)itemsCount / itemsToPage);
 
 			var cntxList = query.OrderByDescending(x => x.Id)
 				.Skip(filter.PageIndex * itemsToPage)
 				.Take(itemsToPage).ToList();
 
-			// переложили из модели БД в модель для UI
-			MapDbToUi(ref ret, cntxList);
-
-			return ret;
+			return cntxList;
 		}
 
 		private void SetViewFilter(ref FeedBackList ModelView, FeedBackFilter filter = null)
@@ -145,24 +128,6 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 			}
 		}
 
-		// 
-		private void MapDbToUi(ref List<FeedBackItem> modelUi, List<AccountFeedBack> modelDb)
-		{
-			modelUi = modelDb.Select(x => new FeedBackItem
-			{
-				About = x.Contacts,
-				AccountId = x.AccountId,
-				CreateDate = (DateTime)x.DateAdd,
-				Description = x.Description,
-				FeedBackStatus = x.StatusEnum,
-				TypeFeedBack = (int)x.TypeEnum,
-				Id = x.Id,
-				UrlString = x.UrlString,
-				AccountLogin = x.Account?.Login,
-				Producername = GetProducerName(x)
-			}).ToList();
-		}
-
 		// возвращает список пользователей, от которых есть сообщения в обратной связи
 		private List<OptionElement> GetAccountList()
 		{
@@ -177,22 +142,15 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 			return accountList;
 		}
 
-		private List<OptionElement> GetItemsToPage()
+		private List<OptionElement> GetItemsPerPageList()
 		{
 			return new List<OptionElement>()
 						{
-								new OptionElement { Value = "0", Text = "20" },
-								new OptionElement { Value = "1", Text = "50" },
-								new OptionElement { Value = "2", Text = "100" },
-								new OptionElement { Value = "3", Text = "1" }
+								new OptionElement { Value = "20", Text = "20" },
+								new OptionElement { Value = "50", Text = "50" },
+								new OptionElement { Value = "100", Text = "100" },
+								new OptionElement { Value = "1", Text = "1" }
 						};
-		}
-
-		// возвращает количество элементов на страницу в зависимости от номера выбранной опции TODO: удалить
-		private int PagerCount(int value)
-		{
-			var ret = GetItemsToPage().Single(x => x.Value == value.ToString()).Text;
-			return Convert.ToInt32(ret);
 		}
 
 		// возвращает список производителей, от пользователей которых есть сообщения в обратной связи
@@ -254,17 +212,5 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 			return pag;
 		}
 
-		private string GetProducerName(AccountFeedBack feedaccount)
-		{
-			if (feedaccount.Account == null || feedaccount.AccountId == 0)
-			{
-				return "";
-			}
-			if (feedaccount.Account.AccountCompany.ProducerId == null)
-			{
-				return "";
-			}
-			return cntx_.producernames.Where(x => x.ProducerId == feedaccount.Account.AccountCompany.ProducerId).First().ProducerName;
-		}
 	}
 }

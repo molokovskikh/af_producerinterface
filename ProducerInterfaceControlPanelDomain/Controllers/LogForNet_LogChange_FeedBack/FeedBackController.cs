@@ -16,7 +16,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		// возвращает модель фильтра
 		public JsonResult GetFilter()
 		{
-			var feedBackFunc = new FeedBackFunction(currentUser: CurrentUser);
+			var feedBackFunc = new FeedBackFunction();
 			var filter = feedBackFunc.GetFilter();
 			return Json(filter, JsonRequestBehavior.AllowGet);
 		}
@@ -24,7 +24,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		// возвращает коллекцию элементов по фильтру
 		public JsonResult FeedBackSearch(FeedBackFilter feedBackFilter)
 		{
-			var feedBackFunc = new FeedBackFunction(currentUser: CurrentUser);
+			var feedBackFunc = new FeedBackFunction();
 			var feedBackListRet = feedBackFunc.GetFeedBackList(feedBackFilter);
 
 			if (feedBackListRet.FeedList == null || !feedBackListRet.FeedList.Any())
@@ -35,7 +35,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public JsonResult FeedBackGetItem(int Id)
 		{
-			var feedBackFunc = new FeedBackFunction(currentUser: CurrentUser);
+			var feedBackFunc = new FeedBackFunction();
 			var feedBackModelView = feedBackFunc.GetOneFeedBack(Id);
 
 			return Json(feedBackModelView, JsonRequestBehavior.AllowGet);
@@ -51,7 +51,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			feedBackItem.StatusEnum = Status;
 			cntx_.SaveChanges(CurrentUser, "Добавление комментария к обращению пользователя");
 
-			return Json("0", JsonRequestBehavior.AllowGet);
+			return Json("1", JsonRequestBehavior.AllowGet);
 		}
 
 	}

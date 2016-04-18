@@ -31,8 +31,8 @@ var FeedBackFilter =
 
     PageIndex: ko.observable(),
 
-    PageCountList: ko.observableArray(),
-    PageCount: ko.observable(),
+    ItemsPerPageList: ko.observableArray(),
+    ItemsPerPage: ko.observable(),
 
     Event_SelectProducer: function() {
 
@@ -70,9 +70,6 @@ var FeedBackItem =
 {
     Id: ko.observable(),
     Description: ko.observable(),
-    //Date: ko.observable(),
-    //Type: ko.observable(),
-    //Contact: ko.observable(),
     Status: ko.observable(),
     StatusList: ko.observableArray(),
     Comment: ko.observable(),
@@ -102,7 +99,8 @@ var FeedBackList =
     SortType: ko.observable(),
     SortStatus: ko.observable(),
 
-    Event_SelectItem: function(data) {
+    Event_SelectItem: function (data) {
+        FeedBackList.FeedSelectedItem(data);
         var JsonSendData = "{\"Id\":\"" + data.Id + "\"}";
         AjaxGetOneFeedBack("FeedBackGetItem", JsonSendData);
     }
@@ -147,7 +145,6 @@ function AjaxSearch()
         type: "POST",
         success: function (result) {
             if (result == "0") {
-                /* поиск результатов не дал */
                 FeedBackList.Message("поиск результатов не дал");
             }
             else {
@@ -172,7 +169,7 @@ function AjaxGetOneFeedBack(Url, JsonSendData)
         data: JsonSendData,
         type: "POST",
         success: function (result) {
-            if (result == "0") {
+            if (result == "1") {
                 $("#ModalFeedBackItem").modal('hide');
             }
             else {
@@ -202,8 +199,8 @@ function bindFilter(result)
     FeedBackFilter.ProducerId(result.ProducerId);
     FeedBackFilter.AccountId(result.AccountId);
     FeedBackFilter.PageIndex(result.PageIndex);
-    FeedBackFilter.PageCountList(result.PageCountList);
-    FeedBackFilter.PageCount(result.PageCount);
+    FeedBackFilter.ItemsPerPageList(result.ItemsPerPageList);
+    FeedBackFilter.ItemsPerPage(result.ItemsPerPage);
 
     FeedBackFilter.DateEnd.valueHasMutated();
     FeedBackFilter.DateBegin.valueHasMutated();
@@ -212,8 +209,8 @@ function bindFilter(result)
     FeedBackFilter.ProducerId.valueHasMutated();
     FeedBackFilter.AccountId.valueHasMutated();
     FeedBackFilter.PageIndex.valueHasMutated();
-    FeedBackFilter.PageCountList.valueHasMutated();
-    FeedBackFilter.PageCount.valueHasMutated();
+    FeedBackFilter.ItemsPerPageList.valueHasMutated();
+    FeedBackFilter.ItemsPerPage.valueHasMutated();
 
     AjaxSearch();
 }
@@ -258,12 +255,12 @@ function bindFeddBackItem(result)
     FeedBackItem.Description(result.Description);
     FeedBackItem.Description.valueHasMutated();
 
-    FeedBackItem.Status(result.Status);
-    FeedBackItem.Status.valueHasMutated();
-
     FeedBackItem.StatusList(result.StatusList);
     FeedBackItem.StatusList.valueHasMutated();
-    
+
+    FeedBackItem.Status("" + result.Status);
+    FeedBackItem.Status.valueHasMutated();
+
     FeedBackItem.Comment(result.Comment);
     FeedBackItem.Comment.valueHasMutated();
     

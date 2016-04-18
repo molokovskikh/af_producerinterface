@@ -10,6 +10,33 @@ using ProducerInterfaceCommon.Heap;
 namespace ProducerInterfaceCommon.ContextModels
 {
 
+	public partial class feedbackui
+	{
+		public string TypeName
+		{
+			get
+			{
+				return AttributeHelper.DisplayName((FeedBackTypePrivate)Type);
+			}
+		}
+
+		public string StatusName
+		{
+			get
+			{
+				return AttributeHelper.DisplayName((FeedBackStatus)Status);
+			}
+		}
+
+		public string DateAddString
+		{
+			get
+			{
+				return DateAdd.ToString("dd.MM.yyyy");
+			}
+		}
+	}
+
 	public partial class AccountFeedBack
 	{
 		public FeedBackTypePrivate TypeEnum {

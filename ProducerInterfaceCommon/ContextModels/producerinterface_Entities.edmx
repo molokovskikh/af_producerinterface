@@ -59,10 +59,10 @@
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Status" Type="tinyint" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="500" />
-          <Property Name="DateAdd" Type="date" />
+          <Property Name="DateAdd" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="AccountId" Type="uint" />
           <Property Name="UrlString" Type="varchar" MaxLength="250" />
-          <Property Name="Type" Type="tinyint" />
+          <Property Name="Type" Type="tinyint" Nullable="false" />
           <Property Name="Contacts" Type="varchar" MaxLength="50" />
           <Property Name="Comment" Type="varchar" MaxLength="1000" />
           <Property Name="AdminId" Type="uint" />
@@ -399,6 +399,27 @@
           </Key>
           <Property Name="FamilyId" Type="uint" Nullable="false" />
           <Property Name="FamilyName" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.feedbackui" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="feedbackui">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="DateAdd" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Type" />
+          </Key>
+          <Property Name="Id" Type="uint" Nullable="false" />
+          <Property Name="AccountId" Type="uint" />
+          <Property Name="Login" Type="varchar" MaxLength="50" />
+          <Property Name="ProducerId" Type="uint" />
+          <Property Name="ProducerName" Type="varchar" MaxLength="255" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="DateAdd" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="Status" Type="tinyint" Nullable="false" />
+          <Property Name="UrlString" Type="varchar" MaxLength="250" />
+          <Property Name="Type" Type="tinyint" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.jobextendwithproducer" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -899,6 +920,21 @@ FROM `drugfamily` AS `drugfamily`</DefiningQuery>
 `drugfamilynames`.`FamilyName`
 FROM `drugfamilynames` AS `drugfamilynames`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="feedbackui" EntityType="Self.feedbackui" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`feedbackui`.`Id`, 
+`feedbackui`.`AccountId`, 
+`feedbackui`.`Login`, 
+`feedbackui`.`ProducerId`, 
+`feedbackui`.`ProducerName`, 
+`feedbackui`.`Contacts`, 
+`feedbackui`.`DateAdd`, 
+`feedbackui`.`Description`, 
+`feedbackui`.`Status`, 
+`feedbackui`.`UrlString`, 
+`feedbackui`.`Type`
+FROM `feedbackui` AS `feedbackui`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="jobextendwithproducer" EntityType="Self.jobextendwithproducer" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `jobextendwithproducer`.`SchedName`, 
@@ -1318,11 +1354,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="mailform" EntitySet="mailform" />
             <End Role="MediaFiles" EntitySet="MediaFiles" />
           </AssociationSet>
-          <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
-          <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
-          </AssociationSet>
           <EntitySet Name="ReportDescription" EntityType="producerinterface_Model.ReportDescription" />
           <EntitySet Name="PromotionsToSupplier" EntityType="producerinterface_Model.PromotionsToSupplier" />
           <EntitySet Name="supplierregions" EntityType="producerinterface_Model.supplierregions" />
@@ -1359,6 +1390,12 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </AssociationSet>
           <EntitySet Name="regionsnamesleaftoreport" EntityType="producerinterface_Model.regionsnamesleaftoreport" />
           <EntitySet Name="regionsnamesleaf" EntityType="producerinterface_Model.regionsnamesleaf" />
+          <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
+          <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+          </AssociationSet>
+          <EntitySet Name="feedbackui" EntityType="producerinterface_Model.feedbackui" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1670,10 +1707,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="AccountAppointment1" Relationship="producerinterface_Model.FK1_Appointment_To_AccountCompany_Id" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
-          <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
           <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
+          <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
         </EntityType>
         <Association Name="Account_Appointment">
           <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
@@ -1730,35 +1767,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
         <Association Name="mailformToMediaFiles">
           <End Type="producerinterface_Model.mailform" Role="mailform" Multiplicity="*" />
           <End Type="producerinterface_Model.MediaFiles" Role="MediaFiles" Multiplicity="*" />
-        </Association>
-        <EntityType Name="AccountFeedBack">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Status" Type="SByte" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="DateAdd" Type="DateTime" />
-          <Property Name="AccountId" Type="Int64" />
-          <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="SByte" />
-          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="AccountFeedBack" ToRole="Account" />
-          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="AdminId" Type="Int64" />
-          <Property Name="DateEdit" Type="DateTime" />
-        </EntityType>
-        <Association Name="FK_FeedBack_To_Account">
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
-          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AccountFeedBack">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
         </Association>
         <EntityType Name="ReportDescription">
           <Key>
@@ -1933,6 +1941,54 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </Key>
           <Property Name="RegionCode" Type="Decimal" Nullable="false" />
           <Property Name="RegionName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AccountFeedBack">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="SByte" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DateAdd" Type="DateTime" Nullable="false" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="SByte" Nullable="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="AdminId" Type="Int64" />
+          <Property Name="DateEdit" Type="DateTime" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="AccountFeedBack" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_FeedBack_To_Account">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBack">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="feedbackui">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="DateAdd" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Type" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProducerId" Type="Int64" />
+          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateAdd" Type="DateTime" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="SByte" Nullable="false" />
+          <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="SByte" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2378,23 +2434,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="MailFormId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="AccountFeedBack">
-            <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBack">
-              <MappingFragment StoreEntitySet="AccountFeedBack">
-                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
-                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="UrlString" ColumnName="UrlString" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ReportDescription">
             <EntityTypeMapping TypeName="producerinterface_Model.ReportDescription">
               <MappingFragment StoreEntitySet="ReportDescription">
@@ -2475,6 +2514,40 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <MappingFragment StoreEntitySet="regionsnamesleaf">
                 <ScalarProperty Name="RegionName" ColumnName="RegionName" />
                 <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountFeedBack">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBack">
+              <MappingFragment StoreEntitySet="AccountFeedBack">
+                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="UrlString" ColumnName="UrlString" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="feedbackui">
+            <EntityTypeMapping TypeName="producerinterface_Model.feedbackui">
+              <MappingFragment StoreEntitySet="feedbackui">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="UrlString" ColumnName="UrlString" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

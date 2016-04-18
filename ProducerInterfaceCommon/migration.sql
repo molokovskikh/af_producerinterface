@@ -1467,3 +1467,15 @@ alter TABLE `AccountFeedBack` add column `Comment` VARCHAR(1000) NULL DEFAULT NU
 alter TABLE `AccountFeedBack` add column `AdminId` INT(11) UNSIGNED NULL DEFAULT NULL after `Comment`;
 alter TABLE `AccountFeedBack` add column `DateEdit` DATETIME NULL DEFAULT NULL after `AdminId`;
 
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view FeedBackUI as 
+select f.Id, f.AccountId, a.Login, ac.ProducerId, p.ProducerName, f.Contacts, f.DateAdd, f.Description, f.`Status`, f.UrlString, f.`Type`
+from AccountFeedBack f
+left outer join Account a on a.Id = f.AccountId
+left outer join AccountCompany ac on ac.Id = a.CompanyId
+left outer join ProducerNames p on p.ProducerId = ac.ProducerId;
+
+alter TABLE `AccountFeedBack`
+CHANGE COLUMN `DateAdd` `DateAdd` DATETIME NOT NULL,
+CHANGE COLUMN `Type` `Type` TINYINT(4) NOT NULL;
+
+drop table AccountFeedBackComment;
