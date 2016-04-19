@@ -14,8 +14,6 @@ namespace ProducerInterface.Controllers
 {
 	public class DrugController : MasterBaseController
 	{
-		//protected reportData cntx;
-		protected NamesHelper h;
 		protected long userId;
 		protected long producerId;
 		protected catalogsEntities ccntx;
@@ -26,16 +24,11 @@ namespace ProducerInterface.Controllers
 
 			ccntx = new catalogsEntities();
 
-			//cntx = new reportData();
-			//  TODO: берётся у юзера            
-			try {
+			if (CurrentUser != null)
+			{
 				userId = CurrentUser.Id;
 				producerId = (long)CurrentUser.AccountCompany.ProducerId;
 			}
-			catch {
-				// Ignore
-			}
-			//h = new NamesHelper(cntx, userId);
 		}
 
 		public ActionResult Index()
@@ -59,13 +52,9 @@ namespace ProducerInterface.Controllers
 			ViewData["familyId"] = id;
 			ViewData["mnn"] = ccntx.mnn.SingleOrDefault(x => x.Id == drugfamily.MnnId);
 
-			//var model = new MnnDescrComposite();
-
 			var model = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
 			if (model == null)
 				model = new Descriptions();
-			//model.Descriptions = d;
-			//model.Mnn = m;
       return View(model);
 		}
 
@@ -147,7 +136,11 @@ namespace ProducerInterface.Controllers
 
 		public JsonResult GetMnn(string term)
 		{
-			var ret = Json(ccntx.mnn.Where(x => x.Mnn1.Contains(term)).Take(10).ToList().Select(x => new { value = x.Id, text = x.Mnn1 }), JsonRequestBehavior.AllowGet);
+			var ret = Json(
+				ccntx.mnn.Where(x => x.Mnn1.Contains(term))
+					.Take(10).ToList()
+					.Select(x => new { value = x.Id, text = x.Mnn1 })
+				, JsonRequestBehavior.AllowGet);
 			return ret;
 		}
 
