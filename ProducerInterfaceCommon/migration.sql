@@ -1460,9 +1460,6 @@ CREATE TABLE `mailformToMediaFiles` (
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB;
 
-
-#ниже не внесено на боевую БД
-
 alter TABLE `AccountFeedBack` add column `Comment` VARCHAR(1000) NULL DEFAULT NULL after Contacts;
 alter TABLE `AccountFeedBack` add column `AdminId` INT(11) UNSIGNED NULL DEFAULT NULL after `Comment`;
 alter TABLE `AccountFeedBack` add column `DateEdit` DATETIME NULL DEFAULT NULL after `AdminId`;
@@ -1478,4 +1475,26 @@ alter TABLE `AccountFeedBack`
 CHANGE COLUMN `DateAdd` `DateAdd` DATETIME NOT NULL,
 CHANGE COLUMN `Type` `Type` TINYINT(4) NOT NULL;
 
+# ниже не внесено на боевую
+
 drop table AccountFeedBackComment;
+
+CREATE TABLE `DescriptionLog` (
+	`Id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`LogTime` DATETIME NOT NULL,
+	`UserId` INT(11) UNSIGNED NOT NULL,
+	`OperatorHost` VARCHAR(50) NOT NULL,
+	`DescriptionId` INT(10) UNSIGNED NOT NULL,
+	`PropertyName` VARCHAR(255) NULL DEFAULT NULL,
+	`Before` MEDIUMTEXT NULL,
+	`After` MEDIUMTEXT NULL,
+	`Apply` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+	`AdminId` INT(11) UNSIGNED NULL DEFAULT NULL,
+	`DateEdit` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`Id`),
+	INDEX `IDX_DescriptionId` (`DescriptionId`),
+	INDEX `IDX_Descr_Prop` (`DescriptionId`, `PropertyName`)
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB
+ROW_FORMAT=COMPACT;

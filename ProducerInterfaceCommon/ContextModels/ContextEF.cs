@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Data.Entity;
-using System.Data;
 using ProducerInterfaceCommon.LoggerModels;
 
 namespace ProducerInterfaceCommon.ContextModels

@@ -46,12 +46,12 @@ namespace ProducerInterfaceCommon.LoggerModels
 
 				// какие объекты БД
 				var obj = new LogObjectChange() { Action = (int)entry.State,
-																					ObjectReference = entry.State == EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry),
+																					ObjectReference = entry.State == System.Data.Entity.EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry),
 																					TypeName = entityType.FullName };
 				set.LogObjectChange.Add(obj);
 
 				IEnumerable<string> propCollection;
-				if (entry.State == EntityState.Added)
+				if (entry.State == System.Data.Entity.EntityState.Added)
 					propCollection = entry.CurrentValues.PropertyNames;
 				else
 					propCollection = entry.OriginalValues.PropertyNames;
@@ -62,7 +62,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 					var prop = new LogPropertyChange() { PropertyName = propName };
 					switch (entry.State)
 					{
-						case EntityState.Added:
+						case System.Data.Entity.EntityState.Added:
 							var currentValue = entry.CurrentValues[propName];
 							if (currentValue == null)
 								continue;
@@ -70,7 +70,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 							obj.LogPropertyChange.Add(prop);
 							break;
 
-						case EntityState.Deleted:
+						case System.Data.Entity.EntityState.Deleted:
 							var originalValue = entry.OriginalValues[propName];
 							// если свойство было null - пропускаем
 							if (originalValue == null)
@@ -79,7 +79,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 							obj.LogPropertyChange.Add(prop);
 							break;
 
-						case EntityState.Modified:
+						case System.Data.Entity.EntityState.Modified:
 							var orValue = entry.OriginalValues[propName];
 							var curValue = entry.CurrentValues[propName];
 							// если свойство не изменилось - пропускаем
@@ -146,7 +146,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 
 								// установка параметров объекта
 								comObject.Parameters["@TypeName"].Value = entityType.FullName;
-								comObject.Parameters["@ObjectReference"].Value = entry.State == EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry);
+								comObject.Parameters["@ObjectReference"].Value = entry.State == System.Data.Entity.EntityState.Added ? entry.Entity.GetHashCode().ToString() : GetPrimaryKey(entry);
 								comObject.Parameters["@Action"].Value = (int)entry.State;
 
 								comObject.ExecuteNonQuery();
@@ -154,7 +154,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 								comProp.Parameters["@LogObjectChangeId"].Value = logObjectChangeId;
 
 								// для добавленных
-								if (entry.State == EntityState.Added)
+								if (entry.State == System.Data.Entity.EntityState.Added)
 									// для каждого свойства объекта
 									foreach (var propName in entry.CurrentValues.PropertyNames)
 									{
@@ -170,7 +170,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 										comProp.ExecuteNonQuery();
 									}
 								// для изменённых
-								else if (entry.State == EntityState.Modified)
+								else if (entry.State == System.Data.Entity.EntityState.Modified)
 									// для каждого свойства объекта
 									foreach (var propName in entry.OriginalValues.PropertyNames)
 									{
@@ -187,7 +187,7 @@ namespace ProducerInterfaceCommon.LoggerModels
 										comProp.ExecuteNonQuery();
 									}
 								// для удалённых
-								else if (entry.State == EntityState.Deleted)
+								else if (entry.State == System.Data.Entity.EntityState.Deleted)
 									foreach (var propName in entry.OriginalValues.PropertyNames)
 									{
 										var originalValue = entry.OriginalValues[propName];

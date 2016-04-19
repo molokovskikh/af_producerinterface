@@ -113,6 +113,22 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="CompanyId" Type="uint" />
         </EntityType>
+        <EntityType Name="DescriptionLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LogTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="UserId" Type="uint" Nullable="false" />
+          <Property Name="OperatorHost" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DescriptionId" Type="uint" Nullable="false" />
+          <Property Name="PropertyName" Type="varchar" MaxLength="255" />
+          <Property Name="Before" Type="mediumtext" />
+          <Property Name="After" Type="mediumtext" />
+          <Property Name="Apply" Type="bool" Nullable="false" />
+          <Property Name="AdminId" Type="uint" />
+          <Property Name="DateEdit" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="DrugDescriptionRemark">
           <Key>
             <PropertyRef Name="Id" />
@@ -862,6 +878,7 @@
           <EntitySet Name="AccountPermission" EntityType="Self.AccountPermission" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountUserToGroup" EntityType="Self.AccountUserToGroup" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="CompanyDomainName" EntityType="Self.CompanyDomainName" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="DescriptionLog" EntityType="Self.DescriptionLog" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="DrugDescriptionRemark" EntityType="Self.DrugDescriptionRemark" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="jobextend" EntityType="Self.jobextend" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="LogForNet" EntityType="Self.LogForNet" Schema="producerinterface" store:Type="Tables" />
@@ -1396,6 +1413,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
           </AssociationSet>
           <EntitySet Name="feedbackui" EntityType="producerinterface_Model.feedbackui" />
+          <EntitySet Name="DescriptionLog" EntityType="producerinterface_Model.DescriptionLog" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -1990,6 +2008,22 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="SByte" Nullable="false" />
         </EntityType>
+        <EntityType Name="DescriptionLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogTime" Type="DateTime" Nullable="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DescriptionId" Type="Int64" Nullable="false" />
+          <Property Name="PropertyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Before" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="After" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Apply" Type="Boolean" Nullable="false" />
+          <Property Name="AdminId" Type="Int64" />
+          <Property Name="DateEdit" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2547,6 +2581,23 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DescriptionLog">
+            <EntityTypeMapping TypeName="producerinterface_Model.DescriptionLog">
+              <MappingFragment StoreEntitySet="DescriptionLog">
+                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Apply" ColumnName="Apply" />
+                <ScalarProperty Name="After" ColumnName="After" />
+                <ScalarProperty Name="Before" ColumnName="Before" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
+                <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

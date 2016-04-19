@@ -7,8 +7,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using ProducerInterfaceCommon.CatalogModels;
-using ProducerInterfaceCommon.Models;
-using System.Diagnostics;
 
 namespace ProducerInterface.Controllers
 {
@@ -42,13 +40,17 @@ namespace ProducerInterface.Controllers
 			return View(model);
 		}
 
+		// id по таблице catalogs.catalognames
 		public ActionResult EditDescription(long id)
 		{
-			var drugfamily = cntx_.drugfamily.SingleOrDefault(x => x.FamilyId == id && x.ProducerId == producerId);
-			if (drugfamily == null)
-				return View();
+			//var drugfamily = GetDrugFamilyWithCheck(id);
+			//if (drugfamily == null) {
+			//	ErrorMessage("Препарат не найден в ассортименте производителя");
+			//	return RedirectToAction("Index");
+			//}
+			var drugfamily = ccntx.catalognames.SingleOrDefault(x => x.Id == id);
 
-			ViewData["familyName"] = drugfamily.FamilyName;
+			ViewData["familyName"] = drugfamily.Name;
 			ViewData["familyId"] = id;
 			ViewData["mnn"] = ccntx.mnn.SingleOrDefault(x => x.Id == drugfamily.MnnId);
 
@@ -60,12 +62,13 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
-			// есть ли данное семейство у данного производителя
-			var drugfamily = cntx_.drugfamily.SingleOrDefault(x => x.FamilyId == id && x.ProducerId == producerId);
-			if (drugfamily == null)
-				return View();
+			var drugfamily = GetDrugFamilyWithCheck(id);
+			if (drugfamily == null) {
+				ErrorMessage("Препарат не найден в ассортименте производителя");
+				return RedirectToAction("Index");
+			}
 
-      ViewData["familyName"] = drugfamily.FamilyName;
+			ViewData["familyName"] = drugfamily.Name;
 			ViewData["familyId"] = id;
 			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 			// формы данного лек.средства из ассортимента данного производителя
@@ -78,12 +81,14 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult EditForms(long familyId)
 		{
-			// есть ли данное семейство у данного производителя
-			var drugfamily = cntx_.drugfamily.SingleOrDefault(x => x.FamilyId == familyId && x.ProducerId == producerId);
+			var drugfamily = GetDrugFamilyWithCheck(familyId);
 			if (drugfamily == null)
-				return View();
+			{
+				ErrorMessage("Препарат не найден в ассортименте производителя");
+				return RedirectToAction("Index");
+			}
 
-			ViewData["familyName"] = drugfamily.FamilyName;
+			ViewData["familyName"] = drugfamily.Name;
 			ViewData["familyId"] = familyId;
 			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 
@@ -114,24 +119,46 @@ namespace ProducerInterface.Controllers
 
 		public JsonResult EditDescriptionField(long familyId, string field, string value)
 		{
-			var df = ccntx.catalognames.Single(x => x.Id == familyId);
-			Descriptions model;
-      if (df.DescriptionId == null) {
-				model = new Descriptions();
+			var drugfamily = ccntx.catalognames.Single(x => x.Id == familyId);
+			var model = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
+			// если описания нет - создаем его
+			if (model == null) {
+				model = new Descriptions() { Name = drugfamily.Name };
 	      ccntx.Descriptions.Add(model);
 				ccntx.SaveChanges(CurrentUser, "Добавление нового описания препарата");
-	      df.DescriptionId = model.Id;
+				drugfamily.DescriptionId = model.Id;
 				ccntx.SaveChanges(CurrentUser, "Добавление ссылки на описание препарата");
 			}
-			else
-				model = ccntx.Descriptions.Single(x => x.Id == df.DescriptionId);
 
 			var propertyInfo = model.GetType().GetProperty(field);
 			var before = (string)propertyInfo.GetValue(model);
-			propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
-			ccntx.SaveChanges(CurrentUser, "Изменение описания препарата");
-			EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, propertyInfo.Name, df.Name, before, value);
+			
+			// пишем в лог для премодерации
+			var dl = new DescriptionLog() {
+				After = value,
+				Before = before,
+				DescriptionId = model.Id,
+				LogTime = DateTime.Now,
+				OperatorHost = CurrentUser.IP,
+				UserId = CurrentUser.ID_LOG,
+				PropertyName = propertyInfo.Name
+			};
+			cntx_.DescriptionLog.Add(dl);
+			cntx_.SaveChanges();
+
+			//propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
+			//ccntx.SaveChanges(CurrentUser, "Изменение описания препарата");
+			// TODO письмо в шаблоны, значения и названия полей - по-русски
+			//EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, propertyInfo.Name, drugfamily.Name, before, value);
       return Json(new { field = field, value = value });
+		}
+
+		private ProducerInterfaceCommon.CatalogModels.catalognames GetDrugFamilyWithCheck(long id)
+		{
+			// идентификаторы товаров данного производителя без учёта формы выпуска
+			var fmilyIds = ccntx.Catalog.Where(x => !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).Select(x => x.NameId).Distinct().ToList();
+			var drugfamily = ccntx.catalognames.SingleOrDefault(x => x.Id == id && fmilyIds.Contains(id));
+			return drugfamily;
 		}
 
 		public JsonResult GetMnn(string term)

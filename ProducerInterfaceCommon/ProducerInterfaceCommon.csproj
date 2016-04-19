@@ -177,6 +177,9 @@
     <Compile Include="ContextModels\CompanyDomainName.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\DescriptionLog.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\DrugDescriptionRemark.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
