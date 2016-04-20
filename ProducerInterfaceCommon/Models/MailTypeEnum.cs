@@ -2,10 +2,10 @@
 
 namespace ProducerInterfaceCommon.Models
 {
-    public enum MailType
-    {
-        [Display(Name = "Регистрация в системе")]
-        Registration = 1,  
+	public enum MailType
+	{
+		[Display(Name = "Регистрация в системе")]
+		Registration = 1,
 
 		[Display(Name = "Смена пароля")]
 		PasswordChange = 2,
@@ -37,8 +37,17 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Ручная рассылка отчетов")]
 		ManualPostReport = 11,
 
-        [Display(Name = "Подтверждение регистрации")]
-        RegistrationSuccess = 12
+		[Display(Name = "Подтверждение регистрации")]
+		RegistrationSuccess = 12,
 
-    }
+		[Display(Name = "Изменение ПКУ препарата")]
+		CatalogEvidence = 13,
+
+		[Display(Name = "Изменение описания препарата")]
+		CatalogDescription = 14,
+
+		[Display(Name = "Именение МНН препарата")]
+		CatalogINN = 15
+
+	}
 }

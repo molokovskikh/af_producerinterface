@@ -12,13 +12,14 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class DescriptionLog
+    public partial class CatalogLog
     {
         public long Id { get; set; }
         public System.DateTime LogTime { get; set; }
         public long UserId { get; set; }
         public string OperatorHost { get; set; }
-        public long DescriptionId { get; set; }
+        public long ObjectReference { get; set; }
+        public string TypeName { get; set; }
         public string PropertyName { get; set; }
         public string Before { get; set; }
         public string After { get; set; }

@@ -341,13 +341,30 @@ span.chosen-comment {
     width: 150px;
 }
 
+.w8p {
+    width: 8%;
+}
+
+.w9p {
+    width: 9%;
+}
+
 .w10p {
     width: 10%;
+}
+
+.w17p {
+    width: 17%;
 }
 
 .w20p {
     width: 20%;
 }
+
+.w24p {
+    width: 24%;
+}
+
 .text-size-09em {
 font-size:0.9em;
 }

@@ -88,7 +88,7 @@ namespace ProducerInterfaceCommon.CatalogModels
 		[UIHint("TextBox")]
 		public string EnglishName { get; set; }
 
-		[Display(Name = "Формакологическое действие", Order = 30)]
+		[Display(Name = "Фармакологическое действие", Order = 30)]
 		[UIHint("TextArea")]
 		public string PharmacologicalAction { get; set; }
 

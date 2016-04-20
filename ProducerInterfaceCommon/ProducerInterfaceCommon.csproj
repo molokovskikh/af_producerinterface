@@ -171,13 +171,13 @@
     <Compile Include="ContextModels\AccountPermission.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\CatalogLog.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\catalognameswithuptime.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\CompanyDomainName.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\DescriptionLog.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\DrugDescriptionRemark.cs">
@@ -525,6 +525,7 @@
       <DependentUpon>Logger_Entities.edmx</DependentUpon>
       <LastGenOutput>Logger_Entities.cs</LastGenOutput>
     </Content>
+    <Content Include="migration.sql" />
     <Content Include="ReportModels\Reports_Entities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Reports_Entities.edmx</DependentUpon>

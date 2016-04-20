@@ -40,19 +40,24 @@ namespace ProducerInterface.Controllers
 			return View(model);
 		}
 
-		// id по таблице catalogs.catalognames
+		// Страница описания препарата (id по таблице catalogs.catalognames)
 		public ActionResult EditDescription(long id)
 		{
-			//var drugfamily = GetDrugFamilyWithCheck(id);
-			//if (drugfamily == null) {
-			//	ErrorMessage("Препарат не найден в ассортименте производителя");
-			//	return RedirectToAction("Index");
-			//}
-			var drugfamily = ccntx.catalognames.SingleOrDefault(x => x.Id == id);
+			var drugfamily = GetDrugFamilyWithCheck(id);
+			if (drugfamily == null)
+			{
+				ErrorMessage("Препарат не найден в ассортименте производителя");
+				return RedirectToAction("Index");
+			}
+
+			//var drugfamily = ccntx.catalognames.Single(x => x.Id == id);
+			var mnn = ccntx.mnn.SingleOrDefault(x => x.Id == drugfamily.MnnId);
+			if (mnn == null)
+				mnn = new mnn();
 
 			ViewData["familyName"] = drugfamily.Name;
 			ViewData["familyId"] = id;
-			ViewData["mnn"] = ccntx.mnn.SingleOrDefault(x => x.Id == drugfamily.MnnId);
+			ViewData["mnn"] = mnn;
 
 			var model = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
 			if (model == null)
@@ -94,7 +99,7 @@ namespace ProducerInterface.Controllers
 
 			// формы данного лек.средства из ассортимента данного производителя
 			var model = ccntx.Catalog.Where(x => x.NameId == familyId && !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).ToList().OrderBy(x => x.Name);
-
+			var ufName = new string[] { "вЫкл", "вкл" };
 			var regex = new Regex(@"(?<catalogId>\d+)_(?<field>\w+)", RegexOptions.IgnoreCase);
 			// форма возвращает значения для всех элементов. Ищем, что изменилось
 			for (int i = 0; i < Request.Form.Count; i++) { 
@@ -102,21 +107,41 @@ namespace ProducerInterface.Controllers
         if (regex.IsMatch(name)) {
 	        var catalogId = long.Parse(regex.Match(name).Groups["catalogId"].Value);
 					var field = regex.Match(name).Groups["field"].Value;
-	        var newValue = bool.Parse(Request.Form.GetValues(i)[0]);
+	        var after = bool.Parse(Request.Form.GetValues(i)[0]);
 					// одна строка из каталога, модель - коллекция строк
 					var row = model.Single(x => x.Id == catalogId);
-					var propertyInfo = row.GetType().GetProperty(field);
-	        var oldValue = (bool)propertyInfo.GetValue(row);
-					if (newValue != oldValue) {
-						propertyInfo.SetValue(row, newValue);
-						ccntx.SaveChanges(CurrentUser, "Редактирование лек. форм");
-						EmailSender.SendCatalogChangeMessage(cntx_, CurrentUser, propertyInfo.Name, row.Name, oldValue.ToString(), newValue.ToString());
+	        var type = row.GetType();
+					if (type.BaseType != null && type.Namespace == "System.Data.Entity.DynamicProxies")
+						type = type.BaseType;
+
+					var propertyInfo = type.GetProperty(field);
+	        var before = (bool)propertyInfo.GetValue(row);
+					if (after != before) {
+						var displayName = AttributeHelper.GetDisplayName(type, propertyInfo.Name);
+						propertyInfo.SetValue(row, after);
+						// пишем в лог для премодерации
+						var dl = new CatalogLog()
+						{
+							After = after.ToString(),
+							Before = before.ToString(),
+							ObjectReference = row.Id,
+							TypeName = type.FullName,
+							LogTime = DateTime.Now,
+							OperatorHost = CurrentUser.IP,
+							UserId = CurrentUser.ID_LOG,
+							PropertyName = propertyInfo.Name
+						};
+						cntx_.CatalogLog.Add(dl);
+						cntx_.SaveChanges();
+
+						EmailSender.SendCatalogChangeMessage(cntx_, CurrentUser, displayName, row.Name, ufName[Convert.ToInt32(before)], ufName[Convert.ToInt32(after)]);
 					}
 				}
 			}
 			return View("DisplayForms", model);
 		}
 
+		// редактирование описания препарата
 		public JsonResult EditDescriptionField(long familyId, string field, string value)
 		{
 			var drugfamily = ccntx.catalognames.Single(x => x.Id == familyId);
@@ -125,40 +150,37 @@ namespace ProducerInterface.Controllers
 			if (model == null) {
 				model = new Descriptions() { Name = drugfamily.Name };
 	      ccntx.Descriptions.Add(model);
-				ccntx.SaveChanges(CurrentUser, "Добавление нового описания препарата");
+				ccntx.SaveChanges();
 				drugfamily.DescriptionId = model.Id;
-				ccntx.SaveChanges(CurrentUser, "Добавление ссылки на описание препарата");
+				ccntx.SaveChanges();
 			}
 
-			var propertyInfo = model.GetType().GetProperty(field);
+			var type = model.GetType();
+			if (type.BaseType != null && type.Namespace == "System.Data.Entity.DynamicProxies")
+				type = type.BaseType;
+			var propertyInfo = type.GetProperty(field);
 			var before = (string)propertyInfo.GetValue(model);
 			
 			// пишем в лог для премодерации
-			var dl = new DescriptionLog() {
+			var dl = new CatalogLog() {
 				After = value,
 				Before = before,
-				DescriptionId = model.Id,
+				ObjectReference = model.Id,
+				TypeName = type.FullName,
 				LogTime = DateTime.Now,
 				OperatorHost = CurrentUser.IP,
 				UserId = CurrentUser.ID_LOG,
 				PropertyName = propertyInfo.Name
 			};
-			cntx_.DescriptionLog.Add(dl);
+			cntx_.CatalogLog.Add(dl);
 			cntx_.SaveChanges();
 
+			// TODO это перенести в админку, где подтверждаются изменения
 			//propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
-			//ccntx.SaveChanges(CurrentUser, "Изменение описания препарата");
-			// TODO письмо в шаблоны, значения и названия полей - по-русски
-			//EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, propertyInfo.Name, drugfamily.Name, before, value);
-      return Json(new { field = field, value = value });
-		}
 
-		private ProducerInterfaceCommon.CatalogModels.catalognames GetDrugFamilyWithCheck(long id)
-		{
-			// идентификаторы товаров данного производителя без учёта формы выпуска
-			var fmilyIds = ccntx.Catalog.Where(x => !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).Select(x => x.NameId).Distinct().ToList();
-			var drugfamily = ccntx.catalognames.SingleOrDefault(x => x.Id == id && fmilyIds.Contains(id));
-			return drugfamily;
+			var displayName = AttributeHelper.GetDisplayName(type, propertyInfo.Name);
+			EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, displayName, drugfamily.Name, before, value);
+      return Json(new { field = field, value = value });
 		}
 
 		public JsonResult GetMnn(string term)
@@ -175,13 +197,40 @@ namespace ProducerInterface.Controllers
 		{
 			var df = ccntx.catalognames.Single(x => x.Id == familyId);
 			var before = ccntx.mnn.SingleOrDefault(x => x.Id == df.MnnId);
-			var after = ccntx.mnn.Single(x => x.Id == mnnId);
+			var after = ccntx.mnn.SingleOrDefault(x => x.Id == mnnId);
 
-			df.MnnId = mnnId;
-      ccntx.SaveChanges(CurrentUser, "Изменение МНН");
+			if (before == after || after == null)
+				return Json(new { field = "Mnn1" }); ;
 
-			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, df.Name, before != null ? before.Mnn1 : "", after.Mnn1);
+			var type = df.GetType();
+			if (type.BaseType != null && type.Namespace == "System.Data.Entity.DynamicProxies")
+				type = type.BaseType;
+
+			// пишем в лог для премодерации
+			var dl = new CatalogLog()
+			{
+				After = after?.Id.ToString(),
+				Before = before?.Id.ToString(),
+				ObjectReference = df.Id,
+				TypeName = type.FullName,
+				LogTime = DateTime.Now,
+				OperatorHost = CurrentUser.IP,
+				UserId = CurrentUser.ID_LOG,
+				PropertyName = "MnnId"
+			};
+			cntx_.CatalogLog.Add(dl);
+			cntx_.SaveChanges();
+
+			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, "МНН", before?.Mnn1, after.Mnn1);
 			return Json(new { field = "Mnn1", value = after.Mnn1 });
+		}
+
+		private ProducerInterfaceCommon.CatalogModels.catalognames GetDrugFamilyWithCheck(long id)
+		{
+			// идентификаторы товаров данного производителя без учёта формы выпуска
+			var fmilyIds = ccntx.Catalog.Where(x => !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).Select(x => x.NameId).Distinct().ToList();
+			var drugfamily = ccntx.catalognames.SingleOrDefault(x => x.Id == id && fmilyIds.Contains(id));
+			return drugfamily;
 		}
 	}
 }

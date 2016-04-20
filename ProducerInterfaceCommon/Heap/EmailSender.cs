@@ -155,7 +155,6 @@ namespace ProducerInterfaceCommon.Heap
 
 		public static void SendControlPanelRegistrationSuccessMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip, long adminId)
 		{
-
 			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RegistrationSuccess);
@@ -173,7 +172,6 @@ namespace ProducerInterfaceCommon.Heap
 		// Универсальное на смену пароля, пользователю и расширенное сотрудникам
 		private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
 		{
-			// TODO при cron-запуске есть вероятность, что пользователя уже нет. Возможно, Главный пользователь Производителя
 			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)type);
@@ -190,38 +188,41 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Изменение ПКУ, сотрудникам
-		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string field, string catalogName, string before, string after)
+		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string fieldName, string formName, string before, string after)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
-			var subject = $"Изменение ПКУ препарата на сайте {siteName}";
-			var body = $"Изменено свойство {field} формы выпуска {catalogName}\r\n\r\nБыло: {before}\r\n\r\nСтало: {after}";
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CatalogEvidence);
+			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, FormName = formName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = "Изменение ПКУ препарата" };
+			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = GetEnumDisplayName(MailType.CatalogEvidence) };
+			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
 
 		// Изменение описания препарата, сотрудникам
-		public static void SendDescriptionChangeMessage(producerinterface_Entities cntx, Account user, string field, string drugFamilyName, string before, string after)
+		public static void SendDescriptionChangeMessage(producerinterface_Entities cntx, Account user, string fieldName, string catalogName, string before, string after)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
-			var subject = $"Изменение описания препарата на сайте {siteName}";
-			var body = $"Изменено поле {field} препарата {drugFamilyName}\r\n\r\nБыло:\r\n\r\n{before}\r\n\r\nСтало:\r\n\r\n{after}";
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CatalogDescription);
+			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, CatalogName = catalogName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = "Изменение описания препарата" };
+			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = GetEnumDisplayName(MailType.CatalogDescription) };
+			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
 
 		// Именение МНН препарата, сотрудникам
-		public static void SendMnnChangeMessage(producerinterface_Entities cntx, Account user, string drugFamilyName, string mnnBefore, string mnnAfter)
+		public static void SendMnnChangeMessage(producerinterface_Entities cntx, Account user, string catalogName, string before, string after)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
-			var subject = $"Изменение МНН препарата на сайте {siteName}";
-			var body = $"Изменен МНН препарата {drugFamilyName}\r\n\r\nБыло:\r\n\r\n{mnnBefore}\r\n\r\nСтало:\r\n\r\n{mnnAfter}";
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CatalogINN);
+			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{ReliableTokenizer(mailForm.Body, new { CatalogName = catalogName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = "Изменение МНН препарата" };
+			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = GetEnumDisplayName(MailType.CatalogINN) };
+			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
 

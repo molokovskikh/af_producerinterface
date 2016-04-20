@@ -70,7 +70,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<regionsnamesleaf> regionsnamesleaf { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<feedbackui> feedbackui { get; set; }
-        public DbSet<DescriptionLog> DescriptionLog { get; set; }
+        public DbSet<CatalogLog> CatalogLog { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {

@@ -105,15 +105,7 @@
           <Property Name="IdUser" Type="uint" Nullable="false" />
           <Property Name="IdGroup" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="CompanyDomainName">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CompanyId" Type="uint" />
-        </EntityType>
-        <EntityType Name="DescriptionLog">
+        <EntityType Name="CatalogLog">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -121,13 +113,22 @@
           <Property Name="LogTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="UserId" Type="uint" Nullable="false" />
           <Property Name="OperatorHost" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="DescriptionId" Type="uint" Nullable="false" />
+          <Property Name="ObjectReference" Type="uint" Nullable="false" />
+          <Property Name="TypeName" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="PropertyName" Type="varchar" MaxLength="255" />
-          <Property Name="Before" Type="mediumtext" />
-          <Property Name="After" Type="mediumtext" />
+          <Property Name="Before" Type="text" />
+          <Property Name="After" Type="text" />
           <Property Name="Apply" Type="bool" Nullable="false" />
           <Property Name="AdminId" Type="uint" />
           <Property Name="DateEdit" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="CompanyDomainName">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CompanyId" Type="uint" />
         </EntityType>
         <EntityType Name="DrugDescriptionRemark">
           <Key>
@@ -877,8 +878,8 @@
           <EntitySet Name="AccountGroupToPermission" EntityType="Self.AccountGroupToPermission" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountPermission" EntityType="Self.AccountPermission" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountUserToGroup" EntityType="Self.AccountUserToGroup" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="CatalogLog" EntityType="Self.CatalogLog" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="CompanyDomainName" EntityType="Self.CompanyDomainName" Schema="producerinterface" store:Type="Tables" />
-          <EntitySet Name="DescriptionLog" EntityType="Self.DescriptionLog" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="DrugDescriptionRemark" EntityType="Self.DrugDescriptionRemark" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="jobextend" EntityType="Self.jobextend" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="LogForNet" EntityType="Self.LogForNet" Schema="producerinterface" store:Type="Tables" />
@@ -1413,7 +1414,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
           </AssociationSet>
           <EntitySet Name="feedbackui" EntityType="producerinterface_Model.feedbackui" />
-          <EntitySet Name="DescriptionLog" EntityType="producerinterface_Model.DescriptionLog" />
+          <EntitySet Name="CatalogLog" EntityType="producerinterface_Model.CatalogLog" />
           </EntityContainer>
         <EntityType Name="LogForNet">
           <Key>
@@ -2008,7 +2009,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="SByte" Nullable="false" />
         </EntityType>
-        <EntityType Name="DescriptionLog">
+        <EntityType Name="CatalogLog">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -2016,10 +2017,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="LogTime" Type="DateTime" Nullable="false" />
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DescriptionId" Type="Int64" Nullable="false" />
+          <Property Name="ObjectReference" Type="Int64" Nullable="false" />
+          <Property Name="TypeName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="PropertyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Before" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
-          <Property Name="After" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Before" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="After" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="Apply" Type="Boolean" Nullable="false" />
           <Property Name="AdminId" Type="Int64" />
           <Property Name="DateEdit" Type="DateTime" />
@@ -2585,16 +2587,17 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DescriptionLog">
-            <EntityTypeMapping TypeName="producerinterface_Model.DescriptionLog">
-              <MappingFragment StoreEntitySet="DescriptionLog">
+          <EntitySetMapping Name="CatalogLog">
+            <EntityTypeMapping TypeName="producerinterface_Model.CatalogLog">
+              <MappingFragment StoreEntitySet="CatalogLog">
                 <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
                 <ScalarProperty Name="AdminId" ColumnName="AdminId" />
                 <ScalarProperty Name="Apply" ColumnName="Apply" />
                 <ScalarProperty Name="After" ColumnName="After" />
                 <ScalarProperty Name="Before" ColumnName="Before" />
                 <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
-                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
                 <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LogTime" ColumnName="LogTime" />

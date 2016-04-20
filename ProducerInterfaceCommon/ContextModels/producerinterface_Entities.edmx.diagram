@@ -66,7 +66,7 @@
         <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="1.5" PointX="6.375" PointY="25" />
         <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
         <EntityTypeShape EntityType="producerinterface_Model.feedbackui" Width="1.5" PointX="16.375" PointY="9.75" />
-        <EntityTypeShape EntityType="producerinterface_Model.DescriptionLog" Width="1.5" PointX="17.375" PointY="13.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.CatalogLog" Width="1.5" PointX="17.375" PointY="13.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

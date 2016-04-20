@@ -1475,26 +1475,37 @@ alter TABLE `AccountFeedBack`
 CHANGE COLUMN `DateAdd` `DateAdd` DATETIME NOT NULL,
 CHANGE COLUMN `Type` `Type` TINYINT(4) NOT NULL;
 
+insert into mailform(Id, Subject, Body, Description, IsBodyHtml)
+values (13, 'Изменение ПКУ препарата на сайте {SiteName}', 'Изменено свойство {FieldName} формы выпуска {FormName}\r\n\r\nБыло: {Before}\r\n\r\nСтало: {After}', 'Изменение ПКУ препарата', 0);
+
+insert into mailform(Id, Subject, Body, Description, IsBodyHtml)
+values (14, 'Изменение описания препарата на сайте {SiteName}', 'Изменено поле {FieldName} препарата {CatalogName}\r\n\r\nБыло:\r\n\r\n{Before}\r\n\r\nСтало:\r\n\r\n{After}', 'Изменение описания препарата', 0);
+
+insert into mailform(Id, Subject, Body, Description, IsBodyHtml)
+values (15, 'Изменение МНН препарата на сайте {SiteName}', 'Изменен МНН препарата {CatalogName}\r\n\r\nБыло:\r\n\r\n{Before}\r\n\r\nСтало:\r\n\r\n{After}', 'Именение МНН препарата', 0);
+
 # ниже не внесено на боевую
 
 drop table AccountFeedBackComment;
 
-CREATE TABLE `DescriptionLog` (
+CREATE TABLE `CatalogLog` (
 	`Id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`LogTime` DATETIME NOT NULL,
 	`UserId` INT(11) UNSIGNED NOT NULL,
 	`OperatorHost` VARCHAR(50) NOT NULL,
-	`DescriptionId` INT(10) UNSIGNED NOT NULL,
+	`ObjectReference` INT(10) UNSIGNED NOT NULL,
+	`TypeName` VARCHAR(255) NOT NULL,
 	`PropertyName` VARCHAR(255) NULL DEFAULT NULL,
-	`Before` MEDIUMTEXT NULL,
-	`After` MEDIUMTEXT NULL,
+	`Before` TEXT NULL,
+	`After` TEXT NULL,
 	`Apply` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
 	`AdminId` INT(11) UNSIGNED NULL DEFAULT NULL,
 	`DateEdit` DATETIME NULL DEFAULT NULL,
-	PRIMARY KEY (`Id`),
-	INDEX `IDX_DescriptionId` (`DescriptionId`),
-	INDEX `IDX_Descr_Prop` (`DescriptionId`, `PropertyName`)
+	PRIMARY KEY (`Id`)
 )
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB
 ROW_FORMAT=COMPACT;
+
+
+
