@@ -7,6 +7,14 @@ using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+
+	public class CataloglogUiPlus : cataloglogui
+	{
+		public string BeforeUi { get; set; }
+
+		public string AfterUi { get; set; }
+	}
+
 	public class ReportDescriptionUI
 	{
 		public int Id { get; set; }
@@ -25,8 +33,17 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	public class SortingPagingInfo
 	{
-		public int PageCount { get; set; }
+		public int PageCount
+		{
+			get
+			{
+				return (int)Math.Ceiling((decimal)ItemsCount / ItemsPerPage);
+			}
+		}
+
 		public int CurrentPageIndex { get; set; }
+		public int ItemsPerPage { get; set; }
+		public int ItemsCount { get; set; }
 	}
 
 	public partial class PromotionsInRegionMask_Result

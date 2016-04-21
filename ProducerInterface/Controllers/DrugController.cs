@@ -83,6 +83,11 @@ namespace ProducerInterface.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// отправляет запрос на правку ПКУ
+		/// </summary>
+		/// <param name="familyId">Идентификатор по таблице catalognames</param>
+		/// <returns></returns>
 		[HttpPost]
 		public ActionResult EditForms(long familyId)
 		{
@@ -125,11 +130,12 @@ namespace ProducerInterface.Controllers
 							After = after.ToString(),
 							Before = before.ToString(),
 							ObjectReference = row.Id,
-							TypeName = type.FullName,
+							Type = (int)CatalogLogType.PKU,
 							LogTime = DateTime.Now,
 							OperatorHost = CurrentUser.IP,
 							UserId = CurrentUser.ID_LOG,
-							PropertyName = propertyInfo.Name
+							PropertyName = propertyInfo.Name,
+							PropertyNameUi = displayName
 						};
 						cntx_.CatalogLog.Add(dl);
 						cntx_.SaveChanges();
@@ -141,7 +147,13 @@ namespace ProducerInterface.Controllers
 			return View("DisplayForms", model);
 		}
 
-		// редактирование описания препарата
+		/// <summary>
+		/// Отправляет запрос на правку описания препарата
+		/// </summary>
+		/// <param name="familyId">идентификатор по таблице catalognames</param>
+		/// <param name="field">имя поля</param>
+		/// <param name="value">значение поля</param>
+		/// <returns></returns>
 		public JsonResult EditDescriptionField(long familyId, string field, string value)
 		{
 			var drugfamily = ccntx.catalognames.Single(x => x.Id == familyId);
@@ -160,17 +172,19 @@ namespace ProducerInterface.Controllers
 				type = type.BaseType;
 			var propertyInfo = type.GetProperty(field);
 			var before = (string)propertyInfo.GetValue(model);
-			
+			var displayName = AttributeHelper.GetDisplayName(type, propertyInfo.Name);
+
 			// пишем в лог для премодерации
 			var dl = new CatalogLog() {
 				After = value,
 				Before = before,
 				ObjectReference = model.Id,
-				TypeName = type.FullName,
+				Type = (int)CatalogLogType.Descriptions,
 				LogTime = DateTime.Now,
 				OperatorHost = CurrentUser.IP,
 				UserId = CurrentUser.ID_LOG,
-				PropertyName = propertyInfo.Name
+				PropertyName = propertyInfo.Name,
+				PropertyNameUi = displayName
 			};
 			cntx_.CatalogLog.Add(dl);
 			cntx_.SaveChanges();
@@ -178,7 +192,6 @@ namespace ProducerInterface.Controllers
 			// TODO это перенести в админку, где подтверждаются изменения
 			//propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
 
-			var displayName = AttributeHelper.GetDisplayName(type, propertyInfo.Name);
 			EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, displayName, drugfamily.Name, before, value);
       return Json(new { field = field, value = value });
 		}
@@ -193,6 +206,12 @@ namespace ProducerInterface.Controllers
 			return ret;
 		}
 
+		/// <summary>
+		/// Отправляет запрос на изменение МНН
+		/// </summary>
+		/// <param name="familyId">идентификатор по таблице catalognames</param>
+		/// <param name="mnnId">идентификатор по таблице mnn</param>
+		/// <returns></returns>
 		public JsonResult EditMnnField(long familyId, long mnnId)
 		{
 			var df = ccntx.catalognames.Single(x => x.Id == familyId);
@@ -205,6 +224,7 @@ namespace ProducerInterface.Controllers
 			var type = df.GetType();
 			if (type.BaseType != null && type.Namespace == "System.Data.Entity.DynamicProxies")
 				type = type.BaseType;
+			var displayName = "МНН";
 
 			// пишем в лог для премодерации
 			var dl = new CatalogLog()
@@ -212,16 +232,17 @@ namespace ProducerInterface.Controllers
 				After = after?.Id.ToString(),
 				Before = before?.Id.ToString(),
 				ObjectReference = df.Id,
-				TypeName = type.FullName,
+				Type = (int)CatalogLogType.MNN,
 				LogTime = DateTime.Now,
 				OperatorHost = CurrentUser.IP,
 				UserId = CurrentUser.ID_LOG,
-				PropertyName = "MnnId"
+				PropertyName = "MnnId",
+				PropertyNameUi = displayName
 			};
 			cntx_.CatalogLog.Add(dl);
 			cntx_.SaveChanges();
 
-			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, "МНН", before?.Mnn1, after.Mnn1);
+			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, displayName, before?.Mnn1, after.Mnn1);
 			return Json(new { field = "Mnn1", value = after.Mnn1 });
 		}
 

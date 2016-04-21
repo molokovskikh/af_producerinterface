@@ -1,0 +1,28 @@
+﻿@using ProducerInterfaceCommon.LoggerModels
+@model IEnumerable<propertychangeview>
+@{
+    ViewBag.Title = "Список правок модели";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<h2>Список правок модели</h2>
+
+<hr />
+
+<table class="table-bordered table-striped" id="Table-LogUserChange">
+  <tr>
+      <th>Свойство</th>
+      <th>Старое значение</th>
+      <th>Новое значение</th>    
+  </tr>
+
+    @foreach (var ModelItem in Model)
+    {
+        <tr>
+            <td>@ModelItem.PropertyDisplayName</td>
+            <td>@ModelItem.ValueOld</td>
+            <td>@ModelItem.ValueNew</td>
+        </tr>
+    }
+ 
+</table>

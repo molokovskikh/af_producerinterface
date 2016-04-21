@@ -41,13 +41,13 @@ namespace ProducerInterfaceCommon.Models
 		RegistrationSuccess = 12,
 
 		[Display(Name = "Изменение ПКУ препарата")]
-		CatalogEvidence = 13,
+		CatalogPKU = 13,
 
 		[Display(Name = "Изменение описания препарата")]
 		CatalogDescription = 14,
 
 		[Display(Name = "Именение МНН препарата")]
-		CatalogINN = 15
+		CatalogMNN = 15
 
 	}
 }

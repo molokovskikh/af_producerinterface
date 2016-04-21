@@ -53,12 +53,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (param.RunTo.HasValue)
 				query = query.Where(x => x.LastRun <= param.RunTo);
 
-			var itemCount = query.Count();
-			var itemsOnPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
-			var skip = param.CurrentPageIndex * itemsOnPage;
-			SetPager(itemCount, param.CurrentPageIndex, itemsOnPage);
+			var itemsCount = query.Count();
+			var itemsPerPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
+			var info = new SortingPagingInfo() { CurrentPageIndex = param.CurrentPageIndex, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
+			ViewBag.Info = info;
 
-			var model = query.OrderBy(x => x.CreationDate).Skip(skip).Take(itemsOnPage).ToList();
+			var model = query.OrderBy(x => x.CreationDate).Skip(param.CurrentPageIndex * itemsPerPage).Take(itemsPerPage).ToList();
 			return View(model);
 		}
 
@@ -130,14 +130,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			cntx_.SaveChanges();
 			SuccessMessage("Свойства отчета сохранены");
 			return RedirectToAction("ReportDescription");
-		}
-
-		private void SetPager(int itemCount, int page, int itemsOnPage)
-		{
-			var info = new SortingPagingInfo();
-			info.CurrentPageIndex = page;
-			info.PageCount = (int)Math.Ceiling((decimal)itemCount / itemsOnPage);
-			ViewBag.Info = info;
 		}
 
 		/// <summary>

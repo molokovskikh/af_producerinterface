@@ -1507,5 +1507,19 @@ COLLATE='cp1251_general_ci'
 ENGINE=InnoDB
 ROW_FORMAT=COMPACT;
 
+alter TABLE `CatalogLog` CHANGE COLUMN `TypeName` `TypeEnum` INT(10) NOT NULL;
 
+alter TABLE `CatalogLog` CHANGE COLUMN `PropertyName` `PropertyName` VARCHAR(255) NOT NULL;
+
+alter TABLE `CatalogLog` add column `PropertyNameUi` VARCHAR(255) NOT NULL after PropertyName;
+
+alter TABLE `CatalogLog` CHANGE COLUMN `TypeEnum` `Type` INT(10) NOT NULL;
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view CatalogLogUI as
+select cl.Id, cl.LogTime, cl.UserId, cl.OperatorHost, cl.ObjectReference, cl.Type,
+cl.PropertyName, cl.PropertyNameUi, cl.Before, cl.After, cl.Apply, cl.AdminId, cl.DateEdit, a.Login, a.Name as UserName, ac.ProducerId, p.ProducerName
+from CatalogLog cl
+left outer join Account a on a.Id = cl.UserId
+left outer join AccountCompany ac on ac.Id = a.CompanyId
+left outer join producernames p on p.ProducerId = ac.ProducerId;
 

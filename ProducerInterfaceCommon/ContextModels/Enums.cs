@@ -2,6 +2,18 @@
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+	public enum CatalogLogType
+	{
+		[Display(Name = "Описание")]
+		Descriptions = 1,
+
+		[Display(Name = "МНН")]
+		MNN = 2,
+
+		[Display(Name = "ПКУ")]
+		PKU = 3
+	}
+
 	public enum DisplayStatus
 	{
 

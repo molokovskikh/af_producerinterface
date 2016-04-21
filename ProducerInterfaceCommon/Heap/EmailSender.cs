@@ -191,11 +191,11 @@ namespace ProducerInterfaceCommon.Heap
 		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string fieldName, string formName, string before, string after)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CatalogEvidence);
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CatalogPKU);
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, FormName = formName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = GetEnumDisplayName(MailType.CatalogEvidence) };
+			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = GetEnumDisplayName(MailType.CatalogPKU) };
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
@@ -217,11 +217,11 @@ namespace ProducerInterfaceCommon.Heap
 		public static void SendMnnChangeMessage(producerinterface_Entities cntx, Account user, string catalogName, string before, string after)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CatalogINN);
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CatalogMNN);
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{ReliableTokenizer(mailForm.Body, new { CatalogName = catalogName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = GetEnumDisplayName(MailType.CatalogINN) };
+			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = GetEnumDisplayName(MailType.CatalogMNN) };
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}

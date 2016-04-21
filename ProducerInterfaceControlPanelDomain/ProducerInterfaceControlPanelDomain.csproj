@@ -195,9 +195,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminProfile\AdminAccountController.cs" />
     <Compile Include="Controllers\AdminProfile\GoToProducerInterfaceController.cs" />
-    <Compile Include="Controllers\LogForNet_LogChange_FeedBack\FeedBackController.cs" />
-    <Compile Include="Controllers\LogForNet_LogChange_FeedBack\LogForNetController.cs" />
-    <Compile Include="Controllers\LogForNet_LogChange_FeedBack\LogUserChangeController.cs" />
+    <Compile Include="Controllers\Logs_FeedBack\FeedBackController.cs" />
+    <Compile Include="Controllers\Logs_FeedBack\LogForNetController.cs" />
+    <Compile Include="Controllers\Logs_FeedBack\LogCatalogController.cs" />
+    <Compile Include="Controllers\Logs_FeedBack\LogUserChangeController.cs" />
     <Compile Include="Controllers\Permissions\BasePermissionController.cs" />
     <Compile Include="Controllers\AdminProfile\GlobalAccountController.cs" />
     <Compile Include="Controllers\Global\HomeController.cs" />
@@ -326,6 +327,7 @@
     <Content Include="Scripts\semantic_ui\dropdown.js" />
     <Content Include="Scripts\semantic_ui\dropdown.min.js" />
     <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
+    <Content Include="Scripts\WorkPlace\CatalogLog.js" />
     <Content Include="Scripts\WorkPlace\FeedBackModel.js" />
     <Content Include="Scripts\WorkPlace\GlobalAccount_AccountVerification.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
@@ -786,6 +788,8 @@
     <Content Include="Views\OfficePost\AccountCustomPost.cshtml" />
     <Content Include="Views\Report\ReportDescription.cshtml" />
     <Content Include="Views\Report\EditReportDescription.cshtml" />
+    <Content Include="Views\LogCatalog\Index.cshtml" />
+    <Content Include="Views\LogCatalog\ReadMore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

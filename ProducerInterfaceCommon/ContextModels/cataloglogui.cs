@@ -12,7 +12,7 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class CatalogLog
+    public partial class cataloglogui
     {
         public long Id { get; set; }
         public System.DateTime LogTime { get; set; }
@@ -27,5 +27,9 @@ namespace ProducerInterfaceCommon.ContextModels
         public bool Apply { get; set; }
         public Nullable<long> AdminId { get; set; }
         public Nullable<System.DateTime> DateEdit { get; set; }
+        public string Login { get; set; }
+        public string UserName { get; set; }
+        public Nullable<long> ProducerId { get; set; }
+        public string ProducerName { get; set; }
     }
 }

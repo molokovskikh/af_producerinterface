@@ -71,6 +71,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<feedbackui> feedbackui { get; set; }
         public DbSet<CatalogLog> CatalogLog { get; set; }
+        public DbSet<cataloglogui> cataloglogui { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {
