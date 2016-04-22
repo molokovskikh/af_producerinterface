@@ -5,6 +5,7 @@ using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
 using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.CatalogModels;
+using System.Web.Caching;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -18,10 +19,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			base.OnActionExecuting(filterContext);
 			ccntx = new catalogsEntities();
-			mnnNames = ccntx.mnn.ToDictionary(x => x.Id, x => x.Mnn1);
+
+			// кешируем МНН
+			var key = "mnnNames";
+			mnnNames = HttpContext.Cache.Get(key) as Dictionary<long, string> ?? ccntx.mnn.ToDictionary(x => x.Id, x => x.Mnn1);
+			HttpContext.Cache.Insert(key, mnnNames, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
 		}
 
-		// GET: LogUserChange
+		[HttpGet]
 		public ActionResult Index(int Id = 0)
 		{
 			var itemsCount = cntx_.cataloglogui.Count();
@@ -39,16 +44,64 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(modelUi);
 		}
 
-		public ActionResult ReadMore(int Id)
+		[HttpPost]
+		public ActionResult Index(int Id, List<long> apply)
 		{
+			var items = cntx_.CatalogLog.Where(x => apply.Contains(x.Id)).ToList();
+			foreach (var item in items) {
+				switch (item.TypeEnum) {
+						case CatalogLogType.Descriptions:
+							var description = ccntx.Descriptions.Single(x => x.Id == item.ObjectReference);
+							SetValue(description, item.PropertyName, item.After);
+							break;
+						case CatalogLogType.MNN:
+							var drugfamily = ccntx.catalognames.Single(x => x.Id == item.ObjectReference);
+							SetValue(drugfamily, item.PropertyName, item.After);
+						break;
+						case CatalogLogType.PKU:
+							var catalog = ccntx.Catalog.Single(x => x.Id == item.ObjectReference);
+							SetValue(catalog, item.PropertyName, item.After);
+							break;
+				}
+				ccntx.SaveChanges();
+				item.Apply = true;
+			}
 
-			if (Id == 0)
-				return RedirectToAction("Index");
-
-			var model = cntx_.cataloglogui.Where(x => x.Id == Id).ToList();
-
-			return View(model);
+			cntx_.SaveChanges();
+			SuccessMessage("Правки успешно внесены в каталог");
+			return RedirectToAction("Index", new { Id = Id });
 		}
+
+		//public ActionResult History(long id)
+		//{
+		//	var logItem = cntx_.CatalogLog.Single(x => x.Id == id);
+		//	var asdf = cntx_.CatalogLog.Where(x => x.ObjectReference == logItem.ObjectReference && x.Type == logItem.Type).ToList();
+		//}
+
+		private void SetValue(object o, string propName, string value)
+		{
+			var type = o.GetType();
+			var pi = type.GetProperties();
+			var p = pi.SingleOrDefault(x => x.Name == propName);
+			if (p == null)
+				return;
+
+			var uType = Nullable.GetUnderlyingType(p.PropertyType);
+			// если тип допускает null и пришёл null - ставим null
+			if (uType != null && string.IsNullOrEmpty(value))
+			{
+				p.SetValue(o, null);
+				return;
+			}
+			// если тип не допускает null и пришёл null
+			if (uType == null && string.IsNullOrEmpty(value))
+				throw new NotSupportedException("Попытка записи null в поле, не допускающее null");
+
+			// если пришёл не null
+			var castValue = Convert.ChangeType(value, uType ?? p.PropertyType);
+			p.SetValue(o, castValue);
+		}
+
 
 		private string UserFrendlyName(string val)
 		{

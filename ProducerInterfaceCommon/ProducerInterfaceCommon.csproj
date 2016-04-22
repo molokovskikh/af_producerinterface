@@ -65,17 +65,14 @@
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
     <Reference Include="MySql.Data.Entity.EF6, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.Entity.6.9.8\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
     <Reference Include="MySql.Web, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Web.6.9.8\lib\net45\MySql.Web.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
     <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
@@ -364,6 +361,27 @@
     <Compile Include="LoggerModels\propertychangeview.cs">
       <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="LogsModels\CatalogLogs.cs">
+      <DependentUpon>LogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogsModels\descriptionlogs.cs">
+      <DependentUpon>LogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogsModels\LogsEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogsEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogsModels\LogsEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogsEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogsModels\LogsEntities.Designer.cs">
+      <DependentUpon>LogsEntities.edmx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Models\CronNotIntervalParam.cs" />
     <Compile Include="Models\CronIntervalParam.cs" />
     <Compile Include="Models\CronParam.cs" />
@@ -486,6 +504,13 @@
     <None Include="LoggerModels\Logger_Entities.edmx.diagram">
       <DependentUpon>Logger_Entities.edmx</DependentUpon>
     </None>
+    <EntityDeploy Include="LogsModels\LogsEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LogsEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="LogsModels\LogsEntities.edmx.diagram">
+      <DependentUpon>LogsEntities.edmx</DependentUpon>
+    </None>
     <None Include="Models\Report.cd" />
     <None Include="packages.config" />
     <EntityDeploy Include="ReportModels\Reports_Entities.edmx">
@@ -527,6 +552,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Logger_Entities.edmx</DependentUpon>
       <LastGenOutput>Logger_Entities.cs</LastGenOutput>
+    </Content>
+    <Content Include="LogsModels\LogsEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LogsEntities.edmx</DependentUpon>
+      <LastGenOutput>LogsEntities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="LogsModels\LogsEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LogsEntities.edmx</DependentUpon>
+      <LastGenOutput>LogsEntities.cs</LastGenOutput>
     </Content>
     <Content Include="migration.sql" />
     <Content Include="ReportModels\Reports_Entities.Context.tt">

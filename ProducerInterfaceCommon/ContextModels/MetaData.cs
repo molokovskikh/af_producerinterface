@@ -10,6 +10,15 @@ using ProducerInterfaceCommon.Heap;
 namespace ProducerInterfaceCommon.ContextModels
 {
 
+	public partial class CatalogLog
+	{
+		public CatalogLogType TypeEnum
+		{
+			get { return (CatalogLogType)Type; }
+			set { Type = (int)value; }
+		}
+	}
+
 	public partial class cataloglogui
 	{
 		public CatalogLogType TypeEnum

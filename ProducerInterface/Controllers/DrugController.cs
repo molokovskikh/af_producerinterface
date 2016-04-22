@@ -1,12 +1,12 @@
 ﻿using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.ContextModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using ProducerInterfaceCommon.CatalogModels;
+using ProducerInterfaceCommon.LogsModels;
+
 
 namespace ProducerInterface.Controllers
 {
@@ -15,12 +15,14 @@ namespace ProducerInterface.Controllers
 		protected long userId;
 		protected long producerId;
 		protected catalogsEntities ccntx;
+		protected LogsEntities lcntx;
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
 
 			ccntx = new catalogsEntities();
+			lcntx = new LogsEntities();
 
 			if (CurrentUser != null)
 			{
@@ -31,6 +33,9 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Index()
 		{
+			//var asdsd = lcntx.CatalogLogs.Where(x => x.CatalogId == 30346).Select(x => x.Id);
+
+
 			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 
 			var catalogIds = ccntx.assortment.Where(x => x.ProducerId == producerId).Select(x => x.CatalogId).ToList();
@@ -84,7 +89,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// отправляет запрос на правку ПКУ
+		/// Отправляет запрос на правку ПКУ
 		/// </summary>
 		/// <param name="familyId">Идентификатор по таблице catalognames</param>
 		/// <returns></returns>
@@ -130,6 +135,7 @@ namespace ProducerInterface.Controllers
 							After = after.ToString(),
 							Before = before.ToString(),
 							ObjectReference = row.Id,
+							ObjectReferenceNameUi = row.Name,
 							Type = (int)CatalogLogType.PKU,
 							LogTime = DateTime.Now,
 							OperatorHost = CurrentUser.IP,
@@ -179,6 +185,7 @@ namespace ProducerInterface.Controllers
 				After = value,
 				Before = before,
 				ObjectReference = model.Id,
+				ObjectReferenceNameUi = drugfamily.Name,
 				Type = (int)CatalogLogType.Descriptions,
 				LogTime = DateTime.Now,
 				OperatorHost = CurrentUser.IP,
@@ -188,9 +195,6 @@ namespace ProducerInterface.Controllers
 			};
 			cntx_.CatalogLog.Add(dl);
 			cntx_.SaveChanges();
-
-			// TODO это перенести в админку, где подтверждаются изменения
-			//propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
 
 			EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, displayName, drugfamily.Name, before, value);
       return Json(new { field = field, value = value });
@@ -224,7 +228,6 @@ namespace ProducerInterface.Controllers
 			var type = df.GetType();
 			if (type.BaseType != null && type.Namespace == "System.Data.Entity.DynamicProxies")
 				type = type.BaseType;
-			var displayName = "МНН";
 
 			// пишем в лог для премодерации
 			var dl = new CatalogLog()
@@ -232,17 +235,18 @@ namespace ProducerInterface.Controllers
 				After = after?.Id.ToString(),
 				Before = before?.Id.ToString(),
 				ObjectReference = df.Id,
+				ObjectReferenceNameUi = df.Name,
 				Type = (int)CatalogLogType.MNN,
 				LogTime = DateTime.Now,
 				OperatorHost = CurrentUser.IP,
 				UserId = CurrentUser.ID_LOG,
 				PropertyName = "MnnId",
-				PropertyNameUi = displayName
+				PropertyNameUi = "МНН"
 			};
 			cntx_.CatalogLog.Add(dl);
 			cntx_.SaveChanges();
 
-			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, displayName, before?.Mnn1, after.Mnn1);
+			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, df.Name, before?.Mnn1, after.Mnn1);
 			return Json(new { field = "Mnn1", value = after.Mnn1 });
 		}
 

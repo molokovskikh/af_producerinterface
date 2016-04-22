@@ -19,6 +19,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public long UserId { get; set; }
         public string OperatorHost { get; set; }
         public long ObjectReference { get; set; }
+        public string ObjectReferenceNameUi { get; set; }
         public int Type { get; set; }
         public string PropertyName { get; set; }
         public string PropertyNameUi { get; set; }

@@ -114,6 +114,7 @@
           <Property Name="UserId" Type="uint" Nullable="false" />
           <Property Name="OperatorHost" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ObjectReference" Type="uint" Nullable="false" />
+          <Property Name="ObjectReferenceNameUi" Type="varchar" MaxLength="1000" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="PropertyName" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="PropertyNameUi" Type="varchar" MaxLength="255" Nullable="false" />
@@ -377,6 +378,7 @@
             <PropertyRef Name="UserId" />
             <PropertyRef Name="OperatorHost" />
             <PropertyRef Name="ObjectReference" />
+            <PropertyRef Name="ObjectReferenceNameUi" />
             <PropertyRef Name="Type" />
             <PropertyRef Name="PropertyName" />
             <PropertyRef Name="PropertyNameUi" />
@@ -387,6 +389,7 @@
           <Property Name="UserId" Type="uint" Nullable="false" />
           <Property Name="OperatorHost" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ObjectReference" Type="uint" Nullable="false" />
+          <Property Name="ObjectReferenceNameUi" Type="varchar" MaxLength="1000" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="PropertyName" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="PropertyNameUi" Type="varchar" MaxLength="255" Nullable="false" />
@@ -394,6 +397,7 @@
           <Property Name="After" Type="text" />
           <Property Name="Apply" Type="bool" Nullable="false" />
           <Property Name="AdminId" Type="uint" />
+          <Property Name="AdminName" Type="varchar" MaxLength="100" />
           <Property Name="DateEdit" Type="datetime" Precision="0" />
           <Property Name="Login" Type="varchar" MaxLength="50" />
           <Property Name="UserName" Type="varchar" MaxLength="100" />
@@ -946,6 +950,7 @@ FROM `assortment` AS `assortment`</DefiningQuery>
 `cataloglogui`.`UserId`, 
 `cataloglogui`.`OperatorHost`, 
 `cataloglogui`.`ObjectReference`, 
+`cataloglogui`.`ObjectReferenceNameUi`, 
 `cataloglogui`.`Type`, 
 `cataloglogui`.`PropertyName`, 
 `cataloglogui`.`PropertyNameUi`, 
@@ -953,6 +958,7 @@ FROM `assortment` AS `assortment`</DefiningQuery>
 `cataloglogui`.`After`, 
 `cataloglogui`.`Apply`, 
 `cataloglogui`.`AdminId`, 
+`cataloglogui`.`AdminName`, 
 `cataloglogui`.`DateEdit`, 
 `cataloglogui`.`Login`, 
 `cataloglogui`.`UserName`, 
@@ -2073,6 +2079,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ObjectReference" Type="Int64" Nullable="false" />
+          <Property Name="ObjectReferenceNameUi" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="PropertyNameUi" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
@@ -2089,6 +2096,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <PropertyRef Name="UserId" />
             <PropertyRef Name="OperatorHost" />
             <PropertyRef Name="ObjectReference" />
+            <PropertyRef Name="ObjectReferenceNameUi" />
             <PropertyRef Name="Type" />
             <PropertyRef Name="PropertyName" />
             <PropertyRef Name="PropertyNameUi" />
@@ -2099,6 +2107,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ObjectReference" Type="Int64" Nullable="false" />
+          <Property Name="ObjectReferenceNameUi" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="PropertyNameUi" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
@@ -2106,6 +2115,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="After" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="Apply" Type="Boolean" Nullable="false" />
           <Property Name="AdminId" Type="Int64" />
+          <Property Name="AdminName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="DateEdit" Type="DateTime" />
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -2684,6 +2694,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="PropertyNameUi" ColumnName="PropertyNameUi" />
                 <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ObjectReferenceNameUi" ColumnName="ObjectReferenceNameUi" />
                 <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
                 <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -2700,6 +2711,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
+                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
                 <ScalarProperty Name="AdminId" ColumnName="AdminId" />
                 <ScalarProperty Name="Apply" ColumnName="Apply" />
                 <ScalarProperty Name="After" ColumnName="After" />
@@ -2707,6 +2719,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="PropertyNameUi" ColumnName="PropertyNameUi" />
                 <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ObjectReferenceNameUi" ColumnName="ObjectReferenceNameUi" />
                 <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
                 <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />

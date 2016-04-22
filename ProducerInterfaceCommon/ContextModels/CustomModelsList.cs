@@ -13,6 +13,19 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string BeforeUi { get; set; }
 
 		public string AfterUi { get; set; }
+
+		public string LogTimeUi
+		{
+			get { return LogTime.ToString("dd.MM.yyyy hh:mm:ss"); }
+		}
+
+		public string DateEditUi
+		{
+			get
+			{
+				return DateEdit.HasValue ? DateEdit.Value.ToString("dd.MM.yyyy hh:mm:ss") : "";
+			}
+		}
 	}
 
 	public class ReportDescriptionUI

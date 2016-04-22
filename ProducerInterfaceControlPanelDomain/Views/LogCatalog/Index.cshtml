@@ -1,73 +1,96 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
 @using ProducerInterfaceCommon.Heap
+
 @model IEnumerable<CataloglogUiPlus>
 @{
   ViewBag.Title = "Логирование изменений каталога";
   Layout = "~/Views/Shared/_MasterPage.cshtml";
+  var info = ViewBag.Info;
 }
 
-<h2>Лог изменений каталога</h2>
+<h2>@ViewBag.Title</h2>
 <hr />
-
-@Html.Partial("Partial/PagerPartial")
 
 @if (Model != null && Model.Count() > 0)
 {
-
-<table class="table-bordered table-striped" id="Table-LogUserChange">
-    <tr>
-        <th>Сущность</th>
-        <th>Свойство</th>
-        <th>Было</th>
-        <th>Стало</th>
-        <th>Принять</th>
-        <th>Подробнее</th>
-    </tr>
-
-    @foreach (var item in Model)
+    using (Html.BeginForm())
     {
-        var details = Json.Encode(new { item.Id, item.LogTime, item.OperatorHost, item.ProducerId, item.ProducerName, item.Login, item.UserId, item.UserName, item.DateEdit });
-    <tr>
-        <td>@item.TypeEnum.DisplayName()</td>
-        <td>@item.PropertyNameUi</td>
-        <td>@item.BeforeUi</td>
-        <td>@item.AfterUi</td>
-        <td>
-            <input name="apply" type="checkbox" value="@item.Id" />
-        </td>
-        <td data-details="@details"><a data-bind="click: Event_SelectItem.bind(Id)"><span class="glyphicon glyphicon-eye-open"></span></a></td>
-    </tr>
-    }
-</table>
+    <input type="hidden" name="Id" value="@info.CurrentPageIndex"/>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Partial("Partial/PagerPartial")
+        </div>
+        <div class="col-md-6" style="text-align:right">
+            <input type="submit" value="Применить" class="btn btn-primary" />
+        </div>
+    </div>
 
-<div id="ModalDetailsItem" class="modal fade" role="dialog">
+
+    <table class="table-bordered table-striped" id="Table-LogUserChange">
+        <tr>
+            <th>Сущность</th>
+            <th>Свойство</th>
+            <th>Было</th>
+            <th>Стало</th>
+            <th>Принять</th>
+            <th>Подробнее</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            var details = Json.Encode(new {item.ObjectReference, item.Id, item.LogTimeUi, item.OperatorHost, item.ProducerId, item.ProducerName, item.Login, item.UserId, item.UserName, item.DateEditUi, item.AdminName });
+        <tr>
+            <td>@item.ObjectReferenceNameUi</td>
+            <td>@item.TypeEnum.DisplayName() / @item.PropertyNameUi</td>
+            <td>@item.BeforeUi</td>
+            <td>@item.AfterUi</td>
+            <td>@Html.ActionLink("История правок", "History", new {id = item.Id})</td>
+            <td>
+                @if (item.Apply)
+                {
+                <input type="checkbox" checked="checked" disabled="disabled" class="pointer" />}
+                else
+                {
+                <input name="apply" type="checkbox" value="@item.Id" />}
+            </td>
+            <td><a onclick="bindDetailsItem(@details)"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+        </tr>
+        }
+    </table>
+    }
+
+<div id="ModalDetailsItem" class="modal fade modal-open-noscroll" role="dialog">
     <div class="modal-dialog modal-dialog-full">
         <div class="modal-content modal-content-full">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Правка номер № <span data-bind="text:Id"></span></h3>
+                <h3>Правка № <span data-bind="text:Id"></span></h3>
             </div>
             <div class="modal-body">
                 <table class="table-bordered table-striped" id="Table-LogUserChange">
                     <tr>
-                        <th>Дата добавления</th>
-                        <th><span data-bind="text:LogTime"></span></th>
+                        <td>Идентификатор сущности</td>
+                        <td><span data-bind="text:ObjectReference"></span></td>
                     </tr>
                     <tr>
-                        <th>Пользователь</th>
-                        <th><span data-bind="text:UserName"></span> (id=<span data-bind="text:UserId"></span>, <span data-bind="text:Login"></span>, IP <span data-bind="text:OperatorHost"></span>)</th>
+                        <td>Дата добавления</td>
+                        <td><span data-bind="text:LogTimeUi"></span></td>
                     </tr>
                     <tr>
-                        <th>Производитель</th>
-                        <th><span data-bind="text:ProducerName"></span> (id=<span data-bind="text:ProducerId"></span>)</th>
+                        <td>Пользователь</td>
+                        <td><span data-bind="text:UserName"></span> (id=<span data-bind="text:UserId"></span>, <span data-bind="text:Login"></span>, IP <span data-bind="text:OperatorHost"></span>)</td>
                     </tr>
                     <tr>
-                        <th>Правку принял</th>
-                        <th><span data-bind="text:DateEdit"></span></th>
+                        <td>Производитель</td>
+                        <td><span data-bind="text:ProducerName"></span> (id=<span data-bind="text:ProducerId"></span>)</td>
                     </tr>
                     <tr>
-                        <th>Дата принятия</th>
-                        <th><span data-bind="text:DateEdit"></span></th>
+                        <td>Правку принял</td>
+                        <td><span data-bind="text:AdminName"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Дата принятия правки</td>
+                        <td><span data-bind="text:DateEditUi"></span></td>
                     </tr>
                 </table>
             </div>
@@ -75,21 +98,27 @@
     </div>
 </div>
 
-    <style>
-        .modal-dialog-full {
-            width: 80%;
-            height: 100%;
-        }
-
-        .modal-content-full {
-            height: 100%;
-        }
-    </style>
 }
 else
 {
-<h4>Список логов пуст</h4>
+    <h4>Список логов пуст</h4>
 }
+
+<style>
+    .modal-dialog-full {
+        width: 50%;
+        height: 50%;
+    }
+
+    .modal-content-full {
+        height: 100%;
+    }
+
+    table.table-striped td, table.table-striped th {
+        vertical-align: top;
+        padding: 10px;
+    }
+</style>
 
 @section scripts
 {

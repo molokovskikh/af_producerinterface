@@ -1515,11 +1515,17 @@ alter TABLE `CatalogLog` add column `PropertyNameUi` VARCHAR(255) NOT NULL after
 
 alter TABLE `CatalogLog` CHANGE COLUMN `TypeEnum` `Type` INT(10) NOT NULL;
 
+alter TABLE `CatalogLog` add column `ObjectReferenceNameUi` VARCHAR(1000) NOT NULL after ObjectReference;
+
 create or replace DEFINER=`RootDBMS`@`127.0.0.1` view CatalogLogUI as
-select cl.Id, cl.LogTime, cl.UserId, cl.OperatorHost, cl.ObjectReference, cl.Type,
-cl.PropertyName, cl.PropertyNameUi, cl.Before, cl.After, cl.Apply, cl.AdminId, cl.DateEdit, a.Login, a.Name as UserName, ac.ProducerId, p.ProducerName
+select cl.Id, cl.LogTime, cl.UserId, cl.OperatorHost, cl.ObjectReference, cl.ObjectReferenceNameUi, cl.Type,
+cl.PropertyName, cl.PropertyNameUi, cl.Before, cl.After, cl.Apply, cl.AdminId, a2.Name as AdminName, 
+cl.DateEdit, a.Login, a.Name as UserName, ac.ProducerId, p.ProducerName
 from CatalogLog cl
 left outer join Account a on a.Id = cl.UserId
 left outer join AccountCompany ac on ac.Id = a.CompanyId
-left outer join producernames p on p.ProducerId = ac.ProducerId;
+left outer join producernames p on p.ProducerId = ac.ProducerId
+left outer join Account a2 on a2.Id = cl.AdminId;
+
+
 
