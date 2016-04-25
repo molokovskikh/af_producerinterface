@@ -110,6 +110,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameId" Type="uint" Nullable="false" />
           <Property Name="LogTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="UserId" Type="uint" Nullable="false" />
           <Property Name="OperatorHost" Type="varchar" MaxLength="50" Nullable="false" />
@@ -374,6 +375,7 @@
         <EntityType Name="cataloglogui">
           <Key>
             <PropertyRef Name="Id" />
+            <PropertyRef Name="NameId" />
             <PropertyRef Name="LogTime" />
             <PropertyRef Name="UserId" />
             <PropertyRef Name="OperatorHost" />
@@ -385,6 +387,7 @@
             <PropertyRef Name="Apply" />
           </Key>
           <Property Name="Id" Type="uint" Nullable="false" />
+          <Property Name="NameId" Type="uint" Nullable="false" />
           <Property Name="LogTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="UserId" Type="uint" Nullable="false" />
           <Property Name="OperatorHost" Type="varchar" MaxLength="50" Nullable="false" />
@@ -403,6 +406,34 @@
           <Property Name="UserName" Type="varchar" MaxLength="100" />
           <Property Name="ProducerId" Type="uint" />
           <Property Name="ProducerName" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.cataloglogview" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="cataloglogview">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="LogTime" />
+          </Key>
+          <Property Name="Id" Type="uint" Nullable="false" />
+          <Property Name="LogTime" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="OperatorName" Type="varchar" MaxLength="50" />
+          <Property Name="OperatorHost" Type="varchar" MaxLength="50" />
+          <Property Name="Operation" Type="utinyint" />
+          <Property Name="CatalogId" Type="uint" />
+          <Property Name="NewVitallyImportant" Type="bool" />
+          <Property Name="OldVitallyImportant" Type="bool" />
+          <Property Name="NewMandatoryList" Type="bool" />
+          <Property Name="OldMandatoryList" Type="bool" />
+          <Property Name="NewMonobrend" Type="bool" />
+          <Property Name="OldMonobrend" Type="bool" />
+          <Property Name="NewNarcotic" Type="bool" />
+          <Property Name="OldNarcotic" Type="bool" />
+          <Property Name="NewToxic" Type="bool" />
+          <Property Name="OldToxic" Type="bool" />
+          <Property Name="NewCombined" Type="bool" />
+          <Property Name="OldCombined" Type="bool" />
+          <Property Name="NewOther" Type="bool" />
+          <Property Name="OldOther" Type="bool" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.catalognames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -427,6 +458,38 @@
           <Property Name="DescriptionId" Type="uint" />
           <Property Name="MnnId" Type="uint" />
           <Property Name="UpdateTime" Type="timestamp" Precision="0" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "def.producerinterface.descriptionlogview" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="descriptionlogview">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="LogTime" />
+            <PropertyRef Name="OperatorName" />
+            <PropertyRef Name="OperatorHost" />
+            <PropertyRef Name="Operation" />
+            <PropertyRef Name="DescriptionId" />
+          </Key>
+          <Property Name="Id" Type="uint" Nullable="false" />
+          <Property Name="LogTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="OperatorName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OperatorHost" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Operation" Type="utinyint" Nullable="false" />
+          <Property Name="DescriptionId" Type="uint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="EnglishName" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="mediumtext" />
+          <Property Name="Interaction" Type="mediumtext" />
+          <Property Name="SideEffect" Type="mediumtext" />
+          <Property Name="IndicationsForUse" Type="mediumtext" />
+          <Property Name="Dosing" Type="mediumtext" />
+          <Property Name="Warnings" Type="mediumtext" />
+          <Property Name="ProductForm" Type="mediumtext" />
+          <Property Name="PharmacologicalAction" Type="mediumtext" />
+          <Property Name="Storage" Type="mediumtext" />
+          <Property Name="Expiration" Type="mediumtext" />
+          <Property Name="Composition" Type="mediumtext" />
+          <Property Name="NeedCorrect" Type="bool" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamily" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
@@ -946,6 +1009,7 @@ FROM `assortment` AS `assortment`</DefiningQuery>
           <EntitySet Name="cataloglogui" EntityType="Self.cataloglogui" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `cataloglogui`.`Id`, 
+`cataloglogui`.`NameId`, 
 `cataloglogui`.`LogTime`, 
 `cataloglogui`.`UserId`, 
 `cataloglogui`.`OperatorHost`, 
@@ -966,6 +1030,30 @@ FROM `assortment` AS `assortment`</DefiningQuery>
 `cataloglogui`.`ProducerName`
 FROM `cataloglogui` AS `cataloglogui`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="cataloglogview" EntityType="Self.cataloglogview" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`cataloglogview`.`Id`, 
+`cataloglogview`.`LogTime`, 
+`cataloglogview`.`OperatorName`, 
+`cataloglogview`.`OperatorHost`, 
+`cataloglogview`.`Operation`, 
+`cataloglogview`.`CatalogId`, 
+`cataloglogview`.`NewVitallyImportant`, 
+`cataloglogview`.`OldVitallyImportant`, 
+`cataloglogview`.`NewMandatoryList`, 
+`cataloglogview`.`OldMandatoryList`, 
+`cataloglogview`.`NewMonobrend`, 
+`cataloglogview`.`OldMonobrend`, 
+`cataloglogview`.`NewNarcotic`, 
+`cataloglogview`.`OldNarcotic`, 
+`cataloglogview`.`NewToxic`, 
+`cataloglogview`.`OldToxic`, 
+`cataloglogview`.`NewCombined`, 
+`cataloglogview`.`OldCombined`, 
+`cataloglogview`.`NewOther`, 
+`cataloglogview`.`OldOther`
+FROM `cataloglogview` AS `cataloglogview`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="catalognames" EntityType="Self.catalognames" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `catalognames`.`CatalogId`, 
@@ -981,6 +1069,30 @@ FROM `catalognames` AS `catalognames`</DefiningQuery>
 `catalognameswithuptime`.`MnnId`, 
 `catalognameswithuptime`.`UpdateTime`
 FROM `catalognameswithuptime` AS `catalognameswithuptime`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="descriptionlogview" EntityType="Self.descriptionlogview" store:Type="Views" store:Schema="producerinterface">
+            <DefiningQuery>SELECT
+`descriptionlogview`.`Id`, 
+`descriptionlogview`.`LogTime`, 
+`descriptionlogview`.`OperatorName`, 
+`descriptionlogview`.`OperatorHost`, 
+`descriptionlogview`.`Operation`, 
+`descriptionlogview`.`DescriptionId`, 
+`descriptionlogview`.`Name`, 
+`descriptionlogview`.`EnglishName`, 
+`descriptionlogview`.`Description`, 
+`descriptionlogview`.`Interaction`, 
+`descriptionlogview`.`SideEffect`, 
+`descriptionlogview`.`IndicationsForUse`, 
+`descriptionlogview`.`Dosing`, 
+`descriptionlogview`.`Warnings`, 
+`descriptionlogview`.`ProductForm`, 
+`descriptionlogview`.`PharmacologicalAction`, 
+`descriptionlogview`.`Storage`, 
+`descriptionlogview`.`Expiration`, 
+`descriptionlogview`.`Composition`, 
+`descriptionlogview`.`NeedCorrect`
+FROM `descriptionlogview` AS `descriptionlogview`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="drugfamily" EntityType="Self.drugfamily" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
@@ -1474,6 +1586,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
           </AssociationSet>
           <EntitySet Name="feedbackui" EntityType="producerinterface_Model.feedbackui" />
+          <EntitySet Name="cataloglogview" EntityType="producerinterface_Model.cataloglogview" />
+          <EntitySet Name="descriptionlogview" EntityType="producerinterface_Model.descriptionlogview" />
           <EntitySet Name="CatalogLog" EntityType="producerinterface_Model.CatalogLog" />
           <EntitySet Name="cataloglogui" EntityType="producerinterface_Model.cataloglogui" />
           </EntityContainer>
@@ -2070,11 +2184,68 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="SByte" Nullable="false" />
         </EntityType>
+        <EntityType Name="cataloglogview">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="LogTime" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="LogTime" Type="DateTime" Nullable="false" />
+          <Property Name="OperatorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OperatorHost" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Operation" Type="Byte" />
+          <Property Name="CatalogId" Type="Int64" />
+          <Property Name="NewVitallyImportant" Type="Boolean" />
+          <Property Name="OldVitallyImportant" Type="Boolean" />
+          <Property Name="NewMandatoryList" Type="Boolean" />
+          <Property Name="OldMandatoryList" Type="Boolean" />
+          <Property Name="NewMonobrend" Type="Boolean" />
+          <Property Name="OldMonobrend" Type="Boolean" />
+          <Property Name="NewNarcotic" Type="Boolean" />
+          <Property Name="OldNarcotic" Type="Boolean" />
+          <Property Name="NewToxic" Type="Boolean" />
+          <Property Name="OldToxic" Type="Boolean" />
+          <Property Name="NewCombined" Type="Boolean" />
+          <Property Name="OldCombined" Type="Boolean" />
+          <Property Name="NewOther" Type="Boolean" />
+          <Property Name="OldOther" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="descriptionlogview">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="LogTime" />
+            <PropertyRef Name="OperatorName" />
+            <PropertyRef Name="OperatorHost" />
+            <PropertyRef Name="Operation" />
+            <PropertyRef Name="DescriptionId" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="LogTime" Type="DateTime" Nullable="false" />
+          <Property Name="OperatorName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Operation" Type="Byte" Nullable="false" />
+          <Property Name="DescriptionId" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EnglishName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Interaction" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="SideEffect" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="IndicationsForUse" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Dosing" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Warnings" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="ProductForm" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="PharmacologicalAction" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Storage" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Expiration" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="Composition" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="NeedCorrect" Type="Boolean" />
+        </EntityType>
         <EntityType Name="CatalogLog">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameId" Type="Int64" Nullable="false" />
           <Property Name="LogTime" Type="DateTime" Nullable="false" />
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -2092,6 +2263,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
         <EntityType Name="cataloglogui">
           <Key>
             <PropertyRef Name="Id" />
+            <PropertyRef Name="NameId" />
             <PropertyRef Name="LogTime" />
             <PropertyRef Name="UserId" />
             <PropertyRef Name="OperatorHost" />
@@ -2103,6 +2275,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <PropertyRef Name="Apply" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="NameId" Type="Int64" Nullable="false" />
           <Property Name="LogTime" Type="DateTime" Nullable="false" />
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -2683,6 +2856,58 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="cataloglogview">
+            <EntityTypeMapping TypeName="producerinterface_Model.cataloglogview">
+              <MappingFragment StoreEntitySet="cataloglogview">
+                <ScalarProperty Name="OldOther" ColumnName="OldOther" />
+                <ScalarProperty Name="NewOther" ColumnName="NewOther" />
+                <ScalarProperty Name="OldCombined" ColumnName="OldCombined" />
+                <ScalarProperty Name="NewCombined" ColumnName="NewCombined" />
+                <ScalarProperty Name="OldToxic" ColumnName="OldToxic" />
+                <ScalarProperty Name="NewToxic" ColumnName="NewToxic" />
+                <ScalarProperty Name="OldNarcotic" ColumnName="OldNarcotic" />
+                <ScalarProperty Name="NewNarcotic" ColumnName="NewNarcotic" />
+                <ScalarProperty Name="OldMonobrend" ColumnName="OldMonobrend" />
+                <ScalarProperty Name="NewMonobrend" ColumnName="NewMonobrend" />
+                <ScalarProperty Name="OldMandatoryList" ColumnName="OldMandatoryList" />
+                <ScalarProperty Name="NewMandatoryList" ColumnName="NewMandatoryList" />
+                <ScalarProperty Name="OldVitallyImportant" ColumnName="OldVitallyImportant" />
+                <ScalarProperty Name="NewVitallyImportant" ColumnName="NewVitallyImportant" />
+                <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
+                <ScalarProperty Name="Operation" ColumnName="Operation" />
+                <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
+                <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="descriptionlogview">
+            <EntityTypeMapping TypeName="producerinterface_Model.descriptionlogview">
+              <MappingFragment StoreEntitySet="descriptionlogview">
+                <ScalarProperty Name="NeedCorrect" ColumnName="NeedCorrect" />
+                <ScalarProperty Name="Composition" ColumnName="Composition" />
+                <ScalarProperty Name="Expiration" ColumnName="Expiration" />
+                <ScalarProperty Name="Storage" ColumnName="Storage" />
+                <ScalarProperty Name="PharmacologicalAction" ColumnName="PharmacologicalAction" />
+                <ScalarProperty Name="ProductForm" ColumnName="ProductForm" />
+                <ScalarProperty Name="Warnings" ColumnName="Warnings" />
+                <ScalarProperty Name="Dosing" ColumnName="Dosing" />
+                <ScalarProperty Name="IndicationsForUse" ColumnName="IndicationsForUse" />
+                <ScalarProperty Name="SideEffect" ColumnName="SideEffect" />
+                <ScalarProperty Name="Interaction" ColumnName="Interaction" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EnglishName" ColumnName="EnglishName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
+                <ScalarProperty Name="Operation" ColumnName="Operation" />
+                <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
+                <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CatalogLog">
             <EntityTypeMapping TypeName="producerinterface_Model.CatalogLog">
               <MappingFragment StoreEntitySet="CatalogLog">
@@ -2699,6 +2924,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="NameId" ColumnName="NameId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2724,6 +2950,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="NameId" ColumnName="NameId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

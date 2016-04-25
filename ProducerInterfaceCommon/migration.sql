@@ -1518,7 +1518,7 @@ alter TABLE `CatalogLog` CHANGE COLUMN `TypeEnum` `Type` INT(10) NOT NULL;
 alter TABLE `CatalogLog` add column `ObjectReferenceNameUi` VARCHAR(1000) NOT NULL after ObjectReference;
 
 create or replace DEFINER=`RootDBMS`@`127.0.0.1` view CatalogLogUI as
-select cl.Id, cl.LogTime, cl.UserId, cl.OperatorHost, cl.ObjectReference, cl.ObjectReferenceNameUi, cl.Type,
+select cl.Id, cl.NameId, cl.LogTime, cl.UserId, cl.OperatorHost, cl.ObjectReference, cl.ObjectReferenceNameUi, cl.Type,
 cl.PropertyName, cl.PropertyNameUi, cl.Before, cl.After, cl.Apply, cl.AdminId, a2.Name as AdminName, 
 cl.DateEdit, a.Login, a.Name as UserName, ac.ProducerId, p.ProducerName
 from CatalogLog cl
@@ -1527,5 +1527,52 @@ left outer join AccountCompany ac on ac.Id = a.CompanyId
 left outer join producernames p on p.ProducerId = ac.ProducerId
 left outer join Account a2 on a2.Id = cl.AdminId;
 
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view descriptionlogview as 
+select 
+	Id,
+	LogTime,
+	OperatorName,
+	OperatorHost,
+	Operation,
+	DescriptionId,
+	Name,
+	EnglishName,
+	Description,
+	Interaction,
+	SideEffect,
+	IndicationsForUse,
+	Dosing,
+	`Warnings`,
+	ProductForm,
+	PharmacologicalAction,
+	`Storage`,
+	Expiration,
+	Composition,
+	NeedCorrect
+	from logs.descriptionlogs;
 
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view cataloglogview as
+select	Id,
+	LogTime,
+	OperatorName,
+	OperatorHost,
+	Operation,
+	CatalogId,
+	NewVitallyImportant,
+	OldVitallyImportant,
+	NewMandatoryList,
+	OldMandatoryList,
+	NewMonobrend,
+	OldMonobrend,
+	NewNarcotic,
+	OldNarcotic,
+	NewToxic,
+	OldToxic,
+	NewCombined,
+	OldCombined,
+	NewOther,
+	OldOther
+	from logs.CatalogLogs;
+
+	alter TABLE `CatalogLog` add column `NameId` INT(10) UNSIGNED NOT NULL after Id;
 

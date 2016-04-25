@@ -23,7 +23,7 @@
                         <th>Наименование</th>
                         <th>Описание</th>
                         <th>Формы выпуска и дозировка</th>
-                        <th>Время последней корректировки</th>
+                        <th>История правок</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,7 +41,10 @@
                         <td>
                             @Html.ActionLink("Формы выпуска и дозировка", "DisplayForms", new { id = item.Id })
                         </td>
-                        <td>@Html.Raw(String.Format("{0:dd.MM.yyyy hh:mm:ss}", item.UpdateTime))</td>
+                        @*<td>@Html.Raw(String.Format("{0:dd.MM.yyyy hh:mm:ss}", item.UpdateTime))</td>*@
+                        <td>
+                            @Html.ActionLink("История правок", "History", new { id = item.Id })
+                        </td>
                     </tr>
                 }
                 </tbody>

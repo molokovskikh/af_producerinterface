@@ -5,8 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using ProducerInterfaceCommon.CatalogModels;
-using ProducerInterfaceCommon.LogsModels;
-
+using System.Collections.Generic;
 
 namespace ProducerInterface.Controllers
 {
@@ -15,14 +14,15 @@ namespace ProducerInterface.Controllers
 		protected long userId;
 		protected long producerId;
 		protected catalogsEntities ccntx;
-		protected LogsEntities lcntx;
+
+		private string[] descrFieldNames = new string[] { "Name", "EnglishName", "Description", "Interaction", "SideEffect", "IndicationsForUse", "Dosing", "Warnings", "ProductForm", "PharmacologicalAction", "Storage", "Expiration", "Composition" };
+		private string[] catalogFieldNames = new string[] { "VitallyImportant", "MandatoryList", "Monobrend", "Narcotic", "Toxic", "Combined", "Other" };
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
 
 			ccntx = new catalogsEntities();
-			lcntx = new LogsEntities();
 
 			if (CurrentUser != null)
 			{
@@ -33,9 +33,6 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Index()
 		{
-			//var asdsd = lcntx.CatalogLogs.Where(x => x.CatalogId == 30346).Select(x => x.Id);
-
-
 			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
 
 			var catalogIds = ccntx.assortment.Where(x => x.ProducerId == producerId).Select(x => x.CatalogId).ToList();
@@ -45,7 +42,18 @@ namespace ProducerInterface.Controllers
 			return View(model);
 		}
 
-		// Страница описания препарата (id по таблице catalogs.catalognames)
+		public ActionResult History(long id)
+		{
+			var model = cntx_.cataloglogui.Where(x => x.NameId == id && x.Apply == true).OrderByDescending(x => x.LogTime).ToList();
+			var modelUi = MapListToUi(model);
+			return View(modelUi);
+		}
+
+		/// <summary>
+		/// Страница описания препарата
+		/// </summary>
+		/// <param name="id">идентификатор по таблице catalogs.catalognames</param>
+		/// <returns></returns>
 		public ActionResult EditDescription(long id)
 		{
 			var drugfamily = GetDrugFamilyWithCheck(id);
@@ -67,8 +75,110 @@ namespace ProducerInterface.Controllers
 			var model = ccntx.Descriptions.SingleOrDefault(x => x.Id == drugfamily.DescriptionId);
 			if (model == null)
 				model = new Descriptions();
-      return View(model);
+
+			if (drugfamily.DescriptionId != null) {
+				// вытащили инфу из таблицы премодерации (таблица CatalogLog базы producerinterface)
+				var newLog = GetNewLog(drugfamily.DescriptionId.Value);
+				// вытащили инфу из основного лога (таблица descriptionlogs базы logs)
+				//var oldLog = GetOldLog(drugfamily.DescriptionId.Value);
+				//foreach (var logItem in newLog) {
+				//	// если инфа (расширенная) по элементу есть в новом логе, удалили её дубликат из основного
+				//	var existItem = oldLog.SingleOrDefault(x => x.PropertyName == logItem.PropertyName);
+				//	if (existItem != null)
+				//		oldLog.Remove(existItem);
+				//}
+				//// добавили
+				//newLog.AddRange(oldLog);
+				ViewData["log"] = newLog;
+			}
+
+			return View(model);
 		}
+
+		private List<LogItem> GetNewLog(long descriptionId)
+		{
+			var result = new List<LogItem>();
+			var logItems = cntx_.cataloglogui.Where(x => x.Type == (int)CatalogLogType.Descriptions && x.ObjectReference == descriptionId && x.Apply == true).ToList();
+			if (!logItems.Any())
+				return result;
+
+			foreach (var pn in descrFieldNames) {
+				var lastItem = logItems.Where(x => x.PropertyName == pn).OrderByDescending(x => x.LogTime).FirstOrDefault();
+				if (lastItem != null) {
+					var logItem = new LogItem() { OperationEnum = Operation.Update, PropertyName = pn, LogTime = lastItem.LogTime, OperatorHost = lastItem.OperatorHost, OperatorName = lastItem.UserName, OperatorLogin = lastItem.Login };
+					result.Add(logItem);
+				}
+			}
+			return result;
+		}
+
+		//private List<LogItem> GetOldLog(long descriptionId)
+		//{
+		//	var o = new descriptionlogview();
+		//	var type = o.GetType();
+		//	var pi = type.GetProperties().Where(x => descrFieldNames.Contains(x.Name)).ToList();
+
+		//	var logItems = cntx_.descriptionlogview.Where(x => x.DescriptionId == descriptionId).ToList();
+		//	var result = new List<LogItem>();
+		//	foreach (var p in pi)
+		//	{
+		//		var lastItem = logItems.Where(x => p.GetValue(x) != null).OrderByDescending(x => x.LogTime).FirstOrDefault();
+		//		if (lastItem != null)
+		//		{
+		//			var logItem = new LogItem() { OperationEnum = (Operation)lastItem.Operation, PropertyName = p.Name, LogTime = lastItem.LogTime, OperatorHost = lastItem.OperatorHost, OperatorName = lastItem.OperatorName };
+		//			result.Add(logItem);
+		//		}
+		//	}
+		//	return result;
+		//}
+
+		private List<LogItem> GetNewCatalogLog(long catalogId)
+		{
+			var result = new List<LogItem>();
+			var logItems = cntx_.cataloglogui.Where(x => x.Type == (int)CatalogLogType.PKU && x.ObjectReference == catalogId && x.Apply == true).ToList();
+			if (!logItems.Any())
+				return result;
+
+			foreach (var pn in catalogFieldNames)
+			{
+				var lastItem = logItems.Where(x => x.PropertyName == pn).OrderByDescending(x => x.LogTime).FirstOrDefault();
+				if (lastItem != null)
+				{
+					var logItem = new LogItem() { OperationEnum = Operation.Update, PropertyName = pn, LogTime = lastItem.LogTime, OperatorHost = lastItem.OperatorHost, OperatorName = lastItem.UserName, OperatorLogin = lastItem.Login };
+					result.Add(logItem);
+				}
+			}
+			return result;
+	}
+
+		//private List<LogItem> GetOldCatalogLog(long catalogId)
+		//{
+		//	var result = new List<LogItem>();
+		//	var logItems = cntx_.cataloglogview.Where(x => x.CatalogId == catalogId).ToList();
+
+		//	var combined = logItems
+		//		.Where(x => x.NewCombined != x.OldCombined)
+		//		.Select(x => new LogItem() { OperationEnum = (Operation)x.Operation, PropertyName = "Combined", LogTime = x.LogTime, OperatorHost = x.OperatorHost, OperatorName = x.OperatorName })
+		//		.ToList();
+
+		//	result.AddRange(combined);
+
+		//	foreach (var item in logItems)
+		//	{
+		//		if (item.NewCombined != item.OldCombined) {
+					
+		//		}
+
+		//		if (lastItem != null)
+		//		{
+		//			var logItem = ;
+		//			result.Add(logItem);
+		//		}
+		//	}
+		//	return result;
+		//}
+
+
 
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
@@ -141,7 +251,8 @@ namespace ProducerInterface.Controllers
 							OperatorHost = CurrentUser.IP,
 							UserId = CurrentUser.ID_LOG,
 							PropertyName = propertyInfo.Name,
-							PropertyNameUi = displayName
+							PropertyNameUi = displayName,
+							NameId = familyId
 						};
 						cntx_.CatalogLog.Add(dl);
 						cntx_.SaveChanges();
@@ -191,7 +302,8 @@ namespace ProducerInterface.Controllers
 				OperatorHost = CurrentUser.IP,
 				UserId = CurrentUser.ID_LOG,
 				PropertyName = propertyInfo.Name,
-				PropertyNameUi = displayName
+				PropertyNameUi = displayName,
+				NameId = familyId
 			};
 			cntx_.CatalogLog.Add(dl);
 			cntx_.SaveChanges();
@@ -241,7 +353,8 @@ namespace ProducerInterface.Controllers
 				OperatorHost = CurrentUser.IP,
 				UserId = CurrentUser.ID_LOG,
 				PropertyName = "MnnId",
-				PropertyNameUi = "МНН"
+				PropertyNameUi = "МНН",
+				NameId = familyId
 			};
 			cntx_.CatalogLog.Add(dl);
 			cntx_.SaveChanges();
@@ -257,5 +370,48 @@ namespace ProducerInterface.Controllers
 			var drugfamily = ccntx.catalognames.SingleOrDefault(x => x.Id == id && fmilyIds.Contains(id));
 			return drugfamily;
 		}
+
+		private string UserFrendlyName(string val)
+		{
+			var res = "вЫкл";
+			if (val == "True")
+				res = "вкл";
+			return res;
+		}
+
+		private List<CataloglogUiPlus> MapListToUi(List<cataloglogui> model)
+		{
+			if (model == null)
+				return null;
+
+			var mapper = new MyAutoMapper<CataloglogUiPlus>();
+			var modelUi = model.Select(x => mapper.Map(x)).ToList();
+			foreach (var item in modelUi)
+			{
+				switch (item.TypeEnum)
+				{
+					case CatalogLogType.MNN:
+						item.AfterUi = item.After != null ? GetMnnName(Int64.Parse(item.After)) : "";
+						item.BeforeUi = item.Before != null ? GetMnnName(Int64.Parse(item.Before)) : "";
+						break;
+					case CatalogLogType.PKU:
+						item.AfterUi = UserFrendlyName(item.After);
+						item.BeforeUi = UserFrendlyName(item.Before);
+						break;
+					default:
+						item.AfterUi = item.After;
+						item.BeforeUi = item.Before;
+						break;
+				}
+			}
+
+			return modelUi;
+		}
+
+		private string GetMnnName(long id)
+		{
+			return ccntx.mnn.Find(id).Mnn1;
+		}
+
 	}
 }

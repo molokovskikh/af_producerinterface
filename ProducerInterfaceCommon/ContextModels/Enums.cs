@@ -2,6 +2,19 @@
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+
+	public enum Operation
+	{
+		[Display(Name = "Добавление")]
+		Insert = 0,
+
+		[Display(Name = "Изменение")]
+		Update = 1,
+
+		[Display(Name = "Удаление")]
+		Delete = 2
+	}
+
 	public enum CatalogLogType
 	{
 		[Display(Name = "Описание")]

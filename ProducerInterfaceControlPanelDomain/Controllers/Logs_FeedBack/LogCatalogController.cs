@@ -72,12 +72,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return RedirectToAction("Index", new { Id = Id });
 		}
 
-		//public ActionResult History(long id)
-		//{
-		//	var logItem = cntx_.CatalogLog.Single(x => x.Id == id);
-		//	var asdf = cntx_.CatalogLog.Where(x => x.ObjectReference == logItem.ObjectReference && x.Type == logItem.Type).ToList();
-		//}
-
 		private void SetValue(object o, string propName, string value)
 		{
 			var type = o.GetType();

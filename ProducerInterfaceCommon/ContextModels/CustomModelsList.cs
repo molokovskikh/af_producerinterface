@@ -4,9 +4,25 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 using System.Web.Mvc;
+using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+
+	public class LogItem
+	{
+		public DateTime LogTime { get; set; }
+		public string OperatorName { get; set; }
+		public string OperatorLogin { get; set; }
+		public string OperatorHost { get; set; }
+		public Operation OperationEnum { get; set; }
+		public string PropertyName { get; set; }
+		
+		public string OperationName
+		{
+			get { return OperationEnum.DisplayName(); }
+		}
+	}
 
 	public class CataloglogUiPlus : cataloglogui
 	{

@@ -15,6 +15,7 @@ namespace ProducerInterfaceCommon.ContextModels
     public partial class cataloglogui
     {
         public long Id { get; set; }
+        public long NameId { get; set; }
         public System.DateTime LogTime { get; set; }
         public long UserId { get; set; }
         public string OperatorHost { get; set; }

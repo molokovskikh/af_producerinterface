@@ -70,6 +70,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<regionsnamesleaf> regionsnamesleaf { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<feedbackui> feedbackui { get; set; }
+        public DbSet<cataloglogview> cataloglogview { get; set; }
+        public DbSet<descriptionlogview> descriptionlogview { get; set; }
         public DbSet<CatalogLog> CatalogLog { get; set; }
         public DbSet<cataloglogui> cataloglogui { get; set; }
     

@@ -248,6 +248,7 @@
     <Content Include="Content\Chosen\js\ajax-chosen.g.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Content\Chosen\js\initCatalogHistory.js" />
     <Content Include="Content\Chosen\js\chosen.jquery.js" />
     <Content Include="Content\Chosen\js\initAddJob.js" />
     <Content Include="Content\Chosen\js\initDisplayReport.js" />
@@ -489,6 +490,7 @@
     <Content Include="Views\Report\EditorTemplates\ByPreviousDay.cshtml" />
     <Content Include="Views\Report\EditorTemplates\CostOrQuantity.cshtml" />
     <Content Include="Views\Report\SearchResult.cshtml" />
+    <Content Include="Views\Drug\History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
