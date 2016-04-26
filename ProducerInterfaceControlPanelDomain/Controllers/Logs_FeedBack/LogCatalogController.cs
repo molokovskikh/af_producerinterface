@@ -99,9 +99,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		private string UserFrendlyName(string val)
 		{
-			var res = "вЫкл";
+			var res = "";
 			if (val == "True")
 				res = "вкл";
+			else if (val == "False")
+				res = "вЫкл";
 			return res;
 		}
 

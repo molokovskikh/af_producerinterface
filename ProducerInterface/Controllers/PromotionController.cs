@@ -259,7 +259,10 @@ namespace ProducerInterface.Controllers
 				newPromo.SuppierRegions = h.GetSupplierList(newPromo.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
 				PromoDB.AllSuppliers = true;
 			}
-
+			else
+			{
+				PromoDB.AllSuppliers = false;
+			}
 			foreach (var SupplierItem in newPromo.SuppierRegions)
 			{
 				bool SupllierExsist = PromoDB.PromotionsToSupplier.Any(x => (ulong)x.SupplierId == (ulong)Convert.ToInt64(SupplierItem));
@@ -383,11 +386,13 @@ namespace ProducerInterface.Controllers
 			//    cntx_.SaveChanges();
 			cntx_.SaveChanges(CurrentUser, "Добавление лекарств к промоакции");
 
-			if (newPromo.SuppierRegions.Contains("0"))
-			{
+			if (newPromo.SuppierRegions.Contains("0")) {
 				newPromo.SuppierRegions = h.GetSupplierList(newPromo.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
 				promotionToDataBase.AllSuppliers = true;
-			}			
+			}
+			else {
+				promotionToDataBase.AllSuppliers = false;
+			}
 
 			foreach (var SupplierItem in newPromo.SuppierRegions)
 			{

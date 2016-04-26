@@ -1484,21 +1484,22 @@ values (14, 'Изменение описания препарата на сай�
 insert into mailform(Id, Subject, Body, Description, IsBodyHtml)
 values (15, 'Изменение МНН препарата на сайте {SiteName}', 'Изменен МНН препарата {CatalogName}\r\n\r\nБыло:\r\n\r\n{Before}\r\n\r\nСтало:\r\n\r\n{After}', 'Именение МНН препарата', 0);
 
-# ниже не внесено на боевую
-
 drop table AccountFeedBackComment;
 
 CREATE TABLE `CatalogLog` (
 	`Id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`NameId` INT(10) UNSIGNED NOT NULL,
 	`LogTime` DATETIME NOT NULL,
 	`UserId` INT(11) UNSIGNED NOT NULL,
 	`OperatorHost` VARCHAR(50) NOT NULL,
 	`ObjectReference` INT(10) UNSIGNED NOT NULL,
-	`TypeName` VARCHAR(255) NOT NULL,
-	`PropertyName` VARCHAR(255) NULL DEFAULT NULL,
+	`ObjectReferenceNameUi` VARCHAR(1000) NOT NULL,
+	`Type` INT(10) NOT NULL,
+	`PropertyName` VARCHAR(255) NOT NULL,
+	`PropertyNameUi` VARCHAR(255) NOT NULL,
 	`Before` TEXT NULL,
 	`After` TEXT NULL,
-	`Apply` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+	`Apply` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`AdminId` INT(11) UNSIGNED NULL DEFAULT NULL,
 	`DateEdit` DATETIME NULL DEFAULT NULL,
 	PRIMARY KEY (`Id`)
@@ -1506,16 +1507,6 @@ CREATE TABLE `CatalogLog` (
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB
 ROW_FORMAT=COMPACT;
-
-alter TABLE `CatalogLog` CHANGE COLUMN `TypeName` `TypeEnum` INT(10) NOT NULL;
-
-alter TABLE `CatalogLog` CHANGE COLUMN `PropertyName` `PropertyName` VARCHAR(255) NOT NULL;
-
-alter TABLE `CatalogLog` add column `PropertyNameUi` VARCHAR(255) NOT NULL after PropertyName;
-
-alter TABLE `CatalogLog` CHANGE COLUMN `TypeEnum` `Type` INT(10) NOT NULL;
-
-alter TABLE `CatalogLog` add column `ObjectReferenceNameUi` VARCHAR(1000) NOT NULL after ObjectReference;
 
 create or replace DEFINER=`RootDBMS`@`127.0.0.1` view CatalogLogUI as
 select cl.Id, cl.NameId, cl.LogTime, cl.UserId, cl.OperatorHost, cl.ObjectReference, cl.ObjectReferenceNameUi, cl.Type,
@@ -1574,5 +1565,6 @@ select	Id,
 	OldOther
 	from logs.CatalogLogs;
 
-	alter TABLE `CatalogLog` add column `NameId` INT(10) UNSIGNED NOT NULL after Id;
+
+	# ниже не внесено на боевую
 

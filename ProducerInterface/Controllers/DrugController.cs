@@ -16,7 +16,6 @@ namespace ProducerInterface.Controllers
 		protected catalogsEntities ccntx;
 
 		private string[] descrFieldNames = new string[] { "Name", "EnglishName", "Description", "Interaction", "SideEffect", "IndicationsForUse", "Dosing", "Warnings", "ProductForm", "PharmacologicalAction", "Storage", "Expiration", "Composition" };
-		private string[] catalogFieldNames = new string[] { "VitallyImportant", "MandatoryList", "Monobrend", "Narcotic", "Toxic", "Combined", "Other" };
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
@@ -37,16 +36,34 @@ namespace ProducerInterface.Controllers
 
 			var catalogIds = ccntx.assortment.Where(x => x.ProducerId == producerId).Select(x => x.CatalogId).ToList();
 			var catalogNamesIds = ccntx.Catalog.Where(x => catalogIds.Contains(x.Id)).Select(x => x.NameId).Distinct().ToList();
-			var model = cntx_.catalognameswithuptime.Where(x => catalogNamesIds.Contains(x.Id)).OrderBy(x => x.Name).ToList();
+			//var model = cntx_.catalognameswithuptime.Where(x => catalogNamesIds.Contains(x.Id)).OrderBy(x => x.Name).ToList();
+			var model = ccntx.catalognames.Where(x => catalogNamesIds.Contains(x.Id)).OrderBy(x => x.Name).ToList();
 
 			return View(model);
 		}
 
+		/// <summary>
+		/// Возвращает историю правок препарата
+		/// </summary>
+		/// <param name="id">идентификатор по таблице catalogs.catalognames</param>
+		/// <returns></returns>
 		public ActionResult History(long id)
 		{
+			ViewData["Name"] = ccntx.catalognames.Single(x => x.Id == id).Name;
 			var model = cntx_.cataloglogui.Where(x => x.NameId == id && x.Apply == true).OrderByDescending(x => x.LogTime).ToList();
-			var modelUi = MapListToUi(model);
-			return View(modelUi);
+			// если есть история в новом логе
+			if (model.Any()) {
+				var modelUi = MapListToUi(model);
+				return View(modelUi);
+			}
+			// если нет - вытаскиваем из старого
+			else {
+				var modelC = GetOldCatalogLogList(id);
+				var modelD = GetOldDescriptionLogList(id);
+				modelD.AddRange(modelC);
+				var modelUi = modelD.OrderByDescending(x => x.LogTime).ToList();
+				return View(modelUi);
+			}
 		}
 
 		/// <summary>
@@ -80,15 +97,16 @@ namespace ProducerInterface.Controllers
 				// вытащили инфу из таблицы премодерации (таблица CatalogLog базы producerinterface)
 				var newLog = GetNewLog(drugfamily.DescriptionId.Value);
 				// вытащили инфу из основного лога (таблица descriptionlogs базы logs)
-				//var oldLog = GetOldLog(drugfamily.DescriptionId.Value);
-				//foreach (var logItem in newLog) {
-				//	// если инфа (расширенная) по элементу есть в новом логе, удалили её дубликат из основного
-				//	var existItem = oldLog.SingleOrDefault(x => x.PropertyName == logItem.PropertyName);
-				//	if (existItem != null)
-				//		oldLog.Remove(existItem);
-				//}
-				//// добавили
-				//newLog.AddRange(oldLog);
+				var oldLog = GetOldLog(drugfamily.DescriptionId.Value);
+				foreach (var logItem in newLog)
+				{
+					// если инфа (расширенная) по элементу есть в новом логе, удалили её дубликат из основного
+					var existItem = oldLog.SingleOrDefault(x => x.PropertyName == logItem.PropertyName);
+					if (existItem != null)
+						oldLog.Remove(existItem);
+				}
+				// добавили
+				newLog.AddRange(oldLog);
 				ViewData["log"] = newLog;
 			}
 
@@ -112,73 +130,219 @@ namespace ProducerInterface.Controllers
 			return result;
 		}
 
-		//private List<LogItem> GetOldLog(long descriptionId)
-		//{
-		//	var o = new descriptionlogview();
-		//	var type = o.GetType();
-		//	var pi = type.GetProperties().Where(x => descrFieldNames.Contains(x.Name)).ToList();
-
-		//	var logItems = cntx_.descriptionlogview.Where(x => x.DescriptionId == descriptionId).ToList();
-		//	var result = new List<LogItem>();
-		//	foreach (var p in pi)
-		//	{
-		//		var lastItem = logItems.Where(x => p.GetValue(x) != null).OrderByDescending(x => x.LogTime).FirstOrDefault();
-		//		if (lastItem != null)
-		//		{
-		//			var logItem = new LogItem() { OperationEnum = (Operation)lastItem.Operation, PropertyName = p.Name, LogTime = lastItem.LogTime, OperatorHost = lastItem.OperatorHost, OperatorName = lastItem.OperatorName };
-		//			result.Add(logItem);
-		//		}
-		//	}
-		//	return result;
-		//}
-
-		private List<LogItem> GetNewCatalogLog(long catalogId)
+		private List<LogItem> GetOldLog(long descriptionId)
 		{
-			var result = new List<LogItem>();
-			var logItems = cntx_.cataloglogui.Where(x => x.Type == (int)CatalogLogType.PKU && x.ObjectReference == catalogId && x.Apply == true).ToList();
-			if (!logItems.Any())
-				return result;
+			var o = new descriptionlogview();
+			var type = o.GetType();
+			var pi = type.GetProperties().Where(x => descrFieldNames.Contains(x.Name)).ToList();
 
-			foreach (var pn in catalogFieldNames)
+			var logItems = cntx_.descriptionlogview.Where(x => x.DescriptionId == descriptionId).ToList();
+			var result = new List<LogItem>();
+			foreach (var p in pi)
 			{
-				var lastItem = logItems.Where(x => x.PropertyName == pn).OrderByDescending(x => x.LogTime).FirstOrDefault();
+				var lastItem = logItems.Where(x => p.GetValue(x) != null).OrderByDescending(x => x.LogTime).FirstOrDefault();
 				if (lastItem != null)
 				{
-					var logItem = new LogItem() { OperationEnum = Operation.Update, PropertyName = pn, LogTime = lastItem.LogTime, OperatorHost = lastItem.OperatorHost, OperatorName = lastItem.UserName, OperatorLogin = lastItem.Login };
+					var logItem = new LogItem() { OperationEnum = (Operation)lastItem.Operation, PropertyName = p.Name, LogTime = lastItem.LogTime, OperatorHost = lastItem.OperatorHost, OperatorName = lastItem.OperatorName };
 					result.Add(logItem);
 				}
 			}
 			return result;
-	}
+		}
 
-		//private List<LogItem> GetOldCatalogLog(long catalogId)
-		//{
-		//	var result = new List<LogItem>();
-		//	var logItems = cntx_.cataloglogview.Where(x => x.CatalogId == catalogId).ToList();
+		/// <summary>
+		/// Возвращает записи из старого лога изменений описания, преобразуя их в новую структуру
+		/// </summary>
+		/// <param name="id">идентификатор по таблице catalogs.catalognames</param>
+		/// <returns></returns>
+		private List<CataloglogUiPlus> GetOldDescriptionLogList(long id)
+		{
+			var result = new List<CataloglogUiPlus>();
+			var cn = ccntx.catalognames.Single(x => x.Id == id);
 
-		//	var combined = logItems
-		//		.Where(x => x.NewCombined != x.OldCombined)
-		//		.Select(x => new LogItem() { OperationEnum = (Operation)x.Operation, PropertyName = "Combined", LogTime = x.LogTime, OperatorHost = x.OperatorHost, OperatorName = x.OperatorName })
-		//		.ToList();
+			if (!cn.DescriptionId.HasValue)
+				return result;
 
-		//	result.AddRange(combined);
+			var logItems = cntx_.descriptionlogview.Where(x => x.DescriptionId == cn.DescriptionId.Value).OrderByDescending(x => x.LogTime).ToList();
+			var o = new descriptionlogview();
+			var type = o.GetType();
+			var pi = type.GetProperties().Where(x => descrFieldNames.Contains(x.Name)).ToList();
 
-		//	foreach (var item in logItems)
-		//	{
-		//		if (item.NewCombined != item.OldCombined) {
-					
-		//		}
+			var meta = new Descriptions();
+			var metaType = meta.GetType();
 
-		//		if (lastItem != null)
-		//		{
-		//			var logItem = ;
-		//			result.Add(logItem);
-		//		}
-		//	}
-		//	return result;
-		//}
+			for (int i = 0; i < logItems.Count; i++)
+			{
+				var itemCur = logItems[i];
+				var itemPrev = o;
+				if (i < logItems.Count - 1)
+					itemPrev = logItems[i+1];
+				foreach (var p in pi) {
+					var valCur = p.GetValue(itemCur);
+					if (valCur == null)
+						continue;
+					var valPrev = p.GetValue(itemPrev);
+					if (valCur != valPrev) {
+						var logItem = new CataloglogUiPlus()
+						{
+							Id = itemCur.Id,
+							Type = (int)CatalogLogType.Descriptions,
+							ObjectReferenceNameUi = cn.Name,
+							BeforeUi = (string)valPrev,
+							AfterUi = (string)valCur,
+							PropertyNameUi = AttributeHelper.GetDisplayName(metaType, p.Name),
+							LogTime = itemCur.LogTime,
+							OperatorHost = itemCur.OperatorHost,
+							UserName = itemCur.OperatorName,
+							Login = "farm@analit.net",
+							DateEdit = itemCur.LogTime
+						};
+						result.Add(logItem);
+					}
+				}
+			}
+			return result;
+		}
 
+		/// <summary>
+		/// Возвращает записи из старого лога изменений каталога, преобразуя их в новую структуру
+		/// </summary>
+		/// <param name="id">идентификатор по таблице catalogs.catalognames</param>
+		/// <returns></returns>
+		private List<CataloglogUiPlus> GetOldCatalogLogList(long id)
+		{
+			var result = new List<CataloglogUiPlus>();
 
+			var cnameDic = ccntx.Catalog.Where(x => x.NameId == id).ToDictionary(x => x.Id, x => x.Name);
+			var catIds = ccntx.assortment.Where(x => x.ProducerId == producerId && x.Catalog.NameId == id).Select(x => x.CatalogId).ToList();
+			var logItems = cntx_.cataloglogview.Where(x => catIds.Contains(x.CatalogId.Value)).ToList();
+
+			var combined = logItems
+				.Where(x => x.NewCombined != x.OldCombined)
+				.Select(x => new CataloglogUiPlus() { Id = x.Id,
+					Type = (int)CatalogLogType.PKU,
+					ObjectReferenceNameUi = cnameDic[x.CatalogId.Value],
+					BeforeUi = UserFrendlyName(x.OldCombined),
+					AfterUi = UserFrendlyName(x.NewCombined),
+					PropertyNameUi = "Комбинированные",
+					LogTime = x.LogTime,
+					OperatorHost = x.OperatorHost,
+					UserName = x.OperatorName,
+					Login = "farm@analit.net",
+					DateEdit = x.LogTime
+				}).ToList();
+			result.AddRange(combined);
+
+			var vitallyImportant = logItems
+				.Where(x => x.NewVitallyImportant != x.OldVitallyImportant)
+				.Select(x => new CataloglogUiPlus()
+				{
+					Id = x.Id,
+					Type = (int)CatalogLogType.PKU,
+					ObjectReferenceNameUi = cnameDic[x.CatalogId.Value],
+					BeforeUi = UserFrendlyName(x.OldVitallyImportant),
+					AfterUi = UserFrendlyName(x.NewVitallyImportant),
+					PropertyNameUi = "Жизненно важные",
+					LogTime = x.LogTime,
+					OperatorHost = x.OperatorHost,
+					UserName = x.OperatorName,
+					Login = "farm@analit.net",
+					DateEdit = x.LogTime
+				}).ToList();
+			result.AddRange(vitallyImportant);
+
+			var mandatoryList = logItems
+				.Where(x => x.NewMandatoryList != x.OldMandatoryList)
+				.Select(x => new CataloglogUiPlus()
+				{
+					Id = x.Id,
+					Type = (int)CatalogLogType.PKU,
+					ObjectReferenceNameUi = cnameDic[x.CatalogId.Value],
+					BeforeUi = UserFrendlyName(x.OldMandatoryList),
+					AfterUi = UserFrendlyName(x.NewMandatoryList),
+					PropertyNameUi = "Обязательный ассортимент",
+					LogTime = x.LogTime,
+					OperatorHost = x.OperatorHost,
+					UserName = x.OperatorName,
+					Login = "farm@analit.net",
+					DateEdit = x.LogTime
+				}).ToList();
+			result.AddRange(mandatoryList);
+
+			var narcotic = logItems
+				.Where(x => x.NewNarcotic != x.OldNarcotic)
+				.Select(x => new CataloglogUiPlus()
+				{
+					Id = x.Id,
+					Type = (int)CatalogLogType.PKU,
+					ObjectReferenceNameUi = cnameDic[x.CatalogId.Value],
+					BeforeUi = UserFrendlyName(x.OldNarcotic),
+					AfterUi = UserFrendlyName(x.NewNarcotic),
+					PropertyNameUi = "Наркотические и психотропные",
+					LogTime = x.LogTime,
+					OperatorHost = x.OperatorHost,
+					UserName = x.OperatorName,
+					Login = "farm@analit.net",
+					DateEdit = x.LogTime
+				}).ToList();
+			result.AddRange(narcotic);
+
+			var toxic = logItems
+				.Where(x => x.NewToxic != x.OldToxic)
+				.Select(x => new CataloglogUiPlus()
+				{
+					Id = x.Id,
+					Type = (int)CatalogLogType.PKU,
+					ObjectReferenceNameUi = cnameDic[x.CatalogId.Value],
+					BeforeUi = UserFrendlyName(x.OldToxic),
+					AfterUi = UserFrendlyName(x.NewToxic),
+					PropertyNameUi = "Сильнодействующие и ядовитые",
+					LogTime = x.LogTime,
+					OperatorHost = x.OperatorHost,
+					UserName = x.OperatorName,
+					Login = "farm@analit.net",
+					DateEdit = x.LogTime
+				}).ToList();
+			result.AddRange(toxic);
+
+			var other = logItems
+				.Where(x => x.NewOther != x.OldOther)
+				.Select(x => new CataloglogUiPlus()
+				{
+					Id = x.Id,
+					Type = (int)CatalogLogType.PKU,
+					ObjectReferenceNameUi = cnameDic[x.CatalogId.Value],
+					BeforeUi = UserFrendlyName(x.OldOther),
+					AfterUi = UserFrendlyName(x.NewOther),
+					PropertyNameUi = "Иные лекарственные средства",
+					LogTime = x.LogTime,
+					OperatorHost = x.OperatorHost,
+					UserName = x.OperatorName,
+					Login = "farm@analit.net",
+					DateEdit = x.LogTime
+				}).ToList();
+			result.AddRange(other);
+
+			var monobrend = logItems
+				.Where(x => x.NewMonobrend != x.OldMonobrend)
+				.Select(x => new CataloglogUiPlus()
+				{
+					Id = x.Id,
+					Type = (int)CatalogLogType.PKU,
+					ObjectReferenceNameUi = cnameDic[x.CatalogId.Value],
+					BeforeUi = UserFrendlyName(x.OldMonobrend),
+					AfterUi = UserFrendlyName(x.NewMonobrend),
+					PropertyNameUi = "Форма выпуска производится исключительно",
+					LogTime = x.LogTime,
+					OperatorHost = x.OperatorHost,
+					UserName = x.OperatorName,
+					Login = "farm@analit.net",
+					DateEdit = x.LogTime
+				}).ToList();
+			result.AddRange(monobrend);
+
+			return result;
+		}
 
 		public ActionResult DisplayForms(long id, bool edit = false)
 		{
@@ -373,11 +537,24 @@ namespace ProducerInterface.Controllers
 
 		private string UserFrendlyName(string val)
 		{
-			var res = "вЫкл";
+			var res = "";
 			if (val == "True")
 				res = "вкл";
+			else if (val == "False")
+				res = "вЫкл";
 			return res;
 		}
+
+		private string UserFrendlyName(bool? val)
+		{
+			var res = "";
+			if (val.HasValue && val.Value)
+				res = "вкл";
+			else if (val.HasValue && !val.Value)
+				res = "вЫкл";
+			return res;
+		}
+
 
 		private List<CataloglogUiPlus> MapListToUi(List<cataloglogui> model)
 		{
