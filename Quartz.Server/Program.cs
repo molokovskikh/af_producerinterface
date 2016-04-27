@@ -1,9 +1,4 @@
-﻿using log4net;
-using log4net.Config;
-using System.IO;
-using Topshelf;
-
-[assembly: XmlConfigurator(Watch = true)]
+﻿using Topshelf;
 
 namespace Quartz.Server
 {
@@ -23,6 +18,8 @@ namespace Quartz.Server
 			var hh = System.AppDomain.CurrentDomain.BaseDirectory;
 
 			HostFactory.Run(x => {
+				x.DependsOn("Dnscache");
+				x.DependsOn("Tcpip");
 				x.RunAsLocalSystem();
 				//x.RunAsNetworkService();
 
