@@ -113,6 +113,24 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
     }
 
+		// Реакция на давно не запускавшийся отчет, пользователю и расширенное сотрудникам
+		public static void CallForDeleteReportMessage(producerinterface_Entities cntx, jobextend jext)
+		{
+			var user = cntx.Account.Single(x => x.Id == jext.CreatorId);
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CallForDelete);
+			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
+			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName })}\r\n\r\n{mailForm.Footer}";
+			var di = new DiagnosticInformation() { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, User = user, ActionName = GetEnumDisplayName(MailType.CallForDelete) };
+			var bodyExtended = di.ToString(cntx);
+			var attachments = GetAttachments(cntx, MailType.EmptyReport);
+			EmailSender.SendEmail(user.Login, subject, body, attachments);
+
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
+		}
+
 		// Ошибка при формировании отчета, пользователю и расширенное сотрудникам
 		public static void SendReportErrorMessage(producerinterface_Entities cntx, long userId, jobextend jext, string errorMessage, string ip)
 		{

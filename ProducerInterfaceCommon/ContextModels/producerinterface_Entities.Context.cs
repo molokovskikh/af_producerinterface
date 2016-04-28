@@ -41,7 +41,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
         public DbSet<regionnames> regionnames { get; set; }
         public DbSet<suppliernames> suppliernames { get; set; }
-        public DbSet<LogForNet> LogForNet { get; set; }
         public DbSet<drugfamilynames> drugfamilynames { get; set; }
         public DbSet<AccountCompany> AccountCompany { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
@@ -74,6 +73,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<descriptionlogview> descriptionlogview { get; set; }
         public DbSet<CatalogLog> CatalogLog { get; set; }
         public DbSet<cataloglogui> cataloglogui { get; set; }
+        public DbSet<LogForNet> LogForNet { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {

@@ -5,6 +5,7 @@ using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
 using System.Threading;
 using System.Web.Caching;
+using log4net;
 
 namespace ProducerInterfaceCommon.Controllers
 {
@@ -22,9 +23,11 @@ namespace ProducerInterfaceCommon.Controllers
 			CurrentUser = GetCurrentUser(TypeLoginUser);
 
 			ViewBag.UrlString = HttpContext.Request.Url;
+			ThreadContext.Properties["url"] = HttpContext.Request.Url;
 
 			if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
 			{
+				ThreadContext.Properties["user"] = CurrentUser.Name ?? CurrentUser.Login;
 				CurrentUser.IP = Request.UserHostAddress.ToString();
 				ViewBag.CurrentUser = CurrentUser;
 				if (CurrentUserIdLog != CurrentUser.Id)

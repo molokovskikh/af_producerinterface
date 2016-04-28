@@ -47,7 +47,9 @@ namespace ProducerInterfaceCommon.Models
 		CatalogDescription = 14,
 
 		[Display(Name = "Именение МНН препарата")]
-		CatalogMNN = 15
+		CatalogMNN = 15,
 
+		[Display(Name = "Реакция на давно не запускавшийся отчет")]
+		CallForDelete = 16
 	}
 }

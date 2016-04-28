@@ -203,6 +203,9 @@
     <Compile Include="ContextModels\feedbackui.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContextModels\LogForNet.cs">
+      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ContextModels\MediaFiles.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -262,9 +265,6 @@
     <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
-    <Compile Include="ContextModels\LogForNet.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\MetaData.cs" />
     <Compile Include="ContextModels\assortment.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>

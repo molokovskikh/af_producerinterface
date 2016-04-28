@@ -15,9 +15,13 @@ namespace ProducerInterfaceCommon.ContextModels
     public partial class LogForNet
     {
         public int Id { get; set; }
-        public string Message { get; set; }
-        public System.DateTime DateAddLog { get; set; }
-        public string ErrorType { get; set; }
+        public System.DateTime Date { get; set; }
+        public string Level { get; set; }
+        public string Logger { get; set; }
         public string Host { get; set; }
+        public string User { get; set; }
+        public string Message { get; set; }
+        public string Exception { get; set; }
+        public string App { get; set; }
     }
 }

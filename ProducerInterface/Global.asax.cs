@@ -29,12 +29,9 @@ namespace ProducerInterface
             if (Server != null)
             {
                 Exception ex = Server.GetLastError();
-
-                //log4net.Config.XmlConfigurator.Configure();
-
                 ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
 
-                _logger.Error(ex.Message.ToString());
+                _logger.Error(ex.Message.ToString(), ex);
 
                 if (Response.StatusCode != 404)
                 {

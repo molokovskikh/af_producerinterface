@@ -1568,3 +1568,27 @@ select	Id,
 
 	# ниже не внесено на боевую
 
+	drop table LogForNet;
+
+CREATE TABLE `LogForNet` (
+	`Id` INT(10) NOT NULL AUTO_INCREMENT,
+	`Date` DATETIME NOT NULL,
+	`Level` VARCHAR(50) NOT NULL,
+	`Logger` VARCHAR(255) NOT NULL,
+	`Host` VARCHAR(255) NULL DEFAULT NULL,
+	`User` VARCHAR(255) NULL DEFAULT NULL,
+	`Message` TEXT NULL,
+	`Exception` TEXT NULL,
+	`App` VARCHAR(255) NULL DEFAULT NULL,
+	PRIMARY KEY (`Id`),
+	INDEX `Date` (`Date`)
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+
+insert into mailform (Id, Subject, Body, IsBodyHtml, Description)
+values (16, 'Отчет на сайте {SiteName} давно не используется', 
+ 'Созданный вами отчет {ReportName} давно не запускался, предлагаем вам удалить его. Сделать это можно в личном кабинете', 
+ 0, 'Реакция на давно не запускавшийся отчет');
+
+

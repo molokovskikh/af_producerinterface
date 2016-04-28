@@ -28,7 +28,7 @@ namespace ProducerInterfaceControlPanelDomain
 
 				ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
 
-				_logger.Error(ex.Message.ToString());
+				_logger.Error(ex.Message.ToString(), ex);
 
 				if (Response.StatusCode != 404)
 				{

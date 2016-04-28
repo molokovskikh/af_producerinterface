@@ -57,9 +57,12 @@
                     <th></th>
                 </tr>
 
-                @foreach (var item in Model)
-                {
-                    <tr>
+                @foreach (var item in Model) {
+                    var callForDelete = false;
+                    if ((item.LastRun ?? item.CreationDate).AddMonths(6) < DateTime.Now) {
+                        callForDelete = true;
+                    }
+                  <tr>
                         <td class="td_275">
                             @Html.DisplayFor(modelItem => item.CustomName)
                         </td>
