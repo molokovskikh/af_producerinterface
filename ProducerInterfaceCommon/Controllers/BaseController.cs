@@ -179,6 +179,10 @@ namespace ProducerInterfaceCommon.Controllers
 
 		public bool PermissionUserExsist()
 		{
+			if (CurrentUser.Enabled == 0) {
+
+
+			}
 			var permissionList = GetPermissionList();
 			var permissionKey = $"{permissionName}_{controllerAcctributes}";
 			return permissionList.Contains(permissionKey);

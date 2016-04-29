@@ -81,18 +81,18 @@ namespace ProducerInterfaceCommon.Controllers
             get { return 6; }
         }
 
-        public class SystemTime
-        {
-            public static DateTime Now()
-            {
-                return DateTime.Now;
-            }
-            public static DateTime GetDefaultDate()
-            {
-                return default(DateTime);
-            }
+        //public class SystemTime
+        //{
+        //    public static DateTime Now()
+        //    {
+        //        return DateTime.Now;
+        //    }
+        //    public static DateTime GetDefaultDate()
+        //    {
+        //        return default(DateTime);
+        //    }
 
-        }
+        //}
 
         public string GetUserCookiesName()
         {

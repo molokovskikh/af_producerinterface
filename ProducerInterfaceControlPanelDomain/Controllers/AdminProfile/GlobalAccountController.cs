@@ -107,7 +107,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var AccountSave = cntx_.Account.Find(AccountModel.Id);
 
-            AccountSave.PasswordUpdated = SystemTime.GetDefaultDate();
+            //AccountSave.PasswordUpdated = null;
             PassWord = GetRandomPassword();
             AccountSave.Password = Md5HashHelper.GetHash(PassWord);
 

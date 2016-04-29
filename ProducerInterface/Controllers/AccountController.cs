@@ -383,7 +383,7 @@ namespace ProducerInterface.Controllers
                 NewAccount.FirstName = Reg_ViewModel.FirstName;
                 NewAccount.OtherName = Reg_ViewModel.OtherName;
                 NewAccount.Password = Md5HashHelper.GetHash(Pass);
-                NewAccount.PasswordUpdated = SystemTime.GetDefaultDate();
+                //NewAccount.PasswordUpdated = null;
                 NewAccount.Phone = Reg_ViewModel.PhoneNumber;
                 NewAccount.AppointmentId = Reg_ViewModel.AppointmentId;
                 NewAccount.Appointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == Reg_ViewModel.AppointmentId).First().Name;
@@ -398,7 +398,7 @@ namespace ProducerInterface.Controllers
                 NewAccount.FirstName = RegDomain_ViewModel.FirstName;
                 NewAccount.OtherName = RegDomain_ViewModel.OtherName;
                 NewAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
-                NewAccount.PasswordUpdated = DateTime.MinValue;
+                //NewAccount.PasswordUpdated = null;
                 NewAccount.Enabled = 0;
                 NewAccount.Appointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == RegDomain_ViewModel.AppointmentId).First().Name;
                 NewAccount.CompanyId = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == RegDomain_ViewModel.Producers).First().Id;

@@ -279,6 +279,7 @@ namespace ProducerInterface.Controllers
 		[HttpGet]
 		public ActionResult JobList(long? cid)
 		{
+			throw new NotSupportedException("Искусственно вызванная ошибка");
 			ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
 			return View(cid);
 		}
@@ -288,11 +289,10 @@ namespace ProducerInterface.Controllers
 		{
 			if (id.HasValue)
 				return RedirectToAction("AddJob", "Report", new { id = id.Value });
-			else {
-				ModelState.AddModelError("id", "Выберите тип отчета, который хотите создать");
-				ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
-				return View();
-			}
+
+			ModelState.AddModelError("id", "Выберите тип отчета, который хотите создать");
+			ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
+			return View();
 		}
 
 		/// <summary>
