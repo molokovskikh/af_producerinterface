@@ -73,7 +73,7 @@
                             <a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета"><span class="glyphicon glyphicon-pencil"></span>&nbsp; ред.</a>
                             @Html.DisplayFor(modelItem => item.ReportTypeEnum)
                         </td>
-                        <td>    @listCreator.Where(x => x.Value == item.CreatorId.ToString()).First().Text                              
+                        <td>@listCreator.Where(x => x.Value == item.CreatorId.ToString()).First().Text                              
                         </td>
 
                         <td>
