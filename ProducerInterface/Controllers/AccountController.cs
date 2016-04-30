@@ -5,439 +5,409 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ViewModel.Interface.Registration;
+using ProducerInterfaceCommon.Controllers;
+using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterface.Controllers
 {
-    public class AccountController : AccountAuthController
-    {
-
-        public ActionResult Auth()
-        {
-            var ModelView = new LoginValidation();
-            return View(ModelView);
-        }
-
-        /* заполняет ViewBag.AppointmentList списком должностей (если передан ID производителя, добавляются должности данного производителя) */
-        private void ViewBagAppointmentList(long ProducerId = 0)
-        {
-            var ListAppointment = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-            ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1 && xx.IdAccount == null)
-                 .ToList()
-                 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
-                 .ToList());
-
-            if (ProducerId != 0)
-            {
-                var CompanyCustomAppointment = cntx_.AccountAppointment.Where(xxx => xxx.Account1.AccountCompany.ProducerId == ProducerId).ToList().Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
-                ListAppointment.AddRange(CompanyCustomAppointment);              
-            }
-            ViewBag.AppointmentList = ListAppointment;
-        }
-
-        /* заполняет ViewBag.ProducerList списоком производителей */
-        private void ViewBagProducerList()
-        {
-            var ProducerList = new List<OptionElement>() { new OptionElement() { Text = "", Value = "" } };
-            ProducerList.AddRange(
-                cntx_.producernames.Select(
-                    xxx => new OptionElement { Text = xxx.ProducerName, Value = xxx.ProducerId.ToString() }).ToList());
-
-            ViewBag.ProducerList = ProducerList;
-        }
-
-        // GET: Account
-        public ActionResult Index()
-        {
-            var ViewModel = new RegProducerViewModel();
-
-            ViewBagProducerList();
-
-            return View(ViewModel);
-        }
-
-        [HttpGet]
-        public ActionResult Registration(RegProducerViewModel ViewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBagProducerList();
-                return View("Index", ViewModel);
-            }
-                                    
-            var CompanyExsist = cntx_.AccountCompany.Any(xxx => xxx.ProducerId == ViewModel.ProducerId);
-               
-            if (CompanyExsist)
-            {
-                /* если ото данного производитля регистрировались, возвращаем форму для регистрации пользователя с моделью RegDomainViewModel */
-                ViewBagAppointmentList();
-
-                var ModelDomainView = new RegDomainViewModel();
-                ModelDomainView.Producers = ViewModel.ProducerId;
-                ModelDomainView.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ViewModel.ProducerId).First().ProducerName;                
-                ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == ViewModel.ProducerId).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
-                return View("DomainRegistration", ModelDomainView);
-            }
-
-            ViewBagAppointmentList();
-        
-            RegViewModel ModelView = new RegViewModel();
-            ModelView.ProducerId = ViewModel.ProducerId;
-            ModelView.ProducerName = cntx_.producernames.Where(xxx => xxx.ProducerId == ViewModel.ProducerId).First().ProducerName;
-
-            return View(ModelView);   
-                        
-        }
-        [HttpPost]
-        public ActionResult Registration(RegViewModel ModelView)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBagAppointmentList();            
-                return View(ModelView);
-            }
-
-            var Company = new AccountCompany(); // Entity Model
-            var ExsistCompany = cntx_.AccountCompany.Any(xxx => xxx.ProducerId == ModelView.ProducerId);
-
-            var UserExsist = cntx_.Account.Any(xxx => xxx.Login == ModelView.login);
-
-            if (UserExsist)
-            {
-                ErrorMessage("Данный емаил уже зарегистрирован в нашей базе, попробуйте восстановить пароль");
-                ViewBag.AppointmentList = cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
-                   .ToList()
-                   .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
-                   .ToList();
-                return View(ModelView);
-            }
-
-            if (ExsistCompany)
-            {
-                Company = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == ModelView.ProducerId).First();
-            }
-            else
-            {
-                Company.ProducerId = ModelView.ProducerId;
-                Company.Name = ModelView.ProducerName;
-                cntx_.Entry(Company).State = System.Data.Entity.EntityState.Added;
-                cntx_.SaveChanges();
-                string DomainName = ModelView.login.ToString().Split(new Char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[1].ToLower();
-                var X = new CompanyDomainName();
-                X.Name = DomainName;
-                X.CompanyId = Company.Id;
-                cntx_.Entry(X).State = System.Data.Entity.EntityState.Added;
-                cntx_.SaveChanges();
-                Company.CompanyDomainName.Add(X);
-                cntx_.SaveChanges();
-
-            }
-
-            cntx_.SaveChanges();
-
-            string Password = GetRandomPassword();
-            var NewAccount = SaveAccount(Reg_ViewModel: ModelView, Pass: Password, AC: Company);
-            
-            string AdminGroupName = GetWebConfigParameters("AdminGroupName");
-
-            NewAccount.AccountGroup.Add(cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First());
-            cntx_.SaveChanges();
-
-            ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx_, NewAccount.Id, Password, NewAccount.IP);
-
-            SuccessMessage("Пароль отправлен на ваш email " + NewAccount.Login);
-            return RedirectToAction("Index", "Home");
-        }
-        
-        [HttpPost]
-        public ActionResult DomainRegistration(RegDomainViewModel modelAccount)
-        {
-         //   var ModelView = new RegisterDomainValidation();
-            if (!ModelState.IsValid)
-            {
-                ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == modelAccount.Producers).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
-
-                var ListAppointment = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-                ListAppointment.AddRange(cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
-                     .ToList()
-                     .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
-                     .ToList());
-
-                ViewBag.AppointmentList = ListAppointment;
-
-                return View(modelAccount);
-            }
-
-            var EmailAdress = modelAccount.Mailname + "@" + cntx_.CompanyDomainName.Where(xxx => xxx.Id == modelAccount.EmailDomain).First().Name;
-
-            bool UserExsist = cntx_.Account.Any(xxx => xxx.Login == EmailAdress);
-
-            if (UserExsist)
-            {
-                ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == modelAccount.Producers).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
-                ViewBag.AppointmentList = cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
-                     .ToList()
-                     .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
-                     .ToList();
-
-                ErrorMessage("Данный eMail уже зарегистрирован в нашей базе, попробуйте восстановить пароль");
-                return View(modelAccount);
-            }
-
-            string Password = GetRandomPassword();
-            var NewAccount = SaveAccount(RegDomain_ViewModel: modelAccount, Pass: Password);
-                   
-            // добавляем в группу все пользователи
-
-            var Group_NewAccount = cntx_.AccountGroup.Where(xxx => xxx.Name == "все" && xxx.TypeGroup == NewAccount.TypeUser).FirstOrDefault();
-
-            if (Group_NewAccount == null)
-            {
-                Group_NewAccount = new AccountGroup() { Name = "все", Description = "вновь зарегистрированные пользователи" };
-                Group_NewAccount.Enabled = true;
-                cntx_.Entry(Group_NewAccount).State = EntityState.Added;
-                cntx_.SaveChanges();
-
-                List<AccountPermission> LST_Permission = cntx_.AccountPermission.ToList().Where(xxx => xxx.Enabled == true && xxx.TypePermission == NewAccount.TypeUser).ToList();
-
-                for (int i = 0; i < LST_Permission.Count(); i++)
-                {
-                    Group_NewAccount.AccountPermission.Add(LST_Permission[i]);    
-                }
-                cntx_.Entry(Group_NewAccount).State = EntityState.Modified;
-                cntx_.SaveChanges();
-            }
-
-
-            Group_NewAccount.Account.Add(NewAccount);
-            cntx_.Entry(Group_NewAccount).State = EntityState.Modified;
-
-            NewAccount.AccountAppointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == modelAccount.AppointmentId).First();
-         
-            cntx_.Entry(NewAccount).State = EntityState.Modified;
-            
-            cntx_.SaveChanges();
-
-            ProducerInterfaceCommon.Heap.EmailSender.SendRegistrationMessage(cntx_, NewAccount.Id, Password, HttpContext.Request.UserHostAddress.ToString());
-
-            SuccessMessage("Письмо с паролем отправлено на ваш email");
-            return RedirectToAction("Index", "Home");
-
-        }
-           
-        [HttpPost]
-        public ActionResult DolznostAddNew(string NewNameAppointment)
-        {
-            var NewAppExsist = cntx_.AccountAppointment.Any(xxx => xxx.Name == NewNameAppointment);
-            var NewAppointment_ = new AccountAppointment();
-
-            if (NewAppExsist)
-            {
-                NewAppointment_ = cntx_.AccountAppointment.Where(xxx => xxx.Name == NewNameAppointment).First();
-            }
-            else
-            {
-                NewAppointment_.Name = NewNameAppointment;
-                NewAppointment_.GlobalEnabled = 0;
-                cntx_.Entry(NewAppointment_).State = EntityState.Added;
-                cntx_.SaveChanges();
-            }
-
-            return Content(NewAppointment_.Id.ToString() + ";" + NewAppointment_.Name);            
-        }
-            
-        [HttpGet]
-        public ActionResult CustomRegistration()
-        {
-
-            ViewBagAppointmentList();       
-
-            var ViewModel = new RegNotProducerViewModel();
-            return View(ViewModel);
-        }
-
-        [HttpPost] 
-        public ActionResult CustomRegistration(RegNotProducerViewModel AccountModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(AccountModel);
-            }
-
-            var Temp = cntx_.Account.Where(x => x.Login == AccountModel.login).ToList().Where(y=>y.TypeUser == (sbyte)TypeUsers.ProducerUser).ToList();
-            if (Temp != null && Temp.Count() >= 1)
-            {
-                ErrorMessage("Данный eMail уже зарегистрирован в нашей базе");
-                return View(AccountModel);
-            }
-                        
-            var CompanyCreate = new AccountCompany();
-
-            CompanyCreate.Name = AccountModel.CompanyName; // Комментарий пользователя, далее название компании
-            cntx_.Entry(CompanyCreate).State = EntityState.Added;
-            cntx_.SaveChanges();
-
-            var NewAccount = SaveAccount(RegNotProducer_ViewModel: AccountModel, AC: CompanyCreate);
-
-            NewAccount.AccountCompany = CompanyCreate;
-            cntx_.Entry(NewAccount).State = EntityState.Modified;
-            cntx_.SaveChanges();
-
-            var NewFeedBack = new AccountFeedBack();
-            NewFeedBack.Description = "Запрос на регистрацию";
-            NewFeedBack.DateAdd = DateTime.Now;
-            NewFeedBack.AccountId = NewAccount.Id;
-            NewFeedBack.UrlString = "~/Regisration/CustomRegistration";
-            NewFeedBack.Type = (sbyte)ProducerInterfaceCommon.ContextModels.FeedBackTypePrivate.Registration;
-
-            cntx_.AccountFeedBack.Add(NewFeedBack);
-            cntx_.SaveChanges();
-
-            SuccessMessage("Ваша заявка принята. Ожидайте с вами свяжутся");
-            return RedirectToAction("Index", "Home");
-        }
-
-
-        [HttpGet]
-        public ActionResult AdminAuthentification(string AdminLogin, long? IdProducerUSer, string SecureHash)
-        {
-
-          if (AdminLogin == null || IdProducerUSer == null)
-            {
-                return RedirectToAction("index", "home");
-            }
-
-            // проверка наличия Админа В БД.
-
-            var AccountAdminExsist = cntx_.Account.Any(xxx => xxx.Login == AdminLogin && xxx.TypeUser == (SByte)ProducerInterfaceCommon.ContextModels.TypeUsers.ControlPanelUser);
-            var ProducerUserExsist = cntx_.Account.Any(xxx => xxx.Id == IdProducerUSer && xxx.TypeUser == (SByte)ProducerInterfaceCommon.ContextModels.TypeUsers.ProducerUser);
-
-            // проверка SecureHash
-
-            var AdminAccount = cntx_.Account.Where(xxx => xxx.Login == AdminLogin).First();
-
-            string i = "";
-
-            if (AdminAccount.Name != null)
-            {
-                i = (AdminAccount.Name.Length * 19801112).ToString();
-            }
-            else
-            {
-                i = (18 * 19801112).ToString();
-            }
-
-            if (!SecureHash.Contains(i.ToString()))
-            {
-                return RedirectToAction("index", "home");
-            }
-
-            if (AdminAccount.SecureTime.Value > DateTime.Now)
-            {
-                CurrentUser = cntx_.Account.Find(IdProducerUSer);
-                var AdminId = AdminAccount.Id.ToString();
-                Autentificate(this, true, AdminId);
-                return RedirectToAction("Index", "Profile");
-
-            }
-            else
-            {
-                ErrorMessage("Данная ссылка действительна три минуты, время истекло, просьба повторить авторизацию");
-                return View("AdminAuth", new ProducerInterfaceCommon.ContextModels.AdminAutentification() { IdProducerUser = (long)IdProducerUSer, Login = AdminAccount.Login });
-            }     
-        }
-
-        [HttpPost]     
-        public ActionResult AdminAuth(ProducerInterfaceCommon.ContextModels.AdminAutentification AdminAccountModel)
-        {
-            var DomainAuth = new ProducerInterfaceCommon.Controllers.DomainAutentification();
-            if (DomainAuth.IsAuthenticated(AdminAccountModel.Login, AdminAccountModel.Password))
-            {
-                // авторизовываем как обычного пользователя, но с добавление ID Администратора 
-
-                CurrentUser = cntx_.Account.Find(AdminAccountModel.IdProducerUser);
-                var AdminId = cntx_.Account.Where(xxx => xxx.Login == AdminAccountModel.Login).First().Id.ToString();
-                Autentificate(this, true, AdminId);
-            }
-
-            if (CurrentUser != null)
-            {
-                return RedirectToAction("Index", "Profile");
-            }
-
-            AdminAccountModel.Password = "";
-            ErrorMessage("Пароль указан не верно");
-            return View("AdminAuth", AdminAccountModel);
-        }
-
-        private Account SaveAccount(RegViewModel Reg_ViewModel = null, RegDomainViewModel RegDomain_ViewModel = null, RegNotProducerViewModel RegNotProducer_ViewModel = null, string Pass = null, AccountCompany AC = null)
-        {
-            
-            var NewAccount = new Account();          
-            if (Reg_ViewModel != null)
-            {
-                NewAccount.Enabled = 0;
-                NewAccount.CompanyId = AC.Id;
-                NewAccount.Login = Reg_ViewModel.login;
-                NewAccount.Name = Reg_ViewModel.LastName + " " + Reg_ViewModel.FirstName + " " + Reg_ViewModel.OtherName;
-                NewAccount.LastName = Reg_ViewModel.LastName;
-                NewAccount.FirstName = Reg_ViewModel.FirstName;
-                NewAccount.OtherName = Reg_ViewModel.OtherName;
-                NewAccount.Password = Md5HashHelper.GetHash(Pass);
-                //NewAccount.PasswordUpdated = null;
-                NewAccount.Phone = Reg_ViewModel.PhoneNumber;
-                NewAccount.AppointmentId = Reg_ViewModel.AppointmentId;
-                NewAccount.Appointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == Reg_ViewModel.AppointmentId).First().Name;
-                NewAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;                
-            }
-
-            if (RegDomain_ViewModel != null)
-            {
-                NewAccount.Login = RegDomain_ViewModel.Mailname + "@" + cntx_.CompanyDomainName.Where(xxx => xxx.Id == RegDomain_ViewModel.EmailDomain).First().Name;
-                NewAccount.Name = RegDomain_ViewModel.LastName + " " + RegDomain_ViewModel.FirstName + " " + RegDomain_ViewModel.OtherName;
-                NewAccount.LastName = RegDomain_ViewModel.LastName;
-                NewAccount.FirstName = RegDomain_ViewModel.FirstName;
-                NewAccount.OtherName = RegDomain_ViewModel.OtherName;
-                NewAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
-                //NewAccount.PasswordUpdated = null;
-                NewAccount.Enabled = 0;
-                NewAccount.Appointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == RegDomain_ViewModel.AppointmentId).First().Name;
-                NewAccount.CompanyId = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == RegDomain_ViewModel.Producers).First().Id;
-                NewAccount.Password = Md5HashHelper.GetHash(Pass);
-                NewAccount.Phone = RegDomain_ViewModel.PhoneNumber;  
-
-            }
-
-            if (RegNotProducer_ViewModel != null)
-            {
-                var NewPost = new AccountAppointment();
-                NewPost.Name = RegNotProducer_ViewModel.Appointment;
-                NewPost.GlobalEnabled = 0;            
-                cntx_.Entry(NewPost).State = EntityState.Added;
-                cntx_.SaveChanges();
-
-                NewAccount = new Account()
-                {
-                    LastName = RegNotProducer_ViewModel.LastName,
-                    FirstName = RegNotProducer_ViewModel.FirstName,
-                    OtherName = RegNotProducer_ViewModel.OtherName,
-                    Name = RegNotProducer_ViewModel.LastName + " " + RegNotProducer_ViewModel.FirstName + " " + RegNotProducer_ViewModel.OtherName,
-
-                    AppointmentId = NewPost.Id,
-                    CompanyId = AC.Id,
-                    Login = RegNotProducer_ViewModel.login,
-                    LastUpdatePermisison = DateTime.Now,
-                    PasswordUpdated = DateTime.Now,
-                    Phone = RegNotProducer_ViewModel.PhoneNumber,
-
-                    Enabled = 0,                   
-                    UserType =(sbyte) TypeUsers.ProducerUser   
-                };               
-            }
-            NewAccount.RegionMask = 0;
-
-            cntx_.Entry(NewAccount).State = System.Data.Entity.EntityState.Added;
-            cntx_.SaveChanges();
-            return NewAccount;
-        }
-    }
+	public class AccountController : AccountAuthController
+	{
+
+		public ActionResult Auth()
+		{
+			var model = new LoginValidation();
+			return View(model);
+		}
+
+		/// <summary>
+		/// Возвращает форму выбора производителя
+		/// </summary>
+		/// <returns></returns>
+		public ActionResult Index()
+		{
+			var model = new RegProducerViewModel();
+			ViewBagProducerList();
+			return View(model);
+		}
+
+		/// <summary>
+		/// Форма регистрации после выбора производителя
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult Registration(RegProducerViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				ViewBagProducerList();
+				return View("Index", model);
+			}
+
+			ViewBagAppointmentList(model.ProducerId);
+			var producerName = cntx_.producernames.Single(x => x.ProducerId == model.ProducerId).ProducerName;
+			var companyExsist = cntx_.AccountCompany.Any(x => x.ProducerId == model.ProducerId);
+			// если от данного производителя регистрировались, возвращаем форму для регистрации пользователя с моделью RegDomainViewModel
+			if (companyExsist)
+			{
+				var modelDomainView = new RegDomainViewModel() { Producers = model.ProducerId, ProducerName = producerName };
+				ViewBag.DomainList = cntx_.AccountCompany
+					.First(x => x.ProducerId == model.ProducerId).CompanyDomainName
+					.Select(x => new OptionElement { Text = '@' + x.Name, Value = x.Id.ToString() })
+					.ToList();
+				return View("DomainRegistration", modelDomainView);
+			}
+
+			var modelUi = new RegViewModel() { ProducerId = model.ProducerId, ProducerName = producerName };
+			return View(modelUi);
+		}
+
+		/// <summary>
+		/// Регистрация первого пользователя производителя, который включается в группу админов
+		/// </summary>
+		/// <param name="model">заполненная регистрационная форма</param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult Registration(RegViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				ViewBagAppointmentList(model.ProducerId);
+				return View(model);
+			}
+
+			// если уже есть такой пользователь
+			var userExsist = cntx_.Account.Any(x => x.Login == model.login);
+			if (userExsist)
+			{
+				ErrorMessage("Пользователь с указанным email уже зарегистрирован, попробуйте восстановить пароль");
+				ViewBagAppointmentList(model.ProducerId);
+				return View(model);
+			}
+
+			// если такой компании нет. Компания - это не производитель, это прослойка под производителем
+			var company = cntx_.AccountCompany.FirstOrDefault(x => x.ProducerId == model.ProducerId);
+			if (company == null)
+			{
+				company = new AccountCompany() { ProducerId = model.ProducerId, Name = model.ProducerName };
+				cntx_.Entry(company).State = EntityState.Added;
+				cntx_.SaveChanges();
+
+				string domainName = model.login.Split('@')[1].ToLower();
+				var domain = new CompanyDomainName() { Name = domainName, CompanyId = company.Id };
+				cntx_.Entry(domain).State = EntityState.Added;
+				cntx_.SaveChanges();
+
+				company.CompanyDomainName.Add(domain);
+				cntx_.SaveChanges();
+			}
+
+			// создали новый аккаунт
+			var password = GetRandomPassword();
+			var account = SaveAccount(accountCompany: company, Reg_ViewModel: model, Pass: password);
+
+			// добавили аккаунт в группу админов
+			var adminGroupName = GetWebConfigParameters("AdminGroupName");
+			var adminGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
+			if (adminGroup == null)
+			{
+				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+				cntx_.AccountGroup.Add(adminGroup);
+				cntx_.SaveChanges();
+			}
+
+			account.AccountGroup.Add(adminGroup);
+			account.LastUpdatePermisison = DateTime.Now;
+			cntx_.SaveChanges();
+
+			// отправили письмо о регистрации
+			EmailSender.SendRegistrationMessage(cntx_, account.Id, password, account.IP);
+			SuccessMessage("Пароль отправлен на ваш email " + account.Login);
+			return RedirectToAction("Index", "Home");
+		}
+
+		/// <summary>
+		/// Регистрация второго и последующих пользователей производителя
+		/// </summary>
+		/// <param name="model">заполненная форма регистрации</param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult DomainRegistration(RegDomainViewModel model)
+		{
+			var company = cntx_.AccountCompany.Single(x => x.ProducerId == model.Producers);
+			// если невалидный ввод - возвращаем
+			if (!ModelState.IsValid)
+			{
+				ViewBag.DomainList = company.CompanyDomainName.Select(x => new OptionElement { Text = '@' + x.Name, Value = x.Id.ToString() }).ToList();
+				ViewBagAppointmentList(model.Producers);
+				return View(model);
+			}
+
+			// если пользователь с таким email уже регистрировался - возвращаем
+			var emailAdress = model.Mailname + "@" + cntx_.CompanyDomainName.Single(x => x.Id == model.EmailDomain).Name;
+			var userExsist = cntx_.Account.Any(x => x.Login == emailAdress);
+			if (userExsist)
+			{
+				ViewBag.DomainList = company.CompanyDomainName.Select(x => new OptionElement { Text = '@' + x.Name, Value = x.Id.ToString() }).ToList();
+				ViewBagAppointmentList(model.Producers);
+				ErrorMessage("Данный email уже зарегистрирован в нашей базе, попробуйте восстановить пароль");
+				return View(model);
+			}
+
+			// создали новый аккаунт
+			var password = GetRandomPassword();
+			var account = SaveAccount(accountCompany: company, RegDomain_ViewModel: model, Pass: password);
+
+			// ищем группу "все пользователи", если такой нет - создаем
+			var otherGroup = cntx_.AccountGroup.FirstOrDefault(x => x.Name == "все" && x.TypeGroup == account.TypeUser);
+			if (otherGroup == null)
+			{
+				otherGroup = new AccountGroup() { Name = "все", Description = "вновь зарегистрированные пользователи", Enabled = true };
+				cntx_.Entry(otherGroup).State = EntityState.Added;
+				cntx_.SaveChanges();
+
+				// добавляем в группу права TODO уточнить, какие
+				var permissionList = cntx_.AccountPermission.Where(x => x.Enabled && x.TypePermission == account.TypeUser).ToList();
+				foreach (var item in permissionList)
+					otherGroup.AccountPermission.Add(item);
+
+				cntx_.Entry(otherGroup).State = EntityState.Modified;
+				cntx_.SaveChanges();
+			}
+
+			// добавляем пользователя в группу все пользователи
+			account.AccountGroup.Add(otherGroup);
+			account.LastUpdatePermisison = DateTime.Now;
+			cntx_.SaveChanges();
+
+			// отправили письмо о регистрации
+			EmailSender.SendRegistrationMessage(cntx_, account.Id, password, HttpContext.Request.UserHostAddress);
+			SuccessMessage("Письмо с паролем отправлено на ваш email");
+			return RedirectToAction("Index", "Home");
+		}
+
+		[HttpPost]
+		public ActionResult DolznostAddNew(string NewNameAppointment)
+		{
+			var NewAppExsist = cntx_.AccountAppointment.Any(xxx => xxx.Name == NewNameAppointment);
+			var NewAppointment_ = new AccountAppointment();
+
+			if (NewAppExsist)
+			{
+				NewAppointment_ = cntx_.AccountAppointment.Where(xxx => xxx.Name == NewNameAppointment).First();
+			}
+			else
+			{
+				NewAppointment_.Name = NewNameAppointment;
+				NewAppointment_.GlobalEnabled = 0;
+				cntx_.Entry(NewAppointment_).State = EntityState.Added;
+				cntx_.SaveChanges();
+			}
+
+			return Content(NewAppointment_.Id.ToString() + ";" + NewAppointment_.Name);
+		}
+
+		/// <summary>
+		/// Если компания в списке отсутствует GET
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult CustomRegistration()
+		{
+			ViewBagAppointmentList();
+			var model = new RegNotProducerViewModel();
+			return View(model);
+		}
+
+		/// <summary>
+		/// Если компания в списке отсутствует POST
+		/// </summary>
+		/// <param name="model">заполненная регистрационная форма</param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult CustomRegistration(RegNotProducerViewModel model)
+		{
+			// если модель невалидна
+			if (!ModelState.IsValid)
+				return View(model);
+
+			// если такой пользователь уже есть
+			var userExist = cntx_.Account.Any(x => x.Login == model.login);
+			if (userExist)
+			{
+				ErrorMessage("Пользователь с указанным email уже зарегистрирован");
+				return View(model);
+			}
+
+			// создали и сохранили компанию
+			var company = new AccountCompany() { Name = model.CompanyName };
+			company.Name = model.CompanyName;
+			cntx_.Entry(company).State = EntityState.Added;
+			cntx_.SaveChanges();
+
+			// создали аккаунт
+			var account = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
+
+			// отправили сообщение в обратную связь
+			var feedBack = new AccountFeedBack() {
+				Description = "Запрос на регистрацию",
+				DateAdd = DateTime.Now,
+				AccountId = account.Id,
+				UrlString = "~/Regisration/CustomRegistration",
+				Type = (sbyte)FeedBackTypePrivate.Registration
+			};
+			cntx_.AccountFeedBack.Add(feedBack);
+			cntx_.SaveChanges();
+
+			SuccessMessage("Ваша заявка принята. Ожидайте с вами свяжутся");
+			return RedirectToAction("Index", "Home");
+		}
+
+
+		[HttpGet]
+		public ActionResult AdminAuthentification(string AdminLogin, long? IdProducerUSer, string SecureHash)
+		{
+			if (AdminLogin == null || IdProducerUSer == null)
+				return RedirectToAction("index", "home");
+
+			// проверка наличия Админа В БД.
+
+			var AccountAdminExsist = cntx_.Account.Any(xxx => xxx.Login == AdminLogin && xxx.TypeUser == (SByte)TypeUsers.ControlPanelUser);
+			var ProducerUserExsist = cntx_.Account.Any(xxx => xxx.Id == IdProducerUSer && xxx.TypeUser == (SByte)TypeUsers.ProducerUser);
+
+			// проверка SecureHash
+			var adminAccount = cntx_.Account.Single(xxx => xxx.Login == AdminLogin);
+
+			string i = "";
+			if (adminAccount.Name != null)
+				i = (adminAccount.Name.Length * 19801112).ToString();
+			else
+				i = (18 * 19801112).ToString();
+
+			if (!SecureHash.Contains(i))
+				return RedirectToAction("index", "home");
+
+			if (adminAccount.SecureTime.Value > DateTime.Now)
+			{
+				CurrentUser = cntx_.Account.Find(IdProducerUSer);
+				var AdminId = adminAccount.Id.ToString();
+				Autentificate(this, true, AdminId);
+				return RedirectToAction("Index", "Profile");
+			}
+			else
+			{
+				ErrorMessage("Данная ссылка действительна три минуты, время истекло, просьба повторить авторизацию");
+				return View("AdminAuth", new AdminAutentification() { IdProducerUser = (long)IdProducerUSer, Login = adminAccount.Login });
+			}
+		}
+
+		[HttpPost]
+		public ActionResult AdminAuth(AdminAutentification model)
+		{
+			var DomainAuth = new DomainAutentification();
+			if (DomainAuth.IsAuthenticated(model.Login, model.Password))
+			{
+				// авторизовываем как обычного пользователя, но с добавление ID Администратора 
+				CurrentUser = cntx_.Account.Find(model.IdProducerUser);
+				var AdminId = cntx_.Account.Single(x => x.Login == model.Login).Id.ToString();
+				Autentificate(this, true, AdminId);
+			}
+
+			if (CurrentUser != null)
+				return RedirectToAction("Index", "Profile");
+
+			model.Password = "";
+			ErrorMessage("Пароль указан не верно");
+			return View("AdminAuth", model);
+		}
+
+		private Account SaveAccount(AccountCompany accountCompany, RegViewModel Reg_ViewModel = null, RegDomainViewModel RegDomain_ViewModel = null, RegNotProducerViewModel RegNotProducer_ViewModel = null, string Pass = null)
+		{
+			var newAccount = new Account();
+			newAccount.Enabled = 0;
+			newAccount.RegionMask = 0;
+			newAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
+			newAccount.CompanyId = accountCompany.Id;
+
+			// регистрация первого пользователя компании
+			if (Reg_ViewModel != null)
+			{
+				newAccount.Login = Reg_ViewModel.login;
+				newAccount.Password = Md5HashHelper.GetHash(Pass);
+				newAccount.FirstName = Reg_ViewModel.FirstName;
+				newAccount.LastName = Reg_ViewModel.LastName;
+				newAccount.OtherName = Reg_ViewModel.OtherName;
+				newAccount.Name = Reg_ViewModel.LastName + " " + Reg_ViewModel.FirstName + " " + Reg_ViewModel.OtherName;
+				newAccount.Phone = Reg_ViewModel.PhoneNumber;
+				newAccount.AppointmentId = Reg_ViewModel.AppointmentId;
+			}
+
+			// регистрация второго и последующих пользователей производителя
+			if (RegDomain_ViewModel != null)
+			{
+				newAccount.Login = RegDomain_ViewModel.Mailname + "@" + cntx_.CompanyDomainName.Single(x => x.Id == RegDomain_ViewModel.EmailDomain).Name;
+				newAccount.Password = Md5HashHelper.GetHash(Pass);
+				newAccount.FirstName = RegDomain_ViewModel.FirstName;
+				newAccount.LastName = RegDomain_ViewModel.LastName;
+				newAccount.OtherName = RegDomain_ViewModel.OtherName;
+				newAccount.Name = RegDomain_ViewModel.LastName + " " + RegDomain_ViewModel.FirstName + " " + RegDomain_ViewModel.OtherName;
+				newAccount.Phone = RegDomain_ViewModel.PhoneNumber;
+				newAccount.AppointmentId = RegDomain_ViewModel.AppointmentId;
+			}
+
+			// Если компания в списке отсутствует
+			if (RegNotProducer_ViewModel != null)
+			{
+				// создали новую должность
+				var appointment = new AccountAppointment() { Name = RegNotProducer_ViewModel.Appointment, GlobalEnabled = 0 };
+				cntx_.Entry(appointment).State = EntityState.Added;
+				cntx_.SaveChanges();
+
+				newAccount.Login = RegNotProducer_ViewModel.login;
+				newAccount.FirstName = RegNotProducer_ViewModel.FirstName;
+				newAccount.LastName = RegNotProducer_ViewModel.LastName;
+				newAccount.OtherName = RegNotProducer_ViewModel.OtherName;
+				newAccount.Name = RegNotProducer_ViewModel.LastName + " " + RegNotProducer_ViewModel.FirstName + " " + RegNotProducer_ViewModel.OtherName;
+				newAccount.Phone = RegNotProducer_ViewModel.PhoneNumber;
+				newAccount.AppointmentId = appointment.Id;
+			}
+
+			cntx_.Entry(newAccount).State = EntityState.Added;
+			cntx_.SaveChanges();
+			return newAccount;
+		}
+
+		/// <summary>
+		/// Кладет в ViewBag.AppointmentList список должностей
+		/// </summary>
+		/// <param name="ProducerId"></param>
+		private void ViewBagAppointmentList(long ProducerId = 0)
+		{
+			var result = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
+			result.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 && x.IdAccount == null)
+					 .ToList()
+					 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
+					 .ToList());
+
+			// если передан ID производителя, добавляются должности данного производителя
+			if (ProducerId != 0)
+			{
+				var companyCustomAppointment = cntx_.AccountAppointment.Where(x => x.Account1.AccountCompany.ProducerId == ProducerId).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+				result.AddRange(companyCustomAppointment);
+			}
+			ViewBag.AppointmentList = result;
+		}
+
+		/// <summary>
+		/// Кладет в ViewBag.ProducerList список производителей
+		/// </summary>
+		private void ViewBagProducerList()
+		{
+			var producerList = new List<OptionElement>() { new OptionElement() { Text = "", Value = "" } };
+			producerList.AddRange(
+					cntx_.producernames.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList()
+			);
+			ViewBag.ProducerList = producerList;
+		}
+	}
 }

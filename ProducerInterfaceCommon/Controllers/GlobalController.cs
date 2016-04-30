@@ -8,224 +8,205 @@ using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceCommon.Controllers
 {
-    public class GlobalController : Controller
-    {
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-            //protected string controllerName;
-            //protected string actionName;
-            //protected string controllerAcctributes;
-            controllerName = this.GetType().Name.Replace("Controller", "").ToLower().ToString();
-            actionName = this.Request.RequestContext.RouteData.GetRequiredString("action").ToLower().ToString();
-            controllerAcctributes = this.Request.HttpMethod.ToString().ToLower();            
-        }
+	public class GlobalController : Controller
+	{
+		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+		{
+			base.OnActionExecuting(filterContext);
+			//protected string controllerName;
+			//protected string actionName;
+			//protected string controllerAcctributes;
+			controllerName = this.GetType().Name.Replace("Controller", "").ToLower().ToString();
+			actionName = this.Request.RequestContext.RouteData.GetRequiredString("action").ToLower().ToString();
+			controllerAcctributes = this.Request.HttpMethod.ToString().ToLower();
+		}
 
-        // глобальные переменные и функции
-        // тип текущего пользователя SByte - хранится в ProducerUser таблице, параметр TypeUser
+		// глобальные переменные и функции
+		// тип текущего пользователя SByte - хранится в ProducerUser таблице, параметр TypeUser
 
-        protected ContextModels.TypeUsers TypeLoginUser { get { return (ContextModels.TypeUsers)SbyteTypeUser; } set { SbyteTypeUser = (SByte)value; } }
-        protected SByte SbyteTypeUser { get; set; }
+		protected ContextModels.TypeUsers TypeLoginUser { get { return (ContextModels.TypeUsers)SbyteTypeUser; } set { SbyteTypeUser = (SByte)value; } }
+		protected SByte SbyteTypeUser { get; set; }
 
-        // сюда попадёт авторизованный пользователь
-        protected ContextModels.Account CurrentUser { get; set; }
-        protected long CurrentUserIdLog { get; set; }
+		// сюда попадёт авторизованный пользователь
+		protected ContextModels.Account CurrentUser { get; set; }
+		protected long CurrentUserIdLog { get; set; }
 
-        // Context DataBase       
-        protected producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
-        
-        protected string controllerName;
-        protected string actionName;
-        protected string controllerAcctributes;
+		// Context DataBase       
+		protected producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
 
-        protected string permissionName { get { return (controllerName + "_" + actionName).ToLower(); } }
+		protected string controllerName;
+		protected string actionName;
+		protected string controllerAcctributes;
 
-        public string GetRandomPassword()
-        {
-            return Guid.NewGuid().ToString().Replace("-", "").ToLower().Substring(8, MaxPasswordLeight);
-        }
+		protected string permissionName { get { return (controllerName + "_" + actionName).ToLower(); } }
 
-        public class Md5HashHelper
-        {
-            /// <summary>
-            /// Получение хэша строки
-            /// </summary>
-            /// <param name="text"></param>
-            /// <returns></returns>
-            public static string GetHash(string text)
-            {
-                using (MD5 md5Hash = MD5.Create()) return GetMd5Hash(md5Hash, text);
-            }
+		public string GetRandomPassword()
+		{
+			return Guid.NewGuid().ToString().Replace("-", "").ToLower().Substring(8, MaxPasswordLeight);
+		}
 
-            /// <summary>
-            /// получение хэша строки
-            /// </summary>
-            /// <param name="md5Hash">Объект MD5</param>
-            /// <param name="text">Хэшируемая строка</param>
-            /// <returns>Хыш строки</returns>
-            public static string GetMd5Hash(MD5 md5Hash, string text)
-            {
-                // Конвертация байтового массива в хэш
-                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(text));
-                // создание строки
-                StringBuilder sBuilder = new StringBuilder();
-                // проходит по каждому байту хэша и форматирует его в 16 string
-                for (int i = 0; i < data.Length; i++) sBuilder.Append(data[i].ToString("x2"));
-                return sBuilder.ToString();
-            }
+		public class Md5HashHelper
+		{
+			/// <summary>
+			/// Получение хэша строки
+			/// </summary>
+			/// <param name="text"></param>
+			/// <returns></returns>
+			public static string GetHash(string text)
+			{
+				using (MD5 md5Hash = MD5.Create()) return GetMd5Hash(md5Hash, text);
+			}
 
-        }
-        
-        private int MaxPasswordLeight
-        {
-            get { return 6; }
-        }
+			/// <summary>
+			/// получение хэша строки
+			/// </summary>
+			/// <param name="md5Hash">Объект MD5</param>
+			/// <param name="text">Хэшируемая строка</param>
+			/// <returns>Хыш строки</returns>
+			public static string GetMd5Hash(MD5 md5Hash, string text)
+			{
+				// Конвертация байтового массива в хэш
+				byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(text));
+				// создание строки
+				StringBuilder sBuilder = new StringBuilder();
+				// проходит по каждому байту хэша и форматирует его в 16 string
+				for (int i = 0; i < data.Length; i++) sBuilder.Append(data[i].ToString("x2"));
+				return sBuilder.ToString();
+			}
 
-        //public class SystemTime
-        //{
-        //    public static DateTime Now()
-        //    {
-        //        return DateTime.Now;
-        //    }
-        //    public static DateTime GetDefaultDate()
-        //    {
-        //        return default(DateTime);
-        //    }
+		}
 
-        //}
+		private int MaxPasswordLeight
+		{
+			get { return 6; }
+		}
 
-        public string GetUserCookiesName()
-        {
-            var currentUser = "";
+		public string GetUserCookiesName()
+		{
+			var currentUser = "";
+			string cookiesName = GetWebConfigParameters("CookiesName");
+			HttpCookie authCookie = Request.Cookies[cookiesName];
 
-            string cookiesName = GetWebConfigParameters("CookiesName");
+			if (authCookie == null)
+				return currentUser;
 
-            try
-            {
-                HttpCookie authCookie = Request.Cookies[cookiesName];
-                if (authCookie != null)
-                {
-                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
-                    string cookiePath = ticket.CookiePath;
-                    DateTime expiration = ticket.Expiration;
-                    bool expired = ticket.Expired;
-                    bool isPersistent = ticket.IsPersistent;
-                    DateTime issueDate = ticket.IssueDate;
-                    string name = ticket.Name;
-                    string userData = ticket.UserData;
-                    string version = ticket.Version.ToString();
-                    currentUser = name;
-                    if (String.IsNullOrEmpty(ticket.UserData))
-                    { }
-                    else
-                    {
-                        CurrentUserIdLog = Convert.ToInt64(ticket.UserData);
-                    }                 
-                    authCookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
-                    Response.Cookies.Set(authCookie);
-                }
-            }
-            catch (Exception) { /*IGNORE*/ }
+			var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+			if (ticket == null)
+				return currentUser;
 
-            return currentUser;
-        }
-                
-        #region COOKIES
-        public void SetUserCookiesName(string UserLoginOrEmail, bool shouldRemember = true, string userData= "")
-        {
-            var CoockieName = GetWebConfigParameters("CookiesName");
-            var ticket = new FormsAuthenticationTicket(
-            1,
-            UserLoginOrEmail,
-            DateTime.Now,
-            DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
-            shouldRemember,
-            userData,
-            FormsAuthentication.FormsCookiePath
-            );
+			//string cookiePath = ticket.CookiePath;
+			//DateTime expiration = ticket.Expiration;
+			//bool expired = ticket.Expired;
+			//bool isPersistent = ticket.IsPersistent;
+			//DateTime issueDate = ticket.IssueDate;
+			//string name = ticket.Name;
+			//string userData = ticket.UserData;
+			//string version = ticket.Version.ToString();
 
-            var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
+			currentUser = ticket.Name;
+			if (!String.IsNullOrEmpty(ticket.UserData))
+				CurrentUserIdLog = Convert.ToInt64(ticket.UserData);
+			authCookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
+			Response.Cookies.Set(authCookie);
+			return currentUser;
+		}
 
-            if (shouldRemember)
-            {
-							cookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
-            }
+		#region COOKIES
+		public void SetUserCookiesName(string UserLoginOrEmail, bool shouldRemember = true, string userData = "")
+		{
+			var CoockieName = GetWebConfigParameters("CookiesName");
+			var ticket = new FormsAuthenticationTicket(
+			1,
+			UserLoginOrEmail,
+			DateTime.Now,
+			DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
+			shouldRemember,
+			userData,
+			FormsAuthentication.FormsCookiePath
+			);
 
-            FormsAuthentication.SetAuthCookie(UserLoginOrEmail, false);
-            Response.Cookies.Set(cookie);
-        }
+			var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
 
-        public void SetCookie(string name, string value, bool IsCoding = true)
-        {
-            var ExpiresDate = DateTime.Now.AddSeconds(15);
+			if (shouldRemember)
+			{
+				cookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
+			}
 
-            if (name == "AccountName")
-            {
-                ExpiresDate.AddYears(1);
-            }
-            
-            if (value == null)
-            {
-                Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
-                return;
-            }
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
-            var text = "";
-            if (IsCoding){ text = Convert.ToBase64String(plainTextBytes); }
-            else { text = value; }
-            Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
-        }
+			FormsAuthentication.SetAuthCookie(UserLoginOrEmail, false);
+			Response.Cookies.Set(cookie);
+		}
 
-        public void DeleteCookie(string name)
-        {
-            Response.Cookies.Remove(name);
-        }
+		public void SetCookie(string name, string value, bool IsCoding = true)
+		{
+			var ExpiresDate = DateTime.Now.AddSeconds(15);
 
-        public void LogOut_User()
-        {
-            // очишаем куки, пользователь более не аутентифицирован
-            ClearAllCookies();
-        }
+			if (name == "AccountName")
+			{
+				ExpiresDate.AddYears(1);
+			}
 
-        public void ClearAllCookies()
-        {
-            var cookiesName = GetWebConfigParameters("CookiesName");
-            for (int i = 0; i < Request.Cookies.Count; i++)
-            {
-                HttpCookie currentUserCookie = Request.Cookies[i];
-                if (currentUserCookie != null && currentUserCookie.Name.IndexOf(cookiesName) != -1)
-                {
-                    Response.Cookies.Remove(currentUserCookie.Name);
-                    currentUserCookie.Expires = DateTime.Now.AddDays(-10);
-                    currentUserCookie.Value = null;
-                    Response.SetCookie(currentUserCookie);
-                }
-            }
-        }
+			if (value == null)
+			{
+				Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
+				return;
+			}
+			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
+			var text = "";
+			if (IsCoding) { text = Convert.ToBase64String(plainTextBytes); }
+			else { text = value; }
+			Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
+		}
 
-        public void SuccessMessage(string message)
-        {
-            SetCookie("SuccessMessage", message);
-        }
+		public void DeleteCookie(string name)
+		{
+			Response.Cookies.Remove(name);
+		}
 
-        public void ErrorMessage(string message)
-        {
-            SetCookie("ErrorMessage", message);
-        }
+		public void LogOut_User()
+		{
+			// очишаем куки, пользователь более не аутентифицирован
+			ClearAllCookies();
+		}
 
-        public void WarningMessage(string message)
-        {
-            SetCookie("WarningMessage", message);
-        }      
+		public void ClearAllCookies()
+		{
+			var cookiesName = GetWebConfigParameters("CookiesName");
+			for (int i = 0; i < Request.Cookies.Count; i++)
+			{
+				HttpCookie currentUserCookie = Request.Cookies[i];
+				if (currentUserCookie != null && currentUserCookie.Name.IndexOf(cookiesName) != -1)
+				{
+					Response.Cookies.Remove(currentUserCookie.Name);
+					currentUserCookie.Expires = DateTime.Now.AddDays(-10);
+					currentUserCookie.Value = null;
+					Response.SetCookie(currentUserCookie);
+				}
+			}
+		}
 
-        public string GetWebConfigParameters(string ParamKey)
-        {
-            return System.Configuration.ConfigurationManager.AppSettings[ParamKey].ToString();
-        }
+		public void SuccessMessage(string message)
+		{
+			SetCookie("SuccessMessage", message);
+		}
 
-        #endregion
+		public void ErrorMessage(string message)
+		{
+			SetCookie("ErrorMessage", message);
+		}
+
+		public void WarningMessage(string message)
+		{
+			SetCookie("WarningMessage", message);
+		}
+
+		public string GetWebConfigParameters(string ParamKey)
+		{
+			return System.Configuration.ConfigurationManager.AppSettings[ParamKey].ToString();
+		}
+
+		#endregion
 
 
-     
-    }
+
+	}
 }

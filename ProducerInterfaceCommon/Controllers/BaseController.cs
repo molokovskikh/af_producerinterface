@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using System.Linq;
 using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
-using System.Threading;
 using System.Web.Caching;
 using log4net;
 
@@ -25,102 +24,75 @@ namespace ProducerInterfaceCommon.Controllers
 			ViewBag.UrlString = HttpContext.Request.Url;
 			ThreadContext.Properties["url"] = HttpContext.Request.Url;
 
-			if (CurrentUser != null) // присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
+			// присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
+			if (CurrentUser != null) 
 			{
 				ThreadContext.Properties["user"] = CurrentUser.Name ?? CurrentUser.Login;
-				CurrentUser.IP = Request.UserHostAddress.ToString();
+				CurrentUser.IP = Request.UserHostAddress;
 				ViewBag.CurrentUser = CurrentUser;
 				if (CurrentUserIdLog != CurrentUser.Id)
-				{
 					ViewBag.AdminUser = cntx_.Account.Find(CurrentUserIdLog);
-				}
 			}
-			CheckGlobalPermission(); // проверка наличия пермишена для данного экшена в БД  
-			CheckUserPermission(filterContext); // проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)       
-		}
-
-		#region /*проверка наличия пермишена в БД или в игнорируемых*/
-
-		public void CheckGlobalPermission()
-		{
-			//protected string controllerName; - определены ранее
-			//protected string actionName; - определены ранее
-
-			if (IgnoreRoutePermission(permissionName))
-			{
-				return; // найден в игнорируемых
-			}
-			bool PermissionExsist = cntx_.AccountPermission.Any(xxx => xxx.Enabled == true && xxx.TypePermission == SbyteTypeUser && xxx.ControllerAction == permissionName && xxx.ActionAttributes == controllerAcctributes);
-
-			if (!PermissionExsist)
-			{
-				// если пермишена в БД нет, то добавим данный пермишен к группе администраторов
-				// проверим наличие группы администраторы
-
-				var AdminGroupName = GetWebConfigParameters("AdminGroupName");
-
-				bool GroupExsist = cntx_.AccountGroup.Any(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser);
-
-				var GroupAddPermission = new AccountGroup();
-
-				if (!GroupExsist)
-				{
-					GroupAddPermission = new AccountGroup { Name = AdminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-					cntx_.AccountGroup.Add(GroupAddPermission);
-					cntx_.SaveChanges();
-				}
-				else
-				{
-					GroupAddPermission = cntx_.AccountGroup.Where(xxx => xxx.Enabled == true && xxx.Name == AdminGroupName && xxx.TypeGroup == SbyteTypeUser).First();
-				}
-
-				var NewPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
-				// добавляем новый доступ
-				cntx_.AccountPermission.Add(NewPermission);
-				cntx_.SaveChanges();
-
-
-				// добавляем его к группе Администраторы
-				AddPermissionToGroup(GroupAddPermission.Id, NewPermission.Id);
-			}
-			// пермишен есть в БД, добавлять ничего не требуется                  
-		}
-
-		private void AddPermissionToGroup(int GroupId, int PermissionId)
-		{
-			var GroupItem = cntx_.AccountGroup.Find(GroupId);
-			var PermissionItem = cntx_.AccountPermission.Find(PermissionId);
-			GroupItem.AccountPermission.Add(PermissionItem);
-			cntx_.Entry(GroupItem).State = System.Data.Entity.EntityState.Modified;
-			cntx_.SaveChanges();
-
-
-		}
-
-		protected void AccountLastUpdatePermission(int GroupId)
-		{
-			//var AccountList = cntx_.Account.Where(x => x.AccountGroup.Any(y => y.Id == GroupId)).Distinct().ToList();
-
-			//foreach (var AccountItem in AccountList)
-			//{
-			//	AccountItem.LastUpdatePermisison = DateTime.Now;
-			//}
-
-			//cntx_.Entry(AccountList).State = System.Data.Entity.EntityState.Modified;
-			//cntx_.SaveChanges();
-		}
-
-
-		#endregion
-
-		#region /*Проверка прав пользователя*/
-
-		public void CheckUserPermission(ActionExecutingContext filterContext)
-		{
-			// если в списке игнорируемых маршрутов
-			if (IgnoreRoutePermission(permissionName))
+			// если найден в игнорируемых
+			if (IgnoreRoutePermission())
 				return;
 
+			// проверка наличия пермишена в БД и добавление в случае отсутствия
+			AddPermission();
+			
+			// проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)
+			CheckUserPermission(filterContext);        
+		}
+
+		/// <summary>
+		/// проверка наличия пермишена в БД и добавление в случае отсутствия
+		/// </summary>
+		private void AddPermission()
+		{
+			var permissionExsist = cntx_.AccountPermission.Any(x => 
+				x.TypePermission == SbyteTypeUser 
+				&& x.ControllerAction == permissionName 
+				&& x.ActionAttributes == controllerAcctributes);
+
+			// пермишен есть в БД, добавлять ничего не требуется                  
+			if (permissionExsist)
+				return;
+
+			// если пермишена в БД нет, то добаляем пермишен к группе администраторов
+
+			// проверим наличие группы "Администраторы"
+			var adminGroupName = GetWebConfigParameters("AdminGroupName");
+			// убрал условие Enabled потому что группа будет создана заново, если disabled
+			var adminGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
+			if (adminGroup == null)
+			{
+				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+				cntx_.AccountGroup.Add(adminGroup);
+				cntx_.SaveChanges();
+			}
+
+			// добавляем новый доступ
+			var newPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
+			cntx_.AccountPermission.Add(newPermission);
+			cntx_.SaveChanges();
+
+			// добавляем его к группе Администраторы
+			adminGroup.AccountPermission.Add(newPermission);
+			//cntx_.Entry(adminGroup).State = System.Data.Entity.EntityState.Modified;
+
+			var date = DateTime.Now;
+			foreach (var user in adminGroup.Account)
+				user.LastUpdatePermisison = date;
+
+			cntx_.SaveChanges();
+		}
+
+		/// <summary>
+		/// Проверка прав пользователя
+		/// </summary>
+		/// <param name="filterContext"></param>
+		private void CheckUserPermission(ActionExecutingContext filterContext)
+		{
 			// если пользователя нет, но он пришёл из панели управления - на регистрацию
 			if (CurrentUser == null && TypeLoginUser == TypeUsers.ControlPanelUser)
 				filterContext.Result = RedirectToAction("Index", "Registration");
@@ -135,7 +107,7 @@ namespace ProducerInterfaceCommon.Controllers
 
 			// если есть пользователь и нет прав доступа
 			else {
-				ErrorMessage("У вас нет прав доступа к запрашиваемой странице или для изменения данных");
+				ErrorMessage("У вас нет прав доступа к запрашиваемой странице");
 				var refferer = filterContext.HttpContext.Request.UrlReferrer;
 				if (refferer != null && !String.IsNullOrEmpty(refferer.OriginalString))
 					filterContext.Result = Redirect(refferer.OriginalString);
@@ -144,216 +116,102 @@ namespace ProducerInterfaceCommon.Controllers
 			}
 		}
 
-		private bool IgnoreRoutePermission(string ThisRoute)
+		/// <summary>
+		/// Проверяет, находится ли вызываемый экшн контроллера в списке всегда открытых
+		/// </summary>
+		/// <returns></returns>
+		private bool IgnoreRoutePermission()
 		{
-			try
-			{
-
-
-				List<string> IgnoreRoute = IgnoreRouteForPermission();
-
-				foreach (var ItemIgnore in IgnoreRoute)
-				{
-					if (ItemIgnore == ThisRoute || ItemIgnore.ToLower() == (controllerName + "_*").ToLower())
-					{
-						return true;
-					}
-				}
-			}
-			catch { return false; }
-
-			return false;
+			// список игнорируемых маршрутов CSV. Сейчас Home_Index,FeedBack_*,Account_*
+			var ignoreRoute = GetWebConfigParameters("IgnoreRoute").ToLower().Split(',').ToList();
+			var result = ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
+			return result;
 		}
 
-		public List<string> IgnoreRouteForPermission()
-		{
-			// список игнорируемый маршрутов  (хранится в веб конфиге, через запятую в формате Controller_Action && Controller_* где * игнорируются все акшены в данном контроллере)
-			try
-			{
-				return GetWebConfigParameters("IgnoreRoute").ToString().ToLower().Split(new char[] { ',' }).ToList();
-			}
-			catch { return null; }
-		}
-
-		#endregion
-
+		/// <summary>
+		/// Проверяет наличие пермишена в списке пермишенов пользователя
+		/// </summary>
+		/// <returns></returns>
 		public bool PermissionUserExsist()
 		{
-			if (CurrentUser.Enabled == 0) {
-
-
-			}
 			var permissionList = GetPermissionList();
 			var permissionKey = $"{permissionName}_{controllerAcctributes}";
 			return permissionList.Contains(permissionKey);
 		}
 
+		/// <summary>
+		/// Возврашает список пермишенов пользователя
+		/// </summary>
+		/// <returns></returns>
 		public HashSet<string> GetPermissionList()
 		{
 			var key = $"permission{CurrentUser.Id}";
 			var permissionList = HttpContext.Cache.Get(key) as HashSet<string>;
-			if (permissionList != null)
-			{
-				var lastUpdatePermissiion = GetLastDate();
-				if (lastUpdatePermissiion.First().ToLower() == permissionList.First().ToLower())
-				{
+			// если есть в кеше - возвращаем из кеша
+			if (permissionList != null) {
+				// в первой строке лежит время создания кеша
+				var dateHash = DateTime.Parse(permissionList.First());
+				// если права пользователя не менялись с момента создания кеша
+				if (CurrentUser.LastUpdatePermisison.HasValue && dateHash > CurrentUser.LastUpdatePermisison.Value)
 					return permissionList;
-				}
 			}
 			permissionList = new HashSet<string>();
 
-			if (CurrentUser.LastUpdatePermisison == null)
-			{
-				permissionList.Add(DateTime.MinValue.Year.ToString());
-			}
-			else
-			{
-				permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());
-			}
+			// добавляем время обновления кеша первой строкой
+			permissionList.Add(DateTime.Now.ToString("O"));
 
-			permissionList.Add(CurrentUser.LastUpdatePermisison.ToString());
+			var ps = CurrentUser.AccountGroup.SelectMany(x => x.AccountPermission)
+				.Where(x => x.Enabled && x.TypePermission == SbyteTypeUser)
+				.Select(x => $"{x.ControllerAction}_{x.ActionAttributes}")
+				.Distinct().ToList();
 
-			foreach (var group in CurrentUser.AccountGroup)
-			{
-				foreach (var permission in group.AccountPermission)
-				{
-					var permissionKey = $"{permission.ControllerAction}_{permission.ActionAttributes}";
-					if (permission.Enabled && !permissionList.Contains(permissionKey))
-						permissionList.Add(permissionKey);
-				}
-			}
+			foreach (var p in ps)
+				permissionList.Add(p);
 
-			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(0), Cache.NoSlidingExpiration);
+			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
 			return permissionList;
 		}
 
-		public HashSet<string> GetLastDate()
+		/// <summary>
+		/// Возвращает текущего пользователя из Кукисов (если они существуют)
+		/// </summary>
+		/// <param name="typeUser">enum Тип пользователя</param>
+		/// <returns></returns>
+		protected Account GetCurrentUser(TypeUsers typeUser)
 		{
-			var key = $"date{CurrentUser.Id}";
-			var DateList = HttpContext.Cache.Get(key) as HashSet<string>;
+			TypeLoginUser = typeUser;
+			var login = GetUserCookiesName();
+			if (String.IsNullOrEmpty(login))
+				return null;
 
-			if (DateList != null) { return DateList; }
-
-			DateList = new HashSet<string>();
-
-			if (CurrentUser.LastUpdatePermisison == null)
+			// TODO: First - это неправильно
+			var retUser = cntx_.Account.FirstOrDefault(x => x.TypeUser == SbyteTypeUser && x.Login == login && x.Enabled == 1);
+			if (retUser != null && typeUser == TypeUsers.ProducerUser)
 			{
-				DateList.Add(DateTime.MinValue.Year.ToString());
-			}
-			else
-			{
-				DateList.Add(CurrentUser.LastUpdatePermisison.ToString());
-			}
-
-			HttpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(0), Cache.NoSlidingExpiration);
-			return DateList;
-		}
-
-
-		#region /*Возврат залогиненого пользователя из Кукисов (если они существуют)*/
-
-		protected Account GetCurrentUser(TypeUsers TypeUser_)
-		{
-			var retUser = new Account();
-			TypeLoginUser = TypeUser_;
-
-			if (TypeUser_ == TypeUsers.ProducerUser)
-			{
-				var EmailUser = GetUserCookiesName();
-
-				if (String.IsNullOrEmpty(EmailUser))
-				{
-					return null;
-				}
-
-				retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == EmailUser && xxx.Enabled == 1).FirstOrDefault();
-
-				if (retUser == null || String.IsNullOrEmpty(retUser.Login))
-				{
-					retUser = null;
-				}
-				else
-				{
-					if (CurrentUserIdLog > 0)
-					{
-						retUser.ID_LOG = CurrentUserIdLog;
-					}
-					else
-					{
-						retUser.ID_LOG = retUser.Id;
-					}
-				}
-			}
-
-			if (TypeUser_ == TypeUsers.ControlPanelUser)
-			{
-				var LoginUser = GetUserCookiesName();
-
-				if (String.IsNullOrEmpty(LoginUser))
-				{
-					return null;
-				}
-
-				retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == LoginUser && xxx.Enabled == 1).First();
-
-				if (String.IsNullOrEmpty(retUser.Login))
-				{
-					retUser = null;
-				}
-			}
-
-			if (TypeUser_ == TypeUsers.UserNotProducer)
-			{
-				var EmailUser = GetUserCookiesName();
-
-				if (String.IsNullOrEmpty(EmailUser))
-				{
-					return null;
-				}
-
-				retUser = cntx_.Account.Where(xxx => xxx.TypeUser == SbyteTypeUser && xxx.Login == EmailUser && xxx.Enabled == 1).FirstOrDefault();
-
-				if (String.IsNullOrEmpty(retUser.Login))
-				{
-					retUser = null;
-				}
+				retUser.ID_LOG = retUser.Id;
+				if (CurrentUserIdLog > 0)
+					retUser.ID_LOG = CurrentUserIdLog;
 			}
 			return retUser;
 		}
 
-		#endregion
-
-		#region /*Аторизация*/
-
-		protected void AutorizeCurrentUser(Account thisUser, TypeUsers TypeUser_, string UserData = null)
+		/// <summary>
+		/// Аторизация
+		/// </summary>
+		/// <param name="user">Текущий пользователь</param>
+		/// <param name="typeUser">Тип пользователя</param>
+		/// <param name="userData">Некие данные пользователя</param>
+		protected void AutorizeCurrentUser(Account user, TypeUsers typeUser, string userData = null)
 		{
-			var UserLoginName = "";
-
-			if (TypeUser_ == TypeUsers.ProducerUser)
+			if (typeUser == TypeUsers.ProducerUser)
 			{
-				UserLoginName = thisUser.Login;
-				SetUserCookiesName(UserLoginName, true, UserData);
-				SetCookie("AccountName", thisUser.Login, false);
+				SetUserCookiesName(user.Login, true, userData);
+				SetCookie("AccountName", user.Login, false);
 				RedirectToAction("Index", "Profile");
 			}
 
-			if (TypeUser_ == TypeUsers.ControlPanelUser)
-			{
-				UserLoginName = thisUser.Login;
-				SetUserCookiesName(UserLoginName);
-
-				RedirectToAction("Index", "Home");
-			}
-			if (TypeUser_ == TypeUsers.UserNotProducer)
-			{
-				UserLoginName = thisUser.Login;
-				SetUserCookiesName(UserLoginName);
-
-				RedirectToAction("Index", "Home");
-			}
-
+			SetUserCookiesName(user.Login);
+			RedirectToAction("Index", "Home");
 		}
-		#endregion
-
 	}
 }

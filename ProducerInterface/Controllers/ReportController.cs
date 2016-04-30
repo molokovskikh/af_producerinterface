@@ -279,7 +279,7 @@ namespace ProducerInterface.Controllers
 		[HttpGet]
 		public ActionResult JobList(long? cid)
 		{
-			throw new NotSupportedException("Искусственно вызванная ошибка");
+			//throw new NotSupportedException("Искусственно вызванная ошибка");
 			ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
 			return View(cid);
 		}
