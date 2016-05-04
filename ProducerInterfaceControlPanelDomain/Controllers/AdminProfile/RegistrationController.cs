@@ -186,10 +186,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
             Response.Cookies.Set(cookie);
         }
 
-        public ActionResult LogOut()
+        /// <summary>
+				/// Выход
+				/// </summary>
+				/// <returns></returns>
+				public ActionResult LogOut()
         {
             CurrentUser = null;
-            LogOut_User();         
+            LogOutUser();         
             return RedirectToAction("Index");
         }
 

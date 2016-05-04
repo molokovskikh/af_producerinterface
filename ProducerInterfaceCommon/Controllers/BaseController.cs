@@ -195,23 +195,23 @@ namespace ProducerInterfaceCommon.Controllers
 			return retUser;
 		}
 
-		/// <summary>
-		/// Аторизация
-		/// </summary>
-		/// <param name="user">Текущий пользователь</param>
-		/// <param name="typeUser">Тип пользователя</param>
-		/// <param name="userData">Некие данные пользователя</param>
-		protected void AutorizeCurrentUser(Account user, TypeUsers typeUser, string userData = null)
-		{
-			if (typeUser == TypeUsers.ProducerUser)
-			{
-				SetUserCookiesName(user.Login, true, userData);
-				SetCookie("AccountName", user.Login, false);
-				RedirectToAction("Index", "Profile");
-			}
-
-			SetUserCookiesName(user.Login);
-			RedirectToAction("Index", "Home");
-		}
+		///// <summary>
+		///// Аторизация
+		///// </summary>
+		///// <param name="user">Текущий пользователь</param>
+		///// <param name="typeUser">Тип пользователя</param>
+		///// <param name="userData">Некие данные пользователя</param>
+		//protected void AutorizeCurrentUser(Account user, TypeUsers typeUser, string userData = null)
+ 	//	{
+		//	if (typeUser == TypeUsers.ProducerUser) {
+		//		SetUserCookiesName(user.Login, true, userData);
+		//		SetCookie("AccountName", user.Login, false);
+ 	//			RedirectToAction("Index", "Profile");
+ 	//		}
+		//	else {
+		//		SetUserCookiesName(user.Login);
+		//		RedirectToAction("Index", "Home");
+		//	}
+ 	//	}
 	}
 }

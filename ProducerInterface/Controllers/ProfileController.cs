@@ -21,48 +21,48 @@ namespace ProducerInterface.Controllers
 		{
 			ViewBag.Pager = 1;
 
-			var NewsAll = cntx_.NotificationToProducers.Where(x => x.Enabled == true).ToList();
-			NewsAll.Reverse();
+			var newsAll = cntx_.NotificationToProducers.Where(x => x.Enabled).ToList();
+			newsAll.Reverse();
 
-			ViewBag.News = NewsAll.OrderByDescending(x => x.DatePublication).Take(PagerCount).ToList();
-			ViewBag.MaxCount = NewsAll.Count();
+			ViewBag.News = newsAll.OrderByDescending(x => x.DatePublication).Take(PagerCount).ToList();
+			ViewBag.MaxCount = newsAll.Count();
 			return View();
 		}
 
+		/// <summary>
+		/// Мой профиль GET
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Account()
 		{
 
-			var ThisUser = cntx_.Account.Where(xxx => xxx.Id == CurrentUser.Id).First();
+			var thisUser = cntx_.Account.Single(x => x.Id == CurrentUser.Id);
 
-			var ModelView = new ProfileValidation();
+			var model = new ProfileValidation();
+			model.AppointmentId = thisUser.AccountAppointment.Id;
+			model.CompanyName = cntx_.producernames.Single(x => x.ProducerId == thisUser.AccountCompany.ProducerId).ProducerName;
+			model.EmailDomain = thisUser.AccountCompany.CompanyDomainName.First(x => thisUser.Login.Contains(x.Name)).Id;
+			model.Mailname = thisUser.Login.Split('@')[0];
+			model.PhoneNumber = thisUser.Phone;
+			model.LastName = thisUser.LastName;
+			model.FirstName = thisUser.FirstName;
+			model.OtherName = thisUser.OtherName;
 
-			ModelView.AppointmentId = ThisUser.AccountAppointment.Id;
-			ModelView.CompanyName = cntx_.producernames.Where(xxx => xxx.ProducerId == ThisUser.AccountCompany.ProducerId).First().ProducerName;
-			ModelView.EmailDomain = ThisUser.AccountCompany.CompanyDomainName.Where(xxx => ThisUser.Login.Contains(xxx.Name)).First().Id;
-			ModelView.Mailname = ThisUser.Login.Split(new Char[] { '@' }, StringSplitOptions.RemoveEmptyEntries)[0].ToString();
-			ModelView.PhoneNumber = ThisUser.Phone;
-			ModelView.LastName = ThisUser.LastName;
-			ModelView.FirstName = ThisUser.FirstName;
-			ModelView.OtherName = ThisUser.OtherName;
-
-			var AppointmentList =
+			var appointmentList =
 			 cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
 					 .ToList()
 					 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
 					 .ToList();
 
-			var UserOptionAppointment = cntx_.AccountAppointment.Where(xxx => xxx.Id == ThisUser.AccountAppointment.Id).ToList().Select(xxx => new OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name }).First();
+			var userOptionAppointment = cntx_.AccountAppointment.Where(x => x.Id == thisUser.AccountAppointment.Id).ToList().Select(x => new OptionElement { Value = x.Id.ToString(), Text = x.Name }).First();
+			if (!appointmentList.Contains(userOptionAppointment))
+				appointmentList.Add(userOptionAppointment);
 
-			if (!AppointmentList.Contains(UserOptionAppointment))
-			{
-				AppointmentList.Add(UserOptionAppointment);
-			}
-
-			ViewBag.AppointmentList = AppointmentList;
+			ViewBag.AppointmentList = appointmentList;
 			ViewBag.DomainList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).First().CompanyDomainName.Select(xxx => new OptionElement { Text = '@' + xxx.Name, Value = xxx.Id.ToString() }).ToList();
 
-			return View(ModelView);
+			return View(model);
 		}
 
 		[HttpPost]

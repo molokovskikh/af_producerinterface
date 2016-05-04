@@ -162,13 +162,13 @@ namespace ProducerInterfaceCommon.Controllers
 			Response.Cookies.Remove(name);
 		}
 
-		public void LogOut_User()
-		{
-			// очишаем куки, пользователь более не аутентифицирован
-			ClearAllCookies();
-		}
+		//public void LogOut_User()
+		//{
+		//	// очишаем куки, пользователь более не аутентифицирован
+		//	ClearAllCookies();
+		//}
 
-		public void ClearAllCookies()
+		public void LogOutUser()
 		{
 			var cookiesName = GetWebConfigParameters("CookiesName");
 			for (int i = 0; i < Request.Cookies.Count; i++)

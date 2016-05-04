@@ -159,10 +159,11 @@ namespace ProducerInterface.Controllers
 			var account = SaveAccount(accountCompany: company, RegDomain_ViewModel: model, Pass: password);
 
 			// ищем группу "все пользователи", если такой нет - создаем
-			var otherGroup = cntx_.AccountGroup.FirstOrDefault(x => x.Name == "все" && x.TypeGroup == account.TypeUser);
+			var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
+			var otherGroup = cntx_.AccountGroup.FirstOrDefault(x => x.Name == otherGroupName && x.TypeGroup == account.TypeUser);
 			if (otherGroup == null)
 			{
-				otherGroup = new AccountGroup() { Name = "все", Description = "вновь зарегистрированные пользователи", Enabled = true };
+				otherGroup = new AccountGroup() { Name = otherGroupName, Description = "вновь зарегистрированные пользователи", Enabled = true };
 				cntx_.Entry(otherGroup).State = EntityState.Added;
 				cntx_.SaveChanges();
 
@@ -259,7 +260,7 @@ namespace ProducerInterface.Controllers
 			cntx_.AccountFeedBack.Add(feedBack);
 			cntx_.SaveChanges();
 
-			SuccessMessage("Ваша заявка принята. Ожидайте с вами свяжутся");
+			SuccessMessage("Ваша заявка принята. Ожидайте, с вами свяжутся");
 			return RedirectToAction("Index", "Home");
 		}
 
@@ -291,7 +292,7 @@ namespace ProducerInterface.Controllers
 			{
 				CurrentUser = cntx_.Account.Find(IdProducerUSer);
 				var AdminId = adminAccount.Id.ToString();
-				Autentificate(this, true, AdminId);
+				Autentificate(AdminId);
 				return RedirectToAction("Index", "Profile");
 			}
 			else
@@ -310,7 +311,7 @@ namespace ProducerInterface.Controllers
 				// авторизовываем как обычного пользователя, но с добавление ID Администратора 
 				CurrentUser = cntx_.Account.Find(model.IdProducerUser);
 				var AdminId = cntx_.Account.Single(x => x.Login == model.Login).Id.ToString();
-				Autentificate(this, true, AdminId);
+				Autentificate(AdminId);
 			}
 
 			if (CurrentUser != null)
