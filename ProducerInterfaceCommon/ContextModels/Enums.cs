@@ -153,9 +153,22 @@ namespace ProducerInterfaceCommon.ContextModels
 		ProducerUser = 0,
 		[Display(Name = "Пользователь из Панели управления")]
 		ControlPanelUser = 1,
-		[Display(Name = "Пользователь из интерфейса производителя, без Id производителя")]
-		UserNotProducer = 2
+		//[Display(Name = "Пользователь из интерфейса производителя, без Id производителя")]
+		//UserNotProducer = 2
 	}
+
+	public enum UserStatus
+	{
+		[Display(Name = "Новый")]
+		New = 0,
+		[Display(Name = "Активный")]
+		Active = 1,
+		[Display(Name = "Заблокированный")]
+		Blocked = 2,
+		[Display(Name = "Запрос регистрации")]
+		Request = 3
+	}
+
 
 	public enum EntityCommand
 	{

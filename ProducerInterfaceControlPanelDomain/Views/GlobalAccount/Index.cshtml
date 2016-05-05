@@ -1,14 +1,15 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
+@using ProducerInterfaceCommon.Heap
 @model IEnumerable<Account>
 
 @{
-    ViewBag.Title = "Управление пользователями";
+    ViewBag.Title = "Заявки на регистрацию";
     Layout = "~/Views/Shared/_MasterPage.cshtml"; 
 }
 
-<h2>Управление пользователями</h2>
+<h2>@ViewBag.Title</h2>
 
-@if (Model.Where(xxx => xxx.AccountCompany.ProducerId == null).Count() == 0)
+@if (!Model.Any())
 {
     <h4>Список заявок пуст</h4>
 }
@@ -17,41 +18,34 @@ else
 
 <div class="row">
     <div class="col-xs-12">
-        <h3>Список заявок на регистрацию</h3>
         <hr />
         
 
-        @foreach (var AccountItem in Model.Where(xxx => xxx.AccountCompany.ProducerId == null))
+        @foreach (var item in Model)
         {
             <div class="panel">
                 <div class="panel-heading">
                     <h4>
-                        @AccountItem.Name | @AccountItem.Login @if (AccountItem.Enabled == 1)
-                        {
-                            <span class="pull-right">Подтвержден</span>
-                        }
-                        else
-                        {
-                            <span class="pull-right">Не Подтвержден</span>
-                        }
+                        Пользователь @item.Name (@item.Login) 
+                        <span class="pull-right">@item.EnabledEnum.DisplayName()</span>
                     </h4>
                 </div>
             </div>
             <div class="panel-body">
-                @AccountItem.Name | @AccountItem.Login @if (AccountItem.Enabled == 1)
+                @if (item.EnabledEnum == UserStatus.Active)
                 {
                     <label>Название компании</label>
-                    <p>@AccountItem.AccountCompany.Name</p>
+                    <p>@item.AccountCompany.Name</p>
                 }
                 else
                 {
-                    <label>Текст обращения и контакты для свзяи</label>
-                    <p>@AccountItem.AccountCompany.Name</p>
+                    <label>Текст обращения и контакты для связи</label>
+                    <p>@item.AccountCompany.Name</p>
 
                     <div class="form-group">
                         <div class="btn-group">
-                            @Html.ActionLink("Предоставить доступ к сайту", "SuccessAccount", "GlobalAccount", new { Id = AccountItem.Id }, new { @class="btn btn-primary" })
-                            @Html.ActionLink("Удалить аккаунт", "DeleteAccount", "GlobalAccount", new { Id = AccountItem.Id }, new { @class = "btn btn-primary", @onclick="return confirm('Вы точно хотите удалить данную заявку?')" })
+                            @Html.ActionLink("Активировать", "AccountVerification", "GlobalAccount", new { id = item.Id }, new { @class="btn btn-primary" })
+                            @*@Html.ActionLink("Удалить аккаунт", "DeleteAccount", "GlobalAccount", new { id = item.Id }, new { @class = "btn btn-primary", @onclick="return confirm('Вы точно хотите удалить данную заявку?')" })*@
                         </div>
                     </div>                   
                 }                        

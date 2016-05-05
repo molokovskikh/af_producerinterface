@@ -206,7 +206,13 @@ namespace ProducerInterfaceCommon.ContextModels
 		public TypeUsers UserType
 		{
 			get { return (TypeUsers)TypeUser; }
-			set { TypeUser = (SByte)value; }
+			set { TypeUser = (sbyte)value; }
+		}
+
+		public UserStatus EnabledEnum
+		{
+			get { return (UserStatus)Enabled; }
+			set { Enabled = (sbyte)value; }
 		}
 
 		public long ID_LOG

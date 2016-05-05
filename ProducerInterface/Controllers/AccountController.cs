@@ -242,24 +242,25 @@ namespace ProducerInterface.Controllers
 
 			// создали и сохранили компанию
 			var company = new AccountCompany() { Name = model.CompanyName };
-			company.Name = model.CompanyName;
 			cntx_.Entry(company).State = EntityState.Added;
 			cntx_.SaveChanges();
 
 			// создали аккаунт
-			var account = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
+			var user = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
 
 			// отправили сообщение в обратную связь
 			var feedBack = new AccountFeedBack() {
-				Description = "Запрос на регистрацию",
+				Contacts = $"{model.PhoneNumber}, {model.login}",
+				Description = $"Запрос на регистрацию, компания {company.Name} (id={company.Id})",
 				DateAdd = DateTime.Now,
-				AccountId = account.Id,
+				AccountId = user.Id,
 				UrlString = "~/Regisration/CustomRegistration",
 				Type = (sbyte)FeedBackTypePrivate.Registration
 			};
 			cntx_.AccountFeedBack.Add(feedBack);
 			cntx_.SaveChanges();
 
+			EmailSender.ProducerRequestMessage(cntx_, user, feedBack);
 			SuccessMessage("Ваша заявка принята. Ожидайте, с вами свяжутся");
 			return RedirectToAction("Index", "Home");
 		}
@@ -325,7 +326,7 @@ namespace ProducerInterface.Controllers
 		private Account SaveAccount(AccountCompany accountCompany, RegViewModel Reg_ViewModel = null, RegDomainViewModel RegDomain_ViewModel = null, RegNotProducerViewModel RegNotProducer_ViewModel = null, string Pass = null)
 		{
 			var newAccount = new Account();
-			newAccount.Enabled = 0;
+			newAccount.EnabledEnum = UserStatus.New;
 			newAccount.RegionMask = 0;
 			newAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
 			newAccount.CompanyId = accountCompany.Id;
@@ -371,6 +372,8 @@ namespace ProducerInterface.Controllers
 				newAccount.Name = RegNotProducer_ViewModel.LastName + " " + RegNotProducer_ViewModel.FirstName + " " + RegNotProducer_ViewModel.OtherName;
 				newAccount.Phone = RegNotProducer_ViewModel.PhoneNumber;
 				newAccount.AppointmentId = appointment.Id;
+				// особый статус
+				newAccount.EnabledEnum = UserStatus.Request;
 			}
 
 			cntx_.Entry(newAccount).State = EntityState.Added;

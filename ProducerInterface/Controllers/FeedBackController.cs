@@ -1,157 +1,139 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using ProducerInterfaceCommon.ViewModel.Interface.Global;
 using ProducerInterfaceCommon.ContextModels;
-using System.Linq;
 using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterface.Controllers
 {
-    public class FeedBackController : MasterBaseController
-    {
-        [HttpPost]
-        public ActionResult SaveFeedBack(FeedBack Model_View)
-        {
-            if (!ModelState.IsValid)
-                return PartialView("FeedBack", Model_View);
+	public class FeedBackController : MasterBaseController
+	{
+		[HttpPost]
+		public ActionResult SaveFeedBack(FeedBack model)
+		{
+			if (!ModelState.IsValid)
+				return PartialView("FeedBack", model);
 
-            if (string.IsNullOrEmpty(Model_View.PhoneNum) && string.IsNullOrEmpty(Model_View.Email) && CurrentUser == null)
-            {
-                ViewBag.ErrorMessageModal = "Укажите контакты для связи. Email или номер телефона";
-                return PartialView("FeedBack", Model_View);
-            }
-             
-            var FeedBackAdd = new AccountFeedBack();
+			if (string.IsNullOrEmpty(model.PhoneNum) && string.IsNullOrEmpty(model.Email) && CurrentUser == null)
+			{
+				ViewBag.ErrorMessageModal = "Укажите контакты для связи. Email или номер телефона";
+				return PartialView("FeedBack", model);
+			}
 
-            if (CurrentUser != null)
-            {
-                FeedBackAdd.Contacts = Model_View.Contact;
-                FeedBackAdd.AccountId = CurrentUser.Id;
-            }
-            else
-            {
-                FeedBackAdd.Contacts = Model_View.ContactNotAuth;
-            }
+			var feedBack = new AccountFeedBack();
 
-            FeedBackAdd.Description = Model_View.Description;
-            FeedBackAdd.UrlString = Model_View.Url;
-            FeedBackAdd.DateAdd = System.DateTime.Now;
-            FeedBackAdd.Type = Model_View.FeedType;
-            cntx_.AccountFeedBack.Add(FeedBackAdd);
-            cntx_.SaveChanges();
+			if (CurrentUser != null)
+			{
+				feedBack.Contacts = model.Contact;
+				feedBack.AccountId = CurrentUser.Id;
+			}
+			else
+				feedBack.Contacts = model.ContactNotAuth;
 
-						EmailSender.SendFeedBackMessage(cntx_, CurrentUser, FeedBackAdd.ToString(), Request.UserHostAddress);
+			feedBack.Description = model.Description;
+			feedBack.UrlString = model.Url;
+			feedBack.DateAdd = DateTime.Now;
+			feedBack.Type = model.FeedType;
+			cntx_.AccountFeedBack.Add(feedBack);
+			cntx_.SaveChanges();
 
-						return PartialView("Success");
-        }
+			EmailSender.SendFeedBackMessage(cntx_, CurrentUser, feedBack.ToString(), Request.UserHostAddress);
 
-        [HttpGet]
-        public ActionResult Index()
-        {
-            ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();        
-            return View();
-        }
+			return PartialView("Success");
+		}
 
-        [HttpGet]
-        public ActionResult Index_Type(sbyte Id, long IdProducer = 0)
-        {
-            ViewBag.FBT = (FeedBackTypePrivate)Id;
+		[HttpGet]
+		public ActionResult Index()
+		{
+			ViewBag.TypeMessage = Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
+			return View();
+		}
 
-            ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackTypePrivate)).Cast<FeedBackTypePrivate>();
-            var FeedModel = new FeedBack();
+		[HttpGet]
+		public ActionResult Index_Type(sbyte Id, long IdProducer = 0)
+		{
+			ViewBag.FBT = (FeedBackTypePrivate)Id;
+			ViewBag.TypeMessage = Enum.GetValues(typeof(FeedBackTypePrivate)).Cast<FeedBackTypePrivate>();
 
-            if (Id == (sbyte)FeedBackTypePrivate.AddNewAppointment)
-            {
-                FeedModel.Description = "Просьба добавить мою должность: ";
+			var model = new FeedBack();
 
-            }
+			if (Id == (sbyte)FeedBackTypePrivate.AddNewAppointment)
+				model.Description = "Просьба добавить мою должность: ";
+			else if (Id == (sbyte)FeedBackTypePrivate.AddNewDomainName)
+			{
+				var producerName = cntx_.producernames.First(x => x.ProducerId == IdProducer).ProducerName;
+				ViewBag.ProducerName = producerName;
+				model.Description = $"Я являюсь сотрудником компании {producerName}, не могу зарегистрироваться в связи с отсутствием домена моего почтового ящика, прошу добавить возможность регистрации с моим email";
+				return View("FeedBackNewDomain", model);
+			}
 
-            if (Id == (sbyte)FeedBackTypePrivate.AddNewDomainName)
-            {             
-                var ProducerName = cntx_.producernames.Where(x => x.ProducerId == IdProducer).First().ProducerName;
-                ViewBag.ProducerName = ProducerName;
-                FeedModel.Description = "Я являясь сотрудником компании " + ProducerName + ", не могу зарегистрироваться в связи с отсутствием домена моего почтового ящика, прошу добавить возможность регистрации с моим eMail";
-                return View("FeedBackNewDomain", FeedModel);
-            }
-            
-            return View("Index", FeedModel);
-        }
+			return View("Index", model);
+		}
 
-        [HttpPost]
-        public ActionResult Index(FeedBack FB)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
-                ViewBag.FBT = (FeedBackType)FB.FeedType;
-                return View(FB);
-            }
+		[HttpPost]
+		public ActionResult Index(FeedBack model)
+		{
+			if (!ModelState.IsValid)
+			{
+				ViewBag.TypeMessage = Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
+				ViewBag.FBT = (FeedBackType)model.FeedType;
+				return View(model);
+			}
 
-            if (CurrentUser == null && string.IsNullOrEmpty(FB.Email) && FB.FeedType == (sbyte)FeedBackTypePrivate.AddNewDomainName)
-            {
-                ViewBag.FBT = (FeedBackTypePrivate)FB.FeedType;
-                ViewBag.TypeMessage = System.Enum.GetValues(typeof(FeedBackTypePrivate)).Cast<FeedBackTypePrivate>();
+			if (CurrentUser == null && string.IsNullOrEmpty(model.Email) && model.FeedType == (sbyte)FeedBackTypePrivate.AddNewDomainName)
+			{
+				ViewBag.FBT = (FeedBackTypePrivate)model.FeedType;
+				ViewBag.TypeMessage = Enum.GetValues(typeof(FeedBackTypePrivate)).Cast<FeedBackTypePrivate>();
+				ViewBag.ErrorMessageModal = "поле Email является обязательным для заполнения";
+				return View("Index", model);
+			}
 
-                ViewBag.ErrorMessageModal = "поле Email является обязательным для заполнения";
+			var feedBack = new AccountFeedBack();
 
-                return View("Index", FB);              
-            }
-                    
-            var FB_Save = new ProducerInterfaceCommon.ContextModels.AccountFeedBack();
+			if (model.FeedType == (sbyte)FeedBackTypePrivate.AddNewAppointment)
+				feedBack.UrlString = "Обратная взязь в ЛК";
+			else if (model.FeedType == (sbyte)FeedBackTypePrivate.AddNewDomainName)
+				feedBack.UrlString = "Регистрация нового пользователя для зарегистированного производителя";
+			if (string.IsNullOrEmpty(feedBack.UrlString))
+				feedBack.UrlString = "~/FeedBack/Index_Type/";
+			if (CurrentUser != null)
+				feedBack.AccountId = CurrentUser.Id;
 
-            if (FB.FeedType == (sbyte)FeedBackTypePrivate.AddNewAppointment)
-            {
-                FB_Save.UrlString = "Обратная взязь в ЛК";
-            }
-            if (FB.FeedType == (sbyte)FeedBackTypePrivate.AddNewDomainName)
-            {
-                FB_Save.UrlString = "Регистрация нового пользователя для зарегистированного производителя";
-            }
-            if (string.IsNullOrEmpty(FB_Save.UrlString))
-            {
-                FB_Save.UrlString = "~/FeedBack/Index_Type/";
-            }
+			feedBack.Description = model.Description;
+			feedBack.Type = model.FeedType;
+			feedBack.Contacts = model.Contact;
+			feedBack.DateAdd = DateTime.Now;
+			cntx_.AccountFeedBack.Add(feedBack);
+			cntx_.SaveChanges();
 
-            FB_Save.Description = FB.Description;
+			SuccessMessage("Выша заявка принята к исполнению");
+			return RedirectToAction("Index", "Profile");
+		}
 
-            if (CurrentUser != null)
-            {
-                FB_Save.AccountId = CurrentUser.Id;
-            }
-      
-            FB_Save.Type = FB.FeedType;
-            FB_Save.Contacts = FB.Contact;
-            FB_Save.DateAdd = System.DateTime.Now;         
-            cntx_.AccountFeedBack.Add(FB_Save);
-            cntx_.SaveChanges();
+		public ActionResult FeedBakcAddNewDomain(string FIO, string Email, string PhoneNum, string CompanyNames)
+		{
 
-            SuccessMessage("Выша заявка принята к исполнению");
+			var feedBack = new AccountFeedBack();
 
-            return RedirectToAction("Index", "Profile");
-        }
+			feedBack.Contacts = $"{PhoneNum}, {Email}";
+			feedBack.Type = (sbyte)FeedBackTypePrivate.AddNewDomainName;
+			feedBack.Status = (sbyte)FeedBackStatus.New;
+			feedBack.UrlString = $"Заявка подана при невозможности зарегистрироватся с другим доменом для производителя {CompanyNames}";
+			feedBack.Description = $"Я, {FIO}, являюсь сотрудником компании {CompanyNames}, использую в своей деятельности email {Email}, но система не позволяет мне зарегистрироваться с этим email. Прошу решить возникшую  проблему. Телефон для связи {PhoneNum}";
+			feedBack.DateAdd = DateTime.Now;
 
-        public ActionResult FeedBakcAddNewDomain(string FIO, string Email, string PhoneNum, string CompanyNames)
-        {
+			cntx_.AccountFeedBack.Add(feedBack);
+			cntx_.SaveChanges();
 
-            AccountFeedBack AFB = new AccountFeedBack();
+			SuccessMessage("Выша заявка принята к исполнению");
+			return RedirectToAction("index", "home");
+		}
 
-            AFB.Contacts = PhoneNum + "," + Email;
-            AFB.Type = (sbyte)FeedBackTypePrivate.AddNewDomainName;
-            AFB.Status =(sbyte) FeedBackStatus.New;
-            AFB.UrlString = "Заявка подана при невозможности зарегистрироватся с другим доменом для производителя: " + CompanyNames;
-            AFB.Description = "Я, " + FIO + ", являясь сотрудником компании " + CompanyNames + ", использую в своей деятельности E-mail: " + Email + " Однако система не позволяет мне зарегистрироваться с этим E-mail. Прошу решить возникшую  проблему. Телефон для связи: " + PhoneNum;
-            AFB.DateAdd = System.DateTime.Now;
-            
-            cntx_.AccountFeedBack.Add(AFB);
-            cntx_.SaveChanges();
-            
-            SuccessMessage("Выша заявка принята к исполнению");
-            return RedirectToAction("index", "home");
-        }
-
-        public ActionResult GetView()
-        {          
-            var ModelView = new FeedBack();
-            return PartialView("FeedBack", ModelView);
-        }
-    }
+		public ActionResult GetView()
+		{
+			var model = new FeedBack();
+			return PartialView("FeedBack", model);
+		}
+	}
 }

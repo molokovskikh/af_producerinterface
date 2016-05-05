@@ -37,8 +37,8 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Ручная рассылка отчетов")]
 		ManualPostReport = 11,
 
-		[Display(Name = "Подтверждение регистрации")]
-		RegistrationSuccess = 12,
+		[Display(Name = "Подтверждение регистрации пользователя без производителя")]
+		AccountVerification = 12,
 
 		[Display(Name = "Изменение ПКУ препарата")]
 		CatalogPKU = 13,
@@ -50,6 +50,10 @@ namespace ProducerInterfaceCommon.Models
 		CatalogMNN = 15,
 
 		[Display(Name = "Реакция на давно не запускавшийся отчет")]
-		CallForDelete = 16
+		CallForDelete = 16,
+
+		[Display(Name = "Запрос регистрации производителя")]
+		ProducerRequest = 17
+
 	}
 }

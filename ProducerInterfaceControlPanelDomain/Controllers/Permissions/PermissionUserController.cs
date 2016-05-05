@@ -46,10 +46,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 {
                     Id = xxx.Id,
                     ListUsersInGroup = cntx_.Account.Where(zzz => zzz.AccountGroup.Any(vvv => vvv.Id == xxx.Id)).ToList().Select(d => new UsersViewInChange { eMail = d.Login, Name = d.Name, ProducerName = d.AccountCompany.Name }).ToList(),
-                    CountUser = xxx.Account.Where(eee => eee.Enabled == 1 && eee.TypeUser == FilterSbyte).Count(),
+                    CountUser = xxx.Account.Where(eee => eee.Enabled == (sbyte)UserStatus.Active && eee.TypeUser == FilterSbyte).Count(),
                     NameGroup = xxx.Name,
                     Description = xxx.Description,
-                    Users = xxx.Account.Where(zzz => zzz.TypeUser == SbyteTypeUser_ && zzz.Enabled == 1 && zzz.TypeUser == FilterSbyte).Select(zzz => zzz.Name).ToArray(),
+                    Users = xxx.Account.Where(zzz => zzz.TypeUser == SbyteTypeUser_ && zzz.Enabled == (sbyte)UserStatus.Active && zzz.TypeUser == FilterSbyte).Select(zzz => zzz.Name).ToArray(),
                     Permissions = xxx.AccountPermission.Where(zzz => zzz.Enabled == true && zzz.TypePermission == FilterSbyte).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes).ToArray()
                 });
 

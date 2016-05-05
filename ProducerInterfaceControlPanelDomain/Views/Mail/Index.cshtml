@@ -12,16 +12,20 @@
 <div class="jumbotron">
     @using (Html.BeginForm("Edit", "Mail", FormMethod.Get)) {
         <div class="form-group">
+
             <select name="id" class="form-control">
                 <option selected="selected"></option>
                 <optgroup label="Рассылка регистрационных данных">
                     <option value="@((int)MailType.Registration)">@MailType.Registration.DisplayName()</option>
                     <option value="@((int)MailType.PasswordChange)">@MailType.PasswordChange.DisplayName()</option>
                     <option value="@((int)MailType.PasswordRecovery)">@MailType.PasswordRecovery.DisplayName()</option>
-                </optgroup>
+                    <option value="@((int)MailType.ProducerRequest)">@MailType.ProducerRequest.DisplayName()</option>
+                    <option value="@((int)MailType.AccountVerification)">@MailType.AccountVerification.DisplayName()</option>
+               </optgroup>
                 <optgroup label="Рассылка отчетов">
                     <option value="@((int)MailType.AutoPostReport)">@MailType.AutoPostReport.DisplayName()</option>
                     <option value="@((int)MailType.ManualPostReport)">@MailType.ManualPostReport.DisplayName()</option>
+                    <option value="@((int)MailType.CallForDelete)">@MailType.CallForDelete.DisplayName()</option>
                 </optgroup>
                 <optgroup label="Акции">
                     <option value="@((int)MailType.CreatePromotion)">@MailType.CreatePromotion.DisplayName()</option>

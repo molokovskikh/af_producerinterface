@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProducerInterfaceCommon.ContextModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,12 +21,9 @@ namespace ProducerInterface.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var ListUser = cntx_.Account.Where(xxx => xxx.Enabled == 1 && xxx.CompanyId == CurrentUser.CompanyId && xxx.TypeUser == (SByte)SbyteTypeUser).ToList();
-
-            if (ListUser.Count() > 0)
-            {
-                ViewBag.UserList = ListUser;
-            }
+            var listUser = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.CompanyId == CurrentUser.CompanyId && x.TypeUser == (SByte)SbyteTypeUser).ToList();
+            if (listUser.Any())
+                ViewBag.UserList = listUser;
 
             return View();
         }

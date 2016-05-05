@@ -184,8 +184,7 @@ namespace ProducerInterfaceCommon.Controllers
 			if (String.IsNullOrEmpty(login))
 				return null;
 
-			// TODO: First - это неправильно
-			var retUser = cntx_.Account.FirstOrDefault(x => x.TypeUser == SbyteTypeUser && x.Login == login && x.Enabled == 1);
+			var retUser = cntx_.Account.SingleOrDefault(x => x.TypeUser == SbyteTypeUser && x.Login == login && x.Enabled == (sbyte)UserStatus.Active);
 			if (retUser != null && typeUser == TypeUsers.ProducerUser)
 			{
 				retUser.ID_LOG = retUser.Id;

@@ -1,153 +1,148 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.GlobalAccount;
 using ProducerInterfaceCommon.Heap;
+using System.Data.Entity;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class GlobalAccountController : MasterBaseController
-    {
+	public class GlobalAccountController : MasterBaseController
+	{
 
-        sbyte Type = (sbyte)ProducerInterfaceCommon.ContextModels.TypeUsers.ProducerUser;
+		sbyte Type = (sbyte)TypeUsers.ProducerUser;
 
-        // GET: GlobalAccount
-        public ActionResult Index()
-        {
-            var ListUsers = cntx_.Account.Where(xxx=>xxx.TypeUser == Type).ToList();
-            return View(ListUsers);
-        }
+		/// <summary>
+		/// Список пользователей без производителя GET: GlobalAccount
+		/// </summary>
+		/// <returns></returns>
+		public ActionResult Index(bool active = false)
+		{
+			var model = cntx_.Account.Where(x => x.TypeUser == Type && !x.AccountCompany.ProducerId.HasValue).ToList();
+			// item.Enabled == 0 && item.PasswordUpdated.HasValue
+			return View(model);
+		}
 
-        [HttpGet]
-        public ActionResult SuccessAccount(long Id)
-        {
-            var ModelAccount = cntx_.Account.Where(xxx => xxx.Id == Id).First();
-            ViewBag.Group = new List<long>();
+		//[HttpGet]
+		//public ActionResult DeleteAccount(long id)
+		//{
+		//	SuccessMessage("Пока не реализовано");
+		//	return RedirectToAction("Index");
+		//}
 
-            ViewBag.GroupList = cntx_.AccountGroup.Where(xxx => xxx.Enabled == true && xxx.TypeGroup == Type).ToList().Select(xxx => new OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + "(" + xxx.Description + ")"}).ToList();
+		/// <summary>
+		/// Подтверждение регистрации пользователя без производителя GET
+		/// </summary>
+		/// <param name="id">идентификатор пользователя</param>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult AccountVerification(long id)
+		{
+			var AccountModel = cntx_.Account.Find(id);
 
+			var model = cntx_.Account.Where(x => x.Id == id).ToList().Select(x => new RegistrationCustomProfile
+			{
+				Id = x.Id,
+				AppointmentId = (int)x.AppointmentId,
+				CompanyName = x.AccountCompany.Name,
+				FirstName = x.FirstName,
+				LastName = x.LastName,
+				Login = x.Login,
+				OtherName = x.OtherName,
+				Phone = x.Phone,
+				SelectedGroupList = new List<int>(),
+				CompanyId = x.AccountCompany.Id
+			}
+			).First();
 
-            return View(ModelAccount);            
-        }
+			// список должностей общий для всех + для данного пользователя
+			ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 || x.Account.Any(z => z.Id == id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			// список групп пользователей
+			ViewBag.GroupList = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser && x.Enabled).ToList().Select(x => new OptionElement
+			{
+				Text = x.Name + " " + x.Description,
+				Value = x.Id.ToString()
+			}).ToList();
 
-        [HttpPost]
-        public ActionResult SuccessAccount(ProducerInterfaceCommon.ContextModels.Account userModel, List<long> Group)
-        {
-            var ModelAccount = cntx_.Account.Where(xxx => xxx.Id == userModel.Id).First();
-            SuccessMessage("Пользователь добавлен, ему отправлено сообщение с паролем на почту");
-            return View(ModelAccount);
-        }
+			return View(model);
 
-        [HttpGet]
-        public ActionResult DeleteAccount(long Id)
-        {
-            SuccessMessage("Пока не реализовано");
-            return RedirectToAction("Index");
-        }
+		}
 
-        [HttpGet]
-        public ActionResult RegistrationCustomAccount(long Id)
-        {
-            var AccountModel = cntx_.Account.Find(Id);
+		/// <summary>
+		/// Подтверждение регистрации пользователя без производителя POST
+		/// </summary>
+		/// <param name="model">заполненная регистрационная форма</param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult AccountVerification(RegistrationCustomProfile model)
+		{
+			if (!ModelState.IsValid)
+			{
+				// список должностей общий для всех + для данного пользователя
+				ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 || x.Account.Any(z => z.Id == model.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+				// список групп пользователей
+				ViewBag.GroupList = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser && x.Enabled).ToList().Select(x => new OptionElement
+				{
+					Text = x.Name + " " + x.Description,
+					Value = x.Id.ToString()
+				}).ToList();
 
-            var ViewModel = cntx_.Account.Where(x => x.Id == Id).ToList().Select(x => new RegistrationCustomProfile
-            {
-                Id = x.Id,
-                AppointmentId =(int) x.AppointmentId,
-                CompanyName = cntx_.AccountCompany.Where(t => t.Id == x.AccountCompany.Id).First().Name,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Login = x.Login,
-                OtherName = x.OtherName,
-                Phone = x.Phone,
-                SelectedGroupList = new List<int>(),
-                CompanyId = x.AccountCompany.Id           
-            }
-            ).First();
+				return View(model);
+			}
 
-            ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 || x.Account.Any(z => z.Id == Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			string password = "";
+			var user = SaveAccount(model, ref password);
 
-            ViewBag.GroupList = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser && x.Enabled == true).ToList().Select(x => new OptionElement
-            {   Text = x.Name + " " + x.Description,
-                Value = x.Id.ToString()
-            }).ToList();
+			// отправка сообщения пользователю с паролем.
+			EmailSender.SendAccountVerificationMessage(cntx_, user.Id, password, CurrentUser.IP, CurrentUser.Id);
+			SuccessMessage("Регистрация пользователя подтверждена");
+			return RedirectToAction("Index");
+		}
 
-            return View("AccountVerification", ViewModel);
+		/// <summary>
+		/// Сохраняет изменения в пользователе и компании
+		/// </summary>
+		/// <param name="model">заполненная форма регистрации</param>
+		/// <param name="password">возвращает пароль</param>
+		/// <returns></returns>
+		private Account SaveAccount(RegistrationCustomProfile model, ref string password)
+		{
+			var user = cntx_.Account.Find(model.Id);
 
-        }
+			// разблокировали пользователя
+			password = GetRandomPassword();
+			user.Password = Md5HashHelper.GetHash(password);
+			user.PasswordUpdated = DateTime.Now;
+			user.Login = model.Login;
+			user.Name = model.LastName + " " + model.FirstName + " " + model.OtherName;
+			user.LastName = model.LastName;
+			user.FirstName = model.FirstName;
+			user.OtherName = model.OtherName;
+			user.Phone = model.Phone;
+			user.UserType = (sbyte)TypeUsers.ProducerUser;
+			user.AppointmentId = model.AppointmentId;
+			user.EnabledEnum = UserStatus.New;
 
-        public ActionResult AccountVerification(RegistrationCustomProfile AccountModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 || x.Account.Any(z => z.Id == AccountModel.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			cntx_.Entry(user).State = EntityState.Modified;
+			cntx_.SaveChanges();
 
-                ViewBag.GroupList = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser && x.Enabled == true).ToList().Select(x => new OptionElement
-                {
-                    Text = x.Name + " " + x.Description,
-                    Value = x.Id.ToString()
-                }).ToList();
+			foreach (var item in model.SelectedGroupList)
+				user.AccountGroup.Add(cntx_.AccountGroup.Find(item));
 
-                return View(AccountModel);
-            }
+			cntx_.Entry(user).State = EntityState.Modified;
 
-            string PassWord = "";
-            var AccountModelSave = SaveAccount(AccountModel, ref PassWord);
+			var accountCompany = cntx_.AccountCompany.Find(model.CompanyId);
+			if (string.IsNullOrEmpty(model.CompanyName))
+				accountCompany.Name = "Физическое лицо";
+			else
+				accountCompany.Name = model.CompanyName;
+			cntx_.Entry(accountCompany).State = EntityState.Modified;
 
-            // отправка сообщения пользователю с паролем.
+			cntx_.SaveChanges();
 
-            ProducerInterfaceCommon.Heap.EmailSender.SendControlPanelRegistrationSuccessMessage(cntx_, AccountModelSave.Id, PassWord, CurrentUser.IP.ToString(), CurrentUser.Id);
-
-            return RedirectToAction("RegistrationCustomAccount", new { Id = AccountModel.Id });
-
-        }
-
-        private Account SaveAccount(RegistrationCustomProfile AccountModel, ref string PassWord)
-        {
-            var AccountSave = cntx_.Account.Find(AccountModel.Id);
-
-            //AccountSave.PasswordUpdated = null;
-            PassWord = GetRandomPassword();
-            AccountSave.Password = Md5HashHelper.GetHash(PassWord);
-
-            AccountSave.Login = AccountModel.Login;
-            AccountSave.Name = AccountModel.LastName + " " + AccountModel.FirstName + " " + AccountModel.OtherName;
-            AccountSave.LastName = AccountModel.LastName;
-            AccountSave.FirstName = AccountModel.FirstName;
-            AccountSave.OtherName = AccountModel.OtherName;
-
-            AccountSave.Phone = AccountModel.Phone;
-
-            AccountSave.UserType =(sbyte) TypeUsers.ProducerUser;            
-            AccountSave.AppointmentId = AccountModel.AppointmentId;
-      
-            cntx_.Entry(AccountSave).State = System.Data.Entity.EntityState.Modified;
-            cntx_.SaveChanges();
-            
-            foreach (var GroupItem in AccountModel.SelectedGroupList)
-            {
-                AccountSave.AccountGroup.Add(cntx_.AccountGroup.Find(GroupItem));
-            }
-
-            cntx_.Entry(AccountSave).State = System.Data.Entity.EntityState.Modified;
-         
-            var AccountCompanyChange = cntx_.AccountCompany.Find(AccountModel.CompanyId);
-
-            if (string.IsNullOrEmpty(AccountModel.CompanyName))
-            {
-                AccountCompanyChange.Name = "Физическое лицо";
-            }
-            else
-            {
-                AccountCompanyChange.Name = AccountModel.CompanyName;
-            }
-
-            cntx_.Entry(AccountCompanyChange).State = System.Data.Entity.EntityState.Modified;
-
-            cntx_.SaveChanges();
-
-            return AccountSave;
-        }        
-    }
+			return user;
+		}
+	}
 }

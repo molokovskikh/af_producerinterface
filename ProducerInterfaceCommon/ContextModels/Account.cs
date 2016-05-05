@@ -38,7 +38,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string Appointment { get; set; }
         public Nullable<long> CompanyId { get; set; }
         public Nullable<System.DateTime> PasswordUpdated { get; set; }
-        public Nullable<sbyte> Enabled { get; set; }
+        public sbyte Enabled { get; set; }
         public Nullable<System.DateTime> LastUpdatePermisison { get; set; }
         public Nullable<decimal> RegionMask { get; set; }
         public Nullable<System.DateTime> SecureTime { get; set; }

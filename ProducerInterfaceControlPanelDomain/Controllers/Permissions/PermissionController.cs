@@ -26,10 +26,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 .Select(xxx => new ListGroupView
                 {
                     Id = xxx.Id,
-                    CountUser = xxx.Account.Where(eee => eee.Enabled == 1 && eee.TypeUser == FilterSbyte).Count(),
+                    CountUser = xxx.Account.Where(eee => eee.Enabled == (sbyte)UserStatus.Active && eee.TypeUser == FilterSbyte).Count(),
                     NameGroup = xxx.Name,
                     Description = xxx.Description,
-                    Users = xxx.Account.Where(zzz => zzz.TypeUser == FilterSbyte && zzz.Enabled == 1 && zzz.TypeUser == FilterSbyte).Select(zzz => zzz.Name + "-" + zzz.Login).ToArray(),
+                    Users = xxx.Account.Where(zzz => zzz.TypeUser == FilterSbyte && zzz.Enabled == (sbyte)UserStatus.Active && zzz.TypeUser == FilterSbyte).Select(zzz => zzz.Name + "-" + zzz.Login).ToArray(),
                     Permissions = xxx.AccountPermission.Where(zzz => zzz.Enabled == true && zzz.TypePermission == FilterSbyte).Select(zzz => zzz.ControllerAction + "  " + zzz.ActionAttributes).ToArray()
                 });
 

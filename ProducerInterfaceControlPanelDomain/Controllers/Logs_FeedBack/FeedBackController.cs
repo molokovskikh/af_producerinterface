@@ -13,7 +13,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View("Index");
 		}
 
-		// возвращает модель фильтра
+		/// <summary>
+		/// Возвращает модель фильтра
+		/// </summary>
+		/// <returns></returns>
 		public JsonResult GetFilter()
 		{
 			var feedBackFunc = new FeedBackFunction();
@@ -21,7 +24,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return Json(filter, JsonRequestBehavior.AllowGet);
 		}
 
-		// возвращает коллекцию элементов по фильтру
+		/// <summary>
+		/// Возвращает коллекцию элементов по фильтру
+		/// </summary>
+		/// <param name="feedBackFilter"></param>
+		/// <returns></returns>
 		public JsonResult FeedBackSearch(FeedBackFilter feedBackFilter)
 		{
 			var feedBackFunc = new FeedBackFunction();
@@ -41,7 +48,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return Json(feedBackModelView, JsonRequestBehavior.AllowGet);
 		}
 
-		// изменение статуса обращения
+		/// <summary>
+		/// Изменение статуса обращения
+		/// </summary>
+		/// <param name="Id">идентификатор сообщения обратной связи</param>
+		/// <param name="Comment">комментарий админа</param>
+		/// <param name="Status">статус сообщения обратной связи</param>
+		/// <returns></returns>
 		public JsonResult AddCommentToFeedBack(long Id, string Comment, FeedBackStatus Status)
 		{
 			var feedBackItem = cntx_.AccountFeedBack.Find(Id);

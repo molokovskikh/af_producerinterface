@@ -1592,3 +1592,57 @@ values (16, 'Отчет на сайте {SiteName} давно не исполь�
  0, 'Реакция на давно не запускавшийся отчет');
 
 
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view supplierregions as
+select Id as SupplierId, RegionMask
+from Customers.Suppliers
+where IsVirtual = 1;
+
+drop PROCEDURE `SecondarySalesReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `SecondarySalesReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `RegionMask` BIGINT(20) UNSIGNED, IN `ProducerId` INT(10) UNSIGNED, IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select c.CatalogName, p.ProducerName, r.RegionName, s.SupplierName,
+T.Summ, CAST(T.PosOrder as SIGNED INTEGER) as PosOrder, 
+T.DistinctOrderId, T.DistinctAddressId
+from
+	(select CatalogId, ProducerId, RegionCode, SupplierId,
+	Sum(Cost*Quantity) as Summ,
+	Sum(Quantity) as PosOrder,
+	Count(distinct OrderId) as DistinctOrderId,
+	Count(distinct AddressId) as DistinctAddressId
+	from producerinterface.RatingReportOrderItems
+	where CatalogId in (', CatalogId, ')
+	and (RegionCode in (', RegionCode, ')
+		or RegionCode in (select RegionCode from farm.Regions where Parent in (', RegionCode, ')))
+	and SupplierId in 
+		(select Id
+		from Customers.Suppliers
+		where IsVirtual = 1 and IsFederal = 0 and RegionMask & ', RegionMask, ')
+	and ProducerId = ', ProducerId, '
+	and WriteTime > \'', DateFrom, '\'
+	and WriteTime < \'', DateTo, '\'
+	group by CatalogId,ProducerId,RegionCode,SupplierId) as T
+left join producerinterface.CatalogNames c on c.CatalogId = T.CatalogId
+left join producerinterface.ProducerNames p on p.ProducerId = T.ProducerId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode
+left join producerinterface.SupplierNames s on s.SupplierId = T.SupplierId
+order by c.CatalogName asc, T.PosOrder desc');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  #select @sql;
+
+END$$
+
+ALTER TABLE `Account`
+ CHANGE COLUMN `Enabled` `Enabled` TINYINT(4) NOT NULL DEFAULT 0;
+
+

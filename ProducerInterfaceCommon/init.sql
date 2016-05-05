@@ -866,3 +866,7 @@ inner join AccountCompany ac on au.CompanyId = ac.Id
 inner join producernames p on p.ProducerId = ac.ProducerId
 inner join LogObjectChange o on o.LogChangeSetId = s.Id;
 
+Запросы переписаны с использованием введенного признака IsVirtual таблицы Customers.Suppliers вместо обращения к usersettings.PricesData. Конкретно, представление supplierregions для построения в интерфейсе списка поставщиков и хранимая процедура SecondarySalesReport для построения отчета "Продажи вторичных дистрибьюторов" выводят только поставщиков с установленным признаком IsVirtual, что означает неотключенные, с домашним регионом не равным Inforoom и имеющие хотя бы один 
+
+
+

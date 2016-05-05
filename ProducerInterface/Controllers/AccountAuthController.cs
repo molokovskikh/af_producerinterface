@@ -46,17 +46,17 @@ namespace ProducerInterface.Controllers
 			}
 
 			// если логинится не впервый раз и не заблокирован
-			if (thisUser.Enabled == 1)
+			if (thisUser.EnabledEnum == UserStatus.Active)
 			{
 				CurrentUser = thisUser;
 				return Autentificate();
 			}
 
 			// если логинится впервые
-			else if (thisUser.Enabled == 0 && !thisUser.PasswordUpdated.HasValue) 
+			else if (thisUser.EnabledEnum == UserStatus.New)
 			{
-				var otherUsersExists = cntx_.Account.Any(x => x.CompanyId == thisUser.CompanyId.Value && x.Enabled == 1 && x.TypeUser == SbyteTypeUser);
-				// если других пользователей этой компании нет - добавляем пользователя в группу администраторов
+				var otherUsersExists = cntx_.Account.Any(x => x.CompanyId == thisUser.CompanyId.Value && x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == SbyteTypeUser);
+				// если других активных (!) пользователей этой компании нет - добавляем пользователя в группу администраторов
 				if (!otherUsersExists)
 				{
 					// если группы администраторов нет - создаем ее
@@ -76,7 +76,8 @@ namespace ProducerInterface.Controllers
 				{
 					var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
 					var otherGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == otherGroupName && x.TypeGroup == SbyteTypeUser);
-					if (otherGroup == null) {
+					if (otherGroup == null)
+					{
 						otherGroup = new AccountGroup() { Name = otherGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
 						cntx_.Entry(otherGroup).State = EntityState.Added;
 						cntx_.SaveChanges();
@@ -86,7 +87,7 @@ namespace ProducerInterface.Controllers
 				}
 
 				thisUser.PasswordUpdated = DateTime.Now;
-				thisUser.Enabled = 1;
+				thisUser.EnabledEnum = UserStatus.Active;
 				cntx_.Entry(thisUser).State = EntityState.Modified;
 				cntx_.SaveChanges();
 
@@ -96,13 +97,20 @@ namespace ProducerInterface.Controllers
 			}
 
 			// Аккаунт заблокирован
-			else if (thisUser.Enabled == 0 && thisUser.PasswordUpdated.HasValue)
+			else if (thisUser.EnabledEnum == UserStatus.Blocked)
 			{
-					CurrentUser = null;
-					ErrorMessage("Ваш аккаунт заблокирован");
-					return RedirectToAction("Index", "Home");
+				CurrentUser = null;
+				ErrorMessage("Ваша учетная запись заблокирована, обращайтесь на " + GetWebConfigParameters("MailFrom"));
+				return RedirectToAction("Index", "Home");
 			}
 
+			// Аккаунт заблокирован
+			else if (thisUser.EnabledEnum == UserStatus.Request)
+			{
+				CurrentUser = null;
+				SuccessMessage("Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на " + GetWebConfigParameters("MailFrom"));
+				return RedirectToAction("Index", "Home");
+			}
 			return RedirectToAction("Index", "Home");
 		}
 
@@ -147,11 +155,12 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("PasswordRecovery", "Account", new { eMail = login });
 			}
 
-			// пользователь зарегистрировался, но ни разу не входил: отсылаем новый пароль на почту
-			if (user.Enabled == 0 && !user.PasswordUpdated.HasValue)
+			// если новый или активный: отсылаем новый пароль на почту
+			if (user.EnabledEnum == UserStatus.New || user.EnabledEnum == UserStatus.Active)
 			{
 				var password = GetRandomPassword();
 				user.Password = Md5HashHelper.GetHash(password);
+				user.PasswordUpdated = DateTime.Now;
 				cntx_.Entry(user).State = EntityState.Modified;
 				cntx_.SaveChanges();
 				EmailSender.SendPasswordRecoveryMessage(cntx_, user.Id, password, Request.UserHostAddress);
@@ -159,21 +168,13 @@ namespace ProducerInterface.Controllers
 				SuccessMessage("Новый пароль отправлен на ваш email: " + login);
 			}
 
-			// если незаблокирован: отсылаем новый пароль на почту
-			if (user.Enabled == 1)
-			{
-				var password = GetRandomPassword();
-				user.Password = Md5HashHelper.GetHash(password);
-				cntx_.Entry(user).State = EntityState.Modified;
-				cntx_.SaveChanges();
-				EmailSender.SendPasswordRecoveryMessage(cntx_, user.Id, password, Request.UserHostAddress);
-
-				SuccessMessage("Новый пароль отправлен на ваш email " + login);
-			}
-
 			// если заблокирован
-			if (user.Enabled == 0 && !user.PasswordUpdated.HasValue)
+			else if (user.EnabledEnum == UserStatus.Blocked)
 				ErrorMessage("Ваша учетная запись заблокирована, обращайтесь на " + GetWebConfigParameters("MailFrom"));
+
+			// если запросивший регистрацию
+			else if (user.EnabledEnum == UserStatus.Request)
+				SuccessMessage("Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на " + GetWebConfigParameters("MailFrom"));
 
 			return RedirectToAction("Index", "Home");
 		}

@@ -8,11 +8,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 {
 	public class MailController : MasterBaseController
 	{
-		// GET: Mail
 		/// <summary>
-		/// 
+		/// Возвращает список шаблонов писем GET: Mail
 		/// </summary>
-		/// <returns>Возвращает список шаблонов писем</returns>
+		/// <returns></returns>
 		public ActionResult Index()
 		{
 			var model = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email)
@@ -43,9 +42,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		}
 
 		/// <summary>
-		/// 
+		/// Возврашает Шаблон выбранного письма для правки
 		/// </summary>
-		/// <returns>Возврашает Шаблон выбранного письма для правки</returns>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Edit(int? id)
 		{
@@ -76,9 +75,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		}
 
 		/// <summary>
-		/// 
+		/// Принимает шаблон письма для сохранения в БД
 		/// </summary>
-		/// <returns>Принимает шаблон письма для сохранения в БД</returns>
+		/// <returns></returns>
 		[HttpPost]
 		public ActionResult Edit(MailFormUi model)
 		{

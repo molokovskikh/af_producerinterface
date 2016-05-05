@@ -31,7 +31,7 @@ var Model =
      }
 Model.FullText = ko.computed(
     function () {
-        return "Я, " + Model.FIO() + ", являясь сотрудником компании " + Model.CompanyName() + ", использую в своей деятельности E-mail: " + Model.Email() + " Однако система не позволяет мне зарегистрироваться с этим E-mail. Прошу решить возникшую  проблему. Телефон для связи: " + Model.Phone();
+        return "Я, " + Model.FIO() + ", являюсь сотрудником компании " + Model.CompanyName() + ", использую в своей деятельности email " + Model.Email() + ", но система не позволяет мне зарегистрироваться с этим email. Прошу решить возникшую  проблему. Телефон для связи: " + Model.Phone();
     }, Model);
 
 function FormValidate() {
