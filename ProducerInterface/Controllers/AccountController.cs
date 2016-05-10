@@ -336,6 +336,7 @@ namespace ProducerInterface.Controllers
 			{
 				newAccount.Login = Reg_ViewModel.login;
 				newAccount.Password = Md5HashHelper.GetHash(Pass);
+				newAccount.PasswordUpdated = DateTime.Now;
 				newAccount.FirstName = Reg_ViewModel.FirstName;
 				newAccount.LastName = Reg_ViewModel.LastName;
 				newAccount.OtherName = Reg_ViewModel.OtherName;
@@ -349,6 +350,7 @@ namespace ProducerInterface.Controllers
 			{
 				newAccount.Login = RegDomain_ViewModel.Mailname + "@" + cntx_.CompanyDomainName.Single(x => x.Id == RegDomain_ViewModel.EmailDomain).Name;
 				newAccount.Password = Md5HashHelper.GetHash(Pass);
+				newAccount.PasswordUpdated = DateTime.Now;
 				newAccount.FirstName = RegDomain_ViewModel.FirstName;
 				newAccount.LastName = RegDomain_ViewModel.LastName;
 				newAccount.OtherName = RegDomain_ViewModel.OtherName;

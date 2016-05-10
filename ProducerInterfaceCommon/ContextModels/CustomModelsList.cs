@@ -8,6 +8,22 @@ using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+	public class UserFilter
+	{
+		[Display(Name = "ФИО")]
+		public string UserName { get; set; }
+
+		[Display(Name = "Логин")]
+		public string Login { get; set; }
+
+		[Display(Name = "Производитель")]
+		public string ProducerName { get; set; }
+
+		[Display(Name = "Тип пользователя")]
+		public TypeUsers TypeUserEnum { get { return TypeUsers.ProducerUser; } }
+
+		public int CurrentPageIndex { get; set; }
+	}
 
 	public class LogItem
 	{
@@ -199,9 +215,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	{
 		public long Id { get; set; }
 		public string Name { get; set; }
-		public int CountGroup { get; set; }
 		public string[] Groups { get; set; }
-		public int CountPermissions { get; set; }
 		public string[] ListPermission { get; set; }
 	}
 

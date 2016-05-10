@@ -199,7 +199,6 @@
     <Compile Include="Controllers\Logs_FeedBack\LogForNetController.cs" />
     <Compile Include="Controllers\Logs_FeedBack\LogCatalogController.cs" />
     <Compile Include="Controllers\Logs_FeedBack\LogUserChangeController.cs" />
-    <Compile Include="Controllers\Permissions\BasePermissionController.cs" />
     <Compile Include="Controllers\AdminProfile\GlobalAccountController.cs" />
     <Compile Include="Controllers\Global\HomeController.cs" />
     <Compile Include="Controllers\Global\MailController.cs" />
@@ -208,7 +207,6 @@
     <Compile Include="Controllers\Appointment\OfficePostController.cs" />
     <Compile Include="Controllers\ProducersInformation\PR_partial_Domain.cs" />
     <Compile Include="Controllers\Reports_News\NewsController.cs" />
-    <Compile Include="Controllers\Permissions\PermissionController.cs" />
     <Compile Include="Controllers\Permissions\PermissionUserController.cs" />
     <Compile Include="Controllers\ProducersInformation\ProducerInformationController.cs" />
     <Compile Include="Controllers\AdminProfile\ProfileController.cs" />
@@ -706,13 +704,6 @@
     <Content Include="Views\Mail\Edit.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
-    <Content Include="Views\Permission\EditorTemplates\LongListPermission.cshtml" />
-    <Content Include="Views\Permission\Index.cshtml" />
-    <Content Include="Views\Permission\Group.cshtml" />
-    <Content Include="Views\Permission\Users.cshtml" />
-    <Content Include="Views\Permission\ChangeGroupParameters.cshtml" />
-    <Content Include="Views\Permission\EditorTemplates\LongListUser.cshtml" />
-    <Content Include="Views\Permission\CreateGroup.cshtml" />
     <Content Include="Views\LogForNet\Index.cshtml" />
     <Content Include="Views\LogUserChange\Index.cshtml" />
     <Content Include="Views\LogUserChange\ReadMore.cshtml" />
@@ -723,15 +714,12 @@
     <Content Include="Views\PermissionUser\CreateGroup.cshtml" />
     <Content Include="Views\PermissionUser\Group.cshtml" />
     <Content Include="Views\PermissionUser\Index.cshtml" />
-    <Content Include="Views\PermissionUser\Users.cshtml" />
     <Content Include="Views\PermissionUser\SearchUser.cshtml" />
-    <Content Include="Views\PermissionUser\Result.cshtml" />
+    <Content Include="Views\PermissionUser\Users.cshtml" />
     <Content Include="Views\PermissionUser\Change.cshtml" />
     <Content Include="Views\PermissionUser\EditorTemplates\LongListPermissionTwo.cshtml" />
     <Content Include="Views\PermissionUser\ListPermission.cshtml" />
     <Content Include="Views\PermissionUser\EditPermission.cshtml" />
-    <Content Include="Views\Permission\ListPermission.cshtml" />
-    <Content Include="Views\Permission\EditPermission.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\Create.cshtml" />
     <Content Include="Views\News\List.cshtml" />
@@ -765,10 +753,6 @@
     <Content Include="Views\Promotion\Partial\SearchResult.cshtml" />
     <Content Include="Views\Promotion\OnePromotion.cshtml" />
     <Content Include="Views\Promotion\Partial\PromotionStatus.cshtml" />
-    <Content Include="Views\Permission\ChangeAccount.cshtml" />
-    <Content Include="Views\Permission\EditorTemplates\IntListGroup.cshtml" />
-    <Content Include="Views\Permission\EditorTemplates\LongListRegion.cshtml" />
-    <Content Include="Views\Permission\ListUsers.cshtml" />
     <Content Include="Views\News\History.cshtml" />
     <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
     <Content Include="Views\OfficePost\CustomAppointment.cshtml" />
@@ -793,6 +777,7 @@
     <Content Include="Views\GlobalAccount\EditorTemplates\SelectPost.cshtml" />
     <Content Include="Views\GlobalAccount\EditorTemplates\String12.cshtml" />
     <Content Include="Views\GlobalAccount\EditorTemplates\String6.cshtml" />
+    <Content Include="Views\PermissionUser\Partial\Pager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

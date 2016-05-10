@@ -1,39 +1,56 @@
-﻿
+﻿@using ProducerInterfaceCommon.ContextModels
+@model IEnumerable<Account>
 @{
-    ViewBag.Title = "Поиск пользователя";
-    Layout = "~/Views/Shared/_MasterPage.cshtml";
+  Layout = null;
 }
 
-<h2>@ViewBag.Title</h2>
-<hr />
 
-
-
-    @using (Html.BeginForm("SearchUser", "PermissionUser", FormMethod.Post))
+@if (Model.Any())
+{
+@Html.Partial("Partial/Pager")
+<div class="panel-group panel-success" id="accordionlistpermission">
+    @foreach (var user in Model)
     {
-      
-            <h4>Поиск по ФИО</h4>
-            <div class="form-group">
-                <input type="search" name="TextSearch" id="TextSearch" placeholder="Введите Фамилию или Имя, eMail" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Поиск" class="btn btn-primary" />
-            </div>
-       
-    }
+    <h3>@user.Name</h3>
 
-    <hr/>
+    <div class="panel panel-default">
 
-    @using (Html.BeginForm("SearchUserCompany", "PermissionUser", FormMethod.Post))
-    {            
-        
-                <h4>Поиск по названию организации</h4>
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapsePermissionList_@user.Id" data-parent="#accordionlistpermission"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp; Раскрыть</a>
+            </h4>
+        </div>
+        <div id="collapsePermissionList_@user.Id" class="panel-collapse collapse">
+
+            <h4>Список групп </h4>
+            <div class="form-group">
+                @foreach (var g in user.AccountGroup)
+                {
+                <p title="@g.Description">- @g.Name</p>}
                 <div class="form-group">
-                    <input type="search" name="TextSearch" id="TextSearch" placeholder="Введите название компании" class="form-control" />
+                    <a class="btn btn-primary" href="@Url.Action("Change", new { Id = user.Id })"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;&nbsp; Редактировать</a>
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Поиск" class="btn btn-primary" />
-                </div>
-           
+            </div>
+
+            <hr />
+
+            <h4>Список прав: </h4>
+            <div class="form-group">
+                @*@foreach (var p in user.ListPermission)
+                    {
+                        <p>@p</p>
+                    }*@
+            </div>
+
+        </div>
+    </div>
     }
+</div>
+}
+else
+{
+<h3>По вашему запросу ничего не найдено</h3>
+}
+
+
 

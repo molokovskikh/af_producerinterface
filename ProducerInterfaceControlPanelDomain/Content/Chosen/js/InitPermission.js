@@ -1,4 +1,3 @@
 ﻿$(function () {
-    var DrugList = $('#ListPermissionTwo');
-    DrugList.chosen({ width: '100%' });
+    $('#ListGroup').chosen({ width: '100%' });
 });

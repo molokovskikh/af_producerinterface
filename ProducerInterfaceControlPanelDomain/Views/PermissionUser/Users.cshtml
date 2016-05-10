@@ -1,50 +1,68 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.ListUserView>
+﻿@using ProducerInterfaceCommon.ContextModels
+@model UserFilter
+
 @{
-    ViewBag.Title = "Список пользователей сайта";
+    ViewBag.Title = "Список пользователей";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Список пользователей сайта</h2>
-<hr />
+<h2>@ViewBag.Title</h2>
+<span class="btn btn-group">
+    <a class="btn btn-primary" data-toggle="modal" data-target="#ModalFilterForm">Фильтр</a>
+</span>
 
+<hr/>
 
-<div class="panel-group panel-success" id="accordionlistpermission">
+@Html.Action("SearchUser", Model)
 
-@foreach (var UserItem in Model)
+@using (Html.BeginForm())
 {
-    <h3>@UserItem.Name</h3>
+<div id="ModalFilterForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Фильтр пользователей</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
 
-    <div class="panel panel-default">
-     
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" href="#collapsePermissionList_@UserItem.Id" data-parent="#accordionlistpermission"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp; Раскрыть</a>
-            </h4>
-        </div>
-        <div id="collapsePermissionList_@UserItem.Id" class="panel-collapse collapse">
-         
-            <h4>Список групп </h4>
-                <div class="form-group">
-                    @for (int i = 0; i < UserItem.CountGroup; i++)
-                    {
-                        <p>@UserItem.Groups[i]</p>
-                    }
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.UserName)
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control"})
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Login)
+                            @Html.TextBoxFor(m => m.Login, new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ProducerName)
+                            @Html.TextBoxFor(m => m.ProducerName, new { @class = "form-control" })
+                        </div>
+
+                        @*<div class="form-group">
+                            <label>Количество записей на странице</label>
+                            <select data-bind="foreach: ItemsPerPageList, value: ItemsPerPage" class="form-control">
+                                <option data-bind="value: Value, text: Text"></option>
+                            </select>
+                        </div>*@
+                    </div>
                 </div>
-
-            <hr/>
-
-            <h4>Список прав: </h4>
-            <div class="form-group">
-                @for (int i2 = 0; i2 < UserItem.CountPermissions; i2++)
-                {
-                    <p>@UserItem.ListPermission[i2]</p>
-                }
             </div>
 
+            <div class="modal-footer">
+                <div class="btn btn-group btn-group-sm">
+                    <input type="submit" value="Искать" class="btn btn-primary" />
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть без поиска</button>
+                </div>
+            </div>
         </div>
-    </div>
-}
 
+    </div>
 </div>
 
-
+}
+<hr/>

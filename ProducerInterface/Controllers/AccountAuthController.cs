@@ -96,7 +96,7 @@ namespace ProducerInterface.Controllers
 				return Autentificate();
 			}
 
-			// Аккаунт заблокирован
+			// аккаунт заблокирован
 			else if (thisUser.EnabledEnum == UserStatus.Blocked)
 			{
 				CurrentUser = null;
@@ -104,7 +104,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("Index", "Home");
 			}
 
-			// Аккаунт заблокирован
+			// заявка на регистрацию
 			else if (thisUser.EnabledEnum == UserStatus.Request)
 			{
 				CurrentUser = null;
@@ -187,6 +187,7 @@ namespace ProducerInterface.Controllers
 
 			var user = cntx_.Account.First(x => x.Login == CurrentUser.Login && x.TypeUser == 0);
 			user.Password = Md5HashHelper.GetHash(NewPassword.Pass);
+			user.PasswordUpdated = DateTime.Now;
 			cntx_.Entry(user).State = EntityState.Modified;
 			cntx_.SaveChanges();
 
