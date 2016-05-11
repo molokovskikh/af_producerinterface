@@ -1,51 +1,63 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
+@using ProducerInterfaceCommon.Heap
 @model IEnumerable<Account>
 @{
   Layout = null;
+  Dictionary<long, string> producers = ViewBag.Producers;
 }
 
 
 @if (Model.Any())
 {
 @Html.Partial("Partial/Pager")
-<div class="panel-group panel-success" id="accordionlistpermission">
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>Id</th>
+        <th>ФИО</th>
+        <th>Логин</th>
+        <th>Телефон</th>
+        <th>Производитель</th>
+        <th>Тип</th>
+        <th>Статус</th>
+        <th>Группы</th>
+        <th>Должность</th>
+        <th>Изменить</th>
+    </tr>
     @foreach (var user in Model)
     {
-    <h3>@user.Name</h3>
-
-    <div class="panel panel-default">
-
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" href="#collapsePermissionList_@user.Id" data-parent="#accordionlistpermission"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp; Раскрыть</a>
-            </h4>
-        </div>
-        <div id="collapsePermissionList_@user.Id" class="panel-collapse collapse">
-
-            <h4>Список групп </h4>
-            <div class="form-group">
-                @foreach (var g in user.AccountGroup)
-                {
-                <p title="@g.Description">- @g.Name</p>}
-                <div class="form-group">
-                    <a class="btn btn-primary" href="@Url.Action("Change", new { Id = user.Id })"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;&nbsp; Редактировать</a>
-                </div>
-            </div>
-
-            <hr />
-
-            <h4>Список прав: </h4>
-            <div class="form-group">
-                @*@foreach (var p in user.ListPermission)
-                    {
-                        <p>@p</p>
-                    }*@
-            </div>
-
-        </div>
-    </div>
+    <tr>
+        <td>@user.Id</td>
+        <td>@user.Name</td>
+        <td>@user.Login</td>
+        <td>@user.Phone</td>
+        <td>
+            @if (user.AccountCompany.ProducerId.HasValue)
+            {
+                <span>@producers[user.AccountCompany.ProducerId.Value]</span>
+            }
+        </td>
+        <td>@user.UserType.DisplayName()</td>
+        <td>@user.EnabledEnum.DisplayName()</td>
+        <td>
+            @foreach (var g in user.AccountGroup)
+            {
+                @Html.ActionLink(g.Name, "GetOneGroup", new { Id = g.Id })
+                <span> </span>
+            }
+        </td>
+        <td>
+            @if (user.AccountAppointment != null)
+            {
+                <span>@user.AccountAppointment.Name</span>
+            }
+        </td>
+        <td>
+            <a href="@Url.Action("Change", new { Id = user.Id })"><span class="glyphicon glyphicon-pencil"></span></a>
+        </td>
+    </tr>
     }
-</div>
+</table>
+
 }
 else
 {

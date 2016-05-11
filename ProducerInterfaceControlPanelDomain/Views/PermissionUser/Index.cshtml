@@ -1,23 +1,88 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.Account>
+﻿@using ProducerInterfaceCommon.ContextModels
+@model UserFilter
+
 @{
-    ViewBag.Title = "Список администраторов";
-    Layout = "~/Views/Shared/_MasterPage.cshtml";
+  ViewBag.Title = "Список пользователей";
+  Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Администраторы сайта</h2>
+<h3>@ViewBag.Title</h3>
+<div class="row">
+    <div class="col-md-12">
+        <input type="button" value="Фильтр" class="btn btn-primary" data-toggle="modal" data-target="#ModalFilterForm" style="margin-bottom: 10px; margin-top: 0px;" />
+    </div>
+</div>
 
-<hr />
+@Html.Action("SearchUser", Model)
 
-<table class="table-bordered table-condensed table-striped" id="table-width-100prc">
-    <tr>
-        <th>Логин</th>
-        <th>Email</th>      
-    </tr>
-    @foreach (var Administrator in Model)
-    {
-        <tr>
-            <td>@Administrator.Name</td>
-            <td><a href="mailto:@Administrator.Login">@Administrator.Login </a></td>
-        </tr>
-    }
-</table>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "sform" }))
+{
+<input type="hidden" id="CurrentPageIndex" name="CurrentPageIndex" value="0" />
+<div id="ModalFilterForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Фильтр пользователей</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        @*<div class="form-group">
+                            @Html.LabelFor(m => m.UserId)
+                            @Html.TextBoxFor(m => m.UserId, new { @class = "form-control" })
+                        </div>*@
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.UserName)
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control"})
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Login)
+                            @Html.TextBoxFor(m => m.Login, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ProducerName)
+                            @Html.TextBoxFor(m => m.ProducerName, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Status)
+                            @Html.DropDownListFor(m => m.Status, Model.AllStatus, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.WithoutAppointment)
+                            @Html.CheckBoxFor(m => m.WithoutAppointment)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.AccountGroupId)
+                            @Html.DropDownListFor(m => m.AccountGroupId, Model.AllAccountGroup, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="btn btn-group btn-group-sm">
+                    <input type="button" class="btn btn-primary" value="Закрыть без поиска" data-dismiss="modal" />
+                    <input type="button" class="btn btn-primary" value="Искать" onclick="getSearch()" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        function getPage(id) {
+            $('#CurrentPageIndex').val(id);
+            $('#sform').submit();
+        }
+
+        function getSearch() {
+            $('#CurrentPageIndex').val('');
+            $('#sform').submit();
+        }
+    </script>
+}

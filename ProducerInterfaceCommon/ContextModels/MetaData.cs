@@ -200,9 +200,6 @@ namespace ProducerInterfaceCommon.ContextModels
 		[UIHint("LongListPermission")]
 		public List<long> ListSelectedPermission { get; set; }
 
-		[UIHint("LongListPermissionTwo")]
-		public List<int> ListGroup { get; set; }
-
 		public TypeUsers UserType
 		{
 			get { return (TypeUsers)TypeUser; }

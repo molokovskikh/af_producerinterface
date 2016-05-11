@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Permission;
 
@@ -32,50 +33,82 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		}
 
 		/// <summary>
-		/// Форма изменения списка групп, в которые входит пользователь GET
+		/// Форма редактирования пользователя
 		/// </summary>
 		/// <param name="Id">идентификатор пользователя</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ActionResult Change(long? Id)
+		public ActionResult Change(long Id)
 		{
 			var user = cntx_.Account.Single(x => x.Id == Id);
-			user.ListGroup = user.AccountGroup.Select(x => x.Id).ToList();
+			var model = new UserEdit() {
+				UserId = user.Id,
+				Name = user.Name,
+				Status = user.Enabled,
+				AppointmentId = user.AppointmentId,
+				AccountGroupIds = user.AccountGroup.Select(x => x.Id).ToList()
+			};
 
-			ViewBag.GroupList = cntx_.AccountGroup.Where(xxx => xxx.TypeGroup == (sbyte)TypeUsers.ProducerUser && xxx.Enabled).ToList().Select(xxx => new OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
+			model.AllAccountGroup = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser)
+				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
+				.ToList();
 
-			return View(user);
+			model.AllStatus = EnumHelper.GetSelectList(typeof(UserStatus), (UserStatus)user.Enabled).ToList();
+
+			var allAppointment = new List<SelectListItem>();
+			if (!user.AppointmentId.HasValue)
+				allAppointment.Add(new SelectListItem() { Text = "", Value = "", Selected = true });
+			
+			// добавили общедоступные должности
+			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1)
+				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == user.AppointmentId })
+				.ToList());
+
+			// добавили кастомную должность если есть
+			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 0 && x.IdAccount.HasValue && x.IdAccount == user.AppointmentId)
+				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = true })
+				.ToList());
+
+			model.AllAppointment = allAppointment;
+
+			return View(model);
 		}
 
 		/// <summary>
-		/// Применение обновлений списка групп, в которые входит пользователь POST
+		/// Применение правок пользователя POST
 		/// </summary>
-		/// <param name="Id">идентификатор пользователя</param>
-		/// <param name="ListGroup">список идентификаторов групп</param>
+		/// <param name="model">заполненная модель правок пользователя</param>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult Change(long? Id, List<long> ListGroup)
+		public ActionResult Change(UserEdit model)
 		{
-			var user = cntx_.Account.Single(x => x.Id == Id);
-			var groups = cntx_.AccountGroup.Where(c => ListGroup.Contains(c.Id));
-			user.AccountGroup.Clear();
+			var user = cntx_.Account.Single(x => x.Id == model.UserId);
 
+			var groups = cntx_.AccountGroup.Where(x => model.AccountGroupIds.Contains(x.Id));
+			user.AccountGroup.Clear();
 			foreach (var group in groups)
 				user.AccountGroup.Add(group);
+
+			user.AppointmentId = model.AppointmentId;
+			user.Enabled = model.Status;
 			cntx_.SaveChanges();
 
-			SuccessMessage("Изменения сохранены");
-			return RedirectToAction("Group");
+			// TODO валидация, удаление дублирующегося кода, действия при подтверждении запроса на регистрацию, статистика по запросам на первой стр., вид формы редактир., очеррёдность смены статусов
+
+			SuccessMessage("Изменения успешно сохранены");
+			return RedirectToAction("Index");
 		}
 
 		/// <summary>
-		/// Поиск пользователя по имени и логину
+		/// Поиск пользователя
 		/// </summary>
 		/// <param name="filter">фильтр поиска</param>
 		/// <returns></returns>
 		public ActionResult SearchUser(UserFilter filter)
 		{
 			var query = cntx_.Account.Where(x => x.TypeUser == (sbyte)filter.TypeUserEnum);
+			if (filter.UserId.HasValue)
+				query = query.Where(x => x.Id == filter.UserId.Value);
 			if (!string.IsNullOrEmpty(filter.UserName))
 				query = query.Where(x => x.Name.Contains(filter.UserName));
 			if (!string.IsNullOrEmpty(filter.Login))
@@ -85,11 +118,22 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					var producerIds = cntx_.producernames.Where(x => x.ProducerName.Contains(filter.ProducerName)).Select(x => x.ProducerId).ToList();
 					query = query.Where(x => x.AccountCompany.ProducerId.HasValue && producerIds.Contains(x.AccountCompany.ProducerId.Value));
 			}
+			if (filter.AccountGroupId.HasValue) 
+				query = query.Where(x => x.AccountGroup.Any(y => y.Id == filter.AccountGroupId.Value));
+			if (filter.WithoutAppointment)
+				query = query.Where(x => x.AccountAppointment == null);
+			if (filter.Status.HasValue)
+				query = query.Where(x => x.Enabled == filter.Status.Value);
 
+			// установка пейджера
 			var itemsCount = query.Count();
 			var itemsPerPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
 			var info = new SortingPagingInfo() { CurrentPageIndex = filter.CurrentPageIndex, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
 			ViewBag.Info = info;
+
+			// имена производителей
+			var existProducerIds = cntx_.AccountCompany.Where(x => x.ProducerId.HasValue).Select(x => x.ProducerId).Distinct().ToList();
+			ViewBag.Producers = cntx_.producernames.Where(x => existProducerIds.Contains(x.ProducerId)).ToDictionary(x => x.ProducerId, x => x.ProducerName);
 
 			var model = query.OrderByDescending(x => x.Id).Skip(filter.CurrentPageIndex * itemsPerPage).Take(itemsPerPage).ToList();
 			return View(model);
@@ -99,42 +143,25 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// Список пользователей сайта
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet]
-		public ActionResult Users()
+		public ActionResult Index(UserFilter model)
 		{
-			var model = new UserFilter() { CurrentPageIndex = 0 };
-			return View(model);
-		}
+			var emptyElement = new SelectListItem() { Text = "", Value = "" };
 
-		[HttpPost]
-		public ActionResult Users(UserFilter model)
-		{
-			return View(model);
-		}
+			var allAccountGroup = new List<SelectListItem>() { emptyElement };
+			allAccountGroup.AddRange(cntx_.AccountGroup
+				.Where(x => x.Enabled && x.TypeGroup == (sbyte)TypeUsers.ProducerUser)
+				.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = model.AccountGroupId == x.Id })
+				.ToList());
+			model.AllAccountGroup = allAccountGroup;
 
-		/// <summary>
-		/// Список администраторов
-		/// </summary>
-		/// <returns></returns>
-		public ActionResult Index()
-		{
-			string adminGroupName = GetWebConfigParameters("AdminGroupName");
-			var accountGroup = cntx_.AccountGroup.Single(x => x.Name == adminGroupName && x.TypeGroup == (sbyte)TypeUsers.ProducerUser);
-			var model = accountGroup.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active).ToList();
-			return View(model);
-		}
+			var allStatus = new List<SelectListItem>() { emptyElement };
+			if (model.Status.HasValue)
+				allStatus.AddRange(EnumHelper.GetSelectList(typeof(UserStatus), (UserStatus)model.Status.Value));
+			else
+				allStatus.AddRange(EnumHelper.GetSelectList(typeof(UserStatus)));
+			model.AllStatus = allStatus;
 
-		private Dictionary<int, List<string>> GroupPermissionList()
-		{
-			var result = new Dictionary<int, List<string>>();
-			var accountGroupList = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser).ToDictionary(x => x.Id, x => x.AccountPermission.Select(y => $"{y.ControllerAction} {y.ActionAttributes}").ToList());
-			//foreach (var accountGroup in accountGroupList) {
-			//	result.Add(accountGroup.Id, accountGroup.AccountPermission.Select(x => $"{x.ControllerAction} {x.ActionAttributes}").ToList());
-			//}
-			//var ps = user.AccountGroup.SelectMany(x => x.AccountPermission)
-			//													.Select(x => $"{x.ControllerAction} {x.ActionAttributes}")
-			//													.Distinct().ToArray();
-			return result;
+			return View(model);
 		}
 
 		/// <summary>

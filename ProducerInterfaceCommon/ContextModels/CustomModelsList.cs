@@ -8,8 +8,35 @@ using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+	public class UserEdit
+	{
+		[HiddenInput(DisplayValue = false)]
+		public long UserId { get; set; }
+
+		[Display(Name = "ФИО")]
+		public string Name { get; set; }
+
+		[Display(Name = "Статус")]
+		public sbyte Status { get; set; }
+
+		public List<SelectListItem> AllStatus { get; set; }
+
+		[Display(Name = "Должность")]
+		public int? AppointmentId { get; set; }
+
+		public List<SelectListItem> AllAppointment { get; set; }
+
+		[Display(Name = "Группы")]
+		public List<int> AccountGroupIds { get; set; }
+
+		public List<SelectListItem> AllAccountGroup { get; set; }
+	}
+
 	public class UserFilter
 	{
+		[Display(Name = "Идентификатор")]
+		public long? UserId { get; set; }
+
 		[Display(Name = "ФИО")]
 		public string UserName { get; set; }
 
@@ -22,6 +49,20 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Тип пользователя")]
 		public TypeUsers TypeUserEnum { get { return TypeUsers.ProducerUser; } }
 
+		[Display(Name = "Статус")]
+		public sbyte? Status { get; set; }
+
+		public List<SelectListItem> AllStatus { get; set; }
+
+		[Display(Name = "Без должности")]
+		public bool WithoutAppointment { get; set; }
+
+		[Display(Name = "Группа")]
+		public int? AccountGroupId { get; set; }
+
+		public List<SelectListItem> AllAccountGroup { get; set; }
+
+		[HiddenInput(DisplayValue = false)]
 		public int CurrentPageIndex { get; set; }
 	}
 

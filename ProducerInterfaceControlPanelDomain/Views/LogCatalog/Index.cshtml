@@ -11,7 +11,7 @@
 <h2>@ViewBag.Title</h2>
 <hr />
 
-@if (Model != null && Model.Count() > 0)
+@if (Model.Any())
 {
     using (Html.BeginForm())
     {

@@ -342,7 +342,6 @@
     <Content Include="Content\Chosen\js\initDatePicker.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
     <Content Include="Content\Chosen\js\initChangeGroupPermission.js" />
-    <Content Include="Content\Chosen\js\InitPermission.js" />
     <Content Include="Content\Chosen\js\InitSearchPromotionChosen.js" />
     <Content Include="Content\Chosen\js\InitReportSearchChosen.js" />
     <Content Include="Content\Chosen\js\jqCron.js" />
@@ -713,11 +712,9 @@
     <Content Include="Views\PermissionUser\ChangeGroupParameters.cshtml" />
     <Content Include="Views\PermissionUser\CreateGroup.cshtml" />
     <Content Include="Views\PermissionUser\Group.cshtml" />
-    <Content Include="Views\PermissionUser\Index.cshtml" />
     <Content Include="Views\PermissionUser\SearchUser.cshtml" />
-    <Content Include="Views\PermissionUser\Users.cshtml" />
+    <Content Include="Views\PermissionUser\Index.cshtml" />
     <Content Include="Views\PermissionUser\Change.cshtml" />
-    <Content Include="Views\PermissionUser\EditorTemplates\LongListPermissionTwo.cshtml" />
     <Content Include="Views\PermissionUser\ListPermission.cshtml" />
     <Content Include="Views\PermissionUser\EditPermission.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
