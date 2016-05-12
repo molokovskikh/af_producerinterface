@@ -1,56 +1,38 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
-@model IEnumerable<AccountCompany>
+@model Statistics
 
 @{
-    ViewBag.Title = "Домащняя страница";
-    var producers = ViewBag.ProducerList as IEnumerable<producernames>;
-    var promotionList = ViewBag.ListPromotions as IEnumerable<promotions>;
+  ViewBag.Title = "Статистика";
 }
 
-<br/>
+<h2>@ViewBag.Title</h2>
 
 <div class="row">
-    <div class="col-xs-12">
-        <h3>Зарегистрировались из <strong>@Model.Where(xxx=>xxx.ProducerId != null).Count()</strong> компаний производителей</h3>
-        <hr/>   
-        <h3>Подано заявок для подтверждения использования данного продукта <strong>@Model.Where(xxx => xxx.ProducerId == null).Count()</strong> заявка</h3>
-        <hr />   
-        <h3>Создано акций <strong> @promotionList.Count()</strong> Подтверждены <string> @promotionList.Where(xxx => xxx.Status == true).Count() </string>
-            Активны на данный момент <strong> @promotionList.Where(xxx => xxx.Status == true && xxx.Enabled == true && xxx.Begin <= System.DateTime.Now && xxx.End > System.DateTime.Now).Count() </strong>
-        </h3>
-        <hr />
-        
-        <fieldset>
-            <legend>Акции</legend>
+    <div class="col-md-12">
+        <h4>Зарегистрировано</h4>
+        <ul>
+            <li>@Html.DisplayFor(m => m.ProducerCount) @Html.DisplayNameFor(m => m.ProducerCount)</li>
+            <li>@Html.DisplayFor(m => m.NotProducerCount) @Html.DisplayNameFor(m => m.NotProducerCount)</li>
+        </ul>
 
-            @foreach (var CompanyItem in Model)
-            {
-                foreach (var AccountItem in CompanyItem.Account)
-                {
+        <ul>
+            <li>@Html.DisplayFor(m => m.ActionCount) @Html.DisplayNameFor(m => m.ActionCount)</li>
+            <li>@Html.DisplayFor(m => m.AcceptedActionCount) @Html.DisplayNameFor(m => m.AcceptedActionCount)</li>
+            <li>@Html.DisplayFor(m => m.ActiveActionCount) @Html.DisplayNameFor(m => m.ActiveActionCount)</li>
+        </ul>
 
-                    foreach (var PromotionItem in AccountItem.promotions)
-                    {
-                        <p>@PromotionItem.Name  <strong>Производитель @producers.Where(xxx => xxx.ProducerId == PromotionItem.Account.AccountCompany.ProducerId).First().ProducerName</strong></p>
-                    }
+        <ul>
+            <li>@Html.DisplayFor(m => m.UserCount) @Html.DisplayNameFor(m => m.UserCount)</li>
+            <li>@Html.DisplayFor(m => m.ActiveUserCount) @Html.DisplayNameFor(m => m.ActiveUserCount)</li>
+            <li>@Html.DisplayFor(m => m.NewUserCount) @Html.DisplayNameFor(m => m.NewUserCount)</li>
+            <li>@Html.DisplayFor(m => m.RequestUserCount) @Html.DisplayNameFor(m => m.RequestUserCount)</li>
+            <li>@Html.DisplayFor(m => m.BlockedUserCount) @Html.DisplayNameFor(m => m.BlockedUserCount)</li>
+        </ul>
 
-                }
-            }
-        </fieldset>   
-        <hr />  
-
-
-
-
+        <ul>
+            <li>@Html.DisplayFor(m => m.ReportCount) @Html.DisplayNameFor(m => m.ReportCount)</li>
+        </ul>
     </div>
 </div>
 
-
-  <fieldset class="container" id="promoActionView">
-        
-      @foreach ( var CompanyItem in Model)
-      {
-     
-      }   
-      
-  </fieldset>
 

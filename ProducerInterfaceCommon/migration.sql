@@ -1595,7 +1595,7 @@ values (16, 'Отчет на сайте {SiteName} давно не исполь�
 create or replace DEFINER=`RootDBMS`@`127.0.0.1` view supplierregions as
 select Id as SupplierId, RegionMask
 from Customers.Suppliers
-where IsVirtual = 1;
+where IsVirtual = 0;
 
 drop PROCEDURE `SecondarySalesReport`;
 
@@ -1623,7 +1623,7 @@ from
 	and SupplierId in 
 		(select Id
 		from Customers.Suppliers
-		where IsVirtual = 1 and IsFederal = 0 and RegionMask & ', RegionMask, ')
+		where IsVirtual = 0 and IsFederal = 0 and RegionMask & ', RegionMask, ')
 	and ProducerId = ', ProducerId, '
 	and WriteTime > \'', DateFrom, '\'
 	and WriteTime < \'', DateTo, '\'
@@ -1645,4 +1645,20 @@ END$$
 ALTER TABLE `Account`
  CHANGE COLUMN `Enabled` `Enabled` TINYINT(4) NOT NULL DEFAULT 0;
 
+ #ниже не внесено на боевую
+
+ update AccountAppointment
+set GlobalEnabled = 0
+where GlobalEnabled = 2;
+
+update AccountAppointment
+set GlobalEnabled = 0
+where GlobalEnabled is null;
+
+ALTER TABLE `AccountAppointment`
+ CHANGE COLUMN `GlobalEnabled` `GlobalEnabled` TINYINT(1) NOT NULL DEFAULT '0';
+ 
+ALTER TABLE `AccountAppointment` DROP FOREIGN KEY `FK1_Appointment_To_AccountCompany_Id`;
+ 
+ALTER TABLE `AccountAppointment` DROP COLUMN `IdAccount`;
 

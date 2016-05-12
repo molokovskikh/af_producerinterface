@@ -58,7 +58,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			).First();
 
 			// список должностей общий для всех + для данного пользователя
-			ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 || x.Account.Any(z => z.Id == id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled || x.Account.Any(z => z.Id == id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
 			// список групп пользователей
 			ViewBag.GroupList = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser && x.Enabled).ToList().Select(x => new OptionElement
 			{
@@ -81,7 +81,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (!ModelState.IsValid)
 			{
 				// список должностей общий для всех + для данного пользователя
-				ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 || x.Account.Any(z => z.Id == model.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+				ViewBag.PostList = cntx_.AccountAppointment.Where(x => x.GlobalEnabled || x.Account.Any(z => z.Id == model.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
 				// список групп пользователей
 				ViewBag.GroupList = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser && x.Enabled).ToList().Select(x => new OptionElement
 				{

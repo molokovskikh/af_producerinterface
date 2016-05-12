@@ -50,7 +50,7 @@ namespace ProducerInterface.Controllers
 			model.OtherName = thisUser.OtherName;
 
 			var appointmentList =
-			 cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
+			 cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled)
 					 .ToList()
 					 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
 					 .ToList();
@@ -73,7 +73,7 @@ namespace ProducerInterface.Controllers
 			{
 
 				var AppointmentList =
-				 cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled == 1)
+				 cntx_.AccountAppointment.Where(xx => xx.GlobalEnabled)
 						 .ToList()
 						 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
 						 .ToList();

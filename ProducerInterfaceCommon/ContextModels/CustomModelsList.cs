@@ -8,6 +8,42 @@ using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.ContextModels
 {
+	public class Statistics
+	{
+		[Display(Name = "производителей")]
+		public int ProducerCount { get; set; }
+
+		[Display(Name = "наблюдателей")]
+		public int NotProducerCount { get; set; }
+
+		[Display(Name = "акций")]
+		public int ActionCount { get; set; }
+
+		[Display(Name = "активных акций")]
+		public int ActiveActionCount { get; set; }
+
+		[Display(Name = "подтвержденных акций")]
+		public int AcceptedActionCount { get; set; }
+
+		[Display(Name = "пользователей")]
+		public int UserCount { get; set; }
+
+		[Display(Name = "активных")]
+		public int ActiveUserCount { get; set; }
+
+		[Display(Name = "новых")]
+		public int NewUserCount { get; set; }
+
+		[Display(Name = "запросов на регистрацию")]
+		public int RequestUserCount { get; set; }
+
+		[Display(Name = "заблокированных")]
+		public int BlockedUserCount { get; set; }
+
+		[Display(Name = "отчетов")]
+		public int ReportCount { get; set; }
+	}
+
 	public class UserEdit
 	{
 		[HiddenInput(DisplayValue = false)]

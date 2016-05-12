@@ -4,35 +4,39 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Security.Principal;
-using System.Collections;
 using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class HomeController : MasterBaseController
-    {
-       
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns>Стартовая страница сайта, которая будет доступна после авторизации</returns>
-        public ActionResult Index()
-        {
-            var CompanyList = cntx_.AccountCompany.ToList();
-            var producerLongList = cntx_.AccountCompany.Where(xxx => xxx.ProducerId != null).ToList().Select(xxx => xxx.ProducerId).ToList();
-            try
-            {
-                ViewBag.ProducerList = cntx_.producernames.Where(xxx => producerLongList.Contains(xxx.ProducerId)).ToList();
-            }
-            catch
-            {
-                ViewBag.ProducerList = new List<producernames>();
-            }
-         
-            ViewBag.ListPromotions = cntx_.promotions.ToList();
+	public class HomeController : MasterBaseController
+	{
 
-            return View(CompanyList);
-        }
+		/// <summary>
+		/// Стартовая страница сайта, которая будет доступна после авторизации
+		/// </summary>
+		/// <returns></returns>
+		public ActionResult Index()
+		{
+			var model = new Statistics();
 
-    }
+			model.ProducerCount = cntx_.AccountCompany.Count(x => x.ProducerId.HasValue);
+			model.NotProducerCount = cntx_.AccountCompany.Count(x => !x.ProducerId.HasValue);
+
+			model.ActionCount = cntx_.promotions.Count();
+			model.AcceptedActionCount = cntx_.promotions.Count(x => x.Status);
+			model.ActiveActionCount = cntx_.promotions.Count(x => x.Status && x.Enabled && x.Begin <= DateTime.Now && x.End > DateTime.Now);
+
+			var userByType					= cntx_.Account.GroupBy(x => x.Enabled).ToDictionary(x => x.Key, x => x.Count());
+			model.UserCount					= userByType.Sum(x => x.Value);
+			model.ActiveUserCount		= userByType.ContainsKey((int)UserStatus.Active) ? userByType[(int)UserStatus.Active] : 0;
+			model.NewUserCount			= userByType.ContainsKey((int)UserStatus.New) ? userByType[(int)UserStatus.New] : 0;
+			model.RequestUserCount	= userByType.ContainsKey((int)UserStatus.Request) ? userByType[(int)UserStatus.Request] : 0;
+			model.BlockedUserCount	= userByType.ContainsKey((int)UserStatus.Blocked) ? userByType[(int)UserStatus.Blocked] : 0;
+
+			model.ReportCount = cntx_.jobextend.Count();
+
+			return View(model);
+		}
+
+	}
 }

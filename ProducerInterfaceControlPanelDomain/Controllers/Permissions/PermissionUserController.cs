@@ -44,7 +44,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var model = new UserEdit() {
 				UserId = user.Id,
 				Name = user.Name,
-				Status = user.Enabled,
+				//Status = user.Enabled,
 				AppointmentId = user.AppointmentId,
 				AccountGroupIds = user.AccountGroup.Select(x => x.Id).ToList()
 			};
@@ -60,12 +60,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				allAppointment.Add(new SelectListItem() { Text = "", Value = "", Selected = true });
 			
 			// добавили общедоступные должности
-			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1)
+			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled)
 				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == user.AppointmentId })
 				.ToList());
 
 			// добавили кастомную должность если есть
-			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 0 && x.IdAccount.HasValue && x.IdAccount == user.AppointmentId)
+			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => !x.GlobalEnabled && x.Id == user.AppointmentId)
 				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = true })
 				.ToList());
 
@@ -93,7 +93,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			user.Enabled = model.Status;
 			cntx_.SaveChanges();
 
-			// TODO валидация, удаление дублирующегося кода, действия при подтверждении запроса на регистрацию, статистика по запросам на первой стр., вид формы редактир., очеррёдность смены статусов
+			// TODO валидация, удаление дублирующегося кода, действия при подтверждении запроса на регистрацию, вид формы редактир., очерёдность смены статусов
 
 			SuccessMessage("Изменения успешно сохранены");
 			return RedirectToAction("Index");

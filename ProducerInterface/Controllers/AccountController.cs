@@ -200,7 +200,7 @@ namespace ProducerInterface.Controllers
 			else
 			{
 				NewAppointment_.Name = NewNameAppointment;
-				NewAppointment_.GlobalEnabled = 0;
+				NewAppointment_.GlobalEnabled = false;
 				cntx_.Entry(NewAppointment_).State = EntityState.Added;
 				cntx_.SaveChanges();
 			}
@@ -363,7 +363,7 @@ namespace ProducerInterface.Controllers
 			if (RegNotProducer_ViewModel != null)
 			{
 				// создали новую должность
-				var appointment = new AccountAppointment() { Name = RegNotProducer_ViewModel.Appointment, GlobalEnabled = 0 };
+				var appointment = new AccountAppointment() { Name = RegNotProducer_ViewModel.Appointment, GlobalEnabled = false };
 				cntx_.Entry(appointment).State = EntityState.Added;
 				cntx_.SaveChanges();
 
@@ -390,15 +390,15 @@ namespace ProducerInterface.Controllers
 		private void ViewBagAppointmentList(long ProducerId = 0)
 		{
 			var result = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-			result.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled == 1 && x.IdAccount == null)
+			result.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled)
 					 .ToList()
 					 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
 					 .ToList());
 
-			// если передан ID производителя, добавляются должности данного производителя
-			if (ProducerId != 0)
-			{
-				var companyCustomAppointment = cntx_.AccountAppointment.Where(x => x.Account1.AccountCompany.ProducerId == ProducerId).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			// если передан ID производителя, добавляются индивидуальные должности пользователей данного производителя
+			if (ProducerId != 0) {
+				var appointmentIds = cntx_.Account.Where(x => x.AccountCompany.ProducerId == ProducerId).Select(x => x.AppointmentId).Distinct().ToList();
+				var companyCustomAppointment = cntx_.AccountAppointment.Where(x => !x.GlobalEnabled && appointmentIds.Contains(x.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
 				result.AddRange(companyCustomAppointment);
 			}
 			ViewBag.AppointmentList = result;

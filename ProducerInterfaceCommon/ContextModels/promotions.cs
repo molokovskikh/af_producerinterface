@@ -38,10 +38,10 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<long> ProducerAdminId { get; set; }
         public Nullable<bool> AllSuppliers { get; set; }
     
-        public virtual Account Account { get; set; }
-        public virtual Account Account1 { get; set; }
         public virtual MediaFiles MediaFiles { get; set; }
         public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
         public virtual ICollection<PromotionsToSupplier> PromotionsToSupplier { get; set; }
+        public virtual Account Account { get; set; }
+        public virtual Account Account1 { get; set; }
     }
 }

@@ -56,9 +56,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<NewsChange> NewsChange { get; set; }
-        public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<MediaFiles> MediaFiles { get; set; }
-        public DbSet<Account> Account { get; set; }
         public DbSet<ReportDescription> ReportDescription { get; set; }
         public DbSet<PromotionsToSupplier> PromotionsToSupplier { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
@@ -74,6 +72,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<CatalogLog> CatalogLog { get; set; }
         public DbSet<cataloglogui> cataloglogui { get; set; }
         public DbSet<LogForNet> LogForNet { get; set; }
+        public DbSet<AccountAppointment> AccountAppointment { get; set; }
+        public DbSet<Account> Account { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {
