@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Permission;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -32,8 +33,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(ListGroup);
 		}
 
+
 		/// <summary>
-		/// Форма редактирования пользователя
+		/// Редактирование пользователя GET
 		/// </summary>
 		/// <param name="Id">идентификатор пользователя</param>
 		/// <returns></returns>
@@ -41,62 +43,102 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult Change(long Id)
 		{
 			var user = cntx_.Account.Single(x => x.Id == Id);
-			var model = new UserEdit() {
-				UserId = user.Id,
+			var model = new UserEdit()
+			{
 				Name = user.Name,
-				//Status = user.Enabled,
+				Status = user.Enabled,
 				AppointmentId = user.AppointmentId,
 				AccountGroupIds = user.AccountGroup.Select(x => x.Id).ToList()
 			};
 
-			model.AllAccountGroup = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser)
-				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
-				.ToList();
+			// если запрос на регистрацию - показываем сообщение от пользователя
+			if (user.EnabledEnum == UserStatus.Request)
+				model.Message = user.AccountCompany.Name;
 
-			model.AllStatus = EnumHelper.GetSelectList(typeof(UserStatus), (UserStatus)user.Enabled).ToList();
-
-			var allAppointment = new List<SelectListItem>();
-			if (!user.AppointmentId.HasValue)
-				allAppointment.Add(new SelectListItem() { Text = "", Value = "", Selected = true });
-			
-			// добавили общедоступные должности
-			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled)
-				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == user.AppointmentId })
-				.ToList());
-
-			// добавили кастомную должность если есть
-			allAppointment.AddRange(cntx_.AccountAppointment.Where(x => !x.GlobalEnabled && x.Id == user.AppointmentId)
-				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = true })
-				.ToList());
-
-			model.AllAppointment = allAppointment;
-
+			SetChangeModel(user, model);
 			return View(model);
 		}
 
+
 		/// <summary>
-		/// Применение правок пользователя POST
+		/// Редактирование пользователя POST
 		/// </summary>
-		/// <param name="model">заполненная модель правок пользователя</param>
+		/// <param name="model">модель правок пользователя</param>
 		/// <returns></returns>
 		[HttpPost]
 		public ActionResult Change(UserEdit model)
 		{
-			var user = cntx_.Account.Single(x => x.Id == model.UserId);
+			var user = cntx_.Account.Single(x => x.Id == model.Id);
+			if (!ModelState.IsValid)
+			{
+				SetChangeModel(user, model);
+				return View(model);
+			}
 
 			var groups = cntx_.AccountGroup.Where(x => model.AccountGroupIds.Contains(x.Id));
 			user.AccountGroup.Clear();
 			foreach (var group in groups)
 				user.AccountGroup.Add(group);
 
+			var sendAcceptMail = false;
+			var password = "";
+			// если подтверждение регистрации пользователя
+			if (user.EnabledEnum == UserStatus.Request && model.Status == (sbyte)UserStatus.New) {
+				password = GetRandomPassword();
+				user.Password = Md5HashHelper.GetHash(password);
+				user.PasswordUpdated = DateTime.Now;
+				sendAcceptMail = true;
+			}
+
 			user.AppointmentId = model.AppointmentId;
 			user.Enabled = model.Status;
+			user.LastUpdatePermisison = DateTime.Now;
 			cntx_.SaveChanges();
 
-			// TODO валидация, удаление дублирующегося кода, действия при подтверждении запроса на регистрацию, вид формы редактир., очерёдность смены статусов
+			// отправка сообщения пользователю с паролем
+			if (sendAcceptMail)
+				EmailSender.SendAccountVerificationMessage(cntx_, user, password, CurrentUser.Id);
 
 			SuccessMessage("Изменения успешно сохранены");
 			return RedirectToAction("Index");
+		}
+
+		private void SetChangeModel(Account user, UserEdit model)
+		{
+			model.AllAccountGroup = cntx_.AccountGroup.Where(x => x.TypeGroup == (sbyte)TypeUsers.ProducerUser)
+				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
+				.ToList();
+
+			// очередность смены статусов
+			var allStatus = new List<SelectListItem>();
+			switch (user.EnabledEnum) {
+					case UserStatus.Active: // активный можно изменить только на заблокированный
+					allStatus.Add(new SelectListItem() { Text = UserStatus.Active.DisplayName(), Value = ((int)UserStatus.Active).ToString(), Selected = model.Status == (sbyte)UserStatus.Active });
+					allStatus.Add(new SelectListItem() { Text = UserStatus.Blocked.DisplayName(), Value = ((int)UserStatus.Blocked).ToString(), Selected = model.Status == (sbyte)UserStatus.Blocked });
+					break;
+				case UserStatus.Blocked: // заблокированный можно изменить только на активный
+					allStatus.Add(new SelectListItem() { Text = UserStatus.Blocked.DisplayName(), Value = ((int)UserStatus.Blocked).ToString(), Selected = model.Status == (sbyte)UserStatus.Blocked });
+					allStatus.Add(new SelectListItem() { Text = UserStatus.Active.DisplayName(), Value = ((int)UserStatus.Active).ToString(), Selected = model.Status == (sbyte)UserStatus.Active });
+					break;
+				case UserStatus.New: // новый нельзя изменить
+					allStatus.Add(new SelectListItem() { Text = UserStatus.New.DisplayName(), Value = ((int)UserStatus.New).ToString(), Selected = model.Status == (sbyte)UserStatus.New });
+					break;
+				case UserStatus.Request: // запрос регистрации можно изменить только на новый
+					allStatus.Add(new SelectListItem() { Text = UserStatus.Request.DisplayName(), Value = ((int)UserStatus.Request).ToString(), Selected = model.Status == (sbyte)UserStatus.Request });
+					allStatus.Add(new SelectListItem() { Text = UserStatus.New.DisplayName(), Value = ((int)UserStatus.New).ToString(), Selected = model.Status == (sbyte)UserStatus.New });
+					break;
+			}
+			model.AllStatus = allStatus;
+
+			// должности
+			var allAppointment = new List<SelectListItem>();
+			if (!user.AppointmentId.HasValue)
+				allAppointment.Add(new SelectListItem() { Text = "", Value = "", Selected = true });
+			allAppointment.AddRange(cntx_.AccountAppointment.OrderBy(x => x.Name)
+				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == user.AppointmentId })
+				.ToList());
+
+			model.AllAppointment = allAppointment;
 		}
 
 		/// <summary>
@@ -115,13 +157,26 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				query = query.Where(x => x.Login.Contains(filter.Login));
 			if (!string.IsNullOrEmpty(filter.ProducerName))
 			{
-					var producerIds = cntx_.producernames.Where(x => x.ProducerName.Contains(filter.ProducerName)).Select(x => x.ProducerId).ToList();
-					query = query.Where(x => x.AccountCompany.ProducerId.HasValue && producerIds.Contains(x.AccountCompany.ProducerId.Value));
+				var producerIds = cntx_.producernames.Where(x => x.ProducerName.Contains(filter.ProducerName)).Select(x => x.ProducerId).ToList();
+				query = query.Where(x => x.AccountCompany.ProducerId.HasValue && producerIds.Contains(x.AccountCompany.ProducerId.Value));
 			}
-			if (filter.AccountGroupId.HasValue) 
+			if (filter.AccountGroupId.HasValue)
 				query = query.Where(x => x.AccountGroup.Any(y => y.Id == filter.AccountGroupId.Value));
-			if (filter.WithoutAppointment)
-				query = query.Where(x => x.AccountAppointment == null);
+			if (filter.AppointmentId.HasValue)
+			{
+				switch (filter.AppointmentId.Value)
+				{
+					case 0: // без должности
+						query = query.Where(x => x.AccountAppointment == null);
+						break;
+					case -1: // с индивидуальной должностью
+						query = query.Where(x => !x.AccountAppointment.GlobalEnabled);
+						break;
+					default:
+						query = query.Where(x => x.AppointmentId == filter.AppointmentId.Value);
+						break;
+				}
+			}
 			if (filter.Status.HasValue)
 				query = query.Where(x => x.Enabled == filter.Status.Value);
 
@@ -147,6 +202,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var emptyElement = new SelectListItem() { Text = "", Value = "" };
 
+			// список групп
 			var allAccountGroup = new List<SelectListItem>() { emptyElement };
 			allAccountGroup.AddRange(cntx_.AccountGroup
 				.Where(x => x.Enabled && x.TypeGroup == (sbyte)TypeUsers.ProducerUser)
@@ -154,12 +210,23 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				.ToList());
 			model.AllAccountGroup = allAccountGroup;
 
+			// список статусов
 			var allStatus = new List<SelectListItem>() { emptyElement };
 			if (model.Status.HasValue)
 				allStatus.AddRange(EnumHelper.GetSelectList(typeof(UserStatus), (UserStatus)model.Status.Value));
 			else
 				allStatus.AddRange(EnumHelper.GetSelectList(typeof(UserStatus)));
 			model.AllStatus = allStatus;
+
+			// список должностей
+			var allAppointment = new List<SelectListItem>() { emptyElement };
+			allAppointment.Add(new SelectListItem() { Text = "Без должности", Value = "0", Selected = model.AppointmentId == 0 });
+			allAppointment.Add(new SelectListItem() { Text = "С индивидуальной должностью", Value = "-1", Selected = model.AppointmentId == -1 });
+			allAppointment.AddRange(cntx_.AccountAppointment
+				.Where(x => x.Account.Any())
+				.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = model.AppointmentId == x.Id })
+				.ToList());
+			model.AllAppointment = allAppointment;
 
 			return View(model);
 		}

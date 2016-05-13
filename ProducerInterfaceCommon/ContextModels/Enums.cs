@@ -72,8 +72,8 @@ namespace ProducerInterfaceCommon.ContextModels
 		Other = 2,
 		[Display(Name = "Добавление должности")]
 		AddNewAppointment = 3,
-		[Display(Name = "Заявка на Регистрацию")]
-		Registration = 4,
+		//[Display(Name = "Заявка на Регистрацию")]
+		//Registration = 4,
 		[Display(Name = "Добавление домена")]
 		AddNewDomainName = 5
 	}

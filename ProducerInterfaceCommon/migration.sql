@@ -1662,3 +1662,12 @@ ALTER TABLE `AccountAppointment` DROP FOREIGN KEY `FK1_Appointment_To_AccountCom
  
 ALTER TABLE `AccountAppointment` DROP COLUMN `IdAccount`;
 
+delete from AccountFeedBack
+where Type = 4;
+
+insert into mailform (Id, Subject, Body, IsBodyHtml, Description)
+values (17, 'Запрос регистрации на сайте {SiteName}', 
+ 'Сообщение пользователя: {Message} Контакты пользователя: {Contacts}', 
+ 0, 'Запрос регистрации');
+
+

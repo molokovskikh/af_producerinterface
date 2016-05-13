@@ -181,3 +181,7 @@ max-width:45em;
     min-width:275px;
 } 
 
+.mw500 {
+   max-width: 500px;
+}
+

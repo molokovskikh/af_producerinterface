@@ -1,0 +1,110 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@model IEnumerable<AccountAppointment>
+
+@{
+  ViewBag.Title = "Список должностей";
+  Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<h2>Список должностей</h2>
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("Add", "Appointment"))
+        {
+        <div class="form-group">
+            <label>Добавить должность</label>
+            <input type="text" name="name" placeholder="Наименование должности" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-primary" />
+        </div>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table-bordered table-striped table-condensed">
+            <tr>
+                <th>Наименование должности</th>
+                <th>Количество пользователей</th>
+                <th>Пользователей с должностью</th>
+                <th>Общая</th>
+                <th>Редактировать</th>
+                <th>Удалить</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+              var details = Json.Encode(new { item.Id, item.Name, item.GlobalEnabled });
+              <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Account.Count()</td>
+                    <td>
+                        @if (item.Account.Any()) {
+                            <a href="@Url.Action("Index", "PermissionUser", new { AppointmentId = item.Id })">Искать</a>
+                        }
+                    </td>
+                    <td>@if (item.GlobalEnabled) {
+                            <span>Да</span>
+                        }
+                        else {
+                            <span>Нет</span>
+                        }
+                    </td>
+                    <td>
+                        <a onclick="bindDetailsItem(@details)"><span class="glyphicon glyphicon-edit"></span></a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Delete", new { id = item.Id })" onclick="return confirm('Вы уверены, что хотите удалить должность?')">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div id="ModalDetailsItem" class="modal fade modal-open-noscroll" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="button" value="&times;" class="close" data-dismiss="modal"/>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Edit", "Appointment")) {
+                    <input type="hidden" id="Id" name="Id"/>
+                    <div class="form-group">
+                        <label>Наименование должности</label>
+                        <input type="text" id="Name" name="Name" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Общая</label>
+                        <input type="checkbox" id="GlobalEnabled" value="true" name="GlobalEnabled"/>
+                        <input type="hidden" value="false" name="GlobalEnabled"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Сохранить" class="btn btn-primary"/>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var details = $("#ModalDetailsItem");
+
+        function bindDetailsItem(data) {
+            $("#Id").val(data.Id);
+            $("#Name").val(data.Name);
+            if (data.GlobalEnabled)
+                $("#GlobalEnabled").prop('checked', 'checked');
+            else
+                $("#GlobalEnabled").removeAttr('checked');
+            details.modal('show');
+        }
+    </script>
+}

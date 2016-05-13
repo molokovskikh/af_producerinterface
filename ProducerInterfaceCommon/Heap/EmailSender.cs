@@ -168,18 +168,17 @@ namespace ProducerInterfaceCommon.Heap
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
 		}
 
-		public static void SendAccountVerificationMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip, long adminId)
+		public static void SendAccountVerificationMessage(producerinterface_Entities cntx, Account user, string password, long adminId)
 		{
-			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.AccountVerification);
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, MailType.AccountVerification);
-			EmailSender.SendEmail(user.Login, subject, body, attachments, true);
+			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
-			var di = new DiagnosticInformation() { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, User = user, UserIp = ip, ActionName = MailType.AccountVerification.DisplayName() };
+			var di = new DiagnosticInformation() { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, User = user, ActionName = MailType.AccountVerification.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
 		}
@@ -203,12 +202,12 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Запрос регистрации производителя, расширенное сотрудникам
-		public static void ProducerRequestMessage(producerinterface_Entities cntx, Account user, AccountFeedBack feedBack)
+		public static void ProducerRequestMessage(producerinterface_Entities cntx, Account user, string message, string contacts)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ProducerRequest);
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{ReliableTokenizer(mailForm.Body, new { Description = feedBack.Description, Contacts = feedBack.Contacts })}";
+			var body = $"{ReliableTokenizer(mailForm.Body, new { Message = message, Contacts = contacts })}";
 
 			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = MailType.ProducerRequest.DisplayName() };
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
@@ -432,7 +431,7 @@ namespace ProducerInterfaceCommon.Heap
 
 					// у новых пользоватей может не быть производителя, если они не нашли его в системе, а указали его
 					if (string.IsNullOrEmpty(ProducerName) && ProducerId == null && ac != null)
-						ProducerName = ac.Name;
+						ProducerName = "отсутствует";
 				}
 
 				if (!ActionDate.HasValue)

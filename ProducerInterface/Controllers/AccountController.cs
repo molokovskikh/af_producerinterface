@@ -247,24 +247,13 @@ namespace ProducerInterface.Controllers
 
 			// создали аккаунт
 			var user = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
+			user.IP = Request.UserHostAddress;
 
-			// отправили сообщение в обратную связь
-			var feedBack = new AccountFeedBack() {
-				Contacts = $"{model.PhoneNumber}, {model.login}",
-				Description = $"Запрос на регистрацию, компания {company.Name} (id={company.Id})",
-				DateAdd = DateTime.Now,
-				AccountId = user.Id,
-				UrlString = "~/Regisration/CustomRegistration",
-				Type = (sbyte)FeedBackTypePrivate.Registration
-			};
-			cntx_.AccountFeedBack.Add(feedBack);
-			cntx_.SaveChanges();
-
-			EmailSender.ProducerRequestMessage(cntx_, user, feedBack);
+			// отправили сообщение сотрудникам
+			EmailSender.ProducerRequestMessage(cntx_, user, company.Name, $"{model.PhoneNumber}, {model.login}");
 			SuccessMessage("Ваша заявка принята. Ожидайте, с вами свяжутся");
 			return RedirectToAction("Index", "Home");
 		}
-
 
 		[HttpGet]
 		public ActionResult AdminAuthentification(string AdminLogin, long? IdProducerUSer, string SecureHash)

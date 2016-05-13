@@ -52,7 +52,7 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Реакция на давно не запускавшийся отчет")]
 		CallForDelete = 16,
 
-		[Display(Name = "Запрос регистрации производителя")]
+		[Display(Name = "Запрос регистрации")]
 		ProducerRequest = 17
 
 	}

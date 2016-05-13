@@ -1,32 +1,24 @@
-﻿using System;
-using System.Threading;
-using System.Web;
-using System.Web.Mvc;
-using ProducerInterfaceCommon.ContextModels;
+﻿using System.Web.Mvc;
 using System.Linq;
+using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Controllers;
 
 namespace ProducerInterface.Controllers
 {
-    public class MasterBaseController : ProducerInterfaceCommon.Controllers.BaseController
-    {
+	public class MasterBaseController : BaseController
+	{
+		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+		{
+			TypeLoginUser = TypeUsers.ProducerUser;
+			base.OnActionExecuting(filterContext);
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            TypeLoginUser = ProducerInterfaceCommon.ContextModels.TypeUsers.ProducerUser;          
-            base.OnActionExecuting(filterContext);
-
-            if (CurrentUser != null)
-            {
-                if (CurrentUser.AccountCompany.ProducerId != null)
-                {
-                    ViewBag.Producernames = cntx_.producernames.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).First().ProducerName;
-                }
-                else
-                {
-                    ViewBag.Producernames = "Физическое лицо";
-                }
-            }
-                 
-        }   
-    }
+			if (CurrentUser != null)
+			{
+				if (CurrentUser.AccountCompany.ProducerId != null)
+					ViewBag.Producernames = cntx_.producernames.Single(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId).ProducerName;
+				else
+					ViewBag.Producernames = "Физическое лицо";
+			}
+		}
+	}
 }

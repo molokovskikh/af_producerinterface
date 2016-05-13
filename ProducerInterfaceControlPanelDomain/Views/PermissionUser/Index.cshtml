@@ -49,8 +49,8 @@
                             @Html.DropDownListFor(m => m.Status, Model.AllStatus, new { @class = "form-control" })
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.WithoutAppointment)
-                            @Html.CheckBoxFor(m => m.WithoutAppointment)
+                            @Html.LabelFor(m => m.AppointmentId)
+                            @Html.DropDownListFor(m => m.AppointmentId, Model.AllAppointment, new { @class = "form-control" })
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.AccountGroupId)

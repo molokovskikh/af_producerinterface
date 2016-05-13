@@ -25,7 +25,7 @@
             <li>@Html.DisplayFor(m => m.UserCount) @Html.DisplayNameFor(m => m.UserCount)</li>
             <li>@Html.DisplayFor(m => m.ActiveUserCount) @Html.DisplayNameFor(m => m.ActiveUserCount)</li>
             <li>@Html.DisplayFor(m => m.NewUserCount) @Html.DisplayNameFor(m => m.NewUserCount)</li>
-            <li>@Html.DisplayFor(m => m.RequestUserCount) @Html.DisplayNameFor(m => m.RequestUserCount)</li>
+            <li><a href="@Url.Action("Index", "PermissionUser", new { Status = (int)UserStatus.Request })">@Html.DisplayFor(m => m.RequestUserCount) @Html.DisplayNameFor(m => m.RequestUserCount)</a></li>
             <li>@Html.DisplayFor(m => m.BlockedUserCount) @Html.DisplayNameFor(m => m.BlockedUserCount)</li>
         </ul>
 

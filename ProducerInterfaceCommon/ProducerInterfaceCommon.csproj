@@ -448,7 +448,6 @@
     <Compile Include="SPAM\Mail_Send.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBack\FeedBackFilterView.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBack\FeedBackFunction.cs" />
-    <Compile Include="ViewModel\ControlPanel\GlobalAccount\RegistrationCustomProfile.cs" />
     <Compile Include="ViewModel\ControlPanel\Permission\ListGroupView.cs" />
     <Compile Include="ViewModel\ControlPanel\Promotion\SearchProducerPromotion.cs" />
     <Compile Include="ViewModel\ControlPanel\Report\SearchProducerReportsModel.cs" />

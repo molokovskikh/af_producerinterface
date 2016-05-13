@@ -47,10 +47,13 @@ namespace ProducerInterfaceCommon.ContextModels
 	public class UserEdit
 	{
 		[HiddenInput(DisplayValue = false)]
-		public long UserId { get; set; }
+		public long Id { get; set; }
 
 		[Display(Name = "ФИО")]
 		public string Name { get; set; }
+
+		[Display(Name = "Сообщение от пользователя")]
+		public string Message { get; set; }
 
 		[Display(Name = "Статус")]
 		public sbyte Status { get; set; }
@@ -58,11 +61,13 @@ namespace ProducerInterfaceCommon.ContextModels
 		public List<SelectListItem> AllStatus { get; set; }
 
 		[Display(Name = "Должность")]
+		[Required(ErrorMessage = "Укажите должность")]
 		public int? AppointmentId { get; set; }
 
 		public List<SelectListItem> AllAppointment { get; set; }
 
 		[Display(Name = "Группы")]
+		[Required(ErrorMessage = "Укажите хотя бы одну группу")]
 		public List<int> AccountGroupIds { get; set; }
 
 		public List<SelectListItem> AllAccountGroup { get; set; }
@@ -90,8 +95,10 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		public List<SelectListItem> AllStatus { get; set; }
 
-		[Display(Name = "Без должности")]
-		public bool WithoutAppointment { get; set; }
+		[Display(Name = "Должность")]
+		public int? AppointmentId { get; set; }
+
+		public List<SelectListItem> AllAppointment { get; set; }
 
 		[Display(Name = "Группа")]
 		public int? AccountGroupId { get; set; }

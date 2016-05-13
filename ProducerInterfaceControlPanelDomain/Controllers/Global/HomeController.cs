@@ -19,8 +19,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var model = new Statistics();
 
-			model.ProducerCount = cntx_.AccountCompany.Count(x => x.ProducerId.HasValue);
-			model.NotProducerCount = cntx_.AccountCompany.Count(x => !x.ProducerId.HasValue);
+			model.ProducerCount = cntx_.AccountCompany.Count(x => x.ProducerId.HasValue && x.Account.Any());
+			model.NotProducerCount = cntx_.AccountCompany.Count(x => !x.ProducerId.HasValue && x.Account.Any());
 
 			model.ActionCount = cntx_.promotions.Count();
 			model.AcceptedActionCount = cntx_.promotions.Count(x => x.Status);
