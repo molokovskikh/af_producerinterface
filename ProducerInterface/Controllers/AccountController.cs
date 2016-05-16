@@ -46,13 +46,12 @@ namespace ProducerInterface.Controllers
 
 			ViewBagAppointmentList(model.ProducerId);
 			var producerName = cntx_.producernames.Single(x => x.ProducerId == model.ProducerId).ProducerName;
-			var companyExsist = cntx_.AccountCompany.Any(x => x.ProducerId == model.ProducerId);
+			var company = cntx_.AccountCompany.SingleOrDefault(x => x.ProducerId == model.ProducerId);
 			// если от данного производителя регистрировались, возвращаем форму для регистрации пользователя с моделью RegDomainViewModel
-			if (companyExsist)
+			if (company != null)
 			{
 				var modelDomainView = new RegDomainViewModel() { Producers = model.ProducerId, ProducerName = producerName };
-				ViewBag.DomainList = cntx_.AccountCompany
-					.First(x => x.ProducerId == model.ProducerId).CompanyDomainName
+				ViewBag.DomainList = company.CompanyDomainName
 					.Select(x => new OptionElement { Text = '@' + x.Name, Value = x.Id.ToString() })
 					.ToList();
 				return View("DomainRegistration", modelDomainView);
@@ -77,8 +76,8 @@ namespace ProducerInterface.Controllers
 			}
 
 			// если уже есть такой пользователь
-			var userExsist = cntx_.Account.Any(x => x.Login == model.login);
-			if (userExsist)
+			var user = cntx_.Account.SingleOrDefault(x => x.Login == model.login);
+			if (user != null)
 			{
 				ErrorMessage("Пользователь с указанным email уже зарегистрирован, попробуйте восстановить пароль");
 				ViewBagAppointmentList(model.ProducerId);
@@ -86,19 +85,16 @@ namespace ProducerInterface.Controllers
 			}
 
 			// если такой компании нет. Компания - это не производитель, это прослойка под производителем
-			var company = cntx_.AccountCompany.FirstOrDefault(x => x.ProducerId == model.ProducerId);
+			var company = cntx_.AccountCompany.SingleOrDefault(x => x.ProducerId == model.ProducerId);
 			if (company == null)
 			{
 				company = new AccountCompany() { ProducerId = model.ProducerId, Name = model.ProducerName };
-				cntx_.Entry(company).State = EntityState.Added;
+				cntx_.AccountCompany.Add(company);
 				cntx_.SaveChanges();
 
 				string domainName = model.login.Split('@')[1].ToLower();
 				var domain = new CompanyDomainName() { Name = domainName, CompanyId = company.Id };
-				cntx_.Entry(domain).State = EntityState.Added;
-				cntx_.SaveChanges();
-
-				company.CompanyDomainName.Add(domain);
+				cntx_.CompanyDomainName.Add(domain);
 				cntx_.SaveChanges();
 			}
 

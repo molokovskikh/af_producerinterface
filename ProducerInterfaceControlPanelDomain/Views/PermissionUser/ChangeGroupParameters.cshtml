@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Конфигурирование группы @Model.Name</h2>
+<h2>Редактирование группы @Model.Name</h2>
 <hr/>
 
 @using (Html.BeginForm("GroupChangeSave", "PermissionUser", FormMethod.Post))
@@ -12,23 +12,23 @@
     @Html.HiddenFor(m => m.Id);
 
     <div class="form-group">
-        <label>Название группы</label>
+        <label>Название</label>
         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" , @placeholder="Обязательный параметр"})
     </div>
     <div>
-        <label>Описание группы</label>
+        <label>Описание</label>
         @Html.TextBoxFor(m=>m.Description, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label>Пользователи, состоящие в группе</label>
+        <label>Пользователи</label>
         @Html.EditorFor(m => m.ListUser)
     </div>
     <div class="form-group">
-        <label>Пермишены группы</label>
+        <label>Права</label>
         @Html.EditorFor(m => m.ListPermission)
     </div>
     <div class="form-group">
-        <input class="btn btn-primary" value="Сохранить изменения" type="submit" />
+        <input class="btn btn-primary" value="Сохранить" type="submit" />
     </div>
 
 }

@@ -259,68 +259,65 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <summary>
 		/// Сохранение изменений свойств группы пользователей POST
 		/// </summary>
-		/// <param name="ChangedGroup"></param>
+		/// <param name="model"></param>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult GroupChangeSave(AccountGroup ChangedGroup)
+		public ActionResult GroupChangeSave(AccountGroup model)
 		{
-			if (ChangedGroup == null || ChangedGroup.Name == null || ChangedGroup.Name == "")
+			if (string.IsNullOrEmpty(model.Name))
 			{
 				ErrorMessage("Не указано название группы");
-				ViewBag.UserList = cntx_.Account.Where(xxx => xxx.Enabled == (sbyte)UserStatus.Active && xxx.Login != null && xxx.TypeUser == (sbyte)TypeUsers.ProducerUser).Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
-				ViewBag.PermissionList = cntx_.AccountPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == (sbyte)TypeUsers.ProducerUser).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
-				return View("ChangeGroupParameters", ChangedGroup);
+				ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == (sbyte)TypeUsers.ProducerUser).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+				ViewBag.PermissionList = cntx_.AccountPermission.Where(x => x.Enabled && x.TypePermission == (sbyte)TypeUsers.ProducerUser).Select(x => new OptionElement { Text = x.ControllerAction + " " + x.Description, Value = x.Id.ToString() }).ToList();
+				return View("ChangeGroupParameters", model);
 			}
 
-			if (ChangedGroup.Id != 0)
+			if (model.Id != 0)
 			{
 				// старая группа
-				var GroupInDB = cntx_.AccountGroup.Where(xxx => xxx.Id == ChangedGroup.Id).First();
+				var group = cntx_.AccountGroup.SingleOrDefault(x => x.Id == model.Id);
 
-				GroupInDB.Name = ChangedGroup.Name;
-				GroupInDB.Description = ChangedGroup.Description;
-				GroupInDB.TypeGroup = (sbyte)TypeUsers.ProducerUser;
-				cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Modified;
+				group.Name = model.Name;
+				group.Description = model.Description;
+				group.TypeGroup = (sbyte)TypeUsers.ProducerUser;
+				cntx_.Entry(group).State = System.Data.Entity.EntityState.Modified;
 
 				// обновляем список пермишенов для данной группы              
-				List<int> ListIntPermission = GroupInDB.AccountPermission.ToList().Select(x => x.Id).ToList();
-
-				ChangePermissionListInGroup(GroupInDB.Id, ListIntPermission, ChangedGroup.ListPermission);
+				List<int> ListIntPermission = group.AccountPermission.ToList().Select(x => x.Id).ToList();
+				ChangePermissionListInGroup(group.Id, ListIntPermission, model.ListPermission);
 
 				//обновляем список пользователей для данной группы
+				var oldListAccount = group.Account.ToList().Select(x => x.Id).ToList();
 
-				var oldListAccount = GroupInDB.Account.ToList().Select(x => x.Id).ToList();
-
-				ChangeAccountListInGroup(GroupInDB.Id, oldListAccount, ChangedGroup.ListUser);
+				ChangeAccountListInGroup(group.Id, oldListAccount, model.ListUser);
 
 			}
 			else
 			{
 				// новая группа
-				var GroupInDB = new AccountGroup();
-				GroupInDB.Enabled = true;
+				var group = new AccountGroup() { Enabled = true,
+					Name = model.Name,
+					Description = model.Description,
+					TypeGroup = (sbyte)TypeUsers.ProducerUser };
 
-				cntx_.Entry(GroupInDB).State = System.Data.Entity.EntityState.Added;
-				GroupInDB.Name = ChangedGroup.Name;
-				GroupInDB.Description = ChangedGroup.Description;
-				GroupInDB.TypeGroup = (sbyte)TypeUsers.ProducerUser;
+				cntx_.AccountGroup.Add(group);
 				cntx_.SaveChanges(); // сохраняем, что бы присвоился Id
 
 				// заполняем список доступов для группы       
-				if (ChangedGroup.ListPermission != null) // если список не пуст, заполняем пермишены
+				if (model.ListPermission != null) // если список не пуст, заполняем пермишены
 				{
-					ChangePermissionListInGroup(GroupInDB.Id, new List<int>(), ChangedGroup.ListPermission);
+					ChangePermissionListInGroup(group.Id, new List<int>(), model.ListPermission);
 				}
 
 				// заполняем список пользователей в данной группе         
-				if (ChangedGroup.ListUser != null)  // если список не пуст, заполняем пользователей
+				if (model.ListUser != null)  // если список не пуст, заполняем пользователей
 				{
-					ChangeAccountListInGroup(GroupInDB.Id, new List<long>(), ChangedGroup.ListUser);
+					ChangeAccountListInGroup(group.Id, new List<long>(), model.ListUser);
 				}
 
 			}
 
-			SuccessMessage("Изменения в группе " + ChangedGroup.Name + " применены");
+			SuccessMessage("Изменения в группе " + model.Name + " применены");
 			return RedirectToAction("Group");
 		}
 
@@ -400,31 +397,35 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Добавление группы GET
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult CreateGroupPermission()
 		{
-			string Id = "";
-			return View("CreateGroup", Id);
+			string name = "";
+			return View("CreateGroup", name);
 		}
 
+		/// <summary>
+		/// Добавление группы POST
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		[HttpPost]
-		public ActionResult CreateGroupPermission(string Id)
+		public ActionResult CreateGroupPermission(string name)
 		{
-			if (Id != null)
-			{
-				ViewBag.CreateName = Id;
-
-				var GroupPermitionModel = new AccountGroup();
-				GroupPermitionModel.Name = Id;
-				ViewBag.UserList = cntx_.Account.Where(xxx => xxx.Enabled == (sbyte)UserStatus.Active && xxx.Login != null && xxx.TypeUser == (sbyte)TypeUsers.ProducerUser).Select(xxx => new OptionElement { Text = xxx.Name, Value = xxx.Id.ToString() }).ToList();
-				ViewBag.PermissionList = cntx_.AccountPermission.Where(xxx => xxx.Enabled == true && xxx.TypePermission == (sbyte)TypeUsers.ProducerUser).Select(xxx => new OptionElement { Text = xxx.ControllerAction + " " + xxx.Description, Value = xxx.Id.ToString() }).ToList();
-				GroupPermitionModel.ListPermission = new List<int>(); // cntx_.ControlPanelGroup.Where(xxx => xxx.Id == 0).First().ControlPanelPermission.Where(xxx => xxx.Enabled == true).Select(xxx => xxx.Id).ToList();
-				GroupPermitionModel.ListUser = new List<long>(); // cntx_.ControlPanelGroup.Where(xxx => xxx.Id == 0).First().ControlPanelUser.Where(xxx => xxx.Enabled == 1).Select(xxx => xxx.Id).ToList();
-
-				return View("ChangeGroupParameters", GroupPermitionModel);
+			if (string.IsNullOrEmpty(name)) {
+				ErrorMessage("Название группы Обязательный параметр");
+				return View("CreateGroup", name);
 			}
-			ErrorMessage("Название группы Обязательный параметр");
-			return View("CreateGroup", Id);
+
+			var model = new AccountGroup() { Name = name, ListPermission = new List<int>(), ListUser = new List<long>() };
+			ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == (sbyte)TypeUsers.ProducerUser).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			ViewBag.PermissionList = cntx_.AccountPermission.Where(x => x.Enabled && x.TypePermission == (sbyte)TypeUsers.ProducerUser).Select(x => new OptionElement { Text = x.ControllerAction + " " + x.Description, Value = x.Id.ToString() }).ToList();
+
+			return View("ChangeGroupParameters", model);
 		}
 
 		/// <summary>
@@ -434,28 +435,23 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult ListPermission()
 		{
-			var ListPermission = cntx_.AccountPermission.Where(xxx => xxx.TypePermission == (sbyte)TypeUsers.ProducerUser).OrderBy(x => x.ControllerAction).ToList();
-			return View(ListPermission);
+			var model = cntx_.AccountPermission.Where(x => x.TypePermission == (sbyte)TypeUsers.ProducerUser).OrderBy(x => x.ControllerAction).ToList();
+			return View(model);
 		}
 
 		[HttpGet]
 		public ActionResult EditPermission(int Id = 0)
 		{
-			var ListPermission = cntx_.AccountPermission.Where(xxx => xxx.Id == Id).First();
-
-			return View(ListPermission);
+			var model = cntx_.AccountPermission.Single(x => x.Id == Id);
+			return View(model);
 		}
 
 		[HttpPost]
-		public ActionResult EditPermission(AccountPermission CPP_)
+		public ActionResult EditPermission(AccountPermission model)
 		{
-
-			var PermissionItem = cntx_.AccountPermission.Where(xxx => xxx.Id == CPP_.Id).First();
-
-			PermissionItem.Description = CPP_.Description;
-			cntx_.Entry(PermissionItem).State = System.Data.Entity.EntityState.Modified;
+			var permission = cntx_.AccountPermission.Single(x => x.Id == model.Id);
+			permission.Description = model.Description;
 			cntx_.SaveChanges();
-
 
 			SuccessMessage("Описание сохранено");
 			return RedirectToAction("ListPermission");
@@ -463,25 +459,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult DeletePermission(int Id = 0)
 		{
-			if (Id != 0)
-			{
-				var permissionItem = cntx_.AccountPermission.Where(x => x.Id == Id).First();
-
-				var GroupList = cntx_.AccountGroup.Where(x => x.AccountPermission.Any(z => z.Id == permissionItem.Id)).ToList();
-
-				foreach (var GroupItem in GroupList)
-				{
-					GroupItem.AccountPermission.Remove(permissionItem);
-				}
-				cntx_.SaveChanges();
-
-				cntx_.AccountPermission.Remove(permissionItem);
-				cntx_.SaveChanges();
-
-				SuccessMessage("Доступ удален, если доступ данный есть то он будет снова добавлен при следующем открытии страницы. И автоматически добавится в группу 'Администраторы'");
+			if (Id == 0)
 				return RedirectToAction("ListPermission");
-			}
 
+			var permission = cntx_.AccountPermission.Single(x => x.Id == Id);
+			var groupList = cntx_.AccountGroup.Where(x => x.AccountPermission.Any(z => z.Id == permission.Id)).ToList();
+
+			foreach (var item in groupList)
+				item.AccountPermission.Remove(permission);
+			cntx_.SaveChanges();
+
+			cntx_.AccountPermission.Remove(permission);
+			cntx_.SaveChanges();
+
+			SuccessMessage("Доступ удален, если доступ данный есть то он будет снова добавлен при следующем открытии страницы. И автоматически добавится в группу 'Администраторы'");
 			return RedirectToAction("ListPermission");
 		}
 	}

@@ -1,7 +1,7 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
 @model int?
     <div class="form-group">
-    @Html.LabelFor(m => m)
+    <label>Должность <strong class="required">*</strong></label>
     @Html.DropDownListFor(m => m, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
     @Html.ValidationMessageFor(m => m)
 

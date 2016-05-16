@@ -1565,10 +1565,7 @@ select	Id,
 	OldOther
 	from logs.CatalogLogs;
 
-
-	# ниже не внесено на боевую
-
-	drop table LogForNet;
+drop table LogForNet;
 
 CREATE TABLE `LogForNet` (
 	`Id` INT(10) NOT NULL AUTO_INCREMENT,
@@ -1645,9 +1642,7 @@ END$$
 ALTER TABLE `Account`
  CHANGE COLUMN `Enabled` `Enabled` TINYINT(4) NOT NULL DEFAULT 0;
 
- #ниже не внесено на боевую
-
- update AccountAppointment
+update AccountAppointment
 set GlobalEnabled = 0
 where GlobalEnabled = 2;
 
@@ -1669,5 +1664,4 @@ insert into mailform (Id, Subject, Body, IsBodyHtml, Description)
 values (17, 'Запрос регистрации на сайте {SiteName}', 
  'Сообщение пользователя: {Message} Контакты пользователя: {Contacts}', 
  0, 'Запрос регистрации');
-
 

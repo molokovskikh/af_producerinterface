@@ -346,28 +346,29 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			var result = new List<string>();
 
-			// общая директория медиафайлов
-			var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaFiles");
-			if (!Directory.Exists(dir))
-				Directory.CreateDirectory(dir);
+			// TODO раскомментировать, пока Отказано в доступе по пути "U:\WebApps\ProducerInterface\MediaFiles".
+			//// общая директория медиафайлов
+			//var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaFiles");
+			//if (!Directory.Exists(dir))
+			//	Directory.CreateDirectory(dir);
 
-			// поддиректория для хранения файлов данного типа писем
-			var subdir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaFiles", mailType.ToString());
-			if (!Directory.Exists(subdir))
-				Directory.CreateDirectory(subdir);
+			//// поддиректория для хранения файлов данного типа писем
+			//var subdir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaFiles", mailType.ToString());
+			//if (!Directory.Exists(subdir))
+			//	Directory.CreateDirectory(subdir);
 
-			// записали файлы в директорию
-			var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName }).ToList();
-			foreach (var mediaFile in mediaFiles)
-			{
-				var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
-				if (!file.Exists)
-				{
-					var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
-					File.WriteAllBytes(file.FullName, bdFile);
-				}
-				result.Add(file.FullName);
-			}
+			//// записали файлы в директорию
+			//var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName }).ToList();
+			//foreach (var mediaFile in mediaFiles)
+			//{
+			//	var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
+			//	if (!file.Exists)
+			//	{
+			//		var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
+			//		File.WriteAllBytes(file.FullName, bdFile);
+			//	}
+			//	result.Add(file.FullName);
+			//}
 			return result;
 		}
 

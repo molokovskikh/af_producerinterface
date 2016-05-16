@@ -43,6 +43,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Registration
 		[Display(Name = "Номер телефона")]
 		[StringLength(15, MinimumLength = 15, ErrorMessage = "Корректно заполните номер телефона")]
 		[Phone(ErrorMessage = "Некорректно введен номер")]
+		[Required(ErrorMessage = "Укажите номер телефона")]
 		public string PhoneNumber { get; set; }
 
 	}

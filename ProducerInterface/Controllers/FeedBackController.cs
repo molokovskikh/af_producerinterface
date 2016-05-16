@@ -9,6 +9,11 @@ namespace ProducerInterface.Controllers
 {
 	public class FeedBackController : MasterBaseController
 	{
+		/// <summary>
+		/// Добавление сообщ обр связи POST
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public ActionResult SaveFeedBack(FeedBack model)
 		{
@@ -50,6 +55,12 @@ namespace ProducerInterface.Controllers
 			return View();
 		}
 
+		/// <summary>
+		/// Добавление сообщ обр связи, видимо, используется только для запроса доб домена, т.к. должность уже доб сразу без запроса GET
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <param name="IdProducer"></param>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Index_Type(sbyte Id, long IdProducer = 0)
 		{
@@ -71,6 +82,11 @@ namespace ProducerInterface.Controllers
 			return View("Index", model);
 		}
 
+		/// <summary>
+		/// Добавление сообщ обр связи POST. Видимо, не используется
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public ActionResult Index(FeedBack model)
 		{
@@ -111,6 +127,14 @@ namespace ProducerInterface.Controllers
 			return RedirectToAction("Index", "Profile");
 		}
 
+		/// <summary>
+		/// Запрос о добавлении домена в обр связь, видимо, только POST
+		/// </summary>
+		/// <param name="FIO"></param>
+		/// <param name="Email"></param>
+		/// <param name="PhoneNum"></param>
+		/// <param name="CompanyNames"></param>
+		/// <returns></returns>
 		public ActionResult FeedBakcAddNewDomain(string FIO, string Email, string PhoneNum, string CompanyNames)
 		{
 
@@ -130,6 +154,10 @@ namespace ProducerInterface.Controllers
 			return RedirectToAction("index", "home");
 		}
 
+		/// <summary>
+		/// Вызывается при закрытии формы обратной связи для её очистки ??
+		/// </summary>
+		/// <returns></returns>
 		public ActionResult GetView()
 		{
 			var model = new FeedBack();

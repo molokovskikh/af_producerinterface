@@ -13,18 +13,15 @@ namespace ProducerInterfaceCommon.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
-			//protected string controllerName;
-			//protected string actionName;
-			//protected string controllerAcctributes;
-			controllerName = this.GetType().Name.Replace("Controller", "").ToLower().ToString();
-			actionName = this.Request.RequestContext.RouteData.GetRequiredString("action").ToLower().ToString();
-			controllerAcctributes = this.Request.HttpMethod.ToString().ToLower();
+			controllerName = this.GetType().Name.Replace("Controller", "").ToLower();
+			actionName = this.Request.RequestContext.RouteData.GetRequiredString("action").ToLower();
+			controllerAcctributes = this.Request.HttpMethod.ToLower();
 		}
 
 		// глобальные переменные и функции
 		// тип текущего пользователя SByte - хранится в ProducerUser таблице, параметр TypeUser
 
-		protected ContextModels.TypeUsers TypeLoginUser { get { return (ContextModels.TypeUsers)SbyteTypeUser; } set { SbyteTypeUser = (SByte)value; } }
+		protected TypeUsers TypeLoginUser { get { return (TypeUsers)SbyteTypeUser; } set { SbyteTypeUser = (SByte)value; } }
 		protected SByte SbyteTypeUser { get; set; }
 
 		// сюда попадёт авторизованный пользователь

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using log4net;
+using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterface
 {
@@ -26,6 +27,9 @@ namespace ProducerInterface
 			{
 				Exception ex = Server.GetLastError();
 				ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
+
+				// временно. TODO наладить log4net
+				EmailSender.SendEmail("service@analit.net", "Ошибка в Интерфейсе производителя", ex.Message, null, false);
 
 				_logger.Error(ex.Message, ex);
 

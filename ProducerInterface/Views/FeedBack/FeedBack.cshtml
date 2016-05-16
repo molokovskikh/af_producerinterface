@@ -4,8 +4,8 @@
 @model FeedBack
 
 @{
-    var AccountUser = ViewBag.CurrentUser as ProducerInterfaceCommon.ContextModels.Account;
-    var FeedBackList = System.Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>(); 
+    var user = ViewBag.CurrentUser as Account;
+    var feedBackList = Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>(); 
 }
 
 @using (Ajax.BeginForm("SaveFeedBack", "FeedBack", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "feedback_modal_content", OnSuccess = "InitPhone()" }))
@@ -13,34 +13,28 @@
 
     <div class="modal-header">
         @Ajax.ActionLink("Закрыть", "GetView", "FeedBack", new AjaxOptions
-   {
-       UpdateTargetId = "feedback_modal_content",
-       HttpMethod = "Get"
-   }, null, new { @class = "close", @onclick = "ModalClose()" })
-
-        @*<button type="button" class="close" data-dismiss="modal" onclick="AjaxRenew()">Закрыть</button>*@
+       {
+           UpdateTargetId = "feedback_modal_content",
+           HttpMethod = "Get"
+       }, null, new { @class = "close", @onclick = "ModalClose()" })
         <h4 class="modal-title">Ваши пожелания, сообщение об ошибке</h4>
-
     </div>
 
     <div class="modal-body" id="ModalBodyId">
-
         <input value="@ViewBag.UrlString" id="Url" name="Url" hidden="hidden" />
-
-        @if (AccountUser != null)
+        @if (user != null)
         {
             <div class="form-group">
                 <label>Сообщение</label>
                 @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
             </div>
-
             <div class="form-group">
                 <label>Выберите удобный способ для связи с вами</label>
                 <select name="Contact" id="Contact" class="form-control">
-                    <option value="@AccountUser.Login">@AccountUser.Login</option>
-                    @if (AccountUser.Phone != null)
+                    <option value="@user.Login">@user.Login</option>
+                    @if (user.Phone != null)
                     {
-                        <option value="@AccountUser.Phone">@AccountUser.Phone</option>
+                        <option value="@user.Phone">@user.Phone</option>
                     }
                 </select>
             </div>
@@ -73,22 +67,19 @@
             <label>Тип обращения</label>
             <select id="FeedType" name="FeedType" class="form-control">
 
-                @foreach (var FeedBackTypeItem in FeedBackList)
+                @foreach (var item in feedBackList)
                 {
-                    if (FeedBackTypeItem == FeedBackType.AddNewAppointment)
-                    { }
-                    else
+                    if (item != FeedBackType.AddNewAppointment)
                     {
-                        <option value="@((int)FeedBackTypeItem)">@AttributeHelper.DisplayName((ProducerInterfaceCommon.ContextModels.FeedBackType)FeedBackTypeItem)</option>
+                        <option value="@((int)item)">@item.DisplayName()</option>
                     }
                 }             
             </select>
         </div>
-
     </div>
 
-            <div class="modal-footer" id="footer_model_message">
-                <input type="submit" class="btn btn-primary" value="Отправить запрос" />
-            </div>
+    <div class="modal-footer" id="footer_model_message">
+        <input type="submit" class="btn btn-primary" value="Отправить запрос" />
+    </div>
 
 }
