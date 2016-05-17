@@ -346,14 +346,21 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			var result = new List<string>();
 
-			// TODO раскомментировать, пока Отказано в доступе по пути "U:\WebApps\ProducerInterface\MediaFiles".
+			// U:\WebApps\ProducerInterface\bin\ -> U:\WebApps\ProducerInterface\var\
+			//var baseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\var\"));
+			//if (!Directory.Exists(baseDir))
+			//	Directory.CreateDirectory(baseDir);
+
+			// TODO временно, пока нет доступа к папкам
+			//var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
 			//// общая директория медиафайлов
-			//var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaFiles");
+			//var dir = Path.Combine(baseDir, "MediaFiles");
 			//if (!Directory.Exists(dir))
 			//	Directory.CreateDirectory(dir);
 
 			//// поддиректория для хранения файлов данного типа писем
-			//var subdir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaFiles", mailType.ToString());
+			//var subdir = Path.Combine(baseDir, "MediaFiles", mailType.ToString());
 			//if (!Directory.Exists(subdir))
 			//	Directory.CreateDirectory(subdir);
 

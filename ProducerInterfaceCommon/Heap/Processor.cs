@@ -114,11 +114,15 @@ namespace ProducerInterfaceCommon.Heap
 
 		public FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds, Report param)
 		{
-			var dir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Reports");
+			// U:\WebApps\ProducerInterface\bin\ -> U:\WebApps\ProducerInterface\var\
+			//var baseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\var\"));
+			var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+			var dir = Path.Combine(baseDir, "Reports");
 			if (!Directory.Exists(dir))
 				Directory.CreateDirectory(dir);
 
-			var subdir = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Reports", jobGroup);
+			var subdir = Path.Combine(baseDir, "Reports", jobGroup);
 			if (!Directory.Exists(subdir))
 				Directory.CreateDirectory(subdir);
 
@@ -129,7 +133,7 @@ namespace ProducerInterfaceCommon.Heap
 			var data = ds.Tables["Data"];
 			var headers = new List<string>();
 
-			foreach (System.Data.DataRow row in ds.Tables["Headers"].Rows)
+			foreach (DataRow row in ds.Tables["Headers"].Rows)
 				headers.Add(row[0].ToString());
 
 			var title = ds.Tables["Titles"].Rows[0][0].ToString();
