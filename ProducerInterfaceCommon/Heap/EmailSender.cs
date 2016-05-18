@@ -331,51 +331,38 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
 		}
 
-		//private static string GetEnumDisplayName(MailType type)
-		//{
-		//	string displayName = null;
-		//	foreach (var item in EnumHelper.GetSelectList(typeof(MailType), type))
-		//	{
-		//		if (item.Selected)
-		//			displayName = item.Text;
-		//	}
-		//	return displayName;
-		//}
-
 		private static List<string> GetAttachments(producerinterface_Entities cntx, MailType mailType)
 		{
 			var result = new List<string>();
 
 			// U:\WebApps\ProducerInterface\bin\ -> U:\WebApps\ProducerInterface\var\
-			//var baseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\var\"));
-			//if (!Directory.Exists(baseDir))
-			//	Directory.CreateDirectory(baseDir);
+			var pathToBaseDir = ConfigurationManager.AppSettings["PathToBaseDir"];
+			var baseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToBaseDir));
+			if (!Directory.Exists(baseDir))
+				throw new NotSupportedException($"Не найдена директория {baseDir} для сохранения файлов");
 
-			// TODO временно, пока нет доступа к папкам
-			//var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+			// общая директория медиафайлов
+			var dir = Path.Combine(baseDir, "MediaFiles");
+			if (!Directory.Exists(dir))
+				Directory.CreateDirectory(dir);
 
-			//// общая директория медиафайлов
-			//var dir = Path.Combine(baseDir, "MediaFiles");
-			//if (!Directory.Exists(dir))
-			//	Directory.CreateDirectory(dir);
+			// поддиректория для хранения файлов данного типа писем
+			var subdir = Path.Combine(baseDir, "MediaFiles", mailType.ToString());
+			if (!Directory.Exists(subdir))
+				Directory.CreateDirectory(subdir);
 
-			//// поддиректория для хранения файлов данного типа писем
-			//var subdir = Path.Combine(baseDir, "MediaFiles", mailType.ToString());
-			//if (!Directory.Exists(subdir))
-			//	Directory.CreateDirectory(subdir);
-
-			//// записали файлы в директорию
-			//var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName }).ToList();
-			//foreach (var mediaFile in mediaFiles)
-			//{
-			//	var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
-			//	if (!file.Exists)
-			//	{
-			//		var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
-			//		File.WriteAllBytes(file.FullName, bdFile);
-			//	}
-			//	result.Add(file.FullName);
-			//}
+			// записали файлы в директорию
+			var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName }).ToList();
+			foreach (var mediaFile in mediaFiles)
+			{
+				var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
+				if (!file.Exists)
+				{
+					var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
+					File.WriteAllBytes(file.FullName, bdFile);
+				}
+				result.Add(file.FullName);
+			}
 			return result;
 		}
 

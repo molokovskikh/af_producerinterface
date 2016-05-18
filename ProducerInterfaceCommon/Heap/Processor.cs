@@ -115,8 +115,10 @@ namespace ProducerInterfaceCommon.Heap
 		public FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds, Report param)
 		{
 			// U:\WebApps\ProducerInterface\bin\ -> U:\WebApps\ProducerInterface\var\
-			//var baseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\var\"));
-			var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+			var pathToBaseDir = ConfigurationManager.AppSettings["PathToBaseDir"];
+			var baseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToBaseDir));
+			if (!Directory.Exists(baseDir))
+				throw new NotSupportedException($"Не найдена директория {baseDir} для сохранения файлов");
 
 			var dir = Path.Combine(baseDir, "Reports");
 			if (!Directory.Exists(dir))

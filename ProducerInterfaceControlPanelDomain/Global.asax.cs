@@ -4,10 +4,11 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using log4net;
+using log4net.Config;
 
 namespace ProducerInterfaceControlPanelDomain
 {
-	public class MvcApplication : System.Web.HttpApplication
+	public class MvcApplication : HttpApplication
 	{
 		protected void Application_Start()
 		{
@@ -16,20 +17,16 @@ namespace ProducerInterfaceControlPanelDomain
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
+			XmlConfigurator.Configure();
 		}
 
 		protected void Application_Error(object sender, EventArgs e)
 		{
 			if (Server != null)
 			{
-				Exception ex = Server.GetLastError();
-
-				log4net.Config.XmlConfigurator.Configure();
-
-				ILog _logger = LogManager.GetLogger("MySqlAdoNetAppender");
-
-				_logger.Error(ex.Message.ToString(), ex);
-
+				var ex = Server.GetLastError();
+				ILog logger = LogManager.GetLogger(GetType());
+				logger.Error(ex.Message, ex);
 				if (Response.StatusCode != 404)
 				{
 

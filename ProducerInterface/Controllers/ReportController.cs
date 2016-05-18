@@ -9,6 +9,7 @@ using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
 using System.Data;
 using System.IO;
+using System.Configuration;
 
 namespace ProducerInterface.Controllers
 {
@@ -25,16 +26,18 @@ namespace ProducerInterface.Controllers
 			TypeLoginUser = TypeUsers.ProducerUser;
 			base.OnActionExecuting(filterContext);
 
-			if (CurrentUser != null)
-			{
-				userId = CurrentUser.Id;
-				producerId = (long)CurrentUser.AccountCompany.ProducerId;
-				h = new NamesHelper(cntx_, userId);
+			if (CurrentUser == null)
+				throw new NotSupportedException("Пользователь не найден");
 
-				if (CurrentUser.AccountCompany.ProducerId != null)
-					ViewBag.Producernames = cntx_.producernames.Where(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId).First().ProducerName;
-				else
-					ViewBag.Producernames = "Физическое лицо";
+			userId = CurrentUser.Id;
+			h = new NamesHelper(cntx_, userId);
+			if (CurrentUser.AccountCompany.ProducerId.HasValue) {
+				producerId = CurrentUser.AccountCompany.ProducerId.Value;
+				ViewBag.Producernames = cntx_.producernames.Single(x => x.ProducerId == producerId).ProducerName;
+			}
+			else {
+				ErrorMessage("Доступ в раздел Отчеты закрыт, так как вы не представляете кого-либо из производителей");
+				filterContext.Result = RedirectToAction("Index", "Home");
 			}
 		}
 
@@ -92,7 +95,7 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} add failed:" + e.Message, e);
-				ErrorMessage(e.Message);
+				ErrorMessage("Непредвиденная ошибка при добавлении задания");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -149,7 +152,7 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} paused failed:" + e.Message, e);
-				ErrorMessage(e.Message);
+				ErrorMessage("Непредвиденная ошибка при удалении задания");
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = false;
@@ -190,7 +193,7 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} resume failed:" + e.Message, e);
-				ErrorMessage(e.Message);
+				ErrorMessage("Непредвиденная ошибка при восстановлении задания");
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = true;
@@ -264,7 +267,7 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} change failed:" + e.Message, e);
-				ErrorMessage(e.Message);
+				ErrorMessage("Непредвиденная ошибка при изменении задания");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -304,7 +307,7 @@ namespace ProducerInterface.Controllers
 			var schedulerName = GetSchedulerName();
 			// вытащили всех создателей, создававших отчеты этого производителя
 			var creatorIds = cntx_.jobextend
-				.Where(x => x.ProducerId == producerId && x.SchedName == schedulerName && x.Enable == true)
+				.Where(x => x.ProducerId == producerId && x.SchedName == schedulerName && x.Enable)
 				.Select(x => x.CreatorId)
 				.Distinct().ToList();
 			ViewData["creators"] = cntx_.Account.Where(x => creatorIds.Contains(x.Id)).
@@ -312,7 +315,7 @@ namespace ProducerInterface.Controllers
 
 			var query = cntx_.jobextendwithproducer.Where(x => x.ProducerId == producerId
 																												&& x.SchedName == schedulerName
-																												&& x.Enable == true);
+																												&& x.Enable);
 			if (cid.HasValue)
 				query = query.Where(x => x.CreatorId == cid);
 
@@ -392,7 +395,7 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
-				ErrorMessage(e.Message);
+				ErrorMessage("Непредвиденная ошибка при запуске задания");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -505,7 +508,7 @@ namespace ProducerInterface.Controllers
 			catch (Exception e)
 			{
 				logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
-				ErrorMessage(e.Message);
+				ErrorMessage("Непредвиденная ошибка при установке расписания");
 				return RedirectToAction("JobList", "Report");
 			}
 
