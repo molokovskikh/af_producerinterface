@@ -36,7 +36,7 @@ namespace ProducerInterface.Test
 				if (GlobalDriver != null)
 					return;
 
-				var version = Directory.GetDirectories("../../../packages/", "*ChromeDriver*").FirstOrDefault();
+				var version = Directory.GetDirectories("../../../../packages/", "*ChromeDriver*").FirstOrDefault();
 				var chromeOptions = new ChromeOptionsWithPrefs();
 				chromeOptions.prefs = new Dictionary<string, object> {
 					{ "download.prompt_for_download", "false" },
@@ -67,7 +67,7 @@ namespace ProducerInterface.Test
 						}
 						catch (Exception e)
 						{
-							Console.WriteLine(e);
+							//Console.WriteLine(e);
 							return false;
 						}
 					});
@@ -75,7 +75,7 @@ namespace ProducerInterface.Test
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine(e);
+					//Console.WriteLine(e);
 				}
 				throw;
 			}
@@ -181,7 +181,7 @@ namespace ProducerInterface.Test
 			{
 				if (browser != null)
 				{
-					Console.WriteLine(browser.Url);
+					//Console.WriteLine(browser.Url);
 					if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEBUG_SELENIUM")))
 					{
 						var data = browser.Url + Environment.NewLine + Html;
@@ -432,7 +432,7 @@ namespace ProducerInterface.Test
 				}
 				catch (Exception exception)
 				{
-					Console.WriteLine(exception);
+					//Console.WriteLine(exception);
 				}
 				throw;
 			}
