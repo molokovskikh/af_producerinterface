@@ -36,7 +36,6 @@ namespace ProducerInterface.Controllers
 
 			var catalogIds = ccntx.assortment.Where(x => x.ProducerId == producerId).Select(x => x.CatalogId).ToList();
 			var catalogNamesIds = ccntx.Catalog.Where(x => catalogIds.Contains(x.Id)).Select(x => x.NameId).Distinct().ToList();
-			//var model = cntx_.catalognameswithuptime.Where(x => catalogNamesIds.Contains(x.Id)).OrderBy(x => x.Name).ToList();
 			var model = ccntx.catalognames.Where(x => catalogNamesIds.Contains(x.Id)).OrderBy(x => x.Name).ToList();
 
 			return View(model);
@@ -50,7 +49,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult History(long id)
 		{
 			ViewData["Name"] = ccntx.catalognames.Single(x => x.Id == id).Name;
-			var model = cntx_.cataloglogui.Where(x => x.NameId == id && x.Apply == true).OrderByDescending(x => x.LogTime).ToList();
+			var model = cntx_.cataloglogui.Where(x => x.NameId == id && x.Apply).OrderByDescending(x => x.LogTime).ToList();
 			// если есть история в новом логе
 			if (model.Any()) {
 				var modelUi = MapListToUi(model);

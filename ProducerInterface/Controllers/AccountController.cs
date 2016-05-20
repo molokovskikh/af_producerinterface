@@ -13,6 +13,10 @@ namespace ProducerInterface.Controllers
 	public class AccountController : AccountAuthController
 	{
 
+		/// <summary>
+		/// Форма ввода логина-пароля, сейчас только для тестов TODO убрать
+		/// </summary>
+		/// <returns></returns>
 		public ActionResult Auth()
 		{
 			var model = new LoginValidation();
@@ -119,7 +123,7 @@ namespace ProducerInterface.Controllers
 			// отправили письмо о регистрации
 			EmailSender.SendRegistrationMessage(cntx_, account.Id, password, account.IP);
 			SuccessMessage("Пароль отправлен на ваш email " + account.Login);
-			return RedirectToAction("Index", "Home");
+			return Redirect("~");
 		}
 
 		/// <summary>
@@ -180,28 +184,25 @@ namespace ProducerInterface.Controllers
 			// отправили письмо о регистрации
 			EmailSender.SendRegistrationMessage(cntx_, account.Id, password, HttpContext.Request.UserHostAddress);
 			SuccessMessage("Письмо с паролем отправлено на ваш email");
-			return RedirectToAction("Index", "Home");
+			return Redirect("~");
 		}
 
+		/// <summary>
+		/// Добавление новой должности
+		/// </summary>
+		/// <param name="name">имя должности</param>
+		/// <returns></returns>
 		[HttpPost]
-		public ActionResult DolznostAddNew(string NewNameAppointment)
+		public ActionResult AddAppointment(string name)
 		{
-			var NewAppExsist = cntx_.AccountAppointment.Any(xxx => xxx.Name == NewNameAppointment);
-			var NewAppointment_ = new AccountAppointment();
-
-			if (NewAppExsist)
+			var appointment = cntx_.AccountAppointment.FirstOrDefault(x => x.Name == name);
+			if (appointment == null)
 			{
-				NewAppointment_ = cntx_.AccountAppointment.Where(xxx => xxx.Name == NewNameAppointment).First();
-			}
-			else
-			{
-				NewAppointment_.Name = NewNameAppointment;
-				NewAppointment_.GlobalEnabled = false;
-				cntx_.Entry(NewAppointment_).State = EntityState.Added;
+				appointment = new AccountAppointment() { Name = name, GlobalEnabled = false };
+				cntx_.AccountAppointment.Add(appointment);
 				cntx_.SaveChanges();
 			}
-
-			return Content(NewAppointment_.Id.ToString() + ";" + NewAppointment_.Name);
+			return Content($"{appointment.Id};{appointment.Name}");
 		}
 
 		/// <summary>
@@ -248,14 +249,14 @@ namespace ProducerInterface.Controllers
 			// отправили сообщение сотрудникам
 			EmailSender.ProducerRequestMessage(cntx_, user, company.Name, $"{model.PhoneNumber}, {model.login}");
 			SuccessMessage("Ваша заявка принята. Ожидайте, с вами свяжутся");
-			return RedirectToAction("Index", "Home");
+			return Redirect("~");
 		}
 
 		[HttpGet]
 		public ActionResult AdminAuthentification(string AdminLogin, long? IdProducerUSer, string SecureHash)
 		{
 			if (AdminLogin == null || IdProducerUSer == null)
-				return RedirectToAction("index", "home");
+				return Redirect("~");
 
 			// проверка наличия Админа В БД.
 
@@ -272,7 +273,7 @@ namespace ProducerInterface.Controllers
 				i = (18 * 19801112).ToString();
 
 			if (!SecureHash.Contains(i))
-				return RedirectToAction("index", "home");
+				return Redirect("~");
 
 			if (adminAccount.SecureTime.Value > DateTime.Now)
 			{

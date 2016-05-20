@@ -180,9 +180,6 @@
     <Compile Include="ContextModels\cataloglogview.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\catalognameswithuptime.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\CompanyDomainName.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -455,7 +452,6 @@
     <Compile Include="ViewModel\Interface\Profile\ChangePassword.cs" />
     <Compile Include="ViewModel\Interface\Profile\ProfileValidation.cs" />
     <Compile Include="ViewModel\Interface\Promotion\PromotionEdit.cs" />
-    <Compile Include="ViewModel\Interface\Registration\AuthViewModel.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegDomainViewModel.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegNotProducerViewModel.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegProducerViewModel.cs" />

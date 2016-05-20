@@ -436,8 +436,6 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Registration.cshtml" />
     <Content Include="Views\Account\CustomRegistration.cshtml" />
-    <Content Include="Views\Account\EditorTemplates\Editor_Password.cshtml" />
-    <Content Include="Views\Account\EditorTemplates\EditorMail.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorString.cshtml" />
     <Content Include="Views\Account\EditorTemplates\EditorStringPosition.cshtml" />

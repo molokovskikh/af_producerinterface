@@ -305,13 +305,11 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	public class LoginValidation
 	{
-		[UIHint("EditorMail")]
 		[Display(Name = "Email")]
-		[Required(ErrorMessage = "введите email")]
+		[Required(ErrorMessage = "Введите email")]
 		[EmailAddress(ErrorMessage = "Введите корректный email")]
 		public string login { get; set; }
 
-		[UIHint("Editor_Password")]
 		[Display(Name = "Пароль")]
 		[Required(ErrorMessage = "Введите пароль")]
 		public string password { get; set; }
@@ -319,7 +317,6 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	public class PasswordUpdate
 	{
-		[UIHint("EditorMail")]
 		[Display(Name = "Email")]
 		[Required(ErrorMessage = "Введите email")]
 		[DataType(DataType.EmailAddress, ErrorMessage = "Введите корректый email")]

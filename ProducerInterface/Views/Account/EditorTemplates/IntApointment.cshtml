@@ -1,5 +1,4 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model int?
+﻿@model int?
     <div class="form-group">
     <label>Должность <strong class="required">*</strong></label>
     @Html.DropDownListFor(m => m, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
@@ -12,7 +11,8 @@
             
             <div class="collapse" id="postname">
                 <div class="input-group">
-                    <input type="text" id="newAppountName" placeholder="Свой вариант должности" class="form-control" />
+                    <input type="hidden" id="addAppointmentUrl" value="@Url.Action("AddAppointment")"/>
+                    <input type="text" id="appointmentName" placeholder="Свой вариант должности" class="form-control" />
                     <div class="input-group-btn" style="min-width: 175px;">
                         <a class="btn btn-primary" onclick="AddAppointment()">Добавить в список</a>
                     </div>

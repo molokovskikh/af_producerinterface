@@ -450,19 +450,6 @@
           <Property Name="IsPharmacie" Type="bool" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "def.producerinterface.catalognameswithuptime" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <EntityType Name="catalognameswithuptime">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Id" Type="uint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="DescriptionId" Type="uint" />
-          <Property Name="MnnId" Type="uint" />
-          <Property Name="UpdateTime" Type="timestamp" Precision="0" />
-        </EntityType>
-        <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.descriptionlogview" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="descriptionlogview">
           <Key>
@@ -1050,15 +1037,6 @@ FROM `cataloglogview` AS `cataloglogview`</DefiningQuery>
 `catalognames`.`IsPharmacie`
 FROM `catalognames` AS `catalognames`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="catalognameswithuptime" EntityType="Self.catalognameswithuptime" store:Type="Views" store:Schema="producerinterface">
-            <DefiningQuery>SELECT
-`catalognameswithuptime`.`Id`, 
-`catalognameswithuptime`.`Name`, 
-`catalognameswithuptime`.`DescriptionId`, 
-`catalognameswithuptime`.`MnnId`, 
-`catalognameswithuptime`.`UpdateTime`
-FROM `catalognameswithuptime` AS `catalognameswithuptime`</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="descriptionlogview" EntityType="Self.descriptionlogview" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `descriptionlogview`.`Id`, 
@@ -1481,7 +1459,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="usernames" EntityType="producerinterface_Model.usernames" />
           <EntitySet Name="DrugDescriptionRemark" EntityType="producerinterface_Model.DrugDescriptionRemark" />
           <EntitySet Name="NotificationToProducers" EntityType="producerinterface_Model.NotificationToProducers" />
-					<EntitySet Name="catalognameswithuptime" EntityType="producerinterface_Model.catalognameswithuptime" />
           <EntitySet Name="ReportRunLog" EntityType="producerinterface_Model.ReportRunLog" />
           <EntitySet Name="reportrunlogwithuser" EntityType="producerinterface_Model.reportrunlogwithuser" />
           <EntitySet Name="mailformwithfooter" EntityType="producerinterface_Model.mailformwithfooter" />
@@ -1659,17 +1636,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="DatePublication" Type="DateTime" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK2_NewsChangeToNotification" FromRole="NotificationToProducers" ToRole="NewsChange" />
-        </EntityType>
-        <EntityType Name="catalognameswithuptime">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="DescriptionId" Type="Int64" />
-          <Property Name="MnnId" Type="Int64" />
-          <Property Name="UpdateTime" Type="DateTime" />
         </EntityType>
         <EntityType Name="ReportRunLog">
           <Key>
@@ -2489,17 +2455,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="DatePublication" ColumnName="DatePublication" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="catalognameswithuptime">
-            <EntityTypeMapping TypeName="producerinterface_Model.catalognameswithuptime">
-              <MappingFragment StoreEntitySet="catalognameswithuptime">
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="MnnId" ColumnName="MnnId" />
-                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

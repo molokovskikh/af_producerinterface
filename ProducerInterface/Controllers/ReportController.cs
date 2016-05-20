@@ -37,7 +37,7 @@ namespace ProducerInterface.Controllers
 			}
 			else {
 				ErrorMessage("Доступ в раздел Отчеты закрыт, так как вы не представляете кого-либо из производителей");
-				filterContext.Result = RedirectToAction("Index", "Home");
+				filterContext.Result = Redirect("~");
 			}
 		}
 

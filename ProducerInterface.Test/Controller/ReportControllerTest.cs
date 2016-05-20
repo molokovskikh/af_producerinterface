@@ -18,7 +18,7 @@ namespace ProducerInterface.Test.Controller
 			Open("Account/Auth");
 			WaitForVisibleCss(".login2", 10);
 			Css(".login2").SendKeys("g.maksimenko@analit.net");
-			Css(".password2").SendKeys("d45a43");
+			Css(".password2").SendKeys("123456");
 			Css(".enter2").Click();
 		}
 

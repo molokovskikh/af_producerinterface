@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
 			{
 				ErrorMessage("Некорректно введены данные. Вашим логином является email, указанный при регистрации. Пароль при регистрации был выслан на ваш email");
 				ViewBag.CurrentUser = null;
-				return RedirectToAction("Auth", "Account");
+				return Redirect("~");
 			}
 
 			// проверка наличия в БД
@@ -33,7 +33,7 @@ namespace ProducerInterface.Controllers
 			{
 				ErrorMessage("Пользователь не найден. Вашим логином является email, указанный при регистрации");
 				ViewBag.CurrentUser = null;
-				return RedirectToAction("Auth", "Account");
+				return Redirect("~");
 			}
 
 			// проверка пароля
@@ -42,7 +42,7 @@ namespace ProducerInterface.Controllers
 			{
 				ErrorMessage("Неправильно введен пароль");
 				ViewBag.CurrentUser = null;
-				return RedirectToAction("Auth", "Account");
+				return Redirect("~");
 			}
 
 			// если логинится не впервый раз и не заблокирован
@@ -101,7 +101,7 @@ namespace ProducerInterface.Controllers
 			{
 				CurrentUser = null;
 				ErrorMessage("Ваша учетная запись заблокирована, обращайтесь на " + GetWebConfigParameters("MailFrom"));
-				return RedirectToAction("Index", "Home");
+				return Redirect("~");
 			}
 
 			// заявка на регистрацию
@@ -109,9 +109,9 @@ namespace ProducerInterface.Controllers
 			{
 				CurrentUser = null;
 				SuccessMessage("Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на " + GetWebConfigParameters("MailFrom"));
-				return RedirectToAction("Index", "Home");
+				return Redirect("~");
 			}
-			return RedirectToAction("Index", "Home");
+			return Redirect("~");
 		}
 
 		public ActionResult Autentificate(string userData = "")
@@ -176,30 +176,39 @@ namespace ProducerInterface.Controllers
 			else if (user.EnabledEnum == UserStatus.Request)
 				SuccessMessage("Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на " + GetWebConfigParameters("MailFrom"));
 
-			return RedirectToAction("Index", "Home");
+			return Redirect("~");
 		}
 
+		/// <summary>
+		/// Сменить пароль POST
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
 		[HttpPost]
-		public ActionResult ChangePassword(ChangePassword NewPassword)
+		public ActionResult ChangePassword(ChangePassword model)
 		{
 			if (!ModelState.IsValid)
-				return View(NewPassword);
+				return View(model);
 
-			var user = cntx_.Account.First(x => x.Login == CurrentUser.Login && x.TypeUser == 0);
-			user.Password = Md5HashHelper.GetHash(NewPassword.Pass);
+			var user = cntx_.Account.Single(x => x.Id == CurrentUser.Id);
+			user.Password = Md5HashHelper.GetHash(model.Pass);
 			user.PasswordUpdated = DateTime.Now;
-			cntx_.Entry(user).State = EntityState.Modified;
 			cntx_.SaveChanges();
 
-			EmailSender.SendPasswordChangeMessage(cntx: cntx_, userId: user.Id, password: NewPassword.Pass, ip: Request.UserHostAddress);
+			EmailSender.SendPasswordChangeMessage(cntx_, user.Id, model.Pass, Request.UserHostAddress);
 			SuccessMessage("Новый пароль сохранен и отправлен на ваш email: " + user.Login);
 			return RedirectToAction("Index", "Profile");
 		}
 
+		/// <summary>
+		/// Сменить пароль GET
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult ChangePassword()
 		{
-			return View(new ProducerInterfaceCommon.ViewModel.Interface.Profile.ChangePassword());
+			var model = new ChangePassword();
+			return View(model);
 		}
 
 		/// <summary>
@@ -211,7 +220,7 @@ namespace ProducerInterface.Controllers
 			// зануляем куки регистрации формой
 			LogOutUser();
 			// возвращаем пользователя на главную страницу
-			return RedirectToAction("Index", "Home");
+			return Redirect("~");
 		}
 	}
 }

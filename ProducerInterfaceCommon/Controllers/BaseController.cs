@@ -99,7 +99,7 @@ namespace ProducerInterfaceCommon.Controllers
 
 			// если пользователя нет - на главную
 			else if (CurrentUser == null)
-				filterContext.Result = RedirectToAction("Index", "Home");
+				filterContext.Result = Redirect("~");
 
 			// если есть пользователь и права доступа
 			else if (PermissionUserExsist())
@@ -112,7 +112,7 @@ namespace ProducerInterfaceCommon.Controllers
 				if (refferer != null && !String.IsNullOrEmpty(refferer.OriginalString))
 					filterContext.Result = Redirect(refferer.OriginalString);
 				else
-					filterContext.Result = RedirectToAction("Index", "Home");
+					filterContext.Result = Redirect("~");
 			}
 		}
 
@@ -201,16 +201,16 @@ namespace ProducerInterfaceCommon.Controllers
 		///// <param name="typeUser">Тип пользователя</param>
 		///// <param name="userData">Некие данные пользователя</param>
 		//protected void AutorizeCurrentUser(Account user, TypeUsers typeUser, string userData = null)
- 	//	{
+		//	{
 		//	if (typeUser == TypeUsers.ProducerUser) {
 		//		SetUserCookiesName(user.Login, true, userData);
 		//		SetCookie("AccountName", user.Login, false);
- 	//			RedirectToAction("Index", "Profile");
- 	//		}
+		//			RedirectToAction("Index", "Profile");
+		//		}
 		//	else {
 		//		SetUserCookiesName(user.Login);
-		//		RedirectToAction("Index", "Home");
+		//		Redirect("~");
 		//	}
- 	//	}
+		//	}
 	}
 }

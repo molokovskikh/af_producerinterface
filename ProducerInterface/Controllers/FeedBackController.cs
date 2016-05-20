@@ -151,7 +151,7 @@ namespace ProducerInterface.Controllers
 			cntx_.SaveChanges();
 
 			SuccessMessage("Выша заявка принята к исполнению");
-			return RedirectToAction("index", "home");
+			return Redirect("~");
 		}
 
 		/// <summary>

@@ -14,7 +14,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Profile
         [MinLength(6, ErrorMessage ="Минимальная длина пароля 6 символов")]
         public string Pass { get; set; }
        
-        [Display(Name = "Подтверждение праоля")]        
+        [Display(Name = "Подтверждение пароля")]        
         [Compare("Pass", ErrorMessage = "Пароль и подтверждение пароля не совпадают")]
         public string PassConfirm { get; set; }
     }
