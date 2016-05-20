@@ -36,7 +36,7 @@ namespace ProducerInterface.Test
 				if (GlobalDriver != null)
 					return;
 
-				var version = Directory.GetDirectories("../../../../packages/", "*ChromeDriver*").FirstOrDefault();
+				var version = Directory.GetDirectories("../../../packages/", "*ChromeDriver*").FirstOrDefault();
 				var chromeOptions = new ChromeOptionsWithPrefs();
 				chromeOptions.prefs = new Dictionary<string, object> {
 					{ "download.prompt_for_download", "false" },
