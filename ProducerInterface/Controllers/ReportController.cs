@@ -661,11 +661,11 @@ namespace ProducerInterface.Controllers
 			return cntx_.jobextend.SingleOrDefault(x => x.JobName == jobName);
 		}
 
-		public JsonResult GetCatalogDragFamalyNames(string term)
-		{
-			var ret = Json(h.GetSearchCatalogFamalyName(term).ToList().Select(x => new { value = x.Value, text = x.Text }), JsonRequestBehavior.AllowGet);
-			return ret;
-		}
+		//public JsonResult GetCatalogDragFamalyNames(string term)
+		//{
+		//	var ret = Json(h.GetSearchCatalogFamalyName(term).ToList().Select(x => new { value = x.Value, text = x.Text }), JsonRequestBehavior.AllowGet);
+		//	return ret;
+		//}
 
 		/// <summary>
 		/// Заполняе модель указанного типа значениями, полученными в запросе

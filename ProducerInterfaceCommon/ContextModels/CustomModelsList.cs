@@ -61,7 +61,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public List<SelectListItem> AllStatus { get; set; }
 
 		[Display(Name = "Должность")]
-		[Required(ErrorMessage = "Укажите должность")]
+		//[Required(ErrorMessage = "Укажите должность")]
 		public int? AppointmentId { get; set; }
 
 		public List<SelectListItem> AllAppointment { get; set; }

@@ -149,12 +149,10 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	public enum TypeUsers
 	{
-		[Display(Name = "Пользователь из Интерфейса производителя")]
+		[Display(Name = "Интерфейс производителя")]
 		ProducerUser = 0,
-		[Display(Name = "Пользователь из Панели управления")]
-		ControlPanelUser = 1,
-		//[Display(Name = "Пользователь из интерфейса производителя, без Id производителя")]
-		//UserNotProducer = 2
+		[Display(Name = "Панель управления")]
+		ControlPanelUser = 1
 	}
 
 	public enum UserStatus

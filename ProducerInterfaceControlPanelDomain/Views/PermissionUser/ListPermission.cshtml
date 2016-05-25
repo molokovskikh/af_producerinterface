@@ -1,39 +1,39 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
+@using ProducerInterfaceCommon.Heap
 
 @model IEnumerable<AccountPermission>
 
 @{
-    ViewBag.Title = "Список Доступов Интерфейс Производителя";
-    Layout = "~/Views/Shared/_MasterPage.cshtml";
-    var ListPermission = Model;
+  ViewBag.Title = "Список доступов";
+  Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
 <h2>@ViewBag.Title</h2>
 
-<hr />
-
-@if (Model != null || Model.Any())
+@if (Model != null && Model.Any())
 {
-<table class="table-bordered table-responsive table-custom">
+<table class="table table-striped table-bordered">
     <tr>
+        <th>Проект</th>
         <th>Номер</th>
         <th>Наименивание доступа</th>
-        <th>Тип</th> 
-        <th>Описение</th>      
-        <th>Редактирование</th>      
+        <th>Глагол</th>
+        <th>Описение</th>
+        <th>Редактирование</th>
     </tr>
 
-    @foreach (var ItemPerm in Model)
+    @foreach (var item in Model)
     {
-        <tr>
-            <td>@ItemPerm.Id</td>
-            <td>@ItemPerm.ControllerAction</td>
-            <td>@ItemPerm.ActionAttributes</td>
-            <td>@ItemPerm.Description</td>
-            <td>
-                <a href="@Url.Action("EditPermission", new { Id = ItemPerm.Id })">Редактировать</a>
-            </td>
-        </tr>
+    <tr>
+        <td>@AttributeHelper.DisplayName((TypeUsers)item.TypePermission)</td>
+        <td>@item.Id</td>
+        <td>@item.ControllerAction</td>
+        <td>@item.ActionAttributes</td>
+        <td>@item.Description</td>
+        <td>
+            <a href="@Url.Action("EditPermission", new { Id = item.Id })">Редактировать</a>
+        </td>
+    </tr>
     }
 </table>
 }

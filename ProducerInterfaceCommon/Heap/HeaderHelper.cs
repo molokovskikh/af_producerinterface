@@ -37,11 +37,11 @@ namespace ProducerInterfaceCommon.Heap
 			return $"В отчет включены следующие препараты: {String.Join(", ", products)}";
 		}
 
-		public string GetDragFamalyNames(List<long> DrugFamalies)
-		{
-			var drugNames = _cntx.drugfamilynames.Where(x => DrugFamalies.Contains(x.FamilyId)).Select(xxx => xxx.FamilyName).ToList();
-			return $"В отчет включены следующие препараты: {String.Join(", ", drugNames)}";
-		}
+		//public string GetDragFamalyNames(List<long> DrugFamalies)
+		//{
+		//	var drugNames = _cntx.drugfamilynames.Where(x => DrugFamalies.Contains(x.FamilyId)).Select(xxx => xxx.FamilyName).ToList();
+		//	return $"В отчет включены следующие препараты: {String.Join(", ", drugNames)}";
+		//}
 
 		public string GetNotSupplierHeader(List<long> supplierIds)
 		{

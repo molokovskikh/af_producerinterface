@@ -1,10 +1,12 @@
-﻿@model ProducerInterfaceCommon.ContextModels.AccountGroup
+﻿@using ProducerInterfaceCommon.ContextModels
+@using ProducerInterfaceCommon.Heap
+@model AccountGroup
 @{
-    ViewBag.Title = "Изменение конфигурации группы";
+    ViewBag.Title = $"Редактирование группы {Model.Name} проекта {((TypeUsers)Model.TypeGroup).DisplayName()}";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Редактирование группы @Model.Name</h2>
+<h2>@ViewBag.Title</h2>
 <hr/>
 
 @using (Html.BeginForm("GroupChangeSave", "PermissionUser", FormMethod.Post))
@@ -36,7 +38,7 @@
 
 @section scripts
 {    
-<script src="~/Content/Chosen/js/chosen.jquery.js"></script>
-<link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
-<script src="~/Content/Chosen/js/initChangeGroupPermission.js"></script>
-    }
+    <script src="~/Content/Chosen/js/chosen.jquery.js"></script>
+    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+    <script src="~/Content/Chosen/js/initChangeGroupPermission.js"></script>
+}

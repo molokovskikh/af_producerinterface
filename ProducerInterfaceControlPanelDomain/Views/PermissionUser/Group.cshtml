@@ -1,41 +1,39 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ViewModel.ControlPanel.Permission.ListGroupView>
+﻿@using ProducerInterfaceCommon.ViewModel.ControlPanel.Permission
+@using ProducerInterfaceCommon.Heap
+@model IEnumerable<ListGroupView>
 @{
-    ViewBag.Title = "Список групп сайта";
+    ViewBag.Title = "Список групп";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
-    var ProducerList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
 }
-<h2>Группы Интерфейса производителя</h2>
+<h2>@ViewBag.Title</h2>
 
-<hr />
-
-@foreach (var GroupItem in Model)
+@foreach (var group in Model)
 {
     <div class="panel panel-default">
 
         <div class="panel-heading">
             <H4 class="panel-title">
-                <p data-toggle="collapse" href="#collapse_@GroupItem.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp;@GroupItem.NameGroup</p>
+                <p data-toggle="collapse" href="#collapse_@group.Id" class="pointer"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;&nbsp;&nbsp;@group.NameGroup</p>
             </H4>
         </div>
 
-        <div id="collapse_@GroupItem.Id" class="panel-collapse collapse">
+        <div id="collapse_@group.Id" class="panel-collapse collapse">
             <div class="panel-body">
-                <h4>Описание</h4> <p>' @GroupItem.Description '</p>
+                <h4>Описание: @group.Description</h4>
+                <p>Проект: @group.TypeUser.DisplayName()</p>
 
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h4 class="panel-title" data-toggle="collapse" href="#collapse_a_@GroupItem.Id"><span class="glyphicon glyphicon-user" style="color:green;"></span>&nbsp;&nbsp;&nbsp; Список пользователей</h4>
+                        <h4 class="panel-title pointer" data-toggle="collapse" href="#collapse_a_@group.Id"><span class="glyphicon glyphicon-user" style="color:green;"></span>&nbsp;&nbsp;&nbsp; Список пользователей</h4>
                     </div>
 
-                    <div id="collapse_a_@GroupItem.Id" class="panel-collapse collapse">
+                    <div id="collapse_a_@group.Id" class="panel-collapse collapse">
                         <div class="panel-body">
 
-                            @foreach (var AccountItem in GroupItem.ListUsersInGroup)
+                            @foreach (var AccountItem in group.ListUsersInGroup)
                             {
-                                <p>Email: <a href="@("mailto:"+AccountItem.eMail)">@AccountItem.eMail</a></p>
-                                <p>ФИО: @AccountItem.Name</p>
-                                <p>Компания: @AccountItem.ProducerName</p>
+                                <p>@AccountItem.Name (@AccountItem.eMail) @AccountItem.ProducerName</p>
                             }
                         </div>
                     </div>
@@ -45,14 +43,14 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <H4 class="panel-title" data-toggle="collapse" href="#collapse_a_a_@GroupItem.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt" style="color:green;"></span>&nbsp;&nbsp;&nbsp;Список доступов группы</H4>
+                        <H4 class="panel-title pointer" data-toggle="collapse" href="#collapse_a_a_@group.Id"><span class="glyphicon glyphicon-sort-by-attributes-alt" style="color:green;"></span>&nbsp;&nbsp;&nbsp;Список доступов группы</H4>
                     </div>
 
-                    <div id="collapse_a_a_@GroupItem.Id" class="panel-collapse collapse">
+                    <div id="collapse_a_a_@group.Id" class="panel-collapse collapse">
                         <div class="panel-body">
-                            @for (int i = 0; i < GroupItem.Permissions.Length; i++)
+                            @for (int i = 0; i < group.Permissions.Length; i++)
                             {
-                                <p>@GroupItem.Permissions[i]</p>
+                                <p>@group.Permissions[i]</p>
                             }
                         </div>
                     </div>
@@ -60,7 +58,7 @@
                 </div>
 
                 <div class="form-group">
-                    <a class="btn btn-primary" href="@Url.Action("GetOneGroup", new { id=GroupItem.Id})"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;&nbsp;Редактировать группу</a>
+                    <a class="btn btn-primary" href="@Url.Action("GetOneGroup", new { id=group.Id})"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;&nbsp;Редактировать группу</a>
                 </div>
 
             </div>

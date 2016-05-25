@@ -130,21 +130,21 @@ namespace ProducerInterfaceCommon.Heap
 			return results;
 		}
 
-		public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
-		{
-			if (SelectedDrugs == null || SelectedDrugs.Count() == 0)
-				return new List<OptionElement>();
+		//public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
+		//{
+		//	if (SelectedDrugs == null || SelectedDrugs.Count() == 0)
+		//		return new List<OptionElement>();
 
-			var ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugs.Contains(x.FamilyId)).ToList();
-			var ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
-			return ListSelectGrugs;
-		}
+		//	var ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugs.Contains(x.FamilyId)).ToList();
+		//	var ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
+		//	return ListSelectGrugs;
+		//}
 
-		public List<OptionElement> GetSearchCatalogFamalyName(string NameDrug)
-		{
-			var result = _cntx.drugfamilynames.Where(xxx => xxx.FamilyName.Contains(NameDrug)).Take(10).ToList().Select(xxx => new OptionElement { Value = xxx.FamilyId.ToString(), Text = xxx.FamilyName }).ToList();
-			return result;
-		}
+		//public List<OptionElement> GetSearchCatalogFamalyName(string NameDrug)
+		//{
+		//	var result = _cntx.drugfamilynames.Where(xxx => xxx.FamilyName.Contains(NameDrug)).Take(10).ToList().Select(xxx => new OptionElement { Value = xxx.FamilyId.ToString(), Text = xxx.FamilyName }).ToList();
+		//	return result;
+		//}
 
 		public List<OptionElement> GetSupplierList(List<ulong> regionList)
 		{

@@ -1667,3 +1667,19 @@ values (17, 'Запрос регистрации на сайте {SiteName}',
 
  #ниже не внесено в боевую БД
  drop view catalognameswithuptime;
+
+ drop table DrugDescriptionRemark;
+# + модель
+
+drop view drugfamilynames;
+# + модель
+
+drop view drugdescription;
+
+drop view drugmnn;
+
+drop view drugfamily;
+# + модель
+
+drop view drugformproducer;
+
