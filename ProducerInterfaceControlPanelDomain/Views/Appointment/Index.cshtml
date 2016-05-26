@@ -2,11 +2,11 @@
 @model IEnumerable<AccountAppointment>
 
 @{
-  ViewBag.Title = "Список должностей";
+  ViewBag.Title = "Управление должностями";
   Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Список должностей</h2>
+<h2>@ViewBag.Title</h2>
 <div class="row">
     <div class="col-md-12">
         @using (Html.BeginForm("Add", "Appointment"))

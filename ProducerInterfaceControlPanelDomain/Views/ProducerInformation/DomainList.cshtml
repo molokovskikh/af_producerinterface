@@ -1,35 +1,70 @@
-﻿
+﻿@using ProducerInterfaceCommon.ContextModels
+@model IEnumerable<CompanyDomainName>
 @{
-    ViewBag.Title = "Упраление списком доменов производителей";
-    Layout = "~/Views/Shared/_MasterPage.cshtml";
-    var ProducerList = ViewBag.ProducerList as IEnumerable<ProducerInterfaceCommon.ContextModels.OptionElement>;
+  ViewBag.Title = "Управление доменами";
+  Layout = "~/Views/Shared/_MasterPage.cshtml";
+  var companyList = (List<SelectListItem>)ViewBag.CompanyList;
+  var companyId = ViewBag.CompanyId as long?;
 }
 
-<div class="container body-content">
-    <h2>Упраление списком доменов производителей</h2>
+<h2>@ViewBag.Title</h2>
 
+@if (companyList != null && companyList.Any())
+{
+    using (Html.BeginForm())
+    {
     <div class="row">
-        <div class="form-group">
-            <select id="idproducer" class="form-control">
-                @foreach (var ProducerItem in ProducerList)
-                {
-                    <option value="@ProducerItem.Value">@ProducerItem.Text</option>
-                }
-            </select>
-        </div>     
-
-        <div class="form-group">
-            <input type="button" id="select" onclick="LoadProducerDomainList()" class="btn btn-primary" value="Выбрать" />
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.DropDownList("companyId", companyList, new {@class = "form-control"})
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Выбрать" />
+            </div>
         </div>
     </div>
-    <div class="row" id="replacecontent">
+    }
+}
 
-
-
+@if (companyId.HasValue)
+{
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("AddDomain", "ProducerInformation", FormMethod.Post))
+        {
+        <input id="companyId" name="companyId" value="@companyId" hidden="hidden" />
+        <div class="form-group">
+            <label>Добавить домен</label>
+            <input type="text" name="domainName" placeholder="Доменное имя" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-primary" />
+        </div>
+        }
     </div>
 </div>
-
-@section scripts
-{
-<script src="~/Scripts/WorkPlace/ProducerInfermation_DomainList.v2.0.js"></script>
+@*<span class="input-group-btn" />*@
 }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @if (Model != null) {
+                foreach (var item in Model) {
+                     <hr/>
+                     <div class="form-group">
+                         <h3>@item.Name</h3>
+                         @*<a style="text-decoration: none;"><span class="glyphicon glyphicon-trash"></span>@Ajax.ActionLink(" Удалить", "DeleteDomain", new { Id = item.Id }, new AjaxOptions { UpdateTargetId = "replacecontent", Confirm = "Вы уверены, что хотите удалить домен " + item.Name + "?" })</a>*@
+                         <a class="btn btn-primary" href="@Url.Action("DeleteDomain", new { Id = item.Id })" onclick="return confirm('Вы уверены, что хотите удалить домен?')">Удалить домен</a>
+                         <h4>Список пользователей домена</h4>
+                         @foreach (var user in item.AccountCompany.Account) {
+                             if (user.Login.Contains(item.Name)) {
+                                 <p>@user.Name (@user.Login) @user.AccountAppointment.Name</p>
+                             }
+                         }
+                     </div>
+                 }
+            }
+        </div>
+    </div>
+</div>
