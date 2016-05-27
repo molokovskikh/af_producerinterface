@@ -62,7 +62,7 @@
           <Property Name="AccountId" Type="uint" />
           <Property Name="UrlString" Type="varchar" MaxLength="250" />
           <Property Name="Type" Type="tinyint" Nullable="false" />
-          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="250" />
           <Property Name="Comment" Type="varchar" MaxLength="1000" />
           <Property Name="AdminId" Type="uint" />
           <Property Name="DateEdit" Type="datetime" Precision="0" />
@@ -482,32 +482,6 @@
           <Property Name="NeedCorrect" Type="bool" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamily" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <EntityType Name="drugfamily">
-          <Key>
-            <PropertyRef Name="FamilyId" />
-            <PropertyRef Name="FamilyName" />
-            <PropertyRef Name="ProducerId" />
-            <PropertyRef Name="UpdateTime" />
-          </Key>
-          <Property Name="FamilyId" Type="uint" Nullable="false" />
-          <Property Name="FamilyName" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="ProducerId" Type="uint" Nullable="false" />
-          <Property Name="DescriptionId" Type="uint" />
-          <Property Name="MnnId" Type="uint" />
-          <Property Name="UpdateTime" Type="timestamp" Precision="0" Nullable="false" />
-        </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "def.producerinterface.drugfamilynames" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
-        <EntityType Name="drugfamilynames">
-          <Key>
-            <PropertyRef Name="FamilyId" />
-            <PropertyRef Name="FamilyName" />
-          </Key>
-          <Property Name="FamilyId" Type="uint" Nullable="false" />
-          <Property Name="FamilyName" Type="varchar" MaxLength="255" Nullable="false" />
-        </EntityType>
-        <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "def.producerinterface.feedbackui" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="feedbackui">
           <Key>
@@ -521,7 +495,7 @@
           <Property Name="Login" Type="varchar" MaxLength="50" />
           <Property Name="ProducerId" Type="uint" />
           <Property Name="ProducerName" Type="varchar" MaxLength="255" />
-          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="250" />
           <Property Name="DateAdd" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="500" />
           <Property Name="Status" Type="tinyint" Nullable="false" />
@@ -1061,22 +1035,6 @@ FROM `catalognames` AS `catalognames`</DefiningQuery>
 `descriptionlogview`.`NeedCorrect`
 FROM `descriptionlogview` AS `descriptionlogview`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="drugfamily" EntityType="Self.drugfamily" store:Type="Views" store:Schema="producerinterface">
-            <DefiningQuery>SELECT
-`drugfamily`.`FamilyId`, 
-`drugfamily`.`FamilyName`, 
-`drugfamily`.`ProducerId`, 
-`drugfamily`.`DescriptionId`, 
-`drugfamily`.`MnnId`, 
-`drugfamily`.`UpdateTime`
-FROM `drugfamily` AS `drugfamily`</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="drugfamilynames" EntityType="Self.drugfamilynames" store:Type="Views" store:Schema="producerinterface">
-            <DefiningQuery>SELECT
-`drugfamilynames`.`FamilyId`, 
-`drugfamilynames`.`FamilyName`
-FROM `drugfamilynames` AS `drugfamilynames`</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="feedbackui" EntityType="Self.feedbackui" store:Type="Views" store:Schema="producerinterface">
             <DefiningQuery>SELECT
 `feedbackui`.`Id`, 
@@ -1369,20 +1327,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="CatalogName" Type="String" MaxLength="511" FixedLength="false" Unicode="false" />
           <Property Name="IsPharmacie" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="drugfamily">
-          <Key>
-            <PropertyRef Name="FamilyId" />
-            <PropertyRef Name="FamilyName" />
-            <PropertyRef Name="ProducerId" />
-            <PropertyRef Name="UpdateTime" />
-          </Key>
-          <Property Name="FamilyId" Type="Int64" Nullable="false" />
-          <Property Name="FamilyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ProducerId" Type="Int64" Nullable="false" />
-          <Property Name="DescriptionId" Type="Int64" />
-          <Property Name="MnnId" Type="Int64" />
-          <Property Name="UpdateTime" Type="DateTime" Nullable="false" />
-        </EntityType>
         <EntityType Name="pharmacynames">
           <Key>
             <PropertyRef Name="PharmacyId" />
@@ -1443,13 +1387,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="user_logs" EntityType="Self.user_logs" />
           <EntitySet Name="assortment" EntityType="Self.assortment" />
           <EntitySet Name="catalognames" EntityType="Self.catalognames" />
-          <EntitySet Name="drugfamily" EntityType="Self.drugfamily" />
           <EntitySet Name="pharmacynames" EntityType="Self.pharmacynames" />
           <EntitySet Name="producernames" EntityType="Self.producernames" />
           <EntitySet Name="ratingreportorderitems" EntityType="Self.ratingreportorderitems" />
           <EntitySet Name="regionnames" EntityType="Self.regionnames" />
           <EntitySet Name="suppliernames" EntityType="Self.suppliernames" />
-          <EntitySet Name="drugfamilynames" EntityType="producerinterface_Model.drugfamilynames" />
           <EntitySet Name="AccountCompany" EntityType="producerinterface_Model.AccountCompany" />
           <EntitySet Name="CompanyDomainName" EntityType="producerinterface_Model.CompanyDomainName" />
           <AssociationSet Name="CompanyId_AccountCompanyId" Association="producerinterface_Model.CompanyId_AccountCompanyId">
@@ -1507,7 +1449,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </AssociationSet>
           <EntitySet Name="regionsnamesleaftoreport" EntityType="producerinterface_Model.regionsnamesleaftoreport" />
           <EntitySet Name="regionsnamesleaf" EntityType="producerinterface_Model.regionsnamesleaf" />
-          <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
           <EntitySet Name="feedbackui" EntityType="producerinterface_Model.feedbackui" />
           <EntitySet Name="cataloglogview" EntityType="producerinterface_Model.cataloglogview" />
           <EntitySet Name="descriptionlogview" EntityType="producerinterface_Model.descriptionlogview" />
@@ -1528,10 +1469,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountEmail" EntitySet="AccountEmail" />
           </AssociationSet>
-          <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
-          </AssociationSet>
           <AssociationSet Name="FK_promotions_AccountId" Association="producerinterface_Model.FK_promotions_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="promotions" EntitySet="promotions" />
@@ -1548,15 +1485,12 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountGroup" EntitySet="AccountGroup" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
+          <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
+          <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+          </AssociationSet>
           </EntityContainer>
-        <EntityType Name="drugfamilynames">
-          <Key>
-            <PropertyRef Name="FamilyId" />
-            <PropertyRef Name="FamilyName" />
-          </Key>
-          <Property Name="FamilyId" Type="Int64" Nullable="false" />
-          <Property Name="FamilyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="AccountCompany">
           <Key>
             <PropertyRef Name="Id" />
@@ -1943,23 +1877,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="RegionCode" Type="Decimal" Nullable="false" />
           <Property Name="RegionName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="AccountFeedBack">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Status" Type="SByte" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="DateAdd" Type="DateTime" Nullable="false" />
-          <Property Name="AccountId" Type="Int64" />
-          <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="SByte" Nullable="false" />
-          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="AdminId" Type="Int64" />
-          <Property Name="DateEdit" Type="DateTime" />
-          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="AccountFeedBack" ToRole="Account" />
-        </EntityType>
         <EntityType Name="feedbackui">
           <Key>
             <PropertyRef Name="Id" />
@@ -2137,11 +2054,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="AccountAppointment" Relationship="producerinterface_Model.Account_Appointment" FromRole="Account" ToRole="AccountAppointment" />
           <NavigationProperty Name="AccountCompany" Relationship="producerinterface_Model.Account_CompanyId" FromRole="Account" ToRole="AccountCompany" />
           <NavigationProperty Name="AccountEmail" Relationship="producerinterface_Model.Email_AccountId" FromRole="Account" ToRole="AccountEmail" />
-          <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
           <NavigationProperty Name="promotions" Relationship="producerinterface_Model.FK_promotions_AccountId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
+          <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
         </EntityType>
         <Association Name="Account_Appointment">
           <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
@@ -2175,18 +2092,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AccountEmail">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FeedBack_To_Account">
-          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
-          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AccountFeedBack">
               <PropertyRef Name="AccountId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2230,6 +2135,35 @@ FROM `usernames` AS `usernames`</DefiningQuery>
         <Association Name="AccountUserToGroup">
           <End Type="producerinterface_Model.AccountGroup" Role="AccountGroup" Multiplicity="*" />
           <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="*" />
+        </Association>
+        <EntityType Name="AccountFeedBack">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="SByte" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DateAdd" Type="DateTime" Nullable="false" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="SByte" Nullable="false" />
+          <Property Name="Contacts" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="AdminId" Type="Int64" />
+          <Property Name="DateEdit" Type="DateTime" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="AccountFeedBack" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_FeedBack_To_Account">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBack">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -2324,18 +2258,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="drugfamily">
-            <EntityTypeMapping TypeName="producerinterface_Model.drugfamily">
-              <MappingFragment StoreEntitySet="drugfamily">
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
-                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
-                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
-                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
-                <ScalarProperty Name="MnnId" ColumnName="MnnId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="pharmacynames">
             <EntityTypeMapping TypeName="producerinterface_Model.pharmacynames">
               <MappingFragment StoreEntitySet="pharmacynames">
@@ -2382,14 +2304,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
                 <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
                 <ScalarProperty Name="HomeRegion" ColumnName="HomeRegion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="drugfamilynames">
-            <EntityTypeMapping TypeName="producerinterface_Model.drugfamilynames">
-              <MappingFragment StoreEntitySet="drugfamilynames">
-                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
-                <ScalarProperty Name="FamilyId" ColumnName="FamilyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2695,23 +2609,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AccountFeedBack">
-            <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBack">
-              <MappingFragment StoreEntitySet="AccountFeedBack">
-                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
-                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="UrlString" ColumnName="UrlString" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="feedbackui">
             <EntityTypeMapping TypeName="producerinterface_Model.feedbackui">
               <MappingFragment StoreEntitySet="feedbackui">
@@ -2883,6 +2780,23 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <ScalarProperty Name="Id" ColumnName="IdGroup" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="AccountFeedBack">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBack">
+              <MappingFragment StoreEntitySet="AccountFeedBack">
+                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="UrlString" ColumnName="UrlString" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

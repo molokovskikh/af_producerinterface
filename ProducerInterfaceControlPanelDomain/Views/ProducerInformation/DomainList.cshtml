@@ -5,66 +5,79 @@
   Layout = "~/Views/Shared/_MasterPage.cshtml";
   var companyList = (List<SelectListItem>)ViewBag.CompanyList;
   var companyId = ViewBag.CompanyId as long?;
+  var error = ViewBag.Error as string;
+  var domainName = ViewBag.DomainName as string;
 }
 
-<h2>@ViewBag.Title</h2>
 
-@if (companyList != null && companyList.Any())
-{
-    using (Html.BeginForm())
+    <h2>@ViewBag.Title</h2>
+
+    @if (companyList != null && companyList.Any())
     {
+        using (Html.BeginForm())
+        {
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group form-group-otstup">
+                    <label>Выберите производителя</label>
+                    <div class="input-group">
+                        @Html.DropDownList("companyId", companyList, new { @class = "form-control" })
+                        <span class="input-group-btn">
+                            <input type="submit" value="Выбрать " class="btn btn-primary w150" />
+                        </span>
+                    </div>
+               </div>
+            </div>
+            <div class="col-md-8">&nbsp;</div>
+        </div>
+        }
+    }
+
+    @if (companyId.HasValue)
+    {
+    <div class="row">
+        <div class="col-md-4">
+            @using (Html.BeginForm("AddDomain", "ProducerInformation", FormMethod.Post))
+            {
+            <input id="companyId" name="companyId" value="@companyId" hidden="hidden" />
+            <div class="form-group form-group-otstup">
+                <label>Добавить домен</label>
+                <div class="input-group">
+                    <input type="text" name="domainName" placeholder="Доменное имя" class="form-control" value="@domainName" />
+                    <span class="input-group-btn">
+                        <input type="submit" value="Добавить" class="btn btn-primary w150" />
+                    </span>
+                </div>
+                @if (!string.IsNullOrEmpty(error))
+                {
+                <span class="field-validation-error">@error</span>}
+            </div>}
+        </div>
+        <div class="col-md-8">&nbsp;</div>
+    </div>
+    }
+
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                @Html.DropDownList("companyId", companyList, new {@class = "form-control"})
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                    <hr />
+                    <div class="form-group">
+                        <h3>@item.Name</h3>
+                        @*<a style="text-decoration: none;"><span class="glyphicon glyphicon-trash"></span>@Ajax.ActionLink(" Удалить", "DeleteDomain", new { Id = item.Id }, new AjaxOptions { UpdateTargetId = "replacecontent", Confirm = "Вы уверены, что хотите удалить домен " + item.Name + "?" })</a>*@
+                        <a class="btn btn-primary" href="@Url.Action("DeleteDomain", new { Id = item.Id })" onclick="return confirm('Вы уверены, что хотите удалить домен?')">Удалить домен</a>
+                        <h4>Список пользователей домена</h4>
+                        @foreach (var user in item.AccountCompany.Account)
+                        {
+                            if (user.Login.Contains(item.Name))
+                            {
+                            <p>@user.Name (@user.Login) @user.AccountAppointment.Name</p>}
+                        }
+                    </div>}
+                }
             </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Выбрать" />
-            </div>
         </div>
     </div>
-    }
-}
-
-@if (companyId.HasValue)
-{
-<div class="row">
-    <div class="col-md-12">
-        @using (Html.BeginForm("AddDomain", "ProducerInformation", FormMethod.Post))
-        {
-        <input id="companyId" name="companyId" value="@companyId" hidden="hidden" />
-        <div class="form-group">
-            <label>Добавить домен</label>
-            <input type="text" name="domainName" placeholder="Доменное имя" class="form-control" />
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Сохранить" class="btn btn-primary" />
-        </div>
-        }
-    </div>
-</div>
-@*<span class="input-group-btn" />*@
-}
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            @if (Model != null) {
-                foreach (var item in Model) {
-                     <hr/>
-                     <div class="form-group">
-                         <h3>@item.Name</h3>
-                         @*<a style="text-decoration: none;"><span class="glyphicon glyphicon-trash"></span>@Ajax.ActionLink(" Удалить", "DeleteDomain", new { Id = item.Id }, new AjaxOptions { UpdateTargetId = "replacecontent", Confirm = "Вы уверены, что хотите удалить домен " + item.Name + "?" })</a>*@
-                         <a class="btn btn-primary" href="@Url.Action("DeleteDomain", new { Id = item.Id })" onclick="return confirm('Вы уверены, что хотите удалить домен?')">Удалить домен</a>
-                         <h4>Список пользователей домена</h4>
-                         @foreach (var user in item.AccountCompany.Account) {
-                             if (user.Login.Contains(item.Name)) {
-                                 <p>@user.Name (@user.Login) @user.AccountAppointment.Name</p>
-                             }
-                         }
-                     </div>
-                 }
-            }
-        </div>
-    </div>
-</div>

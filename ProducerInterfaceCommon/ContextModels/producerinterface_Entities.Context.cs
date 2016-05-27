@@ -35,13 +35,11 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<user_logs> user_logs { get; set; }
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
-        public DbSet<drugfamily> drugfamily { get; set; }
         public DbSet<pharmacynames> pharmacynames { get; set; }
         public DbSet<producernames> producernames { get; set; }
         public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
         public DbSet<regionnames> regionnames { get; set; }
         public DbSet<suppliernames> suppliernames { get; set; }
-        public DbSet<drugfamilynames> drugfamilynames { get; set; }
         public DbSet<AccountCompany> AccountCompany { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
         public DbSet<usernames> usernames { get; set; }
@@ -64,7 +62,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<ReportRegion> ReportRegion { get; set; }
         public DbSet<regionsnamesleaftoreport> regionsnamesleaftoreport { get; set; }
         public DbSet<regionsnamesleaf> regionsnamesleaf { get; set; }
-        public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<feedbackui> feedbackui { get; set; }
         public DbSet<cataloglogview> cataloglogview { get; set; }
         public DbSet<descriptionlogview> descriptionlogview { get; set; }
@@ -73,6 +70,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<LogForNet> LogForNet { get; set; }
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<Account> Account { get; set; }
+        public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
     
         public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
         {

@@ -189,13 +189,7 @@
     <Compile Include="ContextModels\DrugDescriptionRemark.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\drugfamily.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\ContextEF.cs" />
-    <Compile Include="ContextModels\drugfamilynames.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\Enums.cs" />
     <Compile Include="ContextModels\feedbackui.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>

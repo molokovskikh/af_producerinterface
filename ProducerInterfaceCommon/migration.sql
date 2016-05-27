@@ -1665,6 +1665,9 @@ values (17, 'Запрос регистрации на сайте {SiteName}',
  'Сообщение пользователя: {Message} Контакты пользователя: {Contacts}', 
  0, 'Запрос регистрации');
 
+ALTER TABLE `AccountFeedBack`
+ CHANGE COLUMN `Contacts` `Contacts` VARCHAR(250) NULL DEFAULT NULL;
+
  #ниже не внесено в боевую БД
  drop view catalognameswithuptime;
 

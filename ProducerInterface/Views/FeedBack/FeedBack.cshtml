@@ -4,76 +4,65 @@
 @model FeedBack
 
 @{
-    var user = ViewBag.CurrentUser as Account;
-    var feedBackList = Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>(); 
+  var user = ViewBag.CurrentUser as Account;
+  var feedBackList = Enum.GetValues(typeof(FeedBackType)).Cast<FeedBackType>();
 }
 
 @using (Ajax.BeginForm("SaveFeedBack", "FeedBack", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "feedback_modal_content", OnSuccess = "InitPhone()" }))
 {
 
-    <div class="modal-header">
-        @Ajax.ActionLink("Закрыть", "GetView", "FeedBack", new AjaxOptions
-       {
-           UpdateTargetId = "feedback_modal_content",
-           HttpMethod = "Get"
-       }, null, new { @class = "close", @onclick = "ModalClose()" })
-        <h4 class="modal-title">Ваши пожелания, сообщение об ошибке</h4>
-    </div>
+<div class="modal-header">
+    @Ajax.ActionLink("Закрыть", "GetView", "FeedBack", new AjaxOptions
+   {
+       UpdateTargetId = "feedback_modal_content",
+       HttpMethod = "Get"
+   }, null, new { @class = "close", @onclick = "ModalClose()" })
+    <h4 class="modal-title">Ваши пожелания, сообщение об ошибке</h4>
+</div>
 
     <div class="modal-body" id="ModalBodyId">
         <input value="@ViewBag.UrlString" id="Url" name="Url" hidden="hidden" />
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description)
+            @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Description)
+        </div>
         @if (user != null)
         {
             <div class="form-group">
-                <label>Сообщение</label>
-                @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
-            </div>
-            <div class="form-group">
-                <label>Выберите удобный способ для связи с вами</label>
+                @Html.LabelFor(m => m.Contact)
                 <select name="Contact" id="Contact" class="form-control">
                     <option value="@user.Login">@user.Login</option>
                     @if (user.Phone != null)
                     {
-                        <option value="@user.Phone">@user.Phone</option>
-                    }
+                    <option value="@user.Phone">@user.Phone</option>}
                 </select>
             </div>
         }
         else
         {
-            @Html.ValidationSummary(true)
-
             <div class="form-group">
-                <label>Сообщение</label>
-                @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Description)
-            </div>
-            <div class="form-group">
-                <h4 class="text-danger">@ViewBag.ErrorMessageModal</h4>
-            </div>
-            <div class="form-group">
-                <label>Номер телефона</label>
+                @Html.LabelFor(m => m.PhoneNum)
                 @Html.TextBoxFor(m => m.PhoneNum, new { @class = "form-control", @placeholder = "(999) 999-99-99" })
                 @Html.ValidationMessageFor(m => m.PhoneNum)
             </div>
             <div class="form-group">
-                <label>Email</label>
+                @Html.LabelFor(m => m.Email)
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Email)
             </div>
         }
 
         <div class="form-group">
-            <label>Тип обращения</label>
+            @Html.LabelFor(m => m.FeedType)
             <select id="FeedType" name="FeedType" class="form-control">
-
                 @foreach (var item in feedBackList)
                 {
                     if (item != FeedBackType.AddNewAppointment)
                     {
                         <option value="@((int)item)">@item.DisplayName()</option>
                     }
-                }             
+                }
             </select>
         </div>
     </div>

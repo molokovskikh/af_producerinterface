@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
+using System.Text.RegularExpressions;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -15,12 +16,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult DomainList(long? companyId)
 		{
-			ViewBag.CompanyId = companyId;
-			ViewBag.CompanyList = cntx_.AccountCompany
-				.OrderBy(x => x.Name)
-				.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == companyId})
-				.ToList();
-			if (companyId.HasValue) {
+			SetViewBag(companyId);
+			if (companyId.HasValue)
+			{
 				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId.Value).ToList();
 				return View(model);
 			}
@@ -36,23 +34,48 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult AddDomain(long companyId, string domainName)
 		{
-			// TODO валидация формата домена
 			if (string.IsNullOrEmpty(domainName))
 			{
-				ErrorMessage("Укажите имя домена");
-				return RedirectToAction("DomainList", new { companyId = companyId });
+				SetViewBag(companyId);
+				ViewBag.Error = "Укажите имя домена";
+				ViewBag.DomainName = domainName;
+				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
+				return View("DomainList", model);
+			}
+
+			var regex = new Regex(@"[-a-z0-9-_]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*", RegexOptions.IgnoreCase);
+			if (!regex.IsMatch(domainName))
+			{
+				SetViewBag(companyId);
+				ViewBag.Error = "Неверный формат домена";
+				ViewBag.DomainName = domainName;
+				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
+				return View("DomainList", model);
 			}
 
 			var domainExist = cntx_.CompanyDomainName.SingleOrDefault(x => x.CompanyId == companyId && x.Name == domainName);
-			if (domainExist != null) {
-				ErrorMessage($"Домен {domainName} уже есть в списке данного производителя");
-				return RedirectToAction("DomainList", new { companyId = companyId });
+			if (domainExist != null)
+			{
+				SetViewBag(companyId);
+				ViewBag.Error = $"Домен {domainName} уже есть в списке данного производителя";
+				ViewBag.DomainName = domainName;
+				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
+				return View("DomainList", model);
 			}
 
 			var newDomain = new CompanyDomainName() { CompanyId = companyId, Name = domainName };
 			cntx_.CompanyDomainName.Add(newDomain);
 			cntx_.SaveChanges();
 			return RedirectToAction("DomainList", new { companyId = companyId });
+		}
+
+		private void SetViewBag(long? companyId)
+		{
+			ViewBag.CompanyId = companyId;
+			ViewBag.CompanyList = cntx_.AccountCompany
+				.OrderBy(x => x.Name)
+				.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == companyId })
+				.ToList();
 		}
 
 		/// <summary>

@@ -6,9 +6,10 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Global
 	{
 		[Required(ErrorMessage = "Заполните сообщение")]
 		[Display(Name = "Сообщение")]
+		[StringLength(500, ErrorMessage = "Длина сообщения не более 500 знаков")]
 		public string Description { get; set; }
 
-		[Display(Name = "Выберите способ для связи")]
+		[Display(Name = "Выберите удобный способ для связи с вами")]
 		public string Contact { get; set; }
 
 		[Display(Name = "Номер телефона")]
@@ -19,6 +20,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Global
 
 		[Display(Name = "Email")]
 		[EmailAddress(ErrorMessage = "Введите корректый email")]
+		[StringLength(100, ErrorMessage = "Длина сообщения не более 100 знаков")]
 		public string Email { get; set; }
 
 		public string ContactNotAuth
@@ -40,6 +42,41 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Global
 		}
 
 		public string Url { get; set; }
+
+		[Display(Name = "Тип обращения")]
 		public sbyte FeedType { get; set; }
+	}
+
+	public class AddDomainFeedBack
+	{
+		[Required(ErrorMessage = "Заполните сообщение")]
+		[Display(Name = "Сообщение *")]
+		[StringLength(500, ErrorMessage = "Длина сообщения не более 500 знаков")]
+		public string Description { get; set; }
+
+		[Display(Name = "Номер телефона *")]
+		[Phone(ErrorMessage = "Некорректно введен номер")]
+		[StringLength(maximumLength: 15, MinimumLength = 15, ErrorMessage = "Корректно заполните номер телефона")]
+		[Required(ErrorMessage = "Укажите номер телефона")]
+		public string PhoneNum { get; set; }
+
+		[Display(Name = "Email *")]
+		[EmailAddress(ErrorMessage = "Введите корректый email")]
+		[StringLength(100, ErrorMessage = "Длина email не более 100 знаков")]
+		[Required(ErrorMessage = "Укажите email")]
+		public string Email { get; set; }
+
+		[Display(Name = "ФИО *")]
+		[Required(ErrorMessage = "Укажите ФИО")]
+		[StringLength(135, ErrorMessage = "Длина ФИО не более 135 знаков")]
+		public string Name { get; set; }
+
+		public string Contact
+		{
+			get { return $"{PhoneNum}, {Email}, {Name}"; }
+		}
+
+		public string ProducerName { get; set; }
+
 	}
 }

@@ -1,5 +1,4 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model int?
+﻿@model int?
     <div class="form-group"> 
             <label>@Html.LabelFor(m => m)<strong>*</strong></label> 
             @Html.DropDownListFor(m => m, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
@@ -7,7 +6,7 @@
 		
 		<br/>
 				<div class="form-group">
-	            <a href="@Url.Action("Index_Type","FeedBack", new { Id= (sbyte)FeedBackType.AddNewAppointment })">Моей должности нет в списке, отправить заявку на ее добавление</a>
+	            <a href="@Url.Action("AddAppointmentRequest","FeedBack")">Моей должности нет в списке, отправить заявку на ее добавление</a>
 		</div>	
 
     </div>

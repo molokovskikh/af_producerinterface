@@ -1,0 +1,43 @@
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Global;
+@model AddDomainFeedBack
+
+@{
+  ViewBag.Title = "Обратная связь";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>@ViewBag.Title</h2>
+
+    @using (Html.BeginForm())
+    {
+    @Html.HiddenFor(m => m.ProducerName)
+    <div class="form-group">
+        @Html.LabelFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Description)
+    </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email)
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.PhoneNum)
+            @Html.TextBoxFor(m => m.PhoneNum, new { @placeholder = "(999) 999-99-99", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.PhoneNum)
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Отправить" />
+        </div>
+    }
+</div>

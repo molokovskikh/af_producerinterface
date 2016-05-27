@@ -1,6 +1,7 @@
 ﻿using ProducerInterfaceCommon.ContextModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc.Html;
 
@@ -81,8 +82,14 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 		// возвращает коллекцию сообщений обратной связи с учетом фильтра
 		private List<feedbackui> GetFeedBackFiltered(FeedBackFilter filter, ref int pageCount)
 		{
-			var dateBegin = Convert.ToDateTime(filter.DateBegin);
-			var dateEnd = Convert.ToDateTime(filter.DateEnd);
+			var dateBegin = DateTime.ParseExact(
+				filter.DateBegin, "dd.MM.yyyy",
+				CultureInfo.InvariantCulture,
+				DateTimeStyles.None);
+			var dateEnd = DateTime.ParseExact(
+				filter.DateEnd, "dd.MM.yyyy",
+				CultureInfo.InvariantCulture,
+				DateTimeStyles.None).AddDays(1);
 
 			var query = cntx_.feedbackui.Where(x => x.DateAdd >= dateBegin && x.DateAdd <= dateEnd);
 			if (filter.AccountId != 0)
