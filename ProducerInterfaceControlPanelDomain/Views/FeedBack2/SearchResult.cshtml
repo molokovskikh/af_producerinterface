@@ -1,0 +1,62 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@using ProducerInterfaceCommon.Heap
+
+@model IEnumerable<AccountFeedBack>
+
+@{
+    Layout = null;
+    var prDictionary = (Dictionary<long, string>)ViewBag.PrDictionary;
+}
+
+@if (Model != null && Model.Any())
+{
+@Html.Partial("Partial/Pager")
+
+<table class="table table-bordered" id="table-width-100prc">
+    <tr>
+        <th>Id</th>
+        <th>Текст обращения</th>
+        <th>Дата обращения</th>
+        <th>Статус</th>
+        <th>Тип</th>
+        <th>Контакты</th>
+        <th>Производитель</th>
+        <th>Адрес с которого сделан запрос</th>
+        <th>Изменил</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        var wrn = (FeedBackStatus)item.Status == FeedBackStatus.New ? "warning2" : "";
+        long? producerId = null;
+        if (item.Account != null) {
+            producerId = item.Account.AccountCompany.ProducerId;
+        }
+
+        <tr class="@wrn"> 
+            <td>@item.Id</td>
+            <td>@item.Description</td>
+            <td>@item.DateAdd.ToString("dd.MM.yyyy hh:mm:ss")</td>
+            <td>@AttributeHelper.DisplayName((FeedBackStatus)item.Status)</td>
+            <td>@AttributeHelper.DisplayName((FeedBackTypePrivate)item.Type)</td>
+            <td>@item.Contacts</td>
+            <td>
+                @if (producerId.HasValue && prDictionary.ContainsKey(producerId.Value)) {
+                    <span>@prDictionary[producerId.Value]</span>
+                }
+            </td>
+            <td>@item.UrlString</td>
+            <td>@item.AdminId<br/>
+            @item.DateEdit</td>
+            <td><a href="#"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+        </tr>
+    }
+</table>
+<br />
+}
+else
+{
+<h4>Обращений не найдено</h4>
+}
+

@@ -4,6 +4,7 @@
 @{
   ViewBag.Title = "Обратная связь";
   Layout = "~/Views/Shared/_Layout.cshtml";
+  var sbst = string.IsNullOrEmpty(Model.Name) ? "<укажите здесь Ваши ФИО>" : Model.Name;
 }
 
 <div class="container">
@@ -12,32 +13,34 @@
     @using (Html.BeginForm())
     {
     @Html.HiddenFor(m => m.ProducerName)
+    <div class="">Я, <span id="fio">@sbst</span>, являюсь сотрудником компании @Model.ProducerName, не могу зарегистрироваться в связи с отсутствием домена моего почтового ящика, прошу добавить возможность регистрации с моим email</div>
+    <br/>
     <div class="form-group">
         @Html.LabelFor(m => m.Description)
         @Html.TextAreaFor(m => m.Description, new { @rows = "5", @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Description)
     </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Name)
-            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Name)
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @onchange = "$('#fio').text($(this).val());" })
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email)
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Email)
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email)
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.PhoneNum)
-            @Html.TextBoxFor(m => m.PhoneNum, new { @placeholder = "(999) 999-99-99", @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.PhoneNum)
-        </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNum)
+        @Html.TextBoxFor(m => m.PhoneNum, new { @placeholder = "(999) 999-99-99", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.PhoneNum)
+    </div>
 
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Отправить" />
-        </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Отправить" />
+    </div>
     }
 </div>

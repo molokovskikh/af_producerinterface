@@ -185,3 +185,4 @@ max-width:45em;
    max-width: 500px;
 }
 
+tr.warning2 > td { background-color: #ffcccc}

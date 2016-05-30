@@ -110,8 +110,7 @@ namespace ProducerInterface.Controllers
 				throw new NotSupportedException("Производитель не найден");
 
 			var model = new AddDomainFeedBack() {
-				ProducerName = producer.ProducerName,
-				Description = $"Я являюсь сотрудником компании {producer.ProducerName}, не могу зарегистрироваться в связи с отсутствием домена моего почтового ящика, прошу добавить возможность регистрации с моим email"
+				ProducerName = producer.ProducerName
 			};
 			return View(model);
 		}
@@ -131,7 +130,7 @@ namespace ProducerInterface.Controllers
 				Contacts = model.Contact,
 				Type = (sbyte)FeedBackTypePrivate.AddNewDomainName,
 				UrlString = $"Добавление домена для производителя {model.ProducerName}",
-				Description = model.Description,
+				Description = $"{model.PresetDescription} {model.Description}",
 				DateAdd = DateTime.Now
 			};
 

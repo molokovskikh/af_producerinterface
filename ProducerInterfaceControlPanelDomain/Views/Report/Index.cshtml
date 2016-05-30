@@ -36,6 +36,7 @@
             <div class="modal-body">
                 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "sform" }))
                 {
+                    @Html.HiddenFor(m => m.CurrentPageIndex)
                     <div class="form-group">
                         @Html.LabelFor(m => m.Enable)
                         @Html.DropDownList("Enable", triStateValues, new { @class = "form-control" })
@@ -68,6 +69,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn btn-group btn-group-sm">
+                    <input type="button" class="btn btn-primary" value="Закрыть без поиска" data-dismiss="modal" />
                     <input type="button" class="btn btn-primary" value="Искать" onclick="getSearch()" />
                 </div>
             </div>

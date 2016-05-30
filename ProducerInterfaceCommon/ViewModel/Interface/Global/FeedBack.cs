@@ -49,9 +49,13 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Global
 
 	public class AddDomainFeedBack
 	{
-		[Required(ErrorMessage = "Заполните сообщение")]
-		[Display(Name = "Сообщение *")]
-		[StringLength(500, ErrorMessage = "Длина сообщения не более 500 знаков")]
+		public string PresetDescription
+		{
+			get { return $"Я, {Name}, являюсь сотрудником компании {ProducerName}, не могу зарегистрироваться в связи с отсутствием домена моего почтового ящика, прошу добавить возможность регистрации с моим email."; }
+		}
+
+		[Display(Name = "Дополнительное сообщение")]
+		[StringLength(200, ErrorMessage = "Длина сообщения не более 200 знаков")]
 		public string Description { get; set; }
 
 		[Display(Name = "Номер телефона *")]
@@ -73,7 +77,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Global
 
 		public string Contact
 		{
-			get { return $"{PhoneNum}, {Email}, {Name}"; }
+			get { return $"{PhoneNum}, {Email}"; }
 		}
 
 		public string ProducerName { get; set; }

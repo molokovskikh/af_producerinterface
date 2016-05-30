@@ -204,6 +204,7 @@
     <Compile Include="Controllers\Global\MasterBaseController.cs" />
     <Compile Include="Controllers\Global\MediaFilesController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\FeedBack2Controller.cs" />
     <Compile Include="Controllers\Reports_News\NewsController.cs" />
     <Compile Include="Controllers\PermissionUserController.cs" />
     <Compile Include="Controllers\ProducerInformationController.cs" />
@@ -325,6 +326,7 @@
     <Content Include="Scripts\WorkPlace\CatalogLog.js" />
     <Content Include="Scripts\WorkPlace\FeedBackModel.js" />
     <Content Include="Scripts\WorkPlace\GlobalAccount_AccountVerification.js" />
+    <Content Include="Scripts\WorkPlace\InitFeedBack.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
@@ -760,6 +762,10 @@
     <Content Include="Views\LogCatalog\ReadMore.cshtml" />
     <Content Include="Views\PermissionUser\Partial\Pager.cshtml" />
     <Content Include="Views\PermissionUser\AdminList.cshtml" />
+    <Content Include="Views\FeedBack2\Index.cshtml" />
+    <Content Include="Views\FeedBack2\SearchResult.cshtml" />
+    <Content Include="Views\FeedBack2\Partial\Pager.cshtml" />
+    <Content Include="Views\FeedBack2\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,18 +19,17 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 		// инициализирует модель фильтра
 		public FeedBackFilter GetFilter()
 		{
-			var filter = new FeedBackFilter();
-			filter.DateBegin = GetMinDate();
-			filter.DateEnd = GetMaxDate();
-			filter.PageIndex = 0;
-			filter.AccountId = 0;
-			filter.ProducerId = 0;
-			filter.ProducerList = GetProducerList();
-			filter.AccountList = GetAccountList();
-			filter.ItemsPerPageList = GetItemsPerPageList();
-			filter.ItemsPerPage = 50;
-
-			return filter;
+			return new FeedBackFilter() {
+				DateBegin = GetMinDate(),
+				DateEnd = GetMaxDate(),
+				PageIndex = 0,
+				AccountId = 0,
+				ProducerId = 0,
+				ProducerList = GetProducerList(),
+				AccountList = GetAccountList(),
+				ItemsPerPageList = GetItemsPerPageList(),
+				ItemsPerPage = 50
+			};
 		}
 
 		// возвращает минимальную дату получения сообщений обратной связи

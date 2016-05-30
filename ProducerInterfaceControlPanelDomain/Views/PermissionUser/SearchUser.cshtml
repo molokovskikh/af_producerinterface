@@ -30,7 +30,7 @@
         <td>@user.Login</td>
         <td>@user.Phone</td>
         <td>
-            @if (user.AccountCompany.ProducerId.HasValue)
+            @if (user.AccountCompany.ProducerId.HasValue && producers.ContainsKey(user.AccountCompany.ProducerId.Value))
             {
                 <span>@producers[user.AccountCompany.ProducerId.Value]</span>
             }
