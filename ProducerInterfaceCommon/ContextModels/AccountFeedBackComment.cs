@@ -12,26 +12,15 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AccountFeedBack
+    public partial class AccountFeedBackComment
     {
-        public AccountFeedBack()
-        {
-            this.AccountFeedBackComment = new HashSet<AccountFeedBackComment>();
-        }
-    
-        public long Id { get; set; }
-        public sbyte Status { get; set; }
-        public string Description { get; set; }
+        public int Id { get; set; }
+        public long IdFeedBack { get; set; }
+        public string Comment { get; set; }
         public System.DateTime DateAdd { get; set; }
-        public Nullable<long> AccountId { get; set; }
-        public string UrlString { get; set; }
-        public sbyte Type { get; set; }
-        public string Contacts { get; set; }
-        public Nullable<long> AdminId { get; set; }
-        public Nullable<System.DateTime> DateEdit { get; set; }
+        public long AdminId { get; set; }
     
         public virtual Account Account { get; set; }
-        public virtual Account Account1 { get; set; }
-        public virtual ICollection<AccountFeedBackComment> AccountFeedBackComment { get; set; }
+        public virtual AccountFeedBack AccountFeedBack { get; set; }
     }
 }

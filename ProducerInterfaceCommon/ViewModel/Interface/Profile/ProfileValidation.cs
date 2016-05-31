@@ -24,7 +24,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Profile
 
         [Display(Name = "Email")]
         [UIHint("EditorStringMail")]       
-        [RegularExpression(@"[-a-z0-9-_]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*", ErrorMessage = "Неккоректное имя пользователя")]
+        //[RegularExpression(@"[-a-z0-9-_]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*", ErrorMessage = "Неккоректное имя пользователя")]
         [Required(ErrorMessage = "Заполните email")]
         public string Mailname { get; set; }
 
@@ -36,7 +36,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Profile
         [Display(Name = "Должность")]
         [UIHint("IntApointment")]
         [Required(ErrorMessage = "Должность")]
-        public int AppointmentId { get; set; }
+        public int? AppointmentId { get; set; }
 
         [UIHint("EditorPhone")]
         [Display(Name = "Номер телефона")]

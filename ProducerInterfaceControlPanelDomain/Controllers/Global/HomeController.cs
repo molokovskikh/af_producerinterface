@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Security.Principal;
 using ProducerInterfaceCommon.ContextModels;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -34,6 +31,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.BlockedUserCount	= userByType.ContainsKey((int)UserStatus.Blocked) ? userByType[(int)UserStatus.Blocked] : 0;
 
 			model.ReportCount = cntx_.jobextend.Count();
+
+			model.FeedBackNewCount = cntx_.AccountFeedBack.Count(x => x.Status == (int)FeedBackStatus.New);
 
 			return View(model);
 		}

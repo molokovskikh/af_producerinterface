@@ -33,6 +33,10 @@
         if (item.Account != null) {
             producerId = item.Account.AccountCompany.ProducerId;
         }
+        var adminName = "";
+        if (item.AdminId.HasValue) {
+            adminName = item.Account1.Login;
+        }
 
         <tr class="@wrn"> 
             <td>@item.Id</td>
@@ -47,9 +51,11 @@
                 }
             </td>
             <td>@item.UrlString</td>
-            <td>@item.AdminId<br/>
-            @item.DateEdit</td>
-            <td><a href="#"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+            <td>
+                @adminName<br/>
+                @Html.DisplayFor(m => item.DateEdit)
+            </td>
+            <td><a href="@Url.Action("CommentToFeedBack", new { Id = item.Id })"><span class="glyphicon glyphicon-eye-open"></span></a></td>
         </tr>
     }
 </table>

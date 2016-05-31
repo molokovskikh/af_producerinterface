@@ -25,31 +25,38 @@
 
     @foreach (var item in Model)
     {
-    <tr>
-        <td class="td_275">
-            @Html.DisplayFor(modelItem => item.CustomName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Enable)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReportTypeEnum)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Scheduler)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProducerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastRun)
-        </td>
-        <td>@Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })</td>
-        <td> @Html.ActionLink("Просмотр", "DisplayReport", new { jobName = item.JobName })</td>
-        <td> @Html.ActionLink("Загрузить", "GetFile", new { jobName = item.JobName })</tr>
+        <tr>
+            <td class="td_275">
+                @Html.DisplayFor(modelItem => item.CustomName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportTypeEnum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Scheduler)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProducerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastRun)
+            </td>
+            <td>@Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })</td>
+            @if (item.DisplayStatusEnum == DisplayStatus.Ready) {
+                <td> @Html.ActionLink("Просмотр", "DisplayReport", new { jobName = item.JobName })</td>
+                <td> @Html.ActionLink("Загрузить", "GetFile", new { jobName = item.JobName })</td>
+            }
+            else {
+                <td></td>
+                <td></td>
+            }
+        </tr>
     }
 </table>
 <br />

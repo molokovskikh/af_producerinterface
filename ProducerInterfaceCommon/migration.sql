@@ -1686,3 +1686,23 @@ drop view drugfamily;
 
 drop view drugformproducer;
 
+ALTER TABLE `AccountFeedBack`
+ADD CONSTRAINT `FK_FeedBack_To_Admin` FOREIGN KEY (`AdminId`) REFERENCES `Account` (`Id`) ON UPDATE SET NULL ON DELETE SET NULL;
+
+ALTER TABLE `AccountFeedBack` drop COLUMN `Comment`;
+	
+CREATE TABLE `AccountFeedBackComment` (
+	`Id` INT(10) NOT NULL AUTO_INCREMENT,
+	`IdFeedBack` INT(10) UNSIGNED NOT NULL,
+	`Comment` VARCHAR(250) NOT NULL,
+	`DateAdd` DATETIME NOT NULL,
+	`AdminId` INT(11) UNSIGNED NOT NULL,
+	PRIMARY KEY (`Id`),
+	INDEX `FK1_Comment_To_Feedback` (`IdFeedBack`),
+	INDEX `FK_Comment_To_Admin` (`AdminId`),
+	CONSTRAINT `FK1_Comment_To_Feedback` FOREIGN KEY (`IdFeedBack`) REFERENCES `AccountFeedBack` (`Id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `FK_Comment_To_Admin` FOREIGN KEY (`AdminId`) REFERENCES `Account` (`Id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+

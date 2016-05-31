@@ -6,10 +6,11 @@ using ProducerInterfaceCommon.ContextModels;
 using System.Data;
 using System.IO;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Report;
+using ProducerInterfaceCommon.Controllers;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class ReportController : ProducerInterfaceCommon.Controllers.BaseReportController
+	public class ReportController : BaseReportController
 	{
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -156,10 +157,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult DisplayReport(string jobName)
 		{
-			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
-			if (jxml == null)
-				return View("Error", (object)"Отчет не найден");
-
+			var jxml = cntx_.reportxml.Single(x => x.JobName == jobName);
 			ViewData["jobName"] = jobName;
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
@@ -178,7 +176,5 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.AddRange(producers);
 			return model;
 		}
-
-
 	}
 }

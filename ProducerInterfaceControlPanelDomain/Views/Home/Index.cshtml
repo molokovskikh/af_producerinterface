@@ -32,6 +32,9 @@
         <ul>
             <li>@Html.DisplayFor(m => m.ReportCount) @Html.DisplayNameFor(m => m.ReportCount)</li>
         </ul>
+        <ul>
+            <li><a href="@Url.Action("Index", "FeedBack2", new { Status = (int)FeedBackStatus.New })">@Html.DisplayFor(m => m.FeedBackNewCount) @Html.DisplayNameFor(m => m.FeedBackNewCount)</a></li>
+        </ul>
     </div>
 </div>
 

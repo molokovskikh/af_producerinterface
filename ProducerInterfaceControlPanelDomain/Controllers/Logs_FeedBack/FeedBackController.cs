@@ -58,7 +58,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public JsonResult AddCommentToFeedBack(long Id, string Comment, FeedBackStatus Status)
 		{
 			var feedBackItem = cntx_.AccountFeedBack.Find(Id);
-			feedBackItem.Comment = Comment;
 			feedBackItem.DateEdit = DateTime.Now;
 			feedBackItem.AdminId = CurrentUser.Id;
 			feedBackItem.StatusEnum = Status;

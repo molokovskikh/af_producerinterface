@@ -70,7 +70,6 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 				Id					= modelDb.Id,
 				Description = modelDb.Description,
 				Status			= modelDb.Status,
-				Comment			= modelDb.Comment,
 				Type				= modelDb.Type,
 				StatusList = EnumHelper.GetSelectList(typeof(FeedBackStatus)).ToList()
 			};

@@ -42,6 +42,9 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		[Display(Name = "отчетов")]
 		public int ReportCount { get; set; }
+
+		[Display(Name = "необработанных сообщений")]
+		public int FeedBackNewCount { get; set; }
 	}
 
 	public class UserEdit

@@ -63,9 +63,18 @@
           <Property Name="UrlString" Type="varchar" MaxLength="250" />
           <Property Name="Type" Type="tinyint" Nullable="false" />
           <Property Name="Contacts" Type="varchar" MaxLength="250" />
-          <Property Name="Comment" Type="varchar" MaxLength="1000" />
           <Property Name="AdminId" Type="uint" />
           <Property Name="DateEdit" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="AccountFeedBackComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdFeedBack" Type="uint" Nullable="false" />
+          <Property Name="Comment" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="DateAdd" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="AdminId" Type="uint" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountGroup">
           <Key>
@@ -723,6 +732,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Comment_To_Admin">
+          <End Role="Account" Type="Self.Account" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AccountFeedBackComment" Type="Self.AccountFeedBackComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBackComment">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FeedBack_To_Account">
           <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
           <End Role="AccountFeedBack" Type="Self.AccountFeedBack" Multiplicity="*" />
@@ -732,6 +755,18 @@
             </Principal>
             <Dependent Role="AccountFeedBack">
               <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedBack_To_Admin">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="AccountFeedBack" Type="Self.AccountFeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBack">
+              <PropertyRef Name="AdminId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -879,6 +914,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK1_Comment_To_Feedback">
+          <End Role="AccountFeedBack" Type="Self.AccountFeedBack" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AccountFeedBackComment" Type="Self.AccountFeedBackComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountFeedBack">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBackComment">
+              <PropertyRef Name="IdFeedBack" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK1_NewsChangeToAccount">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="NewsChange" Type="Self.NewsChange" Multiplicity="*" />
@@ -924,6 +973,7 @@
           <EntitySet Name="AccountCompany" EntityType="Self.AccountCompany" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountEmail" EntityType="Self.AccountEmail" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountFeedBack" EntityType="Self.AccountFeedBack" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="AccountFeedBackComment" EntityType="Self.AccountFeedBackComment" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountGroup" EntityType="Self.AccountGroup" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountGroupToPermission" EntityType="Self.AccountGroupToPermission" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountPermission" EntityType="Self.AccountPermission" Schema="producerinterface" store:Type="Tables" />
@@ -1175,7 +1225,15 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountEmail" EntitySet="AccountEmail" />
           </AssociationSet>
+          <AssociationSet Name="FK_Comment_To_Admin" Association="Self.FK_Comment_To_Admin">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFeedBackComment" EntitySet="AccountFeedBackComment" />
+          </AssociationSet>
           <AssociationSet Name="FK_FeedBack_To_Account" Association="Self.FK_FeedBack_To_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedBack_To_Admin" Association="Self.FK_FeedBack_To_Admin">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
           </AssociationSet>
@@ -1222,6 +1280,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="FK_to_Permission_controlpanel" Association="Self.FK_to_Permission_controlpanel">
             <End Role="AccountPermission" EntitySet="AccountPermission" />
             <End Role="AccountGroupToPermission" EntitySet="AccountGroupToPermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK1_Comment_To_Feedback" Association="Self.FK1_Comment_To_Feedback">
+            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+            <End Role="AccountFeedBackComment" EntitySet="AccountFeedBackComment" />
           </AssociationSet>
           <AssociationSet Name="FK1_NewsChangeToAccount" Association="Self.FK1_NewsChangeToAccount">
             <End Role="Account" EntitySet="Account" />
@@ -1486,9 +1548,22 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
           <EntitySet Name="AccountFeedBack" EntityType="producerinterface_Model.AccountFeedBack" />
+          <EntitySet Name="AccountFeedBackComment" EntityType="producerinterface_Model.AccountFeedBackComment" />
+          <AssociationSet Name="FK_Comment_To_Admin" Association="producerinterface_Model.FK_Comment_To_Admin">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFeedBackComment" EntitySet="AccountFeedBackComment" />
+          </AssociationSet>
           <AssociationSet Name="FK_FeedBack_To_Account" Association="producerinterface_Model.FK_FeedBack_To_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedBack_To_Admin" Association="producerinterface_Model.FK_FeedBack_To_Admin">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+          </AssociationSet>
+          <AssociationSet Name="FK1_Comment_To_Feedback" Association="producerinterface_Model.FK1_Comment_To_Feedback">
+            <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
+            <End Role="AccountFeedBackComment" EntitySet="AccountFeedBackComment" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AccountCompany">
@@ -2058,7 +2133,9 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="promotions1" Relationship="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" FromRole="Account" ToRole="promotions" />
           <NavigationProperty Name="NewsChange" Relationship="producerinterface_Model.FK1_NewsChangeToAccount" FromRole="Account" ToRole="NewsChange" />
           <NavigationProperty Name="AccountGroup" Relationship="producerinterface_Model.AccountUserToGroup" FromRole="Account" ToRole="AccountGroup" />
+          <NavigationProperty Name="AccountFeedBackComment" Relationship="producerinterface_Model.FK_Comment_To_Admin" FromRole="Account" ToRole="AccountFeedBackComment" />
           <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
+          <NavigationProperty Name="AccountFeedBack1" Relationship="producerinterface_Model.FK_FeedBack_To_Admin" FromRole="Account" ToRole="AccountFeedBack" />
         </EntityType>
         <Association Name="Account_Appointment">
           <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
@@ -2148,11 +2225,38 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="UrlString" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="SByte" Nullable="false" />
           <Property Name="Contacts" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="AdminId" Type="Int64" />
           <Property Name="DateEdit" Type="DateTime" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="AccountFeedBack" ToRole="Account" />
+          <NavigationProperty Name="Account1" Relationship="producerinterface_Model.FK_FeedBack_To_Admin" FromRole="AccountFeedBack" ToRole="Account" />
+          <NavigationProperty Name="AccountFeedBackComment" Relationship="producerinterface_Model.FK1_Comment_To_Feedback" FromRole="AccountFeedBack" ToRole="AccountFeedBackComment" />
         </EntityType>
+        <EntityType Name="AccountFeedBackComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdFeedBack" Type="Int64" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="DateAdd" Type="DateTime" Nullable="false" />
+          <Property Name="AdminId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_Comment_To_Admin" FromRole="AccountFeedBackComment" ToRole="Account" />
+          <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK1_Comment_To_Feedback" FromRole="AccountFeedBackComment" ToRole="AccountFeedBack" />
+        </EntityType>
+        <Association Name="FK_Comment_To_Admin">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="producerinterface_Model.AccountFeedBackComment" Role="AccountFeedBackComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBackComment">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FeedBack_To_Account">
           <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
           <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
@@ -2162,6 +2266,32 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Principal>
             <Dependent Role="AccountFeedBack">
               <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedBack_To_Admin">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBack">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK1_Comment_To_Feedback">
+          <End Type="producerinterface_Model.AccountFeedBack" Role="AccountFeedBack" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="producerinterface_Model.AccountFeedBackComment" Role="AccountFeedBackComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountFeedBack">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFeedBackComment">
+              <PropertyRef Name="IdFeedBack" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2785,7 +2915,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               <MappingFragment StoreEntitySet="AccountFeedBack">
                 <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
                 <ScalarProperty Name="AdminId" ColumnName="AdminId" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
                 <ScalarProperty Name="Contacts" ColumnName="Contacts" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="UrlString" ColumnName="UrlString" />
@@ -2793,6 +2922,17 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountFeedBackComment">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountFeedBackComment">
+              <MappingFragment StoreEntitySet="AccountFeedBackComment">
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="IdFeedBack" ColumnName="IdFeedBack" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -1,25 +1,33 @@
 ﻿@model ProducerInterfaceCommon.ViewModel.Interface.Profile.ProfileValidation
 @{
-   ViewBag.Title = "Мой профиль";
+  ViewBag.Title = "Мой профиль";
+  var className = "form-group collapse";
+  var stateMail = ViewData.ModelState["Mailname"];
+  if (stateMail != null && stateMail.Errors.Count > 0)
+  {
+      className = "form-group in";
+  }
 }
+
+
 <div class="container body-content">
-  @using(Html.BeginForm("Account", "Profile", FormMethod.Post)){
-        <h3>Компания : @Model.CompanyName</h3>
-        <hr/>     
+    @using (Html.BeginForm("Account", "Profile", FormMethod.Post))
+    {
+    <h3>Компания : @Model.CompanyName</h3>
+        <hr />
 
-    @Html.EditorFor(m => m.LastName)
-    @Html.EditorFor(m => m.FirstName)
-    @Html.EditorFor(m => m.OtherName)
+        @Html.EditorFor(m => m.LastName)
+        @Html.EditorFor(m => m.FirstName)
+        @Html.EditorFor(m => m.OtherName)
+        @Html.EditorFor(m => m.PhoneNumber)
+        @Html.EditorFor(m => m.AppointmentId)
 
-	        @Html.EditorFor(m => m.PhoneNumber)
-	        @Html.EditorFor(m => m.AppointmentId)
+        <br />
 
-	        <br/>
-
-            <hr/>
+            <hr />
             <a href="#LoginChange" data-toggle="collapse">Смена логина</a>
 
-            <div class="form-group collapse" id="LoginChange">
+            <div class="@className" id="LoginChange">
                 <div class="row">
                     <div class="col-xs-12">
                         <label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
@@ -37,14 +45,14 @@
 
             <hr />
 
-	        <div class="form-group">
-		        <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Сохранить изменения"/>
-	        </div>
-	      
-}
-   </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Сохранить изменения" />
+            </div>
+
+    }
+</div>
 
 @section JavaScript{
-<script src="~/Scripts/jquery.maskedinput.min.js"></script>
-<script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
 }

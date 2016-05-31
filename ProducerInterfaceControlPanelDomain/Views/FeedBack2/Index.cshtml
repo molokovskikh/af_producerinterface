@@ -21,7 +21,7 @@
                 <h3>Фильтр сообщений</h3>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "sform" }))
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "sform" }))
                 {
                     @Html.HiddenFor(m => m.CurrentPageIndex)
                     <div class="form-group">

@@ -766,6 +766,7 @@
     <Content Include="Views\FeedBack2\SearchResult.cshtml" />
     <Content Include="Views\FeedBack2\Partial\Pager.cshtml" />
     <Content Include="Views\FeedBack2\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\FeedBack2\CommentToFeedBack.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

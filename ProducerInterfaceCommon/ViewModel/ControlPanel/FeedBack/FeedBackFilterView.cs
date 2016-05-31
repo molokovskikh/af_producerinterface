@@ -1,7 +1,6 @@
 ﻿using ProducerInterfaceCommon.ContextModels;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
@@ -56,6 +55,27 @@ namespace ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack
 		public List<SelectListItem> AccountList { get; set; }
 		public List<SelectListItem> ItemsPerPageList { get; set; }
 	}
+
+	// данная модель будет возвращатся при поиске результатов с клиента
+	public class FeedBackComment
+	{
+		[Display(Name = "Сообщение #")]
+		public long Id { get; set; }
+
+		[Display(Name = "Текст обращения")]
+		public string Description { get; set; }
+
+		[Display(Name = "Статус")]
+		public sbyte Status { get; set; }
+
+		[Display(Name = "Комментарий")]
+		public string Comment { get; set; }
+
+		public List<SelectListItem> StatusList { get; set; }
+
+		public IEnumerable<AccountFeedBackComment> CommentList { get; set; }
+	}
+
 
 	// данная модель будет возвращатся при поиске результатов с клиента
 	public class FeedBackFilter

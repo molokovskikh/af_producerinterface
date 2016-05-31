@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.ContextModels;
-using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class FeedBack2Controller : BaseReportController
+	public class FeedBack2Controller : MasterBaseController
 	{
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
@@ -16,27 +16,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			base.OnActionExecuting(filterContext);
 		}
 
-		[HttpGet]
-		public ActionResult Index()
-		{
-			var prDictionary = GetProducerList();
-			var model = new FeedBackFilter2()
-			{
-				ProducerList = GetProducerListUi(prDictionary),
-				AccountList = GetAccountList(),
-				DateBegin = GetMinDate(),
-				DateEnd = GetMaxDate(),
-				ItemsPerPage = 50,
-				ItemsPerPageList = GetItemsPerPageList(50),
-				CurrentPageIndex = 0,
-				StatusList = GetStatusList()
-			};
-			return View(model);
-		}
-
-		[HttpPost]
 		public ActionResult Index(FeedBackFilter2 model)
 		{
+			if (!model.DateBegin.HasValue)
+				model.DateBegin = GetMinDate();
+			if (!model.DateEnd.HasValue)
+				model.DateEnd = GetMaxDate();
+			if (model.ItemsPerPage == 0)
+				model.ItemsPerPage = 50;
 			var prDictionary = GetProducerList();
 			model.ProducerList = GetProducerListUi(prDictionary, model.ProducerId);
 			model.AccountList = GetAccountList(model.AccountId);
@@ -45,6 +32,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Поиск сообщений обратной связи по фильтру
+		/// </summary>
+		/// <param name="filter">фильтр</param>
+		/// <returns></returns>
 		public ActionResult SearchResult(FeedBackFilter2 filter)
 		{
 			var query = cntx_.AccountFeedBack.AsQueryable();
@@ -70,110 +62,56 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(model);
 		}
 
-		//[HttpGet]
-		//public ActionResult ReportDescription()
-		//{
-		//	var model = cntx_.ReportDescription.ToList();
-		//	return View(model);
-		//}
+		/// <summary>
+		/// Форма ввода-вывода комментариев админов к сообщению обратной связи GET
+		/// </summary>
+		/// <param name="Id">идентификатор сообщения</param>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult CommentToFeedBack(long Id)
+		{
+			var feedBack = cntx_.AccountFeedBack.Single(x => x.Id == Id);
+			var model = new FeedBackComment() {
+				Id = Id,
+				Status = feedBack.Status,
+				Description = feedBack.Description
+			};
+			model.StatusList = EnumHelper.GetSelectList(typeof(FeedBackStatus), (FeedBackStatus)model.Status).ToList();
+			model.CommentList = cntx_.AccountFeedBackComment.Where(x => x.IdFeedBack == Id).OrderByDescending(x => x.DateAdd).ToList();
+			return View(model);
+		}
 
-		//[HttpPost]
-		//public ActionResult ReportDescription(int? id)
-		//{
-		//	if (id.HasValue)
-		//		return RedirectToAction("EditReportDescription", new { id = id.Value });
+		/// <summary>
+		/// Изменение статуса сообщения, добавление комментария
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult CommentToFeedBack(FeedBackComment model)
+		{
+			var feedBack = cntx_.AccountFeedBack.Single(x => x.Id == model.Id);
+			feedBack.AdminId = CurrentUser.Id;
+			feedBack.DateEdit = DateTime.Now;
+			feedBack.Status = model.Status;
 
-		//	ModelState.AddModelError("id", "Выберите тип отчета, который хотите изменить");
-		//	var model = cntx_.ReportDescription.ToList();
-		//	return View(model);
-		//}
+			// если передан текст комментария
+			if (!string.IsNullOrEmpty(model.Comment)) {
+				var comment = new AccountFeedBackComment() {
+					AdminId = CurrentUser.Id,
+					DateAdd = DateTime.Now,
+					Comment = model.Comment
+				};
+				feedBack.AccountFeedBackComment.Add(comment);
+			}
+			cntx_.SaveChanges();
+			return RedirectToAction("Index");
+		}
 
-		//[HttpGet]
-		//public ActionResult EditReportDescription(int id)
-		//{
-		//	var model = cntx_.ReportDescription.Single(x => x.Id == id);
-		//	var regionCode = model.ReportRegion.Select(x => x.RegionCode).ToList();
-
-		//	ViewData["Regions"] = cntx_.regionsnamesleaf
-		//		.ToList()
-		//		.OrderBy(x => x.RegionName)
-		//		.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionCode.Contains(x.RegionCode) })
-		//		.ToList();
-
-		//	var modelUI = new ReportDescriptionUI()
-		//	{
-		//		Id = model.Id,
-		//		Name = model.Name,
-		//		Description = model.Description,
-		//		RegionList = regionCode
-		//	};
-		//	return View(modelUI);
-		//}
-
-		//[HttpPost]
-		//public ActionResult EditReportDescription(ReportDescriptionUI modelUI)
-		//{
-		//	var model = cntx_.ReportDescription.Single(x => x.Id == modelUI.Id);
-		//	var regionCode = model.ReportRegion.Select(x => x.RegionCode).ToList();
-
-		//	if (!ModelState.IsValid)
-		//	{
-		//		ViewData["Regions"] = cntx_.regionsnamesleaf
-		//			.ToList()
-		//			.OrderBy(x => x.RegionName)
-		//			.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionCode.Contains(x.RegionCode) })
-		//			.ToList();
-		//		return View(modelUI);
-		//	}
-		//	model.Description = modelUI.Description;
-		//	var rr = new List<ReportRegion>();
-		//	foreach (var r in modelUI.RegionList)
-		//		rr.Add(new ReportRegion() { RegionCode = r, ReportId = modelUI.Id });
-
-		//	foreach (var child in model.ReportRegion.ToList())
-		//		model.ReportRegion.Remove(child);
-		//	cntx_.SaveChanges();
-
-		//	model.ReportRegion = rr;
-		//	cntx_.SaveChanges();
-		//	SuccessMessage("Свойства отчета сохранены");
-		//	return RedirectToAction("ReportDescription");
-		//}
-
-		///// <summary>
-		///// Возвращает историю запуска отчета
-		///// </summary>
-		///// <param name="jobName">Имя задания в Quartz</param>
-		///// <returns></returns>
-		//public ActionResult RunHistory(string jobName)
-		//{
-		//	var reportName = cntx_.jobextend.Single(x => x.JobName == jobName).CustomName;
-		//	var ProducerId = cntx_.jobextend.Where(y => y.JobName == jobName).First().ProducerId;
-		//	var ProducerName = cntx_.producernames.Where(x => x.ProducerId == ProducerId).First().ProducerName;
-
-		//	ViewBag.Title = $"История запусков отчета: \"{reportName}\", Производитель : \"{ProducerName}\"";
-		//	var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
-
-		//	return View(model);
-		//}
-
-		///// <summary>
-		///// Возвращает последнюю версию указанного отчета для отображения пользователю в веб-интерфейсе
-		///// </summary>
-		///// <param name="jobName">Имя задания в Quartz</param>
-		///// <returns></returns>
-		//public ActionResult DisplayReport(string jobName)
-		//{
-		//	var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
-		//	if (jxml == null)
-		//		return View("Error", (object)"Отчет не найден");
-
-		//	ViewData["jobName"] = jobName;
-		//	var ds = new DataSet();
-		//	ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
-		//	return View(ds);
-		//}
-
+		/// <summary>
+		/// Список статусов сообщений
+		/// </summary>
+		/// <param name="status"></param>
+		/// <returns></returns>
 		private List<SelectListItem> GetStatusList(int? status = null)
 		{
 				return new List<SelectListItem> {
@@ -183,7 +121,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				};
 		}
 
-		// возвращает список производителей, от пользователей которых есть сообщения в обратной связи
+		/// <summary>
+		/// Возвращает список производителей, от пользователей которых есть сообщения в обратной связи
+		/// </summary>
+		/// <returns></returns>
 		private Dictionary<long, string> GetProducerList()
 		{
 			var cIds = cntx_.AccountFeedBack.Where(x => x.AccountId.HasValue).Select(x => x.Account.AccountCompany.Id).Distinct().ToList();
@@ -195,7 +136,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return plDictionary;
 		}
 
-		// возвращает список производителей, от пользователей которых есть сообщения в обратной связи
+		/// <summary>
+		/// Возвращает список производителей, от пользователей которых есть сообщения в обратной связи
+		/// </summary>
+		/// <param name="prDictionary"></param>
+		/// <param name="producerId"></param>
+		/// <returns></returns>
 		private List<SelectListItem> GetProducerListUi(Dictionary<long, string> prDictionary, long? producerId = null)
 		{
 			var producerList = new List<SelectListItem>() { new SelectListItem { Text = "Выберите производителя", Value = "" } };
@@ -203,7 +149,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return producerList;
 		}
 
-		// возвращает минимальную дату получения сообщений обратной связи
+		/// <summary>
+		/// Возвращает минимальную дату получения сообщений обратной связи
+		/// </summary>
+		/// <returns></returns>
 		private DateTime? GetMinDate()
 		{
 			if (cntx_.AccountFeedBack.Any())
@@ -211,7 +160,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return null;
 		}
 
-		// возвращает максимальную дату получения сообщений обратной связи
+		/// <summary>
+		/// Возвращает максимальную дату получения сообщений обратной связи
+		/// </summary>
+		/// <returns></returns>
 		private DateTime? GetMaxDate()
 		{
 			if (cntx_.AccountFeedBack.Any())
@@ -219,6 +171,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return null;
 		}
 
+		/// <summary>
+		/// Список возможных значений элементов на странице
+		/// </summary>
+		/// <param name="itemsPerPage"></param>
+		/// <returns></returns>
 		private List<SelectListItem> GetItemsPerPageList(int itemsPerPage)
 		{
 			return new List<SelectListItem>()
@@ -230,7 +187,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				};
 		}
 
-		// возвращает список пользователей, от которых есть сообщения в обратной связи
+		/// <summary>
+		/// Возвращает список пользователей, от которых есть сообщения в обратной связи
+		/// </summary>
+		/// <param name="accountId"></param>
+		/// <returns></returns>
 		private List<SelectListItem> GetAccountList(long? accountId = null)
 		{
 			var accIds = cntx_.AccountFeedBack.Select(x => x.AccountId).Distinct().ToList();
@@ -243,7 +204,5 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			accountList.AddRange(acc);
 			return accountList;
 		}
-
-
 	}
 }

@@ -64,8 +64,12 @@
         <AssociationConnector Association="producerinterface_Model.FK_promotions_AdminId_To_ProducerId" />
         <AssociationConnector Association="producerinterface_Model.FK1_NewsChangeToAccount" />
         <AssociationConnector Association="producerinterface_Model.AccountUserToGroup" />
-        <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="1.5" PointX="7.75" PointY="25.125" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBack" Width="1.5" PointX="6.125" PointY="29.25" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountFeedBackComment" Width="1.5" PointX="7.625" PointY="26.125" />
+        <AssociationConnector Association="producerinterface_Model.FK_Comment_To_Admin" />
         <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Account" />
+        <AssociationConnector Association="producerinterface_Model.FK_FeedBack_To_Admin" />
+        <AssociationConnector Association="producerinterface_Model.FK1_Comment_To_Feedback" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
