@@ -17,7 +17,6 @@ namespace ProducerInterfaceCommon.Controllers
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
-
 			base.OnActionExecuting(filterContext);
 			CurrentUser = GetCurrentUser(TypeLoginUser);
 

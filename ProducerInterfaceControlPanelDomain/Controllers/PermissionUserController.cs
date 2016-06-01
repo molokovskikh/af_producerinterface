@@ -31,7 +31,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 							Name = y.Name,
 							ProducerName = y.AccountCompany != null ? y.AccountCompany.Name : "" // у админов нет компании
 						}).ToList(),
-						Permissions = x.AccountPermission.Where(y => y.Enabled).Select(y => y.ControllerAction + "  " + y.ActionAttributes).ToArray()
+						Permissions = x.AccountPermission
+							.Where(y => y.Enabled)
+							.OrderBy(y => new { y.ControllerAction, y.ActionAttributes })
+							.Select(y => y.ControllerAction + " " + y.ActionAttributes)
+							.ToArray()
 					});
 
 			return View(model);
@@ -269,7 +273,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			// все пользователи
 			ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name + " - " + x.Login, Value = x.Id.ToString() }).ToList();
 			// все права
-			ViewBag.PermissionList = cntx_.AccountPermission.Where(x => x.Enabled && x.TypePermission == model.TypeGroup).Select(x => new OptionElement { Text = x.ControllerAction + " " + x.Description, Value = x.Id.ToString() }).ToList();
+			ViewBag.PermissionList = cntx_.AccountPermission
+				.Where(x => x.Enabled && x.TypePermission == model.TypeGroup)
+				.OrderBy(x => new { x.ControllerAction, x.ActionAttributes })
+				.Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.Id.ToString() })
+				.ToList();
 
 			model.ListPermission = model.AccountPermission.Select(x => x.Id).ToList();
 			model.ListUser = model.Account.Select(x => x.Id).ToList();
@@ -289,7 +297,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			{
 				ErrorMessage("Не указано название группы");
 				ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
-				ViewBag.PermissionList = cntx_.AccountPermission.Where(x => x.Enabled && x.TypePermission == model.TypeGroup).Select(x => new OptionElement { Text = x.ControllerAction + " " + x.Description, Value = x.Id.ToString() }).ToList();
+				ViewBag.PermissionList = cntx_.AccountPermission
+					.Where(x => x.Enabled && x.TypePermission == model.TypeGroup)
+					.OrderBy(x => new { x.ControllerAction, x.ActionAttributes })
+					.Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.Id.ToString() })
+					.ToList();
 				return View("ChangeGroupParameters", model);
 			}
 
@@ -304,11 +316,19 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			group.Description = model.Description;
 			cntx_.SaveChanges();
 
+			// если очищено всё
+			if (model.ListPermission == null)
+				model.ListPermission = new List<int>();
+			
 			// обновляем список пермишенов для данной группы 
-			var groupPermissions = cntx_.AccountPermission.Where(x => model.ListPermission.Contains(x.Id));
+			var groupPermissions = cntx_.AccountPermission.Where(x => model.ListPermission.Contains(x.Id)).ToList();
 			group.AccountPermission.Clear();
 			foreach (var permission in groupPermissions)
 				group.AccountPermission.Add(permission);
+
+			// если очищено всё
+			if (model.ListUser == null)
+				model.ListUser = new List<long>();
 
 			// пользователи, что более не состоят в данной группе
 			var deletedAccounts = group.Account.Where(x => !model.ListUser.Contains(x.Id)).ToList();
@@ -316,7 +336,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				account.LastUpdatePermisison = DateTime.Now;
 
 			//обновляем список пользователей для данной группы
-			var groupAccounts = cntx_.Account.Where(x => model.ListUser.Contains(x.Id));
+			var groupAccounts = cntx_.Account.Where(x => model.ListUser.Contains(x.Id)).ToList();
 			group.Account.Clear();
 			foreach (var account in groupAccounts) {
 				group.Account.Add(account);
@@ -356,7 +376,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.ListUser = new List<long>();
 
 			ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
-			ViewBag.PermissionList = cntx_.AccountPermission.Where(x => x.Enabled && x.TypePermission == model.TypeGroup).Select(x => new OptionElement { Text = x.ControllerAction + " " + x.Description, Value = x.Id.ToString() }).ToList();
+			ViewBag.PermissionList = cntx_.AccountPermission
+				.Where(x => x.Enabled && x.TypePermission == model.TypeGroup)
+				.OrderBy(x => new { x.ControllerAction, x.ActionAttributes })
+				.Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.Id.ToString() })
+				.ToList();
 
 			return View("ChangeGroupParameters", model);
 		}

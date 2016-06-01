@@ -3,9 +3,17 @@
     setInterval(ajaxCall, 10000);
 
     $('#id').on('change', function() {
+        var val = $(this).val();
         $('div.descr').hide();
-        var selector = '#d' + $(this).val();
+        var selector = '#d' + val;
         $(selector).show();
+
+        var btn = $('#btn');
+        if (val) {
+            btn.removeProp("disabled");
+        } else {
+            btn.prop("disabled", "disabled");
+        }
     });
 });
 
@@ -43,7 +51,6 @@ function ajaxCall() {
 
 	});
 };
-
 
 
 

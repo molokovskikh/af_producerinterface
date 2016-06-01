@@ -9,11 +9,11 @@ using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
 using System.Data;
 using System.IO;
-using System.Configuration;
+using ProducerInterfaceCommon.Controllers;
 
 namespace ProducerInterface.Controllers
 {
-	public class ReportController : ProducerInterfaceCommon.Controllers.BaseReportController
+	public class ReportController : BaseReportController
 	{
 
 		protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));

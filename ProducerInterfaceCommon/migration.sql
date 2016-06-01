@@ -1668,24 +1668,6 @@ values (17, 'Запрос регистрации на сайте {SiteName}',
 ALTER TABLE `AccountFeedBack`
  CHANGE COLUMN `Contacts` `Contacts` VARCHAR(250) NULL DEFAULT NULL;
 
- #ниже не внесено в боевую БД
- drop view catalognameswithuptime;
-
- drop table DrugDescriptionRemark;
-# + модель
-
-drop view drugfamilynames;
-# + модель
-
-drop view drugdescription;
-
-drop view drugmnn;
-
-drop view drugfamily;
-# + модель
-
-drop view drugformproducer;
-
 ALTER TABLE `AccountFeedBack`
 ADD CONSTRAINT `FK_FeedBack_To_Admin` FOREIGN KEY (`AdminId`) REFERENCES `Account` (`Id`) ON UPDATE SET NULL ON DELETE SET NULL;
 
@@ -1705,4 +1687,24 @@ CREATE TABLE `AccountFeedBackComment` (
 )
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB;
+
+
+#ниже не внесено в боевую БД
+ drop view catalognameswithuptime;
+
+ drop table DrugDescriptionRemark;
+# + модель
+
+drop view drugfamilynames;
+# + модель
+
+drop view drugdescription;
+
+drop view drugmnn;
+
+drop view drugfamily;
+# + модель
+
+drop view drugformproducer;
+
 

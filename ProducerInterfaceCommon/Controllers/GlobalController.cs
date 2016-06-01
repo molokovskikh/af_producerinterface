@@ -93,8 +93,8 @@ namespace ProducerInterfaceCommon.Controllers
 
 			// если тикет устарел
 			if (ticket.Expired) {
-				// если пользователь хочет зайти в закрытую часть, но доступ устарел
-				if (!IgnoreRoutePermission())
+				// если пользователь хочет зайти в закрытую часть, но доступ устарел 
+				if (!IgnoreRoutePermission() && TypeLoginUser != TypeUsers.ControlPanelUser)
 					ErrorMessage("Вы достаточно долго не проявляли активность. К сожалению, Ваш сеанс работы завершен. Для продолжения работы вновь авторизуйтесь (введите имя и пароль)");
 				return currentUser;
 			}

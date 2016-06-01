@@ -6,7 +6,7 @@
 
      @{
         var listReport = new List<SelectListItem>();
-        listReport.Add(new SelectListItem() { Text = "Выберите тип отчета, который вы хотите создать", Selected = true });
+        listReport.Add(new SelectListItem() { Value = "", Text = "Выберите тип отчета, который вы хотите создать", Selected = true });
         listReport.AddRange(EnumHelper.GetSelectList(typeof(Reports)));
 
         var descr = (Dictionary<int, string>)ViewData["descr"];
@@ -24,7 +24,7 @@
                             @Html.ValidationMessage("id")
                         </div>
                         <div class="col-xs-1">
-                            <input id="btn" type="submit" value="Создать" class="btn btn-primary" />
+                            <input id="btn" type="submit" value="Создать" class="btn btn-primary" disabled="disabled" />
                         </div>
                         <div class="col-xs-7">
                             @foreach (var d in descr) {
