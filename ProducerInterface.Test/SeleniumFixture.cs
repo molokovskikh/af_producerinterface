@@ -16,6 +16,7 @@ using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using System.Threading;
+using NUnit.Framework.Interfaces;
 
 namespace ProducerInterface.Test
 {
@@ -36,7 +37,8 @@ namespace ProducerInterface.Test
 				if (GlobalDriver != null)
 					return;
 
-				var version = Directory.GetDirectories("../../../packages/", "*ChromeDriver*").FirstOrDefault();
+				var pathToPackages = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../packages/"));
+				var version = Directory.GetDirectories(pathToPackages, "*ChromeDriver*").FirstOrDefault();
 				var chromeOptions = new ChromeOptionsWithPrefs();
 				chromeOptions.prefs = new Dictionary<string, object> {
 					{ "download.prompt_for_download", "false" },
@@ -177,7 +179,7 @@ namespace ProducerInterface.Test
 		public void SeleniumTearDown()
 		{
 			var currentContext = TestContext.CurrentContext;
-			if (currentContext.Result.Status == TestStatus.Failed)
+			if (currentContext.Result.Outcome.Status == TestStatus.Failed)
 			{
 				if (browser != null)
 				{
@@ -417,7 +419,8 @@ namespace ProducerInterface.Test
 			WebRoot = ConfigurationManager.AppSettings["webRoot"] ?? "/";
 			WebDir = ConfigurationManager.AppSettings["webDirectory"];
 
-			var webServer = new Server(WebPort, WebRoot, Path.GetFullPath(WebDir));
+			var pathToWebDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, WebDir));
+			var webServer = new Server(WebPort, WebRoot, pathToWebDir);
 			webServer.Start();
 
 			try

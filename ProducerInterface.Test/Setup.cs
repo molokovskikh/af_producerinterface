@@ -8,14 +8,14 @@ namespace ProducerInterface.Test
 	{
 		private Server _webServer;
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void SetupFixture()
 		{
 			SeleniumFixture.GlobalSetup();
 			_webServer = SeleniumFixture.StartServer();
 		}
 
-		[TearDown]
+		[OneTimeTearDown]
 		public void TeardownFixture()
 		{
 			SeleniumFixture.GlobalTearDown();
