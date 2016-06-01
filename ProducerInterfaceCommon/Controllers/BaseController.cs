@@ -116,17 +116,17 @@ namespace ProducerInterfaceCommon.Controllers
 			}
 		}
 
-		/// <summary>
-		/// Проверяет, находится ли вызываемый экшн контроллера в списке всегда открытых
-		/// </summary>
-		/// <returns></returns>
-		private bool IgnoreRoutePermission()
-		{
-			// список игнорируемых маршрутов CSV. Сейчас Home_Index,FeedBack_*,Account_*
-			var ignoreRoute = GetWebConfigParameters("IgnoreRoute").ToLower().Split(',').ToList();
-			var result = ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
-			return result;
-		}
+		///// <summary>
+		///// Проверяет, находится ли вызываемый экшн контроллера в списке всегда открытых
+		///// </summary>
+		///// <returns></returns>
+		//private bool IgnoreRoutePermission()
+		//{
+		//	// список игнорируемых маршрутов CSV. Сейчас Home_Index,FeedBack_*,Account_*
+		//	var ignoreRoute = GetWebConfigParameters("IgnoreRoute").ToLower().Split(',').ToList();
+		//	var result = ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
+		//	return result;
+		//}
 
 		/// <summary>
 		/// Проверяет наличие пермишена в списке пермишенов пользователя

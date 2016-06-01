@@ -27,17 +27,20 @@ namespace ProducerInterface.Controllers
 			base.OnActionExecuting(filterContext);
 
 			if (CurrentUser == null)
-				throw new NotSupportedException("Пользователь не найден");
-
-			userId = CurrentUser.Id;
-			h = new NamesHelper(cntx_, userId);
-			if (CurrentUser.AccountCompany.ProducerId.HasValue) {
-				producerId = CurrentUser.AccountCompany.ProducerId.Value;
-				ViewBag.Producernames = cntx_.producernames.Single(x => x.ProducerId == producerId).ProducerName;
-			}
-			else {
-				ErrorMessage("Доступ в раздел Отчеты закрыт, так как вы не представляете кого-либо из производителей");
 				filterContext.Result = Redirect("~");
+			else {
+				userId = CurrentUser.Id;
+				h = new NamesHelper(cntx_, userId);
+				if (CurrentUser.AccountCompany.ProducerId.HasValue)
+				{
+					producerId = CurrentUser.AccountCompany.ProducerId.Value;
+					ViewBag.Producernames = cntx_.producernames.Single(x => x.ProducerId == producerId).ProducerName;
+				}
+				else
+				{
+					ErrorMessage("Доступ в раздел Отчеты закрыт, так как вы не представляете кого-либо из производителей");
+					filterContext.Result = Redirect("~");
+				}
 			}
 		}
 

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using ProducerInterfaceCommon.ContextModels;
+using System.Linq;
 
 namespace ProducerInterfaceCommon.Controllers
 {
@@ -70,7 +71,6 @@ namespace ProducerInterfaceCommon.Controllers
 				for (int i = 0; i < data.Length; i++) sBuilder.Append(data[i].ToString("x2"));
 				return sBuilder.ToString();
 			}
-
 		}
 
 		private int MaxPasswordLeight
@@ -91,42 +91,43 @@ namespace ProducerInterfaceCommon.Controllers
 			if (ticket == null)
 				return currentUser;
 
-			//string cookiePath = ticket.CookiePath;
-			//DateTime expiration = ticket.Expiration;
-			//bool expired = ticket.Expired;
-			//bool isPersistent = ticket.IsPersistent;
-			//DateTime issueDate = ticket.IssueDate;
-			//string name = ticket.Name;
-			//string userData = ticket.UserData;
-			//string version = ticket.Version.ToString();
+			// если тикет устарел
+			if (ticket.Expired) {
+				// если пользователь хочет зайти в закрытую часть, но доступ устарел
+				if (!IgnoreRoutePermission())
+					ErrorMessage("Вы достаточно долго не проявляли активность. К сожалению, Ваш сеанс работы завершен. Для продолжения работы вновь авторизуйтесь (введите имя и пароль)");
+				return currentUser;
+			}
 
 			currentUser = ticket.Name;
 			if (!String.IsNullOrEmpty(ticket.UserData))
 				CurrentUserIdLog = Convert.ToInt64(ticket.UserData);
-			authCookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
-			Response.Cookies.Set(authCookie);
+
+			// продлевает сессию, если с пользователем все ок
+			SetUserCookiesName(currentUser, true, ticket.UserData);
 			return currentUser;
 		}
 
 		#region COOKIES
 		public void SetUserCookiesName(string UserLoginOrEmail, bool shouldRemember = true, string userData = "")
 		{
-			var CoockieName = GetWebConfigParameters("CookiesName");
+			var addMinutes = FormsAuthentication.Timeout.TotalMinutes; // 30 мин
+
+			var coockieName = GetWebConfigParameters("CookiesName");
 			var ticket = new FormsAuthenticationTicket(
 			1,
 			UserLoginOrEmail,
 			DateTime.Now,
-			DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
+			DateTime.Now.AddMinutes(addMinutes),
 			shouldRemember,
 			userData,
 			FormsAuthentication.FormsCookiePath
 			);
 
-			var cookie = new HttpCookie(CoockieName, FormsAuthentication.Encrypt(ticket));
+			var cookie = new HttpCookie(coockieName, FormsAuthentication.Encrypt(ticket));
 
-			if (shouldRemember)
-			{
-				cookie.Expires = DateTime.Now.AddMinutes(FormsAuthentication.Timeout.TotalMinutes);
+			if (shouldRemember) {
+				cookie.Expires = DateTime.Now.AddYears(1);
 			}
 
 			FormsAuthentication.SetAuthCookie(UserLoginOrEmail, false);
@@ -158,12 +159,6 @@ namespace ProducerInterfaceCommon.Controllers
 		{
 			Response.Cookies.Remove(name);
 		}
-
-		//public void LogOut_User()
-		//{
-		//	// очишаем куки, пользователь более не аутентифицирован
-		//	ClearAllCookies();
-		//}
 
 		public void LogOutUser()
 		{
@@ -203,7 +198,16 @@ namespace ProducerInterfaceCommon.Controllers
 
 		#endregion
 
-
-
+		/// <summary>
+		/// Проверяет, находится ли вызываемый экшн контроллера в списке всегда открытых
+		/// </summary>
+		/// <returns></returns>
+		protected bool IgnoreRoutePermission()
+		{
+			// список игнорируемых маршрутов CSV. Сейчас Home_Index,FeedBack_*,Account_*
+			var ignoreRoute = GetWebConfigParameters("IgnoreRoute").ToLower().Split(',').ToList();
+			var result = ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
+			return result;
+		}
 	}
 }
