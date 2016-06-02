@@ -1,0 +1,35 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+@{
+    var info = ViewBag.Info;
+}
+
+@if (info.PageCount > 1) {
+    <ul class="pagination pagination-sm">
+        @for (var i = 0; i < info.PageCount; i++) {
+            if (i == info.CurrentPageIndex) {
+                <li class="active">
+                    <span>@(i + 1)</span>
+                </li>
+            }
+            else {
+                var I2 = i - 4;
+                var I3 = i + 4;
+                if (I3 > info.CurrentPageIndex && I2 < info.CurrentPageIndex) {
+                    <li class="pointer">
+                        <span  onclick="getPage(@i)">@(i + 1)</span>
+                    </li>
+                }
+                if (I2 == info.CurrentPageIndex) {
+                    <li class="pointer">
+                        <span onclick="getPage(@i)">Следующая</span>
+                    </li>
+                }
+                if (I3 == info.CurrentPageIndex) {
+                    <li class="pointer">
+                        <span onclick="getPage(@i)">Предыдущая</span>
+                    </li>
+                }
+            }
+        }
+    </ul>
+}

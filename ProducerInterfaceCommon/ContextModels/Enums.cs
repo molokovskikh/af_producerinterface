@@ -3,6 +3,19 @@
 namespace ProducerInterfaceCommon.ContextModels
 {
 
+	public enum ApplyRedaction
+	{
+		[Display(Name = "В ожидании")]
+		New = 0,
+
+		[Display(Name = "Принятые")]
+		Applied = 1,
+
+		[Display(Name = "Отклоненные")]
+		Rejected = 2
+	}
+
+
 	public enum Operation
 	{
 		[Display(Name = "Добавление")]

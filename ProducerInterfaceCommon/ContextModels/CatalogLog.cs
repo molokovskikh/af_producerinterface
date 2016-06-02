@@ -26,7 +26,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string PropertyNameUi { get; set; }
         public string Before { get; set; }
         public string After { get; set; }
-        public bool Apply { get; set; }
+        public sbyte Apply { get; set; }
         public Nullable<long> AdminId { get; set; }
         public Nullable<System.DateTime> DateEdit { get; set; }
     }

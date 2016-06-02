@@ -16,7 +16,7 @@
 {
 <table class="table-bordered table-striped" id="Table-LogUserChange">
     <tr>
-        <th>Сущность</th>
+        <th>Наименование</th>
         <th>Свойство</th>
         <th>Было</th>
         <th>Стало</th>
@@ -29,44 +29,49 @@
     <tr>
         <td>@item.ObjectReferenceNameUi</td>
         <td>@item.TypeEnum.DisplayName() / @item.PropertyNameUi</td>
-        <td>@item.BeforeUi</td>
-        <td>@item.AfterUi</td>
+        <td><span style="white-space: pre-wrap;">@item.BeforeUi</span></td>
+        <td><span style="white-space: pre-wrap;">@item.AfterUi</span></td>
         <td><a onclick="bindDetailsItem(@details)"><span class="glyphicon glyphicon-eye-open"></span></a></td>
     </tr>
     }
 </table>
 
-    <div id="ModalDetailsItem" class="modal fade modal-open-noscroll" role="dialog">
-        <div class="modal-dialog modal-dialog-full">
-            <div class="modal-content modal-content-full">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3>Правка № <span data-bind="text:Id"></span></h3>
-                </div>
-                <div class="modal-body">
-                    <table class="table-bordered table-striped" id="Table-LogUserChange">
-                        <tr>
-                            <td>Дата добавления</td>
-                            <td><span data-bind="text:LogTimeUi"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Пользователь</td>
-                            <td><span data-bind="text:UserName"></span> (<span data-bind="text:Login"></span>, IP <span data-bind="text:OperatorHost"></span>)</td>
-                        </tr>
-                        <tr>
-                            <td>Производитель</td>
-                            <td><span data-bind="text:ProducerName"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Дата принятия правки</td>
-                            <td><span data-bind="text:DateEditUi"></span></td>
-                        </tr>
-                    </table>
+<div id="ModalDetailsItem" class="modal fade modal-open-noscroll" role="dialog">
+    <div class="modal-dialog modal-dialog-full">
+        <div class="modal-content modal-content-full">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Правка № <span data-bind="text:Id"></span></h3>
+            </div>
+            <div class="modal-body">
+                <table class="table-bordered table-striped" id="Table-LogUserChange">
+                    <tr>
+                        <td>Дата добавления</td>
+                        <td><span data-bind="text:LogTimeUi"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Пользователь</td>
+                        <td><span data-bind="text:UserName"></span> (<span data-bind="text:Login"></span>, IP <span data-bind="text:OperatorHost"></span>)</td>
+                    </tr>
+                    <tr>
+                        <td>Производитель</td>
+                        <td><span data-bind="text:ProducerName"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Дата принятия правки</td>
+                        <td><span data-bind="text:DateEditUi"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div class="btn btn-group btn-group-sm">
+                    @*<p>&nbsp;</p>*@
                 </div>
             </div>
         </div>
     </div>
-    <p>&nbsp;</p>
+</div>
+<p>&nbsp;</p>
 
 }
 else

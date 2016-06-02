@@ -35,7 +35,8 @@
         <ul>
             <li><a href="@Url.Action("Index", "FeedBack2", new { Status = (int)FeedBackStatus.New })">@Html.DisplayFor(m => m.FeedBackNewCount) @Html.DisplayNameFor(m => m.FeedBackNewCount)</a></li>
         </ul>
+        <ul>
+            <li><a href="@Url.Action("Index", "LogCatalog", new { Apply = (int)ApplyRedaction.New })">@Html.DisplayFor(m => m.CatalogChangeRequest) @Html.DisplayNameFor(m => m.CatalogChangeRequest)</a></li>
+        </ul>
     </div>
 </div>
-
-

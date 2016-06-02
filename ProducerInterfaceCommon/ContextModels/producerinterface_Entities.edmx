@@ -129,7 +129,7 @@
           <Property Name="PropertyNameUi" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Before" Type="text" />
           <Property Name="After" Type="text" />
-          <Property Name="Apply" Type="bool" Nullable="false" />
+          <Property Name="Apply" Type="tinyint" Nullable="false" />
           <Property Name="AdminId" Type="uint" />
           <Property Name="DateEdit" Type="datetime" Precision="0" />
         </EntityType>
@@ -410,9 +410,9 @@
           <Property Name="PropertyNameUi" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Before" Type="text" />
           <Property Name="After" Type="text" />
-          <Property Name="Apply" Type="bool" Nullable="false" />
+          <Property Name="Apply" Type="tinyint" Nullable="false" />
           <Property Name="AdminId" Type="uint" />
-          <Property Name="AdminName" Type="varchar" MaxLength="100" />
+          <Property Name="AdminLogin" Type="varchar" MaxLength="50" />
           <Property Name="DateEdit" Type="datetime" Precision="0" />
           <Property Name="Login" Type="varchar" MaxLength="50" />
           <Property Name="UserName" Type="varchar" MaxLength="100" />
@@ -1022,7 +1022,7 @@ FROM `assortment` AS `assortment`</DefiningQuery>
 `cataloglogui`.`After`, 
 `cataloglogui`.`Apply`, 
 `cataloglogui`.`AdminId`, 
-`cataloglogui`.`AdminName`, 
+`cataloglogui`.`AdminLogin`, 
 `cataloglogui`.`DateEdit`, 
 `cataloglogui`.`Login`, 
 `cataloglogui`.`UserName`, 
@@ -1514,8 +1514,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySet Name="feedbackui" EntityType="producerinterface_Model.feedbackui" />
           <EntitySet Name="cataloglogview" EntityType="producerinterface_Model.cataloglogview" />
           <EntitySet Name="descriptionlogview" EntityType="producerinterface_Model.descriptionlogview" />
-          <EntitySet Name="CatalogLog" EntityType="producerinterface_Model.CatalogLog" />
-          <EntitySet Name="cataloglogui" EntityType="producerinterface_Model.cataloglogui" />
           <EntitySet Name="LogForNet" EntityType="producerinterface_Model.LogForNet" />
           <EntitySet Name="AccountAppointment" EntityType="producerinterface_Model.AccountAppointment" />
           <EntitySet Name="Account" EntityType="producerinterface_Model.Account" />
@@ -1565,6 +1563,8 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <End Role="AccountFeedBack" EntitySet="AccountFeedBack" />
             <End Role="AccountFeedBackComment" EntitySet="AccountFeedBackComment" />
           </AssociationSet>
+          <EntitySet Name="CatalogLog" EntityType="producerinterface_Model.CatalogLog" />
+          <EntitySet Name="cataloglogui" EntityType="producerinterface_Model.cataloglogui" />
           </EntityContainer>
         <EntityType Name="AccountCompany">
           <Key>
@@ -2027,61 +2027,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Composition" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
           <Property Name="NeedCorrect" Type="Boolean" />
         </EntityType>
-        <EntityType Name="CatalogLog">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameId" Type="Int64" Nullable="false" />
-          <Property Name="LogTime" Type="DateTime" Nullable="false" />
-          <Property Name="UserId" Type="Int64" Nullable="false" />
-          <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ObjectReference" Type="Int64" Nullable="false" />
-          <Property Name="ObjectReferenceNameUi" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="PropertyNameUi" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Before" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="After" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Apply" Type="Boolean" Nullable="false" />
-          <Property Name="AdminId" Type="Int64" />
-          <Property Name="DateEdit" Type="DateTime" />
-        </EntityType>
-        <EntityType Name="cataloglogui">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="NameId" />
-            <PropertyRef Name="LogTime" />
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="OperatorHost" />
-            <PropertyRef Name="ObjectReference" />
-            <PropertyRef Name="ObjectReferenceNameUi" />
-            <PropertyRef Name="Type" />
-            <PropertyRef Name="PropertyName" />
-            <PropertyRef Name="PropertyNameUi" />
-            <PropertyRef Name="Apply" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" />
-          <Property Name="NameId" Type="Int64" Nullable="false" />
-          <Property Name="LogTime" Type="DateTime" Nullable="false" />
-          <Property Name="UserId" Type="Int64" Nullable="false" />
-          <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ObjectReference" Type="Int64" Nullable="false" />
-          <Property Name="ObjectReferenceNameUi" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="PropertyNameUi" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Before" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="After" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="Apply" Type="Boolean" Nullable="false" />
-          <Property Name="AdminId" Type="Int64" />
-          <Property Name="AdminName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="DateEdit" Type="DateTime" />
-          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ProducerId" Type="Int64" />
-          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="LogForNet">
           <Key>
             <PropertyRef Name="Id" />
@@ -2295,6 +2240,61 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CatalogLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameId" Type="Int64" Nullable="false" />
+          <Property Name="LogTime" Type="DateTime" Nullable="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ObjectReference" Type="Int64" Nullable="false" />
+          <Property Name="ObjectReferenceNameUi" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PropertyNameUi" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Before" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="After" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Apply" Type="SByte" Nullable="false" />
+          <Property Name="AdminId" Type="Int64" />
+          <Property Name="DateEdit" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="cataloglogui">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="NameId" />
+            <PropertyRef Name="LogTime" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="OperatorHost" />
+            <PropertyRef Name="ObjectReference" />
+            <PropertyRef Name="ObjectReferenceNameUi" />
+            <PropertyRef Name="Type" />
+            <PropertyRef Name="PropertyName" />
+            <PropertyRef Name="PropertyNameUi" />
+            <PropertyRef Name="Apply" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="NameId" Type="Int64" Nullable="false" />
+          <Property Name="LogTime" Type="DateTime" Nullable="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="OperatorHost" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ObjectReference" Type="Int64" Nullable="false" />
+          <Property Name="ObjectReferenceNameUi" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PropertyNameUi" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Before" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="After" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Apply" Type="SByte" Nullable="false" />
+          <Property Name="AdminId" Type="Int64" />
+          <Property Name="AdminLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateEdit" Type="DateTime" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProducerId" Type="Int64" />
+          <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2808,53 +2808,6 @@ FROM `usernames` AS `usernames`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CatalogLog">
-            <EntityTypeMapping TypeName="producerinterface_Model.CatalogLog">
-              <MappingFragment StoreEntitySet="CatalogLog">
-                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
-                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
-                <ScalarProperty Name="Apply" ColumnName="Apply" />
-                <ScalarProperty Name="After" ColumnName="After" />
-                <ScalarProperty Name="Before" ColumnName="Before" />
-                <ScalarProperty Name="PropertyNameUi" ColumnName="PropertyNameUi" />
-                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="ObjectReferenceNameUi" ColumnName="ObjectReferenceNameUi" />
-                <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
-                <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
-                <ScalarProperty Name="NameId" ColumnName="NameId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="cataloglogui">
-            <EntityTypeMapping TypeName="producerinterface_Model.cataloglogui">
-              <MappingFragment StoreEntitySet="cataloglogui">
-                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
-                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Login" ColumnName="Login" />
-                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
-                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
-                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
-                <ScalarProperty Name="Apply" ColumnName="Apply" />
-                <ScalarProperty Name="After" ColumnName="After" />
-                <ScalarProperty Name="Before" ColumnName="Before" />
-                <ScalarProperty Name="PropertyNameUi" ColumnName="PropertyNameUi" />
-                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="ObjectReferenceNameUi" ColumnName="ObjectReferenceNameUi" />
-                <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
-                <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
-                <ScalarProperty Name="NameId" ColumnName="NameId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="LogForNet">
             <EntityTypeMapping TypeName="producerinterface_Model.LogForNet">
               <MappingFragment StoreEntitySet="LogForNet">
@@ -2933,6 +2886,53 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="DateAdd" ColumnName="DateAdd" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
                 <ScalarProperty Name="IdFeedBack" ColumnName="IdFeedBack" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CatalogLog">
+            <EntityTypeMapping TypeName="producerinterface_Model.CatalogLog">
+              <MappingFragment StoreEntitySet="CatalogLog">
+                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Apply" ColumnName="Apply" />
+                <ScalarProperty Name="After" ColumnName="After" />
+                <ScalarProperty Name="Before" ColumnName="Before" />
+                <ScalarProperty Name="PropertyNameUi" ColumnName="PropertyNameUi" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ObjectReferenceNameUi" ColumnName="ObjectReferenceNameUi" />
+                <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
+                <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="NameId" ColumnName="NameId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cataloglogui">
+            <EntityTypeMapping TypeName="producerinterface_Model.cataloglogui">
+              <MappingFragment StoreEntitySet="cataloglogui">
+                <ScalarProperty Name="ProducerName" ColumnName="ProducerName" />
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
+                <ScalarProperty Name="AdminLogin" ColumnName="AdminLogin" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Apply" ColumnName="Apply" />
+                <ScalarProperty Name="After" ColumnName="After" />
+                <ScalarProperty Name="Before" ColumnName="Before" />
+                <ScalarProperty Name="PropertyNameUi" ColumnName="PropertyNameUi" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ObjectReferenceNameUi" ColumnName="ObjectReferenceNameUi" />
+                <ScalarProperty Name="ObjectReference" ColumnName="ObjectReference" />
+                <ScalarProperty Name="OperatorHost" ColumnName="OperatorHost" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="NameId" ColumnName="NameId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

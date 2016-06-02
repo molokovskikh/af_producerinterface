@@ -1688,6 +1688,18 @@ CREATE TABLE `AccountFeedBackComment` (
 COLLATE='cp1251_general_ci'
 ENGINE=InnoDB;
 
+insert into mailform(Id, Subject, Body, IsBodyHtml, Description)
+values (18, 'Предложенная вами правка на сайте {SiteName} отклонена', 'Изменение {CatalogName} {FieldName}
+
+С: {Before}
+
+На: {After}
+
+отклонено со следующим комментарием:
+
+{Comment}', 0, 'Отклонение правки в каталог');
+
+ALTER TABLE `CatalogLog` CHANGE COLUMN	`Apply` `Apply` TINYINT(4) NOT NULL DEFAULT '0';
 
 #ниже не внесено в боевую БД
  drop view catalognameswithuptime;
@@ -1706,5 +1718,34 @@ drop view drugfamily;
 # + модель
 
 drop view drugformproducer;
+
+
+create or replace DEFINER=`RootDBMS`@`127.0.0.1` view cataloglogui as
+select `cl`.`Id` AS `Id`,
+`cl`.`NameId` AS `NameId`,
+`cl`.`LogTime` AS `LogTime`,
+`cl`.`UserId` AS `UserId`,
+`cl`.`OperatorHost` AS `OperatorHost`,
+`cl`.`ObjectReference` AS `ObjectReference`,
+`cl`.`ObjectReferenceNameUi` AS `ObjectReferenceNameUi`,
+`cl`.`Type` AS `Type`,
+`cl`.`PropertyName` AS `PropertyName`,
+`cl`.`PropertyNameUi` AS `PropertyNameUi`,
+`cl`.`Before` AS `Before`,
+`cl`.`After` AS `After`,
+`cl`.`Apply` AS `Apply`,
+`cl`.`AdminId` AS `AdminId`,
+`a2`.`Login` AS `AdminLogin`,
+`cl`.`DateEdit` AS `DateEdit`,
+`a`.`Login` AS `Login`,
+`a`.`Name` AS `UserName`,
+`ac`.`ProducerId` AS `ProducerId`,
+`p`.`ProducerName` AS `ProducerName` 
+from ((((`producerinterface`.`cataloglog` `cl` 
+left join `producerinterface`.`account` `a` on((`a`.`Id` = `cl`.`UserId`))) 
+left join `producerinterface`.`accountcompany` `ac` on((`ac`.`Id` = `a`.`CompanyId`))) 
+left join `producerinterface`.`producernames` `p` on((`p`.`ProducerId` = `ac`.`ProducerId`))) 
+left join `producerinterface`.`account` `a2` on((`a2`.`Id` = `cl`.`AdminId`)));
+
 
 

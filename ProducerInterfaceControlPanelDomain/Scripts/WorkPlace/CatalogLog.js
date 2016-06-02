@@ -18,7 +18,7 @@ var DetailsItem =
     UserId: ko.observable(),
     UserName: ko.observable(),
     DateEditUi: ko.observable(),
-    AdminName: ko.observable()
+    AdminLogin: ko.observable()
 }
 
 // биндинг выбранного сообщения
@@ -54,9 +54,38 @@ function bindDetailsItem(result) {
     DetailsItem.DateEditUi(result.DateEditUi);
     DetailsItem.DateEditUi.valueHasMutated();
 
-    DetailsItem.AdminName(result.AdminName);
-    DetailsItem.AdminName.valueHasMutated();
+    DetailsItem.AdminLogin(result.AdminLogin);
+    DetailsItem.AdminLogin.valueHasMutated();
 
     details.modal('show');
 }
+
+function getPage(id) {
+    $('#CurrentPageIndex').val(id);
+    $('#sform').submit();
+}
+
+function getSearch() {
+    $('#CurrentPageIndex').val('');
+    $('#sform').submit();
+}
+
+function applyChange(id) {
+    $('#ApplyId').val(id);
+    $('#sform').submit();
+}
+
+function getComment(id) {
+    $('#RejectId2').val(id);
+    $('#commentModal').modal('show');
+}
+
+function rejectChange() {
+    var rejectId = $('#RejectId2').val();
+    var rejectComment = $('#RejectComment2').val();
+    $('#RejectId').val(rejectId);
+    $('#RejectComment').val(rejectComment);
+    $('#sform').submit();
+}
+
 

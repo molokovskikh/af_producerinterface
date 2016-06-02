@@ -45,6 +45,9 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		[Display(Name = "необработанных сообщений")]
 		public int FeedBackNewCount { get; set; }
+
+		[Display(Name = "запросов на правку каталога")]
+		public int CatalogChangeRequest { get; set; }
 	}
 
 	public class UserEdit
@@ -135,16 +138,32 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		public string LogTimeUi
 		{
-			get { return LogTime.ToString("dd.MM.yyyy hh:mm:ss"); }
+			get { return LogTime.ToString("dd.MM.yyyy HH:mm:ss"); }
 		}
 
 		public string DateEditUi
 		{
 			get
 			{
-				return DateEdit.HasValue ? DateEdit.Value.ToString("dd.MM.yyyy hh:mm:ss") : "";
+				return DateEdit.HasValue ? DateEdit.Value.ToString("dd.MM.yyyy HH:mm:ss") : "";
 			}
 		}
+	}
+
+	public class CatalogLogFilter
+	{
+		public int CurrentPageIndex { get; set; }
+
+		[Display(Name = "Статус")]
+		public int? Apply { get; set; }
+
+		public List<SelectListItem> ApplyList { get; set; }
+
+		public long? ApplyId { get; set; }
+
+		public long? RejectId { get; set; }
+
+		public string RejectComment { get; set; }
 	}
 
 	public class ReportDescriptionUI

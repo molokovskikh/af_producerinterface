@@ -40,7 +40,7 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Подтверждение регистрации пользователя без производителя")]
 		AccountVerification = 12,
 
-		[Display(Name = "Изменение ПКУ препарата")]
+		[Display(Name = "Изменение свойств препарата")]
 		CatalogPKU = 13,
 
 		[Display(Name = "Изменение описания препарата")]
@@ -53,7 +53,10 @@ namespace ProducerInterfaceCommon.Models
 		CallForDelete = 16,
 
 		[Display(Name = "Запрос регистрации")]
-		ProducerRequest = 17
+		ProducerRequest = 17,
+
+		[Display(Name = "Отклонение правки в каталог")]
+		RejectCatalogChange = 18
 
 	}
 }

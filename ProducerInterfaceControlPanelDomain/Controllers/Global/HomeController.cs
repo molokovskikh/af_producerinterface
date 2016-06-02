@@ -34,6 +34,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			model.FeedBackNewCount = cntx_.AccountFeedBack.Count(x => x.Status == (int)FeedBackStatus.New);
 
+			model.CatalogChangeRequest = cntx_.CatalogLog.Count(x => x.Apply == (sbyte)ApplyRedaction.New);
+
 			return View(model);
 		}
 

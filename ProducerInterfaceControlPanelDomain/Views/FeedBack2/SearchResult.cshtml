@@ -28,7 +28,7 @@
 
     @foreach (var item in Model)
     {
-        var wrn = (FeedBackStatus)item.Status == FeedBackStatus.New ? "warning2" : "";
+        var wrn = (FeedBackStatus)item.Status == FeedBackStatus.New ? "danger" : "";
         long? producerId = null;
         if (item.Account != null) {
             producerId = item.Account.AccountCompany.ProducerId;
@@ -41,7 +41,7 @@
         <tr class="@wrn"> 
             <td>@item.Id</td>
             <td>@item.Description</td>
-            <td>@item.DateAdd.ToString("dd.MM.yyyy hh:mm:ss")</td>
+            <td>@item.DateAdd.ToString("dd.MM.yyyy HH:mm:ss")</td>
             <td>@AttributeHelper.DisplayName((FeedBackStatus)item.Status)</td>
             <td>@AttributeHelper.DisplayName((FeedBackTypePrivate)item.Type)</td>
             <td>@item.Contacts</td>

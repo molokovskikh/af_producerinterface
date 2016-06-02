@@ -319,7 +319,8 @@
     <Content Include="Content\themes\default\assets\fonts\icons.ttf" />
     <Content Include="Content\themes\default\assets\fonts\icons.woff" />
     <Content Include="Content\themes\default\assets\fonts\icons.woff2" />
-    <None Include="Properties\PublishProfiles\TEST.pubxml" />
+    <None Include="Properties\PublishProfiles\RELEASE.pubxml" />
+    <None Include="Properties\PublishProfiles\TEST2.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

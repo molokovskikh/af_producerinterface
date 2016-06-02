@@ -168,6 +168,7 @@ namespace ProducerInterfaceCommon.Heap
 			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
 		}
 
+		// Подтверждение регистрации пользователя без производителя
 		public static void SendAccountVerificationMessage(producerinterface_Entities cntx, Account user, string password, long adminId)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
@@ -253,6 +254,22 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
 
+		// Отклонение правки в каталог
+		public static void SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName, string fieldName, string before, string after, string comment, long adminId)
+		{
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RejectCatalogChange);
+			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
+			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
+			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, CatalogName = catalogName, Before = before, After = after, Comment = comment })}\r\n\r\n{mailForm.Footer}";
+			var attachments = GetAttachments(cntx, MailType.RejectCatalogChange);
+			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
+
+			var di = new DiagnosticInformation() { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, User = user, ActionName = MailType.RejectCatalogChange.DisplayName() };
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
+		}
+
 		// Обратная связь, сотрудникам
 		public static void SendFeedBackMessage(producerinterface_Entities cntx, Account user, string message, string Ip)
 		{
@@ -263,7 +280,6 @@ namespace ProducerInterfaceCommon.Heap
 			var di = new DiagnosticInformation() { Body = message, User = user, UserIp = Ip, ActionName = "Обратная связь" };
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
 		}
-
 
 		// Создание акции, пользователю и расширенное сотрудникам
 		public static void SendNewPromotion(producerinterface_Entities cntx, long userId, long promotionId, string ip)

@@ -310,7 +310,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Ip { get; set; }
 
 		[Display(Name = "Дата запуска")]
-		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy hh:mm:ss}")]
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm:ss}")]
 		public DateTime RunStartTime { get; set; }
 
 		public bool RunNow { get; set; }

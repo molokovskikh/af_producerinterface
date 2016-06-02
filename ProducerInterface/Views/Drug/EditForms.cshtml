@@ -22,36 +22,36 @@
                          <th class="w20p">
                              @Html.DisplayNameFor(m => m.Name)
                          </th>
-                         <th class="w10p">
+                         <th class="w8p">
                              @Html.DisplayNameFor(m => m.VitallyImportant)<br />
                              @Html.CheckBox("VitallyImportant", false, new { @onchange = "$('.VitallyImportant').prop('checked', $(this).prop('checked'))" })
                          </th>
-                         <th class="w10p">
+                         <th class="w8">
                              @Html.DisplayNameFor(m => m.MandatoryList)<br />
                              @Html.CheckBox("MandatoryList", false, new { @onchange = "$('.MandatoryList').prop('checked', $(this).prop('checked'))" })
                          </th>
-                         <th class="w10p">
+                         <th class="w8p">
                              @Html.DisplayNameFor(m => m.Narcotic)<br />
                              @Html.CheckBox("Narcotic", false, new { @onchange = "$('.Narcotic').prop('checked', $(this).prop('checked'))" })
                         </th>
-                         <th class="w10p">
+                         <th class="w8p">
                              @Html.DisplayNameFor(m => m.Toxic)<br />
                              @Html.CheckBox("Toxic", false, new { @onchange = "$('.Toxic').prop('checked', $(this).prop('checked'))" })
                          </th>
-                         <th class="w10p">
+                         <th class="w8p">
                              @Html.DisplayNameFor(m => m.Other)<br/>
                              @Html.CheckBox("Other", false, new { @onchange = "$('.Other').prop('checked', $(this).prop('checked'))" })
                          </th>
-                         <th class="w10p">
+                         <th class="w8p">
                              @Html.DisplayNameFor(m => m.Combined)<br />
                              @Html.CheckBox("Combined", false, new { @onchange = "$('.Combined').prop('checked', $(this).prop('checked'))" })
                          </th>
-                         <th class="w10p">
+                         <th class="w8p">
                              @Html.DisplayNameFor(m => m.Monobrend) 
                              @ViewData["producerName"]<br />
                              @Html.CheckBox("Monobrend", false, new { @onchange = "$('.Monobrend').prop('checked', $(this).prop('checked'))" })
                         </th>
-                         <th class="w10p">Свойства</th>
+                         <th class="w24p">Свойства</th>
                      </tr>
                      </thead>
                      <tbody>

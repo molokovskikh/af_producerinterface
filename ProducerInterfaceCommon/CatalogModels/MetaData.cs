@@ -51,13 +51,13 @@ namespace ProducerInterfaceCommon.CatalogModels
 		[Display(Name = "ПКУ: наркотические и психотропные", Order = 40)]
 		public bool Narcotic { get; set; }
 
-		[Display(Name = "ПКУ: сильнодействующие и ядовитые", Order = 50)]
+		[Display(Name = "ПКУ: сильнодейств. и ядовитые", Order = 50)]
 		public bool Toxic { get; set; }
 
 		[Display(Name = "ПКУ: иные лекарственные средства", Order = 60)]
 		public bool Other { get; set; }
 
-		[Display(Name = "ПКУ: комбинированные", Order = 70)]
+		[Display(Name = "ПКУ: комбинир.", Order = 70)]
 		public bool Combined { get; set; }
 
 		[Display(Name = "Данный препарат с указанной формой выпуска и дозировкой производится исключительно ", Order = 80)]
