@@ -38,6 +38,7 @@ namespace ProducerInterfaceCommon.Heap
 			if (tparam is RunNowParam) {
 				ip = ((RunNowParam)tparam).Ip;
 				reportRunLog.Ip = ip;
+				reportRunLog.RunNow = true;
 			}
 			_cntx.ReportRunLog.Add(reportRunLog);
 			_cntx.SaveChanges();

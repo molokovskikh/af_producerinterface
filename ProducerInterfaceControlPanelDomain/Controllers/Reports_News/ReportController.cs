@@ -59,7 +59,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var info = new SortingPagingInfo() { CurrentPageIndex = param.CurrentPageIndex, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
 			ViewBag.Info = info;
 
-			var model = query.OrderBy(x => x.CreationDate).Skip(param.CurrentPageIndex * itemsPerPage).Take(itemsPerPage).ToList();
+			var model = query.OrderByDescending(x => x.CreationDate).Skip(param.CurrentPageIndex * itemsPerPage).Take(itemsPerPage).ToList();
 			return View(model);
 		}
 
@@ -140,11 +140,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult RunHistory(string jobName)
 		{
-			var reportName = cntx_.jobextend.Single(x => x.JobName == jobName).CustomName;
-			var ProducerId = cntx_.jobextend.Where(y => y.JobName == jobName).First().ProducerId;
-			var ProducerName = cntx_.producernames.Where(x => x.ProducerId == ProducerId).First().ProducerName;
+			var jext = cntx_.jobextend.Single(x => x.JobName == jobName);
+			var producer = cntx_.producernames.SingleOrDefault(x => x.ProducerId == jext.ProducerId);
+			var producerName = "удален";
+			if (producer != null)
+				producerName = producer.ProducerName;
 
-			ViewBag.Title = $"История запусков отчета: \"{reportName}\", Производитель : \"{ProducerName}\"";
+			ViewBag.Title = $"История запусков отчета: \"{jext.CustomName}\", Производитель : \"{producerName}\"";
 			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
 
 			return View(model);

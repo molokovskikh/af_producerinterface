@@ -1701,25 +1701,6 @@ values (18, 'Предложенная вами правка на сайте {Sit
 
 ALTER TABLE `CatalogLog` CHANGE COLUMN	`Apply` `Apply` TINYINT(4) NOT NULL DEFAULT '0';
 
-#ниже не внесено в боевую БД
- drop view catalognameswithuptime;
-
- drop table DrugDescriptionRemark;
-# + модель
-
-drop view drugfamilynames;
-# + модель
-
-drop view drugdescription;
-
-drop view drugmnn;
-
-drop view drugfamily;
-# + модель
-
-drop view drugformproducer;
-
-
 create or replace DEFINER=`RootDBMS`@`127.0.0.1` view cataloglogui as
 select `cl`.`Id` AS `Id`,
 `cl`.`NameId` AS `NameId`,
@@ -1746,6 +1727,27 @@ left join `producerinterface`.`account` `a` on((`a`.`Id` = `cl`.`UserId`)))
 left join `producerinterface`.`accountcompany` `ac` on((`ac`.`Id` = `a`.`CompanyId`))) 
 left join `producerinterface`.`producernames` `p` on((`p`.`ProducerId` = `ac`.`ProducerId`))) 
 left join `producerinterface`.`account` `a2` on((`a2`.`Id` = `cl`.`AdminId`)));
+
+#ниже не внесено в боевую БД
+ drop view catalognameswithuptime;
+
+ drop table DrugDescriptionRemark;
+# + модель
+
+drop view drugfamilynames;
+# + модель
+
+drop view drugdescription;
+
+drop view drugmnn;
+
+drop view drugfamily;
+# + модель
+
+drop view drugformproducer;
+
+
+
 
 
 
