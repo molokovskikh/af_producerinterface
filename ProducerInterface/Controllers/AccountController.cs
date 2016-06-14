@@ -7,11 +7,223 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ViewModel.Interface.Registration;
 using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceCommon.ViewModel.Interface.Profile;
 
 namespace ProducerInterface.Controllers
 {
-	public class AccountController : AccountAuthController
+	public class AccountController : MasterBaseController
 	{
+
+		/// <summary>
+		/// Вход
+		/// </summary>
+		/// <param name="user">заполненная форма логин-пароль</param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult UserAuthentication(LoginValidation user)
+		{
+			// валидация
+			if (String.IsNullOrEmpty(user.login) || String.IsNullOrEmpty(user.password))
+			{
+				ErrorMessage("Некорректно введены данные. Вашим логином является email, указанный при регистрации. Пароль при регистрации был выслан на ваш email");
+				ViewBag.CurrentUser = null;
+				return Redirect("~");
+			}
+
+			// проверка наличия в БД
+			var thisUser = cntx_.Account.SingleOrDefault(x => x.Login == user.login && x.TypeUser == SbyteTypeUser);
+			if (thisUser == null)
+			{
+				ErrorMessage("Пользователь не найден. Вашим логином является email, указанный при регистрации");
+				ViewBag.CurrentUser = null;
+				return Redirect("~");
+			}
+
+			// проверка пароля
+			var passHash = Md5HashHelper.GetHash(user.password);
+			if (passHash != thisUser.Password)
+			{
+				ErrorMessage("Неправильно введен пароль");
+				ViewBag.CurrentUser = null;
+				return Redirect("~");
+			}
+
+			// если логинится не впервый раз и не заблокирован
+			if (thisUser.EnabledEnum == UserStatus.Active)
+			{
+				CurrentUser = thisUser;
+				return Autentificate();
+			}
+
+			// если логинится впервые
+			else if (thisUser.EnabledEnum == UserStatus.New)
+			{
+				var otherUsersExists = cntx_.Account.Any(x => x.CompanyId == thisUser.CompanyId.Value && x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == SbyteTypeUser);
+				// если других активных (!) пользователей этой компании нет - добавляем пользователя в группу администраторов
+				if (!otherUsersExists)
+				{
+					// если группы администраторов нет - создаем ее
+					var adminGroupName = GetWebConfigParameters("AdminGroupName");
+					var adminGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
+					if (adminGroup == null)
+					{
+						adminGroup = new AccountGroup() { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+						cntx_.Entry(adminGroup).State = EntityState.Added;
+						cntx_.SaveChanges();
+					}
+					adminGroup.Account.Add(thisUser);
+					cntx_.SaveChanges();
+				}
+				// если есть другие пользователи компании - включаем в группу Все пользователи
+				else
+				{
+					var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
+					var otherGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == otherGroupName && x.TypeGroup == SbyteTypeUser);
+					if (otherGroup == null)
+					{
+						otherGroup = new AccountGroup() { Name = otherGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+						cntx_.Entry(otherGroup).State = EntityState.Added;
+						cntx_.SaveChanges();
+					}
+					otherGroup.Account.Add(thisUser);
+					cntx_.SaveChanges();
+				}
+
+				thisUser.PasswordUpdated = DateTime.Now;
+				thisUser.EnabledEnum = UserStatus.Active;
+				cntx_.Entry(thisUser).State = EntityState.Modified;
+				cntx_.SaveChanges();
+
+				CurrentUser = thisUser;
+				SuccessMessage("Вы успешно подтвердили свою регистрацию на сайте");
+				return Autentificate();
+			}
+
+			// аккаунт заблокирован
+			else if (thisUser.EnabledEnum == UserStatus.Blocked)
+			{
+				CurrentUser = null;
+				ErrorMessage("Ваша учетная запись заблокирована, обращайтесь на " + GetWebConfigParameters("MailFrom"));
+				return Redirect("~");
+			}
+
+			// заявка на регистрацию
+			else if (thisUser.EnabledEnum == UserStatus.Request)
+			{
+				CurrentUser = null;
+				SuccessMessage("Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на " + GetWebConfigParameters("MailFrom"));
+				return Redirect("~");
+			}
+			return Redirect("~");
+		}
+
+		public ActionResult Autentificate(string userData = "")
+		{
+			SetUserCookiesName(CurrentUser.Login, true, userData);
+			SetCookie("AccountName", CurrentUser.Login, false);
+			return RedirectToAction("Index", "Profile");
+		}
+
+		/// <summary>
+		/// Форма ввода email для напоминания пароля
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult PasswordRecovery()
+		{
+			var model = new PasswordUpdate();
+			return View(model);
+		}
+
+		/// <summary>
+		/// Напоминание пароля
+		/// </summary>
+		/// <param name="model">заполненная модель</param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult PasswordRecovery(PasswordUpdate model)
+		{
+			if (String.IsNullOrEmpty(model.login))
+			{
+				ErrorMessage("Вы не указали eMail");
+				return View(model);
+			}
+
+			var user = cntx_.Account.FirstOrDefault(x => x.Login == model.login && x.TypeUser == (SByte)TypeUsers.ProducerUser);
+			// пользователь не найден, отсылаем на домашнюю с ошибкой
+			if (user == null)
+			{
+				ErrorMessage($"Пользователь с email {model.login} не найден, обращайтесь на {GetWebConfigParameters("MailFrom")}");
+				return View(model);
+			}
+
+			// если новый или активный: отсылаем новый пароль на почту
+			if (user.EnabledEnum == UserStatus.New || user.EnabledEnum == UserStatus.Active)
+			{
+				var password = GetRandomPassword();
+				user.Password = Md5HashHelper.GetHash(password);
+				user.PasswordUpdated = DateTime.Now;
+				cntx_.Entry(user).State = EntityState.Modified;
+				cntx_.SaveChanges();
+				EmailSender.SendPasswordRecoveryMessage(cntx_, user.Id, password, Request.UserHostAddress);
+
+				SuccessMessage($"Новый пароль отправлен на ваш email {model.login}");
+			}
+
+			// если заблокирован
+			else if (user.EnabledEnum == UserStatus.Blocked)
+				ErrorMessage($"Ваша учетная запись заблокирована, обращайтесь на {GetWebConfigParameters("MailFrom")}");
+
+			// если запросивший регистрацию
+			else if (user.EnabledEnum == UserStatus.Request)
+				SuccessMessage($"Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на {GetWebConfigParameters("MailFrom")}");
+
+			return Redirect("~");
+		}
+
+		/// <summary>
+		/// Сменить пароль POST
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult ChangePassword(ChangePassword model)
+		{
+			if (!ModelState.IsValid)
+				return View(model);
+
+			var user = cntx_.Account.Single(x => x.Id == CurrentUser.Id);
+			user.Password = Md5HashHelper.GetHash(model.Pass);
+			user.PasswordUpdated = DateTime.Now;
+			cntx_.SaveChanges();
+
+			EmailSender.SendPasswordChangeMessage(cntx_, user.Id, model.Pass, Request.UserHostAddress);
+			SuccessMessage("Новый пароль сохранен и отправлен на ваш email: " + user.Login);
+			return RedirectToAction("Index", "Profile");
+		}
+
+		/// <summary>
+		/// Сменить пароль GET
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult ChangePassword()
+		{
+			var model = new ChangePassword();
+			return View(model);
+		}
+
+		/// <summary>
+		/// Выход
+		/// </summary>
+		/// <returns></returns>
+		public ActionResult LogOut()
+		{
+			// зануляем куки регистрации формой
+			LogOutUser();
+			// возвращаем пользователя на главную страницу
+			return Redirect("~");
+		}
 
 		/// <summary>
 		/// Форма ввода логина-пароля, сейчас только для тестов TODO убрать
@@ -252,60 +464,84 @@ namespace ProducerInterface.Controllers
 			return Redirect("~");
 		}
 
+		/// <summary>
+		/// Аутентифицирует администратора панели управления как пользователя
+		/// </summary>
+		/// <param name="AdminLogin">логин администратора</param>
+		/// <param name="IdProducerUSer">идентификатор пользователя</param>
+		/// <param name="SecureHash">хеш</param>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult AdminAuthentification(string AdminLogin, long? IdProducerUSer, string SecureHash)
 		{
-			if (AdminLogin == null || IdProducerUSer == null)
+			if (string.IsNullOrEmpty(AdminLogin)) {
+				ErrorMessage("Не указан логин администратора");
 				return Redirect("~");
+			}
 
-			// проверка наличия Админа В БД.
+			if (!IdProducerUSer.HasValue) {
+				ErrorMessage("Не указан идентификатор пользователя");
+				return Redirect("~");
+			}
 
-			var AccountAdminExsist = cntx_.Account.Any(xxx => xxx.Login == AdminLogin && xxx.TypeUser == (SByte)TypeUsers.ControlPanelUser);
-			var ProducerUserExsist = cntx_.Account.Any(xxx => xxx.Id == IdProducerUSer && xxx.TypeUser == (SByte)TypeUsers.ProducerUser);
+			var adminAccount = cntx_.Account.SingleOrDefault(x => x.Login == AdminLogin && x.TypeUser == (SByte)TypeUsers.ControlPanelUser);
+			if (adminAccount == null)
+			{
+				ErrorMessage($"Администратор с логином {AdminLogin} не найден");
+				return Redirect("~");
+			}
+
+			var producerUser = cntx_.Account.SingleOrDefault(x => x.Id == IdProducerUSer && x.TypeUser == (SByte)TypeUsers.ProducerUser);
+			if (producerUser == null)
+			{
+				ErrorMessage($"Пользователь с идентификатором {IdProducerUSer} не найден");
+				return Redirect("~");
+			}
 
 			// проверка SecureHash
-			var adminAccount = cntx_.Account.Single(xxx => xxx.Login == AdminLogin);
-
 			string i = "";
 			if (adminAccount.Name != null)
 				i = (adminAccount.Name.Length * 19801112).ToString();
 			else
 				i = (18 * 19801112).ToString();
-
-			if (!SecureHash.Contains(i))
+			if (!SecureHash.Contains(i)) {
+				ErrorMessage("Неверный SecureHash");
 				return Redirect("~");
-
-			if (adminAccount.SecureTime.Value > DateTime.Now)
-			{
-				CurrentUser = cntx_.Account.Find(IdProducerUSer);
-				var AdminId = adminAccount.Id.ToString();
-				Autentificate(AdminId);
-				return RedirectToAction("Index", "Profile");
 			}
-			else
-			{
+
+			if (!adminAccount.SecureTime.HasValue || adminAccount.SecureTime.Value < DateTime.Now) {
 				ErrorMessage("Данная ссылка действительна три минуты, время истекло, просьба повторить авторизацию");
 				return View("AdminAuth", new AdminAutentification() { IdProducerUser = (long)IdProducerUSer, Login = adminAccount.Login });
 			}
+
+			CurrentUser = producerUser;
+			var adminId = adminAccount.Id.ToString();
+			Autentificate(adminId);
+			return RedirectToAction("Index", "Profile");
 		}
 
+		/// <summary>
+		/// Форма ввода пароля при аутентификации админа как пользователя, если время входа истекло, для повторной авторизации
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public ActionResult AdminAuth(AdminAutentification model)
 		{
-			var DomainAuth = new DomainAutentification();
-			if (DomainAuth.IsAuthenticated(model.Login, model.Password))
+			var domainAuth = new DomainAutentification();
+			if (domainAuth.IsAuthenticated(model.Login, model.Password))
 			{
 				// авторизовываем как обычного пользователя, но с добавление ID Администратора 
 				CurrentUser = cntx_.Account.Find(model.IdProducerUser);
-				var AdminId = cntx_.Account.Single(x => x.Login == model.Login).Id.ToString();
-				Autentificate(AdminId);
+				var adminId = cntx_.Account.Single(x => x.Login == model.Login).Id.ToString();
+				Autentificate(adminId);
 			}
 
 			if (CurrentUser != null)
 				return RedirectToAction("Index", "Profile");
 
 			model.Password = "";
-			ErrorMessage("Пароль указан не верно");
+			ErrorMessage("Пароль указан неверно");
 			return View("AdminAuth", model);
 		}
 

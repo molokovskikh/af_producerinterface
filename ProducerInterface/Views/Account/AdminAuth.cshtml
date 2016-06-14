@@ -1,13 +1,13 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
-@model ProducerInterfaceCommon.ContextModels.AdminAutentification
+@model AdminAutentification
 @{
-    ViewBag.Title = "Вход для администратора";
+    ViewBag.Title = "Вход с паролем администратора";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container body-content">
 
-    <h3>Вход с паролем администратора</h3>
+    <h3>@ViewBag.Title</h3>
     <hr/>
 
     @using (Html.BeginForm("AdminAuth", "Account", FormMethod.Post))
@@ -32,8 +32,3 @@
         </div>
     }
     </div>
-
-
-    @*public long IdProducerUser { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }*@
