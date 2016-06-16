@@ -8,6 +8,7 @@ using ProducerInterfaceCommon.ViewModel.Interface.Registration;
 using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.ViewModel.Interface.Profile;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterface.Controllers
 {
@@ -347,6 +348,13 @@ namespace ProducerInterface.Controllers
 		public ActionResult DomainRegistration(RegDomainViewModel model)
 		{
 			var company = cntx_.AccountCompany.Single(x => x.ProducerId == model.Producers);
+			
+			// проверка email
+			var domain = company.CompanyDomainName.SingleOrDefault(x => x.Id == model.EmailDomain);
+			var ea = new EmailAddressAttribute();
+			if (domain == null || !ea.IsValid($"{model.Mailname}@{domain.Name}"))
+				ModelState.AddModelError("Mailname", "Неверный формат email");
+
 			// если невалидный ввод - возвращаем
 			if (!ModelState.IsValid)
 			{

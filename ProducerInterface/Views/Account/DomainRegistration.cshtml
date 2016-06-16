@@ -16,7 +16,8 @@
     {
         @Html.ValidationSummary(true, "")
         @Html.HiddenFor(m => m.Producers)
-         
+        @Html.HiddenFor(m => m.ProducerName)
+
         <div class="form-group">
             <label>Email (введите имя и выберите доменное имя)</label>
             <div class="input-group">

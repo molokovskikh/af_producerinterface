@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
-using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -43,8 +43,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				return View("DomainList", model);
 			}
 
-			var regex = new Regex(@"[-a-z0-9-_]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*", RegexOptions.IgnoreCase);
-			if (!regex.IsMatch(domainName))
+			var ea = new EmailAddressAttribute();
+			if (!ea.IsValid($"ab@{domainName}"))
 			{
 				SetViewBag(companyId);
 				ViewBag.Error = "Неверный формат домена";
@@ -74,7 +74,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			ViewBag.CompanyId = companyId;
 			ViewBag.CompanyList = cntx_.AccountCompany
 				.OrderBy(x => x.Name)
-				.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == companyId })
+				.Select(x => new SelectListItem() { Text = x.ProducerId.HasValue ? x.Name : x.Name + " (без производителя)", Value = x.Id.ToString(), Selected = x.Id == companyId })
 				.ToList();
 		}
 
