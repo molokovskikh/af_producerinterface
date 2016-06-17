@@ -33,8 +33,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 						}).ToList(),
 						Permissions = x.AccountPermission
 							.Where(y => y.Enabled)
-							.OrderBy(y => new { y.ControllerAction, y.ActionAttributes })
 							.Select(y => y.ControllerAction + " " + y.ActionAttributes)
+							.OrderBy(y => y)
 							.ToArray()
 					});
 

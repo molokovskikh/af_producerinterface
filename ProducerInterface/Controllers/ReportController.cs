@@ -20,6 +20,7 @@ namespace ProducerInterface.Controllers
 		protected NamesHelper h;
 		protected long userId;
 		protected long producerId;
+		protected bool isAdmin;
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
@@ -29,6 +30,8 @@ namespace ProducerInterface.Controllers
 			if (CurrentUser == null)
 				filterContext.Result = Redirect("~");
 			else {
+				var adminGroupName = GetWebConfigParameters("AdminGroupName");
+				isAdmin = CurrentUser.AccountGroup.Any(x => x.Name == adminGroupName);
 				userId = CurrentUser.Id;
 				h = new NamesHelper(cntx_, userId);
 				if (CurrentUser.AccountCompany.ProducerId.HasValue)
@@ -97,8 +100,8 @@ namespace ProducerInterface.Controllers
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Job {key.Name} {key.Group} add failed:" + e.Message, e);
-				ErrorMessage("Непредвиденная ошибка при добавлении задания");
+				logger.Error($"Ошибка при добавлении отчета", e);
+				ErrorMessage("Непредвиденная ошибка при добавлении отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -132,19 +135,27 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult Delete(string jobName, string jobGroup)
 		{
+			var jext = GetJobExtend(jobName);
+			if (jext == null)
+			{
+				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+				ErrorMessage("Отчет не найден");
+				return RedirectToAction("JobList", "Report");
+			}
+
+			if (jext.CreatorId != userId && !isAdmin)
+			{
+				ErrorMessage("Вы можете удалять только свои отчеты");
+				return RedirectToAction("JobList", "Report");
+			}
+
 			var key = new JobKey(jobName, jobGroup);
 			var scheduler = GetScheduler();
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
 			{
-				ErrorMessage("Задача не найдена");
-				return RedirectToAction("JobList", "Report");
-			}
-
-			var jext = GetJobExtend(jobName);
-			if (jext == null)
-			{
-				ErrorMessage("Дополнительные параметры задачи не найдены");
+				logger.Error($"Отчет {jobName} не найден");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -154,13 +165,13 @@ namespace ProducerInterface.Controllers
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Job {key.Name} {key.Group} paused failed:" + e.Message, e);
-				ErrorMessage("Непредвиденная ошибка при удалении задания");
+				logger.Error($"Ошибка при удалении отчета {jobName}", e);
+				ErrorMessage("Непредвиденная ошибка при удалении отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = false;
 			cntx_.SaveChanges(CurrentUser, "Удаление отчета");
-			SuccessMessage("Задача удалена");
+			SuccessMessage("Отчет удален");
 			return RedirectToAction("JobList", "Report");
 
 		}
@@ -178,14 +189,16 @@ namespace ProducerInterface.Controllers
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
 			{
-				ErrorMessage("Задача не найдена");
+				logger.Error($"Отчет {jobName} не найден");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
 			var jext = GetJobExtend(jobName);
 			if (jext == null)
 			{
-				ErrorMessage("Дополнительные параметры задачи не найдены");
+				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -195,13 +208,13 @@ namespace ProducerInterface.Controllers
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Job {key.Name} {key.Group} resume failed:" + e.Message, e);
-				ErrorMessage("Непредвиденная ошибка при восстановлении задания");
+				logger.Error($"Ошибка при восстановлении отчета {key.Name}", e);
+				ErrorMessage("Непредвиденная ошибка при восстановлении отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = true;
 			cntx_.SaveChanges(CurrentUser, "Восстановление отчета");
-			SuccessMessage("Задача восстановлена");
+			SuccessMessage("Отчет восстановлен");
 			return RedirectToAction("JobList", "Report");
 		}
 
@@ -213,19 +226,27 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult Edit(string jobName, string jobGroup)
 		{
-			var key = new JobKey(jobName, jobGroup);
-			var scheduler = GetScheduler();
-			var job = scheduler.GetJobDetail(key);
-			if (job == null)
-			{
-				ErrorMessage("Задача не найдена");
-				return RedirectToAction("JobList", "Report");
-			}
-
 			var jext = GetJobExtend(jobName);
 			if (jext == null)
 			{
-				ErrorMessage("Дополнительные параметры задачи не найдены");
+				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+				ErrorMessage("Отчет не найден");
+				return RedirectToAction("JobList", "Report");
+			}
+
+			if (jext.CreatorId != userId && !isAdmin)
+			{
+				ErrorMessage("Вы можете редактировать только свои отчеты");
+				return RedirectToAction("JobList", "Report");
+			}
+
+			var scheduler = GetScheduler();
+			var key = new JobKey(jobName, jobGroup);
+			var job = scheduler.GetJobDetail(key);
+			if (job == null)
+			{
+				logger.Error($"Отчет {jobName} не найден");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -269,8 +290,8 @@ namespace ProducerInterface.Controllers
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Job {key.Name} {key.Group} change failed:" + e.Message, e);
-				ErrorMessage("Непредвиденная ошибка при изменении задания");
+				logger.Error($"Ошибка при изменении отчета {key.Name}", e);
+				ErrorMessage("Непредвиденная ошибка при изменении отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -340,14 +361,16 @@ namespace ProducerInterface.Controllers
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
 			{
-				ErrorMessage("Задача не найдена");
+				logger.Error($"Отчет {jobName} не найден");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
 			var jext = GetJobExtend(jobName);
 			if (jext == null)
 			{
-				ErrorMessage("Дополнительные параметры задачи не найдены");
+				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -397,8 +420,8 @@ namespace ProducerInterface.Controllers
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
-				ErrorMessage("Непредвиденная ошибка при запуске задания");
+				logger.Error($"Непредвиденная ошибка при запуске отчета {key.Name}", e);
+				ErrorMessage("Непредвиденная ошибка при запуске отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -436,20 +459,28 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult ScheduleJob(string jobName, string jobGroup)
 		{
-			var key = JobKey.Create(jobName, jobGroup);
-			var scheduler = GetScheduler();
-			// нашли задачу
-			var job = scheduler.GetJobDetail(key);
-			if (job == null)
+			var jext = GetJobExtend(jobName);
+			if (jext == null)
 			{
-				ErrorMessage("Задача не найдена");
+				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var jext = GetJobExtend(key.Name);
-			if (jext == null)
+			if (jext.CreatorId != userId && !isAdmin)
 			{
-				ErrorMessage("Дополнительные параметры задачи не найдены");
+				ErrorMessage("Вы можете редактировать только свои отчеты");
+				return RedirectToAction("JobList", "Report");
+			}
+
+			// нашли задачу
+			var scheduler = GetScheduler();
+			var key = JobKey.Create(jobName, jobGroup);
+			var job = scheduler.GetJobDetail(key);
+			if (job == null)
+			{
+				logger.Error($"Отчет {jobName} не найден");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -510,7 +541,7 @@ namespace ProducerInterface.Controllers
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Job {key.Name} {key.Group} run now failed:" + e.Message, e);
+				logger.Error($"Ошибка при установке расписания отчета {key.Name}", e);
 				ErrorMessage("Непредвиденная ошибка при установке расписания");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -534,6 +565,7 @@ namespace ProducerInterface.Controllers
 			var jxml = cntx_.reportxml.Where(x => x.JobName == jobName).Select(x => x.JobName).SingleOrDefault();
 			if (jxml == null)
 			{
+				logger.Error($"Отчет {jobName} не найден");
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -541,7 +573,8 @@ namespace ProducerInterface.Controllers
 			var jext = GetJobExtend(jobName);
 			if (jext == null)
 			{
-				ErrorMessage("Дополнительные параметры задачи не найдены");
+				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -587,6 +620,7 @@ namespace ProducerInterface.Controllers
 			var jxml = cntx_.reportxml.Where(x => x.JobName == model.jobName).Select(x => x.JobName).SingleOrDefault();
 			if (jxml == null)
 			{
+				logger.Error($"XML отчета {model.jobName} не найден");
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
@@ -594,7 +628,8 @@ namespace ProducerInterface.Controllers
 			var jext = GetJobExtend(model.jobName);
 			if (jext == null)
 			{
-				ErrorMessage("Дополнительные параметры задачи не найдены");
+				logger.Error($"Дополнительные параметры отчета {model.jobName} не найдены");
+				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
 			
