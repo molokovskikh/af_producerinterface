@@ -24,6 +24,7 @@ namespace ProducerInterfaceCommon.ContextModels
             this.AccountFeedBackComment = new HashSet<AccountFeedBackComment>();
             this.AccountFeedBack = new HashSet<AccountFeedBack>();
             this.AccountFeedBack1 = new HashSet<AccountFeedBack>();
+            this.AccountRegion = new HashSet<AccountRegion>();
         }
     
         public long Id { get; set; }
@@ -54,5 +55,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public virtual ICollection<AccountFeedBackComment> AccountFeedBackComment { get; set; }
         public virtual ICollection<AccountFeedBack> AccountFeedBack { get; set; }
         public virtual ICollection<AccountFeedBack> AccountFeedBack1 { get; set; }
+        public virtual ICollection<AccountRegion> AccountRegion { get; set; }
     }
 }

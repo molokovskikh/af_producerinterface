@@ -105,6 +105,14 @@
           <Property Name="Enabled" Type="bool" Nullable="false" />
           <Property Name="TypePermission" Type="tinyint" Nullable="false" />
         </EntityType>
+        <EntityType Name="AccountRegion">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="RegionCode" />
+          </Key>
+          <Property Name="AccountId" Type="uint" Nullable="false" />
+          <Property Name="RegionCode" Type="ubigint" Nullable="false" />
+        </EntityType>
         <EntityType Name="AccountUserToGroup">
           <Key>
             <PropertyRef Name="IdUser" />
@@ -732,6 +740,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_AccountRegion_To_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountRegion" Type="Self.AccountRegion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountRegion">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Comment_To_Admin">
           <End Role="Account" Type="Self.Account" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -977,6 +997,7 @@
           <EntitySet Name="AccountGroup" EntityType="Self.AccountGroup" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountGroupToPermission" EntityType="Self.AccountGroupToPermission" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountPermission" EntityType="Self.AccountPermission" Schema="producerinterface" store:Type="Tables" />
+          <EntitySet Name="AccountRegion" EntityType="Self.AccountRegion" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="AccountUserToGroup" EntityType="Self.AccountUserToGroup" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="CatalogLog" EntityType="Self.CatalogLog" Schema="producerinterface" store:Type="Tables" />
           <EntitySet Name="CompanyDomainName" EntityType="Self.CompanyDomainName" Schema="producerinterface" store:Type="Tables" />
@@ -1224,6 +1245,10 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <AssociationSet Name="Email_AccountId" Association="Self.Email_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountEmail" EntitySet="AccountEmail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountRegion_To_Account" Association="Self.FK_AccountRegion_To_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountRegion" EntitySet="AccountRegion" />
           </AssociationSet>
           <AssociationSet Name="FK_Comment_To_Admin" Association="Self.FK_Comment_To_Admin">
             <End Role="Account" EntitySet="Account" />
@@ -1565,6 +1590,11 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           </AssociationSet>
           <EntitySet Name="CatalogLog" EntityType="producerinterface_Model.CatalogLog" />
           <EntitySet Name="cataloglogui" EntityType="producerinterface_Model.cataloglogui" />
+          <EntitySet Name="AccountRegion" EntityType="producerinterface_Model.AccountRegion" />
+          <AssociationSet Name="FK_AccountRegion_To_Account" Association="producerinterface_Model.FK_AccountRegion_To_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountRegion" EntitySet="AccountRegion" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AccountCompany">
           <Key>
@@ -2081,6 +2111,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <NavigationProperty Name="AccountFeedBackComment" Relationship="producerinterface_Model.FK_Comment_To_Admin" FromRole="Account" ToRole="AccountFeedBackComment" />
           <NavigationProperty Name="AccountFeedBack" Relationship="producerinterface_Model.FK_FeedBack_To_Account" FromRole="Account" ToRole="AccountFeedBack" />
           <NavigationProperty Name="AccountFeedBack1" Relationship="producerinterface_Model.FK_FeedBack_To_Admin" FromRole="Account" ToRole="AccountFeedBack" />
+          <NavigationProperty Name="AccountRegion" Relationship="producerinterface_Model.FK_AccountRegion_To_Account" FromRole="Account" ToRole="AccountRegion" />
         </EntityType>
         <Association Name="Account_Appointment">
           <End Type="producerinterface_Model.AccountAppointment" Role="AccountAppointment" Multiplicity="0..1" />
@@ -2295,6 +2326,27 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="ProducerId" Type="Int64" />
           <Property Name="ProducerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="AccountRegion">
+          <Key>
+            <PropertyRef Name="AccountId" />
+            <PropertyRef Name="RegionCode" />
+          </Key>
+          <Property Name="AccountId" Type="Int64" Nullable="false" />
+          <Property Name="RegionCode" Type="Decimal" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_AccountRegion_To_Account" FromRole="AccountRegion" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_AccountRegion_To_Account">
+          <End Type="producerinterface_Model.Account" Role="Account" Multiplicity="1" />
+          <End Type="producerinterface_Model.AccountRegion" Role="AccountRegion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountRegion">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2934,6 +2986,14 @@ FROM `usernames` AS `usernames`</DefiningQuery>
                 <ScalarProperty Name="LogTime" ColumnName="LogTime" />
                 <ScalarProperty Name="NameId" ColumnName="NameId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountRegion">
+            <EntityTypeMapping TypeName="producerinterface_Model.AccountRegion">
+              <MappingFragment StoreEntitySet="AccountRegion">
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

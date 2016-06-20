@@ -38,6 +38,21 @@
             @Html.ValidationMessageFor(m => m.AppointmentId)
         </div>
         <div class="form-group">
+            <div>@Html.LabelFor(m => m.AccountRegionIds)</div>
+            <div class="row">
+                @for (int i = 0; i < Model.AllAccountRegion.Count; i++)
+                {
+                    var r = Model.AllAccountRegion[i];
+                    <div class="col-md-4">
+                        <input type="checkbox" name="AccountRegionIds" value="@r.Value"
+                            @{if (r.Selected) { <text> checked='checked' </text> } } />
+                        <span>@r.Text</span>
+                    </div>
+                }
+            </div>
+            @Html.ValidationMessageFor(m => m.AccountRegionIds)
+        </div>
+        <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
         </div>
     </div>

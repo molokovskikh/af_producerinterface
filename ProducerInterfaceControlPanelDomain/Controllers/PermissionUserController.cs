@@ -56,7 +56,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				Name = user.Name,
 				Status = user.Enabled,
 				AppointmentId = user.AppointmentId,
-				AccountGroupIds = user.AccountGroup.Select(x => x.Id).ToList()
+				AccountGroupIds = user.AccountGroup.Select(x => x.Id).ToList(),
+				AccountRegionIds = user.AccountRegion.Select(x => x.RegionCode).ToList()
 			};
 
 			// если запрос на регистрацию - показываем сообщение от пользователя
@@ -87,6 +88,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			user.AccountGroup.Clear();
 			foreach (var group in groups)
 				user.AccountGroup.Add(group);
+
+			user.AccountRegion.Clear();
+			foreach (var regionCode in model.AccountRegionIds)
+				user.AccountRegion.Add(new AccountRegion() { AccountId = user.Id, RegionCode = regionCode });
 
 			var sendAcceptMail = false;
 			var password = "";
@@ -151,8 +156,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			allAppointment.AddRange(cntx_.AccountAppointment.OrderBy(x => x.Name)
 				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == user.AppointmentId })
 				.ToList());
-
 			model.AllAppointment = allAppointment;
+
+			var regions = cntx_.regionsnamesleaf
+				.ToList()
+				.OrderBy(x => x.RegionName)
+				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = model.AccountRegionIds.Contains(x.RegionCode) })
+				.ToList();
+			model.AllAccountRegion = regions;
 		}
 
 		/// <summary>

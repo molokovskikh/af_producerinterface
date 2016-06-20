@@ -307,7 +307,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult JobList(long? cid)
 		{
 			//throw new NotSupportedException("Искусственно вызванная ошибка");
-			ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
+			ViewData["descr"] = AvailableReports();
 			return View(cid);
 		}
 
@@ -318,8 +318,16 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("AddJob", "Report", new { id = id.Value });
 
 			ModelState.AddModelError("id", "Выберите тип отчета, который хотите создать");
-			ViewData["descr"] = cntx_.ReportDescription.ToDictionary(x => x.Id, x => x.Description);
+			ViewData["descr"] = AvailableReports();
 			return View();
+		}
+
+		private List<ReportDescription> AvailableReports()
+		{
+			var userRegions = CurrentUser.AccountRegion.Select(x => x.RegionCode).ToList();
+			var reportIds = cntx_.ReportRegion.Where(x => userRegions.Contains(x.RegionCode)).Select(x => x.ReportId).Distinct().ToList();
+			var result = cntx_.ReportDescription.Where(x => reportIds.Contains(x.Id)).ToList();
+			return result;
 		}
 
 		/// <summary>

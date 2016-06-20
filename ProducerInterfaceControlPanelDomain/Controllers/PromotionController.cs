@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.CustomHelpers.Func;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion;
+using ProducerInterfaceCommon.CustomHelpers.Models;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -34,7 +35,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
         {
             var PromotionList = new List<promotions>();
 
-            SqlProcedure<ProducerInterfaceCommon.CustomHelpers.Models.PromotionsInRegionMask> CH = new SqlProcedure<ProducerInterfaceCommon.CustomHelpers.Models.PromotionsInRegionMask>((ulong)CurrentUser.RegionMask);
+            var CH = new SqlProcedure<PromotionsInRegionMask>((ulong)CurrentUser.RegionMask);
             var ListId = CH.GetPromotionId();
                     
             PromotionList = cntx_.promotions.Where(x => ListId.Contains(x.Id)).ToList();

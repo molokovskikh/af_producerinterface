@@ -319,6 +319,11 @@ namespace ProducerInterface.Controllers
 			var password = GetRandomPassword();
 			var account = SaveAccount(accountCompany: company, Reg_ViewModel: model, Pass: password);
 
+			// добавили все регионы. TODO возможно, иная логика
+			var regionCodes = cntx_.regionsnamesleaf.Select(x => x.RegionCode).ToList();
+			foreach (var regionCode in regionCodes)
+				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionCode = regionCode });
+
 			// добавили аккаунт в группу админов
 			var adminGroupName = GetWebConfigParameters("AdminGroupName");
 			var adminGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
@@ -377,6 +382,11 @@ namespace ProducerInterface.Controllers
 			// создали новый аккаунт
 			var password = GetRandomPassword();
 			var account = SaveAccount(accountCompany: company, RegDomain_ViewModel: model, Pass: password);
+
+			// добавили все регионы. TODO возможно, иная логика
+			var regionCodes = cntx_.regionsnamesleaf.Select(x => x.RegionCode).ToList();
+			foreach (var regionCode in regionCodes)
+				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionCode = regionCode });
 
 			// ищем группу "все пользователи", если такой нет - создаем
 			var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
@@ -463,6 +473,7 @@ namespace ProducerInterface.Controllers
 			cntx_.SaveChanges();
 
 			// создали аккаунт
+			// регионы и группы не добавляются здесь, потому что всё равно должен регистрировать админ
 			var user = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
 			user.IP = Request.UserHostAddress;
 
@@ -557,6 +568,7 @@ namespace ProducerInterface.Controllers
 		{
 			var newAccount = new Account();
 			newAccount.EnabledEnum = UserStatus.New;
+			// TODO удалить RegionMask при переделке промоакций
 			newAccount.RegionMask = 0;
 			newAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
 			newAccount.CompanyId = accountCompany.Id;

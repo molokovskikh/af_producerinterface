@@ -70,6 +70,8 @@
         <AssociationConnector Association="producerinterface_Model.FK1_Comment_To_Feedback" />
         <EntityTypeShape EntityType="producerinterface_Model.CatalogLog" Width="1.5" PointX="3.375" PointY="16.75" />
         <EntityTypeShape EntityType="producerinterface_Model.cataloglogui" Width="1.5" PointX="18.375" PointY="0.75" />
+        <EntityTypeShape EntityType="producerinterface_Model.AccountRegion" Width="1.5" PointX="12.25" PointY="25.125" />
+        <AssociationConnector Association="producerinterface_Model.FK_AccountRegion_To_Account" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

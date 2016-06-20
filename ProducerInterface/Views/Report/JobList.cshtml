@@ -1,15 +1,13 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
 @model long?
 
-
 <div class="body-content">
 
      @{
-        var listReport = new List<SelectListItem>();
-        listReport.Add(new SelectListItem() { Value = "", Text = "Выберите тип отчета, который вы хотите создать", Selected = true });
-        listReport.AddRange(EnumHelper.GetSelectList(typeof(Reports)));
-
-        var descr = (Dictionary<int, string>)ViewData["descr"];
+       var descr = (List<ReportDescription>)ViewData["descr"];
+       var listReport = new List<SelectListItem>();
+       listReport.Add(new SelectListItem() { Value = "", Text = "Выберите тип отчета, который вы хотите создать", Selected = true });
+       listReport.AddRange(descr.Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }));
     }
 
     <div class="row">
@@ -28,7 +26,7 @@
                         </div>
                         <div class="col-xs-7">
                             @foreach (var d in descr) {
-                                <div id="@('d' + d.Key.ToString())" class="descr" style="display: none">@d.Value</div>
+                                <div id="@('d' + d.Id.ToString())" class="descr" style="display: none">@d.Description</div>
                             }
                         </div>
                     </div>               

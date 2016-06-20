@@ -67,7 +67,6 @@ namespace ProducerInterfaceCommon.ContextModels
 		public List<SelectListItem> AllStatus { get; set; }
 
 		[Display(Name = "Должность")]
-		//[Required(ErrorMessage = "Укажите должность")]
 		public int? AppointmentId { get; set; }
 
 		public List<SelectListItem> AllAppointment { get; set; }
@@ -77,6 +76,12 @@ namespace ProducerInterfaceCommon.ContextModels
 		public List<int> AccountGroupIds { get; set; }
 
 		public List<SelectListItem> AllAccountGroup { get; set; }
+
+		[Display(Name = "Доступные регионы")]
+		[Required(ErrorMessage = "Укажите хотя бы один регион")]
+		public List<decimal> AccountRegionIds { get; set; }
+
+		public List<SelectListItem> AllAccountRegion { get; set; }
 	}
 
 	public class UserFilter

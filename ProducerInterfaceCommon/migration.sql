@@ -1728,6 +1728,20 @@ left join `producerinterface`.`accountcompany` `ac` on((`ac`.`Id` = `a`.`Company
 left join `producerinterface`.`producernames` `p` on((`p`.`ProducerId` = `ac`.`ProducerId`))) 
 left join `producerinterface`.`account` `a2` on((`a2`.`Id` = `cl`.`AdminId`)));
 
+CREATE TABLE `AccountRegion` (
+	`AccountId` INT(11) UNSIGNED NOT NULL,
+	`RegionCode` BIGINT(20) UNSIGNED NOT NULL,
+	PRIMARY KEY (`AccountId`, `RegionCode`),
+	INDEX `IDX_AccountId` (`AccountId`),
+	CONSTRAINT `FK_AccountRegion_To_Account` FOREIGN KEY (`AccountId`) REFERENCES `Account` (`Id`)
+)
+COLLATE='cp1251_general_ci'
+ENGINE=InnoDB;
+
+insert into AccountRegion (AccountId, RegionCode)
+select 49, RegionCode 
+from regionsnamesleaf;
+
 #ниже не внесено в боевую БД
  drop view catalognameswithuptime;
 

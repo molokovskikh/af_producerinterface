@@ -106,28 +106,22 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult EditReportDescription(ReportDescriptionUI modelUI)
 		{
-			var model = cntx_.ReportDescription.Single(x => x.Id == modelUI.Id);
-			var regionCode = model.ReportRegion.Select(x => x.RegionCode).ToList();
-
 			if (!ModelState.IsValid)
 			{
 				ViewData["Regions"] = cntx_.regionsnamesleaf
 					.ToList()
 					.OrderBy(x => x.RegionName)
-					.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionCode.Contains(x.RegionCode) })
+					.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = modelUI.RegionList.Contains(x.RegionCode) })
 					.ToList();
 				return View(modelUI);
 			}
+
+			var model = cntx_.ReportDescription.Single(x => x.Id == modelUI.Id);
 			model.Description = modelUI.Description;
-			var rr = new List<ReportRegion>();
-			foreach (var r in modelUI.RegionList)
-				rr.Add(new ReportRegion() { RegionCode = r, ReportId = modelUI.Id });
+			model.ReportRegion.Clear();
+			foreach (var regionCode in modelUI.RegionList)
+				model.ReportRegion.Add(new ReportRegion() { RegionCode = regionCode, ReportId = modelUI.Id });
 
-			foreach (var child in model.ReportRegion.ToList())
-				model.ReportRegion.Remove(child);
-			cntx_.SaveChanges();
-
-			model.ReportRegion = rr;
 			cntx_.SaveChanges();
 			SuccessMessage("Свойства отчета сохранены");
 			return RedirectToAction("ReportDescription");

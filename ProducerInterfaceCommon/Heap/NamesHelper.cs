@@ -59,8 +59,13 @@ namespace ProducerInterfaceCommon.Heap
 		// #48585 возвращает список регионов, разрешённый для данного типа отчётов
 		public List<OptionElement> GetRegionList(int reportId)
 		{
-			var results = _cntx.regionsnamesleaftoreport
-				.Where(x => x.ReportId == reportId)
+			var userRegionCodes = _cntx.AccountRegion.Where(x => x.AccountId == _userId).Select(x => x.RegionCode).ToList();
+			var reportRegionCodes = _cntx.ReportRegion.Where(x => x.ReportId == reportId).Select(x => x.RegionCode).ToList();
+			var intersect = userRegionCodes.Intersect(reportRegionCodes);
+
+			// TODO удалить regionsnamesleaftoreport
+			var results = _cntx.regionsnamesleaf
+				.Where(x => intersect.Contains(x.RegionCode))
 				.ToList()
 				.OrderBy(x => x.RegionName)
 				.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
