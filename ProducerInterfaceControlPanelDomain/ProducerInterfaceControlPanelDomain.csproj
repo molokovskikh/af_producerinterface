@@ -205,13 +205,13 @@
     <Compile Include="Controllers\Global\MediaFilesController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\FeedBack2Controller.cs" />
-    <Compile Include="Controllers\Reports_News\NewsController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\PermissionUserController.cs" />
     <Compile Include="Controllers\ProducerInformationController.cs" />
     <Compile Include="Controllers\AdminProfile\ProfileController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\AdminProfile\RegistrationController.cs" />
-    <Compile Include="Controllers\Reports_News\ReportController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -717,9 +717,8 @@
     <Content Include="Views\PermissionUser\Change.cshtml" />
     <Content Include="Views\PermissionUser\ListPermission.cshtml" />
     <Content Include="Views\PermissionUser\EditPermission.cshtml" />
-    <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\Create.cshtml" />
-    <Content Include="Views\News\List.cshtml" />
+    <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\GetNextList.cshtml" />
     <Content Include="Views\ProducerInformation\Index.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\AccountList.cshtml" />
@@ -778,7 +777,6 @@
     <Folder Include="Views\BasePermission\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\MasterBase\" />
-    <Folder Include="Views\News\Partial\" />
     <Folder Include="Views\PR_partial_AccountAppointment\" />
   </ItemGroup>
   <ItemGroup>

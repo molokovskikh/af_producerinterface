@@ -89,11 +89,11 @@ namespace ProducerInterfaceCommon.ContextModels
 	{
 		public string GetDisplayNewsTypeChange
 		{
-			get { return Heap.AttributeHelper.DisplayName(ChangeNewsType); }
+			get { return Heap.AttributeHelper.DisplayName(ActionNewsType); }
 		}
-		private NewsChanges ChangeNewsType
+		private NewsActions ActionNewsType
 		{
-			get { return (NewsChanges)TypeCnhange; }
+			get { return (NewsActions)TypeCnhange; }
 		}
 	}
 

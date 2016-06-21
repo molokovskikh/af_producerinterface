@@ -1742,6 +1742,13 @@ insert into AccountRegion (AccountId, RegionCode)
 select 49, RegionCode 
 from regionsnamesleaf;
 
+insert into mailform (Id, Subject, Body, IsBodyHtml, Description)
+values (19, 'Действие с новостью на сайте {SiteName}', 'Изменена новость Id={Id}
+
+Было: {Before}
+
+Стало: {After}', 0, 'Действие с новостью');
+
 #ниже не внесено в боевую БД
  drop view catalognameswithuptime;
 

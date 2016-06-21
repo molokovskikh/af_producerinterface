@@ -100,16 +100,18 @@ namespace ProducerInterfaceCommon.ContextModels
 		Processed = 1
 	}
 
-	public enum NewsChanges
+	public enum NewsActions
 	{
-		[Display(Name = "Добавление")]
-		NewsAdd = 0,
-		[Display(Name = "Редактирование")]
-		NewsChange = 1,
-		[Display(Name = "Отправлено в архив")]
-		NewsArchive = 2,
-		[Display(Name = "Возвращено из архива")]
-		NewsRetArchive = 3
+		[Display(Name = "Добавление новости")]
+		Add = 0,
+		[Display(Name = "Редактирование новости")]
+		Edit = 1,
+		[Display(Name = "Новость перенесена в архив")]
+		Archive = 2,
+		[Display(Name = "Новость возвращена из архива")]
+		RetArchive = 3,
+		[Display(Name = "Новость удалена")]
+		PastRetrieve = 4
 	}
 
 	public enum Reports

@@ -1,32 +1,31 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>
-
-
+﻿@using ProducerInterfaceCommon.ContextModels
+@model IEnumerable<NotificationToProducers>
 
 @if (Model != null && Model.Any())
 {
 
-    foreach (var NewsItem in Model)
+    foreach (var item in Model)
     {
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div>
-                            Тема @NewsItem.Name
-                            <div class="pull-right">Дата изменения @NewsItem.DatePublication.Value.ToString("dd-MM-yyyy")</div>
+                            Тема @item.Name
+                            <div class="pull-right">Дата изменения @item.DatePublication.Value.ToString("dd-MM-yyyy")</div>
                         </div>
                     </div>
                     <div class="panel-body">                    
                         <div class="form-group">
-                            <a href="@Url.Action("Create", new { Id = NewsItem.Id})" class="btn btn-primary">Редактировать</a>
-                            <a href="@Url.Action("DeleteNews", new { id= NewsItem.Id})" class="btn btn-primary">Удалить</a>
+                            <a href="@Url.Action("Create", new { Id = item.Id})" class="btn btn-primary">Редактировать</a>
+                            <a href="@Url.Action("DeleteNews", new { id= item.Id})" class="btn btn-primary">Удалить</a>
                         </div>
 
                         <div class="form-group">
                             <label>История изменений</label>
-                            @foreach (var HistoryItem in NewsItem.NewsChange)
+                            @foreach (var historyItem in item.NewsChange)
                             {
-                                <p>@HistoryItem.DateChange @HistoryItem.Account.Name @HistoryItem.GetDisplayNewsTypeChange </p>
+                                <p>@historyItem.DateChange @historyItem.Account.Name @historyItem.GetDisplayNewsTypeChange </p>
                             }
                         </div>
 

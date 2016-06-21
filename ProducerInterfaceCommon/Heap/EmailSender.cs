@@ -211,9 +211,23 @@ namespace ProducerInterfaceCommon.Heap
 			var body = $"{ReliableTokenizer(mailForm.Body, new { Message = message, Contacts = contacts })}";
 
 			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = MailType.ProducerRequest.DisplayName() };
-			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
-			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
 		}
+
+		// Изменение новости, расширенное сотрудникам
+		public static void ChangeNewsMessage(producerinterface_Entities cntx, Account user, NewsActions action, long newsId, string before, string after)
+		{
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.NewsAction);
+			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
+			var body = $"{ReliableTokenizer(mailForm.Body, new { Before = before, After = after, Id = newsId })}";
+
+			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = action.DisplayName() };
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
+		}
+
 
 		// Изменение ПКУ, сотрудникам
 		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string fieldName, string formName, string before, string after)

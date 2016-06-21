@@ -12,6 +12,7 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Index()
 		{
+			// TODO список новостей
 			return View("Index");
 		}
 	}
