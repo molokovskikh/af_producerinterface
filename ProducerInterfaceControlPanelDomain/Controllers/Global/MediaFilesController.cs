@@ -37,6 +37,30 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return File(file.ImageFile, file.ImageType);
 		}
 
+		public FileResult GetEmailFile(int Id)
+		{
+			var imageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\Images");
+			var file = cntx_.MediaFiles.Find(Id);
+			var ext = Path.GetExtension(file.ImageName)?.ToLower();
+
+			switch (ext) {
+				case ".jpg":
+				case ".png":
+				case ".gif":
+				case ".bmp":
+					return File(file.ImageFile, file.ImageType);
+				case ".txt":
+					return File(Path.Combine(imageDir, "txt.png"), "image/png");
+				case ".xls":
+				case ".xlsx":
+					return File(Path.Combine(imageDir, "xls.png"), "image/png");
+				case ".zip":
+					return File(Path.Combine(imageDir, "zip.png"), "image/png");
+				default:
+					return File(Path.Combine(imageDir, "other.png"), "image/png");
+			}
+		}
+
 		public ActionResult SaveNewsFile()
 		{
 			var file = Request.Files[0];
@@ -49,14 +73,19 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult SaveEmailFile(HttpPostedFileBase file)
 		{
-			if (file != null && file.ContentLength > 0) {
-				var fileId = SaveFile(file, EntityType.Email);
-				return RedirectToAction("Index", "Mail");
-      }
-			else {
+			if (file == null || file.ContentLength == 0) {
 				ErrorMessage("Файл не найден");
 				return RedirectToAction("Index", "Mail");
 			}
+
+			var fileName = Path.GetFileName(file.FileName);
+			if (cntx_.MediaFiles.Any(x => x.ImageName == fileName && x.EntityType == (int)EntityType.Email)) {
+				ErrorMessage("В системе уже есть файл с таким именем. Переименуйте этот или удалите существующий");
+				return RedirectToAction("Index", "Mail"); ;
+			}
+
+			var fileId = SaveFile(file, EntityType.Email);
+			return RedirectToAction("Index", "Mail");
 		}
 
 		[HttpPost]
@@ -82,10 +111,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		private int SaveFile(HttpPostedFileBase file, EntityType type)
 		{
-			var dbFile = new MediaFiles();
-			dbFile.ImageName = file.FileName.Split(new Char[] { '\\' }).Last();
-			dbFile.ImageType = file.ContentType;
-			dbFile.EntityType = (int)type;
+			var fileName = Path.GetFileName(file.FileName);
+			var dbFile = new MediaFiles() {
+				ImageName = fileName,
+				ImageType = file.ContentType,
+				EntityType = (int)type
+			};
 			using (var ms = new MemoryStream())
 			{
 				file.InputStream.CopyTo(ms);

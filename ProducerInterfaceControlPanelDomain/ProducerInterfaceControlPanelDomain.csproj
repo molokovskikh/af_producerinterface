@@ -240,6 +240,10 @@
     <Content Include="Content\Chosen\css\loading.gif" />
     <Content Include="Content\Chosen\css\Site.css" />
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
+    <Content Include="Content\Images\other.png" />
+    <Content Include="Content\Images\txt.png" />
+    <Content Include="Content\Images\xls.png" />
+    <Content Include="Content\Images\zip.png" />
     <Content Include="Content\semantic_ui\dropdown.css" />
     <Content Include="Content\semantic_ui\dropdown.min.css" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -772,7 +776,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Chozen\" />
     <Folder Include="Models\" />
     <Folder Include="Views\BasePermission\" />
     <Folder Include="Views\Base\" />

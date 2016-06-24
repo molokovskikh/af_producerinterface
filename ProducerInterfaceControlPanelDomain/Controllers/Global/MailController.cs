@@ -15,19 +15,28 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult Index()
 		{
 			var model = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email)
-				.Select(x => new { x.Id, x.ImageName }).ToList()
-				.Select(x => Tuple.Create(x.Id, x.ImageName)).ToList();
+				.Select(x => new { x.Id, x.ImageName })
+				.ToList()
+				.Select(x => Tuple.Create(x.Id, x.ImageName))
+				.ToList();
 			return View(model);
 		}
 
-		public ActionResult DeleteFile(int Id)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
+		public ActionResult DeleteFile(List<int> ids)
 		{
-			var file = cntx_.MediaFiles.Find(Id);
-			if (file != null)
-			{
+			if (ids == null || !ids.Any()) {
+				return RedirectToAction("Index");
+			}
+
+			var files = cntx_.MediaFiles.Where(x => ids.Contains(x.Id));
+			foreach (var file in files)
 				cntx_.MediaFiles.Remove(file);
-				cntx_.SaveChanges();
-      }
+			cntx_.SaveChanges();
 			return RedirectToAction("Index");
 		}
 
@@ -44,6 +53,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <summary>
 		/// Возврашает Шаблон выбранного письма для правки
 		/// </summary>
+		/// <param name="id">идентификатор формы</param>
 		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Edit(int? id)
@@ -56,16 +66,45 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				return RedirectToAction("Index");
 
 			// файлы, присоединенные к форме
-			var mediaFiles = mailForm.MediaFiles.Select(x => x.Id).ToList();
+			var mediaFiles = mailForm.MediaFiles
+				.Select(x => new { x.Id, x.ImageName })
+				.ToList()
+				.Select(x => Tuple.Create(x.Id, x.ImageName))
+				.ToList();
+
+			var mediaFilesIds = mediaFiles.Select(y => y.Item1).ToList();
+
 			// все доступные файлы, кроме уже присоединенных
-			var allMediaFiles = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email && !mediaFiles.Contains(x.Id)).Select(x => x.Id).ToList();
-			var model = new MailFormUi() { Body = mailForm.Body, Description = mailForm.Description, Id = mailForm.Id, Subject = mailForm.Subject, MediaFiles = mediaFiles, AllMediaFiles = allMediaFiles };
+			var allMediaFiles = cntx_.MediaFiles
+				.Where(x => x.EntityType == (int)EntityType.Email && !mediaFilesIds.Contains(x.Id))
+				.Select(x => new {x.Id, x.ImageName})
+				.ToList()
+				.Select(x => Tuple.Create(x.Id, x.ImageName))
+				.ToList();
+
+			var model = new MailFormUi() {
+				Body = mailForm.Body,
+				Description = mailForm.Description,
+				Id = mailForm.Id,
+				Subject = mailForm.Subject,
+				MediaFiles = mediaFiles,
+				AllMediaFiles = allMediaFiles
+			};
 			return View(model);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <param name="fileId"></param>
+		/// <returns></returns>
 		public ActionResult AttachFile(int Id, List<int> fileId)
 		{
 			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == Id);
+			if (mailForm == null)
+				return RedirectToAction("Index");
+
 			var mediaFiles = cntx_.MediaFiles.Where(x => fileId.Contains(x.Id)).ToList();
 			foreach (var f in mediaFiles)
 				mailForm.MediaFiles.Add(f);

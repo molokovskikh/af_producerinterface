@@ -214,13 +214,13 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Subject { get; set; }
 		public string Body { get; set; }
 		public string Description { get; set; }
-		public List<int> MediaFiles { get; set; }
-		public List<int> AllMediaFiles { get; set; }
+		public List<Tuple<int, string>> MediaFiles { get; set; }
+		public List<Tuple<int, string>> AllMediaFiles { get; set; }
 
 		public MailFormUi()
 		{
-			MediaFiles = new List<int>();
-			AllMediaFiles = new List<int>();
+			MediaFiles = new List<Tuple<int, string>>();
+			AllMediaFiles = new List<Tuple<int, string>>();
 		}
 	}
 

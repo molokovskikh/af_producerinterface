@@ -77,14 +77,15 @@
             <hr />
             <input type="hidden" name="Id" value="@Model.Id" />
             <div class="row">
-                @foreach(var id in Model.MediaFiles){
+                @foreach(var item in Model.MediaFiles){
                     <div class="col-md-4">
-                        <img src="@Url.Action("GetFile", "MediaFiles", new { Id = id })" style="max-height:100px; margin:10px 0;" />
-                        <input name="fileId" type="checkbox" value="@id" />
+                        <img src="@Url.Action("GetEmailFile", "MediaFiles", new { Id = item.Item1 })" style="max-height:100px; margin:10px 0;" />
+                        <input name="fileId" type="checkbox" value="@item.Item1"/>
+                        <span>@item.Item2</span>
                     </div>
                 }
             </div>
-            <input type="submit" value="Удалить файл из сообщения" class="btn btn-primary" />
+            <input type="submit" value="Удалить файлы из сообщения" class="btn btn-primary" />
             }
         }
     </div>
@@ -101,10 +102,11 @@
                 </div>
                 <div class="modal-body" id="result">
                     <div class="row">
-                        @foreach(var id in Model.AllMediaFiles){
+                        @foreach(var item in Model.AllMediaFiles){
                             <div class="col-md-3">
-                                <img style="margin-top:10px" src="@Url.Action("GetFile", "MediaFiles", new { Id = id })" height="50" />
-                                <input name="fileId" type="checkbox" value="@id" />
+                                <img style="margin-top:10px" src="@Url.Action("GetEmailFile", "MediaFiles", new { Id = item.Item1 })" height="50" />
+                                <input name="fileId" type="checkbox" value="@item.Item1" />
+                                <span>@item.Item2</span>
                             </div>
                         }
                     </div>

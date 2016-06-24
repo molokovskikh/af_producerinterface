@@ -66,13 +66,15 @@
     <div class="row">
         @foreach (var item in Model) {
             <div class="col-md-3">
-                <img style="max-height:50px; margin:10px 0;" src="@Url.Action("GetFile", "MediaFiles", new { Id = item.Item1 })"/>
-                <input name="Id" type="checkbox" value="@item.Item1"/>
+                <span style="display: inline-block; width: 50px; text-align: center;">
+                    <img style="max-height: 50px; margin: 10px 0;" src="@Url.Action("GetEmailFile", "MediaFiles", new { Id = item.Item1 })" />
+                </span>
+                <input name="ids" type="checkbox" value="@item.Item1"/>
                 <span>@item.Item2</span>
             </div>
         }
     </div>
-    <input type="submit" value="Удалить файл из системы" class="btn btn-primary" />
+    <input type="submit" value="Удалить файлы из системы" class="btn btn-primary" />
     }
 }
 
