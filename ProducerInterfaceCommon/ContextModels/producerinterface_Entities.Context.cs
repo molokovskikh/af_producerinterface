@@ -9,13 +9,11 @@
 
 namespace ProducerInterfaceCommon.ContextModels
 {
-	using System;
-	using System.Data.Entity;
-	using System.Data.Entity.Core.Objects;
-	using System.Data.Entity.Infrastructure;
-	using System.Linq;
-
-	public partial class producerinterface_Entities : DbContext
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    
+    public partial class producerinterface_Entities : DbContext
     {
         public producerinterface_Entities()
             : base("name=producerinterface_Entities")
@@ -58,7 +56,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<PromotionsToSupplier> PromotionsToSupplier { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }
-        public DbSet<promotions> promotions { get; set; }
         public DbSet<ReportRegion> ReportRegion { get; set; }
         public DbSet<regionsnamesleaftoreport> regionsnamesleaftoreport { get; set; }
         public DbSet<regionsnamesleaf> regionsnamesleaf { get; set; }
@@ -67,20 +64,12 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<descriptionlogview> descriptionlogview { get; set; }
         public DbSet<LogForNet> LogForNet { get; set; }
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
-        public DbSet<Account> Account { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<AccountFeedBackComment> AccountFeedBackComment { get; set; }
         public DbSet<CatalogLog> CatalogLog { get; set; }
         public DbSet<cataloglogui> cataloglogui { get; set; }
         public DbSet<AccountRegion> AccountRegion { get; set; }
-    
-        public virtual ObjectResult<PromotionsInRegionMask_Result> PromotionsInRegionMask(Nullable<long> rGM)
-        {
-            var rGMParameter = rGM.HasValue ?
-                new ObjectParameter("RGM", rGM) :
-                new ObjectParameter("RGM", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PromotionsInRegionMask_Result>("PromotionsInRegionMask", rGMParameter);
-        }
+        public DbSet<Account> Account { get; set; }
+        public DbSet<promotions> promotions { get; set; }
     }
 }

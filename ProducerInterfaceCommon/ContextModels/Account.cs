@@ -17,14 +17,14 @@ namespace ProducerInterfaceCommon.ContextModels
         public Account()
         {
             this.AccountEmail = new HashSet<AccountEmail>();
-            this.promotions = new HashSet<promotions>();
-            this.promotions1 = new HashSet<promotions>();
-            this.NewsChange = new HashSet<NewsChange>();
-            this.AccountGroup = new HashSet<AccountGroup>();
+            this.AccountRegion = new HashSet<AccountRegion>();
             this.AccountFeedBackComment = new HashSet<AccountFeedBackComment>();
             this.AccountFeedBack = new HashSet<AccountFeedBack>();
             this.AccountFeedBack1 = new HashSet<AccountFeedBack>();
-            this.AccountRegion = new HashSet<AccountRegion>();
+            this.NewsChange = new HashSet<NewsChange>();
+            this.AccountGroup = new HashSet<AccountGroup>();
+            this.promotions = new HashSet<promotions>();
+            this.promotions1 = new HashSet<promotions>();
         }
     
         public long Id { get; set; }
@@ -42,19 +42,18 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<System.DateTime> PasswordUpdated { get; set; }
         public sbyte Enabled { get; set; }
         public Nullable<System.DateTime> LastUpdatePermisison { get; set; }
-        public Nullable<decimal> RegionMask { get; set; }
         public Nullable<System.DateTime> SecureTime { get; set; }
     
         public virtual AccountAppointment AccountAppointment { get; set; }
         public virtual AccountCompany AccountCompany { get; set; }
         public virtual ICollection<AccountEmail> AccountEmail { get; set; }
-        public virtual ICollection<promotions> promotions { get; set; }
-        public virtual ICollection<promotions> promotions1 { get; set; }
-        public virtual ICollection<NewsChange> NewsChange { get; set; }
-        public virtual ICollection<AccountGroup> AccountGroup { get; set; }
+        public virtual ICollection<AccountRegion> AccountRegion { get; set; }
         public virtual ICollection<AccountFeedBackComment> AccountFeedBackComment { get; set; }
         public virtual ICollection<AccountFeedBack> AccountFeedBack { get; set; }
         public virtual ICollection<AccountFeedBack> AccountFeedBack1 { get; set; }
-        public virtual ICollection<AccountRegion> AccountRegion { get; set; }
+        public virtual ICollection<NewsChange> NewsChange { get; set; }
+        public virtual ICollection<AccountGroup> AccountGroup { get; set; }
+        public virtual ICollection<promotions> promotions { get; set; }
+        public virtual ICollection<promotions> promotions1 { get; set; }
     }
 }

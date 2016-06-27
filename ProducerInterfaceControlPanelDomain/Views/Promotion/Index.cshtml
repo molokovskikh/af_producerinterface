@@ -8,10 +8,9 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 
     var listStatus = new List<SelectListItem>();
-    listStatus.AddRange(EnumHelper.GetSelectList(typeof(PromotionStatus)));
+    listStatus.AddRange(EnumHelper.GetSelectList(typeof(PromotionFakeStatus)));
 
-    var RegionList = ViewBag.RegionList as IEnumerable<OptionElement>;
-    var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
+    var producerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
 }
 
 <div class="row">
@@ -55,9 +54,9 @@
                                 <label>Производитель</label>
 
                                 <select id="Producer" name="Producer" class="form-control">
-                                    @foreach (var Item in ProducerList)
+                                    @foreach (var item in producerList)
                                     {
-                                        <option value="@Item.Value">@Item.Text</option>
+                                        <option value="@item.Value">@item.Text</option>
                                     }
                                 </select>
 
@@ -67,15 +66,15 @@
                                 <label>Статус</label>
 
                                 <select id="Status" name="Status" class="form-control">
-                                    @foreach (var Item in listStatus)
+                                    @foreach (var item in listStatus)
                                     {
-                                        if (Item.Value == "5")
+                                        if (item.Value == Model.Status.ToString())
                                         {
-                                            <option value="@Item.Value" selected="selected">@Item.Text</option>
+                                            <option value="@item.Value" selected="selected">@item.Text</option>
                                         }
                                         else
                                         {
-                                            <option value="@Item.Value">@Item.Text</option>
+                                            <option value="@item.Value">@item.Text</option>
                                         }
                                     }
                                 </select>
@@ -92,7 +91,7 @@
                             <div class="row" id="datepickers">
 
                                 <div class="col-xs-12">
-                                    <label>Периуд действия акции входит в заданный деапазон дат</label>
+                                    <label>Период действия акции входит в заданный деапазон дат</label>
                                 </div>
 
                                 <div class="col-xs-6">
@@ -113,20 +112,6 @@
                                 <input value="Применить" class="btn btn-primary btn-sm" type="submit" />
                             </div>
                         </div>
-
-                        <div class="col-xs-12">
-                            @if (RegionList != null && RegionList.Count() > 0)
-                            {
-                                <label>Список регионов, по которым осуществляется поиск</label>
-                                        <p>
-                                            @foreach (var ItemRegion in RegionList)
-                                            {
-                                                <span>@ItemRegion.Text</span>
-                                            }
-                                        </p>
-                            }
-                        </div>
-
                     </div>
                 }
             </div>      

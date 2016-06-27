@@ -30,8 +30,8 @@ namespace ProducerInterfaceCommon.ContextModels
         public Nullable<long> AdminId { get; set; }
         public Nullable<System.DateTime> DateEdit { get; set; }
     
+        public virtual ICollection<AccountFeedBackComment> AccountFeedBackComment { get; set; }
         public virtual Account Account { get; set; }
         public virtual Account Account1 { get; set; }
-        public virtual ICollection<AccountFeedBackComment> AccountFeedBackComment { get; set; }
     }
 }

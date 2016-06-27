@@ -1,5 +1,5 @@
 ﻿$(function () {     
-    var elem = document.getElementById("PromotionEditDiv");
+    var elem = document.getElementById("PromotionUiDiv");
     ko.applyBindings(Promotion, elem);
     $("form").hide();
     Promotion.Title("Загрузка ...");

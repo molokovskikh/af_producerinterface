@@ -455,7 +455,6 @@
     <Content Include="Views\Profile\EditorTemplates\EditorMailReg.cshtml" />
     <Content Include="Views\Profile\EditorTemplates\Editor_Password.cshtml" />
     <Content Include="Views\Promotion\Partial\PromotionItem.cshtml" />
-    <Content Include="Views\Promotion\Partial\PromotionItemHeading.cshtml" />
     <Content Include="Views\Promotion\Partial\PromotionItemActionLink.cshtml" />
     <Content Include="Views\Promotion\Partial\FileUpLoad.cshtml" />
     <Content Include="Views\Promotion\Partial\FileUpLoadChange.cshtml" />

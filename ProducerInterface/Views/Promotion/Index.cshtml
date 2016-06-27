@@ -1,5 +1,5 @@
-﻿@using ProducerInterfaceCommon.ContextModels;
-@model IEnumerable<ProducerInterfaceCommon.ContextModels.promotions>
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Promotion
+@model IEnumerable<PromotionUi>
 @{
     ViewBag.Title = "Акции";
     Layout = "~/Views/Shared/_Layout.cshtml";   
@@ -7,7 +7,7 @@
 <div class="container body-content">
 
     <div class="content panel-body">
-        <h3 class="title">Акции<a href="@Url.Action("Edit")" class="btn btn-primary pull-right">Добавить акцию</a>
+        <h3 class="title">@ViewBag.Title<a href="@Url.Action("Edit")" class="btn btn-primary pull-right">Добавить акцию</a>
         </h3> 
     </div>
 
@@ -16,9 +16,9 @@
     @if (Model != null && Model.Any())
     {
         <div class="panel-group">
-            @foreach (var PromoItem in Model)
+            @foreach (var item in Model)
             {
-            @Html.Partial("PromotionItem", PromoItem)
+            @Html.Partial("PromotionItem", item)
 
             <hr/>
             }

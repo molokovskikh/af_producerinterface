@@ -350,7 +350,7 @@ namespace ProducerInterfaceCommon.Heap
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
 			var subject = ReliableTokenizer(mailForm.Subject, new { PromotionName = promotion.Name, SiteName = siteName });
 			string statusPromotion = "Деактивирована";
-			if (promotion.Status) { statusPromotion = "Подтверждена"; }
+			if (promotion.Status == (byte)PromotionStatus.Confirmed) { statusPromotion = "Подтверждена"; }
 			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { PromotionName = promotion.Name, Status = statusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, mailType);

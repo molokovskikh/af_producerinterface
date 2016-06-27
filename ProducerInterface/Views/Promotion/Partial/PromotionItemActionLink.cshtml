@@ -1,29 +1,30 @@
-﻿@using ProducerInterfaceCommon.ContextModels;
-@model promotions
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Promotion
+@using ProducerInterfaceCommon.ContextModels
+@model PromotionUi
 
 <div class="btn-group btn-group-primary btn-group-lg">
 
-    @if(Model.Status == false)
+    <!-- если ещё не согласована - можно редактировать -->
+    @if(Model.FakeStatus == PromotionFakeStatus.NotСonfirmed)
     {
-        <!-- редактирование -->
         <a href="@Url.Action("Edit", new { IdKey = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
     }
 
     <!-- копия акции (сразу открывается для редактирования) -->
-    <a href="@Url.Action("Edit", new { IdKey = Model.Id, Copy = true })" title="Создать копию акции" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
+    <a href="@Url.Action("Edit", new { IdKey = Model.Id, Copy = true })" title="Создать копию" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
 
-    @if (Model.Enabled == true && Model.Status == true)
+    <!-- если ещё не началась или активна - можно остановить -->
+    @if (Model.FakeStatus == PromotionFakeStatus.ConfirmedNotBegin || Model.FakeStatus == PromotionFakeStatus.Active)
     {
-          <!-- Отменить публикацию -->
-        <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = false })" title="Остановить публикацию акции" class="btn  btn-default glyphicon glyphicon-eye-close"></a>
+        <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = false })" title="Остановить публикацию" class="btn  btn-default glyphicon glyphicon-eye-close"></a>
+    }
+    else if(Model.FakeStatus == PromotionFakeStatus.Disabled)
+    {
+        <!-- если остановлена пользователем - можно запустить -->
+        <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = true })" title="Начать публикацию акции*(При наступлении срока)" class="btn btn-default glyphicon glyphicon-eye-close"></a>
     }
 
-    else if(Model.Status == true)
-    {
-          <!-- запустить публикацию -->
-        <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = true })" title="Начать публикацию акции*(При наступлении срока)" class="btn btn-default glyphicon glyphicon-eye-close"></a>
-    }  
-
-    <a href="@Url.Action("DeletePromo", new { Id = Model.Id })" title="Удаление промоакции" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn  btn-default glyphicon glyphicon-trash"></a>
+    <!-- удаляется из базы -->
+    <a href="@Url.Action("DeletePromo", new { Id = Model.Id })" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn  btn-default glyphicon glyphicon-trash"></a>
 
 </div>

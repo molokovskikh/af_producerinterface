@@ -20,7 +20,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public System.DateTime DateAdd { get; set; }
         public long AdminId { get; set; }
     
-        public virtual Account Account { get; set; }
         public virtual AccountFeedBack AccountFeedBack { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

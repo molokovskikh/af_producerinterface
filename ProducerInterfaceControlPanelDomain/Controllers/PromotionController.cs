@@ -3,166 +3,158 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
-using ProducerInterfaceCommon.CustomHelpers.Func;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion;
-using ProducerInterfaceCommon.CustomHelpers.Models;
+using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-    public class PromotionController : MasterBaseController
-    {
+	public class PromotionController : MasterBaseController
+	{
+		/// <summary>
+		/// Список промоакций
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult Index()
+		{
+			var h = new NamesHelper(cntx_, CurrentUser.Id);
+			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
+			producerList.AddRange(h.RegisterListProducer());
+			ViewBag.ProducerList = producerList;
 
-        [HttpGet]
-        public ActionResult Index()
-        {
-            var ModelSearch = new SearchProducerPromotion();
-            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-            var ProducerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
-            ProducerList.AddRange(h.RegisterListProducer());
-            ViewBag.ProducerList = ProducerList;
-            ViewBag.RegionList = h.GetRegionList((decimal)CurrentUser.RegionMask);
-            
-            ModelSearch = new SearchProducerPromotion();
-            ModelSearch.Status = (byte)PromotionStatus.All;
-            ModelSearch.Begin = DateTime.Now.AddDays(-30);
-            ModelSearch.End = DateTime.Now.AddDays(30);
-            ModelSearch.EnabledDateTime = false;
-                    
-            return View(ModelSearch);          
-        }
-               
-        public ActionResult SearchResult(SearchProducerPromotion Filter)
-        {
-            var PromotionList = new List<promotions>();
+			var model = new SearchProducerPromotion() {
+				Status = (byte)PromotionFakeStatus.All,
+				Begin = DateTime.Now.AddDays(-30),
+				End = DateTime.Now.AddDays(30),
+				EnabledDateTime = false
+			};
 
-            var CH = new SqlProcedure<PromotionsInRegionMask>((ulong)CurrentUser.RegionMask);
-            var ListId = CH.GetPromotionId();
-                    
-            PromotionList = cntx_.promotions.Where(x => ListId.Contains(x.Id)).ToList();
-                       
-            if (!Filter.EnabledDateTime)
-            {
-                PromotionList = PromotionList.Where(x=> x.Begin > Filter.Begin && x.End < Filter.End).ToList();
-            }
+			return View(model);
+		}
 
-            if (Filter.Producer > 0)
-            {
-                PromotionList = PromotionList.Where(x => x.ProducerId == Filter.Producer).ToList();
-            }
+		/// <summary>
+		/// Поиск промоакций по фильтру
+		/// </summary>
+		/// <param name="filter"></param>
+		/// <returns></returns>
+		public ActionResult SearchResult(SearchProducerPromotion filter)
+		{
+			var query = cntx_.promotions.AsQueryable();
+			if (!filter.EnabledDateTime)
+				query = query.Where(x => x.Begin > filter.Begin && x.End < filter.End);
+			if (filter.Producer > 0)
+				query = query.Where(x => x.ProducerId == filter.Producer);
 
-            if (Filter.Status == (byte)PromotionStatus.All)
-            { }
-            else
-            {
-                if (Filter.Status == (byte)PromotionStatus.СonfirmedFalse)
-                {
-                    PromotionList = PromotionList.Where(x => x.Status == false).ToList();
-                }
+			switch ((PromotionFakeStatus)filter.Status) {
+				// отключена пользователем
+				case PromotionFakeStatus.Disabled:
+					query = query.Where(x => !x.Enabled);
+					break;
+				// отклонена админом
+				case PromotionFakeStatus.Rejected:
+					query = query.Where(x => x.Status == (byte)PromotionStatus.Rejected);
+					break;
+				// ожидает подтверждения
+				case PromotionFakeStatus.NotСonfirmed:
+					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.New);
+					break;
+				// не началась
+				case PromotionFakeStatus.ConfirmedNotBegin:
+					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.Confirmed && x.Begin > DateTime.Now);
+					break;
+				// закончилась
+				case PromotionFakeStatus.ConfirmedEnded:
+					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.Confirmed && x.End < DateTime.Now);
+					break;
+				// активна
+				case PromotionFakeStatus.Active:
+					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.Confirmed && x.Begin < DateTime.Now && x.End > DateTime.Now);
+					break;
+				case PromotionFakeStatus.All:
+					break;
+			}
 
-                if (Filter.Status == (byte)PromotionStatus.Confirmed)
-                {
-                    PromotionList = PromotionList.Where(x => x.Status == true).ToList();
-                }
+			var model = query.OrderByDescending(x => x.UpdateTime).ToList();
 
-                if (Filter.Status == (byte)PromotionStatus.ConfirmedNotBegin)
-                {
-                    PromotionList = PromotionList.Where(x => x.Status == true && x.Begin > System.DateTime.Now).ToList();
-                }
+			var h = new NamesHelper(cntx_, CurrentUser.Id);
+			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
+			producerList.AddRange(h.RegisterListProducer());
+			ViewBag.ProducerList = producerList;
+			return PartialView("Partial/SearchResult", model);
+		}
 
-                if (Filter.Status == (byte)PromotionStatus.ConfirmedNotView)
-                {
-                    PromotionList = PromotionList.Where(x => x.Status == true && x.Enabled == false).ToList();
-                }
+		/// <summary>
+		/// Подробнее
+		/// </summary>
+		/// <param name="Id">идентификатор промоакции</param>
+		/// <returns></returns>
+		public ActionResult OnePromotion(int Id = 0)
+		{
+			if (Id == 0)
+				return RedirectToAction("Index");
+			var model = cntx_.promotions.Find(Id);
+			if (model == null)
+				return RedirectToAction("Index");
 
-                if (Filter.Status == (byte)PromotionStatus.ConfirmedEnd)
-                {
-                    PromotionList = PromotionList.Where(x => x.Status == true && x.End < System.DateTime.Now).ToList();
-                }
-            }
+			var h = new NamesHelper(cntx_, CurrentUser.Id);
 
-            PromotionList = PromotionList.OrderByDescending(x => x.UpdateTime).ToList();
+			ViewBag.ProducerName = h.GetProducerList().Single(x => x.Value == model.ProducerId.ToString()).Text;
+			ViewBag.RegionList = h.GetPromotionRegionNames((ulong)model.RegionMask);
+			ViewBag.DrugList = h.GetDrugInPromotion(model.Id);
+			ViewBag.SupplierList = h.GetSupplierList(model.PromotionsToSupplier.ToList().Select(x => (decimal)x.SupplierId).ToList());
 
-            var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-           
-            ViewBag.ProducerList = h.RegisterListProducer();
-       
-            return PartialView("Partial/SearchResult",PromotionList);
-        }
+			return View(model);
+		}
 
-        public ActionResult OnePromotion(int Id=0)
-        {
-            if (Id == 0)
-            {
-                return RedirectToAction("Index");
-            }
+		/// <summary>
+		/// Подтверждение промоакции
+		/// </summary>
+		/// <param name="Id">идентификатор промоакции</param>
+		/// <returns></returns>
+		public ActionResult SuccessPromotion(int Id = 0)
+		{
+			if (Id == 0)
+				return RedirectToAction("Index");
+			var model = cntx_.promotions.Single(x => x.Id == Id);
+			if (model == null)
+				return RedirectToAction("Index");
 
-            var promotionModel = cntx_.promotions.Find(Id);
+			model.Status = (byte)PromotionStatus.Confirmed;
+			cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
 
-            if (promotionModel == null)
-            {
-                return RedirectToAction("Index");
-            }
+			SuccessMessage("Промоакция подтверждена");
+			return RedirectToAction("Index");
+		}
 
-            ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_,CurrentUser.Id);
+		/// <summary>
+		/// Отмена подтверждения промоакции
+		/// </summary>
+		/// <param name="Id">идентификатор промоакции</param>
+		/// <returns></returns>
+		public ActionResult UnSuccessPromotion(int Id = 0)
+		{
+			if (Id == 0)
+				return RedirectToAction("Index");
+			var model = cntx_.promotions.Single(x => x.Id == Id);
+			if (model == null)
+				return RedirectToAction("Index");
 
-            ViewBag.ProducerName = h.GetProducerList().Where(x => x.Value == promotionModel.ProducerId.ToString()).First().Text;
-            ViewBag.RegionList = h.GetPromotionRegionNames((ulong)promotionModel.RegionMask);
-            ViewBag.DrugList = h.GetDrugInPromotion(promotionModel.Id);
-            ViewBag.SupplierList = h.GetSupplierList(promotionModel.PromotionsToSupplier.ToList().Select(x=>(decimal)x.SupplierId).ToList());         
+			model.Status = (byte)PromotionStatus.New;
+			cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
 
-            return View(promotionModel);
-        }
+			SuccessMessage("Промоакция отменено подтверждение");
+			return RedirectToAction("Index");
+		}
 
-        public ActionResult SuccessPromotion(int Id = 0)
-        {
-            if (Id == 0)
-            {
-                return RedirectToAction("Index");
-            }
-            var promotionModel = cntx_.promotions.Where(xxx=>xxx.Id == Id).First();
-
-            if (promotionModel == null)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                promotionModel.Status = true;
-                cntx_.Entry(promotionModel).State = System.Data.Entity.EntityState.Modified;
-                cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
-
-                SuccessMessage("Промоакция подтверждена");
-                return RedirectToAction("Index");
-            }
-        }
-
-        public ActionResult UnSuccessPromotion(int Id = 0)
-        {
-            if (Id == 0)
-            {
-                return RedirectToAction("Index");
-            }
-            var promotionModel = cntx_.promotions.Where(xxx => xxx.Id == Id).First();
-
-            if (promotionModel == null)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                promotionModel.Status = false;
-                cntx_.Entry(promotionModel).State = System.Data.Entity.EntityState.Modified;
-                cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
-
-                SuccessMessage("Промоакция отменено подтверждение");
-                return RedirectToAction("Index");
-            }
-        }
-
-        public FileResult GetFile(int Id)
-        {
-            var ReturnFile = cntx_.MediaFiles.Find(Id);
-            return File(ReturnFile.ImageFile, ReturnFile.ImageType, ReturnFile.ImageName);
-        }
-    }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <returns></returns>
+		public FileResult GetFile(int Id)
+		{
+			var file = cntx_.MediaFiles.Find(Id);
+			return File(file.ImageFile, file.ImageType, file.ImageName);
+		}
+	}
 }

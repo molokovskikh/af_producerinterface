@@ -1,17 +1,20 @@
-﻿@using ProducerInterfaceCommon.ContextModels;
-@model promotions
+﻿@using ProducerInterfaceCommon.Heap
+@using ProducerInterfaceCommon.ViewModel.Interface.Promotion
+@model PromotionUi
 
 @{
-    string x = "text-info";
-    var DrugList_ = ViewBag.GrugList as IEnumerable<OptionElement>;
-    var RegionList = ViewBag.RegionList as IEnumerable<OptionElement>;
-    var SupplierList = ViewBag.SupplierList as IEnumerable<OptionElement>;
-    ViewBag.Classs = "";
+  string x = "text-info";
+  ViewBag.Classs = "";
 }
 <div class="panel panel-default panel-sm">
     <!--        Оглавление    -->
     
-    @Html.Partial("PromotionItemHeading",Model)
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#collapse_@Model.Id" class="panel-title">
+            <span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp; @Model.Name
+            <p class="pull-right">Статус '@Model.FakeStatus.DisplayName()'</p>
+        </a>
+    </div>
 
     <!--        Содержание акции    -->
 
@@ -32,21 +35,21 @@
             </div>
             <div class="form-group col-xs-6">
                 <h4>Дата начала акции</h4>
-                <p>'@Model.Begin.Value.ToString("dd.MM.yyyy")'</p>
+                <p>'@Model.Begin</p>
             </div>
 
             <div class="form-group col-xs-6">
                 <h4>Дата окончания акции</h4>
-                <p>'@Model.End.Value.ToString("dd.MM.yyyy")'</p>
+                <p>'@Model.End</p>
             </div>
 
             <!--                    Прикрепленный файл          -->
             <div class="form-group col-xs-12">
                 <h4>Прикреплен файл</h4>
 
-                @if (Model.PromoFileId != null)
+                @if (Model.PromotionFileId != null)
                 {
-                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromoFileId })">@Model.MediaFiles.ImageName (скачать)</a> <br />                 
+                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />                 
                 }
                 else
                 {
@@ -55,16 +58,18 @@
             </div>
             <!--                Список лекарств            -->
             <hr />
-
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a class="panel-title" data-toggle="collapse" href="#collapse__@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список препаратов <p class="pull-right">@Model.promotionToDrug.Count()</p></a>
+                    <a class="panel-title" data-toggle="collapse" href="#collapse__@Model.Id">
+                        <span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список препаратов
+                        <p class="pull-right">@Model.DrugList.Count()</p>
+                    </a>
                 </div>
                 <div id="collapse__@Model.Id" class="panel-collapse collapse">
                     <div class="panel-body">
-                        @foreach (var DrugItem in Model.promotionToDrug)
+                        @foreach (var item in Model.DrugList)
                         {
-                            <p>@DrugList_.Where(xxx => xxx.Value == DrugItem.DrugId.ToString()).First().Text</p>
+                            <p>@item</p>
                         }
                     </div>
                 </div>
@@ -72,13 +77,16 @@
             <!--                Список регионов            -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a class="panel-title" data-toggle="collapse" href="#collapse___@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список регионов <p class="pull-right">@Model.RegionList.Count()</p></a>
+                    <a class="panel-title" data-toggle="collapse" href="#collapse___@Model.Id">
+                        <span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список регионов
+                        <p class="pull-right">@Model.RegionList.Count()</p>
+                    </a>
                 </div>
                 <div id="collapse___@Model.Id" class="panel-collapse collapse">
                     <div class="panel-body">
-                        @foreach (var RegionItem in Model.RegionList)
+                        @foreach (var item in Model.RegionList)
                         {
-                            <p>@RegionList.Where(xxx => xxx.Value == RegionItem.ToString()).First().Text</p>
+                            <p>@item</p>
                         }
                     </div>
                 </div>
@@ -86,19 +94,22 @@
             <!--                Список Поставщиков            -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a class="panel-title" data-toggle="collapse" href="#collapse_supplier___@Model.Id"><span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список Поставщиков <p class="pull-right">@Model.PromotionsToSupplier.Count()</p></a>
+                    <a class="panel-title" data-toggle="collapse" href="#collapse_supplier___@Model.Id">
+                        <span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;&nbsp;&nbsp; Список Поставщиков
+                        <p class="pull-right">@Model.SuppierRegions.Count()</p>
+                    </a>
                 </div>
                 <div id="collapse_supplier___@Model.Id" class="panel-collapse collapse">
                     <div class="panel-body">
-                        @if (Model.PromotionsToSupplier.Any(xxx => xxx.SupplierId == 0))
+                        @if (Model.AllSuppliers)
                         {
-                        <p>Все поставщики</p>
+                        <p>Все поставщики в выбранных регионах</p>
                         }
                         else
                         {
-                            foreach (var SupplierItem in Model.PromotionsToSupplier)
+                            foreach (var item in Model.SuppierRegions)
                             {
-                             <p> @SupplierList.Where(xxx => xxx.Value == SupplierItem.SupplierId.ToString()).First().Text </p>
+                             <p>@item</p>
                             }
                         }
 
@@ -114,8 +125,5 @@
                 @Html.Partial("Partial/PromotionItemActionLink", Model)
             </div>
         </div>
-
-
-
     </div>
 </div>

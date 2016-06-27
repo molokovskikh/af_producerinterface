@@ -202,12 +202,6 @@ namespace ProducerInterfaceCommon.ContextModels
 		public int ItemsCount { get; set; }
 	}
 
-	public partial class PromotionsInRegionMask_Result
-	{
-		public long Id { get; set; }
-		public decimal RegionMask { get; set; }
-	}
-
 	public class MailFormUi
 	{
 		public int Id { get; set; }

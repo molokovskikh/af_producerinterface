@@ -195,20 +195,32 @@ namespace ProducerInterfaceCommon.ContextModels
 		Modified = 16
 	}
 
-	public enum PromotionStatus
+	public enum PromotionFakeStatus
 	{
-		[Display(Name = "Не подтверждена")]
-		СonfirmedFalse = 0,
-		[Display(Name = "Ожидание даты начала ")]
+		[Display(Name = "Ожидает подтверждения")]
+		NotСonfirmed = 0,
+		[Display(Name = "Ожидание даты начала публикации")]
 		ConfirmedNotBegin = 1,
 		[Display(Name = "Завершена")]
-		ConfirmedEnd = 2,
-		[Display(Name = "Публикуется")]
-		Confirmed = 3,
-		[Display(Name = "Не публикуется")]
-		ConfirmedNotView = 4,
+		ConfirmedEnded = 2,
+		[Display(Name = "Опубликована")]
+		Active = 3,
+		[Display(Name = "Отключена пользователем")]
+		Disabled = 4,
 		[Display(Name = "Любой")]
-		All = 5
+		All = 5,
+		[Display(Name = "Отклонена администратором")]
+		Rejected = 6
+	}
+
+	public enum PromotionStatus
+	{
+		[Display(Name = "Ожидает подтверждения")]
+		New = 0,
+		[Display(Name = "Подтверждена")]
+		Confirmed = 1,
+		[Display(Name = "Отклонена")]
+		Rejected = 2
 	}
 
 	public enum EntityType

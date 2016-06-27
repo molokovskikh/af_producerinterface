@@ -568,8 +568,6 @@ namespace ProducerInterface.Controllers
 		{
 			var newAccount = new Account();
 			newAccount.EnabledEnum = UserStatus.New;
-			// TODO удалить RegionMask при переделке промоакций
-			newAccount.RegionMask = 0;
 			newAccount.TypeUser = (sbyte)TypeUsers.ProducerUser;
 			newAccount.CompanyId = accountCompany.Id;
 

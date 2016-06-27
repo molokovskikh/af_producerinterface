@@ -215,9 +215,6 @@
     <Compile Include="ContextModels\promotions.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\PromotionsInRegionMask_Result.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\PromotionsToSupplier.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
@@ -251,10 +248,6 @@
     <Compile Include="Controllers\BaseReportController.cs" />
     <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
-    <Compile Include="CustomHelpers\Func\SqlProcedure.cs" />
-    <Compile Include="CustomHelpers\Models\BaseModel.cs" />
-    <Compile Include="CustomHelpers\Models\PromotionsInRegionMask.cs" />
-    <Compile Include="CustomHelpers\Models\ReportsInRegionMask.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
     <Compile Include="Heap\ExcelPieChartExtended.cs" />
     <Compile Include="Heap\EmailSender.cs" />
@@ -451,7 +444,7 @@
     <Compile Include="ViewModel\Interface\Global\FeedBack.cs" />
     <Compile Include="ViewModel\Interface\Profile\ChangePassword.cs" />
     <Compile Include="ViewModel\Interface\Profile\ProfileValidation.cs" />
-    <Compile Include="ViewModel\Interface\Promotion\PromotionEdit.cs" />
+    <Compile Include="ViewModel\Interface\Promotion\PromotionUi.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegDomainViewModel.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegNotProducerViewModel.cs" />
     <Compile Include="ViewModel\Interface\Registration\RegProducerViewModel.cs" />

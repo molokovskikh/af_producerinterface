@@ -4,516 +4,532 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
-using Quartz;
-using Quartz.Impl;
 using ProducerInterfaceCommon.Heap;
-using ProducerInterfaceCommon.Models;
-using System.Configuration;
-using System.Collections.Specialized;
 using System.Data.Entity;
 using System.IO;
-using ProducerInterface.Controllers;
 using ProducerInterfaceCommon.ViewModel.Interface.Promotion;
 namespace ProducerInterface.Controllers
 {
 	public class PromotionController : MasterBaseController
 	{
 
+		private NamesHelper h;
+		protected long producerId;
+
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
 
-			if (HttpContext != null && CurrentUser != null)
+			if (CurrentUser == null)
+				filterContext.Result = Redirect("~");
+			else
 			{
-				h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id, HttpContext);
+				h = new NamesHelper(cntx_, CurrentUser.Id, HttpContext);
+				if (CurrentUser.AccountCompany.ProducerId.HasValue)
+					producerId = CurrentUser.AccountCompany.ProducerId.Value;
+				else
+				{
+					ErrorMessage("Доступ в раздел Акции закрыт, так как вы не представляете кого-либо из производителей");
+					filterContext.Result = Redirect("~");
+				}
 			}
 		}
 
-		private ProducerInterfaceCommon.Heap.NamesHelper h;
-
+		/// <summary>
+		/// Акции главная
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <returns></returns>
 		public ActionResult Index(string Id = null)
 		{
+			var model = new List<PromotionUi>();
+			var promoList = cntx_.promotions.Where(x => x.ProducerId == producerId).ToList();
+			if (promoList.Count == 0)
+				return View(model);
 
-			IEnumerable<promotions> list = cntx_.promotions.Where(xxx => xxx.ProducerId == CurrentUser.AccountCompany.ProducerId).ToList();
-
+			var regions = cntx_.regionnames.ToDictionary(x => x.RegionCode, x => x.RegionName);
+			var suppliers = cntx_.suppliernames.ToDictionary(x => x.SupplierId, x => x.SupplierName);
+			var assortment = cntx_.assortment.Where(x => x.ProducerId == producerId).ToDictionary(x => x.CatalogId, x => x.CatalogName);
+			foreach (var item in promoList) {
+				if (item.RegionMask == 0)
+					item.RegionMask = ulong.MaxValue;
+				var supplierIds = item.PromotionsToSupplier.Select(x => x.SupplierId).ToList();
+				var drugsIds = item.promotionToDrug.Select(x => x.DrugId).ToList();
+				var itemUi = new PromotionUi() {
+					Id = item.Id,
+					Name = item.Name,
+					Annotation = item.Annotation,
+					Begin = item.Begin.ToString("dd.MM.yyyy"),
+					End = item.End.ToString("dd.MM.yyyy"),
+					PromotionFileId = item.PromoFileId,
+					PromotionFileName = item.MediaFiles?.ImageName,
+					AllSuppliers = item.AllSuppliers,
+					FakeStatus = GetStatus(item),
+					DrugList = assortment.Where(x => drugsIds.Contains(x.Key)).Select(x => x.Value).ToList(),
+					RegionList = regions.Where(x => ((ulong)x.Key & (ulong)item.RegionMask) > 0 ).Select(x => x.Value).ToList(),
+					SuppierRegions = suppliers.Where(x => supplierIds.Contains(x.Key)).Select(x => x.Value).ToList()
+				};
+				model.Add(itemUi);
+			}
 
 			if (Id != null)
-			{
 				ViewBag.OpenPromotionId = Id;
-			}
-
-			ViewBag.GrugList = h.GetCatalogListPromotion();
-			ViewBag.RegionList = h.GetRegionList();
-			var SupplierList = h.GetSupplierList(new List<decimal>() { 0 });
-			SupplierList.Add(new OptionElement() { Text = "Все поставщики в выбранных регионах", Value = "0" });
-			ViewBag.SupplierList = SupplierList;
-
-			foreach (var list_item in list)
-			{
-				list_item.RegionList = h.GetPromotionRegions((ulong)list_item.RegionMask);
-			}
-
-			return View(list);
+			return View(model);
 		}
 
+		private PromotionFakeStatus GetStatus(promotions model)
+		{
+			// отклонена админом
+			if (model.Status == (byte)PromotionStatus.Rejected)
+				return PromotionFakeStatus.Rejected;
+
+			// отключена пользователем
+			if (!model.Enabled)
+				return PromotionFakeStatus.Disabled;
+
+			// ожидает согласования
+			if (model.Enabled && model.Status == (byte)PromotionStatus.New)
+				return PromotionFakeStatus.NotСonfirmed;
+
+			// не отклонена, согласована, не началась
+			if (model.Enabled && model.Status == (byte)PromotionStatus.Confirmed && model.Begin > DateTime.Now)
+				return PromotionFakeStatus.ConfirmedNotBegin;
+
+			// не отклонена, согласована, просрочена
+			if (model.Enabled && model.Status == (byte)PromotionStatus.Confirmed && model.End < DateTime.Now)
+				return PromotionFakeStatus.ConfirmedEnded;
+
+			// активная
+			if (model.Enabled && model.Status == (byte)PromotionStatus.Confirmed && model.Begin < DateTime.Now && model.End > DateTime.Now)
+				return PromotionFakeStatus.Active;
+
+			throw new NotSupportedException("Неизвестный статус");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="IdKey"></param>
+		/// <param name="Copy"></param>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Edit(long IdKey = 0, bool Copy = false)
 		{
-			string ID_ = IdKey.ToString();
+			var id = IdKey.ToString();
 			if (Copy)
-			{
-				ID_ += ", true";
-			}
-			ViewBag.PromotionId = ID_;
+				id += ", true";
+			ViewBag.PromotionId = id;
 			return View();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="IdKey"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public JsonResult EditGetPromotion(string IdKey = "0")
 		{
-			PromotionEdit ViewModel = new PromotionEdit();
-
-			long ID = Convert.ToInt64(IdKey.ToString().Split(new Char[] { ',' }).First());
+			var model = new PromotionUi();
+			var id = Convert.ToInt64(IdKey.Split(new Char[] { ',' }).First());
 			if (IdKey.Contains("true"))
-			{
-				ID = 0;
-			}
+				id = 0;
 
-			var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx_, CurrentUser.Id);
-
-
-			ViewModel.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
-			ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+			var h = new NamesHelper(cntx_, CurrentUser.Id); // ??
+			model.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+			model.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
 			if (IdKey == "0")
 			{
 				// возвращаем новую промо акцию
-				ViewModel.Id = 0;
-				ViewModel.Title = "Новая промоакция";
-				ViewModel.Name = "";
-				ViewModel.Annotation = "";
-				ViewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
-				ViewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
-				ViewModel.SuppierRegionsList = h.GetSupplierList(new List<decimal>() { 0 }).Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
-				ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(0)).ToList().Select(x => x.ToString()).ToList();
-				ViewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+				model.Id = 0;
+				model.Title = "Новая промоакция";
+				model.Name = "";
+				model.Annotation = "";
+				model.Begin = DateTime.Now.ToString("dd.MM.yyyy");
+				model.End = DateTime.Now.ToString("dd.MM.yyyy");
+				model.SuppierRegionsList = h.GetSupplierList(new List<decimal>() { 0 }).Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+				model.RegionList = h.GetPromotionRegions(Convert.ToUInt64(0)).ToList().Select(x => x.ToString()).ToList();
+				model.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 			}
 			else
 			{
-				var ID_Promo = Convert.ToInt64(IdKey.Split(new Char[] { ',' }).First());
+				var idPromo = Convert.ToInt64(IdKey.Split(new Char[] { ',' }).First());
+				var dBmodel = cntx_.promotions.Find(idPromo);
+				model.Id = id;
+				model.SuppierRegions = dBmodel.PromotionsToSupplier.ToList().Select(x => (string)x.SupplierId.ToString()).ToList();
+				model.SuppierRegionsList = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();				
+				model.Name = dBmodel.Name;
 
-				var ChangePromo = cntx_.promotions.Find(ID_Promo);
-				ViewModel.Id = ID;
-				ViewModel.SuppierRegions = ChangePromo.PromotionsToSupplier.ToList().Select(x => (string)x.SupplierId.ToString()).ToList();
+				if (dBmodel.AllSuppliers)
+					model.SuppierRegions = new List<string>() { "0" };
 
-				ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();				
-				ViewModel.Name = ChangePromo.Name;
-
-				if (ChangePromo.AllSuppliers != null && ChangePromo.AllSuppliers != false)
+				if (id == 0)
 				{
-					ViewModel.SuppierRegions = new List<string>() { "0" };
-				}
-
-				if (ID == 0)
-				{
-					ViewModel.Name += " Копия";
-					ViewModel.Title = "Создание промоакции: копия из " + ChangePromo.Name;
+					model.Name += " Копия";
+					model.Title = "Создание промоакции: копия из " + dBmodel.Name;
 				}
 				else
-				{
-					ViewModel.Title = "Редактирование промоакции: " + ChangePromo.Name;
-				}
-				if (ChangePromo.PromoFileId != null)
-				{
-					ViewModel.PromotionFileId = (long)ChangePromo.PromoFileId;
-					ViewModel.PromotionFileName = ChangePromo.MediaFiles?.ImageName;
-				}
-				ViewModel.DrugList = ChangePromo.promotionToDrug.ToList().Select(x => x.DrugId.ToString()).ToList();
-				if (ChangePromo.Begin < DateTime.Now)
-				{
-					ViewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
-				}
-				else
-				{
-					ViewModel.Begin = ChangePromo.Begin.Value.ToString("dd.MM.yyyy");
-				}
+					model.Title = "Редактирование промоакции: " + dBmodel.Name;
 
-				if (ChangePromo.End < DateTime.Now)
+				if (dBmodel.PromoFileId != null)
 				{
-					ViewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
+					model.PromotionFileId = (long)dBmodel.PromoFileId;
+					model.PromotionFileName = dBmodel.MediaFiles?.ImageName;
 				}
+				model.DrugList = dBmodel.promotionToDrug.ToList().Select(x => x.DrugId.ToString()).ToList();
+				if (dBmodel.Begin < DateTime.Now)
+					model.Begin = DateTime.Now.ToString("dd.MM.yyyy");
 				else
-				{
-					ViewModel.End = ChangePromo.End.Value.ToString("dd.MM.yyyy");
-				}
+					model.Begin = dBmodel.Begin.ToString("dd.MM.yyyy");
 
-				ViewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(ChangePromo.RegionMask)).ToList().Select(x => x.ToString()).ToList();
-				ViewModel.SuppierRegionsList = h.GetSupplierList(ViewModel.RegionList.Select(x => (decimal)Convert.ToUInt64(x)).ToList()).ToList()
+				if (dBmodel.End < DateTime.Now)
+					model.End = DateTime.Now.ToString("dd.MM.yyyy");
+				else
+					model.End = dBmodel.End.ToString("dd.MM.yyyy");
+
+				model.RegionList = h.GetPromotionRegions(Convert.ToUInt64(dBmodel.RegionMask)).ToList().Select(x => x.ToString()).ToList();
+				model.SuppierRegionsList = h.GetSupplierList(model.RegionList.Select(x => (decimal)Convert.ToUInt64(x)).ToList()).ToList()
 						.Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
-				ViewModel.PromotionFileUrl = Url.Action("GetFile", new { id = ChangePromo.MediaFiles?.Id });
-				ViewModel.Annotation = ChangePromo.Annotation;
+				model.PromotionFileUrl = Url.Action("GetFile", new { id = dBmodel.MediaFiles?.Id });
+				model.Annotation = dBmodel.Annotation;
 			}
 
-			ViewModel.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
+			model.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
 
-			var JsonModel = Json(ViewModel);
+			var JsonModel = Json(model);
 
-			return Json(ViewModel, JsonRequestBehavior.AllowGet);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public JsonResult GetUpdateSupplierList(List<decimal> Id)
 		{
-
 			if (Id == null || Id.Count() == 0)
-			{
 				return Json(new List<TextValue>(), JsonRequestBehavior.AllowGet);
-			}
-
-			var SupplierListOptionElements = h.GetSupplierList(Id).ToList();
-
-			var SupplierList = SupplierListOptionElements
+			var supplierListOptionElements = h.GetSupplierList(Id).ToList();
+			var supplierList = supplierListOptionElements
 					.Select(x => new TextValue { Text = x.Text, Value = x.Value })
 					.ToList();
-
-			SupplierList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
-			return Json(SupplierList, JsonRequestBehavior.AllowGet);
+			supplierList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
+			return Json(supplierList, JsonRequestBehavior.AllowGet);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
 		[HttpPost]
-		public ActionResult EditSave(PromotionEdit PE)
+		public ActionResult EditSave(PromotionUi model)
 		{
-
-			if (PE.Id == 0)
+			if (model.Id == 0)
 			{
 				// добавить
-				long IdNewPromo = SaveNewPromotion(PE);
+				var idNewPromo = SaveNewPromotion(model);
 				SuccessMessage("Промо акция добавлена и отправлен запрос на её подтверждение");
-				return RedirectToAction("Index", new { Id = IdNewPromo });
-
+				return RedirectToAction("Index", new { Id = idNewPromo });
 			}
 			else
 			{
-				long IdNewPromo = ChangePromotion(PE);
+				var idNewPromo = ChangePromotion(model);
 				SuccessMessage("Промо акция изменена и отправлен запрос на её подтверждение");
-				return RedirectToAction("Index", new { Id = IdNewPromo });
+				return RedirectToAction("Index", new { Id = idNewPromo });
 			}
-
 		}
 
-		private long ChangePromotion(PromotionEdit newPromo)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		private long ChangePromotion(PromotionUi model)
 		{
-			var PromoDB = cntx_.promotions.Find(newPromo.Id);
-
-			var promotion_to_Drug = PromoDB.promotionToDrug.ToList();
-
-			foreach (var DrugItem in promotion_to_Drug)
+			var promoDb = cntx_.promotions.Find(model.Id);
+			var promotionToDrug = promoDb.promotionToDrug.ToList();
+			foreach (var item in promotionToDrug)
 			{
-				bool DrugExsist = newPromo.DrugList.Any(x => Convert.ToInt64(x) == DrugItem.DrugId);
-
-				if (!DrugExsist)
-				{
-					cntx_.promotionToDrug.Remove(DrugItem);
-				}
-
+				var drugExsist = model.DrugList.Any(x => Convert.ToInt64(x) == item.DrugId);
+				if (!drugExsist)
+					cntx_.promotionToDrug.Remove(item);
 			}
-
 			cntx_.SaveChanges(CurrentUser, "Препарат удален из акции");
-
-			foreach (var DrugItem in newPromo.DrugList)
+			foreach (var item in model.DrugList)
 			{
-				bool DrugExsist = PromoDB.promotionToDrug.Any(x => x.DrugId == Convert.ToInt64(DrugItem));
-
-				if (!DrugExsist)
+				var drugExsist = promoDb.promotionToDrug.Any(x => x.DrugId == Convert.ToInt64(item));
+				if (!drugExsist)
 				{
 					promotionToDrug newAddDrug = new promotionToDrug()
 					{
-						DrugId = Convert.ToInt64(DrugItem),
-						PromotionId = PromoDB.Id
+						DrugId = Convert.ToInt64(item),
+						PromotionId = promoDb.Id
 					};
-
 					cntx_.promotionToDrug.Add(newAddDrug);
-
 				}
 			}
-
 			cntx_.SaveChanges(CurrentUser, "Препарат добавлен в акцию");
 
-			var Promo_PromotionsToSupplier = PromoDB.PromotionsToSupplier.ToList();
-
-			foreach (var SupplierItem in Promo_PromotionsToSupplier)
+			var promoPromotionsToSupplier = promoDb.PromotionsToSupplier.ToList();
+			foreach (var item in promoPromotionsToSupplier)
 			{
-				bool SupllierExsist = newPromo.SuppierRegions.Any(x => (ulong)Convert.ToInt64(x) == (ulong)SupplierItem.SupplierId);
-
-				if (!SupllierExsist)
-				{
-					cntx_.PromotionsToSupplier.Remove(SupplierItem);
-				}
+				var supllierExsist = model.SuppierRegions.Any(x => (ulong)Convert.ToInt64(x) == (ulong)item.SupplierId);
+				if (!supllierExsist)
+					cntx_.PromotionsToSupplier.Remove(item);
 			}
-
 			cntx_.SaveChanges(CurrentUser, "Поставщик удален из акции");
-
-			if (newPromo.SuppierRegions.Contains("0"))
+			if (model.SuppierRegions.Contains("0"))
 			{
-				newPromo.SuppierRegions = h.GetSupplierList(newPromo.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
-				PromoDB.AllSuppliers = true;
+				model.SuppierRegions = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
+				promoDb.AllSuppliers = true;
 			}
 			else
-			{
-				PromoDB.AllSuppliers = false;
-			}
-			foreach (var SupplierItem in newPromo.SuppierRegions)
-			{
-				bool SupllierExsist = PromoDB.PromotionsToSupplier.Any(x => (ulong)x.SupplierId == (ulong)Convert.ToInt64(SupplierItem));
+				promoDb.AllSuppliers = false;
 
-				if (!SupllierExsist)
+			foreach (var item in model.SuppierRegions)
+			{
+				var supllierExsist = promoDb.PromotionsToSupplier.Any(x => (ulong)x.SupplierId == (ulong)Convert.ToInt64(item));
+				if (!supllierExsist)
 				{
-					PromotionsToSupplier AddNew = new PromotionsToSupplier()
-					{ SupplierId = (long)Convert.ToInt64(SupplierItem), PromotionId = PromoDB.Id };
-					PromoDB.PromotionsToSupplier.Add(AddNew);
+					var addNew = new PromotionsToSupplier() {
+						SupplierId = Convert.ToInt64(item),
+						PromotionId = promoDb.Id
+					};
+					promoDb.PromotionsToSupplier.Add(addNew);
 				}
 			}
-
 			cntx_.SaveChanges(CurrentUser, "Поставщик добавлен в акцию");
 
 			ulong regionMask = 0;
-
-			if (newPromo.RegionList.Count() == 1)
-			{
-				regionMask = (ulong)Convert.ToInt64(newPromo.RegionList.First());
-			}
+			if (model.RegionList.Count() == 1)
+				regionMask = (ulong)Convert.ToInt64(model.RegionList.First());
 			else
-			{
-				regionMask = newPromo.RegionList.Select(x => (ulong)Convert.ToInt64(x)).Aggregate((y, z) => y | z);
-			}
-			PromoDB.RegionMask = regionMask;
-			PromoDB.Name = newPromo.Name;
-			PromoDB.Annotation = newPromo.Annotation;
+				regionMask = model.RegionList.Select(x => (ulong)Convert.ToInt64(x)).Aggregate((y, z) => y | z);
 
-			PromoDB.Begin = Convert.ToDateTime(newPromo.Begin);
-			PromoDB.End = Convert.ToDateTime(newPromo.End);
-
-			PromoDB.AgencyDisabled = false;
-			PromoDB.Enabled = true;
-			PromoDB.Status = false;
-
-			PromoDB.ProducerUserId = CurrentUser.Id;
-
-			cntx_.Entry(PromoDB).State = EntityState.Modified;
+			promoDb.RegionMask = regionMask;
+			promoDb.Name = model.Name;
+			promoDb.Annotation = model.Annotation;
+			promoDb.Begin = Convert.ToDateTime(model.Begin);
+			promoDb.End = Convert.ToDateTime(model.End);
+			promoDb.AgencyDisabled = false;
+			promoDb.Enabled = true;
+			promoDb.Status = (byte)PromotionStatus.New;
+			promoDb.ProducerUserId = CurrentUser.Id;
+			cntx_.Entry(promoDb).State = EntityState.Modified;
 			cntx_.SaveChanges();
 
-			int? FileID = SaveFile(newPromo.File);
-
-			if (FileID != null)
+			int? saveFile = SaveFile(model.File);
+			if (saveFile != null)
 			{
-				var PromoFileRemove = cntx_.MediaFiles.Find(PromoDB.PromoFileId);
-
-				PromoDB.PromoFileId = null;
-				PromoDB.PromoFile = "";
-
-				cntx_.Entry(PromoDB).State = EntityState.Modified;
+				var promoFileRemove = cntx_.MediaFiles.Find(promoDb.PromoFileId);
+				promoDb.PromoFileId = null;
+				promoDb.PromoFile = "";
+				cntx_.Entry(promoDb).State = EntityState.Modified;
 				cntx_.SaveChanges();
 
-				if (PromoFileRemove != null)
+				if (promoFileRemove != null)
 				{
 					//    cntx_.MediaFiles.Remove(PromoFileRemove);
 					//    cntx_.SaveChanges();
-
 					//    для лоигрования действий решил не удалять файл для возможности восстановления промоакции
 				}
-
-				PromoDB.PromoFileId = FileID;
+				promoDb.PromoFileId = saveFile;
 			}
 			else
 			{
-				if (newPromo.PromotionFileId != null)
+				if (model.PromotionFileId != null)
 				{
-					FileID = (int)newPromo.PromotionFileId;
-					PromoDB.PromoFileId = FileID;
+					saveFile = (int)model.PromotionFileId;
+					promoDb.PromoFileId = saveFile;
 				}
 			}
-
 			cntx_.SaveChanges();
-
-			return PromoDB.Id;
+			return promoDb.Id;
 		}
 
-		private long SaveNewPromotion(PromotionEdit newPromo)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		private long SaveNewPromotion(PromotionUi model)
 		{
-
-			int? FileId = SaveFile(newPromo.File);
-			var regionMask = newPromo.RegionList.Select(x => (ulong)Convert.ToInt64(x)).Aggregate((y, z) => y | z);
-
-			if (FileId == null)
+			int? saveFile = SaveFile(model.File);
+			var regionMask = model.RegionList.Select(x => (ulong)Convert.ToInt64(x)).Aggregate((y, z) => y | z);
+			if (saveFile == null)
 			{
-				if (newPromo.PromotionFileId != null)
-				{
-					FileId = (int)newPromo.PromotionFileId;
-				}
+				if (model.PromotionFileId != null)
+					saveFile = (int)model.PromotionFileId;
 			}
 
-			promotions promotionToDataBase = new promotions()
+			var promotionToDataBase = new promotions()
 			{
-				Name = newPromo.Name,
-				Annotation = newPromo.Annotation,
-
-				Begin = Convert.ToDateTime(newPromo.Begin),
-				End = Convert.ToDateTime(newPromo.End),
+				Name = model.Name,
+				Annotation = model.Annotation,
+				Begin = Convert.ToDateTime(model.Begin),
+				End = Convert.ToDateTime(model.End),
 				UpdateTime = DateTime.Now,
-
 				AgencyDisabled = false,
 				Enabled = true,
-				Status = false,
-
-				ProducerId = (long)CurrentUser.AccountCompany.ProducerId,
+				Status = (byte)PromotionStatus.New,
+				ProducerId = producerId,
 				ProducerUserId = CurrentUser.Id,
-
-				PromoFileId = FileId,
+				PromoFileId = saveFile,
 				RegionMask = regionMask,
 				PromoFile = ""
 			};
-
 			cntx_.promotions.Add(promotionToDataBase);
-			//    cntx_.SaveChanges();
 			cntx_.SaveChanges(CurrentUser, "Добавление промоакции");
 
-			foreach (var DrugItem in newPromo.DrugList)
+			foreach (var item in model.DrugList)
 			{
-				var X = new promotionToDrug() { DrugId = Convert.ToInt64(DrugItem), PromotionId = promotionToDataBase.Id };
-				cntx_.promotionToDrug.Add(X);
+				var promotionToDrug = new promotionToDrug() {
+					DrugId = Convert.ToInt64(item),
+					PromotionId = promotionToDataBase.Id
+				};
+				cntx_.promotionToDrug.Add(promotionToDrug);
 			}
-			//    cntx_.SaveChanges();
 			cntx_.SaveChanges(CurrentUser, "Добавление лекарств к промоакции");
 
-			if (newPromo.SuppierRegions.Contains("0")) {
-				newPromo.SuppierRegions = h.GetSupplierList(newPromo.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
+			if (model.SuppierRegions.Contains("0")) {
+				model.SuppierRegions = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
 				promotionToDataBase.AllSuppliers = true;
 			}
-			else {
+			else
 				promotionToDataBase.AllSuppliers = false;
-			}
 
-			foreach (var SupplierItem in newPromo.SuppierRegions)
+			foreach (var item in model.SuppierRegions)
 			{
-				var X = new PromotionsToSupplier() { PromotionId = promotionToDataBase.Id, SupplierId = (long)Convert.ToInt64(SupplierItem) };
+				var X = new PromotionsToSupplier() { PromotionId = promotionToDataBase.Id, SupplierId = Convert.ToInt64(item) };
 				cntx_.PromotionsToSupplier.Add(X);
 			}
-
-			//     cntx_.SaveChanges();
 			cntx_.SaveChanges(CurrentUser, "Добавление поставщиков к промоакции");
-
 			return promotionToDataBase.Id;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="_file"></param>
+		/// <returns></returns>
 		private int? SaveFile(HttpPostedFileBase _file)
 		{
 			if (_file == null)
-			{
 				return null;
-			}
 
-			var PromoFile = new MediaFiles();
+			var promoFile = new MediaFiles();
+			var ms = new MemoryStream();
+			_file.InputStream.CopyTo(ms);
 
-			MemoryStream MS = new MemoryStream();
-			_file.InputStream.CopyTo(MS);
-
-			PromoFile.ImageFile = MS.ToArray();
-			PromoFile.ImageName = _file.FileName.Split(new Char[] { '\\' }).Last();
-			PromoFile.ImageType = _file.ContentType;
-			PromoFile.ImageSize = MS.Length.ToString();
-			PromoFile.EntityType = (int)EntityType.Promotion;
-			cntx_.MediaFiles.Add(PromoFile);
+			promoFile.ImageFile = ms.ToArray();
+			promoFile.ImageName = _file.FileName.Split(new Char[] { '\\' }).Last();
+			promoFile.ImageType = _file.ContentType;
+			promoFile.ImageSize = ms.Length.ToString();
+			promoFile.EntityType = (int)EntityType.Promotion;
+			cntx_.MediaFiles.Add(promoFile);
 			cntx_.SaveChanges();
-
-			return PromoFile.Id;
+			return promoFile.Id;
 		}
 
+		/// <summary>
+		/// Запуск-остановка публикации акции
+		/// </summary>
+		/// <param name="Id">идентификатор акции</param>
+		/// <param name="Enabled">статус</param>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Publication(long Id, bool Enabled)
 		{
-
-			var PromoAction = cntx_.promotions.Where(xxx => xxx.Id == Id).FirstOrDefault();
-
-			if (PromoAction != null && PromoAction.ProducerId == CurrentUser.AccountCompany.ProducerId)
-			{
-				PromoAction.Enabled = Enabled;
-				cntx_.Entry(PromoAction).State = EntityState.Modified;
-				cntx_.SaveChanges(CurrentUser, "Изменения статуса акции");
-			}
-
-			if (Enabled)
-			{
-				if (System.DateTime.Now > PromoAction.Begin && System.DateTime.Now < PromoAction.End)
-				{
-					SuccessMessage("акция публикуется");
-				}
-				else
-				{
-					SuccessMessage("при наступлении даты начала акция будет публиковатся");
-				}
-			}
-			else
-			{
-				SuccessMessage("публикация акции отключена");
-			}
-			return RedirectToAction("Index", new { Id = Id.ToString() });
-		}
-
-		public FileResult GetFile(int Id)
-		{
-			var Image = cntx_.MediaFiles.Find(Id);
-			return File(Image.ImageFile, Image.ImageType, Image.ImageName);//      fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
-		}
-
-		public ActionResult DeletePromo(long? Id)
-		{
-			var PromoAction = cntx_.promotions.Where(xxx => xxx.Id == Id).FirstOrDefault();
-
-			if (PromoAction == null && Id == 0)
+			var promoAction = cntx_.promotions.SingleOrDefault(x => x.Id == Id);
+			if (promoAction == null)
 			{
 				ErrorMessage("Акция не найдена");
 				return RedirectToAction("Index");
 			}
-			if (PromoAction.ProducerId != CurrentUser.AccountCompany.ProducerId)
+			if (promoAction.ProducerId != producerId)
+			{
+				ErrorMessage("У вас нет прав для изменения данной акции");
+				return RedirectToAction("Index");
+			}
+
+			promoAction.Enabled = Enabled;
+			cntx_.SaveChanges(CurrentUser, "Изменения статуса акции");
+
+			var message = GetStatus(promoAction).DisplayName();
+			SuccessMessage($"Новый статус: {message}");
+			return RedirectToAction("Index", new { Id = Id.ToString() });
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <returns></returns>
+		public FileResult GetFile(int Id)
+		{
+			var Image = cntx_.MediaFiles.Find(Id);
+			return File(Image.ImageFile, Image.ImageType, Image.ImageName);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <returns></returns>
+		public ActionResult DeletePromo(long? Id)
+		{
+			var promoAction = cntx_.promotions.SingleOrDefault(x => x.Id == Id);
+			if (promoAction == null)
+			{
+				ErrorMessage("Акция не найдена");
+				return RedirectToAction("Index");
+			}
+			if (promoAction.ProducerId != producerId)
 			{
 				ErrorMessage("У вас нет прав для удаления данной акции");
 				return RedirectToAction("Index");
 			}
 
-			if (PromoAction.PromoFileId != null)
+			if (promoAction.PromoFileId != null)
 			{
-				var IdFile = PromoAction.PromoFileId;
-				PromoAction.PromoFileId = null;
-				cntx_.Entry(PromoAction).State = EntityState.Modified;
+				var fileId = promoAction.PromoFileId;
+				promoAction.PromoFileId = null;
+				cntx_.Entry(promoAction).State = EntityState.Modified;
 				cntx_.SaveChanges(CurrentUser, "Удаление акции");
-
-				cntx_.MediaFiles.Remove(cntx_.MediaFiles.Where(xxx => xxx.Id == IdFile).First());
+				cntx_.MediaFiles.Remove(cntx_.MediaFiles.First(x => x.Id == fileId));
 				cntx_.SaveChanges(CurrentUser);
 			}
 
-			var Suppliers = cntx_.PromotionsToSupplier.Where(x => x.PromotionId == PromoAction.Id).ToList();
-			foreach (var SupItem in Suppliers)
+			var suppliers = cntx_.PromotionsToSupplier.Where(x => x.PromotionId == promoAction.Id).ToList();
+			foreach (var item in suppliers)
 			{
-				cntx_.PromotionsToSupplier.Remove(SupItem);
+				cntx_.PromotionsToSupplier.Remove(item);
 				cntx_.SaveChanges(CurrentUser);
 			}
 
-			var DrugList = cntx_.promotionToDrug.Where(x => x.PromotionId == PromoAction.Id).ToList();
-
-			foreach (var DrugItem in DrugList)
+			var drugList = cntx_.promotionToDrug.Where(x => x.PromotionId == promoAction.Id).ToList();
+			foreach (var item in drugList)
 			{
-				cntx_.promotionToDrug.Remove(DrugItem);
+				cntx_.promotionToDrug.Remove(item);
 				cntx_.SaveChanges(CurrentUser);
 			}
-
-			cntx_.promotions.Remove(PromoAction);
+			cntx_.promotions.Remove(promoAction);
 			cntx_.SaveChanges(CurrentUser, "Удаление акции");
-
 			SuccessMessage("Акция удалена");
 			return RedirectToAction("Index");
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="RegionList"></param>
+		/// <param name="SuppierRegions"></param>
+		/// <returns></returns>
 		public JsonResult GetSupplierJson(List<decimal> RegionList, List<long> SuppierRegions)
 		{
 			var h = new NamesHelper(cntx_, CurrentUser.Id);
@@ -527,6 +543,5 @@ namespace ProducerInterface.Controllers
 				results = (h.GetSupplierList(RegionList).Select(x => new { value = x.Value, text = x.Text, selected = supplierStringList.Contains(x.Value) }))
 			}, JsonRequestBehavior.AllowGet);
 		}
-
 	}
 }

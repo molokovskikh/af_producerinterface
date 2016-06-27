@@ -20,8 +20,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.NotProducerCount = cntx_.AccountCompany.Count(x => !x.ProducerId.HasValue && x.Account.Any());
 
 			model.ActionCount = cntx_.promotions.Count();
-			model.AcceptedActionCount = cntx_.promotions.Count(x => x.Status);
-			model.ActiveActionCount = cntx_.promotions.Count(x => x.Status && x.Enabled && x.Begin <= DateTime.Now && x.End > DateTime.Now);
+			model.AcceptedActionCount = cntx_.promotions.Count(x => x.Status == (byte)PromotionStatus.Confirmed);
+			model.ActiveActionCount = cntx_.promotions.Count(x => x.Status == (byte)PromotionStatus.Confirmed && x.Enabled && x.Begin < DateTime.Now && x.End > DateTime.Now);
 
 			var userByType					= cntx_.Account.GroupBy(x => x.Enabled).ToDictionary(x => x.Key, x => x.Count());
 			model.UserCount					= userByType.Sum(x => x.Value);

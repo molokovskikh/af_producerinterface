@@ -1768,7 +1768,15 @@ drop view drugfamily;
 drop view drugformproducer;
 
 
+alter table Account drop column RegionMask;
 
+drop PROCEDURE PromotionsInRegionMask;
 
+alter table promotions 
+	change column `Begin` `Begin` DATETIME not NULL,
+	change column `End` `End` DATETIME not NULL,	
+	change column `AllSuppliers` `AllSuppliers` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+	change column `Status` `Status` TINYINT(4) UNSIGNED NOT NULL DEFAULT 0;	
+	
 
 
