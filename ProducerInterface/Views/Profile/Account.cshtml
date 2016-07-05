@@ -13,42 +13,75 @@
 <div class="container body-content">
     @using (Html.BeginForm("Account", "Profile", FormMethod.Post))
     {
-    <h3>Компания : @Model.CompanyName</h3>
+        @Html.HiddenFor(m => m.CompanyName)
+        <h3>Компания @Model.CompanyName</h3>
         <hr />
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label>@Html.LabelFor(m => m.LastName) <strong class="required">*</strong></label>
+                @Html.TextBoxFor(m => m.LastName, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+            <div class="form-group col-md-4">
+                <label>@Html.LabelFor(m => m.FirstName) <strong class="required">*</strong></label>
+                @Html.TextBoxFor(m => m.FirstName, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+            <div class="form-group col-md-4">
+                <label>@Html.LabelFor(m => m.OtherName)</label>
+                @Html.TextBoxFor(m => m.OtherName, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.OtherName)
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label>Номер телефона <strong class="required">*</strong></label>
+                @Html.TextBoxFor(m => m.PhoneNumber, null, new { @class = "form-control", @placeholder = "(999) 999-99-99" })
+                @Html.ValidationMessageFor(m => m.PhoneNumber)
+            </div>
+            <div class="form-group col-md-6">
+                <label>Должность <strong class="required">*</strong></label>
+                @Html.DropDownListFor(m => m.AppointmentId, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.AppointmentId)
+            </div>
+        </div>
 
-        @Html.EditorFor(m => m.LastName)
-        @Html.EditorFor(m => m.FirstName)
-        @Html.EditorFor(m => m.OtherName)
-        @Html.EditorFor(m => m.PhoneNumber)
-        @Html.EditorFor(m => m.AppointmentId)
-
-        <br />
-
-            <hr />
-            <a href="#LoginChange" data-toggle="collapse">Смена логина</a>
-
-            <div class="@className" id="LoginChange">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
-                        <div class="input-group">
-                            @Html.EditorFor(m => m.Mailname)
-                            <div class="input-group-btn" style="min-width: 175px;">
-                                @Html.EditorFor(m => m.EmailDomain)
-                            </div>
-                        </div>
-                        @Html.ValidationMessageFor(model => model.Mailname)
-                        @Html.ValidationMessageFor(model => model.EmailDomain)
+        <div class="form-group">
+            <a href="#postname" data-toggle="collapse">Отсутствует ваша должность</a>
+            <div class="collapse" id="postname">
+                <div class="input-group">
+                    <input type="hidden" id="addAppointmentUrl" value="@Url.Action("AddAppointment")"/>
+                    <input type="text" id="appointmentName" placeholder="Свой вариант должности" class="form-control"/>
+                    <div class="input-group-btn" style="min-width: 175px;">
+                        <a class="btn btn-primary" onclick="AddAppointment()">Добавить в список</a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <hr />
-
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary col-lg-12 col-sm-12 col-md-12 col-xs-12" value="Сохранить изменения" />
+        <hr />
+        <a href="#LoginChange" data-toggle="collapse">Смена логина</a>
+        <div class="@className" id="LoginChange">
+            <div class="row">
+                <div class="col-xs-12">
+                    <label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
+                    <div class="input-group">
+                        @Html.EditorFor(m => m.Mailname)
+                        <div class="input-group-btn" style="min-width: 175px;">
+                            @Html.EditorFor(m => m.EmailDomain)
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Mailname)
+                    @Html.ValidationMessageFor(model => model.EmailDomain)
+                </div>
             </div>
+        </div>
 
+        <hr />
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary col-md-12" value="Сохранить изменения" />
+        </div>
     }
 </div>
 

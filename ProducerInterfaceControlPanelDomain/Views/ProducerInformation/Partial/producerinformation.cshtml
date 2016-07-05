@@ -84,8 +84,8 @@
                     {
                         <tr>
                             <td>@ItemPromotion.Name</td>
-                            <td>@ItemPromotion.Begin.Value.ToString("dd.MM.yyyy")</td>
-                            <td>@ItemPromotion.End.Value.ToString("dd.MM.yyyy")</td>
+                            <td>@ItemPromotion.Begin.ToString("dd.MM.yyyy")</td>
+                            <td>@ItemPromotion.End.ToString("dd.MM.yyyy")</td>
                             <td>
 
                                 <a href="#Drugs_@ItemPromotion.Id" data-toggle="collapse">Развернуть список препаратов (@ItemPromotion.promotionToDrug.Count())</a>

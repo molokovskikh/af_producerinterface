@@ -112,7 +112,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var h = new NamesHelper(cntx_, CurrentUser.Id);
 			ViewBag.ListProducer = h.RegisterListProducer();
-			var model = cntx_.AccountCompany.ToList();
+			var model = cntx_.AccountCompany.Where(x => x.ProducerId.HasValue).ToList(); // TODO протестировать без производителя
 			return View(model);
 		}
 

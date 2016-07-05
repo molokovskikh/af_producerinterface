@@ -36,9 +36,12 @@ namespace ProducerInterfaceCommon.Models
 
 		public override List<ErrorMessage> Validate()
 		{
+			var maxPeriod = 35;
 			var errors = base.Validate();
 			if (DateToUi < DateFrom)
 				errors.Add(new ErrorMessage("DateToUi", "Дата \"с...\" должна быть меньше или равна дате \"по...\""));
+			if ((DateTo - DateFrom).TotalDays > maxPeriod)
+				errors.Add(new ErrorMessage("DateToUi", $"Создание отчета возможно за период не более {maxPeriod} дней"));
 
 			return errors;
 		}

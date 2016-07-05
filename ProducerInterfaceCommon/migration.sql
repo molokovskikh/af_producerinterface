@@ -1749,6 +1749,48 @@ values (19, 'Действие с новостью на сайте {SiteName}', '
 
 Стало: {After}', 0, 'Действие с новостью');
 
+drop PROCEDURE `ProductRatingReport`;
+
+CREATE DEFINER=`RootDBMS`@`127.0.0.1` PROCEDURE `ProductRatingReport`(IN `CatalogId` VARCHAR(255), IN `RegionCode` VARCHAR(255), IN `SupplierId` VARCHAR(255), IN `DateFrom` datetime, IN `DateTo` datetime)
+	LANGUAGE SQL
+	NOT DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
+BEGIN
+
+  SET @sql = CONCAT('select c.CatalogName, ri.ProducerId, p.ProducerName, r.RegionName, 
+Sum(ri.Cost * ri.Quantity) as Summ,
+CAST(Sum(ri.Quantity) as SIGNED INTEGER) as PosOrder,
+Min(ri.Cost) as MinCost,
+Avg(ri.Cost) as AvgCost,
+Max(ri.Cost) as MaxCost,
+Count(distinct ri.OrderId) as DistinctOrderId,
+Count(distinct ri.AddressId) as DistinctAddressId
+from producerinterface.RatingReportOrderItems ri
+left join producerinterface.CatalogNames c on c.CatalogId = ri.CatalogId
+left join producerinterface.ProducerNames p on p.ProducerId = ri.ProducerId
+left join producerinterface.RegionNames r on r.RegionCode = ri.RegionCode
+where ri.IsLocal = 0
+and ri.CatalogId in (', CatalogId, ')
+and (ri.RegionCode in (', RegionCode, ')
+	or ri.RegionCode in (select RegionCode from farm.Regions where Parent in (', RegionCode, ')))
+#and ri.SupplierId not in (', SupplierId, ')
+and ri.WriteTime > \'', DateFrom, '\'
+and ri.WriteTime < \'', DateTo, '\'
+group by ri.CatalogId, ri.ProducerId, ri.RegionCode
+order by Summ desc');
+  
+  PREPARE stmt FROM @sql;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
+  
+  
+
+END$$
+
+
+
 #ниже не внесено в боевую БД
  drop view catalognameswithuptime;
 

@@ -10,9 +10,10 @@
     <div class="col-xs-12">
         <label>Выберите производителя</label>
         <select id="CompanySelectId" onchange="GetProducerInformation()" class="form-control">
-            @foreach (var ItemCompany in Model.Where(x => x.ProducerId != null).ToList())
+           <option value=""></option>
+            @foreach (var item in Model)
             {
-                <option value="@ItemCompany.Id">@ListProducer.Where(xxx=>xxx.Value==ItemCompany.ProducerId.ToString()).First().Text</option>
+                <option value="@item.Id">@item.Name</option>
             }
         </select>
     </div>

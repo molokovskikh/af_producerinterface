@@ -55,7 +55,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					query = query.Where(x => x.Status == (byte)PromotionStatus.Rejected);
 					break;
 				// ожидает подтверждения
-				case PromotionFakeStatus.NotСonfirmed:
+				case PromotionFakeStatus.NotConfirmed:
 					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.New);
 					break;
 				// не началась

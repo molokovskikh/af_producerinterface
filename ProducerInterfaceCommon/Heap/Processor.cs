@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using Quartz;
+using System.Data.Entity;
 
 namespace ProducerInterfaceCommon.Heap
 {
@@ -70,6 +71,7 @@ namespace ProducerInterfaceCommon.Heap
 			// действия при пустом отчете
 			if (querySort.Count == 0) {
 				jext.DisplayStatusEnum = DisplayStatus.Empty;
+				_cntx.Entry(jext).State = EntityState.Modified;
 				_cntx.SaveChanges();
 				EmailSender.SendEmptyReportMessage(_cntx, tparam.UserId, jext, ip);
 				return;
@@ -98,6 +100,7 @@ namespace ProducerInterfaceCommon.Heap
 
 			// отправили статус, что отчет готов
 			jext.DisplayStatusEnum = DisplayStatus.Ready;
+			_cntx.Entry(jext).State = EntityState.Modified;
 			_cntx.SaveChanges();
 
 			// если указаны email - отправляем

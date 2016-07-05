@@ -73,7 +73,7 @@
                 <h3>Правка № <span data-bind="text:Id"></span></h3>
             </div>
             <div class="modal-body">
-                <table class="table-bordered table-striped" id="Table-LogUserChange">
+                <table class="table-bordered table-striped" id="Table-LogUserChange" style="min-width: 350px;">
                     <tr>
                         <td>Идентификатор сущности</td>
                         <td><span data-bind="text:ObjectReference"></span></td>
@@ -100,24 +100,13 @@
                     </tr>
                 </table>
             </div>
-            <div class="modal-footer">
-                @*<input type="submit" class="btn btn-primary" value="Отправить запрос" />*@
-            </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
 <p>&nbsp;</p>
 
 <style>
-    .modal-dialog-full {
-        width: 50%;
-        height: 50%;
-    }
-
-    .modal-content-full {
-        height: 100%;
-    }
-
     table.table-striped td, table.table-striped th {
             vertical-align: top;
             padding: 10px;

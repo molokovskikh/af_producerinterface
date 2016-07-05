@@ -5,7 +5,7 @@
 <div class="btn-group btn-group-primary btn-group-lg">
 
     <!-- если ещё не согласована - можно редактировать -->
-    @if(Model.FakeStatus == PromotionFakeStatus.NotСonfirmed)
+    @if(Model.FakeStatus == PromotionFakeStatus.NotConfirmed)
     {
         <a href="@Url.Action("Edit", new { IdKey = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
     }

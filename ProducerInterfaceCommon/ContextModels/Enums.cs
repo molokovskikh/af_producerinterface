@@ -198,7 +198,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	public enum PromotionFakeStatus
 	{
 		[Display(Name = "Ожидает подтверждения")]
-		NotСonfirmed = 0,
+		NotConfirmed = 0,
 		[Display(Name = "Ожидание даты начала публикации")]
 		ConfirmedNotBegin = 1,
 		[Display(Name = "Завершена")]

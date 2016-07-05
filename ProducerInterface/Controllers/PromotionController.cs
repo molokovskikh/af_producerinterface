@@ -89,7 +89,7 @@ namespace ProducerInterface.Controllers
 
 			// ожидает согласования
 			if (model.Enabled && model.Status == (byte)PromotionStatus.New)
-				return PromotionFakeStatus.NotСonfirmed;
+				return PromotionFakeStatus.NotConfirmed;
 
 			// не отклонена, согласована, не началась
 			if (model.Enabled && model.Status == (byte)PromotionStatus.Confirmed && model.Begin > DateTime.Now)
