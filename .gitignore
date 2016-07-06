@@ -7,3 +7,4 @@
 .ProducerInterface/Properties/PublishProfiles/TEST LOCAL.pubxml
 *.log
 .vs
+*.suo
