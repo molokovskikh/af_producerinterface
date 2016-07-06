@@ -3,8 +3,7 @@
 *.suo
 *.cache
 *.user
-*.gen.*/vs/
+*.gen.*
 .ProducerInterface/Properties/PublishProfiles/TEST LOCAL.pubxml
 *.log
-./ProducerInterface/debug.log
-.vs/config/applicationhost.config
+.vs
