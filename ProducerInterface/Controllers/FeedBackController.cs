@@ -43,10 +43,10 @@ namespace ProducerInterface.Controllers
 			else
 				feedBack.Contacts = model.ContactNotAuth;
 
-			cntx_.AccountFeedBack.Add(feedBack);
-			cntx_.SaveChanges();
+			DB.AccountFeedBack.Add(feedBack);
+			DB.SaveChanges();
 
-			EmailSender.SendFeedBackMessage(cntx_, CurrentUser, feedBack.ToString(), Request.UserHostAddress);
+			EmailSender.SendFeedBackMessage(DB, CurrentUser, feedBack.ToString(), Request.UserHostAddress);
 			return PartialView("Success");
 		}
 
@@ -89,10 +89,10 @@ namespace ProducerInterface.Controllers
 				AccountId = CurrentUser.Id
 			};
 
-			cntx_.AccountFeedBack.Add(feedBack);
-			cntx_.SaveChanges();
+			DB.AccountFeedBack.Add(feedBack);
+			DB.SaveChanges();
 
-			EmailSender.SendFeedBackMessage(cntx_, CurrentUser, feedBack.ToString(), Request.UserHostAddress);
+			EmailSender.SendFeedBackMessage(DB, CurrentUser, feedBack.ToString(), Request.UserHostAddress);
 			SuccessMessage("Ваша заявка принята к исполнению");
 			return RedirectToAction("Index", "Profile");
 		}
@@ -105,7 +105,7 @@ namespace ProducerInterface.Controllers
 		[HttpGet]
 		public ActionResult AddDomainRequest(long? producerId)
 		{
-			var producer = cntx_.producernames.SingleOrDefault(x => x.ProducerId == producerId);
+			var producer = DB.producernames.SingleOrDefault(x => x.ProducerId == producerId);
 			if (producer == null)
 				throw new NotSupportedException("Производитель не найден");
 
@@ -134,10 +134,10 @@ namespace ProducerInterface.Controllers
 				DateAdd = DateTime.Now
 			};
 
-			cntx_.AccountFeedBack.Add(feedBack);
-			cntx_.SaveChanges();
+			DB.AccountFeedBack.Add(feedBack);
+			DB.SaveChanges();
 
-			EmailSender.SendFeedBackMessage(cntx_, CurrentUser, feedBack.ToString(), Request.UserHostAddress);
+			EmailSender.SendFeedBackMessage(DB, CurrentUser, feedBack.ToString(), Request.UserHostAddress);
 			SuccessMessage("Ваша заявка принята к исполнению");
 			return Redirect("~");
 		}

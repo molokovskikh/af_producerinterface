@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
 				filterContext.Result = Redirect("~");
 			else
 			{
-				h = new NamesHelper(cntx_, CurrentUser.Id, HttpContext);
+				h = new NamesHelper(DB, CurrentUser.Id, HttpContext);
 				if (CurrentUser.AccountCompany.ProducerId.HasValue)
 					producerId = CurrentUser.AccountCompany.ProducerId.Value;
 				else
@@ -43,13 +43,13 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index(string Id = null)
 		{
 			var model = new List<PromotionUi>();
-			var promoList = cntx_.promotions.Where(x => x.ProducerId == producerId).ToList();
+			var promoList = DB.promotions.Where(x => x.ProducerId == producerId).ToList();
 			if (promoList.Count == 0)
 				return View(model);
 
-			var regions = cntx_.regionnames.ToDictionary(x => x.RegionCode, x => x.RegionName);
-			var suppliers = cntx_.suppliernames.ToDictionary(x => x.SupplierId, x => x.SupplierName);
-			var assortment = cntx_.assortment.Where(x => x.ProducerId == producerId).ToDictionary(x => x.CatalogId, x => x.CatalogName);
+			var regions = DB.regionnames.ToDictionary(x => x.RegionCode, x => x.RegionName);
+			var suppliers = DB.suppliernames.ToDictionary(x => x.SupplierId, x => x.SupplierName);
+			var assortment = DB.assortment.Where(x => x.ProducerId == producerId).ToDictionary(x => x.CatalogId, x => x.CatalogName);
 			foreach (var item in promoList) {
 				if (item.RegionMask == 0)
 					item.RegionMask = ulong.MaxValue;
@@ -135,7 +135,7 @@ namespace ProducerInterface.Controllers
 			if (IdKey.Contains("true"))
 				id = 0;
 
-			var h = new NamesHelper(cntx_, CurrentUser.Id); // ??
+			var h = new NamesHelper(DB, CurrentUser.Id); // ??
 			model.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 			model.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
@@ -155,7 +155,7 @@ namespace ProducerInterface.Controllers
 			else
 			{
 				var idPromo = Convert.ToInt64(IdKey.Split(new Char[] { ',' }).First());
-				var dBmodel = cntx_.promotions.Find(idPromo);
+				var dBmodel = DB.promotions.Find(idPromo);
 				model.Id = id;
 				model.SuppierRegions = dBmodel.PromotionsToSupplier.ToList().Select(x => (string)x.SupplierId.ToString()).ToList();
 				model.SuppierRegionsList = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();				
@@ -251,15 +251,15 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		private long ChangePromotion(PromotionUi model)
 		{
-			var promoDb = cntx_.promotions.Find(model.Id);
+			var promoDb = DB.promotions.Find(model.Id);
 			var promotionToDrug = promoDb.promotionToDrug.ToList();
 			foreach (var item in promotionToDrug)
 			{
 				var drugExsist = model.DrugList.Any(x => Convert.ToInt64(x) == item.DrugId);
 				if (!drugExsist)
-					cntx_.promotionToDrug.Remove(item);
+					DB.promotionToDrug.Remove(item);
 			}
-			cntx_.SaveChanges(CurrentUser, "Препарат удален из акции");
+			DB.SaveChanges(CurrentUser, "Препарат удален из акции");
 			foreach (var item in model.DrugList)
 			{
 				var drugExsist = promoDb.promotionToDrug.Any(x => x.DrugId == Convert.ToInt64(item));
@@ -270,19 +270,19 @@ namespace ProducerInterface.Controllers
 						DrugId = Convert.ToInt64(item),
 						PromotionId = promoDb.Id
 					};
-					cntx_.promotionToDrug.Add(newAddDrug);
+					DB.promotionToDrug.Add(newAddDrug);
 				}
 			}
-			cntx_.SaveChanges(CurrentUser, "Препарат добавлен в акцию");
+			DB.SaveChanges(CurrentUser, "Препарат добавлен в акцию");
 
 			var promoPromotionsToSupplier = promoDb.PromotionsToSupplier.ToList();
 			foreach (var item in promoPromotionsToSupplier)
 			{
 				var supllierExsist = model.SuppierRegions.Any(x => (ulong)Convert.ToInt64(x) == (ulong)item.SupplierId);
 				if (!supllierExsist)
-					cntx_.PromotionsToSupplier.Remove(item);
+					DB.PromotionsToSupplier.Remove(item);
 			}
-			cntx_.SaveChanges(CurrentUser, "Поставщик удален из акции");
+			DB.SaveChanges(CurrentUser, "Поставщик удален из акции");
 			if (model.SuppierRegions.Contains("0"))
 			{
 				model.SuppierRegions = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
@@ -303,7 +303,7 @@ namespace ProducerInterface.Controllers
 					promoDb.PromotionsToSupplier.Add(addNew);
 				}
 			}
-			cntx_.SaveChanges(CurrentUser, "Поставщик добавлен в акцию");
+			DB.SaveChanges(CurrentUser, "Поставщик добавлен в акцию");
 
 			ulong regionMask = 0;
 			if (model.RegionList.Count() == 1)
@@ -320,22 +320,22 @@ namespace ProducerInterface.Controllers
 			promoDb.Enabled = true;
 			promoDb.Status = (byte)PromotionStatus.New;
 			promoDb.ProducerUserId = CurrentUser.Id;
-			cntx_.Entry(promoDb).State = EntityState.Modified;
-			cntx_.SaveChanges();
+			DB.Entry(promoDb).State = EntityState.Modified;
+			DB.SaveChanges();
 
 			int? saveFile = SaveFile(model.File);
 			if (saveFile != null)
 			{
-				var promoFileRemove = cntx_.MediaFiles.Find(promoDb.PromoFileId);
+				var promoFileRemove = DB.MediaFiles.Find(promoDb.PromoFileId);
 				promoDb.PromoFileId = null;
 				promoDb.PromoFile = "";
-				cntx_.Entry(promoDb).State = EntityState.Modified;
-				cntx_.SaveChanges();
+				DB.Entry(promoDb).State = EntityState.Modified;
+				DB.SaveChanges();
 
 				if (promoFileRemove != null)
 				{
-					//    cntx_.MediaFiles.Remove(PromoFileRemove);
-					//    cntx_.SaveChanges();
+					//    DB.MediaFiles.Remove(PromoFileRemove);
+					//    DB.SaveChanges();
 					//    для лоигрования действий решил не удалять файл для возможности восстановления промоакции
 				}
 				promoDb.PromoFileId = saveFile;
@@ -348,7 +348,7 @@ namespace ProducerInterface.Controllers
 					promoDb.PromoFileId = saveFile;
 				}
 			}
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 			return promoDb.Id;
 		}
 
@@ -383,8 +383,8 @@ namespace ProducerInterface.Controllers
 				RegionMask = regionMask,
 				PromoFile = ""
 			};
-			cntx_.promotions.Add(promotionToDataBase);
-			cntx_.SaveChanges(CurrentUser, "Добавление промоакции");
+			DB.promotions.Add(promotionToDataBase);
+			DB.SaveChanges(CurrentUser, "Добавление промоакции");
 
 			foreach (var item in model.DrugList)
 			{
@@ -392,9 +392,9 @@ namespace ProducerInterface.Controllers
 					DrugId = Convert.ToInt64(item),
 					PromotionId = promotionToDataBase.Id
 				};
-				cntx_.promotionToDrug.Add(promotionToDrug);
+				DB.promotionToDrug.Add(promotionToDrug);
 			}
-			cntx_.SaveChanges(CurrentUser, "Добавление лекарств к промоакции");
+			DB.SaveChanges(CurrentUser, "Добавление лекарств к промоакции");
 
 			if (model.SuppierRegions.Contains("0")) {
 				model.SuppierRegions = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
@@ -406,9 +406,9 @@ namespace ProducerInterface.Controllers
 			foreach (var item in model.SuppierRegions)
 			{
 				var X = new PromotionsToSupplier() { PromotionId = promotionToDataBase.Id, SupplierId = Convert.ToInt64(item) };
-				cntx_.PromotionsToSupplier.Add(X);
+				DB.PromotionsToSupplier.Add(X);
 			}
-			cntx_.SaveChanges(CurrentUser, "Добавление поставщиков к промоакции");
+			DB.SaveChanges(CurrentUser, "Добавление поставщиков к промоакции");
 			return promotionToDataBase.Id;
 		}
 
@@ -431,8 +431,8 @@ namespace ProducerInterface.Controllers
 			promoFile.ImageType = _file.ContentType;
 			promoFile.ImageSize = ms.Length.ToString();
 			promoFile.EntityType = (int)EntityType.Promotion;
-			cntx_.MediaFiles.Add(promoFile);
-			cntx_.SaveChanges();
+			DB.MediaFiles.Add(promoFile);
+			DB.SaveChanges();
 			return promoFile.Id;
 		}
 
@@ -445,7 +445,7 @@ namespace ProducerInterface.Controllers
 		[HttpGet]
 		public ActionResult Publication(long Id, bool Enabled)
 		{
-			var promoAction = cntx_.promotions.SingleOrDefault(x => x.Id == Id);
+			var promoAction = DB.promotions.SingleOrDefault(x => x.Id == Id);
 			if (promoAction == null)
 			{
 				ErrorMessage("Акция не найдена");
@@ -458,7 +458,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			promoAction.Enabled = Enabled;
-			cntx_.SaveChanges(CurrentUser, "Изменения статуса акции");
+			DB.SaveChanges(CurrentUser, "Изменения статуса акции");
 
 			var message = GetStatus(promoAction).DisplayName();
 			SuccessMessage($"Новый статус: {message}");
@@ -472,7 +472,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public FileResult GetFile(int Id)
 		{
-			var Image = cntx_.MediaFiles.Find(Id);
+			var Image = DB.MediaFiles.Find(Id);
 			return File(Image.ImageFile, Image.ImageType, Image.ImageName);
 		}
 
@@ -483,7 +483,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult DeletePromo(long? Id)
 		{
-			var promoAction = cntx_.promotions.SingleOrDefault(x => x.Id == Id);
+			var promoAction = DB.promotions.SingleOrDefault(x => x.Id == Id);
 			if (promoAction == null)
 			{
 				ErrorMessage("Акция не найдена");
@@ -499,27 +499,27 @@ namespace ProducerInterface.Controllers
 			{
 				var fileId = promoAction.PromoFileId;
 				promoAction.PromoFileId = null;
-				cntx_.Entry(promoAction).State = EntityState.Modified;
-				cntx_.SaveChanges(CurrentUser, "Удаление акции");
-				cntx_.MediaFiles.Remove(cntx_.MediaFiles.First(x => x.Id == fileId));
-				cntx_.SaveChanges(CurrentUser);
+				DB.Entry(promoAction).State = EntityState.Modified;
+				DB.SaveChanges(CurrentUser, "Удаление акции");
+				DB.MediaFiles.Remove(DB.MediaFiles.First(x => x.Id == fileId));
+				DB.SaveChanges(CurrentUser);
 			}
 
-			var suppliers = cntx_.PromotionsToSupplier.Where(x => x.PromotionId == promoAction.Id).ToList();
+			var suppliers = DB.PromotionsToSupplier.Where(x => x.PromotionId == promoAction.Id).ToList();
 			foreach (var item in suppliers)
 			{
-				cntx_.PromotionsToSupplier.Remove(item);
-				cntx_.SaveChanges(CurrentUser);
+				DB.PromotionsToSupplier.Remove(item);
+				DB.SaveChanges(CurrentUser);
 			}
 
-			var drugList = cntx_.promotionToDrug.Where(x => x.PromotionId == promoAction.Id).ToList();
+			var drugList = DB.promotionToDrug.Where(x => x.PromotionId == promoAction.Id).ToList();
 			foreach (var item in drugList)
 			{
-				cntx_.promotionToDrug.Remove(item);
-				cntx_.SaveChanges(CurrentUser);
+				DB.promotionToDrug.Remove(item);
+				DB.SaveChanges(CurrentUser);
 			}
-			cntx_.promotions.Remove(promoAction);
-			cntx_.SaveChanges(CurrentUser, "Удаление акции");
+			DB.promotions.Remove(promoAction);
+			DB.SaveChanges(CurrentUser, "Удаление акции");
 			SuccessMessage("Акция удалена");
 			return RedirectToAction("Index");
 		}
@@ -532,7 +532,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public JsonResult GetSupplierJson(List<decimal> RegionList, List<long> SuppierRegions)
 		{
-			var h = new NamesHelper(cntx_, CurrentUser.Id);
+			var h = new NamesHelper(DB, CurrentUser.Id);
 
 			if (SuppierRegions == null)
 				SuppierRegions = new List<long>();

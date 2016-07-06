@@ -12,7 +12,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult Index()
 		{
-			var model = cntx_.AccountAppointment.OrderByDescending(x => x.GlobalEnabled).ToList();
+			var model = DB.AccountAppointment.OrderByDescending(x => x.GlobalEnabled).ToList();
 			return View(model);
 		}
 
@@ -24,10 +24,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult Edit(int Id, string Name, bool GlobalEnabled)
 		{
-			var appointment = cntx_.AccountAppointment.Find(Id);
+			var appointment = DB.AccountAppointment.Find(Id);
 			appointment.Name = Name;
 			appointment.GlobalEnabled = GlobalEnabled;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 			return RedirectToAction("Index");
 		}
 
@@ -38,11 +38,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult Delete(int id)
 		{
-			var users = cntx_.Account.Where(x => x.AppointmentId == id).ToList();
+			var users = DB.Account.Where(x => x.AppointmentId == id).ToList();
 			foreach (var user in users)
 				user.AppointmentId = null;
-			cntx_.AccountAppointment.Remove(cntx_.AccountAppointment.Find(id));
-			cntx_.SaveChanges();
+			DB.AccountAppointment.Remove(DB.AccountAppointment.Find(id));
+			DB.SaveChanges();
 			return RedirectToAction("Index");
 		}
 
@@ -54,8 +54,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult Add(string name)
 		{
 			var appointment = new AccountAppointment() { Name = name, GlobalEnabled = true};
-			cntx_.AccountAppointment.Add(appointment);
-			cntx_.SaveChanges();
+			DB.AccountAppointment.Add(appointment);
+			DB.SaveChanges();
 			return RedirectToAction("Index");
 		}
 	}

@@ -57,11 +57,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public JsonResult AddCommentToFeedBack(long Id, string Comment, FeedBackStatus Status)
 		{
-			var feedBackItem = cntx_.AccountFeedBack.Find(Id);
+			var feedBackItem = DB.AccountFeedBack.Find(Id);
 			feedBackItem.DateEdit = DateTime.Now;
 			feedBackItem.AdminId = CurrentUser.Id;
 			feedBackItem.StatusEnum = Status;
-			cntx_.SaveChanges(CurrentUser, "Добавление комментария к обращению пользователя");
+			DB.SaveChanges(CurrentUser, "Добавление комментария к обращению пользователя");
 
 			return Json("1", JsonRequestBehavior.AllowGet);
 		}

@@ -40,7 +40,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult SearchResult(SearchProducerReportsModel param)
 		{
 			var schedulerName = GetSchedulerName();
-			var query = cntx_.jobextendwithproducer.Where(x => x.SchedName == schedulerName);
+			var query = DB.jobextendwithproducer.Where(x => x.SchedName == schedulerName);
 			if (param.Enable.HasValue)
 				query = query.Where(x => x.Enable == param.Enable);
 			if (param.Producer.HasValue)
@@ -66,7 +66,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult ReportDescription()
 		{
-			var model = cntx_.ReportDescription.ToList();
+			var model = DB.ReportDescription.ToList();
 			return View(model);
 		}
 
@@ -77,17 +77,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				return RedirectToAction("EditReportDescription", new { id = id.Value });
 
 			ModelState.AddModelError("id", "Выберите тип отчета, который хотите изменить");
-			var model = cntx_.ReportDescription.ToList();
+			var model = DB.ReportDescription.ToList();
 			return View(model);
 		}
 
 		[HttpGet]
 		public ActionResult EditReportDescription(int id)
 		{
-			var model = cntx_.ReportDescription.Single(x => x.Id == id);
+			var model = DB.ReportDescription.Single(x => x.Id == id);
 			var regionCode = model.ReportRegion.Select(x => x.RegionCode).ToList();
 
-			ViewData["Regions"] = cntx_.regionsnamesleaf
+			ViewData["Regions"] = DB.regionsnamesleaf
 				.ToList()
 				.OrderBy(x => x.RegionName)
 				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionCode.Contains(x.RegionCode) })
@@ -108,7 +108,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				ViewData["Regions"] = cntx_.regionsnamesleaf
+				ViewData["Regions"] = DB.regionsnamesleaf
 					.ToList()
 					.OrderBy(x => x.RegionName)
 					.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = modelUI.RegionList.Contains(x.RegionCode) })
@@ -116,13 +116,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				return View(modelUI);
 			}
 
-			var model = cntx_.ReportDescription.Single(x => x.Id == modelUI.Id);
+			var model = DB.ReportDescription.Single(x => x.Id == modelUI.Id);
 			model.Description = modelUI.Description;
 			model.ReportRegion.Clear();
 			foreach (var regionCode in modelUI.RegionList)
 				model.ReportRegion.Add(new ReportRegion() { RegionCode = regionCode, ReportId = modelUI.Id });
 
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 			SuccessMessage("Свойства отчета сохранены");
 			return RedirectToAction("ReportDescription");
 		}
@@ -134,14 +134,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult RunHistory(string jobName)
 		{
-			var jext = cntx_.jobextend.Single(x => x.JobName == jobName);
-			var producer = cntx_.producernames.SingleOrDefault(x => x.ProducerId == jext.ProducerId);
+			var jext = DB.jobextend.Single(x => x.JobName == jobName);
+			var producer = DB.producernames.SingleOrDefault(x => x.ProducerId == jext.ProducerId);
 			var producerName = "удален";
 			if (producer != null)
 				producerName = producer.ProducerName;
 
 			ViewBag.Title = $"История запусков отчета: \"{jext.CustomName}\", Производитель : \"{producerName}\"";
-			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+			var model = DB.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
 
 			return View(model);
 		}
@@ -153,7 +153,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult DisplayReport(string jobName)
 		{
-			var jxml = cntx_.reportxml.Single(x => x.JobName == jobName);
+			var jxml = DB.reportxml.Single(x => x.JobName == jobName);
 			ViewData["jobName"] = jobName;
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
@@ -164,8 +164,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var schedulerName = GetSchedulerName();
 			// возвращаем только производителей, у которых есть отчёты
-			var producerIdList = cntx_.jobextend.Where(x => x.SchedName == schedulerName).Select(x => x.ProducerId).Distinct().ToList();
-			var producers = cntx_.producernames.Where(x => producerIdList.Contains(x.ProducerId)).ToList()
+			var producerIdList = DB.jobextend.Where(x => x.SchedName == schedulerName).Select(x => x.ProducerId).Distinct().ToList();
+			var producers = DB.producernames.Where(x => producerIdList.Contains(x.ProducerId)).ToList()
 				.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList();
 
 			var model = new List<OptionElement>() { new OptionElement { Text = "Все производители", Value = "" } };

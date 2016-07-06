@@ -33,11 +33,11 @@ namespace ProducerInterface.Controllers
 				var adminGroupName = GetWebConfigParameters("AdminGroupName");
 				isAdmin = CurrentUser.AccountGroup.Any(x => x.Name == adminGroupName);
 				userId = CurrentUser.Id;
-				h = new NamesHelper(cntx_, userId);
+				h = new NamesHelper(DB, userId);
 				if (CurrentUser.AccountCompany.ProducerId.HasValue)
 				{
 					producerId = CurrentUser.AccountCompany.ProducerId.Value;
-					ViewBag.Producernames = cntx_.producernames.Single(x => x.ProducerId == producerId).ProducerName;
+					ViewBag.Producernames = DB.producernames.Single(x => x.ProducerId == producerId).ProducerName;
 				}
 				else
 				{
@@ -121,8 +121,8 @@ namespace ProducerInterface.Controllers
 				Scheduler = "Время формирования не задано"
 			};
 
-			cntx_.jobextend.Add(jext);
-			cntx_.SaveChanges(CurrentUser, "Добавление отчета");
+			DB.jobextend.Add(jext);
+			DB.SaveChanges(CurrentUser, "Добавление отчета");
 			SuccessMessage("Отчет успешно добавлен");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -170,7 +170,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = false;
-			cntx_.SaveChanges(CurrentUser, "Удаление отчета");
+			DB.SaveChanges(CurrentUser, "Удаление отчета");
 			SuccessMessage("Отчет удален");
 			return RedirectToAction("JobList", "Report");
 
@@ -213,7 +213,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 			jext.Enable = true;
-			cntx_.SaveChanges(CurrentUser, "Восстановление отчета");
+			DB.SaveChanges(CurrentUser, "Восстановление отчета");
 			SuccessMessage("Отчет восстановлен");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -298,7 +298,7 @@ namespace ProducerInterface.Controllers
 			// вносим изменения в расширенные параметры
 			jext.LastModified = DateTime.Now;
 			jext.CustomName = model.CastomName;
-			cntx_.SaveChanges(CurrentUser, "Редактирование отчета");
+			DB.SaveChanges(CurrentUser, "Редактирование отчета");
 			SuccessMessage("Отчет успешно изменен");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -325,8 +325,8 @@ namespace ProducerInterface.Controllers
 		private List<ReportDescription> AvailableReports()
 		{
 			var userRegions = CurrentUser.AccountRegion.Select(x => x.RegionCode).ToList();
-			var reportIds = cntx_.ReportRegion.Where(x => userRegions.Contains(x.RegionCode)).Select(x => x.ReportId).Distinct().ToList();
-			var result = cntx_.ReportDescription.Where(x => reportIds.Contains(x.Id)).ToList();
+			var reportIds = DB.ReportRegion.Where(x => userRegions.Contains(x.RegionCode)).Select(x => x.ReportId).Distinct().ToList();
+			var result = DB.ReportDescription.Where(x => reportIds.Contains(x.Id)).ToList();
 			return result;
 		}
 
@@ -338,14 +338,14 @@ namespace ProducerInterface.Controllers
 		{
 			var schedulerName = GetSchedulerName();
 			// вытащили всех создателей, создававших отчеты этого производителя
-			var creatorIds = cntx_.jobextend
+			var creatorIds = DB.jobextend
 				.Where(x => x.ProducerId == producerId && x.SchedName == schedulerName && x.Enable)
 				.Select(x => x.CreatorId)
 				.Distinct().ToList();
-			ViewData["creators"] = cntx_.Account.Where(x => creatorIds.Contains(x.Id)).
+			ViewData["creators"] = DB.Account.Where(x => creatorIds.Contains(x.Id)).
 				Select(x => new SelectListItem() { Text = x.Name + "(" + x.Login + ")", Value = x.Id.ToString() }).ToList();
 
-			var query = cntx_.jobextendwithproducer.Where(x => x.ProducerId == producerId
+			var query = DB.jobextendwithproducer.Where(x => x.ProducerId == producerId
 																												&& x.SchedName == schedulerName
 																												&& x.Enable);
 			if (cid.HasValue)
@@ -436,7 +436,7 @@ namespace ProducerInterface.Controllers
 			// отправили статус, что отчет готовится
 			jext.DisplayStatusEnum = DisplayStatus.Processed;
 			jext.LastRun = DateTime.Now;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			var message = "АналитФармация приступила к формированию запрошенного отчета. Как только отчет будет готов, он сразу же появится в списке отчетов";
 			if (model.MailTo != null && model.MailTo.Count > 0)
@@ -455,7 +455,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult RunHistory(string jobName)
 		{
 			ViewData["repName"] = $"История запусков отчета \"{h.GetReportName(jobName)}\"";
-			var model = cntx_.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
+			var model = DB.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
 			return View(model);
 		}
 
@@ -561,7 +561,7 @@ namespace ProducerInterface.Controllers
 
 			// меняем человекочитаемое описание в доп. параметрах задачи
 			jext.Scheduler = model.CronHumanText;
-			cntx_.SaveChanges(CurrentUser, "Установка времени формирования отчета");
+			DB.SaveChanges(CurrentUser, "Установка времени формирования отчета");
 			SuccessMessage($"Время формирования отчета успешно установлено{nextGen}");
 			return RedirectToAction("JobList", "Report");
 		}
@@ -570,7 +570,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult DisplayReport(string jobName)
 		{
 			// вытащили отчет
-			var jxml = cntx_.reportxml.Where(x => x.JobName == jobName).Select(x => x.JobName).SingleOrDefault();
+			var jxml = DB.reportxml.Where(x => x.JobName == jobName).Select(x => x.JobName).SingleOrDefault();
 			if (jxml == null)
 			{
 				logger.Error($"Отчет {jobName} не найден");
@@ -602,7 +602,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult GetReport(string jobName)
 		{
 			// вытащили отчет
-			var jxml = cntx_.reportxml.SingleOrDefault(x => x.JobName == jobName);
+			var jxml = DB.reportxml.SingleOrDefault(x => x.JobName == jobName);
 			if (jxml == null)
 				return Content("<p>Отчет не найден</p>");
 
@@ -625,7 +625,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult DisplayReport(SendReport model)
 		{
 			// вытащили отчет
-			var jxml = cntx_.reportxml.Where(x => x.JobName == model.jobName).Select(x => x.JobName).SingleOrDefault();
+			var jxml = DB.reportxml.Where(x => x.JobName == model.jobName).Select(x => x.JobName).SingleOrDefault();
 			if (jxml == null)
 			{
 				logger.Error($"XML отчета {model.jobName} не найден");
@@ -655,7 +655,7 @@ namespace ProducerInterface.Controllers
 				return View(model);
 
 			var file = GetExcel(jext);
-			EmailSender.ManualPostReportMessage(cntx_, userId, jext, file.FullName, model.MailTo, CurrentUser.IP);
+			EmailSender.ManualPostReportMessage(DB, userId, jext, file.FullName, model.MailTo, CurrentUser.IP);
 			SuccessMessage("Отчет отправлен на указанные email");
 			return View(model);
 		}
@@ -704,7 +704,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		protected jobextend GetJobExtend(string jobName)
 		{
-			return cntx_.jobextend.SingleOrDefault(x => x.JobName == jobName);
+			return DB.jobextend.SingleOrDefault(x => x.JobName == jobName);
 		}
 
 		//public JsonResult GetCatalogDragFamalyNames(string term)

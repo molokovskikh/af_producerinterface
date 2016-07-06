@@ -18,7 +18,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult Group()
 		{
-			var model = cntx_.AccountGroup.ToList()
+			var model = DB.AccountGroup.ToList()
 					.Select(x => new ListGroupView
 					{
 						Id = x.Id,
@@ -50,7 +50,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult Change(long Id)
 		{
-			var user = cntx_.Account.Single(x => x.Id == Id);
+			var user = DB.Account.Single(x => x.Id == Id);
 			var model = new UserEdit()
 			{
 				Name = user.Name,
@@ -77,14 +77,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult Change(UserEdit model)
 		{
-			var user = cntx_.Account.Single(x => x.Id == model.Id);
+			var user = DB.Account.Single(x => x.Id == model.Id);
 			if (!ModelState.IsValid)
 			{
 				SetChangeModel(user, model);
 				return View(model);
 			}
 
-			var groups = cntx_.AccountGroup.Where(x => model.AccountGroupIds.Contains(x.Id));
+			var groups = DB.AccountGroup.Where(x => model.AccountGroupIds.Contains(x.Id));
 			user.AccountGroup.Clear();
 			foreach (var group in groups)
 				user.AccountGroup.Add(group);
@@ -107,11 +107,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			user.AppointmentId = model.AppointmentId;
 			user.Enabled = model.Status;
 			user.LastUpdatePermisison = DateTime.Now;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			// отправка сообщения пользователю с паролем
 			if (sendAcceptMail)
-				EmailSender.SendAccountVerificationMessage(cntx_, user, password, CurrentUser.Id);
+				EmailSender.SendAccountVerificationMessage(DB, user, password, CurrentUser.Id);
 
 			SuccessMessage("Изменения успешно сохранены");
 			// если админ - на список админов
@@ -123,7 +123,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		private void SetChangeModel(Account user, UserEdit model)
 		{
-			model.AllAccountGroup = cntx_.AccountGroup.Where(x => x.TypeGroup == user.TypeUser)
+			model.AllAccountGroup = DB.AccountGroup.Where(x => x.TypeGroup == user.TypeUser)
 				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
 				.ToList();
 
@@ -153,12 +153,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var allAppointment = new List<SelectListItem>();
 			if (!user.AppointmentId.HasValue)
 				allAppointment.Add(new SelectListItem() { Text = "", Value = "", Selected = true });
-			allAppointment.AddRange(cntx_.AccountAppointment.OrderBy(x => x.Name)
+			allAppointment.AddRange(DB.AccountAppointment.OrderBy(x => x.Name)
 				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == user.AppointmentId })
 				.ToList());
 			model.AllAppointment = allAppointment;
 
-			var regions = cntx_.regionsnamesleaf
+			var regions = DB.regionsnamesleaf
 				.ToList()
 				.OrderBy(x => x.RegionName)
 				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = model.AccountRegionIds.Contains(x.RegionCode) })
@@ -173,7 +173,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult SearchUser(UserFilter filter)
 		{
-			var query = cntx_.Account.Where(x => x.TypeUser == (sbyte)filter.TypeUserEnum);
+			var query = DB.Account.Where(x => x.TypeUser == (sbyte)filter.TypeUserEnum);
 			if (filter.UserId.HasValue)
 				query = query.Where(x => x.Id == filter.UserId.Value);
 			if (!string.IsNullOrEmpty(filter.UserName))
@@ -182,7 +182,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				query = query.Where(x => x.Login.Contains(filter.Login));
 			if (!string.IsNullOrEmpty(filter.ProducerName))
 			{
-				var producerIds = cntx_.producernames.Where(x => x.ProducerName.Contains(filter.ProducerName)).Select(x => x.ProducerId).ToList();
+				var producerIds = DB.producernames.Where(x => x.ProducerName.Contains(filter.ProducerName)).Select(x => x.ProducerId).ToList();
 				query = query.Where(x => x.AccountCompany.ProducerId.HasValue && producerIds.Contains(x.AccountCompany.ProducerId.Value));
 			}
 			if (filter.AccountGroupId.HasValue)
@@ -212,8 +212,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			ViewBag.Info = info;
 
 			// имена производителей
-			var existProducerIds = cntx_.AccountCompany.Where(x => x.ProducerId.HasValue).Select(x => x.ProducerId).Distinct().ToList();
-			ViewBag.Producers = cntx_.producernames.Where(x => existProducerIds.Contains(x.ProducerId)).ToDictionary(x => x.ProducerId, x => x.ProducerName);
+			var existProducerIds = DB.AccountCompany.Where(x => x.ProducerId.HasValue).Select(x => x.ProducerId).Distinct().ToList();
+			ViewBag.Producers = DB.producernames.Where(x => existProducerIds.Contains(x.ProducerId)).ToDictionary(x => x.ProducerId, x => x.ProducerName);
 
 			var model = query.OrderByDescending(x => x.Id).Skip(filter.CurrentPageIndex * itemsPerPage).Take(itemsPerPage).ToList();
 			return View(model);
@@ -225,7 +225,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult AdminList()
 		{
-			var model = cntx_.Account.Where(x => x.TypeUser == (sbyte)TypeUsers.ControlPanelUser).OrderByDescending(x => x.Id).ToList();
+			var model = DB.Account.Where(x => x.TypeUser == (sbyte)TypeUsers.ControlPanelUser).OrderByDescending(x => x.Id).ToList();
 			return View(model);
 		}
 
@@ -239,7 +239,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			// список групп
 			var allAccountGroup = new List<SelectListItem>() { emptyElement };
-			allAccountGroup.AddRange(cntx_.AccountGroup
+			allAccountGroup.AddRange(DB.AccountGroup
 				.Where(x => x.Enabled && x.TypeGroup == (sbyte)model.TypeUserEnum)
 				.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = model.AccountGroupId == x.Id })
 				.ToList());
@@ -257,7 +257,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var allAppointment = new List<SelectListItem>() { emptyElement };
 			allAppointment.Add(new SelectListItem() { Text = "Без должности", Value = "0", Selected = model.AppointmentId == 0 });
 			allAppointment.Add(new SelectListItem() { Text = "С индивидуальной должностью", Value = "-1", Selected = model.AppointmentId == -1 });
-			allAppointment.AddRange(cntx_.AccountAppointment
+			allAppointment.AddRange(DB.AccountAppointment
 				.Where(x => x.Account.Any())
 				.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = model.AppointmentId == x.Id })
 				.ToList());
@@ -273,7 +273,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult GetOneGroup(long Id)
 		{
-			var model = cntx_.AccountGroup.Single(x => x.Id == Id);
+			var model = DB.AccountGroup.Single(x => x.Id == Id);
 
 			if (!model.Enabled)
 			{
@@ -282,9 +282,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			}
 
 			// все пользователи
-			ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name + " - " + x.Login, Value = x.Id.ToString() }).ToList();
+			ViewBag.UserList = DB.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name + " - " + x.Login, Value = x.Id.ToString() }).ToList();
 			// все права
-			ViewBag.PermissionList = cntx_.AccountPermission
+			ViewBag.PermissionList = DB.AccountPermission
 				.Where(x => x.Enabled && x.TypePermission == model.TypeGroup)
 				.OrderBy(x => new { x.ControllerAction, x.ActionAttributes })
 				.Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.Id.ToString() })
@@ -307,8 +307,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (string.IsNullOrEmpty(model.Name))
 			{
 				ErrorMessage("Не указано название группы");
-				ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
-				ViewBag.PermissionList = cntx_.AccountPermission
+				ViewBag.UserList = DB.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+				ViewBag.PermissionList = DB.AccountPermission
 					.Where(x => x.Enabled && x.TypePermission == model.TypeGroup)
 					.OrderBy(x => new { x.ControllerAction, x.ActionAttributes })
 					.Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.Id.ToString() })
@@ -316,23 +316,23 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				return View("ChangeGroupParameters", model);
 			}
 
-			var group = cntx_.AccountGroup.SingleOrDefault(x => x.Id == model.Id);
+			var group = DB.AccountGroup.SingleOrDefault(x => x.Id == model.Id);
 			if (group == null)
 			{
 				group = new AccountGroup() { Enabled = true, TypeGroup = model.TypeGroup, Name = model.Name };
-				cntx_.AccountGroup.Add(group);
-				cntx_.SaveChanges();
+				DB.AccountGroup.Add(group);
+				DB.SaveChanges();
 			}
 			group.Name = model.Name;
 			group.Description = model.Description;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			// если очищено всё
 			if (model.ListPermission == null)
 				model.ListPermission = new List<int>();
 			
 			// обновляем список пермишенов для данной группы 
-			var groupPermissions = cntx_.AccountPermission.Where(x => model.ListPermission.Contains(x.Id)).ToList();
+			var groupPermissions = DB.AccountPermission.Where(x => model.ListPermission.Contains(x.Id)).ToList();
 			group.AccountPermission.Clear();
 			foreach (var permission in groupPermissions)
 				group.AccountPermission.Add(permission);
@@ -347,13 +347,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				account.LastUpdatePermisison = DateTime.Now;
 
 			//обновляем список пользователей для данной группы
-			var groupAccounts = cntx_.Account.Where(x => model.ListUser.Contains(x.Id)).ToList();
+			var groupAccounts = DB.Account.Where(x => model.ListUser.Contains(x.Id)).ToList();
 			group.Account.Clear();
 			foreach (var account in groupAccounts) {
 				group.Account.Add(account);
 				account.LastUpdatePermisison = DateTime.Now;
 			}
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			SuccessMessage("Изменения в группе " + model.Name + " сохранены");
 			return RedirectToAction("Group");
@@ -386,8 +386,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.ListPermission = new List<int>();
 			model.ListUser = new List<long>();
 
-			ViewBag.UserList = cntx_.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
-			ViewBag.PermissionList = cntx_.AccountPermission
+			ViewBag.UserList = DB.Account.Where(x => x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == model.TypeGroup).Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			ViewBag.PermissionList = DB.AccountPermission
 				.Where(x => x.Enabled && x.TypePermission == model.TypeGroup)
 				.OrderBy(x => new { x.ControllerAction, x.ActionAttributes })
 				.Select(x => new OptionElement { Text = x.ControllerAction + " " + x.ActionAttributes, Value = x.Id.ToString() })
@@ -403,7 +403,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult ListPermission()
 		{
-			var model = cntx_.AccountPermission.OrderBy(x => new { x.TypePermission, x.ControllerAction}).ToList();
+			var model = DB.AccountPermission.OrderBy(x => new { x.TypePermission, x.ControllerAction}).ToList();
 			return View(model);
 		}
 
@@ -415,7 +415,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult EditPermission(int Id = 0)
 		{
-			var model = cntx_.AccountPermission.Single(x => x.Id == Id);
+			var model = DB.AccountPermission.Single(x => x.Id == Id);
 			return View(model);
 		}
 
@@ -427,9 +427,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult EditPermission(AccountPermission model)
 		{
-			var permission = cntx_.AccountPermission.Single(x => x.Id == model.Id);
+			var permission = DB.AccountPermission.Single(x => x.Id == model.Id);
 			permission.Description = model.Description;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			SuccessMessage("Описание сохранено");
 			return RedirectToAction("ListPermission");
@@ -442,17 +442,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult DeletePermission(int Id = 0)
 		{
-			var permission = cntx_.AccountPermission.SingleOrDefault(x => x.Id == Id);
+			var permission = DB.AccountPermission.SingleOrDefault(x => x.Id == Id);
 			if (permission == null) {
 				ErrorMessage("Доступ не найден");
 				return RedirectToAction("ListPermission");
 			}
 
 			permission.AccountGroup.Clear();
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
-			cntx_.AccountPermission.Remove(permission);
-			cntx_.SaveChanges();
+			DB.AccountPermission.Remove(permission);
+			DB.SaveChanges();
 
 			SuccessMessage("Доступ удален, но если он есть на сайте, то он будет снова добавлен при следующем открытии страницы и добавится в группу 'Администраторы'");
 			return RedirectToAction("ListPermission");

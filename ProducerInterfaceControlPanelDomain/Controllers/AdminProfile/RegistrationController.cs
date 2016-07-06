@@ -27,7 +27,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			if (DomainAuth.IsAuthenticated(login, password))
 			{
-				var X = cntx_.Account.Where(xxx => xxx.Login == login && xxx.TypeUser == 1).FirstOrDefault();
+				var X = DB.Account.Where(xxx => xxx.Login == login && xxx.TypeUser == 1).FirstOrDefault();
 
 				if (X == null)
 				{
@@ -54,20 +54,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (_filterAttribute != null && _filterAttribute != "" && _filterAttribute.Length > 10)
 				CPU.Name = _filterAttribute;
 
-			cntx_.Account.Add(CPU);
+			DB.Account.Add(CPU);
 
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			string AdminGroup = GetWebConfigParameters("Все");
 
 			// TODO разобраться, почему нет типа и где его брать
-			long IdGroup = cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroup).FirstOrDefault().Id;
+			long IdGroup = DB.AccountGroup.Where(xxx => xxx.Name == AdminGroup).FirstOrDefault().Id;
 
 			if (IdGroup > 0)
 			{
-				var Group = cntx_.AccountGroup.Where(xxx => xxx.Id == IdGroup).First();
+				var Group = DB.AccountGroup.Where(xxx => xxx.Id == IdGroup).First();
 				Group.Account.Add(CPU);
-				cntx_.SaveChanges();
+				DB.SaveChanges();
 			}
 			else
 			{
@@ -76,7 +76,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				Group.Account.Add(CPU);
 			}
 
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 		}
 
@@ -96,17 +96,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				CPU.Name = _filterAttribute;
 			}
 
-			cntx_.Account.Add(CPU);
+			DB.Account.Add(CPU);
 
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			string AdminGroup = GetWebConfigParameters("AdminGroupName");
 
-			var GroupExsist = cntx_.AccountGroup.Any(xxx => xxx.Name == AdminGroup && xxx.TypeGroup == SbyteTypeUser);
+			var GroupExsist = DB.AccountGroup.Any(xxx => xxx.Name == AdminGroup && xxx.TypeGroup == SbyteTypeUser);
 
 			if (GroupExsist)
 			{
-				var Group = cntx_.AccountGroup.Where(xxx => xxx.Name == AdminGroup && xxx.TypeGroup == SbyteTypeUser).First();
+				var Group = DB.AccountGroup.Where(xxx => xxx.Name == AdminGroup && xxx.TypeGroup == SbyteTypeUser).First();
 				Group.Account.Add(CPU);
 			}
 			else
@@ -114,12 +114,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				var Group = new AccountGroup();
 				Group.Name = AdminGroup;
 				Group.Enabled = true;
-				cntx_.AccountGroup.Add(Group);
-				cntx_.SaveChanges();
+				DB.AccountGroup.Add(Group);
+				DB.SaveChanges();
 				Group.Account.Add(CPU);
 			}
 
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 		}
 

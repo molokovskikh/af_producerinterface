@@ -19,7 +19,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			SetViewBag(companyId);
 			if (companyId.HasValue)
 			{
-				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId.Value).ToList();
+				var model = DB.CompanyDomainName.Where(x => x.CompanyId == companyId.Value).ToList();
 				return View(model);
 			}
 			return View();
@@ -39,7 +39,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				SetViewBag(companyId);
 				ViewBag.Error = "Укажите имя домена";
 				ViewBag.DomainName = domainName;
-				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
+				var model = DB.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
 				return View("DomainList", model);
 			}
 
@@ -49,30 +49,30 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				SetViewBag(companyId);
 				ViewBag.Error = "Неверный формат домена";
 				ViewBag.DomainName = domainName;
-				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
+				var model = DB.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
 				return View("DomainList", model);
 			}
 
-			var domainExist = cntx_.CompanyDomainName.SingleOrDefault(x => x.CompanyId == companyId && x.Name == domainName);
+			var domainExist = DB.CompanyDomainName.SingleOrDefault(x => x.CompanyId == companyId && x.Name == domainName);
 			if (domainExist != null)
 			{
 				SetViewBag(companyId);
 				ViewBag.Error = $"Домен {domainName} уже есть в списке данного производителя";
 				ViewBag.DomainName = domainName;
-				var model = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
+				var model = DB.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
 				return View("DomainList", model);
 			}
 
 			var newDomain = new CompanyDomainName() { CompanyId = companyId, Name = domainName };
-			cntx_.CompanyDomainName.Add(newDomain);
-			cntx_.SaveChanges();
+			DB.CompanyDomainName.Add(newDomain);
+			DB.SaveChanges();
 			return RedirectToAction("DomainList", new { companyId = companyId });
 		}
 
 		private void SetViewBag(long? companyId)
 		{
 			ViewBag.CompanyId = companyId;
-			ViewBag.CompanyList = cntx_.AccountCompany
+			ViewBag.CompanyList = DB.AccountCompany
 				.OrderBy(x => x.Name)
 				.Select(x => new SelectListItem() { Text = x.ProducerId.HasValue ? x.Name : x.Name + " (без производителя)", Value = x.Id.ToString(), Selected = x.Id == companyId })
 				.ToList();
@@ -85,15 +85,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult DeleteDomain(long Id)
 		{
-			var domain = cntx_.CompanyDomainName.Find(Id);
+			var domain = DB.CompanyDomainName.Find(Id);
 			var companyId = domain.CompanyId;
-			var domainList = cntx_.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
+			var domainList = DB.CompanyDomainName.Where(x => x.CompanyId == companyId).ToList();
 
 			// последний домен нельзя удалить
 			if (domainList.Count() > 1)
 			{
-				cntx_.CompanyDomainName.Remove(domain);
-				cntx_.SaveChanges();
+				DB.CompanyDomainName.Remove(domain);
+				DB.SaveChanges();
 				SuccessMessage($"Домен {domain.Name} удален");
 			}
 			// последний домен нельзя удалить
@@ -110,9 +110,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult Index()
 		{
-			var h = new NamesHelper(cntx_, CurrentUser.Id);
+			var h = new NamesHelper(DB, CurrentUser.Id);
 			ViewBag.ListProducer = h.RegisterListProducer();
-			var model = cntx_.AccountCompany.Where(x => x.ProducerId.HasValue).ToList(); // TODO протестировать без производителя
+			var model = DB.AccountCompany.Where(x => x.ProducerId.HasValue).ToList(); // TODO протестировать без производителя
 			return View(model);
 		}
 
@@ -123,11 +123,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult GetProducerInformation(int Id)
 		{
-			var producerId = cntx_.AccountCompany.Single(x => x.Id == Id).ProducerId;
-			var promotionList = cntx_.promotions.Where(x => x.ProducerId == producerId).ToList();
+			var producerId = DB.AccountCompany.Single(x => x.Id == Id).ProducerId;
+			var promotionList = DB.promotions.Where(x => x.ProducerId == producerId).ToList();
 
-			var firstUserId = cntx_.Account.First(x => x.AccountCompany.Id == Id).Id;
-			var h = new NamesHelper(cntx_, firstUserId);
+			var firstUserId = DB.Account.First(x => x.AccountCompany.Id == Id).Id;
+			var h = new NamesHelper(DB, firstUserId);
 			ViewBag.ListProducer = h.RegisterListProducer();
 			ViewBag.PromotionList = promotionList;
 
@@ -135,9 +135,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				item.GetRegionnamesList();
 
 			ViewBag.DrugList = h.GetCatalogListPromotion();
-			ViewBag.ReportList = cntx_.jobextendwithproducer.Where(x => x.ProducerId == producerId).ToList();
+			ViewBag.ReportList = DB.jobextendwithproducer.Where(x => x.ProducerId == producerId).ToList();
 
-			var model = cntx_.AccountCompany.Find(Id);
+			var model = DB.AccountCompany.Find(Id);
 			return PartialView("partial/producerinformation", model);
 		}
 	}

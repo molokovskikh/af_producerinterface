@@ -20,22 +20,22 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
                 return View("Index",UserModel);
             }
 
-//            var CurrentUser = cntx_.ProducerUser.Where(xxx => xxx.Login == CurrentUser.Login).First();
+//            var CurrentUser = DB.ProducerUser.Where(xxx => xxx.Login == CurrentUser.Login).First();
 
             // если Id авторизованного пользователя и Id возвращаемое со страницы совпадают сохраняем в БД
             if (CurrentUser.Id == UserModel.Id)
             {
                 //  CurrentUser.Login = UserModel.Login;
 
-                var BdEmailAddress = cntx_.AccountEmail.Where(xxx => xxx.AccountId == UserModel.Id).FirstOrDefault();
+                var BdEmailAddress = DB.AccountEmail.Where(xxx => xxx.AccountId == UserModel.Id).FirstOrDefault();
 
 
 
 
                 CurrentUser.Appointment = UserModel.Appointment;
                 CurrentUser.Name = UserModel.Name;
-                cntx_.Entry((Account)CurrentUser).State = System.Data.Entity.EntityState.Modified;
-                cntx_.SaveChanges();
+                DB.Entry((Account)CurrentUser).State = System.Data.Entity.EntityState.Modified;
+                DB.SaveChanges();
 
                 SuccessMessage("Ваш профиль успешно сохранен");
                 return RedirectToAction("Index", "Home");

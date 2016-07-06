@@ -39,7 +39,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult SearchResult(FeedBackFilter2 filter)
 		{
-			var query = cntx_.AccountFeedBack.AsQueryable();
+			var query = DB.AccountFeedBack.AsQueryable();
 			if (filter.DateBegin.HasValue)
 				query = query.Where(x => x.DateAdd >= filter.DateBegin.Value);
 			if (filter.DateEnd.HasValue) {
@@ -70,14 +70,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult CommentToFeedBack(long Id)
 		{
-			var feedBack = cntx_.AccountFeedBack.Single(x => x.Id == Id);
+			var feedBack = DB.AccountFeedBack.Single(x => x.Id == Id);
 			var model = new FeedBackComment() {
 				Id = Id,
 				Status = feedBack.Status,
 				Description = feedBack.Description
 			};
 			model.StatusList = EnumHelper.GetSelectList(typeof(FeedBackStatus), (FeedBackStatus)model.Status).ToList();
-			model.CommentList = cntx_.AccountFeedBackComment.Where(x => x.IdFeedBack == Id).OrderByDescending(x => x.DateAdd).ToList();
+			model.CommentList = DB.AccountFeedBackComment.Where(x => x.IdFeedBack == Id).OrderByDescending(x => x.DateAdd).ToList();
 			return View(model);
 		}
 
@@ -89,7 +89,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult CommentToFeedBack(FeedBackComment model)
 		{
-			var feedBack = cntx_.AccountFeedBack.Single(x => x.Id == model.Id);
+			var feedBack = DB.AccountFeedBack.Single(x => x.Id == model.Id);
 			feedBack.AdminId = CurrentUser.Id;
 			feedBack.DateEdit = DateTime.Now;
 			feedBack.Status = model.Status;
@@ -103,7 +103,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				};
 				feedBack.AccountFeedBackComment.Add(comment);
 			}
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 			return RedirectToAction("Index");
 		}
 
@@ -127,9 +127,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		private Dictionary<long, string> GetProducerList()
 		{
-			var cIds = cntx_.AccountFeedBack.Where(x => x.AccountId.HasValue).Select(x => x.Account.AccountCompany.Id).Distinct().ToList();
-			var pIds = cntx_.AccountCompany.Where(x => cIds.Contains(x.Id) && x.ProducerId.HasValue).Select(x => x.ProducerId).Distinct().ToList();
-			var plDictionary = cntx_.producernames
+			var cIds = DB.AccountFeedBack.Where(x => x.AccountId.HasValue).Select(x => x.Account.AccountCompany.Id).Distinct().ToList();
+			var pIds = DB.AccountCompany.Where(x => cIds.Contains(x.Id) && x.ProducerId.HasValue).Select(x => x.ProducerId).Distinct().ToList();
+			var plDictionary = DB.producernames
 				.Where(x => pIds.Contains(x.ProducerId))
 				.OrderBy(x => x.ProducerName)
 				.ToDictionary(x => x.ProducerId, x => x.ProducerName);
@@ -155,8 +155,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		private DateTime? GetMinDate()
 		{
-			if (cntx_.AccountFeedBack.Any())
-				return cntx_.AccountFeedBack.Min(x => x.DateAdd);
+			if (DB.AccountFeedBack.Any())
+				return DB.AccountFeedBack.Min(x => x.DateAdd);
 			return null;
 		}
 
@@ -166,8 +166,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		private DateTime? GetMaxDate()
 		{
-			if (cntx_.AccountFeedBack.Any())
-				return cntx_.AccountFeedBack.Max(x => x.DateAdd);
+			if (DB.AccountFeedBack.Any())
+				return DB.AccountFeedBack.Max(x => x.DateAdd);
 			return null;
 		}
 
@@ -194,8 +194,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		private List<SelectListItem> GetAccountList(long? accountId = null)
 		{
-			var accIds = cntx_.AccountFeedBack.Select(x => x.AccountId).Distinct().ToList();
-			var acc = cntx_.Account
+			var accIds = DB.AccountFeedBack.Select(x => x.AccountId).Distinct().ToList();
+			var acc = DB.Account
 				.Where(x => accIds.Contains(x.Id))
 				.Select(x => new SelectListItem { Text = x.Login + " " + x.Name, Value = x.Id.ToString(), Selected = accountId == x.Id })
 				.OrderBy(x => x.Text).ToList();

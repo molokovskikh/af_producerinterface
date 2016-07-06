@@ -774,20 +774,12 @@
     <Content Include="Views\LogCatalog\SearchResult.cshtml" />
     <Content Include="Views\LogCatalog\Partial\Pager.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-    <Folder Include="Views\BasePermission\" />
-    <Folder Include="Views\Base\" />
-    <Folder Include="Views\MasterBase\" />
-    <Folder Include="Views\PR_partial_AccountAppointment\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult Index()
 		{
-			var h = new NamesHelper(cntx_, CurrentUser.Id);
+			var h = new NamesHelper(DB, CurrentUser.Id);
 			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
 			producerList.AddRange(h.RegisterListProducer());
 			ViewBag.ProducerList = producerList;
@@ -39,7 +39,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult SearchResult(SearchProducerPromotion filter)
 		{
-			var query = cntx_.promotions.AsQueryable();
+			var query = DB.promotions.AsQueryable();
 			if (!filter.EnabledDateTime)
 				query = query.Where(x => x.Begin > filter.Begin && x.End < filter.End);
 			if (filter.Producer > 0)
@@ -76,7 +76,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			var model = query.OrderByDescending(x => x.UpdateTime).ToList();
 
-			var h = new NamesHelper(cntx_, CurrentUser.Id);
+			var h = new NamesHelper(DB, CurrentUser.Id);
 			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
 			producerList.AddRange(h.RegisterListProducer());
 			ViewBag.ProducerList = producerList;
@@ -92,11 +92,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			if (Id == 0)
 				return RedirectToAction("Index");
-			var model = cntx_.promotions.Find(Id);
+			var model = DB.promotions.Find(Id);
 			if (model == null)
 				return RedirectToAction("Index");
 
-			var h = new NamesHelper(cntx_, CurrentUser.Id);
+			var h = new NamesHelper(DB, CurrentUser.Id);
 
 			ViewBag.ProducerName = h.GetProducerList().Single(x => x.Value == model.ProducerId.ToString()).Text;
 			ViewBag.RegionList = h.GetPromotionRegionNames((ulong)model.RegionMask);
@@ -115,12 +115,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			if (Id == 0)
 				return RedirectToAction("Index");
-			var model = cntx_.promotions.Single(x => x.Id == Id);
+			var model = DB.promotions.Single(x => x.Id == Id);
 			if (model == null)
 				return RedirectToAction("Index");
 
 			model.Status = (byte)PromotionStatus.Confirmed;
-			cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
+			DB.SaveChanges(CurrentUser, "Подтверждение промоакции");
 
 			SuccessMessage("Промоакция подтверждена");
 			return RedirectToAction("Index");
@@ -135,12 +135,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			if (Id == 0)
 				return RedirectToAction("Index");
-			var model = cntx_.promotions.Single(x => x.Id == Id);
+			var model = DB.promotions.Single(x => x.Id == Id);
 			if (model == null)
 				return RedirectToAction("Index");
 
 			model.Status = (byte)PromotionStatus.New;
-			cntx_.SaveChanges(CurrentUser, "Подтверждение промоакции");
+			DB.SaveChanges(CurrentUser, "Подтверждение промоакции");
 
 			SuccessMessage("Промоакция отменено подтверждение");
 			return RedirectToAction("Index");
@@ -153,7 +153,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public FileResult GetFile(int Id)
 		{
-			var file = cntx_.MediaFiles.Find(Id);
+			var file = DB.MediaFiles.Find(Id);
 			return File(file.ImageFile, file.ImageType, file.ImageName);
 		}
 	}

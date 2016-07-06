@@ -21,26 +21,26 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			}
 #endif
 
-			var files = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.News).Select(x => x.Id).ToList();
+			var files = DB.MediaFiles.Where(x => x.EntityType == (int)EntityType.News).Select(x => x.Id).ToList();
 			return View(files);
 		}
 
 		//public ActionResult EmailFileList()
 		//{
-		//	var files = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
+		//	var files = DB.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
 		//	return View(files);
 		//}
 
 		public FileResult GetFile(int Id)
 		{
-			var file = cntx_.MediaFiles.Find(Id);
+			var file = DB.MediaFiles.Find(Id);
 			return File(file.ImageFile, file.ImageType);
 		}
 
 		public FileResult GetEmailFile(int Id)
 		{
 			var imageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\Images");
-			var file = cntx_.MediaFiles.Find(Id);
+			var file = DB.MediaFiles.Find(Id);
 			var ext = Path.GetExtension(file.ImageName)?.ToLower();
 
 			switch (ext) {
@@ -79,7 +79,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			}
 
 			var fileName = Path.GetFileName(file.FileName);
-			if (cntx_.MediaFiles.Any(x => x.ImageName == fileName && x.EntityType == (int)EntityType.Email)) {
+			if (DB.MediaFiles.Any(x => x.ImageName == fileName && x.EntityType == (int)EntityType.Email)) {
 				ErrorMessage("В системе уже есть файл с таким именем. Переименуйте этот или удалите существующий");
 				return RedirectToAction("Index", "Mail"); ;
 			}
@@ -123,8 +123,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				dbFile.ImageFile = ms.ToArray();
 				dbFile.ImageSize = ms.Length.ToString();
 			}
-			cntx_.MediaFiles.Add(dbFile);
-			cntx_.SaveChanges();
+			DB.MediaFiles.Add(dbFile);
+			DB.SaveChanges();
 			return dbFile.Id;
 		}
 	}

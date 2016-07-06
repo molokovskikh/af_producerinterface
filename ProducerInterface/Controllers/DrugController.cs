@@ -45,7 +45,7 @@ namespace ProducerInterface.Controllers
 			var catalogNamesIds = ccntx.Catalog.Where(x => catalogIds.Contains(x.Id)).Select(x => x.NameId).Distinct().ToList();
 			var model = ccntx.catalognames.Where(x => catalogNamesIds.Contains(x.Id)).OrderBy(x => x.Name).ToList();
 
-			var lastChange = cntx_.CatalogLog
+			var lastChange = DB.CatalogLog
 										.Where(x => catalogNamesIds.Contains(x.NameId) && x.Apply == (sbyte)ApplyRedaction.Applied)
 										.GroupBy(x => x.NameId)
 										.Select(grp => new { grp.Key, LastChange = grp.Max(y => y.LogTime) })
@@ -63,7 +63,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult History(long id)
 		{
 			ViewData["Name"] = ccntx.catalognames.Single(x => x.Id == id).Name;
-			var model = cntx_.cataloglogui.Where(x => x.NameId == id && x.Apply == (sbyte)ApplyRedaction.Applied).OrderByDescending(x => x.LogTime).ToList();
+			var model = DB.cataloglogui.Where(x => x.NameId == id && x.Apply == (sbyte)ApplyRedaction.Applied).OrderByDescending(x => x.LogTime).ToList();
 			var modelUi = MapListToUi(model);
 			return View(modelUi);
 		}
@@ -106,7 +106,7 @@ namespace ProducerInterface.Controllers
 		private List<LogItem> GetNewLog(long descriptionId)
 		{
 			var result = new List<LogItem>();
-			var logItems = cntx_.cataloglogui.Where(x => x.Type == (int)CatalogLogType.Descriptions && x.ObjectReference == descriptionId && x.Apply == (sbyte)ApplyRedaction.Applied).ToList();
+			var logItems = DB.cataloglogui.Where(x => x.Type == (int)CatalogLogType.Descriptions && x.ObjectReference == descriptionId && x.Apply == (sbyte)ApplyRedaction.Applied).ToList();
 			if (!logItems.Any())
 				return result;
 
@@ -194,10 +194,10 @@ namespace ProducerInterface.Controllers
 							PropertyNameUi = displayName,
 							NameId = familyId
 						};
-						cntx_.CatalogLog.Add(dl);
-						cntx_.SaveChanges();
+						DB.CatalogLog.Add(dl);
+						DB.SaveChanges();
 
-						EmailSender.SendCatalogChangeMessage(cntx_, CurrentUser, displayName, row.Name, ufName[Convert.ToInt32(before)], ufName[Convert.ToInt32(after)]);
+						EmailSender.SendCatalogChangeMessage(DB, CurrentUser, displayName, row.Name, ufName[Convert.ToInt32(before)], ufName[Convert.ToInt32(after)]);
 					}
 				}
 			}
@@ -245,10 +245,10 @@ namespace ProducerInterface.Controllers
 				PropertyNameUi = displayName,
 				NameId = familyId
 			};
-			cntx_.CatalogLog.Add(dl);
-			cntx_.SaveChanges();
+			DB.CatalogLog.Add(dl);
+			DB.SaveChanges();
 
-			EmailSender.SendDescriptionChangeMessage(cntx_, CurrentUser, displayName, drugfamily.Name, before, value);
+			EmailSender.SendDescriptionChangeMessage(DB, CurrentUser, displayName, drugfamily.Name, before, value);
       return Json(new { field = field, value = value });
 		}
 
@@ -296,10 +296,10 @@ namespace ProducerInterface.Controllers
 				PropertyNameUi = "МНН",
 				NameId = familyId
 			};
-			cntx_.CatalogLog.Add(dl);
-			cntx_.SaveChanges();
+			DB.CatalogLog.Add(dl);
+			DB.SaveChanges();
 
-			EmailSender.SendMnnChangeMessage(cntx_, CurrentUser, df.Name, before?.Mnn1, after.Mnn1);
+			EmailSender.SendMnnChangeMessage(DB, CurrentUser, df.Name, before?.Mnn1, after.Mnn1);
 			return Json(new { field = "Mnn1", value = after.Mnn1 });
 		}
 

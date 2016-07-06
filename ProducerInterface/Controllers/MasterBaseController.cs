@@ -15,7 +15,7 @@ namespace ProducerInterface.Controllers
 			if (CurrentUser != null)
 			{
 				if (CurrentUser.AccountCompany.ProducerId != null)
-					ViewBag.Producernames = cntx_.producernames.Single(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId).ProducerName;
+					ViewBag.Producernames = DB.producernames.Single(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId).ProducerName;
 				else
 					ViewBag.Producernames = "Физическое лицо";
 			}

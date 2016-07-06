@@ -50,7 +50,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult SearchResult(CatalogLogFilter filter)
 		{
-			var query = cntx_.cataloglogui.AsQueryable();
+			var query = DB.cataloglogui.AsQueryable();
 			if (filter.Apply.HasValue)
 				query = query.Where(x => x.Apply == filter.Apply);
 
@@ -66,7 +66,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		private void Apply(long id)
 		{
-			var item = cntx_.CatalogLog.Single(x => x.Id == id);
+			var item = DB.CatalogLog.Single(x => x.Id == id);
 			switch (item.TypeEnum)
 			{
 				case CatalogLogType.Descriptions:
@@ -87,19 +87,19 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			item.Apply = (sbyte)ApplyRedaction.Applied;
 			item.AdminId = CurrentUser.Id;
 			item.DateEdit = DateTime.Now;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 			// SendMessage
 		}
 
 		private void Reject(long id, string comment)
 		{
-			var item = cntx_.CatalogLog.Single(x => x.Id == id);
+			var item = DB.CatalogLog.Single(x => x.Id == id);
 			item.Apply = (sbyte)ApplyRedaction.Rejected;
 			item.AdminId = CurrentUser.Id;
 			item.DateEdit = DateTime.Now;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
-			var user = cntx_.Account.Single(x => x.Id == item.UserId);
+			var user = DB.Account.Single(x => x.Id == item.UserId);
 			var before = item.Before;
 			var after = item.After;
 
@@ -115,7 +115,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					break;
 			}
 
-			EmailSender.SendRejectCatalogChangeMessage(cntx_, user, item.ObjectReferenceNameUi, item.PropertyNameUi, before, after, comment, CurrentUser.Id);
+			EmailSender.SendRejectCatalogChangeMessage(DB, user, item.ObjectReferenceNameUi, item.PropertyNameUi, before, after, comment, CurrentUser.Id);
 		}
 
 

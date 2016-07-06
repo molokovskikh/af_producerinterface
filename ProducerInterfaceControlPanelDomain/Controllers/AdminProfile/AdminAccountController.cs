@@ -12,7 +12,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
         [HttpGet]
         public ActionResult Index()
         {
-            var AccountModel = cntx_.Account.Find(CurrentUser.Id);           
+            var AccountModel = DB.Account.Find(CurrentUser.Id);           
             return View(AccountModel);
         }
 
@@ -24,17 +24,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
             AccountBdModel.Name = AccountModel.Name;
             AccountBdModel.Appointment = AccountModel.Appointment;
 
-            cntx_.Entry(AccountBdModel).State = System.Data.Entity.EntityState.Modified;
-            cntx_.SaveChanges();
+            DB.Entry(AccountBdModel).State = System.Data.Entity.EntityState.Modified;
+            DB.SaveChanges();
 
             SuccessMessage("Изменения сохранены");
             return View(AccountBdModel);
         }
         public ActionResult DeleteEmail(long Id)
         {
-            var DelEmailItem = cntx_.AccountEmail.Where(xxx => xxx.Id == Id).First();
-            cntx_.AccountEmail.Remove(cntx_.AccountEmail.Where(xxx => xxx.Id == Id).First());
-            cntx_.SaveChanges();
+            var DelEmailItem = DB.AccountEmail.Where(xxx => xxx.Id == Id).First();
+            DB.AccountEmail.Remove(DB.AccountEmail.Where(xxx => xxx.Id == Id).First());
+            DB.SaveChanges();
             return Content("Ok");
         }
 
@@ -45,8 +45,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
             NewEmail.AccountId = CurrentUser.Id;
             NewEmail.eMail = Mail;
 
-            cntx_.AccountEmail.Add(NewEmail);
-            cntx_.SaveChanges();
+            DB.AccountEmail.Add(NewEmail);
+            DB.SaveChanges();
 
             return PartialView(NewEmail);
         }

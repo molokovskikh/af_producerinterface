@@ -22,7 +22,7 @@ namespace ProducerInterfaceCommon.Controllers
 		/// <returns></returns>
 		public FileResult GetFile(string jobName)
 		{
-			var jext = cntx_.jobextend.Single(x => x.JobName == jobName);
+			var jext = DB.jobextend.Single(x => x.JobName == jobName);
 			var file = GetExcel(jext);
 
 			// вернули файл
@@ -58,7 +58,7 @@ namespace ProducerInterfaceCommon.Controllers
 			var job = scheduler.GetJobDetail(key);
 
 			var param = (Report)job.JobDataMap["param"];
-			var jxml = cntx_.reportxml.Single(x => x.JobName == jext.JobName);
+			var jxml = DB.reportxml.Single(x => x.JobName == jext.JobName);
 
 			// вытащили сохраненный отчет
 			var ds = new DataSet();

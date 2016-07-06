@@ -30,7 +30,7 @@ namespace ProducerInterfaceCommon.Controllers
 				CurrentUser.IP = Request.UserHostAddress;
 				ViewBag.CurrentUser = CurrentUser;
 				if (CurrentUserIdLog != CurrentUser.Id)
-					ViewBag.AdminUser = cntx_.Account.Find(CurrentUserIdLog);
+					ViewBag.AdminUser = DB.Account.Find(CurrentUserIdLog);
 			}
 			// если найден в игнорируемых
 			if (IgnoreRoutePermission())
@@ -48,7 +48,7 @@ namespace ProducerInterfaceCommon.Controllers
 		/// </summary>
 		private void AddPermission()
 		{
-			var permissionExsist = cntx_.AccountPermission.Any(x => 
+			var permissionExsist = DB.AccountPermission.Any(x => 
 				x.TypePermission == SbyteTypeUser 
 				&& x.ControllerAction == permissionName 
 				&& x.ActionAttributes == controllerAcctributes);
@@ -62,28 +62,28 @@ namespace ProducerInterfaceCommon.Controllers
 			// проверим наличие группы "Администраторы"
 			var adminGroupName = GetWebConfigParameters("AdminGroupName");
 			// убрал условие Enabled потому что группа будет создана заново, если disabled
-			var adminGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
+			var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
 			if (adminGroup == null)
 			{
 				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-				cntx_.AccountGroup.Add(adminGroup);
-				cntx_.SaveChanges();
+				DB.AccountGroup.Add(adminGroup);
+				DB.SaveChanges();
 			}
 
 			// добавляем новый доступ
 			var newPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
-			cntx_.AccountPermission.Add(newPermission);
-			cntx_.SaveChanges();
+			DB.AccountPermission.Add(newPermission);
+			DB.SaveChanges();
 
 			// добавляем его к группе Администраторы
 			adminGroup.AccountPermission.Add(newPermission);
-			//cntx_.Entry(adminGroup).State = System.Data.Entity.EntityState.Modified;
+			//DB.Entry(adminGroup).State = System.Data.Entity.EntityState.Modified;
 
 			var date = DateTime.Now;
 			foreach (var user in adminGroup.Account)
 				user.LastUpdatePermisison = date;
 
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 		}
 
 		/// <summary>
@@ -183,7 +183,7 @@ namespace ProducerInterfaceCommon.Controllers
 			if (String.IsNullOrEmpty(login))
 				return null;
 
-			var retUser = cntx_.Account.SingleOrDefault(x => x.TypeUser == SbyteTypeUser && x.Login == login && x.Enabled == (sbyte)UserStatus.Active);
+			var retUser = DB.Account.SingleOrDefault(x => x.TypeUser == SbyteTypeUser && x.Login == login && x.Enabled == (sbyte)UserStatus.Active);
 			if (retUser != null && typeUser == TypeUsers.ProducerUser)
 			{
 				retUser.ID_LOG = retUser.Id;

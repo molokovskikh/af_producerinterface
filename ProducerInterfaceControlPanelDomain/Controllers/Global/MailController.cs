@@ -14,7 +14,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult Index()
 		{
-			var model = cntx_.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email)
+			var model = DB.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email)
 				.Select(x => new { x.Id, x.ImageName })
 				.ToList()
 				.Select(x => Tuple.Create(x.Id, x.ImageName))
@@ -33,20 +33,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				return RedirectToAction("Index");
 			}
 
-			var files = cntx_.MediaFiles.Where(x => ids.Contains(x.Id));
+			var files = DB.MediaFiles.Where(x => ids.Contains(x.Id));
 			foreach (var file in files)
-				cntx_.MediaFiles.Remove(file);
-			cntx_.SaveChanges();
+				DB.MediaFiles.Remove(file);
+			DB.SaveChanges();
 			return RedirectToAction("Index");
 		}
 
 		public ActionResult DeleteLinksToFile(int Id, List<int> fileId)
 		{
-			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == Id);
-			var mediaFiles = cntx_.MediaFiles.Where(x => fileId.Contains(x.Id)).ToList();
+			var mailForm = DB.mailform.SingleOrDefault(x => x.Id == Id);
+			var mediaFiles = DB.MediaFiles.Where(x => fileId.Contains(x.Id)).ToList();
 			foreach (var f in mediaFiles)
 				mailForm.MediaFiles.Remove(f);
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 			return RedirectToAction("Edit", new { id = Id });
 		}
 
@@ -61,7 +61,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (!id.HasValue)
 				return RedirectToAction("Index");
 
-			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == id);
+			var mailForm = DB.mailform.SingleOrDefault(x => x.Id == id);
 			if (mailForm == null)
 				return RedirectToAction("Index");
 
@@ -75,7 +75,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var mediaFilesIds = mediaFiles.Select(y => y.Item1).ToList();
 
 			// все доступные файлы, кроме уже присоединенных
-			var allMediaFiles = cntx_.MediaFiles
+			var allMediaFiles = DB.MediaFiles
 				.Where(x => x.EntityType == (int)EntityType.Email && !mediaFilesIds.Contains(x.Id))
 				.Select(x => new {x.Id, x.ImageName})
 				.ToList()
@@ -101,14 +101,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult AttachFile(int Id, List<int> fileId)
 		{
-			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == Id);
+			var mailForm = DB.mailform.SingleOrDefault(x => x.Id == Id);
 			if (mailForm == null)
 				return RedirectToAction("Index");
 
-			var mediaFiles = cntx_.MediaFiles.Where(x => fileId.Contains(x.Id)).ToList();
+			var mediaFiles = DB.MediaFiles.Where(x => fileId.Contains(x.Id)).ToList();
 			foreach (var f in mediaFiles)
 				mailForm.MediaFiles.Add(f);
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			return RedirectToAction("Edit", new { id = Id });
 		}
@@ -120,13 +120,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpPost]
 		public ActionResult Edit(MailFormUi model)
 		{
-			var mailForm = cntx_.mailform.SingleOrDefault(x => x.Id == model.Id);
+			var mailForm = DB.mailform.SingleOrDefault(x => x.Id == model.Id);
 			if (mailForm == null)
 				return RedirectToAction("Index");
 
 			mailForm.Body = model.Body;
 			mailForm.Subject = model.Subject;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			return RedirectToAction("Edit", new { id = model.Id });
 		}

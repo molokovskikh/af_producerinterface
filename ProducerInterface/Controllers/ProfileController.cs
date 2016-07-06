@@ -22,7 +22,7 @@ namespace ProducerInterface.Controllers
 		{
 			ViewBag.Pager = 1;
 
-			var newsAll = cntx_.NotificationToProducers.Where(x => x.Enabled).ToList();
+			var newsAll = DB.NotificationToProducers.Where(x => x.Enabled).ToList();
 			newsAll.Reverse();
 
 			ViewBag.News = newsAll.OrderByDescending(x => x.DatePublication).Take(PagerCount).ToList();
@@ -38,7 +38,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult Account()
 		{
 
-			var thisUser = cntx_.Account.Single(x => x.Id == CurrentUser.Id);
+			var thisUser = DB.Account.Single(x => x.Id == CurrentUser.Id);
 
 			var model = new ProfileValidation() {
 				AppointmentId = thisUser.AppointmentId,
@@ -52,17 +52,17 @@ namespace ProducerInterface.Controllers
 			};
 
 			var appointmentList =
-			 cntx_.AccountAppointment.Where(x => x.GlobalEnabled)
+			 DB.AccountAppointment.Where(x => x.GlobalEnabled)
 					 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
 					 .ToList();
 
 			// добавили кастомную должность, если есть
-			var userOptionAppointment = cntx_.AccountAppointment.SingleOrDefault(x => x.Id == CurrentUser.AppointmentId && !x.GlobalEnabled);
+			var userOptionAppointment = DB.AccountAppointment.SingleOrDefault(x => x.Id == CurrentUser.AppointmentId && !x.GlobalEnabled);
 			if (userOptionAppointment != null)
 				appointmentList.Add(new OptionElement { Value = userOptionAppointment.Id.ToString(), Text = userOptionAppointment.Name });
 
 			ViewBag.AppointmentList = appointmentList;
-			ViewBag.DomainList = cntx_.CompanyDomainName
+			ViewBag.DomainList = DB.CompanyDomainName
 				.Where(x => x.CompanyId == CurrentUser.CompanyId)
 				.ToList()
 				.Select(x => new OptionElement { Text = '@' + x.Name, Value = x.Id.ToString() })
@@ -74,7 +74,7 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult Account(ProfileValidation model)
 		{
-			var domain = cntx_.CompanyDomainName.Single(x => x.Id == model.EmailDomain).Name;
+			var domain = DB.CompanyDomainName.Single(x => x.Id == model.EmailDomain).Name;
 			var newLogin = $"{model.Mailname}@{domain}";
 
 			var ea = new EmailAddressAttribute();
@@ -84,17 +84,17 @@ namespace ProducerInterface.Controllers
 			if (!ModelState.IsValid)
 			{
 				var appointmentList =
-				 cntx_.AccountAppointment.Where(x => x.GlobalEnabled)
+				 DB.AccountAppointment.Where(x => x.GlobalEnabled)
 						 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
 						 .ToList();
 
 				// добавили кастомную должность, если есть
-				var userOptionAppointment = cntx_.AccountAppointment.SingleOrDefault(x => x.Id == CurrentUser.AppointmentId && !x.GlobalEnabled);
+				var userOptionAppointment = DB.AccountAppointment.SingleOrDefault(x => x.Id == CurrentUser.AppointmentId && !x.GlobalEnabled);
 				if (userOptionAppointment != null)
 					appointmentList.Add(new OptionElement { Value = userOptionAppointment.Id.ToString(), Text = userOptionAppointment.Name });
 
 				ViewBag.AppointmentList = appointmentList;
-				ViewBag.DomainList = cntx_.CompanyDomainName
+				ViewBag.DomainList = DB.CompanyDomainName
 					.Where(x => x.CompanyId == CurrentUser.CompanyId)
 					.ToList()
 					.Select(x => new OptionElement { Text = '@' + x.Name, Value = x.Id.ToString() })
@@ -104,7 +104,7 @@ namespace ProducerInterface.Controllers
 			}
 
 
-			var accountSave = cntx_.Account.Single(x => x.Id == CurrentUser.Id);
+			var accountSave = DB.Account.Single(x => x.Id == CurrentUser.Id);
 			var changeLogin = accountSave.Login != newLogin;
 
 			accountSave.Name = $"{model.LastName} {model.FirstName} {model.OtherName}";
@@ -114,7 +114,7 @@ namespace ProducerInterface.Controllers
 			accountSave.Login = newLogin;
 			accountSave.Phone = model.PhoneNumber;
 			accountSave.AppointmentId = model.AppointmentId;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			if (changeLogin) {
 				CurrentUser = accountSave;
@@ -128,22 +128,22 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult GetOldNews(int Pages)
 		{
-			var News = cntx_.NotificationToProducers.OrderByDescending(x => x.DatePublication).Skip(Pages * 10).Take(10).ToList();
+			var News = DB.NotificationToProducers.OrderByDescending(x => x.DatePublication).Skip(Pages * 10).Take(10).ToList();
 			return PartialView(News);
 		}
 
 		public ActionResult GetNextList(int Pager)
 		{
 			ViewBag.Pager = Pager + 1;
-			var ListNews10 = cntx_.NotificationToProducers.OrderByDescending(xxx => xxx.DatePublication).ToList().Skip(PagerCount * Pager).Take(PagerCount).ToList();
+			var ListNews10 = DB.NotificationToProducers.OrderByDescending(xxx => xxx.DatePublication).ToList().Skip(PagerCount * Pager).Take(PagerCount).ToList();
 
-			ViewBag.MaxCount = cntx_.NotificationToProducers.Count() / (PagerCount * Pager);
+			ViewBag.MaxCount = DB.NotificationToProducers.Count() / (PagerCount * Pager);
 			return PartialView("GetNextList", ListNews10);
 		}
 
 		public ActionResult News(int Id)
 		{
-			var News = cntx_.NotificationToProducers.Where(xxx => xxx.Id == Id).First();
+			var News = DB.NotificationToProducers.Where(xxx => xxx.Id == Id).First();
 			return View(News);
 		}
 

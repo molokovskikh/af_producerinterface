@@ -12,7 +12,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult Index(int Id = 0)
 		{
-			var itemsCount = cntx_.LogForNet.Count();
+			var itemsCount = DB.LogForNet.Count();
 			var itemsPerPage = Convert.ToInt32(GetWebConfigParameters("ErrorCountPage"));
 			var info = new SortingPagingInfo() { CurrentPageIndex = Id, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
 
@@ -20,7 +20,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				RedirectToAction("Index");
 
 			ViewBag.Info = info;
-			var model = cntx_.LogForNet.OrderByDescending(xxx => xxx.Id).Skip(Id * itemsPerPage).Take(itemsPerPage).ToList();
+			var model = DB.LogForNet.OrderByDescending(xxx => xxx.Id).Skip(Id * itemsPerPage).Take(itemsPerPage).ToList();
 
 			return View(model);
 		}

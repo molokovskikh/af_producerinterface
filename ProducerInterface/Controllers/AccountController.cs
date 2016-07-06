@@ -32,7 +32,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			// проверка наличия в БД
-			var thisUser = cntx_.Account.SingleOrDefault(x => x.Login == user.login && x.TypeUser == SbyteTypeUser);
+			var thisUser = DB.Account.SingleOrDefault(x => x.Login == user.login && x.TypeUser == SbyteTypeUser);
 			if (thisUser == null)
 			{
 				ErrorMessage("Пользователь не найден. Вашим логином является email, указанный при регистрации");
@@ -59,41 +59,41 @@ namespace ProducerInterface.Controllers
 			// если логинится впервые
 			else if (thisUser.EnabledEnum == UserStatus.New)
 			{
-				var otherUsersExists = cntx_.Account.Any(x => x.CompanyId == thisUser.CompanyId.Value && x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == SbyteTypeUser);
+				var otherUsersExists = DB.Account.Any(x => x.CompanyId == thisUser.CompanyId.Value && x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == SbyteTypeUser);
 				// если других активных (!) пользователей этой компании нет - добавляем пользователя в группу администраторов
 				if (!otherUsersExists)
 				{
 					// если группы администраторов нет - создаем ее
 					var adminGroupName = GetWebConfigParameters("AdminGroupName");
-					var adminGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
+					var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
 					if (adminGroup == null)
 					{
 						adminGroup = new AccountGroup() { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-						cntx_.Entry(adminGroup).State = EntityState.Added;
-						cntx_.SaveChanges();
+						DB.Entry(adminGroup).State = EntityState.Added;
+						DB.SaveChanges();
 					}
 					adminGroup.Account.Add(thisUser);
-					cntx_.SaveChanges();
+					DB.SaveChanges();
 				}
 				// если есть другие пользователи компании - включаем в группу Все пользователи
 				else
 				{
 					var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
-					var otherGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == otherGroupName && x.TypeGroup == SbyteTypeUser);
+					var otherGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == otherGroupName && x.TypeGroup == SbyteTypeUser);
 					if (otherGroup == null)
 					{
 						otherGroup = new AccountGroup() { Name = otherGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-						cntx_.Entry(otherGroup).State = EntityState.Added;
-						cntx_.SaveChanges();
+						DB.Entry(otherGroup).State = EntityState.Added;
+						DB.SaveChanges();
 					}
 					otherGroup.Account.Add(thisUser);
-					cntx_.SaveChanges();
+					DB.SaveChanges();
 				}
 
 				thisUser.PasswordUpdated = DateTime.Now;
 				thisUser.EnabledEnum = UserStatus.Active;
-				cntx_.Entry(thisUser).State = EntityState.Modified;
-				cntx_.SaveChanges();
+				DB.Entry(thisUser).State = EntityState.Modified;
+				DB.SaveChanges();
 
 				CurrentUser = thisUser;
 				SuccessMessage("Вы успешно подтвердили свою регистрацию на сайте");
@@ -150,7 +150,7 @@ namespace ProducerInterface.Controllers
 				return View(model);
 			}
 
-			var user = cntx_.Account.FirstOrDefault(x => x.Login == model.login && x.TypeUser == (SByte)TypeUsers.ProducerUser);
+			var user = DB.Account.FirstOrDefault(x => x.Login == model.login && x.TypeUser == (SByte)TypeUsers.ProducerUser);
 			// пользователь не найден, отсылаем на домашнюю с ошибкой
 			if (user == null)
 			{
@@ -164,9 +164,9 @@ namespace ProducerInterface.Controllers
 				var password = GetRandomPassword();
 				user.Password = Md5HashHelper.GetHash(password);
 				user.PasswordUpdated = DateTime.Now;
-				cntx_.Entry(user).State = EntityState.Modified;
-				cntx_.SaveChanges();
-				EmailSender.SendPasswordRecoveryMessage(cntx_, user.Id, password, Request.UserHostAddress);
+				DB.Entry(user).State = EntityState.Modified;
+				DB.SaveChanges();
+				EmailSender.SendPasswordRecoveryMessage(DB, user.Id, password, Request.UserHostAddress);
 
 				SuccessMessage($"Новый пароль отправлен на ваш email {model.login}");
 			}
@@ -193,12 +193,12 @@ namespace ProducerInterface.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			var user = cntx_.Account.Single(x => x.Id == CurrentUser.Id);
+			var user = DB.Account.Single(x => x.Id == CurrentUser.Id);
 			user.Password = Md5HashHelper.GetHash(model.Pass);
 			user.PasswordUpdated = DateTime.Now;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
-			EmailSender.SendPasswordChangeMessage(cntx_, user.Id, model.Pass, Request.UserHostAddress);
+			EmailSender.SendPasswordChangeMessage(DB, user.Id, model.Pass, Request.UserHostAddress);
 			SuccessMessage("Новый пароль сохранен и отправлен на ваш email: " + user.Login);
 			return RedirectToAction("Index", "Profile");
 		}
@@ -262,8 +262,8 @@ namespace ProducerInterface.Controllers
 			}
 
 			ViewBagAppointmentList(model.ProducerId);
-			var producerName = cntx_.producernames.Single(x => x.ProducerId == model.ProducerId).ProducerName;
-			var company = cntx_.AccountCompany.SingleOrDefault(x => x.ProducerId == model.ProducerId);
+			var producerName = DB.producernames.Single(x => x.ProducerId == model.ProducerId).ProducerName;
+			var company = DB.AccountCompany.SingleOrDefault(x => x.ProducerId == model.ProducerId);
 			// если от данного производителя регистрировались, возвращаем форму для регистрации пользователя с моделью RegDomainViewModel
 			if (company != null)
 			{
@@ -293,7 +293,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			// если уже есть такой пользователь
-			var user = cntx_.Account.SingleOrDefault(x => x.Login == model.login);
+			var user = DB.Account.SingleOrDefault(x => x.Login == model.login);
 			if (user != null)
 			{
 				ErrorMessage("Пользователь с указанным email уже зарегистрирован, попробуйте восстановить пароль");
@@ -302,17 +302,17 @@ namespace ProducerInterface.Controllers
 			}
 
 			// если такой компании нет. Компания - это не производитель, это прослойка под производителем
-			var company = cntx_.AccountCompany.SingleOrDefault(x => x.ProducerId == model.ProducerId);
+			var company = DB.AccountCompany.SingleOrDefault(x => x.ProducerId == model.ProducerId);
 			if (company == null)
 			{
 				company = new AccountCompany() { ProducerId = model.ProducerId, Name = model.ProducerName };
-				cntx_.AccountCompany.Add(company);
-				cntx_.SaveChanges();
+				DB.AccountCompany.Add(company);
+				DB.SaveChanges();
 
 				string domainName = model.login.Split('@')[1].ToLower();
 				var domain = new CompanyDomainName() { Name = domainName, CompanyId = company.Id };
-				cntx_.CompanyDomainName.Add(domain);
-				cntx_.SaveChanges();
+				DB.CompanyDomainName.Add(domain);
+				DB.SaveChanges();
 			}
 
 			// создали новый аккаунт
@@ -320,26 +320,26 @@ namespace ProducerInterface.Controllers
 			var account = SaveAccount(accountCompany: company, Reg_ViewModel: model, Pass: password);
 
 			// добавили все регионы. TODO возможно, иная логика
-			var regionCodes = cntx_.regionsnamesleaf.Select(x => x.RegionCode).ToList();
+			var regionCodes = DB.regionsnamesleaf.Select(x => x.RegionCode).ToList();
 			foreach (var regionCode in regionCodes)
 				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionCode = regionCode });
 
 			// добавили аккаунт в группу админов
 			var adminGroupName = GetWebConfigParameters("AdminGroupName");
-			var adminGroup = cntx_.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
+			var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
 			if (adminGroup == null)
 			{
 				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-				cntx_.AccountGroup.Add(adminGroup);
-				cntx_.SaveChanges();
+				DB.AccountGroup.Add(adminGroup);
+				DB.SaveChanges();
 			}
 
 			account.AccountGroup.Add(adminGroup);
 			account.LastUpdatePermisison = DateTime.Now;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			// отправили письмо о регистрации
-			EmailSender.SendRegistrationMessage(cntx_, account.Id, password, account.IP);
+			EmailSender.SendRegistrationMessage(DB, account.Id, password, account.IP);
 			SuccessMessage("Пароль отправлен на ваш email " + account.Login);
 			return Redirect("~");
 		}
@@ -352,7 +352,7 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult DomainRegistration(RegDomainViewModel model)
 		{
-			var company = cntx_.AccountCompany.Single(x => x.ProducerId == model.Producers);
+			var company = DB.AccountCompany.Single(x => x.ProducerId == model.Producers);
 			
 			// проверка email
 			var domain = company.CompanyDomainName.SingleOrDefault(x => x.Id == model.EmailDomain);
@@ -369,8 +369,8 @@ namespace ProducerInterface.Controllers
 			}
 
 			// если пользователь с таким email уже регистрировался - возвращаем
-			var emailAdress = model.Mailname + "@" + cntx_.CompanyDomainName.Single(x => x.Id == model.EmailDomain).Name;
-			var userExsist = cntx_.Account.Any(x => x.Login == emailAdress);
+			var emailAdress = model.Mailname + "@" + DB.CompanyDomainName.Single(x => x.Id == model.EmailDomain).Name;
+			var userExsist = DB.Account.Any(x => x.Login == emailAdress);
 			if (userExsist)
 			{
 				ViewBag.DomainList = company.CompanyDomainName.Select(x => new OptionElement { Text = '@' + x.Name, Value = x.Id.ToString() }).ToList();
@@ -384,35 +384,35 @@ namespace ProducerInterface.Controllers
 			var account = SaveAccount(accountCompany: company, RegDomain_ViewModel: model, Pass: password);
 
 			// добавили все регионы. TODO возможно, иная логика
-			var regionCodes = cntx_.regionsnamesleaf.Select(x => x.RegionCode).ToList();
+			var regionCodes = DB.regionsnamesleaf.Select(x => x.RegionCode).ToList();
 			foreach (var regionCode in regionCodes)
 				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionCode = regionCode });
 
 			// ищем группу "все пользователи", если такой нет - создаем
 			var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
-			var otherGroup = cntx_.AccountGroup.FirstOrDefault(x => x.Name == otherGroupName && x.TypeGroup == account.TypeUser);
+			var otherGroup = DB.AccountGroup.FirstOrDefault(x => x.Name == otherGroupName && x.TypeGroup == account.TypeUser);
 			if (otherGroup == null)
 			{
 				otherGroup = new AccountGroup() { Name = otherGroupName, Description = "вновь зарегистрированные пользователи", Enabled = true };
-				cntx_.Entry(otherGroup).State = EntityState.Added;
-				cntx_.SaveChanges();
+				DB.Entry(otherGroup).State = EntityState.Added;
+				DB.SaveChanges();
 
 				// добавляем в группу права TODO уточнить, какие
-				var permissionList = cntx_.AccountPermission.Where(x => x.Enabled && x.TypePermission == account.TypeUser).ToList();
+				var permissionList = DB.AccountPermission.Where(x => x.Enabled && x.TypePermission == account.TypeUser).ToList();
 				foreach (var item in permissionList)
 					otherGroup.AccountPermission.Add(item);
 
-				cntx_.Entry(otherGroup).State = EntityState.Modified;
-				cntx_.SaveChanges();
+				DB.Entry(otherGroup).State = EntityState.Modified;
+				DB.SaveChanges();
 			}
 
 			// добавляем пользователя в группу все пользователи
 			account.AccountGroup.Add(otherGroup);
 			account.LastUpdatePermisison = DateTime.Now;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			// отправили письмо о регистрации
-			EmailSender.SendRegistrationMessage(cntx_, account.Id, password, HttpContext.Request.UserHostAddress);
+			EmailSender.SendRegistrationMessage(DB, account.Id, password, HttpContext.Request.UserHostAddress);
 			SuccessMessage("Письмо с паролем отправлено на ваш email");
 			return Redirect("~");
 		}
@@ -425,12 +425,12 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult AddAppointment(string name)
 		{
-			var appointment = cntx_.AccountAppointment.FirstOrDefault(x => x.Name == name);
+			var appointment = DB.AccountAppointment.FirstOrDefault(x => x.Name == name);
 			if (appointment == null)
 			{
 				appointment = new AccountAppointment() { Name = name, GlobalEnabled = false };
-				cntx_.AccountAppointment.Add(appointment);
-				cntx_.SaveChanges();
+				DB.AccountAppointment.Add(appointment);
+				DB.SaveChanges();
 			}
 			return Content($"{appointment.Id};{appointment.Name}");
 		}
@@ -460,7 +460,7 @@ namespace ProducerInterface.Controllers
 				return View(model);
 
 			// если такой пользователь уже есть
-			var userExist = cntx_.Account.Any(x => x.Login == model.login);
+			var userExist = DB.Account.Any(x => x.Login == model.login);
 			if (userExist)
 			{
 				ErrorMessage("Пользователь с указанным email уже зарегистрирован");
@@ -469,8 +469,8 @@ namespace ProducerInterface.Controllers
 
 			// создали и сохранили компанию
 			var company = new AccountCompany() { Name = model.CompanyName };
-			cntx_.Entry(company).State = EntityState.Added;
-			cntx_.SaveChanges();
+			DB.Entry(company).State = EntityState.Added;
+			DB.SaveChanges();
 
 			// создали аккаунт
 			// регионы и группы не добавляются здесь, потому что всё равно должен регистрировать админ
@@ -478,7 +478,7 @@ namespace ProducerInterface.Controllers
 			user.IP = Request.UserHostAddress;
 
 			// отправили сообщение сотрудникам
-			EmailSender.ProducerRequestMessage(cntx_, user, company.Name, $"{model.PhoneNumber}, {model.login}");
+			EmailSender.ProducerRequestMessage(DB, user, company.Name, $"{model.PhoneNumber}, {model.login}");
 			SuccessMessage("Ваша заявка принята. Ожидайте, с вами свяжутся");
 			return Redirect("~");
 		}
@@ -503,14 +503,14 @@ namespace ProducerInterface.Controllers
 				return Redirect("~");
 			}
 
-			var adminAccount = cntx_.Account.SingleOrDefault(x => x.Login == AdminLogin && x.TypeUser == (SByte)TypeUsers.ControlPanelUser);
+			var adminAccount = DB.Account.SingleOrDefault(x => x.Login == AdminLogin && x.TypeUser == (SByte)TypeUsers.ControlPanelUser);
 			if (adminAccount == null)
 			{
 				ErrorMessage($"Администратор с логином {AdminLogin} не найден");
 				return Redirect("~");
 			}
 
-			var producerUser = cntx_.Account.SingleOrDefault(x => x.Id == IdProducerUSer && x.TypeUser == (SByte)TypeUsers.ProducerUser);
+			var producerUser = DB.Account.SingleOrDefault(x => x.Id == IdProducerUSer && x.TypeUser == (SByte)TypeUsers.ProducerUser);
 			if (producerUser == null)
 			{
 				ErrorMessage($"Пользователь с идентификатором {IdProducerUSer} не найден");
@@ -551,8 +551,8 @@ namespace ProducerInterface.Controllers
 			if (domainAuth.IsAuthenticated(model.Login, model.Password))
 			{
 				// авторизовываем как обычного пользователя, но с добавление ID Администратора 
-				CurrentUser = cntx_.Account.Find(model.IdProducerUser);
-				var adminId = cntx_.Account.Single(x => x.Login == model.Login).Id.ToString();
+				CurrentUser = DB.Account.Find(model.IdProducerUser);
+				var adminId = DB.Account.Single(x => x.Login == model.Login).Id.ToString();
 				Autentificate(adminId);
 			}
 
@@ -588,7 +588,7 @@ namespace ProducerInterface.Controllers
 			// регистрация второго и последующих пользователей производителя
 			if (RegDomain_ViewModel != null)
 			{
-				newAccount.Login = RegDomain_ViewModel.Mailname + "@" + cntx_.CompanyDomainName.Single(x => x.Id == RegDomain_ViewModel.EmailDomain).Name;
+				newAccount.Login = RegDomain_ViewModel.Mailname + "@" + DB.CompanyDomainName.Single(x => x.Id == RegDomain_ViewModel.EmailDomain).Name;
 				newAccount.Password = Md5HashHelper.GetHash(Pass);
 				newAccount.PasswordUpdated = DateTime.Now;
 				newAccount.FirstName = RegDomain_ViewModel.FirstName;
@@ -604,8 +604,8 @@ namespace ProducerInterface.Controllers
 			{
 				// создали новую должность
 				var appointment = new AccountAppointment() { Name = RegNotProducer_ViewModel.Appointment, GlobalEnabled = false };
-				cntx_.Entry(appointment).State = EntityState.Added;
-				cntx_.SaveChanges();
+				DB.Entry(appointment).State = EntityState.Added;
+				DB.SaveChanges();
 
 				newAccount.Login = RegNotProducer_ViewModel.login;
 				newAccount.FirstName = RegNotProducer_ViewModel.FirstName;
@@ -618,8 +618,8 @@ namespace ProducerInterface.Controllers
 				newAccount.EnabledEnum = UserStatus.Request;
 			}
 
-			cntx_.Entry(newAccount).State = EntityState.Added;
-			cntx_.SaveChanges();
+			DB.Entry(newAccount).State = EntityState.Added;
+			DB.SaveChanges();
 			return newAccount;
 		}
 
@@ -630,15 +630,15 @@ namespace ProducerInterface.Controllers
 		private void ViewBagAppointmentList(long ProducerId = 0)
 		{
 			var result = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
-			result.AddRange(cntx_.AccountAppointment.Where(x => x.GlobalEnabled)
+			result.AddRange(DB.AccountAppointment.Where(x => x.GlobalEnabled)
 					 .ToList()
 					 .Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() })
 					 .ToList());
 
 			// если передан ID производителя, добавляются индивидуальные должности пользователей данного производителя
 			if (ProducerId != 0) {
-				var appointmentIds = cntx_.Account.Where(x => x.AccountCompany.ProducerId == ProducerId).Select(x => x.AppointmentId).Distinct().ToList();
-				var companyCustomAppointment = cntx_.AccountAppointment.Where(x => !x.GlobalEnabled && appointmentIds.Contains(x.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+				var appointmentIds = DB.Account.Where(x => x.AccountCompany.ProducerId == ProducerId).Select(x => x.AppointmentId).Distinct().ToList();
+				var companyCustomAppointment = DB.AccountAppointment.Where(x => !x.GlobalEnabled && appointmentIds.Contains(x.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
 				result.AddRange(companyCustomAppointment);
 			}
 			ViewBag.AppointmentList = result;
@@ -651,7 +651,7 @@ namespace ProducerInterface.Controllers
 		{
 			var producerList = new List<OptionElement>() { new OptionElement() { Text = "", Value = "" } };
 			producerList.AddRange(
-					cntx_.producernames.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList()
+					DB.producernames.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList()
 			);
 			ViewBag.ProducerList = producerList;
 		}

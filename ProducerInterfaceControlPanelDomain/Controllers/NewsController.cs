@@ -16,7 +16,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			ViewBag.Title = "Новости";
 			ViewBag.Pager = 1;
-			var model = cntx_.NotificationToProducers.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Take(10).ToList();
+			var model = DB.NotificationToProducers.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Take(10).ToList();
 			return View(model);
 		}
 
@@ -46,7 +46,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult GetNextList(int Pager)
 		{
 			ViewBag.Pager = Pager + 1;
-			var model = cntx_.NotificationToProducers.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Skip(Pager * 10).Take(10).ToList();
+			var model = DB.NotificationToProducers.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Skip(Pager * 10).Take(10).ToList();
 			return PartialView(model);
 		}
 
@@ -57,7 +57,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult Archive()
 		{
 			ViewBag.Title = "Архив Новостей";
-			var model = cntx_.NotificationToProducers.Where(x => !x.Enabled).OrderByDescending(x => x.DatePublication).ToList();
+			var model = DB.NotificationToProducers.Where(x => !x.Enabled).OrderByDescending(x => x.DatePublication).ToList();
 			return View("Index", model);
 		}
 
@@ -69,9 +69,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult DeleteNews(long Id)
 		{
 			// отправляем новость в архив
-			var news = cntx_.NotificationToProducers.Find(Id);
+			var news = DB.NotificationToProducers.Find(Id);
 			news.Enabled = false;
-			cntx_.SaveChanges();
+			DB.SaveChanges();
 
 			// добавляем историю изменений
 			var history = new NewsChange()
@@ -82,10 +82,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				TypeCnhange = (byte)NewsActions.Archive,
 				IP = CurrentUser.IP
 			};
-			cntx_.NewsChange.Add(history);
-			cntx_.SaveChanges();
+			DB.NewsChange.Add(history);
+			DB.SaveChanges();
 
-			EmailSender.ChangeNewsMessage(cntx_, CurrentUser, NewsActions.Archive, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
+			EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.Archive, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
 			SuccessMessage("Новость отправлена в архив");
 			return RedirectToAction("Index");
 		}
@@ -97,15 +97,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <returns></returns>
 		public ActionResult PastRetrieve(long Id)
 		{
-			var news = cntx_.NotificationToProducers.Find(Id);
-			var historyList = cntx_.NewsChange.Where(x => x.IdNews == Id).ToList();
-			cntx_.NewsChange.RemoveRange(historyList);
-			cntx_.SaveChanges();
+			var news = DB.NotificationToProducers.Find(Id);
+			var historyList = DB.NewsChange.Where(x => x.IdNews == Id).ToList();
+			DB.NewsChange.RemoveRange(historyList);
+			DB.SaveChanges();
 
-			cntx_.Entry(news).State = System.Data.Entity.EntityState.Deleted;
-			cntx_.SaveChanges(CurrentUser, "Удаление новости");
+			DB.Entry(news).State = System.Data.Entity.EntityState.Deleted;
+			DB.SaveChanges(CurrentUser, "Удаление новости");
 
-			EmailSender.ChangeNewsMessage(cntx_, CurrentUser, NewsActions.PastRetrieve, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
+			EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.PastRetrieve, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
 			SuccessMessage("Новость удалена");
 			return RedirectToAction("Archive");
 		}
@@ -128,7 +128,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			var model = new NotificationToProducers();
 			if (Id > 0)
-				model = cntx_.NotificationToProducers.Find(Id);
+				model = DB.NotificationToProducers.Find(Id);
 			return View(model);
 		}
 
@@ -146,7 +146,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			if (after.Id > 0)
 			{
-				var before = cntx_.NotificationToProducers.Find(after.Id);
+				var before = DB.NotificationToProducers.Find(after.Id);
 				// добавляем в историю изменения
 
 				var history = new NewsChange()
@@ -161,17 +161,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					NewsOldDescription = before.Description,
 					NewsOldTema = before.Name
 				};
-				cntx_.NewsChange.Add(history);
-				cntx_.SaveChanges();
+				DB.NewsChange.Add(history);
+				DB.SaveChanges();
 
 				// изменияем новость
 				before.DatePublication = DateTime.Now;
 				before.Description = after.Description;
 				before.Name = after.Name;
 				before.Enabled = true;
-				cntx_.SaveChanges();
+				DB.SaveChanges();
 
-				EmailSender.ChangeNewsMessage(cntx_, CurrentUser, NewsActions.Edit, after.Id, $"{before.Name}\r\n\r\n{before.Description}", $"{after.Name}\r\n\r\n{after.Description}");
+				EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.Edit, after.Id, $"{before.Name}\r\n\r\n{before.Description}", $"{after.Name}\r\n\r\n{after.Description}");
 				SuccessMessage("Изменения успешно сохранены");
 			}
 			else
@@ -179,8 +179,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				// добавляем новость
 				after.DatePublication = DateTime.Now;
 				after.Enabled = true;
-				cntx_.NotificationToProducers.Add(after);
-				cntx_.SaveChanges();
+				DB.NotificationToProducers.Add(after);
+				DB.SaveChanges();
 
 				// пишем в историю
 				var history = new NewsChange()
@@ -193,9 +193,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					NewsNewDescription = after.Description,
 					NewsNewTema = after.Name
 				};
-				cntx_.NewsChange.Add(history);
-				cntx_.SaveChanges();
-				EmailSender.ChangeNewsMessage(cntx_, CurrentUser, NewsActions.Add, after.Id, "", $"{after.Name}\r\n\r\n{after.Description}");
+				DB.NewsChange.Add(history);
+				DB.SaveChanges();
+				EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.Add, after.Id, "", $"{after.Name}\r\n\r\n{after.Description}");
 				SuccessMessage("Новость успешно добавлена");
 			}
 			return RedirectToAction("Index");
@@ -213,7 +213,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				ErrorMessage("Неверный номер истории изменений");
 				return RedirectToAction("Index");
 			}
-			var model = cntx_.NewsChange.Find(Id);
+			var model = DB.NewsChange.Find(Id);
 			if (model == null)
 			{
 				ErrorMessage("Неверный номер истории изменений");

@@ -30,7 +30,7 @@ namespace ProducerInterfaceCommon.Controllers
 		protected long CurrentUserIdLog { get; set; }
 
 		// Context DataBase       
-		protected producerinterface_Entities cntx_ = new ContextModels.producerinterface_Entities();
+		protected producerinterface_Entities DB = new ContextModels.producerinterface_Entities();
 
 		protected string controllerName;
 		protected string actionName;
