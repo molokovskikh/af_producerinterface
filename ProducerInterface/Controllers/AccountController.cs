@@ -356,6 +356,13 @@ namespace ProducerInterface.Controllers
 			
 			// проверка email
 			var domain = company.CompanyDomainName.SingleOrDefault(x => x.Id == model.EmailDomain);
+			if (model.Mailname?.Contains("@") == true) {
+				var parts = model.Mailname.Split('@');
+				model.Mailname = parts[0];
+				if (!String.Equals(domain?.Name, parts[1], StringComparison.CurrentCultureIgnoreCase)) {
+					ModelState.AddModelError("Mailname", "Домен должен совпадать с выбранным");
+				}
+			}
 			var ea = new EmailAddressAttribute();
 			if (domain == null || !ea.IsValid($"{model.Mailname}@{domain.Name}"))
 				ModelState.AddModelError("Mailname", "Неверный формат email");
