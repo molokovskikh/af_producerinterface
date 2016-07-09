@@ -8,30 +8,19 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Web.Mvc;
 
 namespace ProducerInterfaceCommon.Controllers
 {
-	public class BaseReportController : BaseController 
+	public class ReportHelper
 	{
+		private producerinterface_Entities db;
 
-		/// <summary>
-		/// Возвращает отчет в виде excel-файла
-		/// </summary>
-		/// <param name="jobName">Имя задания в Quartz</param>
-		/// <returns></returns>
-		public FileResult GetFile(string jobName)
+		public ReportHelper(producerinterface_Entities db)
 		{
-			var jext = DB.jobextend.Single(x => x.JobName == jobName);
-			var file = GetExcel(jext);
-
-			// вернули файл
-			byte[] fileBytes = System.IO.File.ReadAllBytes(file.FullName);
-			var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-			return File(fileBytes, contentType, file.Name);
+			this.db = db;
 		}
 
-		protected IScheduler GetScheduler()
+		public IScheduler GetScheduler()
 		{
 #if DEBUG
 			return GetDebagSheduler();
@@ -40,7 +29,7 @@ namespace ProducerInterfaceCommon.Controllers
 #endif
 		}
 
-		protected string GetSchedulerName()
+		public string GetSchedulerName()
 		{
 #if DEBUG
 			return "TestScheduler";
@@ -49,7 +38,7 @@ namespace ProducerInterfaceCommon.Controllers
 #endif
 		}
 
-		protected FileInfo GetExcel(jobextend jext)
+		public FileInfo GetExcel(jobextend jext)
 		{
 
 			var key = JobKey.Create(jext.JobName, jext.JobGroup);
@@ -58,7 +47,7 @@ namespace ProducerInterfaceCommon.Controllers
 			var job = scheduler.GetJobDetail(key);
 
 			var param = (Report)job.JobDataMap["param"];
-			var jxml = DB.reportxml.Single(x => x.JobName == jext.JobName);
+			var jxml = db.reportxml.Single(x => x.JobName == jext.JobName);
 
 			// вытащили сохраненный отчет
 			var ds = new DataSet();
@@ -76,7 +65,7 @@ namespace ProducerInterfaceCommon.Controllers
 		/// </summary>
 		/// <param name="id">Идентификатор типа отчета</param>
 		/// <returns></returns>
-		protected Type GetModelType(int id)
+		public Type GetModelType(int id)
 		{
 			var typeName = ((Reports)id).ToString();
 			var type = Type.GetType($"ProducerInterfaceCommon.Models.{typeName}, {typeof(Report).Assembly.FullName}");

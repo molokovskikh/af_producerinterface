@@ -9,10 +9,12 @@ using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.ViewModel.Interface.Profile;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
+using System.Web.Security;
 
 namespace ProducerInterface.Controllers
 {
-	public class AccountController : MasterBaseController
+	public class AccountController : BaseController
 	{
 
 		/// <summary>
@@ -118,10 +120,15 @@ namespace ProducerInterface.Controllers
 			return Redirect("~");
 		}
 
-		public ActionResult Autentificate(string userData = "")
+		public ActionResult Autentificate(long adminId = 0)
 		{
-			SetUserCookiesName(CurrentUser.Login, true, userData);
-			SetCookie("AccountName", CurrentUser.Login, false);
+			FormsAuthentication.SetAuthCookie(CurrentUser.Login, true);
+			if (adminId > 0) {
+				var ticket = new FormsAuthenticationTicket(adminId.ToString(), true, (int)FormsAuthentication.Timeout.TotalMinutes);
+				var cookie = new HttpCookie("auth", FormsAuthentication.Encrypt(ticket));
+				Response.Cookies.Set(cookie);
+			}
+
 			return RedirectToAction("Index", "Profile");
 		}
 
@@ -214,15 +221,10 @@ namespace ProducerInterface.Controllers
 			return View(model);
 		}
 
-		/// <summary>
-		/// Выход
-		/// </summary>
-		/// <returns></returns>
 		public ActionResult LogOut()
 		{
-			// зануляем куки регистрации формой
-			LogOutUser();
-			// возвращаем пользователя на главную страницу
+			FormsAuthentication.SignOut();
+			Response.Cookies.Remove("auth");
 			return Redirect("~");
 		}
 
@@ -353,7 +355,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult DomainRegistration(RegDomainViewModel model)
 		{
 			var company = DB.AccountCompany.Single(x => x.ProducerId == model.Producers);
-			
+
 			// проверка email
 			var domain = company.CompanyDomainName.SingleOrDefault(x => x.Id == model.EmailDomain);
 			if (model.Mailname?.Contains("@") == true) {
@@ -544,8 +546,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			CurrentUser = producerUser;
-			var adminId = adminAccount.Id.ToString();
-			Autentificate(adminId);
+			Autentificate(adminAccount.Id);
 			return RedirectToAction("Index", "Profile");
 		}
 
@@ -560,9 +561,9 @@ namespace ProducerInterface.Controllers
 			var domainAuth = new DomainAutentification();
 			if (domainAuth.IsAuthenticated(model.Login, model.Password))
 			{
-				// авторизовываем как обычного пользователя, но с добавление ID Администратора 
+				// авторизовываем как обычного пользователя, но с добавление ID Администратора
 				CurrentUser = DB.Account.Find(model.IdProducerUser);
-				var adminId = DB.Account.Single(x => x.Login == model.Login).Id.ToString();
+				var adminId = DB.Account.Single(x => x.Login == model.Login).Id;
 				Autentificate(adminId);
 			}
 

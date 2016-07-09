@@ -2,7 +2,7 @@
 
 namespace ProducerInterface.Controllers
 {
-	public class HomeController : MasterBaseController
+	public class HomeController : BaseController
 	{
 		public ActionResult Index()
 		{

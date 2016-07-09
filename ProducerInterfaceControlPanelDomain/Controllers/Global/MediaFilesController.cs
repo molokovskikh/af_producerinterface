@@ -5,10 +5,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class MediaFilesController : MasterBaseController
+	public class MediaFilesController : BaseController
 	{
 
 		public ActionResult Index()

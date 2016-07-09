@@ -13,9 +13,9 @@ using ProducerInterfaceCommon.Controllers;
 
 namespace ProducerInterface.Controllers
 {
-	public class ReportController : BaseReportController
+	public class ReportController : BaseController
 	{
-
+		private ReportHelper helper;
 		protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
 		protected NamesHelper h;
 		protected long userId;
@@ -24,9 +24,9 @@ namespace ProducerInterface.Controllers
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
-			TypeLoginUser = TypeUsers.ProducerUser;
 			base.OnActionExecuting(filterContext);
 
+			helper = new ReportHelper(DB);
 			if (CurrentUser == null)
 				filterContext.Result = Redirect("~");
 			else {
@@ -47,6 +47,17 @@ namespace ProducerInterface.Controllers
 			}
 		}
 
+		public FileResult GetFile(Controller controller, string jobName)
+		{
+			var jext = DB.jobextend.Single(x => x.JobName == jobName);
+			var file = helper.GetExcel(jext);
+
+			// вернули файл
+			byte[] fileBytes = System.IO.File.ReadAllBytes(file.FullName);
+			var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+			return File(fileBytes, contentType, file.Name);
+		}
+
 		/// <summary>
 		/// Возвращает форму указанного типа для заполнения параметров отчета, проверяет их, сохраняет задание в шедулере Quartz
 		/// </summary>
@@ -61,7 +72,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			// получили пустую модель нужного типа
-			var type = GetModelType(Id.Value);
+			var type = helper.GetModelType(Id.Value);
 			var model = (Report)Activator.CreateInstance(type);
 			model.Id = Id.Value;
 			model.ProducerId = producerId;
@@ -86,7 +97,7 @@ namespace ProducerInterface.Controllers
 				return View(model);
 			}
 
-			var scheduler = GetScheduler();
+			var scheduler = helper.GetScheduler();
 			var key = new JobKey(Guid.NewGuid().ToString(), $"p{producerId}");
 			var job = JobBuilder.Create<ReportJob>()
 					.WithIdentity(key)
@@ -150,7 +161,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			var key = new JobKey(jobName, jobGroup);
-			var scheduler = GetScheduler();
+			var scheduler = helper.GetScheduler();
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
 			{
@@ -185,7 +196,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult Restore(string jobName, string jobGroup)
 		{
 			var key = new JobKey(jobName, jobGroup);
-			var scheduler = GetScheduler();
+			var scheduler = helper.GetScheduler();
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
 			{
@@ -240,7 +251,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 
-			var scheduler = GetScheduler();
+			var scheduler = helper.GetScheduler();
 			var key = new JobKey(jobName, jobGroup);
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
@@ -260,7 +271,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			// при POST - биндим
-			var type = GetModelType(jext.ReportType);
+			var type = helper.GetModelType(jext.ReportType);
 			model = (Report)Activator.CreateInstance(type);
 
 			Bind(model, type);
@@ -336,7 +347,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult SearchResult(long? cid)
 		{
-			var schedulerName = GetSchedulerName();
+			var schedulerName = helper.GetSchedulerName();
 			// вытащили всех создателей, создававших отчеты этого производителя
 			var creatorIds = DB.jobextend
 				.Where(x => x.ProducerId == producerId && x.SchedName == schedulerName && x.Enable)
@@ -364,7 +375,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult RunNow(string jobName, string jobGroup)
 		{
 			var key = JobKey.Create(jobName, jobGroup);
-			var scheduler = GetScheduler();
+			var scheduler = helper.GetScheduler();
 			// нашли задачу
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
@@ -482,7 +493,7 @@ namespace ProducerInterface.Controllers
 			}
 
 			// нашли задачу
-			var scheduler = GetScheduler();
+			var scheduler = helper.GetScheduler();
 			var key = JobKey.Create(jobName, jobGroup);
 			var job = scheduler.GetJobDetail(key);
 			if (job == null)
@@ -640,7 +651,7 @@ namespace ProducerInterface.Controllers
 				ErrorMessage("Отчет не найден");
 				return RedirectToAction("JobList", "Report");
 			}
-			
+
 			// вытащили заголовок отчета
 			ViewBag.Title = jext.CustomName;
 
@@ -654,7 +665,7 @@ namespace ProducerInterface.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			var file = GetExcel(jext);
+			var file = helper.GetExcel(jext);
 			EmailSender.ManualPostReportMessage(DB, userId, jext, file.FullName, model.MailTo, CurrentUser.IP);
 			SuccessMessage("Отчет отправлен на указанные email");
 			return View(model);

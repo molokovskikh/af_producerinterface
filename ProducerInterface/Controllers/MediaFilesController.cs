@@ -2,7 +2,7 @@
 
 namespace ProducerInterface.Controllers
 {
-	public class MediaFilesController : MasterBaseController
+	public class MediaFilesController : BaseController
 	{
 		public FileResult GetFile(int Id)
 		{

@@ -10,7 +10,7 @@ using System.IO;
 using ProducerInterfaceCommon.ViewModel.Interface.Promotion;
 namespace ProducerInterface.Controllers
 {
-	public class PromotionController : MasterBaseController
+	public class PromotionController : BaseController
 	{
 
 		private NamesHelper h;

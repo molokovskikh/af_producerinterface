@@ -3,10 +3,11 @@ using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.LoggerModels;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class LogUserChangeController : MasterBaseController
+	public class LogUserChangeController : BaseController
 	{
 
 		private Logger_Entities cntx__ = new Logger_Entities();

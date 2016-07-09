@@ -5,10 +5,11 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion;
 using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class PromotionController : MasterBaseController
+	public class PromotionController : BaseController
 	{
 		/// <summary>
 		/// Список промоакций
@@ -147,7 +148,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="Id"></param>
 		/// <returns></returns>

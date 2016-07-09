@@ -3,10 +3,11 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using System;
 using System.Collections.Generic;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class MailController : MasterBaseController
+	public class MailController : BaseController
 	{
 		/// <summary>
 		/// Возвращает список шаблонов писем GET: Mail
@@ -23,7 +24,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="ids"></param>
 		/// <returns></returns>
@@ -94,7 +95,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="Id"></param>
 		/// <param name="fileId"></param>

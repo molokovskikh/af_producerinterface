@@ -3,10 +3,11 @@ using System.Web.Mvc;
 using System.Linq;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class NewsController : MasterBaseController
+	public class NewsController : BaseController
 	{
 		/// <summary>
 		/// Список новостей

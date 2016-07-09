@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
 {
-    public class AdminAccountController : MasterBaseController
+    public class AdminAccountController : BaseController
     {
         // GET: AdminAccount
         [HttpGet]
         public ActionResult Index()
         {
-            var AccountModel = DB.Account.Find(CurrentUser.Id);           
+            var AccountModel = DB.Account.Find(CurrentUser.Id);
             return View(AccountModel);
         }
 

@@ -205,9 +205,8 @@
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\DrugController.cs" />
     <Compile Include="Controllers\FeedBackController.cs" />
-    <Compile Include="Controllers\general_reportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MasterBaseController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\MediaFilesController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -424,9 +423,6 @@
     <Content Include="Views\Drug\EditMnn_.cshtml" />
     <Content Include="Views\Permission\EditorTemplates\LongListPermission.cshtml" />
     <Content Include="Views\Shared\MenuPartialView.cshtml" />
-    <Content Include="Views\general_reports\Details.cshtml" />
-    <Content Include="Views\general_reports\Index.cshtml" />
-    <Content Include="Views\general_reports\ReportDetails.cshtml" />
     <Content Include="Views\Report\EditorTemplates\ProductConcurentRatingReport.cshtml" />
     <Content Include="Views\Report\EditorTemplates\IntList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\ProductPriceDynamicsReport.cshtml" />

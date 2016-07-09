@@ -7,6 +7,7 @@ using System.Web.Routing;
 using log4net;
 using ProducerInterfaceCommon.Heap;
 using System.Collections.Generic;
+using System.Web.Security;
 using log4net.Config;
 
 namespace ProducerInterface
@@ -26,7 +27,7 @@ namespace ProducerInterface
 
 		protected void Application_Error(object sender, EventArgs e)
 		{
-			if (Server != null)
+			if (HttpContext.Current.IsCustomErrorEnabled)
 			{
 				var ex = Server.GetLastError();
 				ILog logger = LogManager.GetLogger(GetType());

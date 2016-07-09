@@ -7,10 +7,11 @@ using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.CatalogModels;
 using System.Web.Caching;
 using System.Web.Mvc.Html;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class LogCatalogController : MasterBaseController
+	public class LogCatalogController : BaseController
 	{
 		protected catalogsEntities ccntx;
 

@@ -5,17 +5,12 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class FeedBack2Controller : MasterBaseController
+	public class FeedBack2Controller : BaseController
 	{
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
-		{
-			TypeLoginUser = TypeUsers.ControlPanelUser;
-			base.OnActionExecuting(filterContext);
-		}
-
 		public ActionResult Index(FeedBackFilter2 model)
 		{
 			if (!model.DateBegin.HasValue)

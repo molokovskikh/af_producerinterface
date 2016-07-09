@@ -1,10 +1,11 @@
 ﻿using ProducerInterfaceCommon.ContextModels;
 using System.Linq;
 using System.Web.Mvc;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class AppointmentController : MasterBaseController
+	public class AppointmentController : BaseController
 	{
 		/// <summary>
 		/// Список должностей

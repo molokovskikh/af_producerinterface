@@ -242,10 +242,8 @@
     <Compile Include="ContextModels\usernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\AccountGroupPermissionChanges.cs" />
-    <Compile Include="Controllers\Account_Statistics.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\BaseReportController.cs" />
+    <Compile Include="Controllers\ReportHelper.cs" />
     <Compile Include="Controllers\DomainAutentification.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
@@ -327,7 +325,6 @@
     <Compile Include="Heap\ObjectShredder.cs" />
     <Compile Include="Heap\Processor.cs" />
     <Compile Include="Heap\ReportJob.cs" />
-    <Compile Include="Heap\SqlBuilder.cs" />
     <Compile Include="LoggerModels\DescriptionHelper.cs" />
     <Compile Include="LoggerModels\LogChangeSet.cs">
       <DependentUpon>Logger_Entities.tt</DependentUpon>

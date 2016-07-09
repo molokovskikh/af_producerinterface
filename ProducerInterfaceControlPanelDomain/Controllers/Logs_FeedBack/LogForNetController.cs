@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class LogForNetController : MasterBaseController
+	public class LogForNetController : BaseController
 	{
 		// GET: LogForNet
 		public string Log { get; set; }

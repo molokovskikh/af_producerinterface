@@ -3,10 +3,11 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.FeedBack;
 using System;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class FeedBackController : MasterBaseController
+	public class FeedBackController : BaseController
 	{
 		public ActionResult Index()
 		{

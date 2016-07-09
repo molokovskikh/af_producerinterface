@@ -4,10 +4,11 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.ViewModel.Interface.Profile;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Security;
 
 namespace ProducerInterface.Controllers
 {
-	public class ProfileController : MasterBaseController
+	public class ProfileController : BaseController
 	{
 
 		private int PagerCount = 5;
@@ -118,8 +119,7 @@ namespace ProducerInterface.Controllers
 
 			if (changeLogin) {
 				CurrentUser = accountSave;
-				SetUserCookiesName(CurrentUser.Login, true, "");
-				SetCookie("AccountName", CurrentUser.Login, false);
+				FormsAuthentication.SetAuthCookie(CurrentUser.Login, true);
 			}
 
 			SuccessMessage("Ваш профиль сохранен");

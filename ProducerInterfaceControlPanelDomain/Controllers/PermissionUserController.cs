@@ -6,10 +6,11 @@ using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Permission;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class PermissionUserController : MasterBaseController
+	public class PermissionUserController : BaseController
 	{
 
 		/// <summary>
@@ -330,8 +331,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			// если очищено всё
 			if (model.ListPermission == null)
 				model.ListPermission = new List<int>();
-			
-			// обновляем список пермишенов для данной группы 
+
+			// обновляем список пермишенов для данной группы
 			var groupPermissions = DB.AccountPermission.Where(x => model.ListPermission.Contains(x.Id)).ToList();
 			group.AccountPermission.Clear();
 			foreach (var permission in groupPermissions)

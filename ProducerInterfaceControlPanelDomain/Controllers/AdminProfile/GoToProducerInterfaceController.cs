@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
 {
-    public class GoToProducerInterfaceController : MasterBaseController
+    public class GoToProducerInterfaceController : BaseController
     {
-   
+
         // GET: GoToProducerInterface
         [HttpGet]
         public ActionResult Index()
@@ -17,7 +18,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
             ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(DB, CurrentUser.Id);
             var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
             var ProducerListRegistration = h.RegisterListProducer();
-            ProducerList.AddRange(ProducerListRegistration);           
+            ProducerList.AddRange(ProducerListRegistration);
             return View(ProducerList);
         }
 
@@ -63,6 +64,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
             ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(DB, CurrentUser.Id);
             var UserList = h.GetProducerUserList(idproducer);
             return Json(UserList.Select(x=> new { value=x.Value, text= x.Text}), JsonRequestBehavior.AllowGet);
-        }        
+        }
     }
 }

@@ -3,10 +3,11 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using System.ComponentModel.DataAnnotations;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class ProducerInformationController : MasterBaseController
+	public class ProducerInformationController : BaseController
 	{
 
 		/// <summary>

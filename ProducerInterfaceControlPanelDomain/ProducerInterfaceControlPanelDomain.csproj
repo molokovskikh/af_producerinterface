@@ -201,7 +201,7 @@
     <Compile Include="Controllers\Logs_FeedBack\LogUserChangeController.cs" />
     <Compile Include="Controllers\Global\HomeController.cs" />
     <Compile Include="Controllers\Global\MailController.cs" />
-    <Compile Include="Controllers\Global\MasterBaseController.cs" />
+    <Compile Include="Controllers\Global\BaseController.cs" />
     <Compile Include="Controllers\Global\MediaFilesController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\FeedBack2Controller.cs" />

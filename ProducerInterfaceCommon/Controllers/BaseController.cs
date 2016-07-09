@@ -13,38 +13,33 @@ namespace ProducerInterfaceCommon.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
-			CurrentUser = GetCurrentUser(TypeLoginUser);
 
 			ViewBag.UrlString = HttpContext.Request.Url;
 			ThreadContext.Properties["url"] = HttpContext.Request.Url;
+			ThreadContext.Properties["user"] = HttpContext.User.Identity.Name;
+		}
 
-			// присваивается значение текущему пользователю, в наследнике (Так как типов пользователей у нас много)
-			if (CurrentUser != null) 
-			{
-				ThreadContext.Properties["user"] = CurrentUser.Name ?? CurrentUser.Login;
-				CurrentUser.IP = Request.UserHostAddress;
-				ViewBag.CurrentUser = CurrentUser;
-				if (CurrentUserIdLog != CurrentUser.Id)
-					ViewBag.AdminUser = DB.Account.Find(CurrentUserIdLog);
-			}
+		protected void SecurityCheck(Account user, TypeUsers accessType, ActionExecutingContext filterContext)
+		{
 			// если найден в игнорируемых
 			if (IgnoreRoutePermission())
 				return;
 
 			// проверка наличия пермишена в БД и добавление в случае отсутствия
-			AddPermission();
-			
+			AddPermission(accessType);
+
 			// проверка прав у Пользователя к данному сонтроллеру и экшену (Get, Post etc важно для нас)
-			CheckUserPermission(filterContext);        
+			CheckUserPermission(user, accessType, filterContext);
 		}
 
 		/// <summary>
 		/// проверка наличия пермишена в БД и добавление в случае отсутствия
 		/// </summary>
-		private void AddPermission()
+		private void AddPermission(TypeUsers accessType)
 		{
+			var type = (sbyte)accessType;
 			var permissionExsist = DB.AccountPermission.Any(x => 
-				x.TypePermission == SbyteTypeUser 
+				x.TypePermission == type 
 				&& x.ControllerAction == permissionName 
 				&& x.ActionAttributes == controllerAcctributes);
 
@@ -57,22 +52,21 @@ namespace ProducerInterfaceCommon.Controllers
 			// проверим наличие группы "Администраторы"
 			var adminGroupName = GetWebConfigParameters("AdminGroupName");
 			// убрал условие Enabled потому что группа будет создана заново, если disabled
-			var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
+			var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == type);
 			if (adminGroup == null)
 			{
-				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
+				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = type };
 				DB.AccountGroup.Add(adminGroup);
 				DB.SaveChanges();
 			}
 
 			// добавляем новый доступ
-			var newPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = SbyteTypeUser, Enabled = true, Description = "новый пермишен" };
+			var newPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = type, Enabled = true, Description = "новый пермишен" };
 			DB.AccountPermission.Add(newPermission);
 			DB.SaveChanges();
 
 			// добавляем его к группе Администраторы
 			adminGroup.AccountPermission.Add(newPermission);
-			//DB.Entry(adminGroup).State = System.Data.Entity.EntityState.Modified;
 
 			var date = DateTime.Now;
 			foreach (var user in adminGroup.Account)
@@ -85,18 +79,18 @@ namespace ProducerInterfaceCommon.Controllers
 		/// Проверка прав пользователя
 		/// </summary>
 		/// <param name="filterContext"></param>
-		private void CheckUserPermission(ActionExecutingContext filterContext)
+		private void CheckUserPermission(Account user, TypeUsers accessType, ActionExecutingContext filterContext)
 		{
 			// если пользователя нет, но он пришёл из панели управления - на регистрацию
-			if (CurrentUser == null && TypeLoginUser == TypeUsers.ControlPanelUser)
+			if (user == null && accessType == TypeUsers.ControlPanelUser)
 				filterContext.Result = RedirectToAction("Index", "Registration");
 
 			// если пользователя нет - на главную
-			else if (CurrentUser == null)
+			else if (user == null)
 				filterContext.Result = Redirect("~");
 
 			// если есть пользователь и права доступа
-			else if (PermissionUserExsist())
+			else if (PermissionUserExsist(user, accessType))
 				return;
 
 			// если есть пользователь и нет прав доступа
@@ -110,25 +104,13 @@ namespace ProducerInterfaceCommon.Controllers
 			}
 		}
 
-		///// <summary>
-		///// Проверяет, находится ли вызываемый экшн контроллера в списке всегда открытых
-		///// </summary>
-		///// <returns></returns>
-		//private bool IgnoreRoutePermission()
-		//{
-		//	// список игнорируемых маршрутов CSV. Сейчас Home_Index,FeedBack_*,Account_*
-		//	var ignoreRoute = GetWebConfigParameters("IgnoreRoute").ToLower().Split(',').ToList();
-		//	var result = ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
-		//	return result;
-		//}
-
 		/// <summary>
 		/// Проверяет наличие пермишена в списке пермишенов пользователя
 		/// </summary>
 		/// <returns></returns>
-		public bool PermissionUserExsist()
+		public bool PermissionUserExsist(Account user, TypeUsers accessType)
 		{
-			var permissionList = GetPermissionList();
+			var permissionList = GetPermissionList(user, accessType);
 			var permissionKey = $"{permissionName}_{controllerAcctributes}";
 			return permissionList.Contains(permissionKey);
 		}
@@ -137,16 +119,17 @@ namespace ProducerInterfaceCommon.Controllers
 		/// Возврашает список пермишенов пользователя
 		/// </summary>
 		/// <returns></returns>
-		public HashSet<string> GetPermissionList()
+		public HashSet<string> GetPermissionList(Account user, TypeUsers accessType)
 		{
-			var key = $"permission{CurrentUser.Id}";
+			var type = (sbyte)accessType;
+			var key = $"permission{user.Id}";
 			var permissionList = HttpContext.Cache.Get(key) as HashSet<string>;
 			// если есть в кеше - возвращаем из кеша
 			if (permissionList != null) {
 				// в первой строке лежит время создания кеша
 				var dateHash = DateTime.Parse(permissionList.First());
 				// если права пользователя не менялись с момента создания кеша
-				if (CurrentUser.LastUpdatePermisison.HasValue && dateHash > CurrentUser.LastUpdatePermisison.Value)
+				if (user.LastUpdatePermisison.HasValue && dateHash > user.LastUpdatePermisison.Value)
 					return permissionList;
 			}
 			permissionList = new HashSet<string>();
@@ -154,8 +137,8 @@ namespace ProducerInterfaceCommon.Controllers
 			// добавляем время обновления кеша первой строкой
 			permissionList.Add(DateTime.Now.ToString("O"));
 
-			var ps = CurrentUser.AccountGroup.SelectMany(x => x.AccountPermission)
-				.Where(x => x.Enabled && x.TypePermission == SbyteTypeUser)
+			var ps = user.AccountGroup.SelectMany(x => x.AccountPermission)
+				.Where(x => x.Enabled && x.TypePermission == type)
 				.Select(x => $"{x.ControllerAction}_{x.ActionAttributes}")
 				.Distinct().ToList();
 
@@ -165,46 +148,5 @@ namespace ProducerInterfaceCommon.Controllers
 			HttpContext.Cache.Insert(key, permissionList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
 			return permissionList;
 		}
-
-		/// <summary>
-		/// Возвращает текущего пользователя из Кукисов (если они существуют)
-		/// </summary>
-		/// <param name="typeUser">enum Тип пользователя</param>
-		/// <returns></returns>
-		protected Account GetCurrentUser(TypeUsers typeUser)
-		{
-			TypeLoginUser = typeUser;
-			var login = GetUserCookiesName();
-			if (String.IsNullOrEmpty(login))
-				return null;
-
-			var retUser = DB.Account.SingleOrDefault(x => x.TypeUser == SbyteTypeUser && x.Login == login && x.Enabled == (sbyte)UserStatus.Active);
-			if (retUser != null && typeUser == TypeUsers.ProducerUser)
-			{
-				retUser.ID_LOG = retUser.Id;
-				if (CurrentUserIdLog > 0)
-					retUser.ID_LOG = CurrentUserIdLog;
-			}
-			return retUser;
-		}
-
-		///// <summary>
-		///// Аторизация
-		///// </summary>
-		///// <param name="user">Текущий пользователь</param>
-		///// <param name="typeUser">Тип пользователя</param>
-		///// <param name="userData">Некие данные пользователя</param>
-		//protected void AutorizeCurrentUser(Account user, TypeUsers typeUser, string userData = null)
-		//	{
-		//	if (typeUser == TypeUsers.ProducerUser) {
-		//		SetUserCookiesName(user.Login, true, userData);
-		//		SetCookie("AccountName", user.Login, false);
-		//			RedirectToAction("Index", "Profile");
-		//		}
-		//	else {
-		//		SetUserCookiesName(user.Login);
-		//		Redirect("~");
-		//	}
-		//	}
 	}
 }

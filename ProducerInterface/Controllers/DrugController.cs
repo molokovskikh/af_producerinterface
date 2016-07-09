@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace ProducerInterface.Controllers
 {
-	public class DrugController : MasterBaseController
+	public class DrugController : BaseController
 	{
 		protected long userId;
 		protected long producerId;

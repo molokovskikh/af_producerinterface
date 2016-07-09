@@ -7,16 +7,8 @@ using System.Web.Mvc;
 
 namespace ProducerInterface.Controllers
 {
-    public class PermissionController : MasterBaseController
+    public class PermissionController : BaseController
     {
-      
-
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-        }
-
         //Get User List in This Producer
         [HttpGet]
         public ActionResult Index()

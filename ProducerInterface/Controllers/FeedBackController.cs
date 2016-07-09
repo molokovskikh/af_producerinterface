@@ -7,7 +7,7 @@ using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterface.Controllers
 {
-	public class FeedBackController : MasterBaseController
+	public class FeedBackController : BaseController
 	{
 		/// <summary>
 		/// Добавление сообщ обр связи при клике на "Что-то не так"

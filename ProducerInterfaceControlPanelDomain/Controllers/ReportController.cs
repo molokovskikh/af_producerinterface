@@ -10,13 +10,26 @@ using ProducerInterfaceCommon.Controllers;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
-	public class ReportController : BaseReportController
+	public class ReportController : BaseController
 	{
+		private ReportHelper helper;
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
-			TypeLoginUser = TypeUsers.ControlPanelUser;
 			base.OnActionExecuting(filterContext);
+
+			helper = new ReportHelper(DB);
+		}
+
+		public FileResult GetFile(Controller controller, string jobName)
+		{
+			var jext = DB.jobextend.Single(x => x.JobName == jobName);
+			var file = helper.GetExcel(jext);
+
+			// вернули файл
+			byte[] fileBytes = System.IO.File.ReadAllBytes(file.FullName);
+			var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+			return File(fileBytes, contentType, file.Name);
 		}
 
 		[HttpGet]
@@ -39,7 +52,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult SearchResult(SearchProducerReportsModel param)
 		{
-			var schedulerName = GetSchedulerName();
+			var schedulerName = helper.GetSchedulerName();
 			var query = DB.jobextendwithproducer.Where(x => x.SchedName == schedulerName);
 			if (param.Enable.HasValue)
 				query = query.Where(x => x.Enable == param.Enable);
@@ -162,7 +175,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public List<OptionElement> GetProducerList()
 		{
-			var schedulerName = GetSchedulerName();
+			var schedulerName = helper.GetSchedulerName();
 			// возвращаем только производителей, у которых есть отчёты
 			var producerIdList = DB.jobextend.Where(x => x.SchedName == schedulerName).Select(x => x.ProducerId).Distinct().ToList();
 			var producers = DB.producernames.Where(x => producerIdList.Contains(x.ProducerId)).ToList()
