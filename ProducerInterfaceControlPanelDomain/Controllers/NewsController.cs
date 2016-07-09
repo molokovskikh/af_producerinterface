@@ -81,7 +81,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				IdAccount = CurrentUser.Id,
 				DateChange = DateTime.Now,
 				TypeCnhange = (byte)NewsActions.Archive,
-				IP = CurrentUser.IP
+				IP = Request.UserHostAddress
 			};
 			DB.NewsChange.Add(history);
 			DB.SaveChanges();
@@ -156,7 +156,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					IdAccount = CurrentUser.Id,
 					DateChange = DateTime.Now,
 					TypeCnhange = (byte)NewsActions.Edit,
-					IP = CurrentUser.IP,
+					IP = Request.UserHostAddress,
 					NewsNewDescription = after.Description,
 					NewsNewTema = after.Name,
 					NewsOldDescription = before.Description,
@@ -190,7 +190,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					IdAccount = CurrentUser.Id,
 					DateChange = DateTime.Now,
 					TypeCnhange = (byte)NewsActions.Add,
-					IP = CurrentUser.IP,
+					IP = Request.UserHostAddress,
 					NewsNewDescription = after.Description,
 					NewsNewTema = after.Name
 				};

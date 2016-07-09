@@ -70,7 +70,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Добавление должности")]
 		AddNewAppointment = 3,
 		/*
-				как минимум 4й - 5й пункт  "4" должен отсутствовать        
+				как минимум 4й - 5й пункт  "4" должен отсутствовать
 		*/
 
 	}
@@ -108,9 +108,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		Edit = 1,
 		[Display(Name = "Новость перенесена в архив")]
 		Archive = 2,
-		[Display(Name = "Новость возвращена из архива")]
-		RetArchive = 3,
-		[Display(Name = "Новость удалена")]
+		[Display(Name = "Архивная новость удалена")]
 		PastRetrieve = 4
 	}
 

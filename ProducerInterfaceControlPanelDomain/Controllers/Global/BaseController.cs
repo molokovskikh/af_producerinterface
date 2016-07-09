@@ -17,6 +17,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.Global
 				CurrentUser = GetCurrentUser();
 				SecurityCheck(CurrentUser, TypeLoginUser, filterContext);
 				ViewBag.CurrentUser = CurrentUser;
+				if (CurrentUser != null) {
+					CurrentUser.IP = Request.UserHostAddress;
+				}
 			}
 
 			private Account GetCurrentUser()

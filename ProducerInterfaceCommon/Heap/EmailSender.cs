@@ -442,7 +442,7 @@ namespace ProducerInterfaceCommon.Heap
 
 				// может быть незарегистрированный пользователь
 				if (User != null)
-				{ 
+				{
 					// у админов AccountCompany is null
 					var ac = User.AccountCompany;
 					if (ProducerId == null && ac != null && ac.ProducerId != null)

@@ -12,10 +12,10 @@
                     <div class="panel-heading">
                         <div>
                             Тема @item.Name
-                            <div class="pull-right">Дата изменения @item.DatePublication.Value.ToString("dd-MM-yyyy")</div>
+                            <div class="pull-right">Дата изменения @item.DatePublication.Value.ToShortDateString()</div>
                         </div>
                     </div>
-                    <div class="panel-body">                    
+                    <div class="panel-body">
                         <div class="form-group">
                             <a href="@Url.Action("Create", new { Id = item.Id})" class="btn btn-primary">Редактировать</a>
                             <a href="@Url.Action("DeleteNews", new { id= item.Id})" class="btn btn-primary">Удалить</a>

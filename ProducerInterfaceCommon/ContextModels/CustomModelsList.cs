@@ -86,9 +86,6 @@ namespace ProducerInterfaceCommon.ContextModels
 
 	public class UserFilter
 	{
-		[Display(Name = "Идентификатор")]
-		public long? UserId { get; set; }
-
 		[Display(Name = "ФИО")]
 		public string UserName { get; set; }
 
@@ -97,6 +94,9 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		[Display(Name = "Производитель")]
 		public string ProducerName { get; set; }
+
+		[Display(Name = "Телефон")]
+		public string Phone { get; set; }
 
 		[Display(Name = "Тип пользователя")]
 		public TypeUsers TypeUserEnum { get { return TypeUsers.ProducerUser; } }
@@ -128,7 +128,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string OperatorHost { get; set; }
 		public Operation OperationEnum { get; set; }
 		public string PropertyName { get; set; }
-		
+
 		public string OperationName
 		{
 			get { return OperationEnum.DisplayName(); }

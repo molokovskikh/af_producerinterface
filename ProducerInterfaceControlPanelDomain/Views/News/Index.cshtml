@@ -1,7 +1,7 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
 @model IEnumerable<NotificationToProducers>
 
-@{ 
+@{
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
     <div class="container">
@@ -22,20 +22,20 @@
                     <div class="panel-heading">
                         <div>
                             @item.Name
-                            <div class="pull-right">@item.DatePublication.Value.ToString("dd-MM-yyyy")</div>
+                            <div class="pull-right">@item.DatePublication.Value.ToShortDateString()</div>
                         </div>
                     </div>
-                    <div class="panel-body">                      
+                    <div class="panel-body">
                         <div class="form-group">
                             @if (ViewBag.Title == "Новости")
                             {
                             <a href="@Url.Action("Create", new { Id = item.Id })" class="btn btn-primary">Редактировать</a>
-                           <a href="@Url.Action("DeleteNews", new { id = item.Id })" class="btn btn-primary">В архив (публикация новости прекращается)</a>
+                           <a href="@Url.Action("DeleteNews", new { id = item.Id })" class="btn btn-warning">В архив (публикация новости прекращается)</a>
                             }
                             else
                             {
                                 <a href="@Url.Action("Create", new { Id = item.Id })" class="btn btn-primary">Редактировать с последующей публикацией</a>
-                                <a href="@Url.Action("PastRetrieve", new { id = item.Id })" class="btn btn-primary">Безвозвратно удалить</a>
+                                <a href="@Url.Action("PastRetrieve", new { id = item.Id })" class="btn btn-warning">Безвозвратно удалить</a>
                             }
 
                         </div>
@@ -49,7 +49,7 @@
                             }
                         </div>
 
-                    </div>     
+                    </div>
                 </div>
             }
 

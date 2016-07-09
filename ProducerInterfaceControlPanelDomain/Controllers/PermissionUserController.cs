@@ -175,12 +175,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult SearchUser(UserFilter filter)
 		{
 			var query = DB.Account.Where(x => x.TypeUser == (sbyte)filter.TypeUserEnum);
-			if (filter.UserId.HasValue)
-				query = query.Where(x => x.Id == filter.UserId.Value);
 			if (!string.IsNullOrEmpty(filter.UserName))
 				query = query.Where(x => x.Name.Contains(filter.UserName));
 			if (!string.IsNullOrEmpty(filter.Login))
 				query = query.Where(x => x.Login.Contains(filter.Login));
+			if (!string.IsNullOrEmpty(filter.Phone))
+				query = query.Where(x => x.Phone.Contains(filter.Phone));
 			if (!string.IsNullOrEmpty(filter.ProducerName))
 			{
 				var producerIds = DB.producernames.Where(x => x.ProducerName.Contains(filter.ProducerName)).Select(x => x.ProducerId).ToList();

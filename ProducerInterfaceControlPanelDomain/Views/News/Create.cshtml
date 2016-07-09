@@ -9,7 +9,7 @@
 <div class="container body-content">
     @if (Model.Id > 0)
     {
-        <h2>Редактирование новости</h2>       
+        <h2>Редактирование новости</h2>
         <hr />
     }
     else
@@ -49,16 +49,21 @@
         <div class="form-group">
             <a href="@Url.Action("Index")" class="btn btn-primary">Назад к списку новостей</a>
             <a class="btn btn-primary" onclick="TargetBlackPreviewNews()">Посмотреть результат</a>
-            @if (Model.Id == 0)
-            {<input type="submit" class="btn btn-primary" value="Добавить новость" />}
-            else {<input type="submit" class="btn btn-primary" value="Сохранить изменения" />}
+            @if (Model.Id == 0) {
+	            <input type="submit" class="btn btn-primary" value="Добавить новость" />
+            } else {
+	            <input type="submit" class="btn btn-primary" value="Сохранить изменения"/>
+							if (Model.Enabled) {
+								 <a href="@Url.Action("DeleteNews", "News", new {Model.Id})" class="btn btn-warning">В архив</a>
+							}
+            }
         </div>
-   
+
     }
 </div>
 
 @section scripts
-{   
+{
 <script src="~/Scripts/ckeditor/ckeditor.js"></script>
 <script src="~/Scripts/ckeditor/InitCKEditor_News.js"></script>
 

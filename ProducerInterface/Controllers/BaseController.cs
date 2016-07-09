@@ -24,6 +24,7 @@ namespace ProducerInterface.Controllers
 			{
 				CurrentAdmin = GetCurrentAdmin();
 				CurrentUser.ID_LOG = CurrentAdmin?.Id ?? CurrentUser.Id;
+				CurrentUser.IP = Request.UserHostAddress;
 				if (CurrentUser.AccountCompany.ProducerId != null)
 					ViewBag.Producernames = DB.producernames.Single(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId).ProducerName;
 				else
