@@ -486,16 +486,7 @@
     <Content Include="Views\Report\SearchResult.cshtml" />
     <Content Include="Views\Drug\History.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Views\Ajax\" />
-    <Folder Include="Views\Autorization\" />
-    <Folder Include="Views\Base\" />
-    <Folder Include="Views\Configuration\" />
-    <Folder Include="Views\MasterBase\" />
-    <Folder Include="Views\MediaFiles\" />
-    <Folder Include="Views\OldProfile\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

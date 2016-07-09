@@ -10,11 +10,6 @@ namespace ProducerInterfaceCommon.Controllers
 {
 	public class BaseController : GlobalController
 	{
-		protected override void OnActionExecuted(ActionExecutedContext filterContext)
-		{
-			base.OnActionExecuted(filterContext);
-		}
-
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);

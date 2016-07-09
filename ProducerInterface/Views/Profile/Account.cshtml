@@ -43,23 +43,19 @@
                 <label>Должность <strong class="required">*</strong></label>
                 @Html.DropDownListFor(m => m.AppointmentId, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.AppointmentId)
+				<a href="#postname" data-toggle="collapse">Отсутствует ваша должность?</a>
+				<div class="collapse" id="postname">
+					<div class="input-group">
+						<input type="hidden" id="addAppointmentUrl" value="@Url.Action("AddAppointment", "Account")"/>
+						<input type="text" id="appointmentName" placeholder="Свой вариант должности" class="form-control"/>
+						<div class="input-group-btn" style="min-width: 175px;">
+							<a class="btn btn-primary" onclick="AddAppointment()">Добавить в список</a>
+						</div>
+					</div>
+				</div>
             </div>
         </div>
 
-        <div class="form-group">
-            <a href="#postname" data-toggle="collapse">Отсутствует ваша должность</a>
-            <div class="collapse" id="postname">
-                <div class="input-group">
-                    <input type="hidden" id="addAppointmentUrl" value="@Url.Action("AddAppointment")"/>
-                    <input type="text" id="appointmentName" placeholder="Свой вариант должности" class="form-control"/>
-                    <div class="input-group-btn" style="min-width: 175px;">
-                        <a class="btn btn-primary" onclick="AddAppointment()">Добавить в список</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr />
         <a href="#LoginChange" data-toggle="collapse">Смена логина</a>
         <div class="@className" id="LoginChange">
             <div class="row">
@@ -76,8 +72,6 @@
                 </div>
             </div>
         </div>
-
-        <hr />
 
         <div class="form-group">
             <input type="submit" class="btn btn-primary col-md-12" value="Сохранить изменения" />

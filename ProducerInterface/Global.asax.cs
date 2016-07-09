@@ -11,7 +11,6 @@ using log4net.Config;
 
 namespace ProducerInterface
 {
-	// using Common.Logging;
 	public class MvcApplication : HttpApplication
 	{
 		protected void Application_Start()
@@ -31,16 +30,6 @@ namespace ProducerInterface
 			{
 				var ex = Server.GetLastError();
 				ILog logger = LogManager.GetLogger(GetType());
-
-				// временно. TODO наладить log4net
-				var sb = new StringBuilder();
-				sb.AppendLine($"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff")} ERROR");
-				sb.AppendLine($"{ThreadContext.Properties["user"]} - {ThreadContext.Properties["url"]}");
-				sb.AppendLine($"{ex.GetType()}: {ex.Message}");
-				sb.AppendLine(ex.StackTrace);
-				var to = new List<string>() { "137@analit.net" };
-				EmailSender.SendEmail(to, "Ошибка в клиентской части Интерфейса производителя", sb.ToString(), null);
-
 				logger.Error(ex.Message, ex);
 
 				if (Response.StatusCode != 404)

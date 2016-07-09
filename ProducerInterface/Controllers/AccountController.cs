@@ -432,7 +432,10 @@ namespace ProducerInterface.Controllers
 				DB.AccountAppointment.Add(appointment);
 				DB.SaveChanges();
 			}
-			return Content($"{appointment.Id};{appointment.Name}");
+			return Json(new {
+				id = appointment.Id,
+				name = appointment.Name
+			});
 		}
 
 		/// <summary>
