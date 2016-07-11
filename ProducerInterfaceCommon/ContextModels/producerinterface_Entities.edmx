@@ -1878,7 +1878,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <PropertyRef Name="RegionCode" />
           </Key>
           <Property Name="ReportId" Type="Int32" Nullable="false" />
-          <Property Name="RegionCode" Type="Decimal" Nullable="false" />
+          <Property Name="RegionCode" Type="Int64" Nullable="false" />
           <NavigationProperty Name="ReportDescription" Relationship="producerinterface_Model.FK_ReportRegion_To_Report" FromRole="ReportRegion" ToRole="ReportDescription" />
         </EntityType>
         <Association Name="FK_ReportRegion_To_Report">
@@ -2112,7 +2112,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
             <PropertyRef Name="RegionCode" />
           </Key>
           <Property Name="AccountId" Type="Int64" Nullable="false" />
-          <Property Name="RegionCode" Type="Decimal" Nullable="false" />
+          <Property Name="RegionCode" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="producerinterface_Model.FK_AccountRegion_To_Account" FromRole="AccountRegion" ToRole="Account" />
         </EntityType>
         <EntityType Name="Account">

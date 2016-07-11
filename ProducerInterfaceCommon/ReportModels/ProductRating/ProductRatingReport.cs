@@ -87,13 +87,11 @@ namespace ProducerInterfaceCommon.Models
 
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
 		{
-			var viewDataValues = new Dictionary<string, object>();
-
-			viewDataValues.Add("RegionCodeEqual", h.GetRegionList(Id));
-			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
-			viewDataValues.Add("SupplierIdNonEqual", h.GetSupplierList(RegionCodeEqual));
-
-			return viewDataValues;
+			return new Dictionary<string, object> {
+				{"RegionCodeEqual", h.GetRegionList(Id)},
+				{"CatalogIdEqual", h.GetCatalogList()},
+				{"SupplierIdNonEqual", h.GetSupplierList(RegionCodeEqual)}
+			};
 		}
 
 		public override List<ErrorMessage> Validate()

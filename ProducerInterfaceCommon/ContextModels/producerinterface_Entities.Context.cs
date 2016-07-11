@@ -12,19 +12,19 @@ namespace ProducerInterfaceCommon.ContextModels
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+
     public partial class producerinterface_Entities : DbContext
     {
         public producerinterface_Entities()
             : base("name=producerinterface_Entities")
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public DbSet<mailform> mailform { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
         public DbSet<promotionToDrug> promotionToDrug { get; set; }
@@ -36,7 +36,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<pharmacynames> pharmacynames { get; set; }
         public DbSet<producernames> producernames { get; set; }
         public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
-        public DbSet<regionnames> regionnames { get; set; }
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<AccountCompany> AccountCompany { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
@@ -57,8 +56,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }
         public DbSet<ReportRegion> ReportRegion { get; set; }
-        public DbSet<regionsnamesleaftoreport> regionsnamesleaftoreport { get; set; }
-        public DbSet<regionsnamesleaf> regionsnamesleaf { get; set; }
         public DbSet<feedbackui> feedbackui { get; set; }
         public DbSet<cataloglogview> cataloglogview { get; set; }
         public DbSet<descriptionlogview> descriptionlogview { get; set; }

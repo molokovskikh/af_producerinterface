@@ -7,10 +7,9 @@ namespace ProducerInterfaceCommon.Heap
 {
 	public class HeaderHelper
 	{
-
 		private producerinterface_Entities _cntx;
 
-		public HeaderHelper(producerinterface_Entities cntx)
+		public HeaderHelper()
 		{
 			_cntx = new producerinterface_Entities();
 		}
@@ -27,7 +26,7 @@ namespace ProducerInterfaceCommon.Heap
 
 		public string GetRegionHeader(List<decimal> regionCodes)
 		{
-			var regions = _cntx.regionnames.Where(x => regionCodes.Contains(x.RegionCode)).Select(x => x.RegionName).OrderBy(x => x).ToList();
+			var regions = _cntx.Regions().Where(x => regionCodes.Contains(x.Id)).Select(x => x.Name).OrderBy(x => x).ToList();
 			return $"В отчет включены следующие регионы: {String.Join(", ", regions)}";
 		}
 
@@ -36,12 +35,6 @@ namespace ProducerInterfaceCommon.Heap
 			var products = _cntx.catalognames.Where(x => productIds.Contains(x.CatalogId)).Select(x => x.CatalogName).OrderBy(x => x).ToList();
 			return $"В отчет включены следующие препараты: {String.Join(", ", products)}";
 		}
-
-		//public string GetDragFamalyNames(List<long> DrugFamalies)
-		//{
-		//	var drugNames = _cntx.drugfamilynames.Where(x => DrugFamalies.Contains(x.FamilyId)).Select(xxx => xxx.FamilyName).ToList();
-		//	return $"В отчет включены следующие препараты: {String.Join(", ", drugNames)}";
-		//}
 
 		public string GetNotSupplierHeader(List<long> supplierIds)
 		{

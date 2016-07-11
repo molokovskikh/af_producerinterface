@@ -98,13 +98,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult EditReportDescription(int id)
 		{
 			var model = DB.ReportDescription.Single(x => x.Id == id);
-			var regionCode = model.ReportRegion.Select(x => x.RegionCode).ToList();
+			var regionCode = model.ReportRegion.Select(x => x.RegionId).ToList();
 
-			ViewData["Regions"] = DB.regionsnamesleaf
-				.ToList()
-				.OrderBy(x => x.RegionName)
-				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionCode.Contains(x.RegionCode) })
-				.ToList();
+			ViewData["Regions"] = RegionsSelect(regionCode);
 
 			var modelUI = new ReportDescriptionUI()
 			{
@@ -116,16 +112,19 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(modelUI);
 		}
 
+		private object RegionsSelect(IEnumerable<ulong> selected)
+		{
+			return DB.Regions()
+				.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = selected.Contains(x.Id) })
+				.ToList();
+		}
+
 		[HttpPost]
 		public ActionResult EditReportDescription(ReportDescriptionUI modelUI)
 		{
 			if (!ModelState.IsValid)
 			{
-				ViewData["Regions"] = DB.regionsnamesleaf
-					.ToList()
-					.OrderBy(x => x.RegionName)
-					.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = modelUI.RegionList.Contains(x.RegionCode) })
-					.ToList();
+				ViewData["Regions"] = RegionsSelect(modelUI.RegionList);
 				return View(modelUI);
 			}
 
@@ -133,7 +132,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.Description = modelUI.Description;
 			model.ReportRegion.Clear();
 			foreach (var regionCode in modelUI.RegionList)
-				model.ReportRegion.Add(new ReportRegion() { RegionCode = regionCode, ReportId = modelUI.Id });
+				model.ReportRegion.Add(new ReportRegion() { RegionId = regionCode, ReportId = modelUI.Id });
 
 			DB.SaveChanges();
 			SuccessMessage("Свойства отчета сохранены");

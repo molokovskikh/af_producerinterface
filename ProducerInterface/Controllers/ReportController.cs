@@ -317,7 +317,6 @@ namespace ProducerInterface.Controllers
 		[HttpGet]
 		public ActionResult JobList(long? cid)
 		{
-			//throw new NotSupportedException("Искусственно вызванная ошибка");
 			ViewData["descr"] = AvailableReports();
 			return View(cid);
 		}
@@ -335,8 +334,8 @@ namespace ProducerInterface.Controllers
 
 		private List<ReportDescription> AvailableReports()
 		{
-			var userRegions = CurrentUser.AccountRegion.Select(x => x.RegionCode).ToList();
-			var reportIds = DB.ReportRegion.Where(x => userRegions.Contains(x.RegionCode)).Select(x => x.ReportId).Distinct().ToList();
+			var userRegions = CurrentUser.AccountRegion.Select(x => x.RegionId).ToList();
+			var reportIds = DB.ReportRegion.ToList().Where(x => userRegions.Contains(x.RegionId)).Select(x => x.ReportId).Distinct().ToList();
 			var result = DB.ReportDescription.Where(x => reportIds.Contains(x.Id)).ToList();
 			return result;
 		}

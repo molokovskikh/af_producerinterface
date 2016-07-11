@@ -22,7 +22,7 @@ namespace ProducerInterfaceControlPanelDomain
 
 		protected void Application_Error(object sender, EventArgs e)
 		{
-			if (Server != null)
+			if (HttpContext.Current.IsCustomErrorEnabled)
 			{
 				var ex = Server.GetLastError();
 				ILog logger = LogManager.GetLogger(GetType());

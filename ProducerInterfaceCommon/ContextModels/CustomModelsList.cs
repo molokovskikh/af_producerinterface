@@ -79,7 +79,7 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		[Display(Name = "Доступные регионы")]
 		[Required(ErrorMessage = "Укажите хотя бы один регион")]
-		public List<decimal> AccountRegionIds { get; set; }
+		public List<ulong> AccountRegionIds { get; set; }
 
 		public List<SelectListItem> AllAccountRegion { get; set; }
 	}
@@ -184,7 +184,7 @@ namespace ProducerInterfaceCommon.ContextModels
 
 		[Display(Name = "Доступные регионы")]
 		[Required(ErrorMessage = "Добавьте регионы")]
-		public List<decimal> RegionList { get; set; }
+		public List<ulong> RegionList { get; set; }
 	}
 
 	public class SortingPagingInfo

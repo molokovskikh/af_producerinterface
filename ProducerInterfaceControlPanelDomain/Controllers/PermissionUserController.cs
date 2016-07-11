@@ -58,7 +58,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				Status = user.Enabled,
 				AppointmentId = user.AppointmentId,
 				AccountGroupIds = user.AccountGroup.Select(x => x.Id).ToList(),
-				AccountRegionIds = user.AccountRegion.Select(x => x.RegionCode).ToList()
+				AccountRegionIds = user.AccountRegion.Select(x => x.RegionId).ToList()
 			};
 
 			// если запрос на регистрацию - показываем сообщение от пользователя
@@ -92,7 +92,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			user.AccountRegion.Clear();
 			foreach (var regionCode in model.AccountRegionIds)
-				user.AccountRegion.Add(new AccountRegion() { AccountId = user.Id, RegionCode = regionCode });
+				user.AccountRegion.Add(new AccountRegion() { AccountId = user.Id, RegionId = regionCode });
 
 			var sendAcceptMail = false;
 			var password = "";
@@ -159,12 +159,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				.ToList());
 			model.AllAppointment = allAppointment;
 
-			var regionIds = model.AccountRegionIds ?? new List<decimal>();
-			var a = DB.regionsnamesleaf.ToList();
-			var regions = DB.regionsnamesleaf
-				.ToList()
-				.OrderBy(x => x.RegionName)
-				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionIds.Contains(x.RegionCode) })
+			var regionIds = model.AccountRegionIds ?? new List<ulong>();
+
+			var regions = DB.Regions()
+				.OrderBy(x => x.Name)
+				.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = regionIds.Contains(x.Id) })
 				.ToList();
 			model.AllAccountRegion = regions;
 		}

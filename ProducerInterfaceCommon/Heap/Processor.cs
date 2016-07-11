@@ -24,7 +24,7 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			_type = typeof(T);
       _cntx = new producerinterface_Entities();
-      _helper = new HeaderHelper(_cntx);
+      _helper = new HeaderHelper();
     }
 
 		public void Process(JobKey key, Report jparam, TriggerParam tparam)
@@ -34,7 +34,7 @@ namespace ProducerInterfaceCommon.Heap
 			if (tparam.MailTo != null && tparam.MailTo.Count > 0)
 				mailTo = string.Join(",", tparam.MailTo);
 			var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false, MailTo = mailTo, AccountId = tparam.UserId };
-			// записали IP только для ручного запуска 
+			// записали IP только для ручного запуска
 			var ip = "неизвестен (авт. запуск)";
 			if (tparam is RunNowParam) {
 				ip = ((RunNowParam)tparam).Ip;
@@ -95,7 +95,7 @@ namespace ProducerInterfaceCommon.Heap
 				jxml = new reportxml() { JobName = key.Name, JobGroup = key.Group, SchedName = jext.SchedName, Xml = sw.ToString()};
 				_cntx.reportxml.Add(jxml);
 			}
-			else 
+			else
 				jxml.Xml = sw.ToString();
 
 			// отправили статус, что отчет готов

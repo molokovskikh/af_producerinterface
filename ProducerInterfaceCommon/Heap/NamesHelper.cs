@@ -49,9 +49,8 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetRegionList()
 		{
-			var results = _cntx.regionnames
-				.OrderBy(x => x.RegionName)
-				.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
+			var results = _cntx.Regions()
+				.Select(x => new OptionElement { Value = x.Id.ToString(), Text = x.Name })
 				.ToList();
 			return results;
 		}
@@ -59,44 +58,17 @@ namespace ProducerInterfaceCommon.Heap
 		// #48585 возвращает список регионов, разрешённый для данного типа отчётов
 		public List<OptionElement> GetRegionList(int reportId)
 		{
-			var userRegionCodes = _cntx.AccountRegion.Where(x => x.AccountId == _userId).Select(x => x.RegionCode).ToList();
-			var reportRegionCodes = _cntx.ReportRegion.Where(x => x.ReportId == reportId).Select(x => x.RegionCode).ToList();
+			var userRegionCodes = _cntx.AccountRegion.Where(x => x.AccountId == _userId).ToList().Select(x => x.RegionId).ToList();
+			var reportRegionCodes = _cntx.ReportRegion.Where(x => x.ReportId == reportId).ToList().Select(x => x.RegionId).ToList();
 			var intersect = userRegionCodes.Intersect(reportRegionCodes);
 
-			// TODO удалить regionsnamesleaftoreport
-			var results = _cntx.regionsnamesleaf
-				.Where(x => intersect.Contains(x.RegionCode))
+			var results = _cntx.Regions()
+				.Where(x => intersect.Contains(x.Id))
 				.ToList()
-				.OrderBy(x => x.RegionName)
-				.Select(x => new OptionElement { Value = x.RegionCode.ToString(), Text = x.RegionName })
+				.OrderBy(x => x.Name)
+				.Select(x => new OptionElement { Value = x.Id.ToString(), Text = x.Name })
 				.ToList();
 			return results;
-		}
-
-
-		private List<ulong> GetRegionListId(decimal RegionMask, List<regionnames> LisrRegions)
-		{
-
-			var results = LisrRegions
-					.Where(x => ((ulong)x.RegionCode & (ulong)RegionMask) > 0)
-					.OrderBy(x => x.RegionCode)
-					.Select(x => (ulong)x.RegionCode).ToList();
-
-			return results;
-		}
-
-		public List<OptionElement> GetRegionList(decimal RegionMask)
-		{
-
-			if (RegionMask == 0)
-			{
-				return _cntx.regionnames.Where(x => x.RegionCode == 0).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
-			}
-
-			var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();
-			var IdGetRegions = GetRegionListId(RegionMask, LisrRegions);
-			return LisrRegions.Where(x => IdGetRegions.Contains((ulong)x.RegionCode)).ToList()
-											.Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
 		}
 
 		// для UI
@@ -134,22 +106,6 @@ namespace ProducerInterfaceCommon.Heap
 					.ToList();
 			return results;
 		}
-
-		//public List<OptionElement> GetDrugList(List<long> SelectedDrugs)
-		//{
-		//	if (SelectedDrugs == null || SelectedDrugs.Count() == 0)
-		//		return new List<OptionElement>();
-
-		//	var ListDrugsNoConvert = _cntx.drugfamilynames.Where(x => SelectedDrugs.Contains(x.FamilyId)).ToList();
-		//	var ListSelectGrugs = ListDrugsNoConvert.Select(xxx => new OptionElement { Text = xxx.FamilyName, Value = xxx.FamilyId.ToString() }).ToList();
-		//	return ListSelectGrugs;
-		//}
-
-		//public List<OptionElement> GetSearchCatalogFamalyName(string NameDrug)
-		//{
-		//	var result = _cntx.drugfamilynames.Where(xxx => xxx.FamilyName.Contains(NameDrug)).Take(10).ToList().Select(xxx => new OptionElement { Value = xxx.FamilyId.ToString(), Text = xxx.FamilyName }).ToList();
-		//	return result;
-		//}
 
 		public List<OptionElement> GetSupplierList(List<ulong> regionList)
 		{
@@ -265,21 +221,19 @@ namespace ProducerInterfaceCommon.Heap
 				return new List<long>() { 0 };
 			}
 
-			var LisrRegions = _cntx.regionnames.OrderBy(x => x.RegionName).ToList();
+			var LisrRegions = _cntx.Regions().ToList();
 
 			var results = LisrRegions
-			.Where(x =>
-			((ulong)x.RegionCode & RegionMask) > 0)
-			.OrderBy(x => x.RegionCode)
-			.Select(x => (long)x.RegionCode).ToList();
+				.Where(x =>(x.Id & RegionMask) > 0)
+				.OrderBy(x => x.Id)
+				.Select(x => (long)x.Id).ToList();
 			return results;
 		}
 
 		public List<OptionElement> GetPromotionRegionNames(ulong RegionMask)
 		{
-			var RegionLongList = GetPromotionRegions((ulong)RegionMask);
-			List<decimal> RLS = RegionLongList.Select(x => (decimal)x).ToList();
-			return _cntx.regionnames.Where(x => RLS.Contains(x.RegionCode)).ToList().Select(x => new OptionElement { Text = x.RegionName, Value = x.RegionCode.ToString() }).ToList();
+			var ids = GetPromotionRegions(RegionMask);
+			return _cntx.Regions().Where(x => ids.Contains((long)x.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
 		}
 
 		public List<OptionElement> RegisterListProducer()

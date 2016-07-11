@@ -11,12 +11,12 @@ namespace ProducerInterfaceCommon.ContextModels
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class AccountRegion
     {
         public long AccountId { get; set; }
-        public decimal RegionCode { get; set; }
-    
+        public long RegionCode { get; set; }
+
         public virtual Account Account { get; set; }
     }
 }

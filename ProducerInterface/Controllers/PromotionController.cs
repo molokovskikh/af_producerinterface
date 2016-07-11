@@ -47,7 +47,6 @@ namespace ProducerInterface.Controllers
 			if (promoList.Count == 0)
 				return View(model);
 
-			var regions = DB.regionnames.ToDictionary(x => x.RegionCode, x => x.RegionName);
 			var suppliers = DB.suppliernames.ToDictionary(x => x.SupplierId, x => x.SupplierName);
 			var assortment = DB.assortment.Where(x => x.ProducerId == producerId).ToDictionary(x => x.CatalogId, x => x.CatalogName);
 			foreach (var item in promoList) {
@@ -66,7 +65,7 @@ namespace ProducerInterface.Controllers
 					AllSuppliers = item.AllSuppliers,
 					FakeStatus = GetStatus(item),
 					DrugList = assortment.Where(x => drugsIds.Contains(x.Key)).Select(x => x.Value).ToList(),
-					RegionList = regions.Where(x => ((ulong)x.Key & (ulong)item.RegionMask) > 0 ).Select(x => x.Value).ToList(),
+					RegionList = DB.Regions((ulong)item.RegionMask).Select(x => x.Name).ToList(),
 					SuppierRegions = suppliers.Where(x => supplierIds.Contains(x.Key)).Select(x => x.Value).ToList()
 				};
 				model.Add(itemUi);
@@ -107,7 +106,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="IdKey"></param>
 		/// <param name="Copy"></param>
@@ -123,7 +122,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="IdKey"></param>
 		/// <returns></returns>
@@ -158,7 +157,7 @@ namespace ProducerInterface.Controllers
 				var dBmodel = DB.promotions.Find(idPromo);
 				model.Id = id;
 				model.SuppierRegions = dBmodel.PromotionsToSupplier.ToList().Select(x => (string)x.SupplierId.ToString()).ToList();
-				model.SuppierRegionsList = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();				
+				model.SuppierRegionsList = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 				model.Name = dBmodel.Name;
 
 				if (dBmodel.AllSuppliers)
@@ -204,7 +203,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="Id"></param>
 		/// <returns></returns>
@@ -222,7 +221,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
@@ -245,7 +244,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
@@ -353,7 +352,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
@@ -413,7 +412,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="_file"></param>
 		/// <returns></returns>
@@ -466,7 +465,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="Id"></param>
 		/// <returns></returns>
@@ -477,7 +476,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="Id"></param>
 		/// <returns></returns>
@@ -525,7 +524,7 @@ namespace ProducerInterface.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="RegionList"></param>
 		/// <param name="SuppierRegions"></param>

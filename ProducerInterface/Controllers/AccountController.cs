@@ -321,10 +321,9 @@ namespace ProducerInterface.Controllers
 			var password = GetRandomPassword();
 			var account = SaveAccount(accountCompany: company, Reg_ViewModel: model, Pass: password);
 
-			// добавили все регионы. TODO возможно, иная логика
-			var regionCodes = DB.regionsnamesleaf.Select(x => x.RegionCode).ToList();
+			var regionCodes = DB.Regions().Select(x => x.Id).ToList();
 			foreach (var regionCode in regionCodes)
-				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionCode = regionCode });
+				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionId = regionCode });
 
 			// добавили аккаунт в группу админов
 			var adminGroupName = GetWebConfigParameters("AdminGroupName");
@@ -392,10 +391,9 @@ namespace ProducerInterface.Controllers
 			var password = GetRandomPassword();
 			var account = SaveAccount(accountCompany: company, RegDomain_ViewModel: model, Pass: password);
 
-			// добавили все регионы. TODO возможно, иная логика
-			var regionCodes = DB.regionsnamesleaf.Select(x => x.RegionCode).ToList();
+			var regionCodes = DB.Regions().Select(x => x.Id).ToList();
 			foreach (var regionCode in regionCodes)
-				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionCode = regionCode });
+				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionId = regionCode });
 
 			// ищем группу "все пользователи", если такой нет - создаем
 			var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
