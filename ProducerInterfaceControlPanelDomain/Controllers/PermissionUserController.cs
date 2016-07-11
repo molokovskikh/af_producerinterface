@@ -218,6 +218,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			ViewBag.Producers = DB.producernames.Where(x => existProducerIds.Contains(x.ProducerId)).ToDictionary(x => x.ProducerId, x => x.ProducerName);
 
 			var model = query.OrderByDescending(x => x.Id).Skip(filter.CurrentPageIndex * itemsPerPage).Take(itemsPerPage).ToList();
+			var phones = DB.Account.Where(x => !String.IsNullOrEmpty(x.Phone)).GroupBy(x => x.Phone)
+				.Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
+			foreach (var account in model) {
+				account.IsPhoneSuspicios = phones.Contains(account.Phone);
+			}
 			return View(model);
 		}
 

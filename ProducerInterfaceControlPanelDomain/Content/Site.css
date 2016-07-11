@@ -14,8 +14,8 @@
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
 */
 .dl-horizontal dt {
     white-space: normal;
@@ -31,11 +31,11 @@ textarea {
 #accordion-menu {
     position:fixed;
     margin-top:0px;
-    width:280px;    
-    border-radius:0px;   
+    width:280px;
+    border-radius:0px;
     height:100%;
     background-color:#110d33;
-      
+
 }
     #accordion-menu span {
     margin-right:1em;
@@ -45,37 +45,37 @@ textarea {
     }
 
     #accordion-menu .panel {
-    border-radius:0px;    
+    border-radius:0px;
     }
      #accordion-menu .panel-title {
-    border-radius:0px;    
+    border-radius:0px;
     }
     #accordion-menu .panel .panel-heading {
     background-color:#1F1F2F;
     }
 
     #accordion-menu .panel-heading {
-    border-radius:0px;    
+    border-radius:0px;
     padding:6px;
     }
-    #accordion-menu a {   
-    max-height:28px;     
+    #accordion-menu a {
+    max-height:28px;
     text-decoration:none;
     width:100%;
     margin-left:0px;
-    text-align:left;    
+    text-align:left;
     }
         #accordion-menu .panel-collapse a {
-        background-color:#31375F;        
-        max-height:28px;     
+        background-color:#31375F;
+        max-height:28px;
         }
 
-    #accordion-menu .panel-body {    
-    padding:0px; 
-    border-radius:0px;    
+    #accordion-menu .panel-body {
+    padding:0px;
+    border-radius:0px;
     }
     #accordion-menu .btn {
-    border-radius:0px;    
+    border-radius:0px;
     }
     #accordion-menu .menu-account {
         color: whitesmoke;
@@ -96,16 +96,16 @@ width:100%;
 #form-group-mial-list p{
     font-style:italic;
 }
-#promoActionView {   
-      padding:0.5em; 
+#promoActionView {
+      padding:0.5em;
 }
 #Promo-Action {
 
-  
+
    /* min-height:20em;   */
 }
     #Promo-Action div {
-    background-color:#eeeeee;  
+    background-color:#eeeeee;
     border:outset;
     }
 
@@ -113,7 +113,7 @@ width:100%;
         background-color: green;
         height:0.2em;
         border-style:outset;
-        border-color:#3e534f;       
+        border-color:#3e534f;
     }
 
 #ErrorLogTable tr td {
@@ -151,8 +151,8 @@ min-width:100%;
         .nav-tabs > li.active > a:hover,
         .nav-tabs > li.active > a:focus{
             color: whitesmoke;
-            background-color: #584a4a;  
-        }     
+            background-color: #584a4a;
+        }
 .pointer { cursor: pointer !important; }
 
 .form-group #Begin,.form-group #End, .form-group #RunFrom, .form-group #RunTo {
@@ -179,8 +179,21 @@ max-width:45em;
 }
 .th_275, .td_275 {
     min-width:275px;
-} 
+}
 
 .mw500 {
    max-width: 500px;
+}
+
+
+.user-new {
+	background: #98cbcb;
+}
+
+.user-blocked {
+	background: #ff4848;
+}
+
+.user-wait-confirmation {
+	background: #e2c5c5;
 }

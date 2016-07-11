@@ -24,38 +24,59 @@
     </tr>
     @foreach (var user in Model)
     {
-    <tr>
-        <td>@user.Id</td>
-        <td>@user.Name</td>
-        <td>@user.Login</td>
-        <td>@user.Phone</td>
-        <td>
-            @if (user.AccountCompany.ProducerId.HasValue && producers.ContainsKey(user.AccountCompany.ProducerId.Value))
-            {
-                <span>@producers[user.AccountCompany.ProducerId.Value]</span>
-            }
-        </td>
-        <td>@user.EnabledEnum.DisplayName()</td>
-        <td>
-            @foreach (var g in user.AccountGroup)
-            {
-                @Html.ActionLink(g.Name, "GetOneGroup", new { Id = g.Id })
-                <span> </span>
-            }
-        </td>
-        <td>
-            @if (user.AccountAppointment != null)
-            {
-                <span>@user.AccountAppointment.Name</span>
-            }
-        </td>
-        <td>
-            <a href="@Url.Action("Change", new { Id = user.Id })"><span class="glyphicon glyphicon-edit"></span></a>
-        </td>
-    </tr>
-    }
+			var style = "";
+			if (user.EnabledEnum == UserStatus.Blocked) {
+				style = "user-blocked";
+			} else if (user.EnabledEnum == UserStatus.New) {
+				style = "user-new";
+			} else if (user.EnabledEnum == UserStatus.Request) {
+				style = "user-wait-confirmation";
+			}
+			<tr class="@style">
+				<td>@user.Id</td>
+				<td>@user.Name</td>
+				<td>@user.Login</td>
+				@if (@user.IsPhoneSuspicios) {
+					<td style="font-weight: bold;">@user.Phone</td>
+				} else {
+					<td>@user.Phone</td>
+				}
+				<td>
+						@if (user.AccountCompany.ProducerId.HasValue && producers.ContainsKey(user.AccountCompany.ProducerId.Value))
+						{
+								<span>@producers[user.AccountCompany.ProducerId.Value]</span>
+						}
+				</td>
+				<td>@user.EnabledEnum.DisplayName()</td>
+				<td>
+						@foreach (var g in user.AccountGroup)
+						{
+								@Html.ActionLink(g.Name, "GetOneGroup", new { Id = g.Id })
+								<span> </span>
+						}
+				</td>
+				<td>
+						@if (user.AccountAppointment != null)
+						{
+								<span>@user.AccountAppointment.Name</span>
+						}
+				</td>
+				<td>
+						<a href="@Url.Action("Change", new { Id = user.Id })"><span class="glyphicon glyphicon-edit"></span></a>
+				</td>
+		</tr>
+		}
 </table>
-
+<div class="row">
+	<div class="col-md-2">
+		<h4>Легенда</h4>
+		<ul class="list-group">
+			<li class="list-group-item user-blocked">Заблокирован</li>
+			<li class="list-group-item user-new">Новый</li>
+			<li class="list-group-item user-wait-confirmation">Ожидает подтверждения</li>
+		</ul>
+	</div>
+</div>
 }
 else
 {
