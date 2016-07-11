@@ -113,6 +113,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		private int SaveFile(HttpPostedFileBase file, EntityType type)
 		{
 			var fileName = Path.GetFileName(file.FileName);
+			if (fileName.Length > 50) {
+				var name = Path.GetFileNameWithoutExtension(file.FileName);
+				var ext = Path.GetExtension(file.FileName);
+				name = name.Substring(0, 50 - ext.Length);
+				fileName = name + ext;
+			}
 			var dbFile = new MediaFiles() {
 				ImageName = fileName,
 				ImageType = file.ContentType,

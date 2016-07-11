@@ -159,10 +159,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				.ToList());
 			model.AllAppointment = allAppointment;
 
+			var regionIds = model.AccountRegionIds ?? new List<decimal>();
+			var a = DB.regionsnamesleaf.ToList();
 			var regions = DB.regionsnamesleaf
 				.ToList()
 				.OrderBy(x => x.RegionName)
-				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = model.AccountRegionIds.Contains(x.RegionCode) })
+				.Select(x => new SelectListItem { Value = x.RegionCode.ToString(), Text = x.RegionName, Selected = regionIds.Contains(x.RegionCode) })
 				.ToList();
 			model.AllAccountRegion = regions;
 		}

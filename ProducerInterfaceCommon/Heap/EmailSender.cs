@@ -67,7 +67,7 @@ namespace ProducerInterfaceCommon.Heap
 			attachments.Add(path);
       EmailSender.SendEmail(mailTo, subject, body, attachments);
 
-			var di = new DiagnosticInformation() {ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, ProducerName = producerName, Body = body, User = user, UserIp = ip, ActionName = MailType.AutoPostReport.DisplayName() };
+			var di = new DiagnosticInformation(user) {ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, ProducerName = producerName, Body = body, ActionName = MailType.AutoPostReport.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments);
 		}
@@ -88,7 +88,7 @@ namespace ProducerInterfaceCommon.Heap
 			attachments.Add(path);
 			EmailSender.SendEmail(mailTo, subject, body, attachments);
 
-			var di = new DiagnosticInformation() { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, ProducerName = producerName, Body = body, User = user, UserIp = ip, ActionName = MailType.ManualPostReport.DisplayName() };
+			var di = new DiagnosticInformation(user) { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, ProducerName = producerName, Body = body, ActionName = MailType.ManualPostReport.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments);
 		}
@@ -102,7 +102,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
 			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName })}\r\n\r\n{mailForm.Footer}";
-			var di = new DiagnosticInformation() { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, User = user, UserIp = ip, ActionName = MailType.EmptyReport.DisplayName() };
+			var di = new DiagnosticInformation(user) { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, ActionName = MailType.EmptyReport.DisplayName() };
 			var bodyExtended = di.ToString(cntx);
 			var attachments = GetAttachments(cntx, MailType.EmptyReport);
 			// #48817 пользователю Дополнительная информация высылается также
@@ -121,7 +121,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
 			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName })}\r\n\r\n{mailForm.Footer}";
-			var di = new DiagnosticInformation() { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, User = user, ActionName = MailType.CallForDelete.DisplayName() };
+			var di = new DiagnosticInformation(user) { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, ActionName = MailType.CallForDelete.DisplayName() };
 			var bodyExtended = di.ToString(cntx);
 			var attachments = GetAttachments(cntx, MailType.EmptyReport);
 			EmailSender.SendEmail(user.Login, subject, body, attachments);
@@ -140,7 +140,7 @@ namespace ProducerInterfaceCommon.Heap
 			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName })}\r\n\r\n{mailForm.Footer}";
 
-			var di = new DiagnosticInformation() {ErrorMessage = errorMessage, ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, User = user, UserIp = ip, ActionName = MailType.ReportError.DisplayName() };
+			var di = new DiagnosticInformation(user) {ErrorMessage = errorMessage, ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, ActionName = MailType.ReportError.DisplayName() };
 			var bodyExtended = di.ToString(cntx);
 			var attachments = GetAttachments(cntx, MailType.ReportError);
 			// #48817 пользователю Дополнительная информация высылается также
@@ -179,7 +179,7 @@ namespace ProducerInterfaceCommon.Heap
 			var attachments = GetAttachments(cntx, MailType.AccountVerification);
 			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
-			var di = new DiagnosticInformation() { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, User = user, ActionName = MailType.AccountVerification.DisplayName() };
+			var di = new DiagnosticInformation(user) { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, ActionName = MailType.AccountVerification.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
 		}
@@ -197,7 +197,7 @@ namespace ProducerInterfaceCommon.Heap
 			var attachments = GetAttachments(cntx, type);
 			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
-			var di = new DiagnosticInformation() { Body = bodyWithoutPassword, User = user, UserIp = ip, ActionName = type.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = bodyWithoutPassword, ActionName = type.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
 		}
@@ -210,7 +210,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{ReliableTokenizer(mailForm.Body, new { Message = message, Contacts = contacts })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = MailType.ProducerRequest.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.ProducerRequest.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
 		}
@@ -223,7 +223,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{ReliableTokenizer(mailForm.Body, new { Before = before, After = after, Id = newsId })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = action.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = action.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
 		}
@@ -237,7 +237,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, FormName = formName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = MailType.CatalogPKU.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.CatalogPKU.DisplayName() };
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
@@ -250,7 +250,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, CatalogName = catalogName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = MailType.CatalogDescription.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.CatalogDescription.DisplayName() };
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
@@ -263,7 +263,7 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var body = $"{ReliableTokenizer(mailForm.Body, new { CatalogName = catalogName, Before = before, After = after })}";
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = user.IP, ActionName = MailType.CatalogMNN.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.CatalogMNN.DisplayName() };
 			var catalogChangeEmail = ConfigurationManager.AppSettings["CatalogChangeEmail"];
 			EmailSender.SendEmail(catalogChangeEmail, subject, di.ToString(cntx), null, false);
 		}
@@ -279,7 +279,7 @@ namespace ProducerInterfaceCommon.Heap
 			var attachments = GetAttachments(cntx, MailType.RejectCatalogChange);
 			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
-			var di = new DiagnosticInformation() { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, User = user, ActionName = MailType.RejectCatalogChange.DisplayName() };
+			var di = new DiagnosticInformation(user) { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, ActionName = MailType.RejectCatalogChange.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
 		}
@@ -291,7 +291,7 @@ namespace ProducerInterfaceCommon.Heap
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			var subject = $"Сообщение пользователя с сайта {siteName}";
 
-			var di = new DiagnosticInformation() { Body = message, User = user, UserIp = Ip, ActionName = "Обратная связь" };
+			var di = new DiagnosticInformation(user) { Body = message, ActionName = "Обратная связь" };
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
 		}
 
@@ -310,7 +310,7 @@ namespace ProducerInterfaceCommon.Heap
 			var attachments = GetAttachments(cntx, mailType);
 			EmailSender.SendEmail(user.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = ip, ActionName = mailType.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = mailType.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
 		}
@@ -333,7 +333,7 @@ namespace ProducerInterfaceCommon.Heap
 			var attachments = GetAttachments(cntx, mailType);
 			EmailSender.SendEmail(sendEmailOnCreateUserPromotion.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
-			var di = new DiagnosticInformation() { Body = body, User = user, UserIp = ip, ActionName = mailType.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = mailType.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
 		}
@@ -356,7 +356,7 @@ namespace ProducerInterfaceCommon.Heap
 			var attachments = GetAttachments(cntx, mailType);
 			EmailSender.SendEmail(sendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
 
-			var di = new DiagnosticInformation() {Body = body, User = user, UserIp = ip, ActionName = mailType.DisplayName() };
+			var di = new DiagnosticInformation(user) {Body = body, ActionName = mailType.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
 		}
@@ -435,6 +435,12 @@ namespace ProducerInterfaceCommon.Heap
 			public string ReportName { get; set; }
 			public string ErrorMessage { get; set; }
 			public string AdminLogin { get; set; }
+
+			public DiagnosticInformation(Account user)
+			{
+				User = user;
+				UserIp = user.IP;
+			}
 
 			public string ToString(producerinterface_Entities cntx)
 			{
