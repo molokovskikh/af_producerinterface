@@ -186,14 +186,14 @@ max-width:45em;
 }
 
 
-.user-new {
-	background: #98cbcb;
+.user-new, .user-new td {
+	background: #98cbcb !important;
 }
 
-.user-blocked {
-	background: #ff4848;
+.user-blocked, .user-blocked td {
+	background: #ff4848 !important;
 }
 
-.user-wait-confirmation {
-	background: #e2c5c5;
+.user-wait-confirmation, .user-wait-confirmation td {
+	background: #e2c5c5 !important;
 }

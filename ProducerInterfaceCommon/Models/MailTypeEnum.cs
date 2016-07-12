@@ -40,6 +40,9 @@ namespace ProducerInterfaceCommon.Models
 		[Display(Name = "Подтверждение регистрации пользователя без производителя")]
 		AccountVerification = 12,
 
+		[Display(Name = "Отказ регистрации")]
+		RegistrationRejected = 20,
+
 		[Display(Name = "Изменение свойств препарата")]
 		CatalogPKU = 13,
 

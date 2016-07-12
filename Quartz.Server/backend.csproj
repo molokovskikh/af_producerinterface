@@ -116,9 +116,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProducerInterfaceCommon\ProducerInterfaceCommon.csproj">
+    <ProjectReference Include="..\ProducerInterfaceCommon\lib.csproj">
       <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>
-      <Name>ProducerInterfaceCommon</Name>
+      <Name>lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

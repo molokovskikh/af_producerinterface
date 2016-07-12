@@ -151,41 +151,65 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Регистрация в системе, пользователю и расширенное сотрудникам
-		public static void SendRegistrationMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip)
+		public static void SendRegistrationMessage(producerinterface_Entities cntx, Int64 userId, string password)
 		{
-			SendPasswordMessage(cntx, userId, password, MailType.Registration, ip);
+			SendPasswordMessage(cntx, userId, password, MailType.Registration);
 		}
 
 		// Смена пароля, пользователю и расширенное сотрудникам
-		public static void SendPasswordChangeMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip)
+		public static void SendPasswordChangeMessage(producerinterface_Entities cntx, Int64 userId, string password)
 		{
-			SendPasswordMessage(cntx, userId, password, MailType.PasswordChange, ip);
+			SendPasswordMessage(cntx, userId, password, MailType.PasswordChange);
 		}
 
 		// Восстановление пароля, пользователю и расширенное сотрудникам
-		public static void SendPasswordRecoveryMessage(producerinterface_Entities cntx, Int64 userId, string password, string ip)
+		public static void SendPasswordRecoveryMessage(producerinterface_Entities cntx, Int64 userId, string password)
 		{
-			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery, ip);
+			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery);
 		}
 
 		// Подтверждение регистрации пользователя без производителя
-		public static void SendAccountVerificationMessage(producerinterface_Entities cntx, Account user, string password, long adminId)
+		public static void SendAccountVerificationMessage(producerinterface_Entities db, Account user, string password)
+		{
+			MessageFromTemplate(db, MailType.AccountVerification, user, new { Password = password });
+		}
+
+		public static void RegistrationReject(producerinterface_Entities db, Account user, string reason)
+		{
+			MessageFromTemplate(db, MailType.RegistrationRejected, user, new { Reason = reason });
+		}
+
+		private static void MessageFromTemplate(producerinterface_Entities db, MailType type, Account user, object args)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.AccountVerification);
-			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, MailType.AccountVerification);
-			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
+			var values = new Dictionary<string, object> {
+				{ "UserName", user.Name },
+				{ "UserLogin", user.Login },
+				{ "SiteName", siteName }
+			};
+			var local = ToMap(args);
+			foreach (KeyValuePair<string, object> pair in local) {
+				values[pair.Key] = pair.Value;
+			}
+			var mailForm = db.mailformwithfooter.Single(x => x.Id == (int) type);
+			var subject = Render(mailForm.Subject, values);
+			var header = Render(mailForm.Header, values);
+			var body = Render(mailForm.Body, values);
+			var footer = Render(mailForm.Footer, values);
+			var attachments = GetAttachments(db, type);
+			SendEmail(user.Login, subject, $"{header}\r\n\r\n{body}\r\n\r\n{footer}", attachments);
 
-			var di = new DiagnosticInformation(user) { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, ActionName = MailType.AccountVerification.DisplayName() };
+			var di = new DiagnosticInformation(user) {
+				AdminLogin = user.Login,
+				Body = body,
+				ActionName = type.DisplayName()
+			};
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
+			SendEmail(mailInfo, subject, di.ToString(db), attachments);
 		}
 
 		// Универсальное на смену пароля, пользователю и расширенное сотрудникам
-		private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type, string ip)
+		private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type)
 		{
 			var user = cntx.Account.Single(x => x.Id == userId);
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
@@ -193,10 +217,10 @@ namespace ProducerInterfaceCommon.Heap
 			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
 			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
 			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
-			var bodyWithoutPassword = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { Password = "*******" })}\r\n\r\n{mailForm.Footer}";
 			var attachments = GetAttachments(cntx, type);
 			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
+			var bodyWithoutPassword = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { Password = "*******" })}\r\n\r\n{mailForm.Footer}";
 			var di = new DiagnosticInformation(user) { Body = bodyWithoutPassword, ActionName = type.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
@@ -396,21 +420,12 @@ namespace ProducerInterfaceCommon.Heap
 			return result;
 		}
 
-		// исходное поведение: валится, если не приходит требующейся подстановки. Исправлено: просто не подставляется, но не валится
-		private static string ReliableTokenizer(string format, object substitution)
+		public static string Render(string format, Dictionary<string, object> dictionary)
 		{
 			// получили лист всех имеющихся в формате подстановок
 			IEnumerable<string> tokens;
 			TokenStringFormat.TokenizeString(format, out tokens);
 			var list = (List<string>)tokens;
-
-			// превратили объект подстановок в словарь
-			var dictionary = new Dictionary<string, object>();
-			if (substitution != null)
-			{
-				foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties(substitution))
-					dictionary.Add(propertyDescriptor.Name, propertyDescriptor.GetValue(substitution));
-			}
 
 			// все, что требуется, но не содержится в словаре
 			var required = list.Where(x => !dictionary.ContainsKey(x)).Select(x => x).ToList();
@@ -420,6 +435,23 @@ namespace ProducerInterfaceCommon.Heap
 				dictionary.Add(r, null);
 
 			return TokenStringFormat.Format(format, dictionary);
+		}
+
+		// исходное поведение: валится, если не приходит требующейся подстановки. Исправлено: просто не подставляется, но не валится
+		private static string ReliableTokenizer(string format, object substitution)
+		{
+			var dictionary = ToMap(substitution);
+			return Render(format, dictionary);
+		}
+
+		public static Dictionary<string, object> ToMap(object substitution)
+		{
+			var dictionary = new Dictionary<string, object>();
+			if (substitution != null) {
+				foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties(substitution))
+					dictionary.Add(propertyDescriptor.Name, propertyDescriptor.GetValue(substitution));
+			}
+			return dictionary;
 		}
 
 		private class DiagnosticInformation

@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerInterface", "ProducerInterface\ProducerInterface.csproj", "{2A3AAF08-E77F-4337-BA73-3E67E0E166F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "ProducerInterface\client.csproj", "{2A3AAF08-E77F-4337-BA73-3E67E0E166F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerInterfaceControlPanelDomain", "ProducerInterfaceControlPanelDomain\ProducerInterfaceControlPanelDomain.csproj", "{7115D633-46AD-4DD4-994D-D9ECFF43E88E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "adm", "ProducerInterfaceControlPanelDomain\adm.csproj", "{7115D633-46AD-4DD4-994D-D9ECFF43E88E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quartz.Server", "Quartz.Server\Quartz.Server.csproj", "{889D775F-A54D-4DDE-8FA0-E61D02B44A0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend", "Quartz.Server\backend.csproj", "{889D775F-A54D-4DDE-8FA0-E61D02B44A0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerInterfaceCommon", "ProducerInterfaceCommon\ProducerInterfaceCommon.csproj", "{01558158-99B8-4F25-98E7-B2EDEADB987A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib", "ProducerInterfaceCommon\lib.csproj", "{01558158-99B8-4F25-98E7-B2EDEADB987A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerInterface.Test", "ProducerInterface.Test\ProducerInterface.Test.csproj", "{8BD1AC2A-40C6-4528-9E59-396708707477}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "ProducerInterface.Test\test.csproj", "{8BD1AC2A-40C6-4528-9E59-396708707477}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

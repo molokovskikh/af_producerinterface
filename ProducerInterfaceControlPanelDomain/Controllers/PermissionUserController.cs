@@ -49,13 +49,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <param name="Id">идентификатор пользователя</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ActionResult Change(long Id)
+		public ActionResult Edit(long Id)
 		{
 			var user = DB.Account.Single(x => x.Id == Id);
 			var model = new UserEdit()
 			{
 				Name = user.Name,
-				Status = user.Enabled,
+				Status = user.EnabledEnum,
 				AppointmentId = user.AppointmentId,
 				AccountGroupIds = user.AccountGroup.Select(x => x.Id).ToList(),
 				AccountRegionIds = user.AccountRegion.Select(x => x.RegionId).ToList()
@@ -70,19 +70,38 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		}
 
 
+		public ActionResult RejectRegistration(int id)
+		{
+			var user = DB.Account.Single(x => x.Id == id);
+			user.EnabledEnum = UserStatus.Blocked;
+			DB.SaveChanges();
+			EmailSender.RegistrationReject(DB, user, Request.Form["reject-reason"]);
+			SuccessMessage("Сохранено");
+			return RedirectToAction("Index");
+		}
+
 		/// <summary>
 		/// Редактирование пользователя POST
 		/// </summary>
 		/// <param name="model">модель правок пользователя</param>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult Change(UserEdit model)
+		public ActionResult Edit(UserEdit model)
 		{
 			var user = DB.Account.Single(x => x.Id == model.Id);
 			if (!ModelState.IsValid)
 			{
 				SetChangeModel(user, model);
 				return View(model);
+			}
+
+			var activated = false;
+			if (Request.Form["activate"] != null) {
+				if (user.EnabledEnum == UserStatus.Request)
+					activated = true;
+				user.EnabledEnum = UserStatus.New;
+			} else if (Request.Form["block"] != null) {
+				user.EnabledEnum = UserStatus.Blocked;
 			}
 
 			var groups = DB.AccountGroup.Where(x => model.AccountGroupIds.Contains(x.Id));
@@ -94,25 +113,22 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			foreach (var regionCode in model.AccountRegionIds)
 				user.AccountRegion.Add(new AccountRegion() { AccountId = user.Id, RegionId = regionCode });
 
-			var sendAcceptMail = false;
 			var password = "";
 			// если подтверждение регистрации пользователя
-			if (user.EnabledEnum == UserStatus.Request && model.Status == (sbyte)UserStatus.New)
+			if (activated)
 			{
 				password = GetRandomPassword();
 				user.Password = Md5HashHelper.GetHash(password);
 				user.PasswordUpdated = DateTime.Now;
-				sendAcceptMail = true;
 			}
 
 			user.AppointmentId = model.AppointmentId;
-			user.Enabled = model.Status;
 			user.LastUpdatePermisison = DateTime.Now;
 			DB.SaveChanges();
 
 			// отправка сообщения пользователю с паролем
-			if (sendAcceptMail)
-				EmailSender.SendAccountVerificationMessage(DB, user, password, CurrentUser.Id);
+			if (activated)
+				EmailSender.SendAccountVerificationMessage(DB, user, password);
 
 			SuccessMessage("Изменения успешно сохранены");
 			// если админ - на список админов
@@ -127,28 +143,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.AllAccountGroup = DB.AccountGroup.Where(x => x.TypeGroup == user.TypeUser)
 				.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
 				.ToList();
-
-			// очередность смены статусов
-			var allStatus = new List<SelectListItem>();
-			switch (user.EnabledEnum)
-			{
-				case UserStatus.Active: // активный можно изменить только на заблокированный
-					allStatus.Add(new SelectListItem() { Text = UserStatus.Active.DisplayName(), Value = ((int)UserStatus.Active).ToString(), Selected = model.Status == (sbyte)UserStatus.Active });
-					allStatus.Add(new SelectListItem() { Text = UserStatus.Blocked.DisplayName(), Value = ((int)UserStatus.Blocked).ToString(), Selected = model.Status == (sbyte)UserStatus.Blocked });
-					break;
-				case UserStatus.Blocked: // заблокированный можно изменить только на активный
-					allStatus.Add(new SelectListItem() { Text = UserStatus.Blocked.DisplayName(), Value = ((int)UserStatus.Blocked).ToString(), Selected = model.Status == (sbyte)UserStatus.Blocked });
-					allStatus.Add(new SelectListItem() { Text = UserStatus.Active.DisplayName(), Value = ((int)UserStatus.Active).ToString(), Selected = model.Status == (sbyte)UserStatus.Active });
-					break;
-				case UserStatus.New: // новый нельзя изменить
-					allStatus.Add(new SelectListItem() { Text = UserStatus.New.DisplayName(), Value = ((int)UserStatus.New).ToString(), Selected = model.Status == (sbyte)UserStatus.New });
-					break;
-				case UserStatus.Request: // запрос регистрации можно изменить только на новый
-					allStatus.Add(new SelectListItem() { Text = UserStatus.Request.DisplayName(), Value = ((int)UserStatus.Request).ToString(), Selected = model.Status == (sbyte)UserStatus.Request });
-					allStatus.Add(new SelectListItem() { Text = UserStatus.New.DisplayName(), Value = ((int)UserStatus.New).ToString(), Selected = model.Status == (sbyte)UserStatus.New });
-					break;
-			}
-			model.AllStatus = allStatus;
 
 			// должности
 			var allAppointment = new List<SelectListItem>();

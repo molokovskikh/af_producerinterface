@@ -216,13 +216,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebForm\ReportList.aspx.cs">
-      <DependentUpon>ReportList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm\ReportList.aspx.designer.cs">
-      <DependentUpon>ReportList.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.min.css" />
@@ -334,7 +327,6 @@
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
     <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
-    <Content Include="WebForm\ReportList.aspx" />
     <None Include="Content\Chosen\js\_references.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.ru.min.js" />
@@ -718,7 +710,7 @@
     <Content Include="Views\PermissionUser\Group.cshtml" />
     <Content Include="Views\PermissionUser\SearchUser.cshtml" />
     <Content Include="Views\PermissionUser\Index.cshtml" />
-    <Content Include="Views\PermissionUser\Change.cshtml" />
+    <Content Include="Views\PermissionUser\Edit.cshtml" />
     <Content Include="Views\PermissionUser\ListPermission.cshtml" />
     <Content Include="Views\PermissionUser\EditPermission.cshtml" />
     <Content Include="Views\News\Create.cshtml" />
@@ -786,9 +778,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProducerInterfaceCommon\ProducerInterfaceCommon.csproj">
+    <ProjectReference Include="..\ProducerInterfaceCommon\lib.csproj">
       <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>
-      <Name>ProducerInterfaceCommon</Name>
+      <Name>lib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

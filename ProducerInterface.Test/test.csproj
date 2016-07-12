@@ -144,13 +144,13 @@
     <Compile Include="Setup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProducerInterfaceCommon\ProducerInterfaceCommon.csproj">
+    <ProjectReference Include="..\ProducerInterfaceCommon\lib.csproj">
       <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>
-      <Name>ProducerInterfaceCommon</Name>
+      <Name>lib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProducerInterface\ProducerInterface.csproj">
+    <ProjectReference Include="..\ProducerInterface\client.csproj">
       <Project>{2a3aaf08-e77f-4337-ba73-3e67e0e166f5}</Project>
-      <Name>ProducerInterface</Name>
+      <Name>client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

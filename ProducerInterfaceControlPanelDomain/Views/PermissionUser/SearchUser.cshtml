@@ -56,13 +56,12 @@
 						}
 				</td>
 				<td>
-						@if (user.AccountAppointment != null)
-						{
-								<span>@user.AccountAppointment.Name</span>
-						}
+					@if (user.AccountAppointment != null) {
+						<span>@user.AccountAppointment.Name</span>
+					}
 				</td>
 				<td>
-						<a href="@Url.Action("Change", new { Id = user.Id })"><span class="glyphicon glyphicon-edit"></span></a>
+						<a href="@Url.Action("Edit", new { Id = user.Id })"><span class="glyphicon glyphicon-edit"></span></a>
 				</td>
 		</tr>
 		}

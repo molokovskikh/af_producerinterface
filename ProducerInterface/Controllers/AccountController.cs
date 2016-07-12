@@ -173,7 +173,7 @@ namespace ProducerInterface.Controllers
 				user.PasswordUpdated = DateTime.Now;
 				DB.Entry(user).State = EntityState.Modified;
 				DB.SaveChanges();
-				EmailSender.SendPasswordRecoveryMessage(DB, user.Id, password, Request.UserHostAddress);
+				EmailSender.SendPasswordRecoveryMessage(DB, user.Id, password);
 
 				SuccessMessage($"Новый пароль отправлен на ваш email {model.login}");
 			}
@@ -205,7 +205,7 @@ namespace ProducerInterface.Controllers
 			user.PasswordUpdated = DateTime.Now;
 			DB.SaveChanges();
 
-			EmailSender.SendPasswordChangeMessage(DB, user.Id, model.Pass, Request.UserHostAddress);
+			EmailSender.SendPasswordChangeMessage(DB, user.Id, model.Pass);
 			SuccessMessage("Новый пароль сохранен и отправлен на ваш email: " + user.Login);
 			return RedirectToAction("Index", "Profile");
 		}
@@ -340,7 +340,7 @@ namespace ProducerInterface.Controllers
 			DB.SaveChanges();
 
 			// отправили письмо о регистрации
-			EmailSender.SendRegistrationMessage(DB, account.Id, password, account.IP);
+			EmailSender.SendRegistrationMessage(DB, account.Id, password);
 			SuccessMessage("Пароль отправлен на ваш email " + account.Login);
 			return Redirect("~");
 		}
@@ -419,7 +419,7 @@ namespace ProducerInterface.Controllers
 			DB.SaveChanges();
 
 			// отправили письмо о регистрации
-			EmailSender.SendRegistrationMessage(DB, account.Id, password, HttpContext.Request.UserHostAddress);
+			EmailSender.SendRegistrationMessage(DB, account.Id, password);
 			SuccessMessage("Письмо с паролем отправлено на ваш email");
 			return Redirect("~");
 		}
@@ -485,7 +485,12 @@ namespace ProducerInterface.Controllers
 			// создали аккаунт
 			// регионы и группы не добавляются здесь, потому что всё равно должен регистрировать админ
 			var user = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
+			user.AccountRegion = DB.Regions().Select(x => new AccountRegion(user, x)).ToList();
+			var name = GetWebConfigParameters("AdminGroupName");
+			var group = DB.AccountGroup.SingleOrDefault(x => x.Name == name && x.TypeGroup == SbyteTypeUser);
+			user.AccountGroup.Add(group);
 			user.IP = Request.UserHostAddress;
+			DB.SaveChanges();
 
 			// отправили сообщение сотрудникам
 			EmailSender.ProducerRequestMessage(DB, user, company.Name, $"{model.PhoneNumber}, {model.login}");

@@ -62,9 +62,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Message { get; set; }
 
 		[Display(Name = "Статус")]
-		public sbyte Status { get; set; }
-
-		public List<SelectListItem> AllStatus { get; set; }
+		public UserStatus Status { get; set; }
 
 		[Display(Name = "Должность")]
 		public int? AppointmentId { get; set; }
