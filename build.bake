@@ -13,4 +13,16 @@ Global(
 
 task @default, [@build]
 
-task @build, []
+task @build, ["build:client", "build:adm"]
+
+task "build:client":
+	BuildWeb(Globals, "client")
+
+task "clean:client":
+	CleanWeb(Globals, "client")
+
+task "build:adm":
+	BuildWeb(Globals, "adm")
+
+task "clean:adm":
+	CleanWeb(Globals, "adm")
