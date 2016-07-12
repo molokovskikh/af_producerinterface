@@ -36,4 +36,6 @@ task "clean:adm":
 	CleanWeb(Globals, "adm")
 
 task "deploy:adm":
-	XCopyDeploy(DuckDictionary(Globals, false) {"DeployAlias": "ProducerInterfaceControlPanel"}, "adm")
+	globals = DuckDictionary(Globals, false)
+	globals.DeployAlias = "ProducerInterfaceControlPanel"
+	XCopyDeploy(globals, "adm")
