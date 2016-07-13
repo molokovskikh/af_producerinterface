@@ -75,7 +75,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var user = DB.Account.Single(x => x.Id == id);
 			user.EnabledEnum = UserStatus.Blocked;
 			DB.SaveChanges();
-			EmailSender.RegistrationReject(DB, user, Request.Form["reject-reason"]);
+			Mails.RegistrationReject(user, Request.Form["reject-reason"]);
 			SuccessMessage("Сохранено");
 			return RedirectToAction("Index");
 		}
@@ -128,7 +128,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			// отправка сообщения пользователю с паролем
 			if (activated)
-				EmailSender.SendAccountVerificationMessage(DB, user, password);
+				Mails.SendAccountVerificationMessage(user, password);
 
 			SuccessMessage("Изменения успешно сохранены");
 			// если админ - на список админов

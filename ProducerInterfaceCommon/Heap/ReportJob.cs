@@ -35,22 +35,26 @@ namespace ProducerInterfaceCommon.Heap
 			catch (Exception e) {
 				logger.Error($"Job {key.Group} {key.Name} run failed:" + e.Message, e);
 
-				var cntx = new producerinterface_Entities();
+				var db = new producerinterface_Entities();
 				// вытащили расширенные параметры задачи
-				var jext = cntx.jobextend.Single(x => x.JobName == key.Name
+				var jext = db.jobextend.Single(x => x.JobName == key.Name
 																							&& x.JobGroup == key.Group
 																							&& x.Enable == true);
 
 				// отправили статус об ошибке отчета
 				jext.DisplayStatusEnum = DisplayStatus.Error;
 				jext.LastRun = DateTime.Now;
-				cntx.SaveChanges();
+				db.SaveChanges();
 
 				var ip = "неизвестен (авт. запуск)";
 				if (tparam is RunNowParam)
 					ip = ((RunNowParam)tparam).Ip;
 
-				EmailSender.SendReportErrorMessage(cntx, tparam.UserId, jext, e.Message, ip);
+				var user = db.Account.First(x => x.Id == tparam.UserId);
+				user.IP = ip;
+				var mail = new EmailSender(db, user);
+
+				mail.SendReportErrorMessage(jext, e.Message);
 
 				return;
 			}

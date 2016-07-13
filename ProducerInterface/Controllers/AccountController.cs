@@ -127,6 +127,8 @@ namespace ProducerInterface.Controllers
 				var ticket = new FormsAuthenticationTicket(adminId.ToString(), true, (int)FormsAuthentication.Timeout.TotalMinutes);
 				var cookie = new HttpCookie("auth", FormsAuthentication.Encrypt(ticket));
 				Response.Cookies.Set(cookie);
+			} else {
+				Response.Cookies.Remove("auth");
 			}
 
 			return RedirectToAction("Index", "Profile");
@@ -173,7 +175,7 @@ namespace ProducerInterface.Controllers
 				user.PasswordUpdated = DateTime.Now;
 				DB.Entry(user).State = EntityState.Modified;
 				DB.SaveChanges();
-				EmailSender.SendPasswordRecoveryMessage(DB, user.Id, password);
+				Mails.SendPasswordRecoveryMessage(user, password);
 
 				SuccessMessage($"Новый пароль отправлен на ваш email {model.login}");
 			}
@@ -205,7 +207,7 @@ namespace ProducerInterface.Controllers
 			user.PasswordUpdated = DateTime.Now;
 			DB.SaveChanges();
 
-			EmailSender.SendPasswordChangeMessage(DB, user.Id, model.Pass);
+			Mails.SendPasswordChangeMessage(user, model.Pass);
 			SuccessMessage("Новый пароль сохранен и отправлен на ваш email: " + user.Login);
 			return RedirectToAction("Index", "Profile");
 		}
@@ -340,7 +342,7 @@ namespace ProducerInterface.Controllers
 			DB.SaveChanges();
 
 			// отправили письмо о регистрации
-			EmailSender.SendRegistrationMessage(DB, account.Id, password);
+			Mails.SendRegistrationMessage(account, password);
 			SuccessMessage("Пароль отправлен на ваш email " + account.Login);
 			return Redirect("~");
 		}
@@ -419,7 +421,7 @@ namespace ProducerInterface.Controllers
 			DB.SaveChanges();
 
 			// отправили письмо о регистрации
-			EmailSender.SendRegistrationMessage(DB, account.Id, password);
+			Mails.SendRegistrationMessage(account, password);
 			SuccessMessage("Письмо с паролем отправлено на ваш email");
 			return Redirect("~");
 		}

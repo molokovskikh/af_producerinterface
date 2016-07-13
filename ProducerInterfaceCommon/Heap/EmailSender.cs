@@ -14,6 +14,16 @@ namespace ProducerInterfaceCommon.Heap
 {
 	public class EmailSender
 	{
+		private producerinterface_Entities db;
+		private Account currentUser;
+		private DiagnosticInformation diagnostics;
+
+		public EmailSender(producerinterface_Entities db, Account currentUser)
+		{
+			this.db = db;
+			this.currentUser = currentUser;
+			diagnostics = new DiagnosticInformation(currentUser);
+		}
 
 		public static void SendEmail(List<string> to, string subject, string body, List<string> attachments)
 		{
@@ -52,178 +62,138 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Автоматическая рассылка отчетов, пользователю и расширенное сотрудникам
-		public static void AutoPostReportMessage(producerinterface_Entities cntx, long userId, jobextend jext, string path, List<string> mailTo, string ip)
+		public void AutoPostReportMessage(jobextend jext, string path, List<string> mailTo)
 		{
-			var user = cntx.Account.Single(x => x.Id == userId);
-			var creator = cntx.Account.Single(x => x.Id == jext.CreatorId);
-			var producerName = cntx.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
-
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.AutoPostReport);
-			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = DateTime.Now })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, MailType.AutoPostReport);
-			attachments.Add(path);
-      EmailSender.SendEmail(mailTo, subject, body, attachments);
-
-			var di = new DiagnosticInformation(user) {ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, ProducerName = producerName, Body = body, ActionName = MailType.AutoPostReport.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments);
+			MessageForReport(jext, mailTo, MailType.AutoPostReport);
 		}
 
 		// Ручная рассылка отчетов, пользователю и расширенное сотрудникам
-		public static void ManualPostReportMessage(producerinterface_Entities cntx, long userId, jobextend jext, string path, List<string> mailTo, string ip)
+		public void ManualPostReportMessage(jobextend jext, string path, List<string> mailTo)
 		{
-			var user = cntx.Account.Single(x => x.Id == userId);
-			var creator = cntx.Account.Single(x => x.Id == jext.CreatorId);
-			var producerName = cntx.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
-
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ManualPostReport);
-			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName, CreatorName = creator.Name, ProducerName = producerName, DateTimeNow = jext.LastRun, UserName = user.Name, UserLogin = user.Login })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, MailType.ManualPostReport);
-			attachments.Add(path);
-			EmailSender.SendEmail(mailTo, subject, body, attachments);
-
-			var di = new DiagnosticInformation(user) { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, ProducerName = producerName, Body = body, ActionName = MailType.ManualPostReport.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments);
+			var type = MailType.ManualPostReport;
+			MessageForReport(jext, mailTo, type);
 		}
 
 		// Нет данных для формировании отчета, пользователю и расширенное сотрудникам
-		public static void SendEmptyReportMessage(producerinterface_Entities cntx, long userId, jobextend jext, string ip)
+		public void SendEmptyReportMessage(jobextend jext)
 		{
-			var user = cntx.Account.Single(x => x.Id == userId);
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.EmptyReport);
-			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName })}\r\n\r\n{mailForm.Footer}";
-			var di = new DiagnosticInformation(user) { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, ActionName = MailType.EmptyReport.DisplayName() };
-			var bodyExtended = di.ToString(cntx);
-			var attachments = GetAttachments(cntx, MailType.EmptyReport);
-			// #48817 пользователю Дополнительная информация высылается также
-			EmailSender.SendEmail(user.Login, subject, bodyExtended, attachments);
-
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
-    }
-
-		// Реакция на давно не запускавшийся отчет, пользователю и расширенное сотрудникам
-		public static void CallForDeleteReportMessage(producerinterface_Entities cntx, jobextend jext)
-		{
-			var user = cntx.Account.Single(x => x.Id == jext.CreatorId);
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.CallForDelete);
-			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName })}\r\n\r\n{mailForm.Footer}";
-			var di = new DiagnosticInformation(user) { ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, ActionName = MailType.CallForDelete.DisplayName() };
-			var bodyExtended = di.ToString(cntx);
-			var attachments = GetAttachments(cntx, MailType.EmptyReport);
-			EmailSender.SendEmail(user.Login, subject, body, attachments);
-
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, bodyExtended, attachments);
+			MessageForReport(jext, new List<string> { currentUser.Login }, MailType.EmptyReport);
 		}
 
 		// Ошибка при формировании отчета, пользователю и расширенное сотрудникам
-		public static void SendReportErrorMessage(producerinterface_Entities cntx, long userId, jobextend jext, string errorMessage, string ip)
+		public void SendReportErrorMessage(jobextend jext, string errorMessage)
 		{
-			var user = cntx.Account.Single(x => x.Id == userId);
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.ReportError);
-			var subject = ReliableTokenizer(mailForm.Subject, new { ReportName = jext.CustomName, SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { ReportName = jext.CustomName })}\r\n\r\n{mailForm.Footer}";
+			diagnostics.ErrorMessage = errorMessage;
+			MessageForReport(jext, new List<string> { currentUser.Login }, MailType.ReportError);
+		}
 
-			var di = new DiagnosticInformation(user) {ErrorMessage = errorMessage, ReportId = jext.JobName, ReportName = jext.CustomName, ProducerId = jext.ProducerId, Body = body, ActionName = MailType.ReportError.DisplayName() };
-			var bodyExtended = di.ToString(cntx);
-			var attachments = GetAttachments(cntx, MailType.ReportError);
-			// #48817 пользователю Дополнительная информация высылается также
-			EmailSender.SendEmail(user.Login, subject, bodyExtended, attachments);
+		private void MessageForReport(jobextend jext, List<string> mailTo, MailType type)
+		{
+			var creator = db.Account.Single(x => x.Id == jext.CreatorId);
+			var producerName = db.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
 
-      var mailError = ConfigurationManager.AppSettings["MailError"];
-			EmailSender.SendEmail(mailError, subject, bodyExtended, attachments);
+			var args = new {
+				ReportName = jext.CustomName,
+				CreatorName = creator.Name,
+				ProducerName = producerName,
+				DateTimeNow = jext.LastRun,
+				UserName = currentUser.Name,
+				UserLogin = currentUser.Login
+			};
+			diagnostics.ReportId = jext.JobName;
+			diagnostics.ReportName = jext.CustomName;
+			diagnostics.ProducerId = jext.ProducerId;
+			diagnostics.ProducerName = producerName;
+			MessageFromTemplate(type, mailTo, args);
 		}
 
 		// Регистрация в системе, пользователю и расширенное сотрудникам
-		public static void SendRegistrationMessage(producerinterface_Entities cntx, Int64 userId, string password)
+		public void SendRegistrationMessage(Account targetUser, string password)
 		{
-			SendPasswordMessage(cntx, userId, password, MailType.Registration);
+			MessageForUser(MailType.Registration, targetUser, new { Password = password, });
 		}
 
 		// Смена пароля, пользователю и расширенное сотрудникам
-		public static void SendPasswordChangeMessage(producerinterface_Entities cntx, Int64 userId, string password)
+		public void SendPasswordChangeMessage(Account targetUser, string password)
 		{
-			SendPasswordMessage(cntx, userId, password, MailType.PasswordChange);
+			MessageForUser(MailType.PasswordChange, targetUser, new { Password = password, });
 		}
 
 		// Восстановление пароля, пользователю и расширенное сотрудникам
-		public static void SendPasswordRecoveryMessage(producerinterface_Entities cntx, Int64 userId, string password)
+		public void SendPasswordRecoveryMessage(Account targetUser, string password)
 		{
-			SendPasswordMessage(cntx, userId, password, MailType.PasswordRecovery);
+			MessageForUser(MailType.PasswordRecovery, targetUser, new { Password = password });
 		}
 
 		// Подтверждение регистрации пользователя без производителя
-		public static void SendAccountVerificationMessage(producerinterface_Entities db, Account user, string password)
+		public void SendAccountVerificationMessage(Account targetUser, string password)
 		{
-			MessageFromTemplate(db, MailType.AccountVerification, user, new { Password = password });
+			MessageForUser(MailType.AccountVerification, targetUser, new { Password = password });
 		}
 
-		public static void RegistrationReject(producerinterface_Entities db, Account user, string reason)
+		public void RegistrationReject(Account targetUser, string reason)
 		{
-			MessageFromTemplate(db, MailType.RegistrationRejected, user, new { Reason = reason });
+			MessageForUser(MailType.RegistrationRejected, targetUser, new { Reason = reason });
 		}
 
-		private static void MessageFromTemplate(producerinterface_Entities db, MailType type, Account user, object args)
+		private void MessageForUser(MailType type, Account targetUser, object args)
 		{
+			var values = new Dictionary<string, object> {
+				{ "UserName", targetUser.Name },
+				{ "UserLogin", targetUser.Login },
+			};
+			MessageFromTemplate(type, targetUser.Login, Merge(values, ToMap(args)));
+		}
+
+		private void MessageFromTemplate(MailType type, string to, Dictionary<string, object> args)
+		{
+			MessageFromTemplate(type, new List<string> { to }, args);
+		}
+
+		private void MessageFromTemplate(MailType type, string to, object args)
+		{
+			MessageFromTemplate(type, new List<string> { to }, ToMap(args));
+		}
+
+		private void MessageFromTemplate(MailType type, List<string> to, object args)
+		{
+			MessageFromTemplate(type, to, ToMap(args));
+		}
+
+		private void MessageFromTemplate(MailType type, List<string> to, Dictionary<string, object> args)
+		{
+			var debugMail = ConfigurationManager.AppSettings["DebugEmail"];
+			if (!String.IsNullOrEmpty(debugMail))
+				to = new List<string> { debugMail };
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var values = new Dictionary<string, object> {
-				{ "UserName", user.Name },
-				{ "UserLogin", user.Login },
-				{ "SiteName", siteName }
+				{ "SiteName", siteName },
+				{ "DateTimeNow", DateTime.Now }
 			};
-			var local = ToMap(args);
-			foreach (KeyValuePair<string, object> pair in local) {
-				values[pair.Key] = pair.Value;
-			}
+			Merge(values, args);
 			var mailForm = db.mailformwithfooter.Single(x => x.Id == (int) type);
 			var subject = Render(mailForm.Subject, values);
 			var header = Render(mailForm.Header, values);
 			var body = Render(mailForm.Body, values);
 			var footer = Render(mailForm.Footer, values);
 			var attachments = GetAttachments(db, type);
-			SendEmail(user.Login, subject, $"{header}\r\n\r\n{body}\r\n\r\n{footer}", attachments);
+			SendEmail(to, subject, $"{header}\r\n\r\n{body}\r\n\r\n{footer}", attachments);
 
-			var di = new DiagnosticInformation(user) {
-				AdminLogin = user.Login,
-				Body = body,
-				ActionName = type.DisplayName()
-			};
+			body = Render(mailForm.Body, values);
+			values["Password"] = "*******";
+			diagnostics.Body = $"{header}\r\n\r\n{body}\r\n\r\n{footer}";
+			diagnostics.ActionName = type.DisplayName();
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			SendEmail(mailInfo, subject, di.ToString(db), attachments);
+			SendEmail(mailInfo, subject, diagnostics.ToString(db), attachments);
+
+			diagnostics = new DiagnosticInformation(currentUser);
 		}
 
-		// Универсальное на смену пароля, пользователю и расширенное сотрудникам
-		private static void SendPasswordMessage(producerinterface_Entities cntx, long userId, string password, MailType type)
+		// Изменение новости, расширенное сотрудникам
+		public void NewsChanged(NewsActions action, long newsId, string before, string after)
 		{
-			var user = cntx.Account.Single(x => x.Id == userId);
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)type);
-			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { Password = password })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, type);
-			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
-
-			var bodyWithoutPassword = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { Password = "*******" })}\r\n\r\n{mailForm.Footer}";
-			var di = new DiagnosticInformation(user) { Body = bodyWithoutPassword, ActionName = type.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
+			MessageFromTemplate(MailType.NewsAction, ConfigurationManager.AppSettings["MailInfo"],
+				new { Before = before, After = after, Id = newsId });
 		}
 
 		// Запрос регистрации производителя, расширенное сотрудникам
@@ -238,20 +208,6 @@ namespace ProducerInterfaceCommon.Heap
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
 		}
-
-		// Изменение новости, расширенное сотрудникам
-		public static void ChangeNewsMessage(producerinterface_Entities cntx, Account user, NewsActions action, long newsId, string before, string after)
-		{
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.NewsAction);
-			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
-			var body = $"{ReliableTokenizer(mailForm.Body, new { Before = before, After = after, Id = newsId })}";
-
-			var di = new DiagnosticInformation(user) { Body = body, ActionName = action.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
-		}
-
 
 		// Изменение ПКУ, сотрудникам
 		public static void SendCatalogChangeMessage(producerinterface_Entities cntx, Account user, string fieldName, string formName, string before, string after)
@@ -444,6 +400,14 @@ namespace ProducerInterfaceCommon.Heap
 			return Render(format, dictionary);
 		}
 
+		private static Dictionary<string, object> Merge(Dictionary<string, object> dst, Dictionary<string, object> src)
+		{
+			foreach (var pair in src) {
+				dst[pair.Key] = pair.Value;
+			}
+			return dst;
+		}
+
 		public static Dictionary<string, object> ToMap(object substitution)
 		{
 			var dictionary = new Dictionary<string, object>();
@@ -471,6 +435,7 @@ namespace ProducerInterfaceCommon.Heap
 			public DiagnosticInformation(Account user)
 			{
 				User = user;
+				AdminLogin = user.Login;
 				UserIp = user.IP;
 			}
 

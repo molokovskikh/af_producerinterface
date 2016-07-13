@@ -423,8 +423,6 @@
     <Compile Include="ReportModels\report_type_properties.cs">
       <DependentUpon>Reports_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="SPAM\Enums.cs" />
-    <Compile Include="SPAM\Mail_Send.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBack\FeedBackFilterView.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBack\FeedBackFunction.cs" />
     <Compile Include="ViewModel\ControlPanel\Permission\ListGroupView.cs" />

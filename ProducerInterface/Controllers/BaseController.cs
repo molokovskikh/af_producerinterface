@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Security;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Controllers;
+using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterface.Controllers
 {
@@ -12,6 +13,7 @@ namespace ProducerInterface.Controllers
 		protected Account CurrentUser { get; set; }
 		protected Account CurrentAdmin { get; set; }
 		protected sbyte SbyteTypeUser => (sbyte)TypeUsers.ProducerUser;
+		protected EmailSender Mails;
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
@@ -31,6 +33,7 @@ namespace ProducerInterface.Controllers
 					ViewBag.Producernames = "Физическое лицо";
 				ViewBag.CurrentUser = CurrentUser;
 				ViewBag.AdminUser = CurrentAdmin;
+				Mails = new EmailSender(DB, CurrentUser);
 			}
 		}
 

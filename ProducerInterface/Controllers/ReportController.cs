@@ -665,7 +665,7 @@ namespace ProducerInterface.Controllers
 				return View(model);
 
 			var file = helper.GetExcel(jext);
-			EmailSender.ManualPostReportMessage(DB, userId, jext, file.FullName, model.MailTo, CurrentUser.IP);
+			new EmailSender(DB, CurrentUser).ManualPostReportMessage(jext, file.FullName, model.MailTo);
 			SuccessMessage("Отчет отправлен на указанные email");
 			return View(model);
 		}
@@ -716,12 +716,6 @@ namespace ProducerInterface.Controllers
 		{
 			return DB.jobextend.SingleOrDefault(x => x.JobName == jobName);
 		}
-
-		//public JsonResult GetCatalogDragFamalyNames(string term)
-		//{
-		//	var ret = Json(h.GetSearchCatalogFamalyName(term).ToList().Select(x => new { value = x.Value, text = x.Text }), JsonRequestBehavior.AllowGet);
-		//	return ret;
-		//}
 
 		/// <summary>
 		/// Заполняе модель указанного типа значениями, полученными в запросе

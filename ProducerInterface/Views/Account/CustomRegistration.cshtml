@@ -11,7 +11,7 @@
 
     <hr />
 
-    @using (Html.BeginForm("CustomRegistration", "Account", FormMethod.Post))
+    @using (Html.BeginForm("CustomRegistration", "Account", FormMethod.Post, new { id = "register-form" }))
     {
         @Html.ValidationSummary(true, "")
 
@@ -40,7 +40,7 @@
                 @Html.EditorFor(m => m.PhoneNumber)
             </div>
         </div>
-             
+
         @Html.EditorFor(m => m.Appointment)
 
         <br />

@@ -86,7 +86,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			DB.NewsChange.Add(history);
 			DB.SaveChanges();
 
-			EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.Archive, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
+			Mails.NewsChanged(NewsActions.Archive, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
 			SuccessMessage("Новость отправлена в архив");
 			return RedirectToAction("Index");
 		}
@@ -106,7 +106,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			DB.Entry(news).State = System.Data.Entity.EntityState.Deleted;
 			DB.SaveChanges(CurrentUser, "Удаление новости");
 
-			EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.PastRetrieve, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
+			Mails.NewsChanged(NewsActions.PastRetrieve, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
 			SuccessMessage("Новость удалена");
 			return RedirectToAction("Archive");
 		}
@@ -172,7 +172,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				before.Enabled = true;
 				DB.SaveChanges();
 
-				EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.Edit, after.Id, $"{before.Name}\r\n\r\n{before.Description}", $"{after.Name}\r\n\r\n{after.Description}");
+				Mails.NewsChanged(NewsActions.Edit, after.Id, $"{before.Name}\r\n\r\n{before.Description}", $"{after.Name}\r\n\r\n{after.Description}");
 				SuccessMessage("Изменения успешно сохранены");
 			}
 			else
@@ -196,7 +196,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				};
 				DB.NewsChange.Add(history);
 				DB.SaveChanges();
-				EmailSender.ChangeNewsMessage(DB, CurrentUser, NewsActions.Add, after.Id, "", $"{after.Name}\r\n\r\n{after.Description}");
+				Mails.NewsChanged(NewsActions.Add, after.Id, "", $"{after.Name}\r\n\r\n{after.Description}");
 				SuccessMessage("Новость успешно добавлена");
 			}
 			return RedirectToAction("Index");

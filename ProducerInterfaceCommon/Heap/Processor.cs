@@ -16,14 +16,14 @@ namespace ProducerInterfaceCommon.Heap
 	{
 		private Type _type;
 
-		private producerinterface_Entities _cntx;
+		private producerinterface_Entities db;
 
 		private HeaderHelper _helper;
 
 		public Processor()
 		{
 			_type = typeof(T);
-      _cntx = new producerinterface_Entities();
+      db = new producerinterface_Entities();
       _helper = new HeaderHelper();
     }
 
@@ -41,16 +41,16 @@ namespace ProducerInterfaceCommon.Heap
 				reportRunLog.Ip = ip;
 				reportRunLog.RunNow = true;
 			}
-			_cntx.ReportRunLog.Add(reportRunLog);
-			_cntx.SaveChanges();
+			db.ReportRunLog.Add(reportRunLog);
+			db.SaveChanges();
 
 			// вытащили расширенные параметры задачи
-			var jext = _cntx.jobextend.Single(x => x.JobName == key.Name
+			var jext = db.jobextend.Single(x => x.JobName == key.Name
 																						&& x.JobGroup == key.Group
 																						&& x.Enable == true);
 			// добавили сведения о последнем запуске
 			jext.LastRun = DateTime.Now;
-			_cntx.SaveChanges();
+			db.SaveChanges();
 
 			var querySort = new List<T>();
 			var connString = ConfigurationManager.ConnectionStrings["producerinterface"].ConnectionString;
@@ -68,12 +68,16 @@ namespace ProducerInterfaceCommon.Heap
 				}
 			}
 
+				var user = db.Account.First(x => x.Id == tparam.UserId);
+				user.IP = ip;
+				var mail = new EmailSender(db, user);
+
 			// действия при пустом отчете
 			if (querySort.Count == 0) {
 				jext.DisplayStatusEnum = DisplayStatus.Empty;
-				_cntx.Entry(jext).State = EntityState.Modified;
-				_cntx.SaveChanges();
-				EmailSender.SendEmptyReportMessage(_cntx, tparam.UserId, jext, ip);
+				db.Entry(jext).State = EntityState.Modified;
+				db.SaveChanges();
+				mail.SendEmptyReportMessage(jext);
 				return;
 			}
 
@@ -90,18 +94,18 @@ namespace ProducerInterfaceCommon.Heap
 			var sw = new StringWriter();
 			ds.WriteXml(sw, XmlWriteMode.WriteSchema);
 			// сохранили в базу
-			var jxml = _cntx.reportxml.SingleOrDefault(x => x.JobName == key.Name && x.JobGroup == key.Group);
+			var jxml = db.reportxml.SingleOrDefault(x => x.JobName == key.Name && x.JobGroup == key.Group);
 			if (jxml == null) {
 				jxml = new reportxml() { JobName = key.Name, JobGroup = key.Group, SchedName = jext.SchedName, Xml = sw.ToString()};
-				_cntx.reportxml.Add(jxml);
+				db.reportxml.Add(jxml);
 			}
 			else
 				jxml.Xml = sw.ToString();
 
 			// отправили статус, что отчет готов
 			jext.DisplayStatusEnum = DisplayStatus.Ready;
-			_cntx.Entry(jext).State = EntityState.Modified;
-			_cntx.SaveChanges();
+			db.Entry(jext).State = EntityState.Modified;
+			db.SaveChanges();
 
 			// если указаны email - отправляем
 			if (tparam.MailTo != null && tparam.MailTo.Count > 0) {
@@ -110,9 +114,9 @@ namespace ProducerInterfaceCommon.Heap
 
 				// при автоматическом и ручном запуске разное содержимое письма
 				if (tparam is CronParam)
-					EmailSender.AutoPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo, ip);
+					mail.AutoPostReportMessage(jext, file.FullName, tparam.MailTo);
 				else if (tparam is RunNowParam)
-					EmailSender.ManualPostReportMessage(_cntx, tparam.UserId, jext, file.FullName, tparam.MailTo, ip);
+					mail.ManualPostReportMessage(jext, file.FullName, tparam.MailTo);
 			}
 		}
 
