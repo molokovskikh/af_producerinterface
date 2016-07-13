@@ -1,0 +1,6 @@
+[submodule "lib/test-support"]
+	path = lib/test-support
+	url = git@git.analit.net:root/test-support.git
+[submodule "lib/common-tools"]
+	path = lib/common-tools
+	url = git@git.analit.net:root/common-tools.git

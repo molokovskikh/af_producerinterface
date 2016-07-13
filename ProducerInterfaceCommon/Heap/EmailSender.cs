@@ -17,6 +17,7 @@ namespace ProducerInterfaceCommon.Heap
 		private producerinterface_Entities db;
 		private Account currentUser;
 		private DiagnosticInformation diagnostics;
+		private List<string> attachments = new List<string>();
 
 		public EmailSender(producerinterface_Entities db, Account currentUser)
 		{
@@ -64,14 +65,15 @@ namespace ProducerInterfaceCommon.Heap
 		// Автоматическая рассылка отчетов, пользователю и расширенное сотрудникам
 		public void AutoPostReportMessage(jobextend jext, string path, List<string> mailTo)
 		{
+			attachments.Add(path);
 			MessageForReport(jext, mailTo, MailType.AutoPostReport);
 		}
 
 		// Ручная рассылка отчетов, пользователю и расширенное сотрудникам
 		public void ManualPostReportMessage(jobextend jext, string path, List<string> mailTo)
 		{
-			var type = MailType.ManualPostReport;
-			MessageForReport(jext, mailTo, type);
+			attachments.Add(path);
+			MessageForReport(jext, mailTo, MailType.ManualPostReport);
 		}
 
 		// Нет данных для формировании отчета, пользователю и расширенное сотрудникам
@@ -176,7 +178,7 @@ namespace ProducerInterfaceCommon.Heap
 			var header = Render(mailForm.Header, values);
 			var body = Render(mailForm.Body, values);
 			var footer = Render(mailForm.Footer, values);
-			var attachments = GetAttachments(db, type);
+			attachments.AddRange(GetAttachments(db, type));
 			SendEmail(to, subject, $"{header}\r\n\r\n{body}\r\n\r\n{footer}", attachments);
 
 			body = Render(mailForm.Body, values);
@@ -187,6 +189,7 @@ namespace ProducerInterfaceCommon.Heap
 			SendEmail(mailInfo, subject, diagnostics.ToString(db), attachments);
 
 			diagnostics = new DiagnosticInformation(currentUser);
+			attachments = new List<string>();
 		}
 
 		// Изменение новости, расширенное сотрудникам
