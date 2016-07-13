@@ -17,7 +17,7 @@ task @build, ["build:client", "build:adm", "build:backend"]
 
 task @deploy, ["deploy:pipeline"]
 
-task "deploy:app", ["deploy:client", "deploy:adm"]
+task "deploy:app", ["deploy:client", "deploy:adm", "deploy:backend"]
 
 task "build:client":
 	BuildWeb(Globals, "client")
