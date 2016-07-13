@@ -27,7 +27,7 @@ namespace ProducerInterfaceCommon.Heap
       _helper = new HeaderHelper();
     }
 
-		public void Process(JobKey key, Report jparam, TriggerParam tparam)
+		public void Process(JobKey key, Report report, TriggerParam tparam)
 		{
 			// записали в историю запусков
 			string mailTo = null;
@@ -52,25 +52,10 @@ namespace ProducerInterfaceCommon.Heap
 			jext.LastRun = DateTime.Now;
 			db.SaveChanges();
 
-			var querySort = new List<T>();
-			var connString = ConfigurationManager.ConnectionStrings["producerinterface"].ConnectionString;
-			using (var conn = new MySqlConnection(connString)) {
-				using (var command = new MySqlCommand(jparam.GetSpName(), conn)) {
-					command.CommandType = CommandType.StoredProcedure;
-					command.CommandTimeout = 0;
-					foreach (var spparam in jparam.GetSpParams())
-						command.Parameters.AddWithValue(spparam.Key, spparam.Value);
-					conn.Open();
-					using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection)) {
-						var mapper = new MyAutoMapper<T>();
-						querySort = mapper.Map(reader);
-					}
-				}
-			}
-
-				var user = db.Account.First(x => x.Id == tparam.UserId);
-				user.IP = ip;
-				var mail = new EmailSender(db, user);
+			var querySort = report.Read<T>();
+			var user = db.Account.First(x => x.Id == tparam.UserId);
+			user.IP = ip;
+			var mail = new EmailSender(db, user);
 
 			// действия при пустом отчете
 			if (querySort.Count == 0) {
@@ -82,14 +67,14 @@ namespace ProducerInterfaceCommon.Heap
 			}
 
 			var instance = (ReportRow)Activator.CreateInstance(_type);
-			querySort = instance.Treatment<T>(querySort, jparam);
+			querySort = instance.Treatment<T>(querySort, report);
 
 			var shredder = new ObjectShredder<T>();
 			var dataTable = shredder.Shred(querySort);
 
-			var headers = jparam.GetHeaders(_helper);
+			var headers = report.GetHeaders(_helper);
 
-			var ds = CreateDataSet(jparam.CastomName, headers, dataTable);
+			var ds = CreateDataSet(report.CastomName, headers, dataTable);
 			// записали XML
 			var sw = new StringWriter();
 			ds.WriteXml(sw, XmlWriteMode.WriteSchema);
@@ -110,7 +95,7 @@ namespace ProducerInterfaceCommon.Heap
 			// если указаны email - отправляем
 			if (tparam.MailTo != null && tparam.MailTo.Count > 0) {
 				// создали excel-файл
-				var file = CreateExcel(key.Group, key.Name, ds, jparam);
+				var file = CreateExcel(key.Group, key.Name, ds, report);
 
 				// при автоматическом и ручном запуске разное содержимое письма
 				if (tparam is CronParam)

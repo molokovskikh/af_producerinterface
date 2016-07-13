@@ -2,14 +2,14 @@
 using System.Web.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+using System.Configuration;
+using System.Data;
+using MySql.Data.MySqlClient;
 using ProducerInterfaceCommon.Heap;
-using Quartz;
 
 namespace ProducerInterfaceCommon.Models
 {
 	[Serializable]
-	[SuppressMessage("ReSharper", "Mvc.TemplateNotResolved")] // баг решарпера - не может разрешить шаблоны в абстрактных классах
 	public abstract class Report
 	{
 		public abstract string Name { get; }
@@ -31,9 +31,25 @@ namespace ProducerInterfaceCommon.Models
 
 		public abstract List<string> GetHeaders(HeaderHelper h);
 
-		public abstract string GetSpName();
+		public virtual string GetSpName()
+		{
+			return null;
+		}
 
-		public abstract Dictionary<string, object> GetSpParams();
+		public virtual Dictionary<string, object> GetSpParams()
+		{
+			return new Dictionary<string, object>();
+		}
+
+		public virtual MySqlCommand GetCmd(MySqlConnection connection)
+		{
+			var command = new MySqlCommand(GetSpName(), connection);
+			command.CommandType = CommandType.StoredProcedure;
+			command.CommandTimeout = 0;
+			foreach (var spparam in GetSpParams())
+				command.Parameters.AddWithValue(spparam.Key, spparam.Value);
+			return command;
+		}
 
 		public virtual List<ErrorMessage> Validate()
 		{
@@ -43,7 +59,20 @@ namespace ProducerInterfaceCommon.Models
 
 		public abstract Dictionary<string, object> ViewDataValues(NamesHelper h);
 
-		public abstract IProcessor GetProcessor(); 
+		public abstract IProcessor GetProcessor();
 
+		public List<T> Read<T>()
+		{
+			var connString = ConfigurationManager.ConnectionStrings["producerinterface"].ConnectionString;
+			using (var conn = new MySqlConnection(connString)) {
+				conn.Open();
+				using (var command = GetCmd(conn)) {
+					using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection)) {
+						var mapper = new MyAutoMapper<T>();
+						return mapper.Map(reader);
+					}
+				}
+			}
+		}
 	}
 }

@@ -7,8 +7,7 @@ Global(
 	ExcludesDeployDirectory : ("Content",),
 	SkipFix : true,
 	Config: {
-		"db:generate:log": {@Sufix : "Internet"},
-		"db:seed": {@Profile: "Internet"}
+		"db:seed": {@Profile: "ProducerInterface"}
 	}
 )
 

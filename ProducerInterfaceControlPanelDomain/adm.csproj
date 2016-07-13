@@ -348,7 +348,6 @@
     <Content Include="Scripts\Analit.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Properties\PublishProfiles\RELEASE.pubxml" />
     <Content Include="Scripts\ckeditor\CHANGES.md" />
     <Content Include="Scripts\ckeditor\LICENSE.md" />
     <Content Include="Scripts\ckeditor\plugins\scayt\CHANGELOG.md" />
@@ -368,7 +367,6 @@
     <Content Include="Scripts\ckeditor\skins\moono\readme.md" />
     <Content Include="Scripts\ckeditor\plugins\base64image\LICENSE.md" />
     <Content Include="Scripts\ckeditor\plugins\base64image\README.md" />
-    <None Include="Properties\PublishProfiles\TEST2.pubxml" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\ckeditor\adapters\jquery.js" />
     <Content Include="Scripts\ckeditor\build-config.js" />

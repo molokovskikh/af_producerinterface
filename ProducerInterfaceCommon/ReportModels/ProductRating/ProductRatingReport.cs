@@ -3,6 +3,9 @@ using ProducerInterfaceCommon.Heap;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using MySql.Data.MySqlClient;
+using Dapper;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -57,32 +60,46 @@ namespace ProducerInterfaceCommon.Models
 			return result;
 		}
 
-		public override string GetSpName()
+		public override MySqlCommand GetCmd(MySqlConnection connection)
 		{
-			return "ProductRatingReport";
-		}
+			var regionIds = String.Join(", ",RegionCodeEqual);
+			var children = connection.Query<ulong>($"select RegionCode from Farm.Regions where Parent in ({regionIds})").ToList();
+			regionIds = String.Join(", ", RegionCodeEqual.Select(x => Convert.ToUInt64(x)).Concat(children));
 
-		public override Dictionary<string, object> GetSpParams()
-		{
-			var spparams = new Dictionary<string, object>();
+			var join = "";
+			var filter = "";
 			if (Var == CatalogVar.AllAssortiment) {
-				spparams.Add("@CatalogId", "select CatalogId from Catalogs.assortment");
+				join = "join Catalogs.Assortment a on a.CatalogId = ri.CatalogId";
+			} else if(Var == CatalogVar.AllCatalog) {
+				join = $"join Catalogs.Assortment a on a.CatalogId = ri.CatalogId and a.ProducerId = {ProducerId}";
+			} else {
+				var catalogIds = String.Join(",", CatalogIdEqual);
+				filter = $"and ri.CatalogId in ({catalogIds})";
 			}
-			else if(Var == CatalogVar.AllCatalog) {
-				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
-			}
-			else {
-				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
-			}
-			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
-			// чтоб правильно работала хп при отсутствии ограничений на поставщиков, заведомо несуществующий Id
-			if (SupplierIdNonEqual == null)
-				spparams.Add("@SupplierId", -1);
-			else
-				spparams.Add("@SupplierId", String.Join(",", SupplierIdNonEqual));
-			spparams.Add("@DateFrom", DateFrom);
-			spparams.Add("@DateTo", DateTo);
-			return spparams;
+			var sql = $@"select c.CatalogName, ri.ProducerId, p.ProducerName, r.RegionName,
+Sum(ri.Cost * ri.Quantity) as Summ,
+CAST(Sum(ri.Quantity) as SIGNED INTEGER) as PosOrder,
+Min(ri.Cost) as MinCost,
+Avg(ri.Cost) as AvgCost,
+Max(ri.Cost) as MaxCost,
+Count(distinct ri.OrderId) as DistinctOrderId,
+Count(distinct ri.AddressId) as DistinctAddressId
+from producerinterface.RatingReportOrderItems ri
+	left join producerinterface.CatalogNames c on c.CatalogId = ri.CatalogId
+	left join producerinterface.ProducerNames p on p.ProducerId = ri.ProducerId
+	left join producerinterface.RegionNames r on r.RegionCode = ri.RegionCode
+	{join}
+where ri.IsLocal = 0
+	{filter}
+	and ri.RegionCode in ({regionIds})
+	and ri.WriteTime > @DateFrom
+	and ri.WriteTime < @DateTo
+group by ri.CatalogId, ri.ProducerId, ri.RegionCode
+order by Summ desc";
+			var cmd = new MySqlCommand(sql, connection);
+			cmd.Parameters.AddWithValue("DateFrom", DateFrom);
+			cmd.Parameters.AddWithValue("DateTo", DateTo);
+			return cmd;
 		}
 
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
@@ -98,7 +115,7 @@ namespace ProducerInterfaceCommon.Models
 		{
 			var errors = base.Validate();
 			if (Var == CatalogVar.SelectedProducts && (CatalogIdEqual == null || CatalogIdEqual.Count == 0))
-        errors.Add(new ErrorMessage("CatalogIdEqual", "Не выбраны товары"));
+				errors.Add(new ErrorMessage("CatalogIdEqual", "Не выбраны товары"));
 			if (Var == 0)
 				errors.Add(new ErrorMessage("Var", "Не указан вариант подготовки отчета"));
 			return errors;
