@@ -26,12 +26,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return View(files);
 		}
 
-		//public ActionResult EmailFileList()
-		//{
-		//	var files = DB.MediaFiles.Where(x => x.EntityType == (int)EntityType.Email).Select(x => x.Id).ToList();
-		//	return View(files);
-		//}
-
 		public FileResult GetFile(int Id)
 		{
 			var file = DB.MediaFiles.Find(Id);

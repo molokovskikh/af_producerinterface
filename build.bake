@@ -48,4 +48,4 @@ task "clean:backend":
 	Clean(Globals, "backend")
 
 task "deploy:backend", ["build:backend"]:
-	DeployService(Globals, "backend", "fms")
+	DeployService(DuckDictionary(Globals, false) {"ServiceName": "QuartzServer"}, "backend", "fms")
