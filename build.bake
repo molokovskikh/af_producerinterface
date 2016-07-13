@@ -13,13 +13,15 @@ Global(
 
 task @default, [@build]
 
+task @setup, ["assembly:info:generate"]
+
 task @build, ["build:client", "build:adm", "build:backend"]
 
 task @deploy, ["deploy:pipeline"]
 
 task "deploy:app", ["deploy:client", "deploy:adm", "deploy:backend"]
 
-task "build:client":
+task "build:client", [@setup, "clean:client"]:
 	BuildWeb(Globals, "client")
 
 task "clean:client":
@@ -28,7 +30,7 @@ task "clean:client":
 task "deploy:client", ["build:client"]:
 	XCopyDeploy(DuckDictionary(Globals, false) {"DeployAlias": "ProducerInterface\\bin"}, "client")
 
-task "build:adm":
+task "build:adm", [@setup, "clean:adm"]:
 	BuildWeb(Globals, "adm")
 
 task "clean:adm":
@@ -39,7 +41,7 @@ task "deploy:adm", ["build:adm"]:
 	globals.DeployAlias = "ProducerInterfaceControlPanel"
 	XCopyDeploy(globals, "adm")
 
-task "build:backend", ["clean:backend"]:
+task "build:backend", [@setup, "clean:backend"]:
 	Build(Globals, "backend")
 
 task "clean:backend":
