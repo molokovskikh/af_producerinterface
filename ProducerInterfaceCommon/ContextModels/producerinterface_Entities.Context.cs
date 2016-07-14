@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using ProducerInterfaceCommon.Models;
+
 namespace ProducerInterfaceCommon.ContextModels
 {
     using System;
@@ -20,14 +22,8 @@ namespace ProducerInterfaceCommon.ContextModels
         {
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-
         public DbSet<mailform> mailform { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
-        public DbSet<promotionToDrug> promotionToDrug { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<reportxml> reportxml { get; set; }
         public DbSet<user_logs> user_logs { get; set; }
@@ -52,7 +48,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<NewsChange> NewsChange { get; set; }
         public DbSet<MediaFiles> MediaFiles { get; set; }
         public DbSet<ReportDescription> ReportDescription { get; set; }
-        public DbSet<PromotionsToSupplier> PromotionsToSupplier { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }
         public DbSet<ReportRegion> ReportRegion { get; set; }
@@ -67,6 +62,5 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<cataloglogui> cataloglogui { get; set; }
         public DbSet<AccountRegion> AccountRegion { get; set; }
         public DbSet<Account> Account { get; set; }
-        public DbSet<promotions> promotions { get; set; }
     }
 }

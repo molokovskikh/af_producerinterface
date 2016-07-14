@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -106,15 +107,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		private int SaveFile(HttpPostedFileBase file, EntityType type)
 		{
-			var fileName = Path.GetFileName(file.FileName);
-			if (fileName.Length > 50) {
-				var name = Path.GetFileNameWithoutExtension(file.FileName);
-				var ext = Path.GetExtension(file.FileName);
-				name = name.Substring(0, 50 - ext.Length);
-				fileName = name + ext;
-			}
 			var dbFile = new MediaFiles() {
-				ImageName = fileName,
+				ImageName = MediaFile.ApplyLimit(file.FileName),
 				ImageType = file.ContentType,
 				EntityType = (int)type
 			};

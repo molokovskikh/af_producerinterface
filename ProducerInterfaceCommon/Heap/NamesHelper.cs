@@ -12,13 +12,15 @@ namespace ProducerInterfaceCommon.Heap
 	public class NamesHelper
 	{
 
-		private ProducerInterfaceCommon.ContextModels.producerinterface_Entities _cntx;
+		private producerinterface_Entities _cntx;
+		private Context db;
 		private long _userId;
 		private HttpContextBase _httpContext;
 
-		public NamesHelper(ProducerInterfaceCommon.ContextModels.producerinterface_Entities cntx, long userId, HttpContextBase httpContext = null)
+		public NamesHelper(long userId, HttpContextBase httpContext = null)
 		{
-			_cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
+			_cntx = new producerinterface_Entities();
+			db = new Context();
 			_userId = userId;
 			_httpContext = httpContext;
 		}
@@ -98,7 +100,7 @@ namespace ProducerInterfaceCommon.Heap
 		public List<OptionElement> GetCatalogListPromotion()
 		{
 			var producerId = _cntx.Account.Single(x => x.Id == _userId).AccountCompany.ProducerId;
-			var NewListDrug = _cntx.promotionToDrug.Where(xxx => _cntx.promotions.Where(xx => xx.ProducerId == producerId)
+			var NewListDrug = db.PromotionToDrugs.Where(xxx => db.Promotions.Where(xx => xx.ProducerId == producerId)
 					.Select(xx => xx.Id).ToList().Contains(xxx.PromotionId)).Select(x => x.DrugId).ToList();
 			var results = _cntx.assortment.Where(xxx => NewListDrug.Contains(xxx.CatalogId))
 					.GroupBy(x => x.CatalogId).Select(x => x.FirstOrDefault())
@@ -248,7 +250,7 @@ namespace ProducerInterfaceCommon.Heap
 
 		public List<OptionElement> GetDrugInPromotion(long PromotionId)
 		{
-			List<long> DrudIdList = _cntx.promotionToDrug.Where(x => x.PromotionId == PromotionId).Select(x => x.DrugId).ToList();
+			List<long> DrudIdList = db.PromotionToDrugs.Where(x => x.PromotionId == PromotionId).Select(x => x.DrugId).ToList();
 			return _cntx.assortment.ToList().Where(x => DrudIdList.Contains(x.CatalogId)).ToList().Select(x => new OptionElement { Text = x.CatalogName, Value = x.CatalogId.ToString() }).ToList();
 		}
 

@@ -7,12 +7,12 @@ using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using System.Data.Entity;
 using System.IO;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceCommon.ViewModel.Interface.Promotion;
 namespace ProducerInterface.Controllers
 {
 	public class PromotionController : BaseController
 	{
-
 		private NamesHelper h;
 		protected long producerId;
 
@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
 				filterContext.Result = Redirect("~");
 			else
 			{
-				h = new NamesHelper(DB, CurrentUser.Id, HttpContext);
+				h = new NamesHelper(CurrentUser.Id, HttpContext);
 				if (CurrentUser.AccountCompany.ProducerId.HasValue)
 					producerId = CurrentUser.AccountCompany.ProducerId.Value;
 				else
@@ -43,7 +43,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index(string Id = null)
 		{
 			var model = new List<PromotionUi>();
-			var promoList = DB.promotions.Where(x => x.ProducerId == producerId).ToList();
+			var promoList = DB2.Promotions.Where(x => x.ProducerId == producerId).ToList();
 			if (promoList.Count == 0)
 				return View(model);
 
@@ -60,10 +60,10 @@ namespace ProducerInterface.Controllers
 					Annotation = item.Annotation,
 					Begin = item.Begin.ToString("dd.MM.yyyy"),
 					End = item.End.ToString("dd.MM.yyyy"),
-					PromotionFileId = item.PromoFileId,
-					PromotionFileName = item.MediaFiles?.ImageName,
+					PromotionFileId = item.MediaFile?.Id,
+					PromotionFileName = item.MediaFile?.ImageName,
 					AllSuppliers = item.AllSuppliers,
-					FakeStatus = GetStatus(item),
+					FakeStatus = item.GetStatus(),
 					DrugList = assortment.Where(x => drugsIds.Contains(x.Key)).Select(x => x.Value).ToList(),
 					RegionList = DB.Regions((ulong)item.RegionMask).Select(x => x.Name).ToList(),
 					SuppierRegions = suppliers.Where(x => supplierIds.Contains(x.Key)).Select(x => x.Value).ToList()
@@ -76,41 +76,6 @@ namespace ProducerInterface.Controllers
 			return View(model);
 		}
 
-		private PromotionFakeStatus GetStatus(promotions model)
-		{
-			// отклонена админом
-			if (model.Status == (byte)PromotionStatus.Rejected)
-				return PromotionFakeStatus.Rejected;
-
-			// отключена пользователем
-			if (!model.Enabled)
-				return PromotionFakeStatus.Disabled;
-
-			// ожидает согласования
-			if (model.Enabled && model.Status == (byte)PromotionStatus.New)
-				return PromotionFakeStatus.NotConfirmed;
-
-			// не отклонена, согласована, не началась
-			if (model.Enabled && model.Status == (byte)PromotionStatus.Confirmed && model.Begin > DateTime.Now)
-				return PromotionFakeStatus.ConfirmedNotBegin;
-
-			// не отклонена, согласована, просрочена
-			if (model.Enabled && model.Status == (byte)PromotionStatus.Confirmed && model.End < DateTime.Now)
-				return PromotionFakeStatus.ConfirmedEnded;
-
-			// активная
-			if (model.Enabled && model.Status == (byte)PromotionStatus.Confirmed && model.Begin < DateTime.Now && model.End > DateTime.Now)
-				return PromotionFakeStatus.Active;
-
-			throw new NotSupportedException("Неизвестный статус");
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="IdKey"></param>
-		/// <param name="Copy"></param>
-		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Edit(long IdKey = 0, bool Copy = false)
 		{
@@ -121,20 +86,14 @@ namespace ProducerInterface.Controllers
 			return View();
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="IdKey"></param>
-		/// <returns></returns>
 		[HttpPost]
 		public JsonResult EditGetPromotion(string IdKey = "0")
 		{
 			var model = new PromotionUi();
-			var id = Convert.ToInt64(IdKey.Split(new Char[] { ',' }).First());
+			var id = Convert.ToInt64(IdKey.Split(',').First());
 			if (IdKey.Contains("true"))
 				id = 0;
 
-			var h = new NamesHelper(DB, CurrentUser.Id); // ??
 			model.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 			model.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
@@ -154,7 +113,7 @@ namespace ProducerInterface.Controllers
 			else
 			{
 				var idPromo = Convert.ToInt64(IdKey.Split(new Char[] { ',' }).First());
-				var dBmodel = DB.promotions.Find(idPromo);
+				var dBmodel = DB2.Promotions.Find(idPromo);
 				model.Id = id;
 				model.SuppierRegions = dBmodel.PromotionsToSupplier.ToList().Select(x => (string)x.SupplierId.ToString()).ToList();
 				model.SuppierRegionsList = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
@@ -171,11 +130,7 @@ namespace ProducerInterface.Controllers
 				else
 					model.Title = "Редактирование промоакции: " + dBmodel.Name;
 
-				if (dBmodel.PromoFileId != null)
-				{
-					model.PromotionFileId = (long)dBmodel.PromoFileId;
-					model.PromotionFileName = dBmodel.MediaFiles?.ImageName;
-				}
+				model.PromotionFileId = dBmodel.MediaFile?.Id;
 				model.DrugList = dBmodel.promotionToDrug.ToList().Select(x => x.DrugId.ToString()).ToList();
 				if (dBmodel.Begin < DateTime.Now)
 					model.Begin = DateTime.Now.ToString("dd.MM.yyyy");
@@ -191,22 +146,15 @@ namespace ProducerInterface.Controllers
 				model.SuppierRegionsList = h.GetSupplierList(model.RegionList.Select(x => (decimal)Convert.ToUInt64(x)).ToList()).ToList()
 						.Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 
-				model.PromotionFileUrl = Url.Action("GetFile", new { id = dBmodel.MediaFiles?.Id });
+				//model.PromotionFileUrl = Url.Action("GetFile", new { id = dBmodel.MediaFiles?.Id });
 				model.Annotation = dBmodel.Annotation;
 			}
 
 			model.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
 
-			var JsonModel = Json(model);
-
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="Id"></param>
-		/// <returns></returns>
 		[HttpPost]
 		public JsonResult GetUpdateSupplierList(List<decimal> Id)
 		{
@@ -220,11 +168,6 @@ namespace ProducerInterface.Controllers
 			return Json(supplierList, JsonRequestBehavior.AllowGet);
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
 		[HttpPost]
 		public ActionResult EditSave(PromotionUi model)
 		{
@@ -243,20 +186,15 @@ namespace ProducerInterface.Controllers
 			}
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
 		private long ChangePromotion(PromotionUi model)
 		{
-			var promoDb = DB.promotions.Find(model.Id);
+			var promoDb = DB2.Promotions.Find(model.Id);
 			var promotionToDrug = promoDb.promotionToDrug.ToList();
 			foreach (var item in promotionToDrug)
 			{
 				var drugExsist = model.DrugList.Any(x => Convert.ToInt64(x) == item.DrugId);
 				if (!drugExsist)
-					DB.promotionToDrug.Remove(item);
+					DB2.PromotionToDrugs.Remove(item);
 			}
 			DB.SaveChanges(CurrentUser, "Препарат удален из акции");
 			foreach (var item in model.DrugList)
@@ -264,12 +202,12 @@ namespace ProducerInterface.Controllers
 				var drugExsist = promoDb.promotionToDrug.Any(x => x.DrugId == Convert.ToInt64(item));
 				if (!drugExsist)
 				{
-					promotionToDrug newAddDrug = new promotionToDrug()
+					PromotionToDrug newAddDrug = new PromotionToDrug()
 					{
 						DrugId = Convert.ToInt64(item),
 						PromotionId = promoDb.Id
 					};
-					DB.promotionToDrug.Add(newAddDrug);
+					DB2.PromotionToDrugs.Add(newAddDrug);
 				}
 			}
 			DB.SaveChanges(CurrentUser, "Препарат добавлен в акцию");
@@ -279,7 +217,7 @@ namespace ProducerInterface.Controllers
 			{
 				var supllierExsist = model.SuppierRegions.Any(x => (ulong)Convert.ToInt64(x) == (ulong)item.SupplierId);
 				if (!supllierExsist)
-					DB.PromotionsToSupplier.Remove(item);
+					DB2.PromotionsToSuppliers.Remove(item);
 			}
 			DB.SaveChanges(CurrentUser, "Поставщик удален из акции");
 			if (model.SuppierRegions.Contains("0"))
@@ -318,18 +256,19 @@ namespace ProducerInterface.Controllers
 			promoDb.AgencyDisabled = false;
 			promoDb.Enabled = true;
 			promoDb.Status = (byte)PromotionStatus.New;
-			promoDb.ProducerUserId = CurrentUser.Id;
+			promoDb.Author = DB2.Users.Find(CurrentUser.Id);
 			DB.Entry(promoDb).State = EntityState.Modified;
 			DB.SaveChanges();
 
-			int? saveFile = SaveFile(model.File);
-			if (saveFile != null)
+			var file = SaveFile(model.File);
+			if (file != null)
 			{
-				var promoFileRemove = DB.MediaFiles.Find(promoDb.PromoFileId);
-				promoDb.PromoFileId = null;
+				var promoFileRemove = DB.MediaFiles.Find(promoDb.MediaFile.Id);
+				promoDb.MediaFile = null;
 				promoDb.PromoFile = "";
 				DB.Entry(promoDb).State = EntityState.Modified;
 				DB.SaveChanges();
+				DB2.SaveChanges();
 
 				if (promoFileRemove != null)
 				{
@@ -337,15 +276,10 @@ namespace ProducerInterface.Controllers
 					//    DB.SaveChanges();
 					//    для лоигрования действий решил не удалять файл для возможности восстановления промоакции
 				}
-				promoDb.PromoFileId = saveFile;
+				promoDb.MediaFile = file;
 			}
-			else
-			{
-				if (model.PromotionFileId != null)
-				{
-					saveFile = (int)model.PromotionFileId;
-					promoDb.PromoFileId = saveFile;
-				}
+			else if (model.PromotionFileId != null) {
+				promoDb.MediaFile = DB2.MediaFiles.Find(model.PromotionFileId.Value);
 			}
 			DB.SaveChanges();
 			return promoDb.Id;
@@ -358,15 +292,15 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		private long SaveNewPromotion(PromotionUi model)
 		{
-			int? saveFile = SaveFile(model.File);
+			var file = SaveFile(model.File);
 			var regionMask = model.RegionList.Select(x => (ulong)Convert.ToInt64(x)).Aggregate((y, z) => y | z);
-			if (saveFile == null)
+			if (file == null)
 			{
 				if (model.PromotionFileId != null)
-					saveFile = (int)model.PromotionFileId;
+					file = DB2.MediaFiles.Find(model.PromotionFileId.Value);
 			}
 
-			var promotionToDataBase = new promotions()
+			var promotionToDataBase = new Promotion()
 			{
 				Name = model.Name,
 				Annotation = model.Annotation,
@@ -377,21 +311,22 @@ namespace ProducerInterface.Controllers
 				Enabled = true,
 				Status = (byte)PromotionStatus.New,
 				ProducerId = producerId,
-				ProducerUserId = CurrentUser.Id,
-				PromoFileId = saveFile,
+				Author = DB2.Users.Find(CurrentUser.Id),
+				MediaFile = file,
 				RegionMask = regionMask,
 				PromoFile = ""
 			};
-			DB.promotions.Add(promotionToDataBase);
+			DB2.Promotions.Add(promotionToDataBase);
+			DB2.SaveChanges();
 			DB.SaveChanges(CurrentUser, "Добавление промоакции");
 
 			foreach (var item in model.DrugList)
 			{
-				var promotionToDrug = new promotionToDrug() {
+				var promotionToDrug = new PromotionToDrug() {
 					DrugId = Convert.ToInt64(item),
 					PromotionId = promotionToDataBase.Id
 				};
-				DB.promotionToDrug.Add(promotionToDrug);
+				DB2.PromotionToDrugs.Add(promotionToDrug);
 			}
 			DB.SaveChanges(CurrentUser, "Добавление лекарств к промоакции");
 
@@ -405,34 +340,34 @@ namespace ProducerInterface.Controllers
 			foreach (var item in model.SuppierRegions)
 			{
 				var X = new PromotionsToSupplier() { PromotionId = promotionToDataBase.Id, SupplierId = Convert.ToInt64(item) };
-				DB.PromotionsToSupplier.Add(X);
+				DB2.PromotionsToSuppliers.Add(X);
 			}
 			DB.SaveChanges(CurrentUser, "Добавление поставщиков к промоакции");
+			DB2.SaveChanges();
 			return promotionToDataBase.Id;
 		}
 
 		/// <summary>
 		///
 		/// </summary>
-		/// <param name="_file"></param>
+		/// <param name="src"></param>
 		/// <returns></returns>
-		private int? SaveFile(HttpPostedFileBase _file)
+		private MediaFile SaveFile(HttpPostedFileBase src)
 		{
-			if (_file == null)
+			if (src == null)
 				return null;
 
-			var promoFile = new MediaFiles();
+			var file = new MediaFile(src.FileName);
 			var ms = new MemoryStream();
-			_file.InputStream.CopyTo(ms);
+			src.InputStream.CopyTo(ms);
 
-			promoFile.ImageFile = ms.ToArray();
-			promoFile.ImageName = _file.FileName.Split(new Char[] { '\\' }).Last();
-			promoFile.ImageType = _file.ContentType;
-			promoFile.ImageSize = ms.Length.ToString();
-			promoFile.EntityType = (int)EntityType.Promotion;
-			DB.MediaFiles.Add(promoFile);
-			DB.SaveChanges();
-			return promoFile.Id;
+			file.ImageFile = ms.ToArray();
+			file.ImageType = src.ContentType;
+			file.ImageSize = ms.Length.ToString();
+			file.EntityType = (int)EntityType.Promotion;
+			DB2.MediaFiles.Add(file);
+			DB2.SaveChanges();
+			return file;
 		}
 
 		/// <summary>
@@ -440,11 +375,10 @@ namespace ProducerInterface.Controllers
 		/// </summary>
 		/// <param name="Id">идентификатор акции</param>
 		/// <param name="Enabled">статус</param>
-		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Publication(long Id, bool Enabled)
 		{
-			var promoAction = DB.promotions.SingleOrDefault(x => x.Id == Id);
+			var promoAction = DB2.Promotions.SingleOrDefault(x => x.Id == Id);
 			if (promoAction == null)
 			{
 				ErrorMessage("Акция не найдена");
@@ -458,31 +392,22 @@ namespace ProducerInterface.Controllers
 
 			promoAction.Enabled = Enabled;
 			DB.SaveChanges(CurrentUser, "Изменения статуса акции");
+			DB2.SaveChanges();
 
-			var message = GetStatus(promoAction).DisplayName();
+			var message = promoAction.GetStatus().DisplayName();
 			SuccessMessage($"Новый статус: {message}");
 			return RedirectToAction("Index", new { Id = Id.ToString() });
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="Id"></param>
-		/// <returns></returns>
 		public FileResult GetFile(int Id)
 		{
 			var Image = DB.MediaFiles.Find(Id);
 			return File(Image.ImageFile, Image.ImageType, Image.ImageName);
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="Id"></param>
-		/// <returns></returns>
 		public ActionResult DeletePromo(long? Id)
 		{
-			var promoAction = DB.promotions.SingleOrDefault(x => x.Id == Id);
+			var promoAction = DB2.Promotions.SingleOrDefault(x => x.Id == Id);
 			if (promoAction == null)
 			{
 				ErrorMessage("Акция не найдена");
@@ -494,45 +419,38 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("Index");
 			}
 
-			if (promoAction.PromoFileId != null)
+			if (promoAction.MediaFile != null)
 			{
-				var fileId = promoAction.PromoFileId;
-				promoAction.PromoFileId = null;
+				var fileId = promoAction.MediaFile.Id;
+				promoAction.MediaFile = null;
 				DB.Entry(promoAction).State = EntityState.Modified;
 				DB.SaveChanges(CurrentUser, "Удаление акции");
 				DB.MediaFiles.Remove(DB.MediaFiles.First(x => x.Id == fileId));
 				DB.SaveChanges(CurrentUser);
 			}
 
-			var suppliers = DB.PromotionsToSupplier.Where(x => x.PromotionId == promoAction.Id).ToList();
+			var suppliers = DB2.PromotionsToSuppliers.Where(x => x.PromotionId == promoAction.Id).ToList();
 			foreach (var item in suppliers)
 			{
-				DB.PromotionsToSupplier.Remove(item);
+				DB2.PromotionsToSuppliers.Remove(item);
 				DB.SaveChanges(CurrentUser);
 			}
 
-			var drugList = DB.promotionToDrug.Where(x => x.PromotionId == promoAction.Id).ToList();
+			var drugList = DB2.PromotionToDrugs.Where(x => x.PromotionId == promoAction.Id).ToList();
 			foreach (var item in drugList)
 			{
-				DB.promotionToDrug.Remove(item);
+				DB2.PromotionToDrugs.Remove(item);
 				DB.SaveChanges(CurrentUser);
 			}
-			DB.promotions.Remove(promoAction);
+			DB2.Promotions.Remove(promoAction);
 			DB.SaveChanges(CurrentUser, "Удаление акции");
+			DB2.SaveChanges();
 			SuccessMessage("Акция удалена");
 			return RedirectToAction("Index");
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="RegionList"></param>
-		/// <param name="SuppierRegions"></param>
-		/// <returns></returns>
 		public JsonResult GetSupplierJson(List<decimal> RegionList, List<long> SuppierRegions)
 		{
-			var h = new NamesHelper(DB, CurrentUser.Id);
-
 			if (SuppierRegions == null)
 				SuppierRegions = new List<long>();
 

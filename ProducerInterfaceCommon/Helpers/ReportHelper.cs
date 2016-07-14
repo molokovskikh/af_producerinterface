@@ -1,15 +1,15 @@
-п»їusing ProducerInterfaceCommon.ContextModels;
-using ProducerInterfaceCommon.Models;
-using Quartz;
-using Quartz.Impl;
 using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Models;
+using Quartz;
+using Quartz.Impl;
 
-namespace ProducerInterfaceCommon.Controllers
+namespace ProducerInterfaceCommon.Helpers
 {
 	public class ReportHelper
 	{
@@ -43,39 +43,39 @@ namespace ProducerInterfaceCommon.Controllers
 
 			var key = JobKey.Create(jext.JobName, jext.JobGroup);
 			var scheduler = GetScheduler();
-			// РЅР°С€Р»Рё Р·Р°РґР°С‡Сѓ
+			// нашли задачу
 			var job = scheduler.GetJobDetail(key);
 
 			var param = (Report)job.JobDataMap["param"];
 			var jxml = db.reportxml.Single(x => x.JobName == jext.JobName);
 
-			// РІС‹С‚Р°С‰РёР»Рё СЃРѕС…СЂР°РЅРµРЅРЅС‹Р№ РѕС‚С‡РµС‚
+			// вытащили сохраненный отчет
 			var ds = new DataSet();
 			ds.ReadXml(new StringReader(jxml.Xml), XmlReadMode.ReadSchema);
 
-			// СЃРѕР·РґР°Р»Рё РїСЂРѕС†РµСЃСЃРѕСЂ РґР»СЏ СЌС‚РѕРіРѕ С‚РёРїР° РѕС‚С‡РµС‚РѕРІ
+			// создали процессор для этого типа отчетов
 			var processor = param.GetProcessor();
 
-			// СЃРѕР·РґР°Р»Рё excel-С„Р°Р№Р»
+			// создали excel-файл
 			return processor.CreateExcel(jext.JobGroup, jext.JobName, ds, param);
 		}
 
 		/// <summary>
-		/// Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РёРї РѕС‚С‡РµС‚Р° РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ С‚РёРїР° РѕС‚С‡РµС‚Р°
+		/// Возвращает тип отчета по идентификатору типа отчета
 		/// </summary>
-		/// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РёРїР° РѕС‚С‡РµС‚Р°</param>
+		/// <param name="id">Идентификатор типа отчета</param>
 		/// <returns></returns>
 		public Type GetModelType(int id)
 		{
 			var typeName = ((Reports)id).ToString();
 			var type = Type.GetType($"ProducerInterfaceCommon.Models.{typeName}, {typeof(Report).Assembly.FullName}");
 			if (type == null)
-				throw new NotSupportedException($"РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ С‚РёРї {typeName} РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ {id}");
+				throw new NotSupportedException($"Не удалось создать тип {typeName} по идентификатору {id}");
 			return type;
 		}
 
 		/// <summary>
-		/// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃСЃС‹Р»РєСѓ РЅР° Р»РѕРєР°Р»СЊРЅС‹Р№ С€РµРґСѓР»РµСЂ (Р·Р°РїСѓСЃРєР°РµРјС‹Р№ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ СЃ СЃР°Р№С‚РѕРј РЅР° С‚РѕР№ Р¶Рµ РјР°С€РёРЅРµ)
+		/// Возвращает ссылку на локальный шедулер (запускаемый одновременно с сайтом на той же машине)
 		/// </summary>
 		/// <returns></returns>
 		protected IScheduler GetDebagSheduler()
@@ -84,14 +84,14 @@ namespace ProducerInterfaceCommon.Controllers
 			var sf = new StdSchedulerFactory(props);
 			var scheduler = sf.GetScheduler();
 
-			// РїСЂРѕРІРµСЂСЏРµРј РёРјСЏ С€РµРґСѓР»РµСЂР°
+			// проверяем имя шедулера
 			if (scheduler.SchedulerName != "TestScheduler")
-				throw new NotSupportedException("Р”РѕР»Р¶РµРЅ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ TestScheduler");
+				throw new NotSupportedException("Должен использоваться TestScheduler");
 
-			// РїСЂРѕРІРµСЂСЏРµРј Р»РѕРєР°Р»СЊРЅС‹Р№ Р»Рё С€РµРґСѓР»РµСЂ
+			// проверяем локальный ли шедулер
 			var metaData = scheduler.GetMetaData();
 			if (metaData.SchedulerRemote)
-				throw new NotSupportedException("Р”РѕР»Р¶РµРЅ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ Р»РѕРєР°Р»СЊРЅС‹Р№ TestScheduler");
+				throw new NotSupportedException("Должен использоваться локальный TestScheduler");
 
 			if (!scheduler.IsStarted)
 				scheduler.Start();
@@ -99,7 +99,7 @@ namespace ProducerInterfaceCommon.Controllers
 		}
 
 		/// <summary>
-		/// Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРґР°Р»С‘РЅРЅС‹Р№ С€РµРґСѓР»РµСЂ (РёРЅСЃС‚Р°Р»Р»РёСЂРѕРІР°РЅРЅС‹Р№ РѕС‚РґРµР»СЊРЅРѕ РєР°Рє win-СЃР»СѓР¶Р±Р°)
+		/// Возвращает удалённый шедулер (инсталлированный отдельно как win-служба)
 		/// </summary>
 		/// <returns></returns>
 		protected IScheduler GetRemoteSheduler()
@@ -108,14 +108,14 @@ namespace ProducerInterfaceCommon.Controllers
 			var sf = new StdSchedulerFactory(props);
 			var scheduler = sf.GetScheduler();
 
-			// РїСЂРѕРІРµСЂСЏРµРј РёРјСЏ С€РµРґСѓР»РµСЂР°
+			// проверяем имя шедулера
 			if (scheduler.SchedulerName != "ServerScheduler")
-				throw new NotSupportedException("Р”РѕР»Р¶РµРЅ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ ServerScheduler");
+				throw new NotSupportedException("Должен использоваться ServerScheduler");
 
-			// РїСЂРѕРІРµСЂСЏРµРј СѓРґР°Р»С‘РЅРЅС‹Р№ Р»Рё С€РµРґСѓР»РµСЂ
+			// проверяем удалённый ли шедулер
 			var metaData = scheduler.GetMetaData();
 			if (!metaData.SchedulerRemote)
-				throw new NotSupportedException("Р”РѕР»Р¶РµРЅ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ СѓРґР°Р»РµРЅРЅС‹Р№ ServerScheduler");
+				throw new NotSupportedException("Должен использоваться удаленный ServerScheduler");
 
 			return scheduler;
 		}

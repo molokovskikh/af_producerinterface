@@ -199,7 +199,7 @@
     <Compile Include="ContextModels\DrugDescriptionRemark.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\ContextEF.cs" />
+    <Compile Include="ContextModels\Context.cs" />
     <Compile Include="ContextModels\Enums.cs" />
     <Compile Include="ContextModels\feedbackui.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
@@ -215,12 +215,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\NotificationToProducers.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\promotions.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\PromotionsToSupplier.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\ReportDescription.cs">
@@ -242,15 +236,15 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\ReportHelper.cs" />
-    <Compile Include="Controllers\DomainAutentification.cs" />
-    <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Heap\AttributeHelper.cs" />
     <Compile Include="Heap\ExcelPieChartExtended.cs" />
     <Compile Include="Heap\EmailSender.cs" />
     <Compile Include="Heap\IWriteExcelData.cs" />
     <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
+    <Compile Include="Helpers\AdHelper.cs" />
+    <Compile Include="Helpers\Md5HashHelper.cs" />
+    <Compile Include="Helpers\ReportHelper.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
     <Compile Include="ContextModels\MetaData.cs" />
     <Compile Include="ContextModels\assortment.cs">
@@ -294,9 +288,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\profilenews.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\promotionToDrug.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\ratingreportorderitems.cs">
@@ -366,6 +357,7 @@
     <Compile Include="Models\MailTypeEnum.cs" />
     <Compile Include="Models\NotMinDateAttribute.cs" />
     <Compile Include="Models\PastDateAttribute.cs" />
+    <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\RunNowNotIntervalParam.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReportRow.cs" />

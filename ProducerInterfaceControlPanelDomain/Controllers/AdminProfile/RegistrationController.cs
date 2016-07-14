@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
@@ -20,7 +21,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var Login_ = login.Split(new Char[] { '@' }).First();
 			login = Login_;
 
-			var DomainAuth = new ProducerInterfaceCommon.Controllers.DomainAutentification();
+			var DomainAuth = new AdHelper();
 
 			if (DomainAuth.IsAuthenticated(login, password))
 			{

@@ -2,17 +2,16 @@
 using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
 	public class HomeController : BaseController
 	{
-
 		/// <summary>
 		/// Стартовая страница сайта, которая будет доступна после авторизации
 		/// </summary>
-		/// <returns></returns>
 		public ActionResult Index()
 		{
 			var model = new Statistics();
@@ -20,9 +19,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.ProducerCount = DB.AccountCompany.Count(x => x.ProducerId.HasValue && x.Account.Any());
 			model.NotProducerCount = DB.AccountCompany.Count(x => !x.ProducerId.HasValue && x.Account.Any());
 
-			model.ActionCount = DB.promotions.Count();
-			model.AcceptedActionCount = DB.promotions.Count(x => x.Status == (byte)PromotionStatus.Confirmed);
-			model.ActiveActionCount = DB.promotions.Count(x => x.Status == (byte)PromotionStatus.Confirmed && x.Enabled && x.Begin < DateTime.Now && x.End > DateTime.Now);
+			model.ActionCount = DB2.Promotions.Count();
+			model.AcceptedActionCount = DB2.Promotions.Count(x => x.Status == PromotionStatus.Confirmed);
+			model.ActiveActionCount = DB2.Promotions.Count(x => x.Status == PromotionStatus.Confirmed && x.Enabled && x.Begin < DateTime.Now && x.End > DateTime.Now);
 
 			var userByType					= DB.Account.GroupBy(x => x.Enabled).ToDictionary(x => x.Key, x => x.Count());
 			model.UserCount					= userByType.Sum(x => x.Value);

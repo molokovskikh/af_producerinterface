@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion;
 using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -14,17 +15,16 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <summary>
 		/// Список промоакций
 		/// </summary>
-		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Index()
 		{
-			var h = new NamesHelper(DB, CurrentUser.Id);
+			var h = new NamesHelper(CurrentUser.Id);
 			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
 			producerList.AddRange(h.RegisterListProducer());
 			ViewBag.ProducerList = producerList;
 
 			var model = new SearchProducerPromotion() {
-				Status = (byte)PromotionFakeStatus.All,
+				Status = (byte)ActualPromotionStatus.All,
 				Begin = DateTime.Now.AddDays(-30),
 				End = DateTime.Now.AddDays(30),
 				EnabledDateTime = false
@@ -36,48 +36,46 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <summary>
 		/// Поиск промоакций по фильтру
 		/// </summary>
-		/// <param name="filter"></param>
-		/// <returns></returns>
 		public ActionResult SearchResult(SearchProducerPromotion filter)
 		{
-			var query = DB.promotions.AsQueryable();
+			var query = DB2.Promotions.AsQueryable();
 			if (!filter.EnabledDateTime)
 				query = query.Where(x => x.Begin > filter.Begin && x.End < filter.End);
 			if (filter.Producer > 0)
 				query = query.Where(x => x.ProducerId == filter.Producer);
 
-			switch ((PromotionFakeStatus)filter.Status) {
+			switch ((ActualPromotionStatus)filter.Status) {
 				// отключена пользователем
-				case PromotionFakeStatus.Disabled:
+				case ActualPromotionStatus.Disabled:
 					query = query.Where(x => !x.Enabled);
 					break;
 				// отклонена админом
-				case PromotionFakeStatus.Rejected:
-					query = query.Where(x => x.Status == (byte)PromotionStatus.Rejected);
+				case ActualPromotionStatus.Rejected:
+					query = query.Where(x => x.Status == PromotionStatus.Rejected);
 					break;
 				// ожидает подтверждения
-				case PromotionFakeStatus.NotConfirmed:
-					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.New);
+				case ActualPromotionStatus.NotConfirmed:
+					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.New);
 					break;
 				// не началась
-				case PromotionFakeStatus.ConfirmedNotBegin:
-					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.Confirmed && x.Begin > DateTime.Now);
+				case ActualPromotionStatus.ConfirmedNotBegin:
+					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.Confirmed && x.Begin > DateTime.Now);
 					break;
 				// закончилась
-				case PromotionFakeStatus.ConfirmedEnded:
-					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.Confirmed && x.End < DateTime.Now);
+				case ActualPromotionStatus.ConfirmedEnded:
+					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.Confirmed && x.End < DateTime.Now);
 					break;
 				// активна
-				case PromotionFakeStatus.Active:
-					query = query.Where(x => x.Enabled && x.Status == (byte)PromotionStatus.Confirmed && x.Begin < DateTime.Now && x.End > DateTime.Now);
+				case ActualPromotionStatus.Active:
+					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.Confirmed && x.Begin < DateTime.Now && x.End > DateTime.Now);
 					break;
-				case PromotionFakeStatus.All:
+				case ActualPromotionStatus.All:
 					break;
 			}
 
 			var model = query.OrderByDescending(x => x.UpdateTime).ToList();
 
-			var h = new NamesHelper(DB, CurrentUser.Id);
+			var h = new NamesHelper(CurrentUser.Id);
 			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
 			producerList.AddRange(h.RegisterListProducer());
 			ViewBag.ProducerList = producerList;
@@ -88,17 +86,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// Подробнее
 		/// </summary>
 		/// <param name="Id">идентификатор промоакции</param>
-		/// <returns></returns>
-		public ActionResult OnePromotion(int Id = 0)
+		public ActionResult View(long Id = 0)
 		{
-			if (Id == 0)
-				return RedirectToAction("Index");
-			var model = DB.promotions.Find(Id);
-			if (model == null)
-				return RedirectToAction("Index");
+			var model = DB2.Promotions.Find(Id);
 
-			var h = new NamesHelper(DB, CurrentUser.Id);
-
+			var h = new NamesHelper(CurrentUser.Id);
 			ViewBag.ProducerName = h.GetProducerList().Single(x => x.Value == model.ProducerId.ToString()).Text;
 			ViewBag.RegionList = h.GetPromotionRegionNames((ulong)model.RegionMask);
 			ViewBag.DrugList = h.GetDrugInPromotion(model.Id);
@@ -111,17 +103,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// Подтверждение промоакции
 		/// </summary>
 		/// <param name="Id">идентификатор промоакции</param>
-		/// <returns></returns>
-		public ActionResult SuccessPromotion(int Id = 0)
+		public ActionResult Confirm(long id)
 		{
-			if (Id == 0)
-				return RedirectToAction("Index");
-			var model = DB.promotions.Single(x => x.Id == Id);
-			if (model == null)
-				return RedirectToAction("Index");
-
-			model.Status = (byte)PromotionStatus.Confirmed;
+			var model = DB2.Promotions.Find(id);
+			model.Status = PromotionStatus.Confirmed;
 			DB.SaveChanges(CurrentUser, "Подтверждение промоакции");
+			DB2.SaveChanges();
+			Mails.SendPromotionStatus(model);
 
 			SuccessMessage("Промоакция подтверждена");
 			return RedirectToAction("Index");
@@ -131,30 +119,21 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// Отмена подтверждения промоакции
 		/// </summary>
 		/// <param name="Id">идентификатор промоакции</param>
-		/// <returns></returns>
-		public ActionResult UnSuccessPromotion(int Id = 0)
+		public ActionResult Reject(int id)
 		{
-			if (Id == 0)
-				return RedirectToAction("Index");
-			var model = DB.promotions.Single(x => x.Id == Id);
-			if (model == null)
-				return RedirectToAction("Index");
-
-			model.Status = (byte)PromotionStatus.New;
+			var model = DB2.Promotions.Find(id);
+			model.Status = PromotionStatus.Rejected;
 			DB.SaveChanges(CurrentUser, "Подтверждение промоакции");
+			DB2.SaveChanges();
+			Mails.SendPromotionStatus(model);
 
 			SuccessMessage("Промоакция отменено подтверждение");
 			return RedirectToAction("Index");
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="Id"></param>
-		/// <returns></returns>
-		public FileResult GetFile(int Id)
+		public FileResult GetFile(int id)
 		{
-			var file = DB.MediaFiles.Find(Id);
+			var file = DB.MediaFiles.Find(id);
 			return File(file.ImageFile, file.ImageType, file.ImageName);
 		}
 	}

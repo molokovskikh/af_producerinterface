@@ -2,7 +2,7 @@
 @{
     var user = ViewBag.CurrentUser;
 }
-<div class="navbar navbar-fixed-top navbar-default"> 
+<div class="navbar navbar-fixed-top navbar-default">
     <div class="navbar-header navbar-left">
         <button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
@@ -15,13 +15,19 @@
     </div>
 
     <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-left">      
+        <ul class="nav navbar-nav navbar-left">
             @if (user != null)
             {
-                <li><a href="~/Report/JobList/"><span class="glyphicon glyphicon-th-list"> </span> Отчеты</a></li>
-                @*<li><a href="~/Promotion/"><span class="glyphicon glyphicon-star-empty"> </span> Акции</a></li>*@
-                <li><a href="~/Drug/Index/"><span class="glyphicon glyphicon-align-justify"> </span> Наша продукция</a></li>
-                <li><a data-toggle="modal" data-target="#myModal" class="pointer"><span class="glyphicon glyphicon-envelope"></span> Что-то не так? Сообщите нам об этом</a></li>
+							<li>
+								<a href="~/Report/JobList/">
+									<span class="glyphicon glyphicon-th-list"></span>Отчеты
+								</a>
+							</li>
+							if (ViewBag.Env == "test" || ViewBag.Env == "debug") {
+								<li><a href="~/Promotion/"><span class="glyphicon glyphicon-star-empty"></span>Акции</a></li>
+							}
+							<li><a href="~/Drug/Index/"><span class="glyphicon glyphicon-align-justify"></span>Наша продукция</a></li>
+							<li><a data-toggle="modal" data-target="#myModal" class="pointer"><span class="glyphicon glyphicon-envelope"></span> Что-то не так? Сообщите нам об этом</a></li>
             }
         </ul>
 
@@ -32,23 +38,23 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.AdminUser.Login (админ)</a></li>
             </ul>
-            }                        
+            }
             <ul class="nav navbar-nav navbar-right" role="navigation" style="margin:0px;padding-top:0.3em; margin-right:0.3em;">
                 <li class="dropdown" style="margin:0px;padding:0px;">
 
 
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"style="margin:0px;padding:0px;">                        
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"style="margin:0px;padding:0px;">
                             <table style="max-height:1.5em;margin:0px;padding:0px;">
                                 <tr>
-                                    <td rowspan="2" style="align-self:center; padding-right:0.5em; padding-bottom:0.2em;"><span class="glyphicon glyphicon-user" style="font-size:1.1em;"></span></td>  
-                                    <td style="font-size:1em;">@user.Login</td>                                  
+                                    <td rowspan="2" style="align-self:center; padding-right:0.5em; padding-bottom:0.2em;"><span class="glyphicon glyphicon-user" style="font-size:1.1em;"></span></td>
+                                    <td style="font-size:1em;">@user.Login</td>
                                 </tr>
-                                <tr>                                  
+                                <tr>
                                     <td style="font-size:0.5em;">@ViewBag.Producernames</td>
                                 </tr>
-                            </table>                      
+                            </table>
                     </a>
-                                
+
                     <ul class="dropdown-menu">
                         <li><a href="~/Profile/Account">Мой профиль</a></li>
                         <li class="divider"></li>

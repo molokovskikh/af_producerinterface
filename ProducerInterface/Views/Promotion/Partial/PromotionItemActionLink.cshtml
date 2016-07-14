@@ -1,11 +1,11 @@
 ﻿@using ProducerInterfaceCommon.ViewModel.Interface.Promotion
-@using ProducerInterfaceCommon.ContextModels
+@using ProducerInterfaceCommon.Models
 @model PromotionUi
 
 <div class="btn-group btn-group-primary btn-group-lg">
 
     <!-- если ещё не согласована - можно редактировать -->
-    @if(Model.FakeStatus == PromotionFakeStatus.NotConfirmed)
+    @if(Model.FakeStatus == ActualPromotionStatus.NotConfirmed)
     {
         <a href="@Url.Action("Edit", new { IdKey = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
     }
@@ -14,11 +14,11 @@
     <a href="@Url.Action("Edit", new { IdKey = Model.Id, Copy = true })" title="Создать копию" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
 
     <!-- если ещё не началась или активна - можно остановить -->
-    @if (Model.FakeStatus == PromotionFakeStatus.ConfirmedNotBegin || Model.FakeStatus == PromotionFakeStatus.Active)
+    @if (Model.FakeStatus == ActualPromotionStatus.ConfirmedNotBegin || Model.FakeStatus == ActualPromotionStatus.Active)
     {
         <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = false })" title="Остановить публикацию" class="btn  btn-default glyphicon glyphicon-eye-close"></a>
     }
-    else if(Model.FakeStatus == PromotionFakeStatus.Disabled)
+    else if(Model.FakeStatus == ActualPromotionStatus.Disabled)
     {
         <!-- если остановлена пользователем - можно запустить -->
         <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = true })" title="Начать публикацию акции*(При наступлении срока)" class="btn btn-default glyphicon glyphicon-eye-close"></a>

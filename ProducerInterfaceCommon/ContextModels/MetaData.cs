@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using System.Linq;
 using System.Text;
 using ProducerInterfaceCommon.Heap;
 
@@ -239,51 +238,6 @@ namespace ProducerInterfaceCommon.ContextModels
 		public List<int> ListPermission { get; set; }
 		[UIHint("LongListUser")]
 		public List<long> ListUser { get; set; }
-
-	}
-
-	public partial class promotions
-	{
-		public List<OptionElement> GlobalDrugList { get; set; }
-		public List<OptionElement> RegionnamesList { get; set; }
-
-		public void GetRegionnamesList()
-		{
-			var cntx = new ProducerInterfaceCommon.ContextModels.producerinterface_Entities();
-			var h = new ProducerInterfaceCommon.Heap.NamesHelper(cntx, cntx.Account.Where(xxx => xxx.Id == this.Account.Id).First().Id);
-			RegionnamesList = h.GetPromotionRegionNames(Convert.ToUInt64(this.RegionMask));
-		}
-	}
-
-	[MetadataType(typeof(promotionsMetaData))]
-	[DisplayName("Акция")]
-	public partial class promotions
-	{
-
-	}
-	public class promotionsMetaData
-	{
-		public long Id { get; set; }
-		public System.DateTime UpdateTime { get; set; }
-
-		public Nullable<long> AdminId { get; set; }
-		public long ProducerId { get; set; }
-		public long ProducerUserId { get; set; }
-		public string Annotation { get; set; }
-		public string PromoFile { get; set; }
-		public bool AgencyDisabled { get; set; }
-		public string Name { get; set; }
-		public decimal RegionMask { get; set; }
-
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-		public Nullable<System.DateTime> Begin { get; set; }
-
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-		public Nullable<System.DateTime> End { get; set; }
-
-		public bool Status { get; set; }
-
-		public virtual ICollection<promotionToDrug> promotionToDrug { get; set; }
 
 	}
 

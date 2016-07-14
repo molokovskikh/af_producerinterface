@@ -15,7 +15,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
         [HttpGet]
         public ActionResult Index()
         {
-            ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(DB, CurrentUser.Id);
+            ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(CurrentUser.Id);
             var ProducerList = new List<OptionElement>() { new OptionElement { Text = "", Value = "" } };
             var ProducerListRegistration = h.RegisterListProducer();
             ProducerList.AddRange(ProducerListRegistration);
@@ -61,7 +61,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
 
         public JsonResult GetListUser(long idproducer)
         {
-            ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(DB, CurrentUser.Id);
+            ProducerInterfaceCommon.Heap.NamesHelper h = new ProducerInterfaceCommon.Heap.NamesHelper(CurrentUser.Id);
             var UserList = h.GetProducerUserList(idproducer);
             return Json(UserList.Select(x=> new { value=x.Value, text= x.Text}), JsonRequestBehavior.AllowGet);
         }

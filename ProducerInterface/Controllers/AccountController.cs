@@ -11,6 +11,7 @@ using ProducerInterfaceCommon.ViewModel.Interface.Profile;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 using System.Web.Security;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterface.Controllers
 {
@@ -563,7 +564,7 @@ namespace ProducerInterface.Controllers
 		[HttpPost]
 		public ActionResult AdminAuth(AdminAutentification model)
 		{
-			var domainAuth = new DomainAutentification();
+			var domainAuth = new AdHelper();
 			if (domainAuth.IsAuthenticated(model.Login, model.Password))
 			{
 				// авторизовываем как обычного пользователя, но с добавление ID Администратора

@@ -301,12 +301,6 @@ namespace ProducerInterfaceCommon.ContextModels
 		public byte[] ImageFile { get; set; }
 	}
 
-	public partial class promotions
-	{
-		public List<long> RegionList { get; set; }
-		public List<OptionElement> DrugList { get; set; }
-	}
-
 	public class PromotionFile
 	{
 		public long Id { get; set; }

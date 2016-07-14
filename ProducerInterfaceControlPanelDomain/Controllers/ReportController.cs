@@ -7,6 +7,7 @@ using System.Data;
 using System.IO;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Report;
 using ProducerInterfaceCommon.Controllers;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {

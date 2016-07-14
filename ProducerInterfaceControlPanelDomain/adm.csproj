@@ -733,8 +733,7 @@
     <Content Include="Views\News\Preview.cshtml" />
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\Partial\SearchResult.cshtml" />
-    <Content Include="Views\Promotion\OnePromotion.cshtml" />
-    <Content Include="Views\Promotion\Partial\PromotionStatus.cshtml" />
+    <Content Include="Views\Promotion\View.cshtml" />
     <Content Include="Views\News\History.cshtml" />
     <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />

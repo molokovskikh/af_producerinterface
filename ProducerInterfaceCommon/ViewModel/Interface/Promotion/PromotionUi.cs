@@ -1,5 +1,6 @@
 ﻿using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
+using ProducerInterfaceCommon.Models;
 
 namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
 {
@@ -9,10 +10,10 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
 		public long Id { get; set; }
 		public string Name { get; set; }
 		public string Annotation { get; set; }
-		public string Begin { get; set; } /* DateTime Begin */
-		public string End { get; set; } /* DateTime End*/
+		public string Begin { get; set; }
+		public string End { get; set; }
 		public bool AllSuppliers { get; set; }
-		public PromotionFakeStatus FakeStatus { get; set; }
+		public ActualPromotionStatus FakeStatus { get; set; }
 
 		public System.Web.HttpPostedFileBase File { get; set; }
 

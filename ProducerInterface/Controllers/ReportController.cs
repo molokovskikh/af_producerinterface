@@ -10,6 +10,7 @@ using ProducerInterfaceCommon.Models;
 using System.Data;
 using System.IO;
 using ProducerInterfaceCommon.Controllers;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterface.Controllers
 {
@@ -33,7 +34,7 @@ namespace ProducerInterface.Controllers
 				var adminGroupName = GetWebConfigParameters("AdminGroupName");
 				isAdmin = CurrentUser.AccountGroup.Any(x => x.Name == adminGroupName);
 				userId = CurrentUser.Id;
-				h = new NamesHelper(DB, userId);
+				h = new NamesHelper(userId);
 				if (CurrentUser.AccountCompany.ProducerId.HasValue)
 				{
 					producerId = CurrentUser.AccountCompany.ProducerId.Value;

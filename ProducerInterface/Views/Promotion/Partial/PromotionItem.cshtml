@@ -8,7 +8,7 @@
 }
 <div class="panel panel-default panel-sm">
     <!--        Оглавление    -->
-    
+
     <div class="panel-heading">
         <a data-toggle="collapse" href="#collapse_@Model.Id" class="panel-title">
             <span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp; @Model.Name
@@ -35,12 +35,12 @@
             </div>
             <div class="form-group col-xs-6">
                 <h4>Дата начала акции</h4>
-                <p>'@Model.Begin</p>
+                <p>@Model.Begin</p>
             </div>
 
             <div class="form-group col-xs-6">
                 <h4>Дата окончания акции</h4>
-                <p>'@Model.End</p>
+                <p>@Model.End</p>
             </div>
 
             <!--                    Прикрепленный файл          -->
@@ -49,11 +49,11 @@
 
                 @if (Model.PromotionFileId != null)
                 {
-                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />                 
+                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />
                 }
                 else
                 {
-                    <p>Отсутствует файл</p> <br />                 
+                    <p>Отсутствует файл</p> <br />
                 }
             </div>
             <!--                Список лекарств            -->

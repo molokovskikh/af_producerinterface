@@ -111,7 +111,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult Index()
 		{
-			var h = new NamesHelper(DB, CurrentUser.Id);
+			var h = new NamesHelper(CurrentUser.Id);
 			ViewBag.ListProducer = h.RegisterListProducer();
 			var model = DB.AccountCompany.Where(x => x.ProducerId.HasValue).ToList(); // TODO протестировать без производителя
 			return View(model);
@@ -125,10 +125,10 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult GetProducerInformation(int Id)
 		{
 			var producerId = DB.AccountCompany.Single(x => x.Id == Id).ProducerId;
-			var promotionList = DB.promotions.Where(x => x.ProducerId == producerId).ToList();
+			var promotionList = DB2.Promotions.Where(x => x.ProducerId == producerId).ToList();
 
 			var firstUserId = DB.Account.First(x => x.AccountCompany.Id == Id).Id;
-			var h = new NamesHelper(DB, firstUserId);
+			var h = new NamesHelper(firstUserId);
 			ViewBag.ListProducer = h.RegisterListProducer();
 			ViewBag.PromotionList = promotionList;
 

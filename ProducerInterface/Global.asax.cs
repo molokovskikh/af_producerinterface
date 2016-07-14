@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using log4net;
 using ProducerInterfaceCommon.Heap;
-using System.Collections.Generic;
-using System.Web.Security;
 using log4net.Config;
 
 namespace ProducerInterface
@@ -23,7 +20,6 @@ namespace ProducerInterface
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 			XmlConfigurator.Configure();
 		}
-
 
 		protected void Application_Error(object sender, EventArgs e)
 		{

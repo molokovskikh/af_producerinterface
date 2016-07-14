@@ -1,15 +1,9 @@
-п»їusing System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System;
 using System.DirectoryServices;
-using System.Web.Security;
-using ProducerInterfaceCommon.ContextModels;
 
-namespace ProducerInterfaceCommon.Controllers
+namespace ProducerInterfaceCommon.Helpers
 {
-    public class DomainAutentification
+    public class AdHelper
     {
         private DirectoryEntry entryAu;
         private string _path;
@@ -18,9 +12,9 @@ namespace ProducerInterfaceCommon.Controllers
 
         public bool IsAuthenticated(string username, string pwd)
         {
-            if (Authenticated(@"LDAP://OU=РћС„РёСЃ,DC=adc,DC=analit,DC=net", username, pwd))
+            if (Authenticated(@"LDAP://OU=Офис,DC=adc,DC=analit,DC=net", username, pwd))
                 return true;
-            if (Authenticated(@"LDAP://OU=РљР»РёРµРЅС‚С‹,DC=adc,DC=analit,DC=net", username, pwd))
+            if (Authenticated(@"LDAP://OU=Клиенты,DC=adc,DC=analit,DC=net", username, pwd))
                 return true;
             return false;
         }
@@ -43,7 +37,7 @@ namespace ProducerInterfaceCommon.Controllers
             }
             catch (Exception ex)
             {
-                //_log.Info("РџР°СЂРѕР»СЊ РёР»Рё Р»РѕРіРёРЅ Р±С‹Р» РІРІРµРґРµРЅ РЅРµРїСЂР°РІРёР»СЊРЅРѕ");
+                //_log.Info("Пароль или логин был введен неправильно");
                 //_log.Info(ErrorMessage);
                 ErrorMessageString = ex.Message;
                 return false;

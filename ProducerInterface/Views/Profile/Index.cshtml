@@ -14,11 +14,13 @@
                 <h3 style="margin:0.5em;">Меню</h3>
                 <hr/>
                 <div class="btn-group-vertical profile_submenu" style="width:100%;">
-                    <a href="@Url.Action("JobList", "Report")" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Отчеты</a>
-                    @*<a href="@Url.Action("Index", "Promotion")" class="btn btn-default" style="width:100%;"><span class="glyphicon glyphicon-star-empty"></span> Акции</a>*@
-                    <a href="@Url.Action("Index", "Drug")" class="btn btn-default"><span class="glyphicon glyphicon-align-justify"></span> Наша продукция</a>
-                    <a data-toggle="modal" data-target="#myModal" class="pointer btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
-                </div>             
+									<a href="@Url.Action("JobList", "Report")" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Отчеты</a>
+									@if (ViewBag.Env == "test" || ViewBag.Env == "debug") {
+										<a href="@Url.Action("Index", "Promotion")" class="btn btn-default" style="width:100%;"><span class="glyphicon glyphicon-star-empty"></span> Акции</a>
+									}
+									<a href="@Url.Action("Index", "Drug")" class="btn btn-default"><span class="glyphicon glyphicon-align-justify"></span> Наша продукция</a>
+									<a data-toggle="modal" data-target="#myModal" class="pointer btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
+                </div>
             </div>
         </div>
         <div class="col-xs-12 col-lg-10">
@@ -34,7 +36,7 @@
 
                 @*<div class="form-group" id="NewsListDiv">
                     @if (ViewBag.News != null && ViewBag.News.Count > 0)
-                    {                      
+                    {
                         <div class="row">
                             @foreach (var NewsItem in NewsList)
                             {
@@ -50,7 +52,7 @@
                                             <span class="pull-right">@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span>
                                         </div>
                                     </div>
-                                </div>                                       
+                                </div>
                             }
                         </div>
 

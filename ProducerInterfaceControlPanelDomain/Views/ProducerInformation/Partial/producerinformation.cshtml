@@ -1,8 +1,9 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
+@using ProducerInterfaceCommon.Models
 @model AccountCompany
 @{
     var ListProducer = ViewBag.ListProducer as IEnumerable<OptionElement>;
-    var ListPromotion = ViewBag.PromotionList as IEnumerable<promotions>;
+    var ListPromotion = ViewBag.PromotionList as IEnumerable<Promotion>;
     var ListDrugNames = ViewBag.DrugList as IEnumerable<OptionElement>;
     var ListReport = ViewBag.ReportList as IEnumerable<jobextendwithproducer>;
 }

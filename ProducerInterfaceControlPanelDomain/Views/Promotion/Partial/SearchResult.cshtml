@@ -1,5 +1,6 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
-@model IEnumerable<promotions>
+@using ProducerInterfaceCommon.Heap
+@model IEnumerable<ProducerInterfaceCommon.Models.Promotion>
 @{
     var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
 }
@@ -16,27 +17,25 @@
                     <th>Поствщики</th>
                     <th>Производитель</th>
                     <th>Файл</th>
-                    <th></th>                 
                 </tr>
 
                 @foreach (var Item in Model)
                 {
                     <tr>
-                        <td>@Item.Name</td>
-                        <th>@Html.Partial("PromotionStatus", Item)</th>
+                        <td>@Html.ActionLink(@Item.Name, "View", new { Item.Id })</td>
+                        <th>@Item.GetStatus().DisplayName()</th>
                         <td>@Item.Annotation</td>
-                        <td>@Item.Begin.Value.ToString("dd.MM.yyyy")</td>
-                        <td>@Item.End.Value.ToString("dd.MM.yyyy")</td>
+                        <td>@Item.Begin.ToShortDateString()</td>
+                        <td>@Item.End.ToShortDateString()</td>
                         <td>@Item.promotionToDrug.Count()</td>
                         <td>@Item.PromotionsToSupplier.Count()</td>
                         <td>@ProducerList.Where(xx=>xx.Value == Item.ProducerId.ToString()).First().Text</td>
                         <td>
-                            @if (Item.MediaFiles != null)
+                            @if (Item.MediaFile != null)
                             {
-                                <a href="@Url.Action("GetFile",new { Id= Item.MediaFiles.Id})">@Item.MediaFiles.ImageName</a>
+                                <a href="@Url.Action("GetFile",new { Id= Item.MediaFile.Id})">@Item.MediaFile.ImageName</a>
                             }
                         </td>
-                        <td>@Html.ActionLink("Подробно", "OnePromotion", new { id=Item.Id })</td>
                     </tr>
                 }
 

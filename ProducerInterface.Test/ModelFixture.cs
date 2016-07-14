@@ -1,5 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Models;
 
 namespace ProducerInterface.Test
 {
@@ -13,6 +15,13 @@ namespace ProducerInterface.Test
 			var regions =  cntx.Regions();
 			Assert.That(regions.Count, Is.GreaterThan(0));
 			Assert.That(regions[0].Id, Is.GreaterThan(0));
+		}
+
+		[Test]
+		public void Load_promotions()
+		{
+			var db = new Context();
+			Assert.That(db.Set<Promotion>().ToList().Count, Is.GreaterThan(0));
 		}
 	}
 }

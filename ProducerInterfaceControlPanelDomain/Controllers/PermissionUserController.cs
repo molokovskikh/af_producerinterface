@@ -4,9 +4,11 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.ContextModels;
+using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceCommon.Helpers;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Permission;
-using ProducerInterfaceControlPanelDomain.Controllers.Global;
+using BaseController = ProducerInterfaceControlPanelDomain.Controllers.Global.BaseController;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
