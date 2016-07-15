@@ -1,0 +1,30 @@
+﻿@using ProducerInterfaceCommon.Models
+@model ProducerInterfaceCommon.Models.PromotionSnapshot
+
+@{
+	ViewBag.Title = "История изменений";
+	Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="row">
+	<div class="container">
+		<h4>@Model.SnapshotName</h4>
+		<div class="row">
+				<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#NewsTab_New">После внесения изменений</a></li>
+						<li><a data-toggle="tab" href="#News_Tab_Old">До внесения изменений</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="NewsTab_New" class="tab-pane fade in active">
+						@Html.Partial("Snapshot", Model)
+					</div>
+					<div id="News_Tab_Old" class="tab-pane fade">
+						@if (ViewBag.Old != null) {
+							@Html.Partial("Snapshot", (PromotionSnapshot)ViewBag.Old)
+						}
+					</div>
+				</div>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,83 @@
+﻿<div class="form-group">
+	<label>Автор</label>
+	<p>@Model.Author.Name @Model.Author.Login</p>
+</div>
+
+<div class="form-group">
+	<label>Статус</label>
+	<p>@Model.Status</p>
+</div>
+
+<div class="form-group">
+	<label>Дата операции</label>
+	<p>@Model.CreatedOn</p>
+</div>
+
+<div class="form-group">
+	<label>Название</label>
+	<p>@Model.Name</p>
+</div>
+
+<div class="form-group">
+	<label>Аннотация</label>
+	<p>@Model.Annotation</p>
+</div>
+
+<div class="form-group">
+	<p>
+		<label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span></a>
+	</p>
+	<div id="promotiondruglist" class="collapse">
+		@foreach (var item in @Model.Products) {
+			<p>@item</p>
+		}
+	</div>
+</div>
+
+<div class="form-group">
+	<p>
+		<label>
+			Список регионов <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"></span></a>
+		</label>
+	</p>
+	<div id="promotionregionlist" class="collapse">
+		@foreach (var item in @Model.Regions) {
+			<p>@item</p>
+		}
+	</div>
+</div>
+
+<div class="form-group">
+	<p>
+		<label>
+			Список поставщиков <a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"></span></a>
+		</label>
+	</p>
+	<div id="promotionSupplierList" class="collapse">
+		@foreach (var item in @Model.Suppliers) {
+			<p>@item</p>
+		}
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2">
+		<div class="form-group">
+			<label>Дата начала</label>
+			<p>@Model.Begin.ToString("dd.MM.yyyy")</p>
+		</div>
+	</div>
+	<div class="col-xs-2">
+		<div class="form-group">
+			<label>Дата окончания</label>
+			<p>@Model.End.ToString("dd.MM.yyyy")</p>
+		</div>
+	</div>
+</div>
+
+@if (Model.File != null) {
+	<div class="form-group">
+		<label>Прикреплен файл</label>
+		<a href="@Url.Action("GetFile", "MediaFiles", new {Model.File.Id})">Скачать (@Model.File.ImageName)</a>
+	</div>
+}

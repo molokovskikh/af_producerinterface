@@ -259,7 +259,6 @@ namespace ProducerInterface.Controllers
 			promotion.Annotation = model.Annotation;
 			promotion.Begin = Convert.ToDateTime(model.Begin);
 			promotion.End = Convert.ToDateTime(model.End);
-			promotion.AgencyDisabled = false;
 			promotion.Enabled = true;
 			promotion.Status = PromotionStatus.New;
 			promotion.Author = DB2.Users.Find(CurrentUser.Id);
@@ -303,7 +302,6 @@ namespace ProducerInterface.Controllers
 				Begin = Convert.ToDateTime(model.Begin),
 				End = Convert.ToDateTime(model.End),
 				UpdateTime = DateTime.Now,
-				AgencyDisabled = false,
 				Enabled = true,
 				Status = (byte)PromotionStatus.New,
 				ProducerId = producerId,

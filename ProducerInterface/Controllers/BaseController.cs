@@ -20,6 +20,8 @@ namespace ProducerInterface.Controllers
 			base.OnActionExecuting(filterContext);
 
 			CurrentUser = GetCurrentUser();
+			Mails = new EmailSender(DB, CurrentUser);
+			Mails.IP = Request.UserHostAddress;
 			SecurityCheck(CurrentUser, TypeUsers.ProducerUser, filterContext);
 
 			if (CurrentUser != null)
@@ -33,7 +35,6 @@ namespace ProducerInterface.Controllers
 					ViewBag.Producernames = "Физическое лицо";
 				ViewBag.CurrentUser = CurrentUser;
 				ViewBag.AdminUser = CurrentAdmin;
-				Mails = new EmailSender(DB, CurrentUser);
 			}
 		}
 

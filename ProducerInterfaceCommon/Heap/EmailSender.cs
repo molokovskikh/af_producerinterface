@@ -19,6 +19,7 @@ namespace ProducerInterfaceCommon.Heap
 		private DiagnosticInformation diagnostics;
 		private List<string> attachments = new List<string>();
 		private bool isHtml;
+		public string IP;
 
 		public EmailSender(producerinterface_Entities db, Account currentUser)
 		{
@@ -134,9 +135,9 @@ namespace ProducerInterfaceCommon.Heap
 			MessageForUser(MailType.AccountVerification, targetUser, new { Password = password });
 		}
 
-		public void RegistrationReject(Account targetUser, string reason)
+		public void RegistrationReject(Account targetUser, string comment)
 		{
-			MessageForUser(MailType.RegistrationRejected, targetUser, new { Reason = reason });
+			MessageForUser(MailType.RegistrationRejected, targetUser, new { Comment = comment });
 		}
 
 		private void MessageForUser(MailType type, Account targetUser, object args)
@@ -197,7 +198,9 @@ namespace ProducerInterfaceCommon.Heap
 				body = "<p style='white-space: pre-wrap;'>" + body + "</p>";
 			SendEmail(mailInfo, subject, body, attachments, isHtml);
 
-			diagnostics = new DiagnosticInformation(currentUser);
+			diagnostics = new DiagnosticInformation(currentUser) {
+				IP = IP
+			};
 			attachments = new List<string>();
 			isHtml = false;
 		}
@@ -390,6 +393,7 @@ namespace ProducerInterfaceCommon.Heap
 			public string ReportId { get; set; }
 			public string ReportName { get; set; }
 			public string ErrorMessage { get; set; }
+			public string IP { get; set; }
 
 			public DiagnosticInformation(Account user)
 			{
@@ -432,13 +436,13 @@ namespace ProducerInterfaceCommon.Heap
 					sb.AppendLine($"производитель: {ProducerName} (id={ProducerId})");
 				}
 				else
-					sb.AppendLine($"Незарегистрированный пользователь (IP {User.IP})");
+					sb.AppendLine($"Незарегистрированный пользователь (IP {User?.IP ?? IP})");
 				sb.AppendLine($"действие: {ActionName}, время {ActionDate}");
 				if (!string.IsNullOrEmpty(ReportId))
 					sb.AppendLine($"отчет: {ReportName} (id={ReportId})");
 				if (!string.IsNullOrEmpty(ErrorMessage))
 					sb.AppendLine($"сообщение об ошибке: {ErrorMessage}");
-				if (User.UserType == TypeUsers.ControlPanelUser)
+				if (User?.UserType == TypeUsers.ControlPanelUser)
 					sb.AppendLine($"письмо отправлено из Панели управления администратором: {User.Login}");
 
 				return sb.ToString();

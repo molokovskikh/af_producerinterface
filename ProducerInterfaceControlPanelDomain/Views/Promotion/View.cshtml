@@ -1,4 +1,5 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
+@using ProducerInterfaceCommon.Heap
 @using ProducerInterfaceCommon.Models
 @model ProducerInterfaceCommon.Models.Promotion
 @{
@@ -11,80 +12,105 @@
 }
 
 <div class="container body-content">
-    <h2>Промоакция @Model.Name</h2>
+	<h2>Промоакция @Model.Name</h2>
 
-    <div class="form-group">
-        <label>Производитель</label>
-        <p>@ViewBag.ProducerName</p>
-    </div>
+	<div class="form-group">
+		<label>История изменений</label>
+		<table class="table table-condensed">
+			<thead>
+			<tr>
+				<th>Дата</th>
+				<th>Оператор</th>
+				<th>Описание</th>
+			</tr>
+			</thead>
+			<tbody>
+			@foreach (var item in ViewBag.History) {
+				<tr>
+					<td>@item.CreatedOn</td>
+					<td>@item.AuthorDisplayName</td>
+					<td>
+						<a title="Посмотреть изменения" href="@Url.Action("History", new {item.Id})"><i class="glyphicon glyphicon-info-sign"></i>@item.SnapshotName</a>
+					</td>
+				</tr>
+			}
+			</tbody>
+		</table>
+	</div>
 
-    <div class="form-group">
-        <label>Пользователь</label>
-        <p>@Model.Author.Name @Model.Author.Login</p>
-    </div>
+	<div class="form-group">
+		<label>Производитель</label>
+		<p>@ViewBag.ProducerName</p>
+	</div>
 
-    <div class="form-group">
-        <label>Дата создания (последнего изменения)</label>
-        <p>@Model.UpdateTime</p>
-    </div>
+	<div class="form-group">
+		<label>Пользователь</label>
+		<p>@Model.Author.Name @Model.Author.Login</p>
+	</div>
+	<div class="form-group">
+		<label>Статус</label>
+		<p>@Model.GetStatus().DisplayName()</p>
+	</div>
 
-    <div class="form-group">
-        <label>Аннотация</label>
-        <p>@Model.Annotation</p>
-    </div>
 
-    <div class="form-group">
-        <p><label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></p>
-        <div id="promotiondruglist" class="collapse">
-            @foreach (var DrugItem in DrugList)
-            {
-                <p>@DrugItem.Text</p>
-            }
-        </div>
-    </div>
+	<div class="form-group">
+		<label>Дата создания (последнего изменения)</label>
+		<p>@Model.UpdateTime</p>
+	</div>
 
-    <div class="form-group">
-        <p><label>Список регионов  <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
-        <div id="promotionregionlist" class="collapse">
-            @foreach (var RegItem in RegionList)
-            {
-                <p>@RegItem.Text</p>
-            }
-        </div>
-    </div>
+	<div class="form-group">
+		<label>Аннотация</label>
+		<p>@Model.Annotation</p>
+	</div>
 
-    <div class="form-group">
-        <p><label>Список поствщиков  <a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
-        <div id="promotionSupplierList" class="collapse">
-            @foreach (var SupplierItem in SupplierList)
-            {
-                <p>@SupplierItem.Text</p>
-            }
-        </div>
-    </div>
+	<div class="form-group">
+		<p><label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></p>
+		<div id="promotiondruglist" class="collapse">
+				@foreach (var item in DrugList) {
+						<p>@item.Text</p>
+				}
+		</div>
+	</div>
 
-    <div class="row">
-        <div class="col-xs-6">
-            <div class="form-group">
-                <label>Дата начала</label>
-                <p>@Model.Begin.ToString("dd.MM.yyyy")</p>
-            </div>
-        </div>
-        <div class="col-xs-6">
-            <div class="form-group">
-                <label>Дата окончания</label>
-                <p>@Model.End.ToString("dd.MM.yyyy")</p>
-            </div>
-        </div>
-    </div>
+	<div class="form-group">
+		<p><label>Список регионов  <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
+		<div id="promotionregionlist" class="collapse">
+			@foreach (var item in RegionList) {
+				<p>@item.Text</p>
+			}
+		</div>
+	</div>
 
-    @if (Model.MediaFile != null)
-    {
-        <div class="form-group">
-            <label>Прикреплен файл</label>
-            <a href="@Url.Action("GetFile", "Promotion", new { Model.MediaFile.Id })">Скачать (@Model.MediaFile.ImageName)</a>
-        </div>
-    }
+	<div class="form-group">
+		<p><label>Список поставщиков  <a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
+		<div id="promotionSupplierList" class="collapse">
+			@foreach (var item in SupplierList) {
+				<p>@item.Text</p>
+			}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-2">
+			<div class="form-group">
+				<label>Дата начала</label>
+				<p>@Model.Begin.ToString("dd.MM.yyyy")</p>
+			</div>
+		</div>
+		<div class="col-xs-2">
+			<div class="form-group">
+				<label>Дата окончания</label>
+				<p>@Model.End.ToString("dd.MM.yyyy")</p>
+			</div>
+		</div>
+	</div>
+
+	@if (Model.MediaFile != null) {
+		<div class="form-group">
+			<label>Прикреплен файл</label>
+			<a href="@Url.Action("GetFile", "MediaFiles", new { Model.MediaFile.Id })">Скачать (@Model.MediaFile.ImageName)</a>
+		</div>
+	}
 
 	<div class="form-group">
 		@if (Model.Status == PromotionStatus.Confirmed) {

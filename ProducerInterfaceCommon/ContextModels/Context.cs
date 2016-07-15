@@ -28,6 +28,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public DbSet<PromotionToDrug> PromotionToDrugs { get; set; }
 		public DbSet<PromotionsToSupplier> PromotionsToSuppliers { get; set; }
 		public DbSet<MediaFile> MediaFiles { get; set; }
+		public DbSet<PromotionSnapshot> PromotionHistory { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder builder)
 		{
@@ -47,6 +48,10 @@ namespace ProducerInterfaceCommon.ContextModels
 			builder.Entity<PromotionToDrug>().ToTable("PromotionToDrug")
 				.HasKey(x => new { x.PromotionId, x.DrugId });
 			builder.Entity<MediaFile>().ToTable("MediaFiles");
+			var snapshot = builder.Entity<PromotionSnapshot>().ToTable("PromotionSnapshots");
+			snapshot.HasOptional(x => x.Author).WithMany().Map(x => x.MapKey("AuthorId"));
+			snapshot.HasOptional(x => x.Promotion).WithMany().Map(x => x.MapKey("PromotionId"));
+			snapshot.HasOptional(x => x.File).WithMany().Map(x => x.MapKey("FileId"));
 		}
 	}
 

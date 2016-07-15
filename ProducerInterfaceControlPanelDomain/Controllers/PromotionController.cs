@@ -86,15 +86,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// Подробнее
 		/// </summary>
 		/// <param name="Id">идентификатор промоакции</param>
-		public ActionResult View(long Id = 0)
+		public ActionResult View(long id)
 		{
-			var model = DB2.Promotions.Find(Id);
-
+			var model = DB2.Promotions.Find(id);
 			var h = new NamesHelper(CurrentUser.Id);
 			ViewBag.ProducerName = h.GetProducerList().Single(x => x.Value == model.ProducerId.ToString()).Text;
 			ViewBag.RegionList = h.GetPromotionRegionNames((ulong)model.RegionMask);
 			ViewBag.DrugList = h.GetDrugInPromotion(model.Id);
 			ViewBag.SupplierList = h.GetSupplierList(model.PromotionsToSupplier.ToList().Select(x => (decimal)x.SupplierId).ToList());
+			ViewBag.History = DB2.PromotionHistory.Where(x => x.Promotion.Id == model.Id).ToList();
 
 			return View(model);
 		}
@@ -107,7 +107,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var model = DB2.Promotions.Find(id);
 			model.Status = PromotionStatus.Confirmed;
-			DB.SaveChanges(CurrentUser, "Подтверждение промоакции");
+			DB2.PromotionHistory.Add(new PromotionSnapshot(DB2.Users.Find(CurrentUser.Id), model, DB) {
+				SnapshotName = "Подтверждение промоакции"
+			});
 			DB2.SaveChanges();
 			Mails.PromotionNotification(MailType.StatusPromotion,  model);
 
@@ -123,7 +125,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var model = DB2.Promotions.Find(id);
 			model.Status = PromotionStatus.Rejected;
-			DB.SaveChanges(CurrentUser, "Отклонение промоакции");
+			DB2.PromotionHistory.Add(new PromotionSnapshot(DB2.Users.Find(CurrentUser.Id), model, DB) {
+				SnapshotName = "Отклонение промоакции",
+			});
 			DB2.SaveChanges();
 			Mails.PromotionNotification(MailType.StatusPromotion,  model);
 
@@ -131,10 +135,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			return RedirectToAction("Index");
 		}
 
-		public FileResult GetFile(int id)
+		public ActionResult History(int id)
 		{
-			var file = DB.MediaFiles.Find(id);
-			return File(file.ImageFile, file.ImageType, file.ImageName);
+			var model = DB2.PromotionHistory.Find(id);
+			ViewBag.Old = DB2.PromotionHistory
+				.Where(x => x.Id < model.Id && x.Promotion.Id == model.Promotion.Id)
+				.OrderByDescending(x => x.Id)
+				.FirstOrDefault();
+			return View(model);
 		}
 	}
 }

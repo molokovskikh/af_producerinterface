@@ -45,7 +45,6 @@
                             @foreach (var historyItem in item.NewsChange)
                             {
                                 <p>@historyItem.DateChange @historyItem.Account.Name @historyItem.GetDisplayNewsTypeChange <a title="Посмотреть изменения" href="@Url.Action("History", new {Id = historyItem.Id })"><i class="glyphicon glyphicon-info-sign"></i></a></p>
-
                             }
                         </div>
 

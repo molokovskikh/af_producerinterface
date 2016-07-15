@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 
@@ -90,31 +91,82 @@ namespace ProducerInterfaceCommon.Models
 		public long Id { get; set; }
 		public string Name { get; set; }
 		public string Login { get; set; }
+		public string DisplayName => Name ?? Login;
 	}
 
+	public class PromotionSnapshot
+	{
+		public PromotionSnapshot()
+		{
+		}
+
+		public PromotionSnapshot(User author,
+			Promotion promotion,
+			producerinterface_Entities db)
+		{
+			Author = author;
+			AuthorName = author.DisplayName;
+			CreatedOn = DateTime.Now;
+			Promotion = promotion;
+			Name = promotion.Name;
+			SnapshotName = "Изменена промоакция";
+			Annotation = promotion.Annotation;
+			Status = promotion.GetStatus().DisplayName();
+			Begin = promotion.Begin;
+			End = promotion.End;
+			File = promotion.MediaFile;
+			var ids = promotion.PromotionToDrug.Select(x => x.DrugId).ToArray();
+			var products = db.assortment.Where(x => ids.Contains(x.CatalogId)).Select(x => x.CatalogName).ToArray();
+			ProductsJson = JsonConvert.SerializeObject(products);
+			var regions = db.Regions((ulong)promotion.RegionMask).Select(x => x.Name).ToArray();
+			RegionsJson = JsonConvert.SerializeObject(regions);
+			ids = promotion.PromotionsToSupplier.Select(x => x.SupplierId).ToArray();
+			var suppliers = db.suppliernames.Where(x => ids.Contains(x.SupplierId)).Select(x => x.SupplierName).ToArray();
+			SuppliersJson = JsonConvert.SerializeObject(suppliers);
+		}
+
+		public virtual int Id { get; set; }
+		public virtual DateTime CreatedOn { get; set; }
+		public virtual string SnapshotName { get; set; }
+		public virtual string AuthorName { get; set; }
+		public virtual string AuthorDisplayName => Author.DisplayName ?? AuthorName;
+		public virtual User Author { get; set; }
+
+		public virtual Promotion Promotion { get; set; }
+		public virtual string Name { get; set; }
+		public virtual string Annotation { get; set; }
+		public virtual string Status { get; set; }
+		public virtual DateTime Begin { get; set; }
+		public virtual DateTime End { get; set; }
+		public virtual MediaFile File { get; set; }
+		public virtual string ProductsJson { get; set; }
+		public virtual string RegionsJson { get; set; }
+		public virtual string SuppliersJson { get; set; }
+
+		public virtual string[] Products => JsonConvert.DeserializeObject<string[]>(ProductsJson);
+		public virtual string[] Regions => JsonConvert.DeserializeObject<string[]>(RegionsJson);
+		public virtual string[] Suppliers => JsonConvert.DeserializeObject<string[]>(SuppliersJson);
+	}
 
 	[DisplayName("Акция")]
 	public class Promotion
 	{
 		public Promotion()
 		{
-			this.PromotionToDrug = new HashSet<PromotionToDrug>();
-			this.PromotionsToSupplier = new HashSet<PromotionsToSupplier>();
+			PromotionToDrug = new HashSet<PromotionToDrug>();
+			PromotionsToSupplier = new HashSet<PromotionsToSupplier>();
 		}
 
 		public long Id { get; set; }
 		public DateTime UpdateTime { get; set; }
 		public bool Enabled { get; set; }
-		public long? AdminId { get; set; }
 		public long ProducerId { get; set; }
 		public string Annotation { get; set; }
-		public bool AgencyDisabled { get; set; }
 		public string Name { get; set; }
 		public long RegionMask { get; set; }
 		public DateTime Begin { get; set; }
 		public DateTime End { get; set; }
 		public PromotionStatus Status { get; set; }
-		public long? ProducerAdminId { get; set; }
 		public bool AllSuppliers { get; set; }
 
 		public virtual User Author { get; set; }
