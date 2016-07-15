@@ -116,7 +116,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					break;
 			}
 
-			EmailSender.SendRejectCatalogChangeMessage(DB, user, item.ObjectReferenceNameUi, item.PropertyNameUi, before, after, comment, CurrentUser.Id);
+			EmailSender.SendRejectCatalogChangeMessage(DB, user, item.ObjectReferenceNameUi, item.PropertyNameUi, before, after, comment);
 		}
 
 

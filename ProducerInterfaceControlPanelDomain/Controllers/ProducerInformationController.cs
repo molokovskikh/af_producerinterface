@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using System.ComponentModel.DataAnnotations;
+using ProducerInterfaceCommon.Helpers;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -133,7 +134,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			ViewBag.PromotionList = promotionList;
 
 			foreach (var item in promotionList)
-				item.GetRegionnamesList();
+				item.RegionnamesList = DB.Regions((ulong)item.RegionMask).ToOptions();
 
 			ViewBag.DrugList = h.GetCatalogListPromotion();
 			ViewBag.ReportList = DB.jobextendwithproducer.Where(x => x.ProducerId == producerId).ToList();

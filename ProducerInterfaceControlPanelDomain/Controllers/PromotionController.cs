@@ -109,7 +109,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			model.Status = PromotionStatus.Confirmed;
 			DB.SaveChanges(CurrentUser, "Подтверждение промоакции");
 			DB2.SaveChanges();
-			Mails.SendPromotionStatus(model);
+			Mails.PromotionNotification(MailType.StatusPromotion,  model);
 
 			SuccessMessage("Промоакция подтверждена");
 			return RedirectToAction("Index");
@@ -123,11 +123,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var model = DB2.Promotions.Find(id);
 			model.Status = PromotionStatus.Rejected;
-			DB.SaveChanges(CurrentUser, "Подтверждение промоакции");
+			DB.SaveChanges(CurrentUser, "Отклонение промоакции");
 			DB2.SaveChanges();
-			Mails.SendPromotionStatus(model);
+			Mails.PromotionNotification(MailType.StatusPromotion,  model);
 
-			SuccessMessage("Промоакция отменено подтверждение");
+			SuccessMessage("Промоакция отклонена");
 			return RedirectToAction("Index");
 		}
 

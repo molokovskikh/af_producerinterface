@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Mvc;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceCommon.Heap
 {
@@ -51,10 +52,7 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetRegionList()
 		{
-			var results = _cntx.Regions()
-				.Select(x => new OptionElement { Value = x.Id.ToString(), Text = x.Name })
-				.ToList();
-			return results;
+			return _cntx.Regions().ToOptions();
 		}
 
 		// #48585 возвращает список регионов, разрешённый для данного типа отчётов
@@ -64,13 +62,9 @@ namespace ProducerInterfaceCommon.Heap
 			var reportRegionCodes = _cntx.ReportRegion.Where(x => x.ReportId == reportId).ToList().Select(x => x.RegionId).ToList();
 			var intersect = userRegionCodes.Intersect(reportRegionCodes);
 
-			var results = _cntx.Regions()
+			return _cntx.Regions()
 				.Where(x => intersect.Contains(x.Id))
-				.ToList()
-				.OrderBy(x => x.Name)
-				.Select(x => new OptionElement { Value = x.Id.ToString(), Text = x.Name })
-				.ToList();
-			return results;
+				.ToOptions();
 		}
 
 		// для UI
@@ -235,7 +229,7 @@ namespace ProducerInterfaceCommon.Heap
 		public List<OptionElement> GetPromotionRegionNames(ulong RegionMask)
 		{
 			var ids = GetPromotionRegions(RegionMask);
-			return _cntx.Regions().Where(x => ids.Contains((long)x.Id)).ToList().Select(x => new OptionElement { Text = x.Name, Value = x.Id.ToString() }).ToList();
+			return _cntx.Regions().Where(x => ids.Contains((long)x.Id)).ToOptions();
 		}
 
 		public List<OptionElement> RegisterListProducer()

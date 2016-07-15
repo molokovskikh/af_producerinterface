@@ -47,11 +47,6 @@ namespace ProducerInterfaceCommon.Controllers
 			Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
 		}
 
-		public void DeleteCookie(string name)
-		{
-			Response.Cookies.Remove(name);
-		}
-
 		public void SuccessMessage(string message)
 		{
 			SetCookie("SuccessMessage", message);

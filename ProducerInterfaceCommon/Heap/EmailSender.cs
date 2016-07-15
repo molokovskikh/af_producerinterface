@@ -262,7 +262,7 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Отклонение правки в каталог
-		public static void SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName, string fieldName, string before, string after, string comment, long adminId)
+		public static void SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName, string fieldName, string before, string after, string comment)
 		{
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RejectCatalogChange);
@@ -272,7 +272,7 @@ namespace ProducerInterfaceCommon.Heap
 			var attachments = GetAttachments(cntx, MailType.RejectCatalogChange);
 			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
-			var di = new DiagnosticInformation(user) { AdminLogin = cntx.Account.Find(adminId).Login, Body = body, ActionName = MailType.RejectCatalogChange.DisplayName() };
+			var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.RejectCatalogChange.DisplayName() };
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
 		}
@@ -288,98 +288,18 @@ namespace ProducerInterfaceCommon.Heap
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), null, false);
 		}
 
-		// Создание акции, пользователю и расширенное сотрудникам
-		public static void SendNewPromotion(producerinterface_Entities cntx, Context db, long userId, long promotionId, string ip)
+		public void PromotionNotification(MailType type, Promotion promotion, string comment = null)
 		{
-			var mailType = MailType.CreatePromotion;
-      var user = cntx.Account.Single(x => x.Id == userId);
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var promotion = db.Promotions.Single(x => x.Id == promotionId);
-			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
-			var subject = ReliableTokenizer(mailForm.Subject, new { PromotionName = promotion.Name, SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { PromotionName = promotion.Name, UserName = user.Name, UserLogin = user.Login, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, mailType);
-			EmailSender.SendEmail(user.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
-
-			var di = new DiagnosticInformation(user) { Body = body, ActionName = mailType.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
-		}
-
-		// Изменение акции, пользователю и расширенное сотрудникам
-		public static void SendChangePromotion(producerinterface_Entities cntx, Context db, long userId, long PromotionId, string ip)
-		{
-			var mailType = MailType.EditPromotion;
-      var user = cntx.Account.Single(x => x.Id == userId);
-			long userCreatePromotionID = db.Promotions.Single(x => x.Id == PromotionId).Author.Id;
-			var sendEmailOnCreateUserPromotion = cntx.Account.Single(xxx => xxx.Id == userCreatePromotionID);
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var promotion = db.Promotions.Single(x => x.Id == PromotionId);
-			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
-			var subject = ReliableTokenizer(mailForm.Subject, new { PromotionName = promotion.Name, SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { PromotionName = promotion.Name, UserName = user.Name, UserLogin = user.Login, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, mailType);
-			EmailSender.SendEmail(sendEmailOnCreateUserPromotion.Login, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
-
-			var di = new DiagnosticInformation(user) { Body = body, ActionName = mailType.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
-		}
-
-		public void SendPromotionStatus(Promotion promotion, string comment = null)
-		{
-			var args = new { PromotionName = promotion.Name,
+			var args = new {
+				PromotionName = promotion.Name,
 				Status = promotion.GetStatus().DisplayName(),
 				Comment = comment,
-				Http = "<a href='" + ConfigurationManager.AppSettings["SiteHttp"] + "/Promotion/Manage/" + promotion.Id + "'>ссылке</a>"
+				Http = "<a href='" + ConfigurationManager.AppSettings["SiteHttp"] + "/Promotion/Manage/" + promotion.Id + "'>ссылке</a>",
+				UserName = currentUser.Name,
+				UserLogin = currentUser.Login,
 			};
 			isHtml = true;
-			MessageFromTemplate(MailType.StatusPromotion, promotion.Author.Login, args);
-			//var mailType = MailType.StatusPromotion;
-   //   var user = cntx.Account.Single(x => x.Id == userId);
-			//var siteName = ConfigurationManager.AppSettings["SiteName"];
-			//var promotion = db.Promotions.Single(x => x.Id == promotionId);
-			//var siteHttp = ;
-			//var sendEmailOnCreateUserPromotion = cntx.Account.Where(xxx => xxx.CompanyId == db.Promotions.Single(yyy => yyy.Id == promotionId).Author.Id).Select(zzz => zzz.Login).First();
-			//var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
-			//var subject = ReliableTokenizer(mailForm.Subject, new { PromotionName = promotion.Name, SiteName = siteName });
-			//string statusPromotion = "Деактивирована";
-			//if (promotion.Status == PromotionStatus.Confirmed) { statusPromotion = "Подтверждена"; }
-			//var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			//var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, )}\r\n\r\n{mailForm.Footer}";
-			//var attachments = GetAttachments(cntx, mailType);
-			//EmailSender.SendEmail(sendEmailOnCreateUserPromotion, subject, , attachments, true);
-
-			//var di = new DiagnosticInformation(user) {Body = body, ActionName = mailType.DisplayName() };
-			//var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			//EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
-		}
-
-		// Подтверждение акции, пользователю и расширенное сотрудникам
-		public static void SendPromotionStatus(producerinterface_Entities cntx, Context db, long userId, long promotionId, string ip)
-		{
-			var mailType = MailType.StatusPromotion;
-      var user = cntx.Account.Single(x => x.Id == userId);
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var promotion = db.Promotions.Single(x => x.Id == promotionId);
-			var siteHttp = ConfigurationManager.AppSettings["SiteHttp"];
-			var sendEmailOnCreateUserPromotion = cntx.Account.Where(xxx => xxx.CompanyId == db.Promotions.Single(yyy => yyy.Id == promotionId).Author.Id).Select(zzz => zzz.Login).First();
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)mailType);
-			var subject = ReliableTokenizer(mailForm.Subject, new { PromotionName = promotion.Name, SiteName = siteName });
-			string statusPromotion = "Деактивирована";
-			if (promotion.Status == PromotionStatus.Confirmed) { statusPromotion = "Подтверждена"; }
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { PromotionName = promotion.Name, Status = statusPromotion, Http = "<a href='" + siteHttp + "/Promotion/Manage/" + promotion.Id + "'>ссылке</a>" })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, mailType);
-			EmailSender.SendEmail(sendEmailOnCreateUserPromotion, subject, "<p style='white-space: pre-wrap;'>" + body + "</p>", attachments, true);
-
-			var di = new DiagnosticInformation(user) {Body = body, ActionName = mailType.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, "<p style='white-space: pre-wrap;'>" + di.ToString(cntx) + "</p>", attachments, true);
+			MessageFromTemplate(type, promotion.Author.Login, args);
 		}
 
 		private static List<string> GetAttachments(producerinterface_Entities cntx, MailType mailType)
@@ -463,7 +383,6 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			public string Body { get; set; }
 			public Account User { get; set; }
-			public string UserIp { get; set; }
 			public DateTime? ActionDate { get; set; }
 			public string ActionName { get; set; }
 			public long? ProducerId { get; set; }
@@ -471,13 +390,10 @@ namespace ProducerInterfaceCommon.Heap
 			public string ReportId { get; set; }
 			public string ReportName { get; set; }
 			public string ErrorMessage { get; set; }
-			public string AdminLogin { get; set; }
 
 			public DiagnosticInformation(Account user)
 			{
 				User = user;
-				AdminLogin = user.Login;
-				UserIp = user.IP;
 			}
 
 			public string ToString(producerinterface_Entities cntx)
@@ -512,18 +428,18 @@ namespace ProducerInterfaceCommon.Heap
 				sb.AppendLine("Дополнительная информация");
 				if (User != null)
 				{
-					sb.AppendLine($"пользователь: {User.Name} (id={User.Id}, {User.Login}, IP {UserIp})");
+					sb.AppendLine($"пользователь: {User.Name} (id={User.Id}, {User.Login}, IP {User.IP})");
 					sb.AppendLine($"производитель: {ProducerName} (id={ProducerId})");
 				}
 				else
-					sb.AppendLine($"Незарегистрированный пользователь (IP {UserIp})");
+					sb.AppendLine($"Незарегистрированный пользователь (IP {User.IP})");
 				sb.AppendLine($"действие: {ActionName}, время {ActionDate}");
 				if (!string.IsNullOrEmpty(ReportId))
 					sb.AppendLine($"отчет: {ReportName} (id={ReportId})");
 				if (!string.IsNullOrEmpty(ErrorMessage))
 					sb.AppendLine($"сообщение об ошибке: {ErrorMessage}");
-				if (!string.IsNullOrEmpty(AdminLogin))
-					sb.AppendLine($"письмо отправлено из Панели управления администратором: {AdminLogin}");
+				if (User.UserType == TypeUsers.ControlPanelUser)
+					sb.AppendLine($"письмо отправлено из Панели управления администратором: {User.Login}");
 
 				return sb.ToString();
 			}

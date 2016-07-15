@@ -90,9 +90,9 @@
                             <td>@ItemPromotion.End.ToString("dd.MM.yyyy")</td>
                             <td>
 
-                                <a href="#Drugs_@ItemPromotion.Id" data-toggle="collapse">Развернуть список препаратов (@ItemPromotion.promotionToDrug.Count())</a>
+                                <a href="#Drugs_@ItemPromotion.Id" data-toggle="collapse">Развернуть список препаратов (@ItemPromotion.PromotionToDrug.Count())</a>
                                 <div id="Drugs_@ItemPromotion.Id" class="collapse">
-                                    @foreach (var ItemDrug in ItemPromotion.promotionToDrug)
+                                    @foreach (var ItemDrug in ItemPromotion.PromotionToDrug)
                                     {
                                         <p>@ListDrugNames.Where(x => x.Value == ItemDrug.DrugId.ToString()).First().Text</p>
                                     }

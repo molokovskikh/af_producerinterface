@@ -4,27 +4,18 @@
 
 <div class="btn-group btn-group-primary btn-group-lg">
 
-    <!-- если ещё не согласована - можно редактировать -->
-    @if(Model.FakeStatus == ActualPromotionStatus.NotConfirmed)
-    {
-        <a href="@Url.Action("Edit", new { IdKey = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
-    }
+	<a href="@Url.Action("Edit", new { IdKey = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
+	<a href="@Url.Action("Edit", new { IdKey = Model.Id, Copy = true })" title="Создать копию" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
+	<a href="@Url.Action("Delete", new { Model.Id })" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn  btn-default glyphicon glyphicon-trash"></a>
 
-    <!-- копия акции (сразу открывается для редактирования) -->
-    <a href="@Url.Action("Edit", new { IdKey = Model.Id, Copy = true })" title="Создать копию" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
-
-    <!-- если ещё не началась или активна - можно остановить -->
-    @if (Model.FakeStatus == ActualPromotionStatus.ConfirmedNotBegin || Model.FakeStatus == ActualPromotionStatus.Active)
-    {
-        <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = false })" title="Остановить публикацию" class="btn  btn-default glyphicon glyphicon-eye-close"></a>
-    }
-    else if(Model.FakeStatus == ActualPromotionStatus.Disabled)
-    {
-        <!-- если остановлена пользователем - можно запустить -->
-        <a href="@Url.Action("Publication", new { Id = Model.Id, Enabled = true })" title="Начать публикацию акции*(При наступлении срока)" class="btn btn-default glyphicon glyphicon-eye-close"></a>
-    }
-
-    <!-- удаляется из базы -->
-    <a href="@Url.Action("DeletePromo", new { Id = Model.Id })" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn  btn-default glyphicon glyphicon-trash"></a>
-
+	<!-- если ещё не началась или активна - можно остановить -->
+	@if (Model.ActualStatus == ActualPromotionStatus.ConfirmedNotBegin || Model.ActualStatus == ActualPromotionStatus.NotConfirmed || Model.ActualStatus == ActualPromotionStatus.Active)
+	{
+			<a href="@Url.Action("Publication", new { Model.Id, Enabled = false })" title="Остановить публикацию" class="btn  btn-default glyphicon glyphicon-eye-close"></a>
+	}
+	else if(Model.ActualStatus == ActualPromotionStatus.Disabled)
+	{
+			<!-- если остановлена пользователем - можно запустить -->
+			<a href="@Url.Action("Publication", new { Model.Id, Enabled = true })" title="Начать публикацию акции*(При наступлении срока)" class="btn btn-default glyphicon glyphicon-eye-close"></a>
+	}
 </div>

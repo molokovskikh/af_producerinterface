@@ -38,31 +38,6 @@ namespace ProducerInterfaceCommon.Models
 	}
 
 
-	public class promotionsMetaData
-	{
-		public long Id { get; set; }
-		public DateTime UpdateTime { get; set; }
-
-		public long? AdminId { get; set; }
-		public long ProducerId { get; set; }
-		public long ProducerUserId { get; set; }
-		public string Annotation { get; set; }
-		public string PromoFile { get; set; }
-		public bool AgencyDisabled { get; set; }
-		public string Name { get; set; }
-		public decimal RegionMask { get; set; }
-
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-		public DateTime? Begin { get; set; }
-
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-		public DateTime? End { get; set; }
-
-		public bool Status { get; set; }
-
-		public virtual ICollection<PromotionToDrug> promotionToDrug { get; set; }
-	}
-
 	public class MediaFile
 	{
 		public MediaFile()
@@ -118,13 +93,12 @@ namespace ProducerInterfaceCommon.Models
 	}
 
 
-	//[MetadataType(typeof(promotionsMetaData))]
 	[DisplayName("Акция")]
 	public class Promotion
 	{
 		public Promotion()
 		{
-			this.promotionToDrug = new HashSet<PromotionToDrug>();
+			this.PromotionToDrug = new HashSet<PromotionToDrug>();
 			this.PromotionsToSupplier = new HashSet<PromotionsToSupplier>();
 		}
 
@@ -134,10 +108,9 @@ namespace ProducerInterfaceCommon.Models
 		public long? AdminId { get; set; }
 		public long ProducerId { get; set; }
 		public string Annotation { get; set; }
-		public string PromoFile { get; set; }
 		public bool AgencyDisabled { get; set; }
 		public string Name { get; set; }
-		public decimal RegionMask { get; set; }
+		public long RegionMask { get; set; }
 		public DateTime Begin { get; set; }
 		public DateTime End { get; set; }
 		public PromotionStatus Status { get; set; }
@@ -146,7 +119,7 @@ namespace ProducerInterfaceCommon.Models
 
 		public virtual User Author { get; set; }
 		public virtual MediaFile MediaFile { get; set; }
-		public virtual ICollection<PromotionToDrug> promotionToDrug { get; set; }
+		public virtual ICollection<PromotionToDrug> PromotionToDrug { get; set; }
 		public virtual ICollection<PromotionsToSupplier> PromotionsToSupplier { get; set; }
 
 		public List<OptionElement> GlobalDrugList { get; set; }
@@ -154,13 +127,6 @@ namespace ProducerInterfaceCommon.Models
 
 		public List<long> RegionList { get; set; }
 		public List<OptionElement> DrugList { get; set; }
-
-		public void GetRegionnamesList()
-		{
-			var cntx = new producerinterface_Entities();
-			//var h = new NamesHelper(cntx, cntx.Account.First(xxx => xxx.Id == this.Account.Id).Id);
-			//RegionnamesList = h.GetPromotionRegionNames(Convert.ToUInt64(this.RegionMask));
-		}
 
 		public ActualPromotionStatus GetStatus()
 		{

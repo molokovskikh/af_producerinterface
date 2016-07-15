@@ -245,6 +245,7 @@
     <Compile Include="Helpers\AdHelper.cs" />
     <Compile Include="Helpers\Md5HashHelper.cs" />
     <Compile Include="Helpers\ReportHelper.cs" />
+    <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="LoggerModels\FrameLogger.cs" />
     <Compile Include="ContextModels\MetaData.cs" />
     <Compile Include="ContextModels\assortment.cs">

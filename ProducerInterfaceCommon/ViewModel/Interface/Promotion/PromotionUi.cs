@@ -13,7 +13,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
 		public string Begin { get; set; }
 		public string End { get; set; }
 		public bool AllSuppliers { get; set; }
-		public ActualPromotionStatus FakeStatus { get; set; }
+		public ActualPromotionStatus ActualStatus { get; set; }
 
 		public System.Web.HttpPostedFileBase File { get; set; }
 
