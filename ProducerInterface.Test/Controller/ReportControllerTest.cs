@@ -16,7 +16,7 @@ namespace ProducerInterface.Test.Controller
 			cntx.SaveChanges();
 
 			Open("Account/Auth");
-			WaitForVisibleCss(".login2", 10);
+			WaitForVisibleCss(".login2");
 			Css(".login2").SendKeys("g.maksimenko@analit.net");
 			Css(".password2").SendKeys("123456");
 			Css(".enter2").Click();

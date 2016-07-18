@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
@@ -28,11 +29,17 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.Global
 		private Account GetCurrentUser()
 		{
 			var login = HttpContext.User.Identity.Name;
+#if DEBUG
+			login = Request.QueryString["debug-user"] ?? Request.Cookies["debug-user"]?.Value ?? login;
+			if (Request.QueryString["debug-user"] != null)
+				Response.Cookies.Add(new HttpCookie("debug-user", login));
+#endif
 			if (String.IsNullOrEmpty(login))
 				return null;
 
-			return DB.Account
-				.FirstOrDefault(x => x.TypeUser == (sbyte)TypeLoginUser && x.Login == login && x.Enabled == (sbyte)UserStatus.Active);
+			var user = DB.Account.FirstOrDefault(x => x.TypeUser == (sbyte)TypeLoginUser
+				&& x.Login == login && x.Enabled == (sbyte)UserStatus.Active);
+			return user;
 		}
 	}
 }

@@ -30,9 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CassiniDev-lib, Version=3.5.1.6, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\CassiniDev.3.5.1.2\lib\net40\CassiniDev-lib.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CassiniDev4-lib, Version=4.0.1.7, Culture=neutral, PublicKeyToken=f7f6e0b4240c7c27, processorArchitecture=x86">
+      <HintPath>..\packages\CassiniDev.4.0\lib\net40\CassiniDev4-lib.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.ActiveRecord, Version=3.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -85,8 +84,8 @@
       <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -144,11 +143,14 @@
     <Compile Include="ModelFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationFxiture.cs" />
-    <Compile Include="SeleniumFixture.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Tasks\Fixture.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\lib\test-support\Test.Support.Selenium\Test.Support.Selenium.csproj">
+      <Project>{E37375CE-ADBA-47C9-9FA1-D7C5C704CD89}</Project>
+      <Name>Test.Support.Selenium</Name>
+    </ProjectReference>
     <ProjectReference Include="..\lib\test-support\Test.Support\Test.Support.csproj">
       <Project>{A215E837-1208-49E3-AF93-A9612223122C}</Project>
       <Name>Test.Support</Name>
@@ -157,9 +159,9 @@
       <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>
       <Name>lib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProducerInterface\client.csproj">
+    <ProjectReference Include="..\ProducerInterface\app.csproj">
       <Project>{2a3aaf08-e77f-4337-ba73-3e67e0e166f5}</Project>
-      <Name>client</Name>
+      <Name>app</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -169,10 +171,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\packages\WebDriver.ChromeDriver.win32.2.20.0.0\content\chromedriver.exe">
-      <Link>chromedriver.exe</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

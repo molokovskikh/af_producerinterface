@@ -1,28 +1,30 @@
 ﻿using System;
 using CassiniDev;
 using NUnit.Framework;
+using Test.Support;
 using Test.Support.Selenium;
 
-namespace ProducerInterface.Test
+namespace test
 {
 	[SetUpFixture]
 	public class Setup
 	{
-		private Server _webServer;
+		private Server server;
 
 		[OneTimeSetUp]
 		public void SetupFixture()
 		{
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
-			_webServer = SeleniumFixture.StartServer();
+			server = SeleniumFixture.StartServer("../../../../ProducerInterfaceControlPanelDomain/");
+			IntegrationFixture2.Factory = Test.Support.Setup.Initialize("db");
 		}
 
 		[OneTimeTearDown]
 		public void TeardownFixture()
 		{
 			SeleniumFixture.GlobalTearDown();
-			_webServer.ShutDown();
+			server?.Dispose();
 		}
 	}
 }
