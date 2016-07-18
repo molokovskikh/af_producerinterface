@@ -17,6 +17,17 @@ namespace ProducerInterfaceCommon.ContextModels
 		public string Name { get; set; }
 	}
 
+	public class Email
+	{
+		public int Id { get; set; }
+		public virtual string Subject { get; set; }
+		public virtual string Body { get; set; }
+		public virtual bool IsBodyHtml { get; set; }
+		public virtual string Description { get; set; }
+
+		public virtual ICollection<MediaFile> MediaFiles { get; set; }
+	}
+
 	public class Context : DbContext
 	{
 		public Context() : base("db")
@@ -29,6 +40,7 @@ namespace ProducerInterfaceCommon.ContextModels
 		public DbSet<PromotionsToSupplier> PromotionsToSuppliers { get; set; }
 		public DbSet<MediaFile> MediaFiles { get; set; }
 		public DbSet<PromotionSnapshot> PromotionHistory { get; set; }
+		public DbSet<Email> Emails { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder builder)
 		{
@@ -48,10 +60,14 @@ namespace ProducerInterfaceCommon.ContextModels
 			builder.Entity<PromotionToDrug>().ToTable("PromotionToDrug")
 				.HasKey(x => new { x.PromotionId, x.DrugId });
 			builder.Entity<MediaFile>().ToTable("MediaFiles");
+
 			var snapshot = builder.Entity<PromotionSnapshot>().ToTable("PromotionSnapshots");
 			snapshot.HasOptional(x => x.Author).WithMany().Map(x => x.MapKey("AuthorId"));
 			snapshot.HasOptional(x => x.Promotion).WithMany().Map(x => x.MapKey("PromotionId"));
 			snapshot.HasOptional(x => x.File).WithMany().Map(x => x.MapKey("FileId"));
+
+			var email = builder.Entity<Email>().ToTable("mailform");
+			email.HasMany(x => x.MediaFiles).WithMany().Map(x => x.ToTable("mailformToMediaFiles"));
 		}
 	}
 

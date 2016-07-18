@@ -666,7 +666,7 @@ namespace ProducerInterface.Controllers
 				return View(model);
 
 			var file = helper.GetExcel(jext);
-			new EmailSender(DB, CurrentUser).ManualPostReportMessage(jext, file.FullName, model.MailTo);
+			Mails.ManualPostReportMessage(jext, file.FullName, model.MailTo);
 			SuccessMessage("Отчет отправлен на указанные email");
 			return View(model);
 		}

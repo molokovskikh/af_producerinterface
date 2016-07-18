@@ -15,15 +15,18 @@ namespace ProducerInterfaceCommon.Heap
 	public class EmailSender
 	{
 		private producerinterface_Entities db;
+		private Context db2;
 		private Account currentUser;
 		private DiagnosticInformation diagnostics;
 		private List<string> attachments = new List<string>();
 		private bool isHtml;
 		public string IP;
 
-		public EmailSender(producerinterface_Entities db, Account currentUser)
+		public EmailSender(producerinterface_Entities db, Context db2,
+			Account currentUser)
 		{
 			this.db = db;
+			this.db2 = db2;
 			this.currentUser = currentUser;
 			diagnostics = new DiagnosticInformation(currentUser);
 		}
@@ -180,7 +183,7 @@ namespace ProducerInterfaceCommon.Heap
 			var header = Render(mailForm.Header, values);
 			var body = Render(mailForm.Body, values);
 			var footer = Render(mailForm.Footer, values);
-			attachments.AddRange(GetAttachments(db, type));
+			attachments.AddRange(GetAttachments(type));
 
 			body = $"{header}\r\n\r\n{body}\r\n\r\n{footer}";
 			if (isHtml)
@@ -267,17 +270,18 @@ namespace ProducerInterfaceCommon.Heap
 		// Отклонение правки в каталог
 		public static void SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName, string fieldName, string before, string after, string comment)
 		{
-			var siteName = ConfigurationManager.AppSettings["SiteName"];
-			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RejectCatalogChange);
-			var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
-			var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, CatalogName = catalogName, Before = before, After = after, Comment = comment })}\r\n\r\n{mailForm.Footer}";
-			var attachments = GetAttachments(cntx, MailType.RejectCatalogChange);
-			EmailSender.SendEmail(user.Login, subject, body, attachments, false);
+			throw new NotImplementedException();
+			//var siteName = ConfigurationManager.AppSettings["SiteName"];
+			//var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RejectCatalogChange);
+			//var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
+			//var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
+			//var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, CatalogName = catalogName, Before = before, After = after, Comment = comment })}\r\n\r\n{mailForm.Footer}";
+			//var attachments = GetAttachments(cntx, MailType.RejectCatalogChange);
+			//EmailSender.SendEmail(user.Login, subject, body, attachments, false);
 
-			var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.RejectCatalogChange.DisplayName() };
-			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
+			//var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.RejectCatalogChange.DisplayName() };
+			//var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			//EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
 		}
 
 		// Обратная связь, сотрудникам
@@ -305,7 +309,7 @@ namespace ProducerInterfaceCommon.Heap
 			MessageFromTemplate(type, promotion.Author.Login, args);
 		}
 
-		private static List<string> GetAttachments(producerinterface_Entities cntx, MailType mailType)
+		private List<string> GetAttachments(MailType mailType)
 		{
 			var result = new List<string>();
 
@@ -326,15 +330,12 @@ namespace ProducerInterfaceCommon.Heap
 				Directory.CreateDirectory(subdir);
 
 			// записали файлы в директорию
-			var mediaFiles = cntx.mailform.Single(x => x.Id == (int)mailType).MediaFiles.Select(x => new { x.Id, x.ImageName }).ToList();
-			foreach (var mediaFile in mediaFiles)
+			var email = db2.Emails.Find((int)mailType);
+			foreach (var mediaFile in email.MediaFiles)
 			{
 				var file = new FileInfo($"{subdir}\\{mediaFile.ImageName}");
 				if (!file.Exists)
-				{
-					var bdFile = cntx.MediaFiles.Single(x => x.Id == mediaFile.Id).ImageFile;
-					File.WriteAllBytes(file.FullName, bdFile);
-				}
+					File.WriteAllBytes(file.FullName, mediaFile.ImageFile);
 				result.Add(file.FullName);
 			}
 			return result;

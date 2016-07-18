@@ -46,7 +46,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<NewsChange> NewsChange { get; set; }
-        public DbSet<MediaFiles> MediaFiles { get; set; }
         public DbSet<ReportDescription> ReportDescription { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }

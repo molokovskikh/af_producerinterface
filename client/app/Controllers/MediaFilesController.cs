@@ -4,10 +4,10 @@ namespace ProducerInterface.Controllers
 {
 	public class MediaFilesController : BaseController
 	{
-		public FileResult GetFile(int Id)
+		public FileResult GetFile(int id)
 		{
-			var File_ = DB.MediaFiles.Find(Id);
-			return File(File_.ImageFile, File_.ImageType);
+			var model = DB2.MediaFiles.Find(id);
+			return File(model.ImageFile, model.ImageType, model.ImageName);
 		}
 	}
 }

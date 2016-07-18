@@ -52,7 +52,7 @@ namespace ProducerInterfaceCommon.Heap
 
 				var user = db.Account.First(x => x.Id == tparam.UserId);
 				user.IP = ip;
-				var mail = new EmailSender(db, user);
+				var mail = new EmailSender(db, new Context(), user);
 
 				mail.SendReportErrorMessage(jext, e.Message);
 

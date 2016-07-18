@@ -197,3 +197,9 @@ max-width:45em;
 .user-wait-confirmation, .user-wait-confirmation td {
 	background: #e2c5c5 !important;
 }
+
+.truncate {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

@@ -23,20 +23,20 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			}
 #endif
 
-			var files = DB.MediaFiles.Where(x => x.EntityType == (int)EntityType.News).Select(x => x.Id).ToList();
+			var files = DB2.MediaFiles.Where(x => x.EntityType == EntityType.News).Select(x => x.Id).ToList();
 			return View(files);
 		}
 
-		public FileResult GetFile(int Id)
+		public FileResult GetFile(int id)
 		{
-			var file = DB.MediaFiles.Find(Id);
+			var file = DB2.MediaFiles.Find(id);
 			return File(file.ImageFile, file.ImageType);
 		}
 
-		public FileResult GetEmailFile(int Id)
+		public FileResult GetEmailFile(int id)
 		{
 			var imageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\Images");
-			var file = DB.MediaFiles.Find(Id);
+			var file = DB2.MediaFiles.Find(id);
 			var ext = Path.GetExtension(file.ImageName)?.ToLower();
 
 			switch (ext) {
@@ -75,52 +75,30 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			}
 
 			var fileName = Path.GetFileName(file.FileName);
-			if (DB.MediaFiles.Any(x => x.ImageName == fileName && x.EntityType == (int)EntityType.Email)) {
+			if (DB2.MediaFiles.Any(x => x.ImageName == fileName && x.EntityType == EntityType.Email)) {
 				ErrorMessage("В системе уже есть файл с таким именем. Переименуйте этот или удалите существующий");
 				return RedirectToAction("Index", "Mail"); ;
 			}
 
-			var fileId = SaveFile(file, EntityType.Email);
+			SaveFile(file, EntityType.Email);
 			return RedirectToAction("Index", "Mail");
 		}
 
-		[HttpPost]
-		public void YourAction(IEnumerable<HttpPostedFileBase> files)
-		{
-			if (files != null)
-			{
-				foreach (var file in files)
-				{
-					// Verify that the user selected a file
-					if (file != null && file.ContentLength > 0)
-					{
-						// extract only the fielname
-						var fileName = Path.GetFileName(file.FileName);
-						// TODO: need to define destination
-						var path = Path.Combine(Server.MapPath("~/Upload"), fileName);
-						file.SaveAs(path);
-					}
-				}
-			}
-		}
-
-
 		private int SaveFile(HttpPostedFileBase file, EntityType type)
 		{
-			var dbFile = new MediaFiles() {
-				ImageName = MediaFile.ApplyLimit(file.FileName),
+			var model = new MediaFile(file.FileName) {
 				ImageType = file.ContentType,
-				EntityType = (int)type
+				EntityType = type
 			};
 			using (var ms = new MemoryStream())
 			{
 				file.InputStream.CopyTo(ms);
-				dbFile.ImageFile = ms.ToArray();
-				dbFile.ImageSize = ms.Length.ToString();
+				model.ImageFile = ms.ToArray();
+				model.ImageSize = ms.Length.ToString();
 			}
-			DB.MediaFiles.Add(dbFile);
-			DB.SaveChanges();
-			return dbFile.Id;
+			DB2.MediaFiles.Add(model);
+			DB2.SaveChanges();
+			return model.Id;
 		}
 	}
 }

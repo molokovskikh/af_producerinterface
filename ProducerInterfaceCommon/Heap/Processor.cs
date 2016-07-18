@@ -47,7 +47,7 @@ namespace ProducerInterfaceCommon.Heap
 			// вытащили расширенные параметры задачи
 			var jext = db.jobextend.Single(x => x.JobName == key.Name
 																						&& x.JobGroup == key.Group
-																						&& x.Enable == true);
+																						&& x.Enable);
 			// добавили сведения о последнем запуске
 			jext.LastRun = DateTime.Now;
 			db.SaveChanges();
@@ -55,7 +55,7 @@ namespace ProducerInterfaceCommon.Heap
 			var querySort = report.Read<T>();
 			var user = db.Account.First(x => x.Id == tparam.UserId);
 			user.IP = ip;
-			var mail = new EmailSender(db, user);
+			var mail = new EmailSender(db, new Context(), user);
 
 			// действия при пустом отчете
 			if (querySort.Count == 0) {

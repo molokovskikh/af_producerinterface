@@ -22,7 +22,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.Global
 			ViewBag.CurrentUser = CurrentUser;
 			if (CurrentUser != null) {
 				CurrentUser.IP = Request.UserHostAddress;
-				Mails = new EmailSender(DB, CurrentUser);
+				Mails = new EmailSender(DB, DB2, CurrentUser);
 			}
 		}
 

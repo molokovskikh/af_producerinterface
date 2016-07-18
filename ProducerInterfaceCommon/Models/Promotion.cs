@@ -55,7 +55,7 @@ namespace ProducerInterfaceCommon.Models
 		public byte[] ImageFile { get; set; }
 		public string ImageType { get; set; }
 		public string ImageSize { get; set; }
-		public int EntityType { get; set; }
+		public EntityType EntityType { get; set; }
 
 		public static string ApplyLimit(string path)
 		{

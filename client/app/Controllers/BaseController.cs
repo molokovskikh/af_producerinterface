@@ -20,7 +20,7 @@ namespace ProducerInterface.Controllers
 			base.OnActionExecuting(filterContext);
 
 			CurrentUser = GetCurrentUser();
-			Mails = new EmailSender(DB, CurrentUser);
+			Mails = new EmailSender(DB, DB2, CurrentUser);
 			Mails.IP = Request.UserHostAddress;
 			SecurityCheck(CurrentUser, TypeUsers.ProducerUser, filterContext);
 

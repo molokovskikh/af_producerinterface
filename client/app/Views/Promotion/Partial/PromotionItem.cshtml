@@ -49,7 +49,7 @@
 
                 @if (Model.PromotionFileId != null)
                 {
-                    <a target="_blank" href="@Url.Action("GetFile", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />
+                    <a target="_blank" href="@Url.Action("GetFile", "MediaFiles", new { Id = Model.PromotionFileId })">@Model.PromotionFileName (скачать)</a> <br />
                 }
                 else
                 {
