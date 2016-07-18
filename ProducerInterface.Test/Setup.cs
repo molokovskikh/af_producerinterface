@@ -1,6 +1,7 @@
 ﻿using System;
 using CassiniDev;
 using NUnit.Framework;
+using Test.Support;
 using Test.Support.Selenium;
 
 namespace ProducerInterface.Test
@@ -16,6 +17,7 @@ namespace ProducerInterface.Test
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
 			_webServer = SeleniumFixture.StartServer("../../../ProducerInterface/");
+			IntegrationFixture2.Factory = global::Test.Support.Setup.Initialize();
 		}
 
 		[OneTimeTearDown]
