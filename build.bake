@@ -22,24 +22,24 @@ task @deploy, ["deploy:pipeline"]
 task "deploy:app", ["deploy:client", "deploy:adm", "deploy:backend"]
 
 task "build:client", [@setup, "clean:client"]:
-	BuildWeb(Globals, "client")
+	BuildWeb(Globals, "client/app")
 
 task "clean:client":
-	CleanWeb(Globals, "client")
+	CleanWeb(Globals, "client/app")
 
 task "deploy:client", ["build:client"]:
-	XCopyDeploy(DuckDictionary(Globals, false) {"DeployAlias": "ProducerInterface\\bin"}, "client")
+	XCopyDeploy(DuckDictionary(Globals, false) {"DeployAlias": "ProducerInterface\\bin"}, "client/app")
 
 task "build:adm", [@setup, "clean:adm"]:
-	BuildWeb(Globals, "adm")
+	BuildWeb(Globals, "adm/app")
 
 task "clean:adm":
-	CleanWeb(Globals, "adm")
+	CleanWeb(Globals, "adm/app")
 
 task "deploy:adm", ["build:adm"]:
 	globals = DuckDictionary(Globals, false)
 	globals.DeployAlias = "ProducerInterfaceControlPanel"
-	XCopyDeploy(globals, "adm")
+	XCopyDeploy(globals, "adm/app")
 
 task "build:backend", [@setup, "clean:backend"]:
 	Build(Globals, "backend")
