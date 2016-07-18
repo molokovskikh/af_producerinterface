@@ -15,7 +15,7 @@ namespace ProducerInterface.Test
 		{
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
-			_webServer = SeleniumFixture.StartServer();
+			_webServer = SeleniumFixture.StartServer("../../../ProducerInterface/");
 		}
 
 		[OneTimeTearDown]
