@@ -203,3 +203,7 @@ max-width:45em;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+label.error {
+	color: red;
+}

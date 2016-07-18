@@ -18,26 +18,25 @@
 
         @RenderBody()
         <hr />
-      
+
         @if (ViewBag.CurrentUser != null)
         {
         <div class="navbar-fixed-bottom navbar-inverse">
             <center>
                 <p>Панель управления | Добро пожаловать @ViewBag.CurrentUser.Name | ваш IP @ViewBag.CurrentUser.IP</p>
-            </center>           
+            </center>
         </div>
         }
 
-    </div>  
-   
-        @Scripts.Render("~/bundles/jquery")      
-        @Scripts.Render("~/bundles/bootstrap")
+    </div>
 
-        <script src="~/Scripts/Analit.js"></script>
-        <script src="~/Scripts/ZAnalit.js"></script>
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/bootstrap")
 
-        @RenderSection("scripts", required: false)
-  
+	<script src="~/Scripts/Analit.js"></script>
+	<script src="~/Scripts/ZAnalit.js"></script>
 
+	@RenderSection("scripts", required: false)
 </body>
 </html>

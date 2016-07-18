@@ -711,10 +711,8 @@
     <Content Include="Views\News\GetNextList.cshtml" />
     <Content Include="Views\ProducerInformation\Index.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\AccountList.cshtml" />
-    <Content Include="Views\ProducerInformation\PromotionPartial.cshtml" />
     <Content Include="Views\ProducerInformation\Promotion.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\SubMenu.cshtml" />
-    <Content Include="Views\Shared\_LayoutProducerInfermation.cshtml" />
     <Content Include="Views\Shared\_MasterPage.cshtml" />
     <Content Include="Views\Shared\Partial\GlobalMenu.cshtml" />
     <Content Include="Views\AdminAccount\Index.cshtml" />

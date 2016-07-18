@@ -47,39 +47,39 @@
 }(window.jQuery)
 
 $("#File").change(function () {
-    var _validFileExtensions = [".jpg", ".jpeg", ".txt"]; 
-    var elem = $("#File");
+	var _validFileExtensions = [".jpg", ".jpeg", ".txt"];
+	var elem = $("#File");
 
-    var ErrorText = "";
+	var ErrorText = "";
 
-    var sFileName = this.files[0].name;
-    if (sFileName.length > 0) {
-        var blnValid = false;
-        for (var j = 0; j < _validFileExtensions.length; j++) {
-            var sCurExtension = _validFileExtensions[j];
-            if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
-                blnValid = true;
-                break;
-            }
-        }
+	var sFileName = this.files[0].name;
+	if (sFileName.length > 0) {
+		var blnValid = false;
+		for (var j = 0; j < _validFileExtensions.length; j++) {
+				var sCurExtension = _validFileExtensions[j];
+				if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+						blnValid = true;
+						break;
+				}
+		}
 
-        if (!blnValid) {
-            ErrorText = "Простите, файл " + sFileName + " не соответствует требованиям: " + _validFileExtensions.join(", ");
-            $("#File").val("");
-            document.getElementById("File").innerHTML = document.getElementById("File").innerHTML;
-            Promotion.FileError(ErrorText);
-            Promotion.FileError.valueHasMutated();
-            return;
-        }
-        var Sizes = this.files[0].size;
-        if (Sizes > 500000)
-        {         
-            ErrorText ="Простите, файл " + sFileName + " весит более 500КБ ";
-            $("#File").val("");
-            document.getElementById("File").innerHTML = document.getElementById("File").innerHTML;
-            Promotion.FileError(ErrorText);
-            Promotion.FileError.valueHasMutated();
-            return;
-        }
-    }
+		if (!blnValid) {
+				ErrorText = "Простите, файл " + sFileName + " не соответствует требованиям: " + _validFileExtensions.join(", ");
+				$("#File").val("");
+				document.getElementById("File").innerHTML = document.getElementById("File").innerHTML;
+				Promotion.FileError(ErrorText);
+				Promotion.FileError.valueHasMutated();
+				return;
+		}
+		var Sizes = this.files[0].size;
+		if (Sizes > 500000)
+		{
+			ErrorText = "Превышен максимальный размер файла 500КБ";
+			$("#File").val("");
+			document.getElementById("File").innerHTML = document.getElementById("File").innerHTML;
+			Promotion.FileError(ErrorText);
+			Promotion.FileError.valueHasMutated();
+			return;
+		}
+	}
 });

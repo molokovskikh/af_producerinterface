@@ -17,7 +17,7 @@
 
     <div class="container" style="margin-top:75px;">
         <div class="server-message" style="font-size:1.5em; text-align:center;"></div>
-    </div>   
+    </div>
 
     <div class="body-content">
         <div class="row">
@@ -26,15 +26,15 @@
             </div>
         </div>
     </div>
-  
-    <br/>
-    
-    @Scripts.Render("~/bundles/jquery")   
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/datepicker")
-    <script src="~/Scripts/Analit.js"></script>
-    <script src="~/Scripts/ZAnalit.js"></script>
-    @RenderSection("scripts", required: false)
 
+    <br/>
+
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/bootstrap")
+	@Scripts.Render("~/bundles/datepicker")
+	<script src="~/Scripts/Analit.js"></script>
+	<script src="~/Scripts/ZAnalit.js"></script>
+	@RenderSection("scripts", required: false)
 </body>
 </html>
