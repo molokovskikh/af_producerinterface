@@ -307,6 +307,12 @@ namespace ProducerInterfaceCommon.Heap
 			};
 			isHtml = true;
 			MessageFromTemplate(type, promotion.Author.Login, args);
+			if (promotion.GetStatus() == ActualPromotionStatus.NotConfirmed
+				&& (type == MailType.CreatePromotion || type == MailType.EditPromotion)) {
+				SendEmail(ConfigurationManager.AppSettings["MailInfo"], "Запрос на модерацию промоакции",
+					$@"От пользователя {currentUser.Login} получен запрос на модерацию промоакции {promotion.Name}",
+					new List<string>());
+			}
 		}
 
 		private List<string> GetAttachments(MailType mailType)
