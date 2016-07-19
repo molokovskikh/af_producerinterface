@@ -16,7 +16,7 @@ namespace test
 		{
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
-			server = SeleniumFixture.StartServer("../../../../ProducerInterfaceControlPanelDomain/");
+			server = SeleniumFixture.StartServer("../../../app/");
 			IntegrationFixture2.Factory = Test.Support.Setup.Initialize("db");
 		}
 
