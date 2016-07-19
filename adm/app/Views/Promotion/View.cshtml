@@ -64,16 +64,18 @@
 	</div>
 
 	<div class="form-group">
-		<p><label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></p>
+		<p><label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a>
+		</p>
 		<div id="promotiondruglist" class="collapse">
-				@foreach (var item in DrugList) {
-						<p>@item.Text</p>
-				}
+			@foreach (var item in DrugList) {
+				<p>@item.Text</p>
+			}
 		</div>
 	</div>
 
 	<div class="form-group">
-		<p><label>Список регионов  <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
+		<p><label>Список регионов <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label>
+		</p>
 		<div id="promotionregionlist" class="collapse">
 			@foreach (var item in RegionList) {
 				<p>@item.Text</p>
@@ -82,7 +84,8 @@
 	</div>
 
 	<div class="form-group">
-		<p><label>Список поставщиков  <a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label></p>
+		<p><label>Список поставщиков <a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span> </a></label>
+		</p>
 		<div id="promotionSupplierList" class="collapse">
 			@foreach (var item in SupplierList) {
 				<p>@item.Text</p>
@@ -108,18 +111,43 @@
 	@if (Model.MediaFile != null) {
 		<div class="form-group">
 			<label>Прикреплен файл</label>
-			<a href="@Url.Action("GetFile", "MediaFiles", new { Model.MediaFile.Id })">Скачать (@Model.MediaFile.ImageName)</a>
+			<a href="@Url.Action("GetFile", "MediaFiles", new {Model.MediaFile.Id})">Скачать (@Model.MediaFile.ImageName)</a>
 		</div>
 	}
 
 	<div class="form-group">
 		@if (Model.Status == PromotionStatus.Confirmed) {
-				<a class="btn btn-warning" href="@Url.Action("Reject", "Promotion", new { Model.Id })">Отклонить</a>
+			<a class="btn btn-warning" data-toggle="modal" data-target="#reject-request" href="javascript:">Отклонить</a>
 		} else if (Model.Status == PromotionStatus.New) {
-			<a class="btn btn-primary" href="@Url.Action("Confirm", "Promotion", new { Model.Id })">Подтвердить</a>
-			<a class="btn btn-warning" href="@Url.Action("Reject", "Promotion", new { Model.Id })">Отклонить</a>
+			<a class="btn btn-primary" href="@Url.Action("Confirm", "Promotion", new {Model.Id})">Подтвердить</a>
+			<a class="btn btn-warning" data-toggle="modal" data-target="#reject-request" href="javascript:">Отклонить</a>
 		} else if (Model.Status == PromotionStatus.Rejected) {
-			<a class="btn btn-primary" href="@Url.Action("Confirm", "Promotion", new { Model.Id })">Подтвердить</a>
+			<a class="btn btn-primary" href="@Url.Action("Confirm", "Promotion", new {Model.Id})">Подтвердить</a>
 		}
 	</div>
+</div>
+
+<div id="reject-request" class="modal fade" role="dialog">
+	@using (Html.BeginForm("Reject", "Promotion", FormMethod.Post)) {
+		@Html.Hidden("id", Model.Id)
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3>Отклонение промоакции</h3>
+				</div>
+				<div class="modal-body" id="result">
+					<div class="form-group">
+						<label>Укажите причину</label>
+						<textarea class="form-control" rows="3" name="comment"></textarea>
+					</div>
+				</div>
+					<div class="modal-footer">
+						<div class="btn btn-group btn-group-sm">
+							<button type="submit" class="btn btn-warning">Отклонить</button>
+						</div>
+					</div>
+			</div>
+		</div>
+	}
 </div>

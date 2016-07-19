@@ -3,6 +3,13 @@
 	<p>@Model.Author.Name @Model.Author.Login</p>
 </div>
 
+@if (Model.SnapshotComment != null) {
+	<div class="form-group">
+		<label>Примечание</label>
+		<p>@Model.SnapshotComment</p>
+	</div>
+}
+
 <div class="form-group">
 	<label>Статус</label>
 	<p>@Model.Status</p>

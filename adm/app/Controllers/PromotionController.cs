@@ -121,15 +121,16 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// Отмена подтверждения промоакции
 		/// </summary>
 		/// <param name="Id">идентификатор промоакции</param>
-		public ActionResult Reject(int id)
+		public ActionResult Reject(int id, string comment)
 		{
 			var model = DB2.Promotions.Find(id);
 			model.Status = PromotionStatus.Rejected;
 			DB2.PromotionHistory.Add(new PromotionSnapshot(DB2.Users.Find(CurrentUser.Id), model, DB) {
 				SnapshotName = "Отклонение промоакции",
+				SnapshotComment = comment
 			});
 			DB2.SaveChanges();
-			Mails.PromotionNotification(MailType.StatusPromotion,  model);
+			Mails.PromotionNotification(MailType.StatusPromotion,  model, comment);
 
 			SuccessMessage("Промоакция отклонена");
 			return RedirectToAction("Index");

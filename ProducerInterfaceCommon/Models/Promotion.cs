@@ -102,7 +102,8 @@ namespace ProducerInterfaceCommon.Models
 
 		public PromotionSnapshot(User author,
 			Promotion promotion,
-			producerinterface_Entities db)
+			producerinterface_Entities db,
+			string comment = null)
 		{
 			Author = author;
 			AuthorName = author.DisplayName;
@@ -110,6 +111,7 @@ namespace ProducerInterfaceCommon.Models
 			Promotion = promotion;
 			Name = promotion.Name;
 			SnapshotName = "Изменена промоакция";
+			SnapshotComment = comment;
 			Annotation = promotion.Annotation;
 			Status = promotion.GetStatus().DisplayName();
 			Begin = promotion.Begin;
@@ -128,6 +130,7 @@ namespace ProducerInterfaceCommon.Models
 		public virtual int Id { get; set; }
 		public virtual DateTime CreatedOn { get; set; }
 		public virtual string SnapshotName { get; set; }
+		public virtual string SnapshotComment { get; set; }
 		public virtual string AuthorName { get; set; }
 		public virtual string AuthorDisplayName => Author.DisplayName ?? AuthorName;
 		public virtual User Author { get; set; }

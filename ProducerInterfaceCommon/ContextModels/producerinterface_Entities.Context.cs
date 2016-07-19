@@ -22,7 +22,6 @@ namespace ProducerInterfaceCommon.ContextModels
         {
         }
 
-        public DbSet<mailform> mailform { get; set; }
         public DbSet<profilenews> profilenews { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<reportxml> reportxml { get; set; }

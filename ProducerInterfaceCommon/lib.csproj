@@ -211,9 +211,6 @@
     <Compile Include="ContextModels\LogForNet.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\MediaFiles.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\Models.cs" />
     <Compile Include="ContextModels\NewsChange.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
@@ -263,9 +260,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\jobextendwithproducer.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\mailform.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\mailformwithfooter.cs">

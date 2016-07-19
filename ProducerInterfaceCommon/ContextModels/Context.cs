@@ -67,7 +67,11 @@ namespace ProducerInterfaceCommon.ContextModels
 			snapshot.HasOptional(x => x.File).WithMany().Map(x => x.MapKey("FileId"));
 
 			var email = builder.Entity<Email>().ToTable("mailform");
-			email.HasMany(x => x.MediaFiles).WithMany().Map(x => x.ToTable("mailformToMediaFiles"));
+			email.HasMany(x => x.MediaFiles).WithMany().Map(x => {
+				x.ToTable("mailformToMediaFiles");
+				x.MapLeftKey("MediaFilesId");
+				x.MapRightKey("MailFormId");
+			});
 		}
 	}
 
