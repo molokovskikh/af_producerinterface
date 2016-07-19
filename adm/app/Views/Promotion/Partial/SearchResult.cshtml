@@ -31,9 +31,8 @@
                         <td>@Item.PromotionsToSupplier.Count()</td>
                         <td>@ProducerList.Where(xx=>xx.Value == Item.ProducerId.ToString()).First().Text</td>
                         <td>
-                            @if (Item.MediaFile != null)
-                            {
-                                <a href="@Url.Action("GetFile",new { Id= Item.MediaFile.Id})">@Item.MediaFile.ImageName</a>
+                            @if (Item.MediaFile != null) {
+                                <a href="@Url.Action("GetFile", "MediaFiles", new {Item.MediaFile.Id})">@Item.MediaFile.ImageName</a>
                             }
                         </td>
                     </tr>

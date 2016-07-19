@@ -16,7 +16,7 @@ namespace ProducerInterface.Test
 		{
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
-			_webServer = SeleniumFixture.StartServer("../../../ProducerInterface/");
+			_webServer = SeleniumFixture.StartServer("../../../app/");
 			IntegrationFixture2.Factory = global::Test.Support.Setup.Initialize();
 		}
 

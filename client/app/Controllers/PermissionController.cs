@@ -35,7 +35,7 @@ namespace ProducerInterface.Controllers
                 .ToList().Select(xxx =>(long) xxx.Id).ToList();
 
             ViewBag.GroupList = DB.AccountGroup.Where(xxx => xxx.TypeGroup == SbyteTypeUser && xxx.Enabled == true).ToList().Select(xxx => new ProducerInterfaceCommon.ContextModels.OptionElement { Value = xxx.Id.ToString(), Text = xxx.Name + " " + xxx.Description }).ToList();
-                        
+
             return View(SelectUser);
         }
 
@@ -51,7 +51,7 @@ namespace ProducerInterface.Controllers
             SelectUser.ListSelectedPermission = DB.AccountGroup
                 .Where(xxx => xxx.Enabled == true && xxx.TypeGroup == SbyteTypeUser)
                 .ToList().Select(xxx => (long)xxx.Id).ToList();
-                   
+
             //ListSelectedPermission - список групп в которых состоит пользователь, по мнению БД
             //Удаляем пользователя из групп
             foreach (var ItemUserGroup in SelectUser.ListSelectedPermission)
@@ -65,13 +65,13 @@ namespace ProducerInterface.Controllers
                 {
                     var GroupItem = DB.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
                     GroupItem.Account.Remove(DB.Account.Where(xxx => xxx.Id == Id).First());
-                    DB.SaveChanges();                
+                    DB.SaveChanges();
                 }
             }
 
             // Добавляем пользователя в группы
 
-            // 
+            //
             foreach (var ItemUserGroup in ListSelectedPermission)
             {
                 int GroupId =(int) ItemUserGroup;
@@ -81,7 +81,7 @@ namespace ProducerInterface.Controllers
                 {
                     var GroupItem = DB.AccountGroup.Where(xxx => xxx.Id == GroupId).First();
                     GroupItem.Account.Add(DB.Account.Where(xxx => xxx.Id == Id).First());
-                    DB.SaveChanges();                 
+                    DB.SaveChanges();
                 }
             }
 

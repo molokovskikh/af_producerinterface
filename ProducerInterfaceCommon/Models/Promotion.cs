@@ -96,17 +96,20 @@ namespace ProducerInterfaceCommon.Models
 
 	public class PromotionSnapshot
 	{
+		private PromotionSnapshot old;
+
 		public PromotionSnapshot()
 		{
 		}
 
-		public PromotionSnapshot(User author,
+		public PromotionSnapshot(Account author,
 			Promotion promotion,
 			producerinterface_Entities db,
+			Context db2,
 			string comment = null)
 		{
-			Author = author;
-			AuthorName = author.DisplayName;
+			Author = db2.Users.Find(author.Id);
+			AuthorName = Author.DisplayName;
 			CreatedOn = DateTime.Now;
 			Promotion = promotion;
 			Name = promotion.Name;
@@ -149,6 +152,21 @@ namespace ProducerInterfaceCommon.Models
 		public virtual string[] Products => JsonConvert.DeserializeObject<string[]>(ProductsJson);
 		public virtual string[] Regions => JsonConvert.DeserializeObject<string[]>(RegionsJson);
 		public virtual string[] Suppliers => JsonConvert.DeserializeObject<string[]>(SuppliersJson);
+
+		public virtual bool IsNameChanged => Name != old?.Name;
+		public virtual bool IsAnnotationChanged => Annotation != old?.Annotation;
+		public virtual bool IsStatusChanged => Status != old?.Status;
+		public virtual bool IsBeginChanged => Begin != old?.Begin;
+		public virtual bool IsEndChanged => End != old?.End;
+		public virtual bool IsProductsChanged => ProductsJson != old?.ProductsJson;
+		public virtual bool IsRegionsChanged => RegionsJson != old?.RegionsJson;
+		public virtual bool IsSuppliersChanged => SuppliersJson != old?.SuppliersJson;
+		public virtual bool IsFileChanged => File?.Id != old?.File?.Id;
+
+		public void CalculateChanges(PromotionSnapshot old)
+		{
+			this.old = old;
+		}
 	}
 
 	[DisplayName("Акция")]
@@ -158,6 +176,15 @@ namespace ProducerInterfaceCommon.Models
 		{
 			PromotionToDrug = new HashSet<PromotionToDrug>();
 			PromotionsToSupplier = new HashSet<PromotionsToSupplier>();
+		}
+
+		public Promotion(Account user)
+			: this()
+		{
+			UpdateTime = DateTime.Now;
+			Enabled = true;
+			Status = PromotionStatus.New;
+			ProducerId = user.AccountCompany.ProducerId.Value;
 		}
 
 		public long Id { get; set; }
@@ -210,6 +237,11 @@ namespace ProducerInterfaceCommon.Models
 				return ActualPromotionStatus.Active;
 
 			throw new NotSupportedException("Неизвестный статус");
+		}
+
+		public virtual bool CheckSecurity(Account user)
+		{
+			return user.AccountCompany?.ProducerId == ProducerId;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿<div class="form-group">
-	<label>Автор</label>
+	<label>Оператор</label>
 	<p>@Model.Author.Name @Model.Author.Login</p>
 </div>
 
@@ -11,28 +11,35 @@
 }
 
 <div class="form-group">
-	<label>Статус</label>
-	<p>@Model.Status</p>
-</div>
-
-<div class="form-group">
 	<label>Дата операции</label>
 	<p>@Model.CreatedOn</p>
 </div>
 
+@{ var clazz = @Model.IsStatusChanged ? "" : "unchanged"; }
 <div class="form-group">
-	<label>Название</label>
+	<label class="@clazz">Статус</label>
+	<p>@Model.Status</p>
+</div>
+
+@{ clazz = @Model.IsNameChanged ? "" : "unchanged"; }
+<div class="form-group">
+	<label class="@clazz">Название</label>
 	<p>@Model.Name</p>
 </div>
 
+@{ clazz = @Model.IsAnnotationChanged ? "" : "unchanged"; }
 <div class="form-group">
-	<label>Аннотация</label>
+	<label class="@clazz">Аннотация</label>
 	<p>@Model.Annotation</p>
 </div>
 
+@{ clazz = @Model.IsProductsChanged ? "" : "unchanged"; }
 <div class="form-group">
 	<p>
-		<label>Список препаратов</label><a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span></a>
+		<label class="@clazz">
+			Список препаратов
+			<a href="#promotiondruglist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"> </span></a>
+		</label>
 	</p>
 	<div id="promotiondruglist" class="collapse">
 		@foreach (var item in @Model.Products) {
@@ -41,10 +48,12 @@
 	</div>
 </div>
 
+@{ clazz = @Model.IsRegionsChanged ? "" : "unchanged"; }
 <div class="form-group">
 	<p>
-		<label>
-			Список регионов <a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"></span></a>
+		<label class="@clazz">
+			Список регионов
+			<a href="#promotionregionlist" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"></span></a>
 		</label>
 	</p>
 	<div id="promotionregionlist" class="collapse">
@@ -54,10 +63,12 @@
 	</div>
 </div>
 
+@{ clazz = @Model.IsSuppliersChanged ? "" : "unchanged"; }
 <div class="form-group">
 	<p>
-		<label>
-			Список поставщиков <a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"></span></a>
+		<label class="@clazz">
+			Список поставщиков
+			<a href="#promotionSupplierList" data-toggle="collapse"> <span class="glyphicon glyphicon-info-sign"></span></a>
 		</label>
 	</p>
 	<div id="promotionSupplierList" class="collapse">
@@ -70,21 +81,24 @@
 <div class="row">
 	<div class="col-xs-2">
 		<div class="form-group">
-			<label>Дата начала</label>
+			@{ clazz = @Model.IsBeginChanged ? "" : "unchanged"; }
+			<label class="@clazz">Дата начала</label>
 			<p>@Model.Begin.ToString("dd.MM.yyyy")</p>
 		</div>
 	</div>
 	<div class="col-xs-2">
+		@{ clazz = @Model.IsEndChanged ? "" : "unchanged"; }
 		<div class="form-group">
-			<label>Дата окончания</label>
+			<label class="@clazz">Дата окончания</label>
 			<p>@Model.End.ToString("dd.MM.yyyy")</p>
 		</div>
 	</div>
 </div>
 
-@if (Model.File != null) {
-	<div class="form-group">
-		<label>Прикреплен файл</label>
+@{ clazz = @Model.IsFileChanged ? "" : "unchanged"; }
+<div class="form-group">
+	<label class="@clazz">Прикреплен файл</label>
+	@if (Model.File != null) {
 		<a href="@Url.Action("GetFile", "MediaFiles", new {Model.File.Id})">Скачать (@Model.File.ImageName)</a>
-	</div>
-}
+	}
+</div>

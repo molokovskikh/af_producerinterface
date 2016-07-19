@@ -202,7 +202,6 @@ namespace ProducerInterface.Controllers
 				if (!drugExsist)
 					DB2.PromotionToDrugs.Remove(item);
 			}
-			DB.SaveChanges(CurrentUser, "Препарат удален из акции");
 			foreach (var item in model.DrugList)
 			{
 				var drugExsist = promotion.PromotionToDrug.Any(x => x.DrugId == Convert.ToInt64(item));
@@ -216,7 +215,6 @@ namespace ProducerInterface.Controllers
 					DB2.PromotionToDrugs.Add(newAddDrug);
 				}
 			}
-			DB.SaveChanges(CurrentUser, "Препарат добавлен в акцию");
 
 			var promoPromotionsToSupplier = promotion.PromotionsToSupplier.ToList();
 			foreach (var item in promoPromotionsToSupplier)
@@ -225,7 +223,6 @@ namespace ProducerInterface.Controllers
 				if (!supllierExsist)
 					DB2.PromotionsToSuppliers.Remove(item);
 			}
-			DB.SaveChanges(CurrentUser, "Поставщик удален из акции");
 			if (model.SuppierRegions.Contains("0"))
 			{
 				model.SuppierRegions = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
@@ -246,7 +243,6 @@ namespace ProducerInterface.Controllers
 					promotion.PromotionsToSupplier.Add(addNew);
 				}
 			}
-			DB.SaveChanges(CurrentUser, "Поставщик добавлен в акцию");
 
 			ulong regionMask = 0;
 			if (model.RegionList.Count() == 1)
@@ -262,29 +258,21 @@ namespace ProducerInterface.Controllers
 			promotion.Enabled = true;
 			promotion.Status = PromotionStatus.New;
 			promotion.Author = DB2.Users.Find(CurrentUser.Id);
-			DB2.Entry(promotion).State = EntityState.Modified;
-			DB2.SaveChanges();
 
 			var file = SaveFile(model.File);
 			if (file != null)
 			{
 				promotion.MediaFile = file;
-				DB2.Entry(promotion).State = EntityState.Modified;
-				DB2.SaveChanges();
 			}
 			else if (model.PromotionFileId != null) {
 				promotion.MediaFile = DB2.MediaFiles.Find(model.PromotionFileId.Value);
 			}
+			DB2.PromotionHistory.Add(new PromotionSnapshot(CurrentUser, promotion, DB, DB2));
 			DB2.SaveChanges();
 			Mails.PromotionNotification(MailType.EditPromotion, promotion);
 			return promotion.Id;
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
 		private long SaveNewPromotion(PromotionUi model)
 		{
 			var file = SaveFile(model.File);
@@ -295,23 +283,17 @@ namespace ProducerInterface.Controllers
 					file = DB2.MediaFiles.Find(model.PromotionFileId.Value);
 			}
 
-			var promotion = new Promotion()
-			{
+			var promotion = new Promotion(CurrentUser) {
 				Name = model.Name,
 				Annotation = model.Annotation,
 				Begin = Convert.ToDateTime(model.Begin),
 				End = Convert.ToDateTime(model.End),
-				UpdateTime = DateTime.Now,
-				Enabled = true,
-				Status = (byte)PromotionStatus.New,
-				ProducerId = producerId,
 				Author = DB2.Users.Find(CurrentUser.Id),
 				MediaFile = file,
 				RegionMask = (long)regionMask,
 			};
 			DB2.Promotions.Add(promotion);
 			DB2.SaveChanges();
-			DB.SaveChanges(CurrentUser, "Добавление промоакции");
 
 			foreach (var item in model.DrugList)
 			{
@@ -321,7 +303,6 @@ namespace ProducerInterface.Controllers
 				};
 				DB2.PromotionToDrugs.Add(promotionToDrug);
 			}
-			DB.SaveChanges(CurrentUser, "Добавление лекарств к промоакции");
 
 			if (model.SuppierRegions.Contains("0")) {
 				model.SuppierRegions = h.GetSupplierList(model.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => x.Value).ToList();
@@ -335,17 +316,14 @@ namespace ProducerInterface.Controllers
 				var X = new PromotionsToSupplier() { PromotionId = promotion.Id, SupplierId = Convert.ToInt64(item) };
 				DB2.PromotionsToSuppliers.Add(X);
 			}
-			DB.SaveChanges(CurrentUser, "Добавление поставщиков к промоакции");
+			DB2.PromotionHistory.Add(new PromotionSnapshot(CurrentUser, promotion, DB, DB2) {
+				SnapshotName = "Добавление промоакции",
+			});
 			DB2.SaveChanges();
 			Mails.PromotionNotification(MailType.CreatePromotion, promotion);
 			return promotion.Id;
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="src"></param>
-		/// <returns></returns>
 		private MediaFile SaveFile(HttpPostedFileBase src)
 		{
 			if (src == null)
@@ -378,14 +356,18 @@ namespace ProducerInterface.Controllers
 				ErrorMessage("Акция не найдена");
 				return RedirectToAction("Index");
 			}
-			if (promotion.ProducerId != producerId)
+			;
+			if (!promotion.CheckSecurity(CurrentUser))
 			{
 				ErrorMessage("У вас нет прав для изменения данной акции");
 				return RedirectToAction("Index");
 			}
 
 			promotion.Enabled = Enabled;
-			DB.SaveChanges(CurrentUser, "Изменения статуса акции");
+
+			DB2.PromotionHistory.Add(new PromotionSnapshot(CurrentUser, promotion, DB, DB2) {
+				SnapshotName = "Изменения статуса акции"
+			});
 			DB2.SaveChanges();
 
 			Mails.PromotionNotification(MailType.EditPromotion, promotion);
@@ -396,39 +378,31 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult Delete(long? id)
 		{
-			var promoAction = DB2.Promotions.SingleOrDefault(x => x.Id == id);
-			if (promoAction == null)
+			var promotion = DB2.Promotions.SingleOrDefault(x => x.Id == id);
+			if (promotion == null)
 			{
 				ErrorMessage("Акция не найдена");
 				return RedirectToAction("Index");
 			}
-			if (promoAction.ProducerId != producerId)
-			{
+			if (!promotion.CheckSecurity(CurrentUser)) {
 				ErrorMessage("У вас нет прав для удаления данной акции");
 				return RedirectToAction("Index");
 			}
 
-			if (promoAction.MediaFile != null)
+			if (promotion.MediaFile != null)
 			{
-				promoAction.MediaFile = null;
-				DB2.MediaFiles.Remove(promoAction.MediaFile);
+				promotion.MediaFile = null;
+				DB2.MediaFiles.Remove(promotion.MediaFile);
 			}
 
-			var suppliers = DB2.PromotionsToSuppliers.Where(x => x.PromotionId == promoAction.Id).ToList();
+			var suppliers = DB2.PromotionsToSuppliers.Where(x => x.PromotionId == promotion.Id).ToList();
 			foreach (var item in suppliers)
-			{
 				DB2.PromotionsToSuppliers.Remove(item);
-				DB.SaveChanges(CurrentUser);
-			}
-
-			var drugList = DB2.PromotionToDrugs.Where(x => x.PromotionId == promoAction.Id).ToList();
+			var drugList = DB2.PromotionToDrugs.Where(x => x.PromotionId == promotion.Id).ToList();
 			foreach (var item in drugList)
-			{
 				DB2.PromotionToDrugs.Remove(item);
-				DB.SaveChanges(CurrentUser);
-			}
-			DB2.Promotions.Remove(promoAction);
-			DB.SaveChanges(CurrentUser, "Удаление акции");
+
+			DB2.Promotions.Remove(promotion);
 			DB2.SaveChanges();
 			SuccessMessage("Акция удалена");
 			return RedirectToAction("Index");

@@ -107,11 +107,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var model = DB2.Promotions.Find(id);
 			model.Status = PromotionStatus.Confirmed;
-			DB2.PromotionHistory.Add(new PromotionSnapshot(DB2.Users.Find(CurrentUser.Id), model, DB) {
+			DB2.PromotionHistory.Add(new PromotionSnapshot(CurrentUser, model, DB, DB2) {
 				SnapshotName = "Подтверждение промоакции"
 			});
 			DB2.SaveChanges();
-			Mails.PromotionNotification(MailType.StatusPromotion,  model);
+			Mails.PromotionNotification(MailType.StatusPromotion, model);
 
 			SuccessMessage("Промоакция подтверждена");
 			return RedirectToAction("Index");
@@ -125,12 +125,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var model = DB2.Promotions.Find(id);
 			model.Status = PromotionStatus.Rejected;
-			DB2.PromotionHistory.Add(new PromotionSnapshot(DB2.Users.Find(CurrentUser.Id), model, DB) {
+			DB2.PromotionHistory.Add(new PromotionSnapshot(CurrentUser, model, DB, DB2) {
 				SnapshotName = "Отклонение промоакции",
 				SnapshotComment = comment
 			});
 			DB2.SaveChanges();
-			Mails.PromotionNotification(MailType.StatusPromotion,  model, comment);
+			Mails.PromotionNotification(MailType.StatusPromotion, model, comment);
 
 			SuccessMessage("Промоакция отклонена");
 			return RedirectToAction("Index");
@@ -139,10 +139,12 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult History(int id)
 		{
 			var model = DB2.PromotionHistory.Find(id);
-			ViewBag.Old = DB2.PromotionHistory
+			var old = DB2.PromotionHistory
 				.Where(x => x.Id < model.Id && x.Promotion.Id == model.Promotion.Id)
 				.OrderByDescending(x => x.Id)
 				.FirstOrDefault();
+			model.CalculateChanges(old);
+			ViewBag.Old = old;
 			return View(model);
 		}
 	}

@@ -207,3 +207,7 @@ max-width:45em;
 label.error {
 	color: red;
 }
+
+.unchanged {
+	font-weight: normal !important;
+}
