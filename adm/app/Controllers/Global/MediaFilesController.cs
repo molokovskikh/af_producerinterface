@@ -94,7 +94,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			{
 				file.InputStream.CopyTo(ms);
 				model.ImageFile = ms.ToArray();
-				model.ImageSize = ms.Length.ToString();
+				model.ImageSize = ms.Length;
 			}
 			DB2.MediaFiles.Add(model);
 			DB2.SaveChanges();

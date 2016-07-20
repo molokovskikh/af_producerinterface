@@ -7,10 +7,15 @@ namespace ProducerInterface.Test
 	[TestFixture]
 	public class RegistrationFixture : BaseFixture
 	{
+		public RegistrationFixture()
+		{
+			defaultUrl = "/?debug-user=";
+		}
+
 		[Test]
 		public void Register_not_producer()
 		{
-			Open("/?debug-user=");
+			Open();
 			Click("Регистрация");
 			Click("Компания в списке отсутствует");
 			Css("#CompanyName").SendKeys("Тестовая организация");
@@ -26,7 +31,7 @@ namespace ProducerInterface.Test
 		[Test]
 		public void Recover_email()
 		{
-			Open("/?debug-user=");
+			Open();
 			Click("Вход на сайт");
 			Click("Забыли пароль?");
 			AssertText("Восстановление пароля");

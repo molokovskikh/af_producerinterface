@@ -6,7 +6,7 @@
 
 	<a href="@Url.Action("Edit", new { IdKey = Model.Id })" title="Редактировать" class="btn btn-default glyphicon glyphicon-pencil"></a>
 	<a href="@Url.Action("Edit", new { IdKey = Model.Id, Copy = true })" title="Создать копию" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
-	<a href="@Url.Action("Delete", new { Model.Id })" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn  btn-default glyphicon glyphicon-trash"></a>
+	<a href="@Url.Action("Delete", new { Model.Id })" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn  btn-default glyphicon glyphicon-trash delete"></a>
 
 	<!-- если ещё не началась или активна - можно остановить -->
 	@if (Model.ActualStatus == ActualPromotionStatus.ConfirmedNotBegin || Model.ActualStatus == ActualPromotionStatus.NotConfirmed || Model.ActualStatus == ActualPromotionStatus.Active)

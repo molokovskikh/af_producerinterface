@@ -7,17 +7,11 @@
 <div class="container body-content">
     <div class="row">
         @Html.ActionLink("Вернутся в кабинет производителя", "Index", null, null, new { @class = "btn btn-primary" })
-    </div> 
-    <hr />
+    </div>
     <div class="row">
-        <h3>@Model.Name <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>       
-    </div>  
-    <hr />   
+        <h3>@Model.Name <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>
+    </div>
     <div class="row">
         <p>@Html.Raw(Model.Description)</p>
     </div>
 </div>
-
-
-
-

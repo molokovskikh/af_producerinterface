@@ -335,7 +335,7 @@ namespace ProducerInterface.Controllers
 
 			file.ImageFile = ms.ToArray();
 			file.ImageType = src.ContentType;
-			file.ImageSize = ms.Length.ToString();
+			file.ImageSize = ms.Length;
 			file.EntityType = EntityType.Promotion;
 			DB2.MediaFiles.Add(file);
 			DB2.SaveChanges();
@@ -376,9 +376,9 @@ namespace ProducerInterface.Controllers
 			return RedirectToAction("Index", new { Id = Id.ToString() });
 		}
 
-		public ActionResult Delete(long? id)
+		public ActionResult Delete(long id)
 		{
-			var promotion = DB2.Promotions.SingleOrDefault(x => x.Id == id);
+			var promotion = DB2.Promotions.Find(id);
 			if (promotion == null)
 			{
 				ErrorMessage("Акция не найдена");
@@ -391,8 +391,8 @@ namespace ProducerInterface.Controllers
 
 			if (promotion.MediaFile != null)
 			{
-				promotion.MediaFile = null;
 				DB2.MediaFiles.Remove(promotion.MediaFile);
+				promotion.MediaFile = null;
 			}
 
 			var suppliers = DB2.PromotionsToSuppliers.Where(x => x.PromotionId == promotion.Id).ToList();

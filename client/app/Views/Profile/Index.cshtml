@@ -27,10 +27,7 @@
                     <p class="lead text-center">Здраствуйте, @currentUser.Name!</p>
                 </div>
 
-                <hr />
-
-                <h2>Новости</h2>
-                <hr />
+                <h3>Новости</h3>
 
                 <div class="form-group" id="NewsListDiv">
                     @if (ViewBag.News != null && ViewBag.News.Count > 0)
@@ -38,19 +35,10 @@
                         <div class="row">
                             @foreach (var NewsItem in NewsList)
                             {
-                                <div class="col-xs-12" id="News_Item">
-                                    <div class="row pointer" onclick="window.location='@Url.Action("News", "Profile", new { Id = NewsItem.Id})'">
-                                        <div class="col-md-9 col-xs-12">
-                                            <h4><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;&nbsp; <strong>@NewsItem.Name</strong></h4>
-                                        </div>
-                                        <div class="col-md-2 col-xs-6 text_align_bottom">
-                                            <a href="@Url.Action("News", "Profile", new { Id = NewsItem.Id})">читать далее</a>
-                                        </div>
-                                        <div class="col-md-1 col-xs-6 text_align_bottom">
-                                            <span class="pull-right">@NewsItem.DatePublication.Value.ToString("dd.MM.yyyy")</span>
-                                        </div>
-                                    </div>
-                                </div>
+	                            <div class="col-xs-12" id="News_Item">
+		                            <small>@NewsItem.DatePublication.Value.ToShortDateString()</small>
+		                            <h4>@Html.ActionLink(@NewsItem.Name, "News", "Profile", new {NewsItem.Id}, null)</h4>
+	                            </div>
                             }
                         </div>
 

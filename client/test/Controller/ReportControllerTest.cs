@@ -11,9 +11,9 @@ namespace ProducerInterface.Test.Controller
 		[SetUp]
 		public void RcSetUp()
 		{
-			account = cntx.Account.Single(x => x.Login == "g.maksimenko@analit.net");
+			account = db.Account.Single(x => x.Login == "g.maksimenko@analit.net");
 			account.AccountCompany.ProducerId = null;
-			cntx.SaveChanges();
+			db.SaveChanges();
 
 			Open("Account/Auth");
 			WaitForVisibleCss(".login2");
@@ -26,7 +26,7 @@ namespace ProducerInterface.Test.Controller
 		public void RcTearDown()
 		{
 			account.AccountCompany.ProducerId = 5;
-			cntx.SaveChanges();
+			db.SaveChanges();
 
 			Open("Account/LogOut");
 			//CloseAllTabsButOne();
