@@ -67,6 +67,7 @@ namespace ProducerInterface.Test
 			var el = browser.FindElementsByCssSelector("a").First(x => x.Text?.Trim().StartsWith(promotion.Name) == true);
 			ScrollTo(el);
 			el.Click();
+			Thread.Sleep(100);
 			WaitAnimation();
 			var delete = browser.FindElementsByCssSelector("a.delete")
 				.First(x => x.GetAttribute("href").EndsWith($"/{promotion.Id}"));
