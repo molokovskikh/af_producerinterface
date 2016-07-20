@@ -141,7 +141,7 @@
     <Compile Include="ModelFixture.cs" />
     <Compile Include="PromotionFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistrationFxiture.cs" />
+    <Compile Include="RegistrationFixture.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Tasks\Fixture.cs" />
   </ItemGroup>
