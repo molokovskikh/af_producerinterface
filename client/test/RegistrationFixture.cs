@@ -19,7 +19,7 @@ namespace ProducerInterface.Test
 			Css("#register-form #login").SendKeys($"{Guid.NewGuid()}@analit.net");
 			Css("#PhoneNumber").SendKeys("4732606000");
 			Css("#Appointment").SendKeys("Тестовая должность");
-			SafeClick("Запрос на регистрацию");
+			Click("Запрос на регистрацию");
 			AssertText("Ваша заявка принята. Ожидайте, с вами свяжутся");
 		}
 
@@ -31,24 +31,9 @@ namespace ProducerInterface.Test
 			Click("Забыли пароль?");
 			AssertText("Восстановление пароля");
 			Css("#password-recovery #login").SendKeys("kvasovtest@analit.net");
-			SafeClick("Восстановить");
+			Click("Восстановить");
 			AssertNoText("Ошибка сервера в приложении");
 			AssertText("Новый пароль отправлен на ваш email");
-		}
-
-		protected void SafeClick(string text)
-		{
-			var buttons = browser.FindElementsByCssSelector("a, input[type=button], input[type=submit], button");
-
-			var button = buttons.FirstOrDefault(b => String.Equals(b.GetAttribute("value"), text, StringComparison.CurrentCultureIgnoreCase)) ??
-				buttons.FirstOrDefault(b => String.Equals(b.Text?.Trim(), text, StringComparison.CurrentCultureIgnoreCase));
-
-			if(button == null)
-				throw new Exception($"Элемент с текстом '{text}' не найден!");
-
-			if (button.Displayed)
-				ScrollTo(button);
-			button.Click();
 		}
 	}
 }
