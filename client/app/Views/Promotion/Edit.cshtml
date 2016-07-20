@@ -33,7 +33,6 @@
                                     <p data-bind="text: NameLight" class="text-size-09em text-style-italic pull-right"></p>
                                 </div>
                             </div>
-                            @*<label>Наименование акции <strong data-bind="text: NameLight" class="text-size-09em text-style-italic"></strong></label>*@
 
                             <input type="text" data-bind="value: Name, valueUpdate: 'afterkeydown', event:{keyup: Event_Name}" id="Name" name="Name" class="form-control" />
                             <span class="field-validation-error" data-bind="text: NameError"></span>
@@ -51,7 +50,6 @@
                                     <p class="text-size-09em text-style-italic pull-right" data-bind="text: AnnotationLight"></p>
                                 </div>
                             </div>
-                            @*<label>Аннотация <strong class="text-size-09em text-style-italic" data-bind="text: AnnotationLight"></strong></label>*@
 
                             <textarea rows="5" id="Annotation" name="Annotation" data-bind="value: Annotation, valueUpdate: 'afterkeydown', event:{keyup: Event_Annotation}" class="form-control" typeof="input"></textarea>
                             <span class="field-validation-error" data-bind="text: AnnotationError"></span>

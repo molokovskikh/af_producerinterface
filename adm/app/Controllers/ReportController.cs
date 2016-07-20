@@ -6,8 +6,8 @@ using ProducerInterfaceCommon.ContextModels;
 using System.Data;
 using System.IO;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Report;
-using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.Helpers;
+using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
