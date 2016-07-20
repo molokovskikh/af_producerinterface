@@ -4,7 +4,6 @@ import System.Linq.Enumerable
 Global(
 	Project : "ProducerInterface",
 	HumanReadableName : "Интерфейса производителя",
-	ExcludesDeployDirectory : ("Content",),
 	SkipFix : true,
 	Config: {
 		"db:seed": {@Profile: "ProducerInterface"}
