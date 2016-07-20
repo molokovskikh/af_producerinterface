@@ -9,7 +9,7 @@ namespace ProducerInterface.Test
 		[Test]
 		public void Register_not_producer()
 		{
-			Open();
+			Open("/?debug-user=");
 			Click("Регистрация");
 			Click("Компания в списке отсутствует");
 			Css("#CompanyName").SendKeys("Тестовая организация");
@@ -25,7 +25,7 @@ namespace ProducerInterface.Test
 		[Test]
 		public void Recover_email()
 		{
-			Open();
+			Open("/?debug-user=");
 			Click("Вход на сайт");
 			Click("Забыли пароль?");
 			AssertText("Восстановление пароля");
