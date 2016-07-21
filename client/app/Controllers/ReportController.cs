@@ -112,7 +112,7 @@ namespace ProducerInterface.Controllers
 			}
 			catch (Exception e)
 			{
-				logger.Error($"Ошибка при добавлении отчета", e);
+				logger.Error("Ошибка при добавлении отчета", e);
 				ErrorMessage("Непредвиденная ошибка при добавлении отчета");
 				return RedirectToAction("JobList", "Report");
 			}
