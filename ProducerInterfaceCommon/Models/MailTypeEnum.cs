@@ -60,8 +60,5 @@ namespace ProducerInterfaceCommon.Models
 
 		[Display(Name = "Отклонение правки в каталог")]
 		RejectCatalogChange = 18,
-
-		[Display(Name = "Действие с новостью")]
-		NewsAction = 19
 	}
 }
