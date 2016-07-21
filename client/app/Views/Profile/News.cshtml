@@ -1,4 +1,4 @@
-﻿@model ProducerInterfaceCommon.ContextModels.NotificationToProducers
+﻿@model ProducerInterfaceCommon.Models.News
 @{
     ViewBag.Title = "Новости";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,9 +9,9 @@
         @Html.ActionLink("Вернутся в кабинет производителя", "Index", null, null, new { @class = "btn btn-primary" })
     </div>
     <div class="row">
-        <h3>@Model.Name <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>
+        <h3>@Model.Subject <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>
     </div>
     <div class="row">
-        <p>@Html.Raw(Model.Description)</p>
+        <p>@Html.Raw(Model.Body)</p>
     </div>
 </div>

@@ -1,92 +1,70 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Linq;
+using System.Web.Routing;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
 	public class NewsController : BaseController
 	{
-		/// <summary>
-		/// Список новостей
-		/// </summary>
-		/// <returns></returns>
+		private string root;
+
+		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+		{
+			base.OnActionExecuting(filterContext);
+			root = $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}";
+		}
+
 		public ActionResult Index()
 		{
 			ViewBag.Title = "Новости";
 			ViewBag.Pager = 1;
-			var model = DB.NotificationToProducers.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Take(10).ToList();
+			var model = DB2.Newses.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Take(10).ToList();
 			return View(model);
 		}
 
-		/// <summary>
-		/// Посмотреть результат
-		/// </summary>
-		/// <param name="Name"></param>
-		/// <param name="Description"></param>
-		/// <returns></returns>
 		[ValidateInput(false)]
 		public ActionResult Preview(string Name, string Description)
 		{
-			var model = new NotificationToProducers()
-			{
+			var model = new News {
 				DatePublication = DateTime.Now,
-				Name = Name,
-				Description = Description
+				Subject = Name,
+				Body = Description
 			};
 			return View(model);
 		}
 
-		/// <summary>
-		/// Подгрузить предыдущие новости
-		/// </summary>
-		/// <param name="Pager">pageIndex</param>
-		/// <returns></returns>
 		public ActionResult GetNextList(int Pager)
 		{
 			ViewBag.Pager = Pager + 1;
-			var model = DB.NotificationToProducers.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Skip(Pager * 10).Take(10).ToList();
+			var model = DB2.Newses.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Skip(Pager * 10).Take(10).ToList();
 			return PartialView(model);
 		}
 
-		/// <summary>
-		/// Архив новостей
-		/// </summary>
-		/// <returns></returns>
 		public ActionResult Archive()
 		{
 			ViewBag.Title = "Архив Новостей";
-			var model = DB.NotificationToProducers.Where(x => !x.Enabled).OrderByDescending(x => x.DatePublication).ToList();
+			var model = DB2.Newses.Where(x => !x.Enabled).OrderByDescending(x => x.DatePublication).ToList();
 			return View("Index", model);
 		}
 
-		/// <summary>
-		/// Перенести новость в архив
-		/// </summary>
-		/// <param name="Id">идентификатор новости</param>
-		/// <returns></returns>
-		public ActionResult DeleteNews(long Id)
+		public ActionResult DeleteNews(long id)
 		{
 			// отправляем новость в архив
-			var news = DB.NotificationToProducers.Find(Id);
+			var news = DB2.Newses.Find(id);
 			news.Enabled = false;
-			DB.SaveChanges();
+			DB2.SaveChanges();
 
 			// добавляем историю изменений
-			var history = new NewsChange()
-			{
-				IdNews = Id,
-				IdAccount = CurrentUser.Id,
-				DateChange = DateTime.Now,
-				TypeCnhange = (byte)NewsActions.Archive,
-				IP = Request.UserHostAddress
-			};
-			DB.NewsChange.Add(history);
-			DB.SaveChanges();
+			var history = new NewsSnapshot(news, DB2.Users.Find(CurrentUser.Id), "Новость отправлена в архив");
+			DB2.NewsHistory.Add(history);
+			DB2.SaveChanges();
 
-			Mails.NewsChanged(NewsActions.Archive, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
+			Mails.NewsChanged(news, "Новость отправлена в архив", root);
 			SuccessMessage("Новость отправлена в архив");
 			return RedirectToAction("Index");
 		}
@@ -94,19 +72,15 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// <summary>
 		/// Безвозвратно удалить
 		/// </summary>
-		/// <param name="Id">идентификатор новости</param>
+		/// <param name="id">идентификатор новости</param>
 		/// <returns></returns>
-		public ActionResult PastRetrieve(long Id)
+		public ActionResult Delete(long id)
 		{
-			var news = DB.NotificationToProducers.Find(Id);
-			var historyList = DB.NewsChange.Where(x => x.IdNews == Id).ToList();
-			DB.NewsChange.RemoveRange(historyList);
-			DB.SaveChanges();
+			var news = DB2.Newses.Find(id);
+			DB2.Newses.Remove(news);
+			DB2.SaveChanges();
 
-			DB.Entry(news).State = System.Data.Entity.EntityState.Deleted;
-			DB.SaveChanges(CurrentUser, "Удаление новости");
-
-			Mails.NewsChanged(NewsActions.PastRetrieve, Id, $"{news.Name}\r\n\r\n{news.Description}", "");
+			Mails.NewsChanged(news, "Новость удалена", root);
 			SuccessMessage("Новость удалена");
 			return RedirectToAction("Archive");
 		}
@@ -127,99 +101,63 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			}
 #endif
 
-			var model = new NotificationToProducers();
+			var model = new News();
 			if (Id > 0)
-				model = DB.NotificationToProducers.Find(Id);
+				model = DB2.Newses.Find(Id);
 			return View(model);
 		}
 
-		/// <summary>
-		/// Добавление/внесение изменений
-		/// </summary>
-		/// <param name="after">заполненная модель новости</param>
-		/// <returns></returns>
 		[ValidateInput(false)]
 		[HttpPost]
-		public ActionResult Create(NotificationToProducers after)
+		public ActionResult Create(News news)
 		{
 			if (!ModelState.IsValid)
-				return View(after);
+				return View(news);
 
-			if (after.Id > 0)
+			if (news.Id > 0)
 			{
-				var before = DB.NotificationToProducers.Find(after.Id);
+				var before = DB2.Newses.Find(news.Id);
 				// добавляем в историю изменения
 
-				var history = new NewsChange()
-				{
-					IdNews = after.Id,
-					IdAccount = CurrentUser.Id,
-					DateChange = DateTime.Now,
-					TypeCnhange = (byte)NewsActions.Edit,
-					IP = Request.UserHostAddress,
-					NewsNewDescription = after.Description,
-					NewsNewTema = after.Name,
-					NewsOldDescription = before.Description,
-					NewsOldTema = before.Name
-				};
-				DB.NewsChange.Add(history);
-				DB.SaveChanges();
-
-				// изменияем новость
 				before.DatePublication = DateTime.Now;
-				before.Description = after.Description;
-				before.Name = after.Name;
+				before.Body = news.Body;
+				before.Subject = news.Subject;
 				before.Enabled = true;
-				DB.SaveChanges();
+				DB2.SaveChanges();
 
-				Mails.NewsChanged(NewsActions.Edit, after.Id, $"{before.Name}\r\n\r\n{before.Description}", $"{after.Name}\r\n\r\n{after.Description}");
+				var history = new NewsSnapshot(before, DB2.Users.Find(CurrentUser.Id), "Изменена новость");
+				DB2.NewsHistory.Add(history);
+				DB2.SaveChanges();
+
+				Mails.NewsChanged(news, "Изменена новость", root);
 				SuccessMessage("Изменения успешно сохранены");
 			}
 			else
 			{
 				// добавляем новость
-				after.DatePublication = DateTime.Now;
-				after.Enabled = true;
-				DB.NotificationToProducers.Add(after);
-				DB.SaveChanges();
+				news.DatePublication = DateTime.Now;
+				news.Enabled = true;
+				DB2.Newses.Add(news);
+				DB2.SaveChanges();
 
 				// пишем в историю
-				var history = new NewsChange()
-				{
-					IdNews = after.Id,
-					IdAccount = CurrentUser.Id,
-					DateChange = DateTime.Now,
-					TypeCnhange = (byte)NewsActions.Add,
-					IP = Request.UserHostAddress,
-					NewsNewDescription = after.Description,
-					NewsNewTema = after.Name
-				};
-				DB.NewsChange.Add(history);
-				DB.SaveChanges();
-				Mails.NewsChanged(NewsActions.Add, after.Id, "", $"{after.Name}\r\n\r\n{after.Description}");
+				var history = new NewsSnapshot(news, DB2.Users.Find(CurrentUser.Id), "Добавлена новость");
+				DB2.NewsHistory.Add(history);
+				DB2.SaveChanges();
+				Mails.NewsChanged(news, "Добавлена новость", root);
 				SuccessMessage("Новость успешно добавлена");
 			}
 			return RedirectToAction("Index");
 		}
 
-		/// <summary>
-		/// Посмотреть изменения
-		/// </summary>
-		/// <param name="Id"></param>
-		/// <returns></returns>
-		public ActionResult History(long Id = 0)
+		public ActionResult History(long id)
 		{
-			if (Id == 0)
-			{
-				ErrorMessage("Неверный номер истории изменений");
-				return RedirectToAction("Index");
-			}
-			var model = DB.NewsChange.Find(Id);
-			if (model == null)
-			{
-				ErrorMessage("Неверный номер истории изменений");
-				return RedirectToAction("Index");
-			}
+			var model = DB2.NewsHistory.Find(id);
+			var old = DB2.NewsHistory
+				.Where(x => x.Id < model.Id && x.News.Id == model.News.Id)
+				.OrderByDescending(x => x.Id)
+				.FirstOrDefault();
+			ViewBag.Old = old;
 			return View(model);
 		}
 	}

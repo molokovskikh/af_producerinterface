@@ -1,5 +1,4 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model IEnumerable<NotificationToProducers>
+﻿@model IEnumerable<ProducerInterfaceCommon.Models.News>
 
 @if (Model != null && Model.Any())
 {
@@ -54,8 +53,4 @@
     {
         <h3>Все новости уже отображены на странице</h3>
     }
-}
-else
-{
-
 }

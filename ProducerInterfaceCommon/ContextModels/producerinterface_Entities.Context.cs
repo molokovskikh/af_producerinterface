@@ -22,7 +22,6 @@ namespace ProducerInterfaceCommon.ContextModels
         {
         }
 
-        public DbSet<profilenews> profilenews { get; set; }
         public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<reportxml> reportxml { get; set; }
         public DbSet<user_logs> user_logs { get; set; }
@@ -34,9 +33,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<AccountCompany> AccountCompany { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
-        public DbSet<usernames> usernames { get; set; }
         public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
-        public DbSet<NotificationToProducers> NotificationToProducers { get; set; }
         public DbSet<ReportRunLog> ReportRunLog { get; set; }
         public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
@@ -44,7 +41,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountPermission> AccountPermission { get; set; }
         public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
-        public DbSet<NewsChange> NewsChange { get; set; }
         public DbSet<ReportDescription> ReportDescription { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }
         public DbSet<AccountEmail> AccountEmail { get; set; }

@@ -76,46 +76,9 @@ namespace ProducerInterfaceCommon.ContextModels
 			sb.AppendLine($"адрес страницы: {UrlString}");
 			sb.AppendLine($"идентификатор сообщения: {Id}");
 			sb.AppendLine($"контакты: {Contacts}");
-			//sb.AppendLine($"Дата: {DateAdd}");
-			//sb.AppendLine($"Статус сообщения: {StatusEnum.DisplayName()}");
 
 			return sb.ToString();
 		}
-
-	}
-
-	public partial class NewsChange
-	{
-		public string GetDisplayNewsTypeChange
-		{
-			get { return Heap.AttributeHelper.DisplayName(ActionNewsType); }
-		}
-		private NewsActions ActionNewsType
-		{
-			get { return (NewsActions)TypeCnhange; }
-		}
-	}
-
-	[MetadataType(typeof(NotificationToProducersMetaData))]
-	public partial class NotificationToProducers
-	{
-
-	}
-
-	public class NotificationToProducersMetaData
-	{
-		[Display(Name = "Оглавление")]
-		[MaxLength(150)]
-		[Required(ErrorMessage = "Заполните поле Оглавление")]
-		public string Name { get; set; }
-
-		[Required(ErrorMessage = "Заполните поле Новость")]
-		[MaxLength(10000)]
-		[Display(Name = "Новость")]
-		public string Description { get; set; }
-
-		[Display(Name = "Дата публикации")]
-		public Nullable<System.DateTime> DatePublication { get; set; }
 	}
 
 	[MetadataType(typeof(JobExtendMetaData))]

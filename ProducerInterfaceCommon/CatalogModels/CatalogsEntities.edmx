@@ -172,7 +172,7 @@
           <EntitySet Name="Catalog" EntityType="Self.Catalog" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="catalogforms" EntityType="Self.catalogforms" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="catalognames" EntityType="Self.catalognames" Schema="catalogs" store:Type="Tables" />
-          <EntitySet Name="Descriptions" EntityType="Self.Descriptions" Schema="catalogs" store:Type="Tables" />
+          <EntitySet Name="Descriptions" EntityType="Self.Bodys" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="mnn" EntityType="Self.mnn" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="Producers" EntityType="Self.Producers" Schema="catalogs" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="catalogs" store:Type="Tables" />
@@ -303,7 +303,7 @@
           <EntitySet Name="Catalog" EntityType="Self.Catalog" />
           <EntitySet Name="catalogforms" EntityType="Self.catalogforms" />
           <EntitySet Name="catalognames" EntityType="Self.catalognames" />
-          <EntitySet Name="Descriptions" EntityType="Self.Descriptions" />
+          <EntitySet Name="Descriptions" EntityType="Self.Bodys" />
           <EntitySet Name="mnn" EntityType="Self.mnn" />
           <AssociationSet Name="FK_catalog_1" Association="Self.FK_catalog_1">
             <End Role="catalogforms" EntitySet="catalogforms" />
@@ -444,7 +444,7 @@
               <MappingFragment StoreEntitySet="catalognames">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="DescriptionId" ColumnName="DescriptionId" />
+                <ScalarProperty Name="DescriptionId" ColumnName="BodyId" />
                 <ScalarProperty Name="MnnId" ColumnName="MnnId" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
               </MappingFragment>
@@ -456,7 +456,7 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="EnglishName" ColumnName="EnglishName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Description" ColumnName="Body" />
                 <ScalarProperty Name="Interaction" ColumnName="Interaction" />
                 <ScalarProperty Name="SideEffect" ColumnName="SideEffect" />
                 <ScalarProperty Name="IndicationsForUse" ColumnName="IndicationsForUse" />

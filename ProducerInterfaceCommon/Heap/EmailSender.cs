@@ -208,11 +208,21 @@ namespace ProducerInterfaceCommon.Heap
 			isHtml = false;
 		}
 
-		// Изменение новости, расширенное сотрудникам
-		public void NewsChanged(NewsActions action, long newsId, string before, string after)
+		public void NewsChanged(News news, string description, string root)
 		{
-			MessageFromTemplate(MailType.NewsAction, ConfigurationManager.AppSettings["MailInfo"],
-				new { Before = before, After = after, Id = newsId });
+			var body = $@"
+<head>
+<base href=""{root}"" target=""_blank"">
+</head>
+<body>
+	Дата изменения: {DateTime.Now}<br>
+	Сотрудник: {currentUser.Login} {currentUser.Name}<br>
+	Хост: {currentUser.IP}<br>
+	{description}: <br/>
+	Тема: {news.Subject}</br>
+	Текст: {news.Body}</br>
+</body>";
+			SendEmail(ConfigurationManager.AppSettings["MailInfo"], description, body, new List<string>(), isHtml = true);
 		}
 
 		// Запрос регистрации производителя, расширенное сотрудникам

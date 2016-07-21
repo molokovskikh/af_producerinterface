@@ -294,7 +294,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
           <EntitySetMapping Name="LogChangeSet">
             <EntityTypeMapping TypeName="LoggerModels.LogChangeSet">
               <MappingFragment StoreEntitySet="LogChangeSet">
-                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Description" ColumnName="Body" />
                 <ScalarProperty Name="Ip" ColumnName="Ip" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
@@ -325,7 +325,7 @@ FROM `propertychangeview` AS `propertychangeview`</DefiningQuery>
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Description" ColumnName="Body" />
                 <ScalarProperty Name="Ip" ColumnName="Ip" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="ChangeSetId" ColumnName="ChangeSetId" />

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.NotificationToProducers>
+﻿@model IEnumerable<ProducerInterfaceCommon.ContextModels.News>
 
 @if (Model != null && Model.Any())
 {
@@ -10,7 +10,7 @@
             <br />
             <a href="@Url.Action("News", "Profile", new { Id = NewsItem.Id})">читать далее</a>
         </div>
-        <hr /> 
+        <hr />
     }
 
     if (ViewBag.MaxCount >= ViewBag.Pager)

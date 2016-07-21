@@ -41,6 +41,8 @@ namespace ProducerInterfaceCommon.ContextModels
 		public DbSet<MediaFile> MediaFiles { get; set; }
 		public DbSet<PromotionSnapshot> PromotionHistory { get; set; }
 		public DbSet<Email> Emails { get; set; }
+		public DbSet<News> Newses { get; set; }
+		public DbSet<NewsSnapshot> NewsHistory { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder builder)
 		{
@@ -72,6 +74,11 @@ namespace ProducerInterfaceCommon.ContextModels
 				x.MapLeftKey("MediaFilesId");
 				x.MapRightKey("MailFormId");
 			});
+			var news = builder.Entity<News>().ToTable("Newses");
+			//news.HasMany(x => x.NewsChange).WithOptional(x => x.News).Map(x => x.MapKey("NewsId"));
+			var newsSnapshot = builder.Entity<NewsSnapshot>().ToTable("NewsSnapshots");
+			newsSnapshot.HasOptional(x => x.Author).WithMany().Map(x => x.MapKey("AuthorId"));
+			newsSnapshot.HasOptional(x => x.News).WithMany(x => x.NewsChange).Map(x => x.MapKey("NewsId"));
 		}
 	}
 

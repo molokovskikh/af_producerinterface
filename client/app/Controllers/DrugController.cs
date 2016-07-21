@@ -162,7 +162,7 @@ namespace ProducerInterface.Controllers
 			var ufName = new string[] { "вЫкл", "вкл" };
 			var regex = new Regex(@"(?<catalogId>\d+)_(?<field>\w+)", RegexOptions.IgnoreCase);
 			// форма возвращает значения для всех элементов. Ищем, что изменилось
-			for (int i = 0; i < Request.Form.Count; i++) { 
+			for (int i = 0; i < Request.Form.Count; i++) {
 				var name = Request.Form.GetKey(i);
         if (regex.IsMatch(name)) {
 	        var catalogId = long.Parse(regex.Match(name).Groups["catalogId"].Value);

@@ -1,5 +1,4 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model NotificationToProducers
+﻿@model ProducerInterfaceCommon.Models.News
 
 @{
     ViewBag.Title = "Новое сообщение для производителей";
@@ -7,65 +6,59 @@
 }
 
 <div class="container body-content">
-    @if (Model.Id > 0)
-    {
-        <h2>Редактирование новости</h2>
-        <hr />
-    }
-    else
-    {
-        <h2>Создание новости</h2>
-        <hr />
-    }
+	@if (Model.Id > 0) {
+		<h2>Редактирование новости</h2>
+	} else {
+		<h2>Создание новости</h2>
+	}
+	<hr />
 
-    <input hidden="hidden" id="FullUrlStringFile" value="@ViewBag.FullUrlStringFile" />
+	<input hidden="hidden" id="FullUrlStringFile" value="@ViewBag.FullUrlStringFile" />
 
-    @using (Html.BeginForm(FormMethod.Post))
-    {
-        @Html.ValidationSummary(true)
+	@using (Html.BeginForm(FormMethod.Post))
+	{
+		@Html.ValidationSummary(true)
+		@Html.HiddenFor(m => m.Id)
 
-        if (Model.Id > 0)
-        {
-            @Html.HiddenFor(m => m.Id)
-        }
-        else
-        {
-            <input type="hidden" id="Id" name="Id" value="0" />
-        }
+		<div class="form-group">
+			<a href="@Url.Action("Index")" class="btn btn-primary">Назад к списку новостей</a>
+			<a class="btn btn-primary" onclick="TargetBlackPreviewNews()">Посмотреть результат</a>
+			<input type="submit" class="btn btn-primary" value="Сохранить"/>
+			@if (Model.Id != 0) {
+				if (Model.Enabled) {
+					<a href="@Url.Action("DeleteNews", "News", new {Model.Id})" class="btn btn-warning">В архив</a>
+				}
+			}
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Name)
-            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Name)
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.Subject)
+			@Html.TextBoxFor(m => m.Subject, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.Subject)
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Description)
+		<div class="form-group">
+			@Html.LabelFor(m => m.Body)
+			@Html.TextAreaFor(m => m.Body, new { @class = "form-control", @rows = "5" })
+			@Html.ValidationMessageFor(m => m.Body)
+		</div>
 
-            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = "10" })
-            @Html.ValidationMessageFor(m => m.Description)
-        </div>
-
-        <div class="form-group">
-            <a href="@Url.Action("Index")" class="btn btn-primary">Назад к списку новостей</a>
-            <a class="btn btn-primary" onclick="TargetBlackPreviewNews()">Посмотреть результат</a>
-            @if (Model.Id == 0) {
-	            <input type="submit" class="btn btn-primary" value="Добавить новость" />
-            } else {
-	            <input type="submit" class="btn btn-primary" value="Сохранить изменения"/>
-							if (Model.Enabled) {
-								 <a href="@Url.Action("DeleteNews", "News", new {Model.Id})" class="btn btn-warning">В архив</a>
-							}
-            }
-        </div>
-
-    }
+		<div class="form-group">
+			<a href="@Url.Action("Index")" class="btn btn-primary">Назад к списку новостей</a>
+			<a class="btn btn-primary" onclick="TargetBlackPreviewNews()">Посмотреть результат</a>
+			<input type="submit" class="btn btn-primary" value="Сохранить"/>
+				@if (Model.Id != 0) {
+					if (Model.Enabled) {
+							<a href="@Url.Action("DeleteNews", "News", new {Model.Id})" class="btn btn-warning">В архив</a>
+					}
+				}
+		</div>
+	}
 </div>
 
 @section scripts
 {
-<script src="~/Scripts/ckeditor/ckeditor.js"></script>
-<script src="~/Scripts/ckeditor/InitCKEditor_News.js"></script>
-
+	<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+	<script src="~/Scripts/ckeditor/InitCKEditor_News.js"></script>
 }
 

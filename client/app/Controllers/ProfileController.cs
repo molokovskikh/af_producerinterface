@@ -10,7 +10,6 @@ namespace ProducerInterface.Controllers
 {
 	public class ProfileController : BaseController
 	{
-
 		private int PagerCount = 5;
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -22,12 +21,9 @@ namespace ProducerInterface.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.Pager = 1;
-
-			var newsAll = DB.NotificationToProducers.Where(x => x.Enabled).ToList();
-			newsAll.Reverse();
-
-			ViewBag.News = newsAll.OrderByDescending(x => x.DatePublication).Take(PagerCount).ToList();
-			ViewBag.MaxCount = newsAll.Count();
+			var items = DB2.Newses.Where(x => x.Enabled);
+			ViewBag.News = items.OrderByDescending(x => x.DatePublication).Take(PagerCount).ToList();
+			ViewBag.MaxCount = items.Count();
 			return View();
 		}
 
@@ -38,7 +34,6 @@ namespace ProducerInterface.Controllers
 		[HttpGet]
 		public ActionResult Account()
 		{
-
 			var thisUser = DB.Account.Single(x => x.Id == CurrentUser.Id);
 
 			var model = new ProfileValidation() {
@@ -128,23 +123,23 @@ namespace ProducerInterface.Controllers
 
 		public ActionResult GetOldNews(int Pages)
 		{
-			var News = DB.NotificationToProducers.OrderByDescending(x => x.DatePublication).Skip(Pages * 10).Take(10).ToList();
-			return PartialView(News);
+			var items = DB2.Newses.OrderByDescending(x => x.DatePublication).Skip(Pages * 10).Take(10).ToList();
+			return PartialView(items);
 		}
 
 		public ActionResult GetNextList(int Pager)
 		{
 			ViewBag.Pager = Pager + 1;
-			var ListNews10 = DB.NotificationToProducers.OrderByDescending(xxx => xxx.DatePublication).ToList().Skip(PagerCount * Pager).Take(PagerCount).ToList();
+			var ListNews10 = DB2.Newses.OrderByDescending(xxx => xxx.DatePublication).ToList().Skip(PagerCount * Pager).Take(PagerCount).ToList();
 
-			ViewBag.MaxCount = DB.NotificationToProducers.Count() / (PagerCount * Pager);
+			ViewBag.MaxCount = DB2.Newses.Count() / (PagerCount * Pager);
 			return PartialView("GetNextList", ListNews10);
 		}
 
 		public ActionResult News(int Id)
 		{
-			var News = DB.NotificationToProducers.Where(xxx => xxx.Id == Id).First();
-			return View(News);
+			var item = DB2.Newses.Find(Id);
+			return View(item);
 		}
 
 	}

@@ -1,5 +1,4 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@model IEnumerable<NotificationToProducers>
+﻿@model IEnumerable<ProducerInterfaceCommon.Models.News>
 
 @{
     Layout = "~/Views/Shared/_MasterPage.cshtml";
@@ -9,9 +8,12 @@
 
         <hr />
 
-        @if (ViewBag.Title == "Новости")
-        {  <a href="~/News/Create" class="btn btn-primary">Создать новость</a>  <a href="~/News/Archive" class="btn btn-primary">Архив новостей</a>   }
-        else {  <a href="~/News/" class="btn btn-primary">К списку новостей</a>   }
+        @if (ViewBag.Title == "Новости") {
+	        <a href="~/News/Create" class="btn btn-primary">Создать новость</a>  <a href="~/News/Archive" class="btn btn-primary">Архив новостей</a>
+        }
+        else {
+	        <a href="~/News/" class="btn btn-primary">К списку новостей</a>
+        }
         <hr />
 
         @if (Model != null && Model.Any())
@@ -21,30 +23,33 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div>
-                            @item.Name
+                            @item.Subject
                             <div class="pull-right">@item.DatePublication.Value.ToShortDateString()</div>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            @if (ViewBag.Title == "Новости")
+                            @if (item.Enabled)
                             {
-                            <a href="@Url.Action("Create", new { Id = item.Id })" class="btn btn-primary">Редактировать</a>
-                           <a href="@Url.Action("DeleteNews", new { id = item.Id })" class="btn btn-warning">В архив (публикация новости прекращается)</a>
+															<a href="@Url.Action("Create", new { Id = item.Id })" class="btn btn-primary">Редактировать</a>
+															<a href="@Url.Action("DeleteNews", new { id = item.Id })" class="btn btn-warning">В архив (публикация новости прекращается)</a>
                             }
                             else
                             {
                                 <a href="@Url.Action("Create", new { Id = item.Id })" class="btn btn-primary">Редактировать с последующей публикацией</a>
-                                <a href="@Url.Action("PastRetrieve", new { id = item.Id })" class="btn btn-warning">Безвозвратно удалить</a>
+                                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-warning">Безвозвратно удалить</a>
                             }
 
                         </div>
 
                         <div class="form-group">
                             <label>История изменений</label>
-                            @foreach (var historyItem in item.NewsChange)
+                            @foreach (var historyItem in item.NewsChange.OrderByDescending(x => x.CreatedOn))
                             {
-                                <p>@historyItem.DateChange @historyItem.Account.Name @historyItem.GetDisplayNewsTypeChange <a title="Посмотреть изменения" href="@Url.Action("History", new {Id = historyItem.Id })"><i class="glyphicon glyphicon-info-sign"></i></a></p>
+	                            <p>
+		                            @historyItem.CreatedOn @historyItem.AuthorDisplayName @historyItem.SnapshotName
+		                            <a title="Посмотреть изменения" href="@Url.Action("History", new {historyItem.Id})"><i class="glyphicon glyphicon-info-sign"></i></a>
+	                            </p>
                             }
                         </div>
 
