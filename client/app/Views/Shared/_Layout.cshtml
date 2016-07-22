@@ -44,21 +44,15 @@
         </div>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/MvcAjax")
-    @Scripts.Render("~/bundles/chosen")
-    @Scripts.Render("~/bundles/WorkPlace")
-    @Scripts.Render("~/bundles/bootstrap")
-    
-    @if (user == null)
-    {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/MvcAjax")
+	@Scripts.Render("~/bundles/chosen")
+	@Scripts.Render("~/bundles/WorkPlace")
+	@Scripts.Render("~/bundles/bootstrap")
 
-    @RenderSection("JavaScript", required: false)
+	@RenderSection("JavaScript", required: false)
 
-    <a hidden="hidden" name="UrlString" id="UrlString" value="@ViewBag.UrlString"></a>
-
-
+	<a hidden="hidden" name="UrlString" id="UrlString" value="@ViewBag.UrlString"></a>
 </body>
 </html>

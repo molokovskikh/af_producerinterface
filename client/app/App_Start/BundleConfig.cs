@@ -14,8 +14,6 @@ namespace ProducerInterface
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
-            // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
-            // используйте средство сборки на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
@@ -24,7 +22,6 @@ namespace ProducerInterface
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/MvcAjax").Include("~/Scripts/jquery.unobtrusive-ajax.min.js"));
-
 
             bundles.Add(new ScriptBundle("~/bundles/chosen")
                 .Include(
@@ -37,10 +34,19 @@ namespace ProducerInterface
                     "~/Scripts/WorkPlace/ZAnalit.js",
                     "~/Scripts/WorkPlace/ModalView.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/cron")
+                .Include(
+                    "~/Content/Chosen/js/initCron.js",
+                    "~/Content/Chosen/js/jqCron.js",
+                    "~/Content/Chosen/js/jqCron.ru.js"));
+
+            bundles.Add(new StyleBundle("~/Content/cron")
+                .Include("~/Content/Chosen/css/jqCron.css"));
+
             bundles.Add(new StyleBundle("~/Content/css")
                 .Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",                      
+                      "~/Content/site.css",
                       "~/Content/MyStyle.css"));
         }
     }

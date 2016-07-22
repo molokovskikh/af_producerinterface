@@ -23,8 +23,6 @@
 </div>
 
 @section JavaScript {
-  <script src="~/Content/Chosen/js/initCron.js"></script>
-  <script src="~/Content/Chosen/js/jqCron.js"></script>
-  <script src="~/Content/Chosen/js/jqCron.ru.js"></script>
-  <link href="~/Content/Chosen/css/jqCron.css" rel="stylesheet" />
+	@Scripts.Render("~/bundles/cron")
+	@Styles.Render("~/content/cron")
 }
