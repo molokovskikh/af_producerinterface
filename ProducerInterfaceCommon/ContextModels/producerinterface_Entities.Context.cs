@@ -48,7 +48,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<feedbackui> feedbackui { get; set; }
         public DbSet<cataloglogview> cataloglogview { get; set; }
         public DbSet<descriptionlogview> descriptionlogview { get; set; }
-        public DbSet<LogForNet> LogForNet { get; set; }
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<AccountFeedBackComment> AccountFeedBackComment { get; set; }

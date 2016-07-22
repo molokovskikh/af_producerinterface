@@ -208,9 +208,6 @@
     <Compile Include="ContextModels\feedbackui.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\LogForNet.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\Models.cs" />
     <Compile Include="ContextModels\ReportDescription.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>

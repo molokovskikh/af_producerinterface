@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Linq;
-using System.Web.Routing;
-using ProducerInterfaceCommon.ContextModels;
-using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
@@ -22,8 +19,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.Title = "Новости";
-			ViewBag.Pager = 1;
-			var model = DB2.Newses.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Take(10).ToList();
+			var model = DB2.Newses.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).ToList();
 			return View(model);
 		}
 
@@ -36,13 +32,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				Body = Description
 			};
 			return View(model);
-		}
-
-		public ActionResult GetNextList(int Pager)
-		{
-			ViewBag.Pager = Pager + 1;
-			var model = DB2.Newses.Where(x => x.Enabled).OrderByDescending(x => x.DatePublication).Skip(Pager * 10).Take(10).ToList();
-			return PartialView(model);
 		}
 
 		public ActionResult Archive()

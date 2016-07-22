@@ -349,11 +349,9 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Report\AddJob.cshtml" />
     <Content Include="Views\Report\DisplayTemplates\Enum.cshtml" />
-    <Content Include="Views\Report\EditorTemplates\Bool.cshtml" />
     <Content Include="Views\Report\EditorTemplates\CronExpression.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Report\EditorTemplates\DecimalList.cshtml" />
-    <Content Include="Views\Report\EditorTemplates\Interval.cshtml" />
     <Content Include="Views\Report\EditorTemplates\LongList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\MailTo.cshtml" />
     <Content Include="Views\Report\EditorTemplates\PharmacyRatingReport.cshtml" />

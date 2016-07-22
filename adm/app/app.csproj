@@ -195,10 +195,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminProfile\AdminAccountController.cs" />
     <Compile Include="Controllers\AdminProfile\GoToProducerInterfaceController.cs" />
-    <Compile Include="Controllers\Logs_FeedBack\FeedBackController.cs" />
-    <Compile Include="Controllers\Logs_FeedBack\LogForNetController.cs" />
-    <Compile Include="Controllers\Logs_FeedBack\LogCatalogController.cs" />
-    <Compile Include="Controllers\Logs_FeedBack\LogUserChangeController.cs" />
+    <Compile Include="Controllers\FeedBackController.cs" />
+    <Compile Include="Controllers\LogCatalogController.cs" />
+    <Compile Include="Controllers\LogUserChangeController.cs" />
     <Compile Include="Controllers\Global\HomeController.cs" />
     <Compile Include="Controllers\Global\MailController.cs" />
     <Compile Include="Controllers\Global\BaseController.cs" />
@@ -690,7 +689,6 @@
     <Content Include="Views\Mail\Edit.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
-    <Content Include="Views\LogForNet\Index.cshtml" />
     <Content Include="Views\LogUserChange\Index.cshtml" />
     <Content Include="Views\LogUserChange\ReadMore.cshtml" />
     <Content Include="Views\Shared\Partial\PagerPartial.cshtml" />
@@ -706,7 +704,6 @@
     <Content Include="Views\PermissionUser\EditPermission.cshtml" />
     <Content Include="Views\News\Create.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
-    <Content Include="Views\News\GetNextList.cshtml" />
     <Content Include="Views\ProducerInformation\Index.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\AccountList.cshtml" />
     <Content Include="Views\ProducerInformation\Promotion.cshtml" />

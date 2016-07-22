@@ -1,93 +1,82 @@
 ﻿<div class="navbar navbar-fixed-top navbar-inverse" id="MenuPU">
-    @if (ViewBag.CurrentUser != null)
-    {
-        <div class="navbar-header navbar-left">
-            <button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
+	<div class="navbar-header navbar-left">
+			<button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+			</button>
+	</div>
 
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-left">
-                <li><a href="~/Home/Index"><i class="glyphicon glyphicon-home"></i></a></li>
-            </ul>
+	<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-left">
+					<li><a href="~/Home/Index"><i class="glyphicon glyphicon-home"></i></a></li>
+			</ul>
 
-            <ul class="nav navbar-nav navbar-left" role="navigation">
-                <li class="dropdown" id="dropdownmenu">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp; Разделы сайта</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/ProducerInformation/Index">Статистика по производителям</a></li>
-                        <li><a href="~/Promotion/Index">Акции</a></li>
-                        <li><a href="~/Report/Index">Отчеты</a></li>
-                        <li><a href="~/Report/ReportDescription">Свойства отчетов</a></li>
-                        <li><a href="~/Mail/Index">Шаблоны писем</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-left" role="navigation">
-                <li class="dropdown" id="dropdownmenu">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-info-sign"></span>&nbsp; Новости</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/News/">Список новостей</a></li>
-                        <li><a href="~/News/Archive">Архив новостей</a></li>
-                        <li><a href="~/News/Create">Создать</a></li>
-                    </ul>
-                </li>
-            </ul>
+			<ul class="nav navbar-nav navbar-left" role="navigation">
+					<li class="dropdown" id="dropdownmenu">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp; Разделы сайта</a>
+							<ul class="dropdown-menu">
+									<li><a href="~/ProducerInformation/Index">Статистика по производителям</a></li>
+									<li><a href="~/Promotion/Index">Акции</a></li>
+									<li><a href="~/Report/Index">Отчеты</a></li>
+									<li><a href="~/Report/ReportDescription">Свойства отчетов</a></li>
+									<li><a href="~/Mail/Index">Шаблоны писем</a></li>
+							</ul>
+					</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-left" role="navigation">
+					<li class="dropdown" id="dropdownmenu">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-info-sign"></span>&nbsp; Новости</a>
+							<ul class="dropdown-menu">
+									<li><a href="~/News/">Список новостей</a></li>
+									<li><a href="~/News/Archive">Архив новостей</a></li>
+									<li><a href="~/News/Create">Создать</a></li>
+							</ul>
+					</li>
+			</ul>
 
-            <ul class="nav navbar-nav navbar-left" role="navigation">
-                <li class="dropdown" id="dropdownmenu">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span>&nbsp; Администрирование</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/LogCatalog/Index">Запросы правок каталога</a></li>
-                        <li><a href="~/LogForNet/Index">Логи ошибок</a></li>
-                        <li><a href="~/LogUserChange/Index">Логи изменений</a></li>
-                        <li><a href="@Url.Action("Index","GoToProducerInterface")">Вход в Интерфейс производителя</a></li>
-                        <li><a href="~/ProducerInformation/domainlist">Управление доменами</a></li>
-                        <li><a href="~/Appointment/Index">Управление должностями</a></li>
-                    </ul>
-                </li>
-            </ul>
+			<ul class="nav navbar-nav navbar-left" role="navigation">
+					<li class="dropdown" id="dropdownmenu">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span>&nbsp; Администрирование</a>
+							<ul class="dropdown-menu">
+									<li><a href="~/LogCatalog/Index">Запросы правок каталога</a></li>
+									<li><a href="~/LogUserChange/Index">Логи изменений</a></li>
+									<li><a href="@Url.Action("Index","GoToProducerInterface")">Вход в Интерфейс производителя</a></li>
+									<li><a href="~/ProducerInformation/domainlist">Управление доменами</a></li>
+									<li><a href="~/Appointment/Index">Управление должностями</a></li>
+							</ul>
+					</li>
+			</ul>
 
-            <ul class="nav navbar-nav navbar-left" role="navigation">
-                <li class="dropdown" id="dropdownmenu">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-envelope"></span>&nbsp; Обращения пользователей</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/Feedback2/Index">Обратная связь</a></li>
-                    </ul>
-                </li>
-            </ul>
+			<ul class="nav navbar-nav navbar-left" role="navigation">
+					<li class="dropdown" id="dropdownmenu">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown"> <span class="glyphicon glyphicon-envelope"></span>&nbsp; Обращения пользователей</a>
+							<ul class="dropdown-menu">
+									<li><a href="~/Feedback2/Index">Обратная связь</a></li>
+							</ul>
+					</li>
+			</ul>
 
-            <ul class="nav navbar-nav navbar-left" role="navigation">
-                <li class="dropdown" id="dropdownmenu">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Управление пользователями (Интерфейс производителя)"> <span class="glyphicon glyphicon-user"></span>&nbsp; Пользователи</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/PermissionUser/Index">Список пользователей</a></li>
-                        <li><a href="~/PermissionUser/AdminList">Список администраторов</a></li>
-                        <li><a href="~/PermissionUser/Group">Список групп</a></li>
-                        <li><a href="~/PermissionUser/ListPermission">Список прав</a></li>
-                        <li><a href="~/PermissionUser/CreateGroup">Создать группу</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" role="navigation">
-                <li class="dropdown" id="dropdownmenu">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Мой профиль/Выход"><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Login</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/AdminAccount/Index">Мой профиль</a></li>
-                        <li><a href="~/Registration/LogOut">Выход</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    }
-    else
-    {
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-left">
-            </ul>
-        </div>
-    }
+			<ul class="nav navbar-nav navbar-left" role="navigation">
+					<li class="dropdown" id="dropdownmenu">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Управление пользователями (Интерфейс производителя)"> <span class="glyphicon glyphicon-user"></span>&nbsp; Пользователи</a>
+							<ul class="dropdown-menu">
+									<li><a href="~/PermissionUser/Index">Список пользователей</a></li>
+									<li><a href="~/PermissionUser/AdminList">Список администраторов</a></li>
+									<li><a href="~/PermissionUser/Group">Список групп</a></li>
+									<li><a href="~/PermissionUser/ListPermission">Список прав</a></li>
+									<li><a href="~/PermissionUser/CreateGroup">Создать группу</a></li>
+							</ul>
+					</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right" role="navigation">
+					<li class="dropdown" id="dropdownmenu">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Мой профиль/Выход"><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.CurrentUser.Login</a>
+							<ul class="dropdown-menu">
+									<li><a href="~/AdminAccount/Index">Мой профиль</a></li>
+									<li><a href="~/Registration/LogOut">Выход</a></li>
+							</ul>
+					</li>
+			</ul>
+	</div>
 </div>
