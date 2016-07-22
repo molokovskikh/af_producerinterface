@@ -17,7 +17,7 @@
 							@Html.LabelFor(m => m.IntervalType)
 					</div>
 					<div class="feditor col-md-8">
-							@Html.EnumDropDownListFor(m => m.IntervalType, new { @onchange= "ShowHide_Interval()" })
+							@Html.EnumDropDownListFor(m => m.IntervalType)
 							@Html.ValidationMessageFor(m => m.IntervalType)
 					</div>
 			</div>
