@@ -24,7 +24,7 @@ namespace ProducerInterface.Controllers
 				filterContext.Result = Redirect("~");
 			else
 			{
-				h = new NamesHelper(CurrentUser.Id, HttpContext);
+				h = new NamesHelper(CurrentUser.Id);
 				if (CurrentUser.AccountCompany.ProducerId.HasValue)
 					producerId = CurrentUser.AccountCompany.ProducerId.Value;
 				else
@@ -85,6 +85,7 @@ namespace ProducerInterface.Controllers
 			if (Copy)
 				id += ", true";
 			ViewBag.PromotionId = id;
+			ViewBag.Id = IdKey;
 			return View();
 		}
 
@@ -97,38 +98,28 @@ namespace ProducerInterface.Controllers
 				id = 0;
 
 			viewModel.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
-			viewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+			viewModel.RegionGlobalList = DB.Regions().Select(x => new TextValue(x)).ToList();
 
-			if (IdKey == "0")
-			{
-				// возвращаем новую промо акцию
-				viewModel.Id = 0;
-				viewModel.Title = "Новая промоакция";
-				viewModel.Name = "";
-				viewModel.Annotation = "";
-				viewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
-				viewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
-				viewModel.SuppierRegionsList = h.GetSupplierList(new List<decimal>() { 0 }).Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
-				viewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(0)).ToList().Select(x => x.ToString()).ToList();
-				viewModel.RegionGlobalList = h.GetRegionList().ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
+			Promotion model = null;
+			if (IdKey != "0") {
+				var idPromo = Convert.ToInt64(IdKey.Split(',').First());
+				model = DB2.Promotions.Find(idPromo);
 			}
-			else
-			{
-				var idPromo = Convert.ToInt64(IdKey.Split(new Char[] { ',' }).First());
-				var model = DB2.Promotions.Find(idPromo);
-				viewModel.Id = id;
-				viewModel.SuppierRegions = model.PromotionsToSupplier.ToList().Select(x => (string)x.SupplierId.ToString()).ToList();
-				viewModel.SuppierRegionsList = h.GetSupplierList(viewModel.SuppierRegions.ToList().Select(x => (ulong)Convert.ToInt64(x)).ToList()).ToList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
-				viewModel.Name = model.Name;
-				if (model.MediaFile != null) {
-					viewModel.PromotionFileId = model.MediaFile.Id;
-					viewModel.PromotionFileName = model.MediaFile.ImageName;
-					viewModel.PromotionFileUrl = Url.Action("GetFile", "MediaFiles", new { model.MediaFile.Id });
-				}
+			if (model == null)
+				model = new Promotion(CurrentUser);
 
-				if (model.AllSuppliers)
-					viewModel.SuppierRegions = new List<string>() { "0" };
+			viewModel.Id = id;
+			viewModel.Name = model.Name;
+			viewModel.Annotation = model.Annotation;
+			if (model.MediaFile != null) {
+				viewModel.PromotionFileId = model.MediaFile.Id;
+				viewModel.PromotionFileName = model.MediaFile.ImageName;
+				viewModel.PromotionFileUrl = Url.Action("GetFile", "MediaFiles", new { model.MediaFile.Id });
+			}
 
+			if (model.Id == 0) {
+				viewModel.Title = "Новая промоакция";
+			} else {
 				if (id == 0)
 				{
 					viewModel.Name += " Копия";
@@ -136,26 +127,30 @@ namespace ProducerInterface.Controllers
 				}
 				else
 					viewModel.Title = "Редактирование промоакции: " + model.Name;
-
-				viewModel.PromotionFileId = model.MediaFile?.Id;
-				viewModel.DrugList = model.PromotionToDrug.ToList().Select(x => x.DrugId.ToString()).ToList();
-				if (model.Begin < DateTime.Now)
-					viewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
-				else
-					viewModel.Begin = model.Begin.ToString("dd.MM.yyyy");
-
-				if (model.End < DateTime.Now)
-					viewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
-				else
-					viewModel.End = model.End.ToString("dd.MM.yyyy");
-
-				viewModel.RegionList = h.GetPromotionRegions(Convert.ToUInt64(model.RegionMask)).ToList().Select(x => x.ToString()).ToList();
-				viewModel.SuppierRegionsList = h.GetSupplierList(viewModel.RegionList.Select(x => (decimal)Convert.ToUInt64(x)).ToList()).ToList()
-						.Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
-
-				viewModel.Annotation = model.Annotation;
 			}
 
+			viewModel.PromotionFileId = model.MediaFile?.Id;
+			if (model.Begin < DateTime.Now)
+				viewModel.Begin = DateTime.Now.ToString("dd.MM.yyyy");
+			else
+				viewModel.Begin = model.Begin.ToString("dd.MM.yyyy");
+
+			if (model.End < DateTime.Now)
+				viewModel.End = DateTime.Now.ToString("dd.MM.yyyy");
+			else
+				viewModel.End = model.End.ToString("dd.MM.yyyy");
+
+			viewModel.DrugList = model.PromotionToDrug.ToList().Select(x => x.DrugId.ToString()).ToList();
+			var regions = DB.Regions((ulong)model.RegionMask);
+			viewModel.RegionList = regions.Select(x => x.Id.ToString()).ToList();
+
+			if (model.AllSuppliers)
+				viewModel.SuppierRegions = new List<string>() { "0" };
+			else
+				viewModel.SuppierRegions = model.PromotionsToSupplier.Select(x => x.SupplierId.ToString()).ToList();
+			viewModel.SuppierRegionsList = h.GetSupplierList(regions.Select(x => x.Id).ToList())
+				.Select(x => new TextValue { Text = x.Text, Value = x.Value })
+				.ToList();
 			viewModel.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
 
 			return Json(viewModel, JsonRequestBehavior.AllowGet);

@@ -16,14 +16,12 @@ namespace ProducerInterfaceCommon.Heap
 		private producerinterface_Entities _cntx;
 		private Context db;
 		private long _userId;
-		private HttpContextBase _httpContext;
 
-		public NamesHelper(long userId, HttpContextBase httpContext = null)
+		public NamesHelper(long userId)
 		{
 			_cntx = new producerinterface_Entities();
 			db = new Context();
 			_userId = userId;
-			_httpContext = httpContext;
 		}
 
 		// TODO почта откуда-то берётся
@@ -105,22 +103,15 @@ namespace ProducerInterfaceCommon.Heap
 
 		public List<OptionElement> GetSupplierList(List<ulong> regionList)
 		{
-			if (regionList == null || regionList.Count() == 0)
+			if (regionList == null || !regionList.Any())
 			{
 				return new List<OptionElement>();
 			}
 
-			List<supplierregions> suppliers = new List<supplierregions>();
+			var suppliers = new List<supplierregions>();
 
-			if (_httpContext != null)
-			{
-				suppliers = GetSuppliersInRegions().ToList();
-			}
-			else
-			{
-				suppliers = _cntx.supplierregions.ToList();
-			}
-			List<long> supplierIds = null;
+			suppliers = _cntx.supplierregions.ToList();
+			List<long> supplierIds;
 
 			// если список регионов содержит 0 (все регионы) - возвращаем всех поставщиков
 			if (regionList.Contains(0))
@@ -133,76 +124,17 @@ namespace ProducerInterfaceCommon.Heap
 				supplierIds = suppliers.Where(x => ((ulong)x.RegionMask & regionMask) > 0).Select(x => x.SupplierId).ToList();
 			}
 
-			var results = _cntx.suppliernames
+			return _cntx.suppliernames
 					.Where(x => supplierIds.Contains(x.SupplierId))
 					.OrderBy(x => x.SupplierName)
 					.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
 					.ToList();
-			return results;
 		}
 
 		// для UI
 		public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
-			// если регионы не заданы - пустой лист
-			if (regionList == null || regionList.Count() == 0)
-			{
-				return new List<OptionElement>();
-			}
-
-			List<supplierregions> suppliers = new List<supplierregions>();
-
-			if (_httpContext != null)
-			{
-				suppliers = GetSuppliersInRegions().ToList();
-			}
-			else
-			{
-				suppliers = _cntx.supplierregions.ToList();
-			}
-			List<long> supplierIds = null;
-
-			// если список регионов содержит 0 (все регионы) - возвращаем всех поставщиков
-			if (regionList.Contains(0))
-			{
-				supplierIds = suppliers.Select(x => x.SupplierId).ToList();
-			}
-			else
-			{
-				var regionMask = regionList.Select(x => (ulong)x).Aggregate((y, z) => y | z);
-				supplierIds = suppliers.Where(x => ((ulong)x.RegionMask & regionMask) > 0).Select(x => x.SupplierId).ToList();
-			}
-
-			var results = _cntx.suppliernames
-				.Where(x => supplierIds.Contains(x.SupplierId))
-				.OrderBy(x => x.SupplierName)
-				.Select(x => new OptionElement { Value = x.SupplierId.ToString(), Text = x.SupplierName })
-				.ToList();
-			return results;
-		}
-
-		private HashSet<supplierregions> GetSuppliersInRegions()
-		{
-			var key = $"SuppliersInReg";
-
-			var DateList = _httpContext.Cache.Get(key) as HashSet<supplierregions>;
-
-			if (DateList != null)
-			{
-				return DateList;
-			}
-
-			DateList = new HashSet<supplierregions>();
-
-			var Data = _cntx.supplierregions.Distinct().ToList();
-
-			foreach (var DataItem in Data)
-			{
-				DateList.Add(DataItem);
-			}
-
-			_httpContext.Cache.Insert(key, DateList, null, DateTime.UtcNow.AddSeconds(300), Cache.NoSlidingExpiration);
-			return DateList;
+			return GetSupplierList(regionList.Select(x => (ulong)x).ToList());
 		}
 
 		public List<long> GetPromotionRegions(ulong? RegionMask)

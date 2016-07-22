@@ -181,10 +181,18 @@ namespace ProducerInterfaceCommon.Models
 		public Promotion(Account user)
 			: this()
 		{
+			Name = "";
+			Annotation = "";
 			UpdateTime = DateTime.Now;
 			Enabled = true;
 			Status = PromotionStatus.New;
 			ProducerId = user.AccountCompany.ProducerId.Value;
+			Begin = DateTime.Today;
+			End = DateTime.Today;
+			AllSuppliers = true;
+			unchecked {
+				RegionMask = (long)ulong.MaxValue;
+			}
 		}
 
 		public long Id { get; set; }

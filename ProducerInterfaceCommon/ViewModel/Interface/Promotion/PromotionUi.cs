@@ -32,6 +32,16 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
 
 	public class TextValue
 	{
+		public TextValue(Region region)
+		{
+			Value = region.Id.ToString();
+			Text = region.Name;
+		}
+
+		public TextValue()
+		{
+		}
+
 		public string Value { get; set; }
 		public string Text { get; set; }
 	}

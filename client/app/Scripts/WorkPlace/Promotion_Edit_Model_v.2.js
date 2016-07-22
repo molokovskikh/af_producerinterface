@@ -1,69 +1,79 @@
 ﻿
-var Promotion =
-    {
-        LoadingImageVisible: ko.observable(),
-        ValiedationOnOff: ko.observable(),
-        Title: ko.observable(),
-        SubmitText: ko.observable(),
-        Enabled: ko.observable(),
-        Id: ko.observable(),
-        Name: ko.observable(""),
-        NameLight: ko.observable(),
-        Event_Name: function (data, event) { Event_Name_Change(data, event); },
-        Annotation: ko.observable(""),
-        AnnotationLight: ko.observable(),
-        Event_Annotation: function (data, event) { Event_Annotation_Change(data, event); },
-        Begin: ko.observable(),
-        End: ko.observable(),
-        File: ko.observable(),
+var Promotion = {
+	LoadingImageVisible: ko.observable(),
+	ValiedationOnOff: ko.observable(),
+	Title: ko.observable(),
+	SubmitText: ko.observable(),
+	Enabled: ko.observable(),
+	Id: ko.observable(),
+	Name: ko.observable(""),
+	NameLight: ko.observable(),
+	Event_Name: function (data, event) { Event_Name_Change(data, event); },
+	Annotation: ko.observable(""),
+	AnnotationLight: ko.observable(),
+	Event_Annotation: function (data, event) { Event_Annotation_Change(data, event); },
+	Begin: ko.observable(),
+	End: ko.observable(),
+	File: ko.observable(),
 
-        DrugList: ko.observableArray(), /* List Long */
-        Event_DrudList: function () {
-            if (Promotion.DrugList() != null) {
-                Promotion.DrugListError("");
-                Promotion.DrugListError.valueHasMutated();
-                DropdownReinit();
-            }
-            SubmitValidationForm();
-        },
+	DrugList: ko.observableArray(), /* List Long */
+	Event_DrudList: function () {
+			if (Promotion.DrugList() != null) {
+					Promotion.DrugListError("");
+					Promotion.DrugListError.valueHasMutated();
+					DropdownReinit();
+			}
+			SubmitValidationForm();
+	},
 
-        RegionList: ko.observableArray(), /* List Long */
-        Event_RegionList: function () {Event_RegionList_Change();},
+	RegionList: ko.observableArray(), /* List Long */
+	Event_RegionList: function () {Event_RegionList_Change();},
 
-        SuppierRegions: ko.observableArray(), /* List Long */
-        Event_SuppierRegions: function () {Event_SupplierRegion_Change();},
+	SuppierRegions: ko.observableArray(), /* List Long */
+	Event_SuppierRegions: function () {Event_SupplierRegion_Change();},
 
-        DrugCatalogList: ko.observableArray(), /* List OptionElement */
-        RegionGlobalList: ko.observableArray(), /* List OptionElement */
-        SuppierRegionsList: ko.observableArray(), /* List OptionElement */
+	DrugCatalogList: ko.observableArray(), /* List OptionElement */
+	RegionGlobalList: ko.observableArray(), /* List OptionElement */
+	SuppierRegionsList: ko.observableArray(), /* List OptionElement */
 
-        AllSupplier: ko.observable(),
-        Event_AllSupplier: function () {
-            setTimeout(Event_AllSupplier_Change, 50); /* задержка нужна для корректной работы во всех браузерах */
-        },
+	AllSupplier: ko.observable(),
+	Event_AllSupplier: function () {
+			setTimeout(Event_AllSupplier_Change, 50); /* задержка нужна для корректной работы во всех браузерах */
+	},
 
-        PromotionFileId: ko.observable(),
-        PromotionFileName: ko.observable(),
-        PromotionFileUrl: ko.observable(),
-        OldFileVisible: ko.observable(),
-        PromoFileClass: ko.observable(),
+	PromotionFileId: ko.observable(),
+	PromotionFileName: ko.observable(),
+	PromotionFileUrl: ko.observable(),
+	OldFileVisible: ko.observable(),
+	PromoFileClass: ko.observable(),
 
-        Validation: function () {
-            Promotion.ValiedationOnOff(true);
-            Promotion.ValiedationOnOff.valueHasMutated();
-            var ret = SubmitValidationForm();
-            return ret;
-        },
+	Validation: function () {
+			Promotion.ValiedationOnOff(true);
+			Promotion.ValiedationOnOff.valueHasMutated();
+			var ret = SubmitValidationForm();
+			return ret;
+	},
 
-        NameError: ko.observable(),
-        AnnotationError: ko.observable(),
-        DrugListError: ko.observable(),
-        RegionListError: ko.observable(),
-        SuppierRegionsError: ko.observable(),
-        BeginError: ko.observable(),
-        EndError: ko.observable(),
-        FileError: ko.observable()
-    }
+	NameError: ko.observable(),
+	AnnotationError: ko.observable(),
+	DrugListError: ko.observable(),
+	RegionListError: ko.observable(),
+	SuppierRegionsError: ko.observable(),
+	BeginError: ko.observable(),
+	EndError: ko.observable(),
+	FileError: ko.observable(),
+	selectAllRegions: function () {
+		Promotion.RegionList.removeAll();
+		for (var region of Promotion.RegionGlobalList()) {
+			Promotion.RegionList.push(region.Value);
+		}
+		DropdownReinit();
+	},
+	clearRegions: function () {
+		Promotion.RegionList.removeAll();
+		DropdownReinit();
+	},
+}
 
 function Event_SupplierRegion_Change()
 {
@@ -78,7 +88,7 @@ function Event_SupplierRegion_Change()
             Promotion.SuppierRegions.valueHasMutated();
         }
     }
-  
+
     if (Promotion.SuppierRegions().length == 0)
     {
         Promotion.AllSupplier(false);
@@ -102,7 +112,7 @@ function Event_RegionList_Change()
             Promotion.RegionList(["0"]);
             Promotion.RegionList.valueHasMutated();
         }
-    }   
+    }
 
     DropdownReinit();
     SubmitValidationForm();
@@ -122,7 +132,7 @@ function Event_Name_Change(data, event) {
 
         Promotion.NameLight(OST);
         Promotion.NameLight.valueHasMutated();
-        if (event != null)       
+        if (event != null)
         {
             var keyCode_ = event.which || event.keyCode;
             if (Promotion.Name().length >= 150) {
@@ -140,7 +150,7 @@ function Event_Name_Change(data, event) {
 }
 
 function Event_Annotation_Change(data, event)
-{ 
+{
     if (Promotion.Annotation() != null) {
         Promotion.AnnotationError("");
         Promotion.AnnotationError.valueHasMutated();
@@ -255,7 +265,7 @@ GetIndex = function (value, strict) {
     for (var i = 0; i < strict.length; i++) {
         if (strict[i] === value) return value;
     }
-    return -1;  
+    return -1;
 };
 
 function Event_AllSupplier_Change() {
@@ -274,7 +284,7 @@ function Event_AllSupplier_Change() {
         var X = [];
         Promotion.SuppierRegions(X);
         Promotion.SuppierRegions.valueHasMutated();
-    }    
+    }
     DropdownReinit();
     SubmitValidationForm();
 }
