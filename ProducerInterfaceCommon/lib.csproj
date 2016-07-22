@@ -450,7 +450,6 @@
     <None Include="LoggerModels\Logger_Entities.edmx.diagram">
       <DependentUpon>Logger_Entities.edmx</DependentUpon>
     </None>
-    <None Include="Models\Report.cd" />
     <None Include="packages.config" />
     <EntityDeploy Include="ReportModels\Reports_Entities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

@@ -31,7 +31,7 @@ namespace ProducerInterface.Test
 			Css("#Name").SendKeys("test");
 			Css("#Annotation").SendKeys("test");
 			//Воронеж
-			Eval("$('#RegionList').val('1').trigger('chosen:updated').change();");
+			ChoseRegion("#RegionList");
 			//БЕТАСЕРК табл. 16 мг N30
 			Eval("$('#DrugList').val('3677').trigger('chosen:updated').change();");
 			Css("#all-suppliers").Click();
