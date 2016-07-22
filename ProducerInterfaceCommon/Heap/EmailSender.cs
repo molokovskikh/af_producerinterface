@@ -218,7 +218,7 @@ namespace ProducerInterfaceCommon.Heap
 	Дата изменения: {DateTime.Now}<br>
 	Сотрудник: {currentUser.Login} {currentUser.Name}<br>
 	Хост: {currentUser.IP}<br>
-	{description}: <br/>
+	Операция: {description} <br/>
 	Тема: {news.Subject}</br>
 	Текст: {news.Body}</br>
 </body>";

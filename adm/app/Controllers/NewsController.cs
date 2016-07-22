@@ -105,20 +105,22 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			if (news.Id > 0)
 			{
-				var before = DB2.Newses.Find(news.Id);
+				var db = DB2.Newses.Find(news.Id);
 				// добавляем в историю изменения
-
-				before.DatePublication = DateTime.Now;
-				before.Body = news.Body;
-				before.Subject = news.Subject;
-				before.Enabled = true;
+				var description = "Изменена новость";
+				if (!db.Enabled)
+					description = "Опубликована архивная новость";
+				db.DatePublication = DateTime.Now;
+				db.Body = news.Body;
+				db.Subject = news.Subject;
+				db.Enabled = true;
 				DB2.SaveChanges();
 
-				var history = new NewsSnapshot(before, DB2.Users.Find(CurrentUser.Id), "Изменена новость");
+				var history = new NewsSnapshot(db, DB2.Users.Find(CurrentUser.Id), description);
 				DB2.NewsHistory.Add(history);
 				DB2.SaveChanges();
 
-				Mails.NewsChanged(news, "Изменена новость", root);
+				Mails.NewsChanged(news, description, root);
 				SuccessMessage("Изменения успешно сохранены");
 			}
 			else
