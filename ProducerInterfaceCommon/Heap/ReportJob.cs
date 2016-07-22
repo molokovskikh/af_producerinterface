@@ -39,7 +39,7 @@ namespace ProducerInterfaceCommon.Heap
 				// вытащили расширенные параметры задачи
 				var jext = db.jobextend.Single(x => x.JobName == key.Name
 																							&& x.JobGroup == key.Group
-																							&& x.Enable == true);
+																							&& x.Enable);
 
 				// отправили статус об ошибке отчета
 				jext.DisplayStatusEnum = DisplayStatus.Error;
