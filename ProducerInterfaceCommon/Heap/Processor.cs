@@ -9,6 +9,8 @@ using System.Data;
 using System.Linq;
 using Quartz;
 using System.Data.Entity;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace ProducerInterfaceCommon.Heap
 {
@@ -32,7 +34,7 @@ namespace ProducerInterfaceCommon.Heap
 			// записали в историю запусков
 			string mailTo = null;
 			if (tparam.MailTo != null && tparam.MailTo.Count > 0)
-				mailTo = string.Join(",", tparam.MailTo);
+				mailTo = String.Join(",", tparam.MailTo);
 			var reportRunLog = new ReportRunLog() { JobName = key.Name, RunNow = false, MailTo = mailTo, AccountId = tparam.UserId };
 			// записали IP только для ручного запуска
 			var ip = "неизвестен (авт. запуск)";
@@ -66,8 +68,8 @@ namespace ProducerInterfaceCommon.Heap
 				return;
 			}
 
-			var instance = (ReportRow)Activator.CreateInstance(_type);
-			querySort = instance.Treatment<T>(querySort, report);
+			var reportRow = (ReportRow)Activator.CreateInstance(_type);
+			querySort = reportRow.Treatment<T>(querySort, report);
 
 			var shredder = new ObjectShredder<T>();
 			var dataTable = shredder.Shred(querySort);
@@ -105,8 +107,9 @@ namespace ProducerInterfaceCommon.Heap
 			}
 		}
 
-		public FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds, Report param)
+		public FileInfo CreateExcel(string jobGroup, string jobName, DataSet ds, Report report)
 		{
+			var reportRow = (ReportRow)Activator.CreateInstance(_type);
 			// U:\WebApps\ProducerInterface\bin\ -> U:\WebApps\ProducerInterface\var\
 			var pathToBaseDir = ConfigurationManager.AppSettings["PathToBaseDir"];
 			var baseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToBaseDir));
@@ -133,11 +136,42 @@ namespace ProducerInterfaceCommon.Heap
 
 			var title = ds.Tables["Titles"].Rows[0][0].ToString();
 
-			// TODO именование листов. Сейчас лист называется именем, данным отчету пользователем
-			var ecreator = new ExcelCreator<T>();
-			ecreator.Create(file, title, headers, data, param);
-
+			Write(file, title, headers, data, report, reportRow);
 			return file;
+		}
+
+		public static void Write(FileInfo file, string sheetName, List<string> headers, DataTable dataTable, Report report, ReportRow row)
+		{
+			using (var pck = new ExcelPackage(file)) {
+				var ws = pck.Workbook.Worksheets.Add(sheetName);
+
+				var dataStartRow = headers.Count + 2;
+				var dataAddress = row.WriteExcelData(ws, dataStartRow, dataTable, report);
+
+				// установили автофильтры
+				ws.Cells[dataAddress.Start.Row, 1, dataAddress.Start.Row, dataAddress.End.Column].AutoFilter = true;
+
+				// установили рамку
+				var border = ws.Cells[dataAddress.Address].Style.Border;
+				border.Top.Style = border.Left.Style = border.Right.Style = border.Bottom.Style = ExcelBorderStyle.Thin;
+
+				var da = ws.Cells[ws.Dimension.Address];
+				// установили размер шрифта
+				da.Style.Font.Name = "Arial Narrow";
+				da.Style.Font.Size = 8;
+				// установили ширину колонок
+				da.AutoFitColumns();
+
+				// добавили шапку
+				for (int i = 0; i < headers.Count; i++) {
+					var er = ws.Cells[i + 1, 1];
+					er.Value = headers[i];
+					er.Style.Font.Name = "Arial Narrow";
+					er.Style.Font.Size = 8;
+				}
+				row.Format(ws);
+				pck.Save();
+			}
 		}
 
 		private DataSet CreateDataSet(string title, List<string> headers, DataTable data)

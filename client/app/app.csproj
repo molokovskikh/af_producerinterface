@@ -352,7 +352,6 @@
     <Content Include="Scripts\SemanticUI\transition.min.js" />
     <Content Include="Scripts\WorkPlace\Analit.js" />
     <Content Include="Scripts\WorkPlace\Paginator.js" />
-    <Content Include="Scripts\WorkPlace\CountAlfavit.js" />
     <Content Include="Scripts\WorkPlace\DatePicker.js" />
     <Content Include="Scripts\WorkPlace\FileUpLoad_v.2.0.js" />
     <Content Include="Scripts\WorkPlace\GradientText.js" />

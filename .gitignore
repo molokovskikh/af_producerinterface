@@ -10,5 +10,5 @@
 *.suo
 output
 packages
-ProducerInterface/Reports
 AssemblyInfo.cs
+client/app/reports

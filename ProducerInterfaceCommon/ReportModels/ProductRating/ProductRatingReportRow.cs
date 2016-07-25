@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
+using OfficeOpenXml;
+using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -87,6 +90,12 @@ namespace ProducerInterfaceCommon.Models
 			}
 
 			return clist.Cast<T>().ToList();
+		}
+
+		public override void Format(ExcelWorksheet sheet)
+		{
+			sheet.Column(1).Width = 40;
+			sheet.Column(2).Width = 30;
 		}
 	}
 }
