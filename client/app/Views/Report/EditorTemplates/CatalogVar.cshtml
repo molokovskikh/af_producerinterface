@@ -2,17 +2,20 @@
 @model CatalogVar
 
 <div class="row margin5">
-    <div class="form-group form-group-otstup">
-        <div class="flabel col-md-4">
-            @Html.LabelFor(m => m)
-        </div>
-        <div class="feditor col-md-8">
-            @foreach (SelectListItem item in EnumHelper.GetSelectList(typeof(CatalogVar), Model)) {
-                @Html.RadioButton("", item.Value, item.Selected, new { id = "var" + item.Value})
-                <span>@item.Text</span>
-                <br/>
-            }
-            @Html.ValidationMessageFor(m => m)
-        </div>
-    </div>
+	<div class="form-group form-group-otstup">
+		<div class="flabel col-md-4">
+			@Html.LabelFor(m => m)
+		</div>
+		<div class="feditor col-md-8">
+			@foreach (var item in EnumHelper.GetSelectList(typeof (CatalogVar), Model)) {
+				if (!ViewBag.CurrentUser.IsProducer && item.Value == ((int)CatalogVar.AllCatalog).ToString()) {
+					continue;
+				}
+				@Html.RadioButton("", item.Value, item.Selected, new {id = "var" + item.Value})
+				<span>@item.Text</span>
+				<br/>
+			}
+			@Html.ValidationMessageFor(m => m)
+		</div>
+	</div>
 </div>

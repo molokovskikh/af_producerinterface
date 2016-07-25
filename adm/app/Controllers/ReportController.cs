@@ -148,10 +148,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult RunHistory(string jobName)
 		{
 			var jext = DB.jobextend.Single(x => x.JobName == jobName);
-			var producer = DB.producernames.SingleOrDefault(x => x.ProducerId == jext.ProducerId);
-			var producerName = "удален";
-			if (producer != null)
-				producerName = producer.ProducerName;
+			var producerName = DB.producernames.SingleOrDefault(x => x.ProducerId == jext.ProducerId)?.ProducerName
+				?? "<отсутсвует>";
 
 			ViewBag.Title = $"История запусков отчета: \"{jext.CustomName}\", Производитель : \"{producerName}\"";
 			var model = DB.reportrunlogwithuser.Where(x => x.JobName == jobName).OrderByDescending(x => x.RunStartTime).ToList();
@@ -177,7 +175,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var schedulerName = helper.GetSchedulerName();
 			// возвращаем только производителей, у которых есть отчёты
-			var producerIdList = DB.jobextend.Where(x => x.SchedName == schedulerName).Select(x => x.ProducerId).Distinct().ToList();
+			var producerIdList = DB.jobextend.Where(x => x.SchedName == schedulerName && x.ProducerId != null)
+				.Select(x => x.ProducerId).Distinct().ToList();
 			var producers = DB.producernames.Where(x => producerIdList.Contains(x.ProducerId)).ToList()
 				.Select(x => new OptionElement { Text = x.ProducerName, Value = x.ProducerId.ToString() }).ToList();
 

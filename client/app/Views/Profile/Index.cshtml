@@ -2,73 +2,72 @@
 @using ProducerInterfaceCommon.Models
 
 @{
-    var currentUser = ViewBag.CurrentUser as Account;
-    ViewBag.Title = "Кабинет производителя";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var NewsList = ViewBag.News as IEnumerable<News>;
+	var currentUser = ViewBag.CurrentUser as Account;
+	ViewBag.Title = "Кабинет производителя";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var NewsList = ViewBag.News as IEnumerable<News>;
 }
 
 <div class="row">
-    <div class="col-xs-12">
-        <div class="col-lg-2 visible-lg">
-            <div class="body-content" style="padding:0.2em;">
-                <h3 style="margin:0.5em;">Меню</h3>
-                <hr/>
-                <div class="btn-group-vertical profile_submenu" style="width:100%;">
-									<a href="@Url.Action("JobList", "Report")" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Отчеты</a>
-									<a href="@Url.Action("Index", "Promotion")" class="btn btn-default" style="width:100%;"><span class="glyphicon glyphicon-star-empty"></span> Акции</a>
-									<a href="@Url.Action("Index", "Drug")" class="btn btn-default"><span class="glyphicon glyphicon-align-justify"></span> Наша продукция</a>
-									<a data-toggle="modal" data-target="#myModal" class="pointer btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-lg-10">
-            <div class="body-content">
-                <div class="form-group">
-                    <p class="lead text-center">Здраствуйте, @currentUser.Name!</p>
-                </div>
+	<div class="col-xs-12">
+		<div class="col-lg-2 visible-lg">
+			<div class="body-content" style="padding:0.2em;">
+				<h3 style="margin:0.5em;">Меню</h3>
+				<hr/>
+				<div class="btn-group-vertical profile_submenu" style="width:100%;">
+					<a href="@Url.Action("JobList", "Report")" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Отчеты</a>
+					@if (currentUser.IsProducer) {
+						<a href="@Url.Action("Index", "Promotion")" class="btn btn-default" style="width:100%;"><span class="glyphicon glyphicon-star-empty"></span> Акции</a>
+						<a href="@Url.Action("Index", "Drug")" class="btn btn-default"><span class="glyphicon glyphicon-align-justify"></span> Наша продукция</a>
+					}
+					<a data-toggle="modal" data-target="#myModal" class="pointer btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Обратная связь</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-lg-10">
+			<div class="body-content">
+				<div class="form-group">
+					<p class="lead text-center">Здраствуйте, @currentUser.Name!</p>
+				</div>
 
-                <h3>Новости</h3>
+				<h3>Новости</h3>
 
-                <div class="form-group" id="NewsListDiv">
-                    @if (ViewBag.News != null && ViewBag.News.Count > 0)
-                    {
-                        <div class="row">
-                            @foreach (var NewsItem in NewsList)
-                            {
-	                            <div class="col-xs-12" id="News_Item">
-		                            <small>@NewsItem.DatePublication.Value.ToShortDateString()</small>
-		                            <h4>@Html.ActionLink(@NewsItem.Subject, "News", "Profile", new {NewsItem.Id}, null)</h4>
-	                            </div>
-                            }
-                        </div>
+				<div class="form-group" id="NewsListDiv">
+					@if (ViewBag.News != null && ViewBag.News.Count > 0) {
+						<div class="row">
+							@foreach (var NewsItem in NewsList) {
+								<div class="col-xs-12" id="News_Item">
+									<small>@NewsItem.DatePublication.Value.ToShortDateString()</small>
+									<h4>@Html.ActionLink(@NewsItem.Subject, "News", "Profile", new {NewsItem.Id}, null)</h4>
+								</div>
+							}
+						</div>
 
-                    if (ViewBag.MaxCount > 10)
-                    {
-                            <div id="@("LoadingListDiv" + ViewBag.Pager)" class="row">
+						if (ViewBag.MaxCount > 10) {
+							<div id="@("LoadingListDiv" + ViewBag.Pager)" class="row">
 
-                            </div>
+							</div>
 
-                            <div id=@("Delete_Id" + ViewBag.Pager)>
-                                @Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
-                    new { Pager = ViewBag.Pager },
-                    new AjaxOptions { UpdateTargetId = ("LoadingListDiv" + ViewBag.Pager), InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")" },
-                    new { @class = "btn btn-primary" })
-                            </div>
-                    }
-                }
+							<div id=@("Delete_Id" + ViewBag.Pager)>
+								@Ajax.ActionLink("Подгрузить предыдущие новости", "GetNextList", "Profile",
+									new {ViewBag.Pager},
+									new AjaxOptions {UpdateTargetId = "LoadingListDiv" + ViewBag.Pager, InsertionMode = InsertionMode.InsertAfter, HttpMethod = "GET", OnSuccess = "newsisloadcomplete(" + ViewBag.Pager + ")"},
+									new {@class = "btn btn-primary"})
+							</div>
+						}
+					}
 
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section JavaScript
 {
-<script src="~/Scripts/WorkPlace/GradientText.js"></script>
+	<script src="~/Scripts/WorkPlace/GradientText.js"></script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
     function newsisloadcomplete(data_int) {
         var ElementId = "#Delete_Id" + data_int;
         $(ElementId).css("display", "none");

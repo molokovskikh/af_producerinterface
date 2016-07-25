@@ -1,93 +1,111 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
 @{
-    var user = ViewBag.CurrentUser;
+	var user = ViewBag.CurrentUser;
 }
 <div class="navbar navbar-fixed-top navbar-default">
-    <div class="navbar-header navbar-left">
-        <button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a href="~/" class="navbar-brand" style="margin-left: 0px;">
-            <img class="image-brand" src="~/Content/Image/aflogo.png" />
-        </a>
-    </div>
+	<div class="navbar-header navbar-left">
+		<button type="button" class="navbar-toggle navbar-left col-lg" data-toggle="collapse" data-target=".navbar-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a href="~/" class="navbar-brand" style="margin-left: 0px;">
+			<img class="image-brand" src="~/Content/Image/aflogo.png"/>
+		</a>
+	</div>
 
-    <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-left">
-            @if (user != null)
-            {
-							<li>
-								<a href="~/Report/JobList/">
-									<span class="glyphicon glyphicon-th-list"></span>Отчеты
-								</a>
-							</li>
-							<li><a href="~/Promotion/"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>Акции</a></li>
-							<li><a href="~/Drug/Index/"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>Наша продукция</a></li>
-							<li>
-								<a data-toggle="modal" data-target="#myModal" class="pointer">
-									<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Что-то не так? Сообщите нам об этом
-								</a>
-							</li>
-            }
-        </ul>
+	<div class="navbar-collapse collapse">
+		<ul class="nav navbar-nav navbar-left">
+			@if (user != null) {
+				<li>
+					<a href="~/Report/JobList/">
+						<span class="glyphicon glyphicon-th-list"></span>Отчеты
+					</a>
+				</li>
+				if (user.IsProducer) {
+					<li>
+						<a href="~/Promotion/"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>Акции</a>
+					</li>
+					<li>
+						<a href="~/Drug/Index/"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>Наша продукция</a>
+					</li>
+				}
+				<li>
+					<a data-toggle="modal" data-target="#myModal" class="pointer">
+						<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Что-то не так? Сообщите нам об этом
+					</a>
+				</li>
+			}
+		</ul>
 
-        @if (user != null)
-        {
-            if(ViewBag.AdminUser != null)
-            {
-            <ul class="nav navbar-nav navbar-right">
-                <li><a><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.AdminUser.Login (админ)</a></li>
-            </ul>
-            }
-            <ul class="nav navbar-nav navbar-right" role="navigation" style="margin:0px;padding-top:0.3em; margin-right:0.3em;">
-                <li class="dropdown" style="margin:0px;padding:0px;">
+		@if (user != null) {
+			if (ViewBag.AdminUser != null) {
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a><span class="glyphicon glyphicon-user"></span>&nbsp; @ViewBag.AdminUser.Login (админ)</a>
+					</li>
+				</ul>
+			}
+			<ul class="nav navbar-nav navbar-right" role="navigation" style="margin:0px;padding-top:0.3em; margin-right:0.3em;">
+				<li class="dropdown" style="margin:0px;padding:0px;" id="profile-dropdown">
 
 
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"style="margin:0px;padding:0px;">
-                            <table style="max-height:1.5em;margin:0px;padding:0px;">
-                                <tr>
-                                    <td rowspan="2" style="align-self:center; padding-right:0.5em; padding-bottom:0.2em;"><span class="glyphicon glyphicon-user" style="font-size:1.1em;"></span></td>
-                                    <td style="font-size:1em;">@user.Login</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size:0.5em;">@ViewBag.Producernames</td>
-                                </tr>
-                            </table>
-                    </a>
+					<a class="dropdown-toggle" href="#" data-toggle="dropdown"style="margin:0px;padding:0px;">
+						<table style="max-height:1.5em;margin:0px;padding:0px;">
+							<tr>
+								<td rowspan="2" style="align-self:center; padding-right:0.5em; padding-bottom:0.2em;">
+									<span class="glyphicon glyphicon-user" style="font-size:1.1em;"></span></td>
+								<td style="font-size:1em;">@user.Login</td>
+							</tr>
+							<tr>
+								<td style="font-size:0.5em;">@ViewBag.Producernames</td>
+							</tr>
+						</table>
+					</a>
 
-                    <ul class="dropdown-menu">
-                        <li><a href="~/Profile/Account">Мой профиль</a></li>
-                        <li class="divider"></li>
-                        <li><a href="~/Profile/Index">Кабинет произодителя</a></li>
-                        <li class="divider"></li>
-                        <li><a href="~/Permission/Index">Редактирование прав</a></li>
-                        <li class="divider"></li>
-                        <li><a href="@Url.Action("ChangePassword","Account")">Сменить пароль</a></li>
-                        <li class="divider"></li>
-                        <li><a href="~/Account/LogOut">Выход</a></li>
-                    </ul>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="~/Profile/Account">Мой профиль</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="~/Profile/Index">Кабинет произодителя</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="~/Permission/Index">Редактирование прав</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="@Url.Action("ChangePassword", "Account")">Сменить пароль</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="~/Account/LogOut">Выход</a>
+						</li>
+					</ul>
 
-                </li>
-            </ul>
-        }
-        else
-        {
-            <ul class="nav navbar-nav navbar-right" role="navigation">
-                <li><a data-toggle="modal" data-target="#myModal" class="pointer"><span class="glyphicon glyphicon-envelope"></span> Что-то не так? Сообщите нам об этом</a></li>
-                <li><a href="@Url.Action("Index", "Account")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a></li>
+				</li>
+			</ul>
+		} else {
+			<ul class="nav navbar-nav navbar-right" role="navigation">
+				<li>
+					<a data-toggle="modal" data-target="#myModal" class="pointer"><span class="glyphicon glyphicon-envelope"></span> Что-то не так? Сообщите нам об этом</a>
+				</li>
+				<li>
+					<a href="@Url.Action("Index", "Account")"><span class="glyphicon glyphicon-ok-sign" style="margin-right:0.5em;"></span> Регистрация</a>
+				</li>
 
-                <li class="dropdown">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="menulogin_href" onclick="SetLoginNames()">
-                        <span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
-                    </a>
-                    @Html.Partial("LoginPartialView", new LoginValidation())
-                </li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" href="#" data-toggle="dropdown" id="menulogin_href" onclick="SetLoginNames()">
+						<span class="glyphicon glyphicon-user" style="margin-right:0.5em;"></span> Вход на сайт <span class="caret"></span>
+					</a>
+					@Html.Partial("LoginPartialView", new LoginValidation())
+				</li>
 
-            </ul>
-        }
-    </div>
+			</ul>
+		}
+	</div>
 </div>
 
 

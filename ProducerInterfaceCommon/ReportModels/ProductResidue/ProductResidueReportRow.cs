@@ -41,7 +41,7 @@ namespace ProducerInterfaceCommon.Models
 			var cparam = (ProductResidueReport)param;
 
 			// фильтрация по производителю, если не выбрана опция "По всему ассортименту"
-			if (cparam.Var != CatalogVar.AllAssortiment)
+			if (cparam.Var != CatalogVar.AllAssortment)
 				clist = clist.Where(x => x.ProducerId == cparam.ProducerId).ToList();
 
 			return clist.Cast<T>().ToList();

@@ -40,6 +40,17 @@ namespace ProducerInterfaceCommon.Models
 		public ProductResidueReport()
 		{
 			Var = CatalogVar.AllCatalog;
+			RegionCodeEqual = new List<decimal>();
+			CatalogIdEqual = new List<long>();
+			SupplierIdEqual = new List<long>();
+			SupplierIdNonEqual = new List<long>();
+		}
+
+		public override void Init(Account currentUser)
+		{
+			base.Init(currentUser);
+			if (ProducerId == null)
+				Var = CatalogVar.AllAssortment;
 		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
@@ -49,7 +60,7 @@ namespace ProducerInterfaceCommon.Models
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
 
 			// если выбрано По всему ассортименту
-			if (Var == CatalogVar.AllAssortiment)
+			if (Var == CatalogVar.AllAssortment)
 				result.Add("В отчет включены все товары всех производителей");
 			// если выбрано По всем нашим товарам
 			else if (Var == CatalogVar.AllCatalog)
@@ -80,7 +91,7 @@ namespace ProducerInterfaceCommon.Models
 		public override Dictionary<string, object> GetSpParams()
 		{
 			var spparams = new Dictionary<string, object>();
-			if (Var == CatalogVar.AllAssortiment) {
+			if (Var == CatalogVar.AllAssortment) {
 				spparams.Add("@CatalogId", "select CatalogId from Catalogs.assortment");
 			}
 			else if(Var == CatalogVar.AllCatalog) {

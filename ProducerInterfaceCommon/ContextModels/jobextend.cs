@@ -11,7 +11,7 @@ namespace ProducerInterfaceCommon.ContextModels
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class jobextend
     {
         public string SchedName { get; set; }
@@ -20,7 +20,7 @@ namespace ProducerInterfaceCommon.ContextModels
         public string CustomName { get; set; }
         public string Scheduler { get; set; }
         public int ReportType { get; set; }
-        public long ProducerId { get; set; }
+        public long? ProducerId { get; set; }
         public long CreatorId { get; set; }
         public System.DateTime CreationDate { get; set; }
         public System.DateTime LastModified { get; set; }

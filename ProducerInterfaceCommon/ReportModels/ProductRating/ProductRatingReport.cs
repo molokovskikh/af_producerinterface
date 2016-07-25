@@ -38,6 +38,16 @@ namespace ProducerInterfaceCommon.Models
 		public ProductRatingReport()
 		{
 			Var = CatalogVar.AllCatalog;
+			SupplierIdNonEqual = new List<long>();
+			RegionCodeEqual = new List<decimal>();
+			CatalogIdEqual = new List<long>();
+		}
+
+		public override void Init(Account currentUser)
+		{
+			base.Init(currentUser);
+			if (ProducerId == null)
+				Var = CatalogVar.AllAssortment;
 		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
@@ -47,7 +57,7 @@ namespace ProducerInterfaceCommon.Models
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
 
 			// если выбрано По всему ассортименту
-			if (Var == CatalogVar.AllAssortiment)
+			if (Var == CatalogVar.AllAssortment)
 				result.Add("В отчет включены все товары всех производителей");
 			// если выбрано По всем нашим товарам
 			else if (Var == CatalogVar.AllCatalog)
@@ -68,7 +78,7 @@ namespace ProducerInterfaceCommon.Models
 
 			var join = "";
 			var filter = "";
-			if (Var == CatalogVar.AllAssortiment) {
+			if (Var == CatalogVar.AllAssortment) {
 				join = "join Catalogs.Assortment a on a.CatalogId = ri.CatalogId";
 			} else if(Var == CatalogVar.AllCatalog) {
 				join = $"join Catalogs.Assortment a on a.CatalogId = ri.CatalogId and a.ProducerId = {ProducerId}";

@@ -15,7 +15,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Profile
         public string FirstName { get; set; }
 
         [UIHint("EditorString")]
-        [Display(Name = "Отчество")]      
+        [Display(Name = "Отчество")]
         public string OtherName { get; set; }
 
         [UIHint("EditorString")]
@@ -23,14 +23,14 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Profile
         public string CompanyName { get; set; }
 
         [Display(Name = "Email")]
-        [UIHint("EditorStringMail")]       
+        [UIHint("EditorStringMail")]
         [Required(ErrorMessage = "Заполните email")]
         public string Mailname { get; set; }
 
         [Display(Name = "Доменное имя")]
         [UIHint("IntMailDomain")]
         [Required(ErrorMessage = "Укажите домен")]
-        public int EmailDomain { get; set; }
+        public int? EmailDomain { get; set; }
 
         [Display(Name = "Должность")]
         [UIHint("IntApointment")]

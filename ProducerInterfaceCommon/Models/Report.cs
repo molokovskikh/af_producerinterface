@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
 using MySql.Data.MySqlClient;
+using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 
 namespace ProducerInterfaceCommon.Models
@@ -27,7 +28,7 @@ namespace ProducerInterfaceCommon.Models
 
 		[ScaffoldColumn(false)]
 		[Required]
-		public long ProducerId { get; set; }
+		public long? ProducerId { get; set; }
 
 		public abstract List<string> GetHeaders(HeaderHelper h);
 
@@ -73,6 +74,11 @@ namespace ProducerInterfaceCommon.Models
 					}
 				}
 			}
+		}
+
+		public virtual void Init(Account currentUser)
+		{
+			ProducerId = currentUser.AccountCompany.ProducerId;
 		}
 	}
 }

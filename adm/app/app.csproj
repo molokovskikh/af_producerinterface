@@ -713,7 +713,6 @@
     <Content Include="Views\AdminAccount\Index.cshtml" />
     <Content Include="Views\AdminAccount\AddEMail.cshtml" />
     <Content Include="Views\GoToProducerInterface\Index.cshtml" />
-    <Content Include="Views\GoToProducerInterface\GetListUser.cshtml" />
     <Content Include="Views\MediaFiles\Index.cshtml" />
     <Content Include="Views\ProducerInformation\DomainList.cshtml" />
     <Content Include="Views\ProducerInformation\AppointmentNameList.cshtml" />

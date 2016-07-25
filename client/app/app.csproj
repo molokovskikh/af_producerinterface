@@ -470,6 +470,7 @@
     <Content Include="Views\Report\EditorTemplates\CostOrQuantity.cshtml" />
     <Content Include="Views\Report\SearchResult.cshtml" />
     <Content Include="Views\Drug\History.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Bool.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

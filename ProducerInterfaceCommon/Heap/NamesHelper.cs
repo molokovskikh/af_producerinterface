@@ -134,6 +134,7 @@ namespace ProducerInterfaceCommon.Heap
 		// для UI
 		public List<OptionElement> GetSupplierList(List<decimal> regionList)
 		{
+			regionList = regionList ?? new List<decimal>();
 			return GetSupplierList(regionList.Select(x => (ulong)x).ToList());
 		}
 
@@ -178,13 +179,6 @@ namespace ProducerInterfaceCommon.Heap
 		{
 			List<long> DrudIdList = db.PromotionToDrugs.Where(x => x.PromotionId == PromotionId).Select(x => x.DrugId).ToList();
 			return _cntx.assortment.ToList().Where(x => DrudIdList.Contains(x.CatalogId)).ToList().Select(x => new OptionElement { Text = x.CatalogName, Value = x.CatalogId.ToString() }).ToList();
-		}
-
-		public List<OptionElement> GetProducerUserList(long ProducerId)
-		{
-			return _cntx.Account.Where(xxx => xxx.CompanyId != null).Where(xxx => xxx.AccountCompany.ProducerId == ProducerId)
-					.ToList().Select(xxx => new OptionElement { Text = xxx.Login + " " + xxx.Name, Value = xxx.Id.ToString() })
-					.ToList();
 		}
 
 		public List<OptionElement> GetProducerList()

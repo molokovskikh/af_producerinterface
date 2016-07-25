@@ -139,7 +139,7 @@ namespace ProducerInterfaceCommon.ContextModels
 	public enum CatalogVar
 	{
 		[Display(Name = "всему ассортименту")]
-		AllAssortiment = 1,
+		AllAssortment = 1,
 
 		[Display(Name = "всем нашим товарам")]
 		AllCatalog = 2,

@@ -139,6 +139,7 @@
     <Compile Include="BaseFixture.cs" />
     <Compile Include="Controller\ReportControllerTest.cs" />
     <Compile Include="ModelFixture.cs" />
+    <Compile Include="NonProducer.cs" />
     <Compile Include="PromotionFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationFixture.cs" />

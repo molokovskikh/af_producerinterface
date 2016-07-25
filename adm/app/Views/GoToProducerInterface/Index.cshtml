@@ -10,9 +10,9 @@
     <h2>Вход в интерфейс производителя</h2>
 
     @using (Html.BeginForm(FormMethod.Post))
-    { 
+    {
     <div class="form-group">
-        <label>Выберите производителя</label>   
+        <label>Выберите производителя</label>
         <select id="idproducer" name="idproducer" class="form-control" onselect="LoadListUser()">
             @foreach (var ProducerItem in Model)
             {
@@ -36,6 +36,6 @@
     </div>
 
 @section scripts
-{   
-    <script src="~/Content/Chosen/js/GoToProducerInterface.js"></script>
+{
+	@Scripts.Render("~/Content/Chosen/js/GoToProducerInterface.js")
 }

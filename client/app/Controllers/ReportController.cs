@@ -19,33 +19,16 @@ namespace ProducerInterface.Controllers
 		private ReportHelper helper;
 		protected static readonly ILog logger = LogManager.GetLogger(typeof(ReportController));
 		protected NamesHelper h;
-		protected long userId;
-		protected long producerId;
-		protected bool isAdmin;
 
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
 
 			helper = new ReportHelper(DB);
-			if (CurrentUser == null)
-				filterContext.Result = Redirect("~");
-			else {
-				var adminGroupName = GetWebConfigParameters("AdminGroupName");
-				isAdmin = CurrentUser.AccountGroup.Any(x => x.Name == adminGroupName);
-				userId = CurrentUser.Id;
-				h = new NamesHelper(userId);
-				if (CurrentUser.AccountCompany.ProducerId.HasValue)
-				{
-					producerId = CurrentUser.AccountCompany.ProducerId.Value;
-					ViewBag.Producernames = DB.producernames.Single(x => x.ProducerId == producerId).ProducerName;
-				}
-				else
-				{
-					ErrorMessage("Доступ в раздел Отчеты закрыт, так как вы не представляете кого-либо из производителей");
-					filterContext.Result = Redirect("~");
-				}
-			}
+			h = new NamesHelper(CurrentUser.Id);
+			if (CurrentUser.IsProducer)
+				ViewBag.Producernames = DB.producernames.Single(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId)
+					.ProducerName;
 		}
 
 		public FileResult GetFile(Controller controller, string jobName)
@@ -68,7 +51,7 @@ namespace ProducerInterface.Controllers
 		{
 			if (!Id.HasValue)
 			{
-        ErrorMessage("Выберите тип отчета");
+				ErrorMessage("Выберите тип отчета");
 				return RedirectToAction("JobList", "Report");
 			}
 
@@ -76,7 +59,7 @@ namespace ProducerInterface.Controllers
 			var type = helper.GetModelType(Id.Value);
 			var model = (Report)Activator.CreateInstance(type);
 			model.Id = Id.Value;
-			model.ProducerId = producerId;
+			model.Init(CurrentUser);
 
 			// при GET - отправили её пользователю на заполнение
 			if (HttpContext.Request.HttpMethod == "GET")
@@ -99,7 +82,13 @@ namespace ProducerInterface.Controllers
 			}
 
 			var scheduler = helper.GetScheduler();
-			var key = new JobKey(Guid.NewGuid().ToString(), $"p{producerId}");
+
+			string group;
+			if (CurrentUser.IsProducer)
+				group = $"p{CurrentUser.AccountCompany.ProducerId}";
+			else
+				group = $"u{CurrentUser.Id}";
+			var key = new JobKey(Guid.NewGuid().ToString(), group);
 			var job = JobBuilder.Create<ReportJob>()
 					.WithIdentity(key)
 					.StoreDurably()
@@ -118,16 +107,11 @@ namespace ProducerInterface.Controllers
 			}
 
 			// иначе - успех
-			var jext = new jobextend()
+			var jext = new jobextend(CurrentUser)
 			{
-				CreationDate = DateTime.Now,
-				CreatorId = userId,
 				CustomName = model.CastomName,
-				Enable = true,
 				JobGroup = key.Group,
 				JobName = key.Name,
-				LastModified = DateTime.Now,
-				ProducerId = producerId,
 				ReportType = model.Id,
 				SchedName = scheduler.SchedulerName,
 				Scheduler = "Время формирования не задано"
@@ -155,7 +139,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 
-			if (jext.CreatorId != userId && !isAdmin)
+			if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin)
 			{
 				ErrorMessage("Вы можете удалять только свои отчеты");
 				return RedirectToAction("JobList", "Report");
@@ -246,7 +230,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 
-			if (jext.CreatorId != userId && !isAdmin)
+			if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin)
 			{
 				ErrorMessage("Вы можете редактировать только свои отчеты");
 				return RedirectToAction("JobList", "Report");
@@ -276,7 +260,7 @@ namespace ProducerInterface.Controllers
 			model = (Report)Activator.CreateInstance(type);
 
 			Bind(model, type);
-			model.ProducerId = producerId;
+			model.ProducerId = CurrentUser.AccountCompany.ProducerId;
 
 			foreach (var error in model.Validate())
 				ModelState.AddModelError(error.PropertyName, error.Message);
@@ -345,24 +329,28 @@ namespace ProducerInterface.Controllers
 		/// Выводит список заданий производителя
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult SearchResult(long? cid)
+		public ActionResult SearchResult()
 		{
 			var schedulerName = helper.GetSchedulerName();
-			// вытащили всех создателей, создававших отчеты этого производителя
-			var creatorIds = DB.jobextend
-				.Where(x => x.ProducerId == producerId && x.SchedName == schedulerName && x.Enable)
-				.Select(x => x.CreatorId)
-				.Distinct().ToList();
-			ViewData["creators"] = DB.Account.Where(x => creatorIds.Contains(x.Id)).
+			long[] userIds;
+			IQueryable<jobextendwithproducer> query;
+			if (CurrentUser.IsProducer) {
+				// вытащили всех создателей, создававших отчеты этого производителя
+				userIds = DB.jobextend
+					.Where(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId && x.SchedName == schedulerName && x.Enable)
+					.Select(x => x.CreatorId)
+					.Distinct().ToArray();
+				query = DB.jobextendwithproducer
+					.Where(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId);
+			} else {
+				userIds = new []{ CurrentUser.Id };
+				query = DB.jobextendwithproducer.Where(x => x.CreatorId == CurrentUser.Id);
+			}
+			ViewData["creators"] = DB.Account.Where(x => userIds.Contains(x.Id)).
 				Select(x => new SelectListItem() { Text = x.Name + "(" + x.Login + ")", Value = x.Id.ToString() }).ToList();
 
-			var query = DB.jobextendwithproducer.Where(x => x.ProducerId == producerId
-																												&& x.SchedName == schedulerName
-																												&& x.Enable);
-			if (cid.HasValue)
-				query = query.Where(x => x.CreatorId == cid);
-
-			var jobList = query.OrderByDescending(x => x.CreationDate).ToList();
+			var jobList = query.Where(x => x.SchedName == schedulerName && x.Enable)
+				.OrderByDescending(x => x.CreationDate).ToList();
 			return View(jobList);
 		}
 
@@ -414,7 +402,7 @@ namespace ProducerInterface.Controllers
 			// биндим
 			Bind(model, model.GetType());
 
-			model.UserId = userId;
+			model.UserId = CurrentUser.Id;
 			model.Ip = CurrentUser.IP;
 
 			foreach (var error in model.Validate())
@@ -486,7 +474,7 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("JobList", "Report");
 			}
 
-			if (jext.CreatorId != userId && !isAdmin)
+			if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin)
 			{
 				ErrorMessage("Вы можете редактировать только свои отчеты");
 				return RedirectToAction("JobList", "Report");
@@ -530,7 +518,7 @@ namespace ProducerInterface.Controllers
 			// биндим
 			Bind(model, model.GetType());
 
-			model.UserId = userId;
+			model.UserId = CurrentUser.Id;
 
 			foreach (var error in model.Validate())
 				ModelState.AddModelError(error.PropertyName, error.Message);

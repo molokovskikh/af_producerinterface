@@ -69,7 +69,7 @@ namespace ProducerInterfaceCommon.Models
 			var cparam = (ProductRatingReport)param;
 
 			// фильтрация по производителю, если не выбрана опция "По всему ассортименту"
-			if (cparam.Var != CatalogVar.AllAssortiment)
+			if (cparam.Var != CatalogVar.AllAssortment)
 				clist = clist.Where(x => x.ProducerId == cparam.ProducerId).ToList();
 			// сумма всего
 			var sm = clist.Sum(x => x.Summ ?? 0);

@@ -39,7 +39,7 @@ namespace ProducerInterface.Controllers
 			var model = new ProfileValidation() {
 				AppointmentId = thisUser.AppointmentId,
 				CompanyName = thisUser.AccountCompany.Name,
-				EmailDomain = thisUser.AccountCompany.CompanyDomainName.Single(x => x.Name == thisUser.Login.Split('@')[1]).Id,
+				EmailDomain = thisUser.AccountCompany.CompanyDomainName.FirstOrDefault(x => x.Name == thisUser.Login.Split('@')[1])?.Id,
 				Mailname = thisUser.Login.Split('@')[0],
 				PhoneNumber = thisUser.Phone,
 				LastName = thisUser.LastName,

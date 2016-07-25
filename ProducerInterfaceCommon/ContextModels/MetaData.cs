@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
 using System.Text;
 using ProducerInterfaceCommon.Heap;
@@ -85,6 +86,19 @@ namespace ProducerInterfaceCommon.ContextModels
 	[DisplayName("Отчет")]
 	public partial class jobextend
 	{
+		public jobextend()
+		{
+		}
+
+		public jobextend(Account user)
+		{
+			CreationDate = DateTime.Now;
+			CreatorId = user.Id;
+			LastModified = DateTime.Now;
+			ProducerId = user.AccountCompany.ProducerId;
+			Enable = true;
+		}
+
 		public Reports ReportTypeEnum
 		{
 			get { return (Reports)ReportType; }
@@ -163,6 +177,9 @@ namespace ProducerInterfaceCommon.ContextModels
 		public List<long> ListSelectedPermission { get; set; }
 
 		public bool IsPhoneSuspicios { get; set; }
+
+		public bool IsProducer => AccountCompany.ProducerId != null;
+		public bool IsAdmin => AccountGroup.Any(x => x.Name == "Администраторы");
 
 		public TypeUsers UserType
 		{

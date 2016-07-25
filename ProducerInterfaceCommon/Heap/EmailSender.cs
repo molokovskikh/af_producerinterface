@@ -97,7 +97,7 @@ namespace ProducerInterfaceCommon.Heap
 		private void MessageForReport(jobextend jext, List<string> mailTo, MailType type)
 		{
 			var creator = db.Account.Single(x => x.Id == jext.CreatorId);
-			var producerName = db.producernames.Single(x => x.ProducerId == jext.ProducerId).ProducerName;
+			var producerName = db.producernames.FirstOrDefault(x => x.ProducerId == jext.ProducerId)?.ProducerName;
 
 			var args = new {
 				ReportName = jext.CustomName,
