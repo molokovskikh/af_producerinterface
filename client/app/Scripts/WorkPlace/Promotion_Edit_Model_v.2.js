@@ -64,8 +64,9 @@ var Promotion = {
 	FileError: ko.observable(),
 	selectAllRegions: function () {
 		Promotion.RegionList.removeAll();
-		for (var region of Promotion.RegionGlobalList()) {
-			Promotion.RegionList.push(region.Value);
+		var items = Promotion.RegionGlobalList();
+		for (var i = 0; i < items.length; i++) {
+			Promotion.RegionList.push(items[i].Value);
 		}
 		DropdownReinit();
 	},
