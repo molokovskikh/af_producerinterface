@@ -4,16 +4,15 @@ using ProducerInterfaceCommon.Heap;
 using System.ComponentModel.DataAnnotations;
 using ProducerInterfaceCommon.ContextModels;
 using System.Linq;
+using Common.Tools;
+using MySql.Data.MySqlClient;
 
 namespace ProducerInterfaceCommon.Models
 {
 	[Serializable]
 	public class ProductPriceDynamicsReport : IntervalReport
 	{
-		public override string Name
-		{
-			get { return "Динамика цен и остатков по товару за период"; }
-		}
+		public override string Name => "Динамика цен и остатков по товару за период";
 
 		[Display(Name = "Регион")]
 		[Required(ErrorMessage = "Не указаны регионы")]
@@ -45,8 +44,11 @@ namespace ProducerInterfaceCommon.Models
 		{
 			AllCatalog = true;
 			VarCostOrQuantity = CostOrQuantity.WithCostAndQuantity;
+			CatalogIdEqual = new List<long>();
+			RegionCodeEqual = new List<decimal>();
+			SupplierIdEqual = new List<long>();
+			SupplierIdNonEqual = new List<long>();
 		}
-
 
 		public override List<string> GetHeaders(HeaderHelper h)
 		{
@@ -69,40 +71,48 @@ namespace ProducerInterfaceCommon.Models
 			return result;
 		}
 
-		public override string GetSpName()
+		public override MySqlCommand GetCmd(MySqlConnection connection)
 		{
-			return "ProductPriceDynamicsReport";
-		}
-
-		public override Dictionary<string, object> GetSpParams()
-		{
-			var spparams = new Dictionary<string, object>();
-
+			var filter = "";
+			var join = "";
 			if (AllCatalog)
 			{
-				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
+				if (ProducerId != null)
+					join = $"join Catalogs.Assortment a on a.CatalogId = p.CatalogId and a.ProducerId = {ProducerId}";
+			} else {
+				filter += $" and p.CatalogId in {CatalogIdEqual.Implode()}";
 			}
-			else
-			{
-				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
-			}
-			spparams.Add("@ProducerId", ProducerId);
-			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
+			if (ProducerId != null)
+				filter += $" and ProducerId = {ProducerId}";
+			var regionIds = GetRegions(connection, RegionCodeEqual);
 
-			if (SupplierIdEqual == null)
-				spparams.Add("@SupplierId", "select Id from Customers.Suppliers");
-			else
-				spparams.Add("@SupplierId", String.Join(",", SupplierIdEqual));
+			if (SupplierIdEqual.Count > 0)
+				filter += $" and SupplierId in ({SupplierIdEqual.Implode()})";
 
-			// чтоб правильно работала хп при отсутствии ограничений на поставщиков, заведомо несуществующий Id
-			if (SupplierIdNonEqual == null)
-				spparams.Add("@NotSupplierId", -1);
-			else
-				spparams.Add("@NotSupplierId", String.Join(",", SupplierIdNonEqual));
+			if (SupplierIdNonEqual.Count > 0)
+				filter += $" and SupplierId not in ({SupplierIdNonEqual.Implode()})";
 
-			spparams.Add("@DateFrom", DateFrom);
-			spparams.Add("@DateTo", DateTo);
-			return spparams;
+			var sql = $@"select cn.CatalogName, p.ProducerName, r.RegionName, s.SupplierName, TT.Date, TT.Cost, CAST(TT.Quantity as SIGNED INTEGER) as Quantity from
+	(select p.CatalogId, T.ProducerId, T.RegionId, T.SupplierId, T.Date, AVG(T.Cost) as Cost, SUM(Quantity) as Quantity from
+		(select ProductId, ProducerId, RegionId, SupplierId, Date, Cost, Quantity
+		from reports.AverageCosts a
+			join Catalogs.Products p on p.Id = a.ProductId
+			{join}
+		where Date >= @DateFrom
+		and Date < @DateTo
+		and RegionId in ({regionIds})
+		{filter}) as T
+	inner join catalogs.Products p on p.Id = T.ProductId
+	group by p.CatalogId, T.ProducerId, T.RegionId, T.SupplierId, T.Date) as TT
+left outer join producerinterface.regionnames r on r.RegionCode = TT.RegionId
+left outer join producerinterface.catalognames cn on cn.CatalogId = TT.CatalogId
+left outer join producerinterface.producernames p on p.ProducerId = TT.ProducerId
+left outer join producerinterface.suppliernames s on s.SupplierId = TT.SupplierId
+order by cn.CatalogName, p.ProducerName, r.RegionName, s.SupplierName, TT.Date";
+			var cmd = new MySqlCommand(sql, connection);
+			cmd.Parameters.AddWithValue("@DateFrom", DateFrom);
+			cmd.Parameters.AddWithValue("@DateTo", DateTo);
+			return cmd;
 		}
 
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)

@@ -16,21 +16,20 @@ namespace ProducerInterfaceCommon.Heap
 			var key = context.JobDetail.Key;
 
 			// jparam хранит параметры отчета, неспецифические к моменту запуска
-			var jparam = (Report)context.JobDetail.JobDataMap["param"];
+			var report = (Report)context.JobDetail.JobDataMap["param"];
 			// tparam хранит временнЫе параметы
-			var tparam = (TriggerParam)context.Trigger.JobDataMap["tparam"];
-			if (tparam is IInterval && jparam is IInterval) {
-				((IInterval)jparam).DateFrom = ((IInterval)tparam).DateFrom;
-				((IInterval)jparam).DateTo = ((IInterval)tparam).DateTo;
+			var interval = (TriggerParam)context.Trigger.JobDataMap["tparam"];
+			if (interval is IInterval && report is IInterval) {
+				((IInterval)report).DateFrom = ((IInterval)interval).DateFrom;
+				((IInterval)report).DateTo = ((IInterval)interval).DateTo;
 			}
 			else
-				((INotInterval)jparam).DateFrom = ((INotInterval)tparam).DateFrom;
+				((INotInterval)report).DateFrom = ((INotInterval)interval).DateFrom;
 
 			logger.Info($"Start running job {key.Group} {key.Name}");
 
 			try {
-				var processor = jparam.GetProcessor();
-				processor.Process(key, jparam, tparam);
+				report.Run(key, interval);
 			}
 			catch (Exception e) {
 				logger.Error($"Job {key.Group} {key.Name} run failed:" + e.Message, e);
@@ -47,10 +46,10 @@ namespace ProducerInterfaceCommon.Heap
 				db.SaveChanges();
 
 				var ip = "неизвестен (авт. запуск)";
-				if (tparam is RunNowParam)
-					ip = ((RunNowParam)tparam).Ip;
+				if (interval is RunNowParam)
+					ip = ((RunNowParam)interval).Ip;
 
-				var user = db.Account.First(x => x.Id == tparam.UserId);
+				var user = db.Account.First(x => x.Id == interval.UserId);
 				user.IP = ip;
 				var mail = new EmailSender(db, new Context(), user);
 

@@ -7,6 +7,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
+using Quartz;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -79,6 +80,12 @@ namespace ProducerInterfaceCommon.Models
 		public virtual void Init(Account currentUser)
 		{
 			ProducerId = currentUser.AccountCompany.ProducerId;
+		}
+
+		public void Run(JobKey key, TriggerParam interval)
+		{
+				var processor = GetProcessor();
+				processor.Process(key, this, interval);
 		}
 	}
 }

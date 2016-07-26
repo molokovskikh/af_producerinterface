@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Common.Tools;
 using MySql.Data.MySqlClient;
 using Dapper;
 
@@ -72,9 +73,7 @@ namespace ProducerInterfaceCommon.Models
 
 		public override MySqlCommand GetCmd(MySqlConnection connection)
 		{
-			var regionIds = String.Join(", ",RegionCodeEqual);
-			var children = connection.Query<ulong>($"select RegionCode from Farm.Regions where Parent in ({regionIds})").ToList();
-			regionIds = String.Join(", ", RegionCodeEqual.Select(x => Convert.ToUInt64(x)).Concat(children));
+			var regionIds = GetRegions(connection, RegionCodeEqual);
 
 			var join = "";
 			var filter = "";
@@ -83,9 +82,11 @@ namespace ProducerInterfaceCommon.Models
 			} else if(Var == CatalogVar.AllCatalog) {
 				join = $"join Catalogs.Assortment a on a.CatalogId = ri.CatalogId and a.ProducerId = {ProducerId}";
 			} else {
-				var catalogIds = String.Join(",", CatalogIdEqual);
-				filter = $"and ri.CatalogId in ({catalogIds})";
+				filter = $"and ri.CatalogId in ({CatalogIdEqual.Implode()})";
 			}
+			if (SupplierIdNonEqual.Count > 0)
+				filter += $" and ri.FirmCode not in ({SupplierIdNonEqual.Implode()})";
+
 			var sql = $@"select c.CatalogName, ri.ProducerId, p.ProducerName, r.RegionName,
 Sum(ri.Cost * ri.Quantity) as Summ,
 CAST(Sum(ri.Quantity) as SIGNED INTEGER) as PosOrder,
