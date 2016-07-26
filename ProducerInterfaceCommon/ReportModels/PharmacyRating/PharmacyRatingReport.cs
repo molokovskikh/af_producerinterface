@@ -3,16 +3,15 @@ using Quartz;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Common.Tools;
+using MySql.Data.MySqlClient;
 
 namespace ProducerInterfaceCommon.Models
 {
 	[Serializable]
 	public class PharmacyRatingReport : IntervalReport
 	{
-		public override string Name
-		{
-			get { return "Рейтинг аптек"; }
-		}
+		public override string Name => "Рейтинг аптек";
 
 		[Display(Name = "Регион")]
 		[Required(ErrorMessage = "Не указаны регионы")]
@@ -30,49 +29,59 @@ namespace ProducerInterfaceCommon.Models
 		public PharmacyRatingReport()
 		{
 			AllCatalog = true;
+			RegionCodeEqual = new List<decimal>();
 		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
 		{
-			var result = new List<string>();
-			result.Add(h.GetDateHeader(DateFrom, DateTo));
-			result.Add(h.GetRegionHeader(RegionCodeEqual));
-
-			// если выбрано По всем нашим товарам
-			if (AllCatalog)
-				result.Add("В отчет включены все товары производителя");
-			else
-				result.Add(h.GetProductHeader(CatalogIdEqual));
-			return result;
+			return new List<string> {
+				h.GetDateHeader(DateFrom, DateTo),
+				h.GetRegionHeader(RegionCodeEqual),
+				GetCatalogHeader(h, AllCatalog, CatalogIdEqual)
+			};
 		}
 
-		public override string GetSpName()
+		public override MySqlCommand GetCmd(MySqlConnection connection)
 		{
-			return "PharmacyRatingReport";
-		}
-
-		public override Dictionary<string, object> GetSpParams()
-		{
-			var spparams = new Dictionary<string, object>();
+			var filter = "";
+			var join = "";
 			if (AllCatalog) {
-				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
+				if (ProducerId != null)
+					join = $"join Catalogs.Assortment a on a.CatalogId = i.CatalogId and a.ProducerId = {ProducerId}";
+			} else {
+				filter += $" and CatalogId in {CatalogIdEqual.Implode()}";
 			}
-			else {
-				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
-			}
-			spparams.Add("@ProducerId", ProducerId);
-			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
-			spparams.Add("@DateFrom", DateFrom);
-			spparams.Add("@DateTo", DateTo);
-			return spparams;
+			if (ProducerId != null)
+				filter += $" and ProducerId = {ProducerId}";
+			var regionIds = GetRegions(connection, RegionCodeEqual);
+
+			var sql = $@"select ph.PharmacyName, r.RegionName, T.Summ
+from
+	(select PharmacyId, RegionCode,
+	Sum(Cost*Quantity) as Summ
+	from producerinterface.RatingReportOrderItems i
+		{join}
+	where IsLocal = 0
+	and RegionCode in ({regionIds})
+	{filter}
+	and WriteTime > @DateFrom
+	and WriteTime < @DateTo
+	group by PharmacyId, RegionCode
+	order by Summ desc) as T
+left join producerinterface.PharmacyNames ph on ph.PharmacyId = T.PharmacyId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode";
+			var cmd = new MySqlCommand(sql, connection);
+			cmd.Parameters.AddWithValue("@DateFrom", DateFrom);
+			cmd.Parameters.AddWithValue("@DateTo", DateTo);
+			return cmd;
 		}
 
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
 		{
-			var viewDataValues = new Dictionary<string, object>();
-			viewDataValues.Add("RegionCodeEqual", h.GetRegionList(Id));
-			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
-			return viewDataValues;
+			return new Dictionary<string, object> {
+				{"RegionCodeEqual", h.GetRegionList(Id)},
+				{"CatalogIdEqual", h.GetCatalogList()}
+			};
 		}
 
 		public override List<ErrorMessage> Validate()

@@ -55,17 +55,12 @@ namespace ProducerInterfaceCommon.Models
 			var result = new List<string>();
 			result.Add(h.GetDateHeader(DateFrom, DateTo));
 			result.Add(h.GetRegionHeader(RegionCodeEqual));
+			result.Add(GetCatalogHeader(h, AllCatalog, CatalogIdEqual));
 
-			// если выбрано По всем нашим товарам
-			if (AllCatalog)
-				result.Add("В отчет включены все товары производителя");
-			else
-				result.Add(h.GetProductHeader(CatalogIdEqual));
-
-			if (SupplierIdEqual != null)
+			if (SupplierIdEqual.Count > 0)
 				result.Add(h.GetSupplierHeader(SupplierIdEqual));
 
-			if (SupplierIdNonEqual != null)
+			if (SupplierIdNonEqual.Count > 0)
 				result.Add(h.GetNotSupplierHeader(SupplierIdNonEqual));
 
 			return result;
@@ -75,8 +70,7 @@ namespace ProducerInterfaceCommon.Models
 		{
 			var filter = "";
 			var join = "";
-			if (AllCatalog)
-			{
+			if (AllCatalog) {
 				if (ProducerId != null)
 					join = $"join Catalogs.Assortment a on a.CatalogId = p.CatalogId and a.ProducerId = {ProducerId}";
 			} else {

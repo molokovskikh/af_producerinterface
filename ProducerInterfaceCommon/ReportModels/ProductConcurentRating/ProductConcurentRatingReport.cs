@@ -23,10 +23,7 @@ namespace ProducerInterfaceCommon.Models
 		[UIHint("LongList")]
 		public List<long> CatalogIdEqual2 { get; set; }
 
-		public override string Name
-		{
-			get { return "Рейтинг товаров в конкурентной группе"; }
-		}
+		public override string Name => "Рейтинг товаров в конкурентной группе";
 
 		public override List<string> GetHeaders(HeaderHelper h)
 		{

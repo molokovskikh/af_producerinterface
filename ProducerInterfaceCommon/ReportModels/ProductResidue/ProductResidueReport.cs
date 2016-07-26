@@ -10,10 +10,7 @@ namespace ProducerInterfaceCommon.Models
 	[Serializable]
 	public class ProductResidueReport : NotIntervalReport
 	{
-		public override string Name
-		{
-			get { return "Мониторинг остатков у дистрибьюторов"; }
-		}
+		public override string Name => "Мониторинг остатков у дистрибьюторов";
 
 		[Display(Name = "Регион")]
 		[Required(ErrorMessage = "Не указаны регионы")]

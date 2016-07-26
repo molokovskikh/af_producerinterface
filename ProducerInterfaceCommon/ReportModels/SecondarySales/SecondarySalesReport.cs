@@ -3,16 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Common.Tools;
+using MySql.Data.MySqlClient;
 
 namespace ProducerInterfaceCommon.Models
 {
 	[Serializable]
 	public class SecondarySalesReport : IntervalReport
 	{
-		public override string Name
-		{
-			get { return "Продажи вторичных дистрибьюторов"; }
-		}
+		public override string Name => "Продажи вторичных дистрибьюторов";
 
 		[Display(Name = "Регион")]
 		[Required(ErrorMessage = "Не указаны регионы")]
@@ -30,55 +29,71 @@ namespace ProducerInterfaceCommon.Models
 		public SecondarySalesReport()
 		{
 			AllCatalog = true;
+			RegionCodeEqual = new List<decimal>();
 		}
 
 		public override List<string> GetHeaders(HeaderHelper h)
 		{
-			var result = new List<string>();
-			result.Add(h.GetDateHeader(DateFrom, DateTo));
-			result.Add(h.GetRegionHeader(RegionCodeEqual));
-
-			// если выбрано По всем нашим товарам
-			if (AllCatalog)
-				result.Add("В отчет включены все товары производителя");
-			else
-				result.Add(h.GetProductHeader(CatalogIdEqual));
-
+			var result = new List<string> {
+				h.GetDateHeader(DateFrom, DateTo),
+				h.GetRegionHeader(RegionCodeEqual),
+				GetCatalogHeader(h, AllCatalog, CatalogIdEqual)
+			};
 			return result;
 		}
 
-		public override string GetSpName()
+		public override MySqlCommand GetCmd(MySqlConnection connection)
 		{
-			return "SecondarySalesReport";
+			var filter = "";
+			var join = "";
+			if (AllCatalog) {
+				if (ProducerId != null)
+					join = $"join Catalogs.Assortment a on a.CatalogId = CatalogId and a.ProducerId = {ProducerId}";
+			} else {
+				filter += $" and CatalogId in {CatalogIdEqual.Implode()}";
+			}
+			if (ProducerId != null)
+				filter += $" and ProducerId = {ProducerId}";
+			var regionIds = GetRegions(connection, RegionCodeEqual);
+
+			var sql = $@"select c.CatalogName, p.ProducerName, r.RegionName, s.SupplierName,
+T.Summ, CAST(T.PosOrder as SIGNED INTEGER) as PosOrder,
+T.DistinctOrderId, T.DistinctAddressId
+from
+	(select CatalogId, ProducerId, RegionCode, SupplierId,
+	Sum(Cost*Quantity) as Summ,
+	Sum(Quantity) as PosOrder,
+	Count(distinct OrderId) as DistinctOrderId,
+	Count(distinct AddressId) as DistinctAddressId
+	from producerinterface.RatingReportOrderItems
+		{join}
+	where RegionCode in ({regionIds})
+	and SupplierId in
+		(select Id
+		from Customers.Suppliers
+		where IsVirtual = 0 and IsFederal = 0 and RegionMask & @RegionMask)
+	and WriteTime > @DateFrom
+	and WriteTime < @DateTo
+	{filter}
+	group by CatalogId,ProducerId,RegionCode,SupplierId) as T
+left join producerinterface.CatalogNames c on c.CatalogId = T.CatalogId
+left join producerinterface.ProducerNames p on p.ProducerId = T.ProducerId
+left join producerinterface.RegionNames r on r.RegionCode = T.RegionCode
+left join producerinterface.SupplierNames s on s.SupplierId = T.SupplierId
+order by c.CatalogName asc, T.PosOrder desc";
+			var cmd = new MySqlCommand(sql, connection);
+			cmd.Parameters.AddWithValue("@DateFrom", DateFrom);
+			cmd.Parameters.AddWithValue("@DateTo", DateTo);
+			cmd.Parameters.AddWithValue("RegionMask", RegionCodeEqual.Select(x => (ulong)x).Aggregate((y, z) => y | z));
+			return cmd;
 		}
-
-		public override Dictionary<string, object> GetSpParams()
-		{
-			var spparams = new Dictionary<string, object>();
-			if(AllCatalog) {
-				spparams.Add("@CatalogId", $"select CatalogId from Catalogs.assortment where ProducerId = {ProducerId}");
-			}
-			else {
-				spparams.Add("@CatalogId", String.Join(",", CatalogIdEqual));
-			}
-
-			spparams.Add("@RegionCode", String.Join(",", RegionCodeEqual));
-			spparams.Add("@RegionMask", RegionCodeEqual.Select(x => (ulong)x).Aggregate((y, z) => y | z));
-			spparams.Add("@ProducerId", ProducerId);
-			spparams.Add("@DateFrom", DateFrom);
-			spparams.Add("@DateTo", DateTo);
-			return spparams;
-
-    }
 
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
 		{
-			var viewDataValues = new Dictionary<string, object>();
-
-			viewDataValues.Add("RegionCodeEqual", h.GetRegionList(Id));
-			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
-
-			return viewDataValues;
+			return new Dictionary<string, object> {
+				{"RegionCodeEqual", h.GetRegionList(Id)},
+				{"CatalogIdEqual", h.GetCatalogList()}
+			};
 		}
 
 		public override List<ErrorMessage> Validate()
