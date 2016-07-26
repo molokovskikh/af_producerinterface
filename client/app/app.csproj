@@ -244,7 +244,6 @@
     <Content Include="Content\Chosen\js\initRunNow.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
     <Content Include="Content\Chosen\js\InitPermission.js" />
-    <Content Include="Content\Chosen\js\InitPromotion.js" />
     <Content Include="Content\Chosen\js\InitRegistrationChosen.js" />
     <Content Include="Content\Chosen\js\jqCron.js" />
     <Content Include="Content\Chosen\js\jqCron.ru.js" />
@@ -372,7 +371,7 @@
     <Content Include="Views\Report\EditorTemplates\String.cshtml" />
     <Content Include="Views\Report\EditorTemplates\StringList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\SupplierRatingReport.cshtml" />
-    <Content Include="Views\Report\JobList.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Report\RunNow.cshtml" />
     <Content Include="Views\Report\ScheduleJob.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\LongList.cshtml" />
@@ -471,6 +470,7 @@
     <Content Include="Views\Report\SearchResult.cshtml" />
     <Content Include="Views\Drug\History.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Bool.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Products.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

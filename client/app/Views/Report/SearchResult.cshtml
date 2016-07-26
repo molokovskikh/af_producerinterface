@@ -31,16 +31,16 @@
                     </th>
                     <th style="min-width:25em;">
                         @Html.DisplayNameFor(model => model.Creator)
-                        @using (Html.BeginForm("JobList", "Report", FormMethod.Get))
+                        @using (Html.BeginForm("Index", "Report", FormMethod.Get))
                         {
                             <div class="row">
                                 <div class="col-xs-9">
                                     @Html.DropDownList("cid", listCreator, new { @class = "form-control" })
                                 </div>
                                 <div class="col-xs-3">
-                                    <button type="submit" class="btn btn-primary pull-left" title="применить фильтр"><span class="glyphicon glyphicon-ok-sign"></span></button>                            
+                                    <button type="submit" class="btn btn-primary pull-left" title="применить фильтр"><span class="glyphicon glyphicon-ok-sign"></span></button>
                                 </div>
-                            </div>                         
+                            </div>
                         }
                     </th>
                     <th>

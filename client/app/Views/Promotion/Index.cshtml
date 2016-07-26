@@ -2,13 +2,14 @@
 @model IEnumerable<PromotionUi>
 @{
     ViewBag.Title = "Акции";
-    Layout = "~/Views/Shared/_Layout.cshtml";   
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container body-content">
 
     <div class="content panel-body">
-        <h3 class="title">@ViewBag.Title<a href="@Url.Action("Edit")" class="btn btn-primary pull-right">Добавить акцию</a>
-        </h3> 
+        <h3 class="title">@ViewBag.Title
+					<a href="@Url.Action("Edit")" class="btn btn-primary pull-right">Добавить акцию</a>
+        </h3>
     </div>
 
     <hr />

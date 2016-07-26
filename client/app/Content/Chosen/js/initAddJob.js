@@ -59,7 +59,7 @@
 	    }
 	});
 
-    // https://github.com/meltingice/ajax-chosen
+	// https://github.com/meltingice/ajax-chosen
 	var caturl = $('#caturl').val();
 	$('#CatalogIdEqual2').ajaxChosen({
 	    type: 'GET',
@@ -73,6 +73,19 @@
     { width: '95%', placeholder_text_multiple: 'Введите два или больше символов для поиска' }
   );
 
+	$("select.ajax-chosen").each(function () {
+		$(this).ajaxChosen({
+			type: 'GET',
+			url: $(this).data("ajax-url"),
+			dataType: 'json',
+			minTermLength: 2,
+			afterTypeDelay: 300,
+			keepTypingMsg: "Введите два или больше символов для поиска",
+			lookingForMsg: "Поиск"
+		}, null,
+			{ width: '95%', placeholder_text_multiple: 'Введите два или больше символов для поиска' }
+		)
+	});
 });
 
 function AppendToChosen(el, data) {

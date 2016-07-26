@@ -20,7 +20,7 @@ namespace ProducerInterfaceCommon.Models
 		public List<decimal> RegionCodeEqual { get; set; }
 
 		[Display(Name = "Товар")]
-		[UIHint("LongList")]
+		[UIHint("Products")]
 		public List<long> CatalogIdEqual { get; set; }
 
 		[Display(Name = "По всем нашим товарам")]

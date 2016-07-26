@@ -2,6 +2,13 @@
 
 <div class="container body-content">
 	<div class="row">
+		<ol class="breadcrumb">
+			<li>@Html.ActionLink("Отчеты", "Index") </li>
+			<li class="active">Расписание отчета</li>
+		</ol>
+	</div>
+
+	<div class="row">
 		<div class="col-md-12">
 			@using (Html.BeginForm()) {
 				<fieldset>
@@ -9,9 +16,6 @@
 					@Html.ValidationSummary(true)
 					@Html.EditorForModel()
 					<div class="row margin5">
-						<div class="flabel col-md-4">
-							@Html.ActionLink("Отменить", "JobList", new {r = Guid.NewGuid()}, new {@class = "btn btn-primary"})
-						</div>
 						<div class="feditor col-md-8">
 							<input id="btn" class="btn btn-primary" type="submit" value="Применить"/>
 						</div>

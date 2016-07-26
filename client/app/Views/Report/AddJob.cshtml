@@ -1,37 +1,33 @@
 ﻿@model ProducerInterfaceCommon.Models.Report
-@{
-    ViewBag.Title = "Home Page";
-}
 
 <div class="container body-content">
-    <div class="row">
-        <div class="col-md-12">
-            @using (Html.BeginForm()) {
-                <fieldset>
-                    <legend>@Model.Name</legend>
-                    @Html.ValidationSummary(true)
-                    @Html.EditorFor(m => m.CastomName)
-                    @Html.EditorForModel()
-                    @Html.EditorFor(m => m.Id)
-                    <div class="row margin5">
-                        <div class="flabel col-md-4">&nbsp;</div>
-                        <div class="feditor col-md-8">
-                            <input id="btn" type="submit" value="Сохранить" class="btn btn-primary"/>
-                        </div>
-                    </div>
-                    @Html.Hidden("supurl", Url.Action("GetSupplierJson", "Report"))
-                    @Html.Hidden("caturl", Url.Action("GetCatalogAllList", "Ajax", new { p = Model.ProducerId }))
-                </fieldset>
-            }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @Html.ActionLink("Отменить", "JobList", new { r = Guid.NewGuid() }, new { @class = "btn btn-primary" })
-        </div>
-    </div>
+	<ol class="breadcrumb">
+		<li>@Html.ActionLink("Отчеты", "Index") </li>
+		<li class="active">Новый отчет</li>
+	</ol>
+	<div class="row">
+		<div class="col-md-12">
+			@using (Html.BeginForm()) {
+				<fieldset>
+					<legend>@Model.Name</legend>
+					@Html.ValidationSummary(true)
+					@Html.EditorFor(m => m.CastomName)
+					@Html.EditorForModel()
+					@Html.EditorFor(m => m.Id)
+					<div class="row margin5">
+						<div class="flabel col-md-4">&nbsp;</div>
+						<div class="feditor col-md-8">
+							<input id="btn" type="submit" value="Сохранить" class="btn btn-primary"/>
+						</div>
+					</div>
+					@Html.Hidden("supurl", Url.Action("GetSupplierJson", "Report"))
+					@Html.Hidden("caturl", Url.Action("GetConcurrentProducts", "Ajax"))
+				</fieldset>
+			}
+		</div>
+	</div>
 </div>
-        @section JavaScript {
-            <script src="~/Content/Chosen/js/ajax-chosen.g.js"></script>
-            <script src="~/Content/Chosen/js/initAddJob.js"></script>
-        }
+@section JavaScript {
+	@Scripts.Render("~/Content/Chosen/js/ajax-chosen.g.js")
+	@Scripts.Render("~/Content/Chosen/js/initAddJob.js")
+}

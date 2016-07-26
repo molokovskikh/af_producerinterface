@@ -2,69 +2,65 @@
 @model IEnumerable<reportrunlogwithuser>
 
 @{
-    var title = ViewData["repName"];
-    ViewBag.Title = title;
+	var title = ViewData["repName"];
+	ViewBag.Title = title;
 }
 
 <div class="body-content">
+	<div class="row">
+		<ol class="breadcrumb">
+			<li>@Html.ActionLink("Отчеты", "Index") </li>
+			<li class="active">История запусков</li>
+		</ol>
+	</div>
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <h4>@title</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-striped table-bordered">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.RunStartTime)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UserName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Ip)
-                        </th>
-                    </tr>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                <p>@item.RunStartTime.ToString("dd.MM.yyyy HH:mm:ss")</p>                            
-                            </td>
-                            <td>
-                                @if (item.RunNow) {
-                                    @Html.DisplayFor(modelItem => item.UserName)
-                                }
-                                else {
-                                    <span>Автоматически</span>
-                                }
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Ip)
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </div>
-        </div>
-    }
-    else {
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Истории запусков отчета не найдено</h4>
-            </div>
-        </div>
-    }
-
-    <div class="row">
-        <div class="col-md-12">
-            @Html.ActionLink("К списку отчетов", "JobList")
-        </div>
-    </div>
+	@if (Model != null && Model.Any()) {
+		<div class="row">
+			<div class="col-md-12">
+				<h4>@title</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-striped table-bordered">
+					<tr>
+						<th>
+							@Html.DisplayNameFor(model => model.RunStartTime)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.UserName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.Ip)
+						</th>
+					</tr>
+					@foreach (var item in Model) {
+						<tr>
+							<td>
+								<p>@item.RunStartTime</p>
+							</td>
+							<td>
+								@if (item.RunNow) {
+									@Html.DisplayFor(modelItem => item.UserName)
+								} else {
+									<span>Автоматически</span>
+								}
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.Ip)
+							</td>
+						</tr>
+					}
+				</table>
+			</div>
+		</div>
+	} else {
+		<div class="row">
+			<div class="col-md-12">
+				<h4>Истории запусков отчета не найдено</h4>
+			</div>
+		</div>
+	}
 </div>
 
 

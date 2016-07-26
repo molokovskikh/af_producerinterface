@@ -64,7 +64,7 @@ namespace ProducerInterfaceCommon.Controllers
 
 		public string GetWebConfigParameters(string key)
 		{
-			return System.Configuration.ConfigurationManager.AppSettings[key];
+			return ConfigurationManager.AppSettings[key];
 		}
 
 		/// <summary>
@@ -75,8 +75,7 @@ namespace ProducerInterfaceCommon.Controllers
 		{
 			// список игнорируемых маршрутов CSV. Сейчас Home_Index,FeedBack_*,Account_*
 			var ignoreRoute = GetWebConfigParameters("IgnoreRoute").ToLower().Split(',').ToList();
-			var result = ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
-			return result;
+			return ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
 		}
 
 		public string GetRandomPassword()

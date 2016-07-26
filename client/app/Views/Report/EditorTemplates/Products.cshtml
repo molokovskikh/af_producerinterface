@@ -1,0 +1,33 @@
+﻿@using System.Resources
+@using ProducerInterfaceCommon.ContextModels
+@model List<long>
+@{
+	// имя свойства
+	var propName = ViewData.ModelMetadata.PropertyName;
+	// лист всех вариантов для построения селекта
+	var propList = (List<OptionElement>) ViewData[propName];
+	// класс для ошибки валидации, если есть
+	var errorClass = "";
+	var state = ViewData.ModelState[propName];
+	if (state != null && state.Errors.Count > 0) {
+		errorClass = " input-validation-error";
+	}
+	var inputClass = "";
+	var ajaxUrl = "";
+	if (!ViewBag.CurrentUser.IsProducer) {
+		inputClass = "ajax-chosen";
+		ajaxUrl = Url.Action("GetProducts", "Ajax");
+	}
+}
+<div class="row margin5">
+	<div class="form-group form-group-otstup">
+		<div class="flabel col-md-4">
+			@Html.LabelFor(m => m)
+		</div>
+		<div class="@("feditor col-md-8" + errorClass)">
+			@Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new { @class = inputClass, data_ajax_url = ajaxUrl, style = "display: none;"})
+			<span class="chosen-comment">Для удаления из выбранных кликните по знаку "X" элемента. Для множественного выбора держите нажатой клавишу CTRL</span>
+			@Html.ValidationMessageFor(m => m)
+		</div>
+	</div>
+</div>

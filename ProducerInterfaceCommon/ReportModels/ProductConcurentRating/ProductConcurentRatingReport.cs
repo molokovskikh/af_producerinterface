@@ -15,7 +15,7 @@ namespace ProducerInterfaceCommon.Models
 
 		[Display(Name = "Выберите собственные товары")]
 		[Required(ErrorMessage = "Не выбраны товары")]
-		[UIHint("LongList")]
+		[UIHint("Products")]
 		public List<long> CatalogIdEqual { get; set; }
 
 		[Display(Name = "Выберите товары, конкурирующие с вашими (не более 50)")]

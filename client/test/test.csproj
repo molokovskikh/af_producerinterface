@@ -137,7 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseFixture.cs" />
-    <Compile Include="Controller\ReportControllerTest.cs" />
     <Compile Include="ModelFixture.cs" />
     <Compile Include="NonProducer.cs" />
     <Compile Include="PromotionFixture.cs" />

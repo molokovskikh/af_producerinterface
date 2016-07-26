@@ -14,15 +14,10 @@ namespace ProducerInterface
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "ReportController",
-                url: "Report/{action}/{id}",
-                defaults: new { controller = "Report", action = "JobList", id = UrlParameter.Optional }
-            );
-            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );   
+            );
         }
     }
 }

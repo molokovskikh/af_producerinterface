@@ -52,7 +52,7 @@ namespace ProducerInterface.Controllers
 			if (!Id.HasValue)
 			{
 				ErrorMessage("Выберите тип отчета");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			// получили пустую модель нужного типа
@@ -103,7 +103,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error("Ошибка при добавлении отчета", e);
 				ErrorMessage("Непредвиденная ошибка при добавлении отчета");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			// иначе - успех
@@ -120,7 +120,7 @@ namespace ProducerInterface.Controllers
 			DB.jobextend.Add(jext);
 			DB.SaveChanges(CurrentUser, "Добавление отчета");
 			SuccessMessage("Отчет успешно добавлен");
-			return RedirectToAction("JobList", "Report");
+			return RedirectToAction("Index", "Report");
 		}
 
 		/// <summary>
@@ -136,13 +136,13 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin)
 			{
 				ErrorMessage("Вы можете удалять только свои отчеты");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var key = new JobKey(jobName, jobGroup);
@@ -152,7 +152,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Отчет {jobName} не найден");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			try
@@ -163,12 +163,12 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Ошибка при удалении отчета {jobName}", e);
 				ErrorMessage("Непредвиденная ошибка при удалении отчета");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 			jext.Enable = false;
 			DB.SaveChanges(CurrentUser, "Удаление отчета");
 			SuccessMessage("Отчет удален");
-			return RedirectToAction("JobList", "Report");
+			return RedirectToAction("Index", "Report");
 
 		}
 
@@ -187,7 +187,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Отчет {jobName} не найден");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var jext = GetJobExtend(jobName);
@@ -195,7 +195,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			try
@@ -206,12 +206,12 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Ошибка при восстановлении отчета {key.Name}", e);
 				ErrorMessage("Непредвиденная ошибка при восстановлении отчета");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 			jext.Enable = true;
 			DB.SaveChanges(CurrentUser, "Восстановление отчета");
 			SuccessMessage("Отчет восстановлен");
-			return RedirectToAction("JobList", "Report");
+			return RedirectToAction("Index", "Report");
 		}
 
 		/// <summary>
@@ -227,13 +227,13 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin)
 			{
 				ErrorMessage("Вы можете редактировать только свои отчеты");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var scheduler = helper.GetScheduler();
@@ -243,7 +243,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Отчет {jobName} не найден");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var model = (Report)job.JobDataMap["param"];
@@ -288,7 +288,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Ошибка при изменении отчета {key.Name}", e);
 				ErrorMessage("Непредвиденная ошибка при изменении отчета");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			// вносим изменения в расширенные параметры
@@ -296,18 +296,18 @@ namespace ProducerInterface.Controllers
 			jext.CustomName = model.CastomName;
 			DB.SaveChanges(CurrentUser, "Редактирование отчета");
 			SuccessMessage("Отчет успешно изменен");
-			return RedirectToAction("JobList", "Report");
+			return RedirectToAction("Index", "Report");
 		}
 
 		[HttpGet]
-		public ActionResult JobList(long? cid)
+		public ActionResult Index(long? cid)
 		{
 			ViewData["descr"] = AvailableReports();
 			return View(cid);
 		}
 
 		[HttpPost]
-		public ActionResult JobList(int? id)
+		public ActionResult Index(int? id)
 		{
 			if (id.HasValue)
 				return RedirectToAction("AddJob", "Report", new { id = id.Value });
@@ -329,7 +329,7 @@ namespace ProducerInterface.Controllers
 		/// Выводит список заданий производителя
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult SearchResult()
+		public ActionResult SearchResult(long? cid)
 		{
 			var schedulerName = helper.GetSchedulerName();
 			long[] userIds;
@@ -349,6 +349,8 @@ namespace ProducerInterface.Controllers
 			ViewData["creators"] = DB.Account.Where(x => userIds.Contains(x.Id)).
 				Select(x => new SelectListItem() { Text = x.Name + "(" + x.Login + ")", Value = x.Id.ToString() }).ToList();
 
+			if (cid != null)
+					query = query.Where(x => x.CreatorId == cid.Value);
 			var jobList = query.Where(x => x.SchedName == schedulerName && x.Enable)
 				.OrderByDescending(x => x.CreationDate).ToList();
 			return View(jobList);
@@ -370,7 +372,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Отчет {jobName} не найден");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var jext = GetJobExtend(jobName);
@@ -378,7 +380,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var param = (Report)job.JobDataMap["param"];
@@ -429,7 +431,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Непредвиденная ошибка при запуске отчета {key.Name}", e);
 				ErrorMessage("Непредвиденная ошибка при запуске отчета");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			// отправили статус, что отчет готовится
@@ -442,7 +444,7 @@ namespace ProducerInterface.Controllers
 				message = message + " и будет отправлен на указанные email";
 
 			SuccessMessage(message);
-			return RedirectToAction("JobList", "Report");
+			return RedirectToAction("Index", "Report");
 		}
 
 
@@ -471,13 +473,13 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin)
 			{
 				ErrorMessage("Вы можете редактировать только свои отчеты");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			// нашли задачу
@@ -488,7 +490,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Отчет {jobName} не найден");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var param = (Report)job.JobDataMap["param"];
@@ -550,7 +552,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Ошибка при установке расписания отчета {key.Name}", e);
 				ErrorMessage("Непредвиденная ошибка при установке расписания");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var nextFireTimeUtc = trigger.GetNextFireTimeUtc();
@@ -562,7 +564,7 @@ namespace ProducerInterface.Controllers
 			jext.Scheduler = model.CronHumanText;
 			DB.SaveChanges(CurrentUser, "Установка времени формирования отчета");
 			SuccessMessage($"Время формирования отчета успешно установлено{nextGen}");
-			return RedirectToAction("JobList", "Report");
+			return RedirectToAction("Index", "Report");
 		}
 
 		[HttpGet]
@@ -574,7 +576,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Отчет {jobName} не найден");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var jext = GetJobExtend(jobName);
@@ -582,7 +584,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			ViewBag.Title = jext.CustomName;
@@ -629,7 +631,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"XML отчета {model.jobName} не найден");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			var jext = GetJobExtend(model.jobName);
@@ -637,7 +639,7 @@ namespace ProducerInterface.Controllers
 			{
 				logger.Error($"Дополнительные параметры отчета {model.jobName} не найдены");
 				ErrorMessage("Отчет не найден");
-				return RedirectToAction("JobList", "Report");
+				return RedirectToAction("Index", "Report");
 			}
 
 			// вытащили заголовок отчета
