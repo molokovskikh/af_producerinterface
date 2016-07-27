@@ -34,7 +34,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
         public DbSet<AccountGroup> AccountGroup { get; set; }
         public DbSet<AccountPermission> AccountPermission { get; set; }
-        public DbSet<jobextendwithproducer> jobextendwithproducer { get; set; }
         public DbSet<jobextend> jobextend { get; set; }
         public DbSet<ReportDescription> ReportDescription { get; set; }
         public DbSet<supplierregions> supplierregions { get; set; }

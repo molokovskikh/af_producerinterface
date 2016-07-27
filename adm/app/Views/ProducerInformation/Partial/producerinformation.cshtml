@@ -5,7 +5,7 @@
     var ListProducer = ViewBag.ListProducer as IEnumerable<OptionElement>;
     var ListPromotion = ViewBag.PromotionList as IEnumerable<Promotion>;
     var ListDrugNames = ViewBag.DrugList as IEnumerable<OptionElement>;
-    var ListReport = ViewBag.ReportList as IEnumerable<jobextendwithproducer>;
+    var ListReport = ViewBag.ReportList as IEnumerable<Job>;
 }
 
 <hr />
@@ -134,7 +134,7 @@
 									{
 										<tr>
 											<td>@ItemReport.CustomName</td>
-											<td>@ItemReport.Creator</td>
+											<td>@ItemReport.Owner.Name</td>
 											<td>@ItemReport.LastModified</td>
 											<td>@ItemReport.LastRun</td>
 										</tr>

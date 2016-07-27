@@ -7,11 +7,13 @@ using System.Configuration;
 using System.Web;
 using System.Web.Caching;
 using log4net;
+using NHibernate;
 
 namespace ProducerInterfaceCommon.Controllers
 {
 	public class BaseController : Controller
 	{
+		protected ISession DbSession => HttpContext.Items[typeof(ISession)] as ISession;
 		protected producerinterface_Entities DB = new producerinterface_Entities();
 		protected Context DB2 = new Context();
 		protected string controllerName;

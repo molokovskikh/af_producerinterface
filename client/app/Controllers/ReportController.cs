@@ -9,6 +9,7 @@ using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Models;
 using System.Data;
 using System.IO;
+using NHibernate.Linq;
 using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.Helpers;
 
@@ -335,27 +336,27 @@ namespace ProducerInterface.Controllers
 		{
 			var schedulerName = helper.GetSchedulerName();
 			long[] userIds;
-			IQueryable<jobextendwithproducer> query;
+			IQueryable<Job> query;
 			if (CurrentUser.IsProducer) {
 				// вытащили всех создателей, создававших отчеты этого производителя
 				userIds = DB.jobextend
 					.Where(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId && x.SchedName == schedulerName && x.Enable)
 					.Select(x => x.CreatorId)
 					.Distinct().ToArray();
-				query = DB.jobextendwithproducer
-					.Where(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId);
+				query = DbSession.Query<Job>().Fetch(x => x.Owner).Fetch(x => x.Producer)
+					.Where(x => x.Producer.Id == CurrentUser.AccountCompany.ProducerId);
 			} else {
 				userIds = new []{ CurrentUser.Id };
-				query = DB.jobextendwithproducer.Where(x => x.CreatorId == CurrentUser.Id);
+				query = DbSession.Query<Job>().Where(x => x.Owner.Id == CurrentUser.Id);
 			}
 			ViewData["creators"] = DB.Account.Where(x => userIds.Contains(x.Id)).
 				Select(x => new SelectListItem() { Text = x.Name + "(" + x.Login + ")", Value = x.Id.ToString() }).ToList();
 
 			if (cid != null)
-					query = query.Where(x => x.CreatorId == cid.Value);
-			var jobList = query.Where(x => x.SchedName == schedulerName && x.Enable)
+					query = query.Where(x => x.Owner.Id == cid.Value);
+			var items = query.Where(x => x.SchedName == schedulerName && x.Enable)
 				.OrderByDescending(x => x.CreationDate).ToList();
-			return View(jobList);
+			return View(items);
 		}
 
 		/// <summary>

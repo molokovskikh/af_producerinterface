@@ -1,5 +1,5 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
-@model IEnumerable<jobextendwithproducer>
+@model IEnumerable<Job>
 
 @{
   Layout = null;
@@ -20,9 +20,7 @@
         <th>Запуск</th>
         <th>История запусков</th>
         <th colspan="2">Посл.отчет</th>
-      
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
@@ -33,13 +31,13 @@
                 @Html.DisplayFor(modelItem => item.Enable)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReportTypeEnum)
+                @Html.DisplayFor(modelItem => item.ReportType)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Scheduler)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProducerName)
+                @Html.DisplayFor(modelItem => item.Producer.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreationDate)
@@ -48,11 +46,10 @@
                 @Html.DisplayFor(modelItem => item.LastRun)
             </td>
             <td>@Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })</td>
-            @if (item.DisplayStatusEnum == DisplayStatus.Ready) {
+            @if (item.DisplayStatus == DisplayStatus.Ready) {
                 <td> @Html.ActionLink("Просмотр", "DisplayReport", new { jobName = item.JobName })</td>
                 <td> @Html.ActionLink("Загрузить", "GetFile", new { jobName = item.JobName })</td>
-            }
-            else {
+            } else {
                 <td></td>
                 <td></td>
             }

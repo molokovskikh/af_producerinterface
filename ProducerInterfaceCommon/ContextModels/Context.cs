@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Data.Entity;
 using ProducerInterfaceCommon.LoggerModels;
@@ -15,6 +17,40 @@ namespace ProducerInterfaceCommon.ContextModels
 		}
 		public long RegionCode { get; set; }
 		public string Name { get; set; }
+	}
+
+	public class Producer
+	{
+		public virtual int Id { get; set; }
+		public virtual string Name { get; set; }
+	}
+
+	public class Job
+	{
+		public virtual int Id { get; set; }
+		[Display(Name = "Формировать отчет")]
+		public virtual string SchedName { get; set; }
+		public virtual string JobName { get; set; }
+		public virtual string JobGroup { get; set; }
+		[Display(Name = "Название")]
+		public virtual string CustomName { get; set; }
+		public virtual string Scheduler { get; set; }
+		[Display(Name = "Тип и параметры")]
+		public virtual Reports ReportType { get; set; }
+		[Display(Name = "Дата создания")]
+		public virtual DateTime CreationDate { get; set; }
+		[Display(Name = "Изменен")]
+		public virtual DateTime LastModified { get; set; }
+		[Display(Name = "Статус")]
+		public virtual DisplayStatus DisplayStatus { get; set; }
+		[Display(Name = "Запуск")]
+		public virtual DateTime? LastRun { get; set; }
+		public virtual bool Enable { get; set; }
+
+		[Display(Name = "Производитель")]
+		public virtual Producer Producer { get; set; }
+		[Display(Name = "Создатель")]
+		public virtual User Owner { get; set; }
 	}
 
 	public class Email
@@ -74,8 +110,7 @@ namespace ProducerInterfaceCommon.ContextModels
 				x.MapLeftKey("MediaFilesId");
 				x.MapRightKey("MailFormId");
 			});
-			var news = builder.Entity<News>().ToTable("Newses");
-			//news.HasMany(x => x.NewsChange).WithOptional(x => x.News).Map(x => x.MapKey("NewsId"));
+			builder.Entity<News>().ToTable("Newses");
 			var newsSnapshot = builder.Entity<NewsSnapshot>().ToTable("NewsSnapshots");
 			newsSnapshot.HasOptional(x => x.Author).WithMany().Map(x => x.MapKey("AuthorId"));
 			newsSnapshot.HasOptional(x => x.News).WithMany(x => x.NewsChange).Map(x => x.MapKey("NewsId"));

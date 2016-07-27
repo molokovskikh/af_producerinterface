@@ -4,3 +4,6 @@
 [submodule "lib/common-tools"]
 	path = lib/common-tools
 	url = git@git.analit.net:root/common-tools.git
+[submodule "lib/common-mysql"]
+	path = lib/common-mysql
+	url = git@git.analit.net:root/common-mysql.git

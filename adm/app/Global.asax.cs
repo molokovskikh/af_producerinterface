@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.Entity.Validation;
-using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
@@ -8,29 +6,11 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using log4net;
 using log4net.Config;
-using log4net.ObjectRenderer;
 using MySql.Data.MySqlClient;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceControlPanelDomain
 {
-		public class ExceptionRenderer : IObjectRenderer
-	{
-		public void RenderObject(RendererMap rendererMap, object obj, TextWriter writer)
-		{
-			var ex = obj as DbEntityValidationException;
-			if (ex != null) {
-				writer.Write(ex);
-				writer.WriteLine();
-				foreach (var error in ex.EntityValidationErrors) {
-					writer.WriteLine(error.Entry.Entity);
-					foreach (var validationError in error.ValidationErrors) {
-						writer.WriteLine($"{validationError.PropertyName} - {validationError.ErrorMessage}");
-					}
-				}
-			}
-		}
-	}
-
 	public class MvcApplication : HttpApplication
 	{
 		static ILog Log = LogManager.GetLogger(typeof(MvcApplication));
@@ -40,7 +20,12 @@ namespace ProducerInterfaceControlPanelDomain
 			try {
 				ViewEngines.Engines.Add(new ProducerInterfaceCommon.Heap.MyViewEngine());
 				AreaRegistration.RegisterAllAreas();
-				FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+
+				var nh = new ProducerInterfaceCommon.ContextModels.NHibernate();
+				nh.Init();
+				GlobalFilters.Filters.Add(new ErrorFilter());
+				GlobalFilters.Filters.Add(new SessionFilter(nh.Factory));
+
 				RouteConfig.RegisterRoutes(RouteTable.Routes);
 				BundleConfig.RegisterBundles(BundleTable.Bundles);
 				XmlConfigurator.Configure();

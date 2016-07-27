@@ -88,10 +88,10 @@ namespace ProducerInterfaceCommon.Models
 
 	public class User
 	{
-		public long Id { get; set; }
-		public string Name { get; set; }
-		public string Login { get; set; }
-		public string DisplayName => Name ?? Login;
+		public virtual long Id { get; set; }
+		public virtual string Name { get; set; }
+		public virtual string Login { get; set; }
+		public virtual string DisplayName => Name ?? Login;
 	}
 
 	public class PromotionSnapshot

@@ -186,7 +186,7 @@
           <Property Name="CustomName" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="Scheduler" Type="varchar" MaxLength="250" />
           <Property Name="ReportType" Type="int" Nullable="false" />
-          <Property Name="ProducerId" Type="bigint" Nullable="false" />
+          <Property Name="ProducerId" Type="bigint" Nullable="true" />
           <Property Name="CreatorId" Type="uint" Nullable="false" />
           <Property Name="CreationDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Precision="0" Nullable="false" />
@@ -1525,7 +1525,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="CustomName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Scheduler" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="ReportType" Type="Int32" Nullable="false" />
-          <Property Name="ProducerId" Type="Int64" Nullable="false" />
+          <Property Name="ProducerId" Type="Int64" Nullable="true" />
           <Property Name="CreatorId" Type="Int64" Nullable="false" />
           <Property Name="CreationDate" Type="DateTime" Nullable="false" />
           <Property Name="LastModified" Type="DateTime" Nullable="false" />

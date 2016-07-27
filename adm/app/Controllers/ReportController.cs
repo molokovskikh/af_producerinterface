@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using System.Data;
 using System.IO;
+using NHibernate.Linq;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Report;
 using ProducerInterfaceCommon.Helpers;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
@@ -54,13 +55,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult SearchResult(SearchProducerReportsModel param)
 		{
 			var schedulerName = helper.GetSchedulerName();
-			var query = DB.jobextendwithproducer.Where(x => x.SchedName == schedulerName);
+			var query = DbSession.Query<Job>().Fetch(x => x.Owner).Fetch(x => x.Producer)
+				.Where(x => x.SchedName == schedulerName);
 			if (param.Enable.HasValue)
 				query = query.Where(x => x.Enable == param.Enable);
 			if (param.Producer.HasValue)
-				query = query.Where(x => x.ProducerId == param.Producer);
+				query = query.Where(x => x.Producer.Id == param.Producer);
 			if (param.ReportType.HasValue)
-				query = query.Where(x => x.ReportType == param.ReportType);
+				query = query.Where(x => (int)x.ReportType == param.ReportType);
 			if (!string.IsNullOrEmpty(param.ReportName))
 				query = query.Where(x => x.CustomName.Contains(param.ReportName));
 			if (param.RunFrom.HasValue)

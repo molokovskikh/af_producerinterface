@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
+using NHibernate;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers.Global
 {

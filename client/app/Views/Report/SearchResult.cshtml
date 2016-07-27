@@ -1,5 +1,5 @@
 ﻿@using ProducerInterfaceCommon.ContextModels
-@model IEnumerable<jobextendwithproducer>
+@model IEnumerable<Job>
 
 @{
         var listCreator = new List<SelectListItem>();
@@ -27,10 +27,10 @@
                         @Html.DisplayNameFor(model => model.Scheduler)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ReportTypeEnum)
+                        @Html.DisplayNameFor(model => model.ReportType)
                     </th>
                     <th style="min-width:25em;">
-                        @Html.DisplayNameFor(model => model.Creator)
+                        @Html.DisplayNameFor(model => model.Owner)
                         @using (Html.BeginForm("Index", "Report", FormMethod.Get))
                         {
                             <div class="row">
@@ -71,10 +71,10 @@
                         </td>
                         <td>
                             <a href="@Url.Action("Edit", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" title="Настройки и редактирование параметров отчета"><span class="glyphicon glyphicon-pencil"></span>&nbsp; ред.</a>
-                            @Html.DisplayFor(modelItem => item.ReportTypeEnum)
+                            @Html.DisplayFor(modelItem => item.ReportType)
                         </td>
                         <td>
-                            @listCreator.First(x => x.Value == item.CreatorId.ToString()).Text
+                            @listCreator.First(x => x.Value == item.Owner.Id.ToString()).Text
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CreationDate)
@@ -86,23 +86,23 @@
                             <a href="@Url.Action("RunNow", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })"><span class="glyphicon glyphicon-play" title="Разовое формирование отчета за истекшие периоды времени и даты"></span></a>
                             @Html.DisplayFor(modelItem => item.LastRun)
                         </td>
-                        <td class="@(item.DisplayStatusEnum == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Ajax", new { jobName = item.JobName }))">
+                        <td class="@(item.DisplayStatus == DisplayStatus.Processed ? "processed" : "")" data-url="@(Url.Action("GetDisplayStatusJson", "Ajax", new { jobName = item.JobName }))">
 
-                            @if (item.DisplayStatusEnum == DisplayStatus.Ready) {
+                            @if (item.DisplayStatus == DisplayStatus.Ready) {
                                 <a href="@Url.Action("DisplayReport", "Report", new { jobName = item.JobName })">Посмотреть</a>
                             }
                             else {
-                                @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
+                                @Html.DisplayFor(modelItem => item.DisplayStatus)
                             }
                         </td>
                         <td>
-                            @if (item.DisplayStatusEnum == DisplayStatus.Ready) {
+                            @if (item.DisplayStatus == DisplayStatus.Ready) {
                                 <a href="@Url.Action("GetFile", "Report", new { jobName = item.JobName })">Загрузить</a>
                             }
                         </td>
                         <td>
-                            @if (item.DisplayStatusEnum == DisplayStatus.New) {
-                                @Html.DisplayFor(modelItem => item.DisplayStatusEnum)
+                            @if (item.DisplayStatus == DisplayStatus.New) {
+                                @Html.DisplayFor(modelItem => item.DisplayStatus)
                             }
                             else {
                                 @Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })

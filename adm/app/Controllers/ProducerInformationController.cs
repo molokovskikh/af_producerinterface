@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using System.ComponentModel.DataAnnotations;
+using NHibernate.Linq;
 using ProducerInterfaceCommon.Helpers;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
@@ -137,7 +138,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				item.RegionnamesList = DB.Regions((ulong)item.RegionMask).ToOptions();
 
 			ViewBag.DrugList = h.GetCatalogListPromotion();
-			ViewBag.ReportList = DB.jobextendwithproducer.Where(x => x.ProducerId == producerId).ToList();
+			ViewBag.ReportList = DbSession.Query<Job>().Fetch(x => x.Owner).Where(x => x.Producer.Id == producerId)
+				.OrderByDescending(x => x.CreationDate).ToList();
 
 			var model = DB.AccountCompany.Find(Id);
 			return PartialView("partial/producerinformation", model);
