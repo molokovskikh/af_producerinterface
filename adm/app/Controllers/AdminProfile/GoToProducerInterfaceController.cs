@@ -55,7 +55,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
 
 		public JsonResult GetListUser(long? idproducer)
 		{
-			var items = DB.Account.Where(x => x.AccountCompany.ProducerId == idproducer)
+			var items = DB.Account.Where(x => x.AccountCompany.ProducerId == idproducer && x.TypeUser == (byte)TypeUsers.ProducerUser)
 				.ToList();
 			return Json(items.Select(x => new { text = x.Login + " " + x.Name, value = x.Id.ToString() }), JsonRequestBehavior.AllowGet);
 		}
