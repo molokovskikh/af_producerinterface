@@ -23,5 +23,21 @@ namespace ProducerInterface.Test
 			AssertText("Компания");
 			AssertText("Фамилия");
 		}
+
+		[Test]
+		public void Add_report()
+		{
+			Open();
+			Click("Отчеты");
+			AssertText("Создание нового отчета");
+			Css("#id").SelectByText("Рейтинг товаров");
+			Click("Создать");
+			AssertText("Рейтинг товаров");
+			AssertText("Новый отчет");
+			Css("#CastomName").SendKeys("Рейтинг товаров");
+			ChoseRegion("#RegionCodeEqual");
+			Click("Сохранить");
+			AssertText("Отчет успешно добавлен");
+		}
 	}
 }

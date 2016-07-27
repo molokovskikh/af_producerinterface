@@ -28,7 +28,6 @@ namespace ProducerInterfaceCommon.Models
 		public int Id { get; set; }
 
 		[ScaffoldColumn(false)]
-		[Required]
 		public long? ProducerId { get; set; }
 
 		public abstract List<string> GetHeaders(HeaderHelper h);
@@ -55,8 +54,7 @@ namespace ProducerInterfaceCommon.Models
 
 		public virtual List<ErrorMessage> Validate()
 		{
-			var errors = new List<ErrorMessage>();
-			return errors;
+			return new List<ErrorMessage>();
 		}
 
 		public abstract Dictionary<string, object> ViewDataValues(NamesHelper h);

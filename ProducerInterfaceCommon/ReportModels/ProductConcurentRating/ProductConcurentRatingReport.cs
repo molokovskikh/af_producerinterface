@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ProducerInterfaceCommon.Heap;
 using System.ComponentModel.DataAnnotations;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -9,17 +10,17 @@ namespace ProducerInterfaceCommon.Models
 	public class ProductConcurentRatingReport : IntervalReport
 	{
 		[Display(Name = "Регион")]
-		[Required(ErrorMessage = "Не указаны регионы")]
+		[CollectionRequired(ErrorMessage = "Не указаны регионы")]
 		[UIHint("DecimalList")]
 		public List<decimal> RegionCodeEqual { get; set; }
 
 		[Display(Name = "Выберите собственные товары")]
-		[Required(ErrorMessage = "Не выбраны товары")]
+		[CollectionRequired(ErrorMessage = "Не выбраны товары")]
 		[UIHint("Products")]
 		public List<long> CatalogIdEqual { get; set; }
 
 		[Display(Name = "Выберите товары, конкурирующие с вашими (не более 50)")]
-		[Required(ErrorMessage = "Не выбраны товары")]
+		[CollectionRequired(ErrorMessage = "Не выбраны товары")]
 		[UIHint("LongList")]
 		public List<long> CatalogIdEqual2 { get; set; }
 

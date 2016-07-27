@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Common.Tools;
 using MySql.Data.MySqlClient;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -14,7 +15,7 @@ namespace ProducerInterfaceCommon.Models
 		public override string Name => "Продажи вторичных дистрибьюторов";
 
 		[Display(Name = "Регион")]
-		[Required(ErrorMessage = "Не указаны регионы")]
+		[CollectionRequired(ErrorMessage = "Не указаны регионы")]
 		[UIHint("DecimalList")]
 		public List<decimal> RegionCodeEqual { get; set; }
 

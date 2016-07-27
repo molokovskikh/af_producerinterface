@@ -7,6 +7,7 @@ using System.Linq;
 using Common.Tools;
 using MySql.Data.MySqlClient;
 using Dapper;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -23,7 +24,7 @@ namespace ProducerInterfaceCommon.Models
 		public List<long> SupplierIdNonEqual { get; set; }
 
 		[Display(Name = "Регион")]
-		[Required(ErrorMessage = "Не указаны регионы")]
+		[CollectionRequired(ErrorMessage = "Не указаны регионы")]
 		[UIHint("DecimalList")]
 		public List<decimal> RegionCodeEqual { get; set; }
 

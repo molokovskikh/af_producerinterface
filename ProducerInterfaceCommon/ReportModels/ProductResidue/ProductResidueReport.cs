@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using ProducerInterfaceCommon.Helpers;
 
 namespace ProducerInterfaceCommon.Models
 {
@@ -13,7 +14,7 @@ namespace ProducerInterfaceCommon.Models
 		public override string Name => "Мониторинг остатков у дистрибьюторов";
 
 		[Display(Name = "Регион")]
-		[Required(ErrorMessage = "Не указаны регионы")]
+		[CollectionRequired(ErrorMessage = "Не указаны регионы")]
 		[UIHint("DecimalList")]
 		public List<decimal> RegionCodeEqual { get; set; }
 
@@ -116,14 +117,12 @@ namespace ProducerInterfaceCommon.Models
 
 		public override Dictionary<string, object> ViewDataValues(NamesHelper h)
 		{
-			var viewDataValues = new Dictionary<string, object>();
-
-			viewDataValues.Add("RegionCodeEqual", h.GetRegionList(Id));
-			viewDataValues.Add("CatalogIdEqual", h.GetCatalogList());
-			viewDataValues.Add("SupplierIdEqual", h.GetSupplierList(RegionCodeEqual));
-			viewDataValues.Add("SupplierIdNonEqual", h.GetSupplierList(RegionCodeEqual));
-
-			return viewDataValues;
+			return new Dictionary<string, object> {
+				{"RegionCodeEqual", h.GetRegionList(Id)},
+				{"CatalogIdEqual", h.GetCatalogList()},
+				{"SupplierIdEqual", h.GetSupplierList(RegionCodeEqual)},
+				{"SupplierIdNonEqual", h.GetSupplierList(RegionCodeEqual)}
+			};
 		}
 
 		public override List<ErrorMessage> Validate()

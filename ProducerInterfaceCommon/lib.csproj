@@ -223,6 +223,7 @@
     <Compile Include="Heap\IProcessor.cs" />
     <Compile Include="Heap\MyViewEngine.cs" />
     <Compile Include="Helpers\AdHelper.cs" />
+    <Compile Include="Helpers\CollectionRequired.cs" />
     <Compile Include="Helpers\ErrorFilter.cs" />
     <Compile Include="Helpers\Md5HashHelper.cs" />
     <Compile Include="Helpers\ReportHelper.cs" />
