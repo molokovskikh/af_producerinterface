@@ -12,12 +12,6 @@ namespace ProducerInterface.Controllers
 	{
 		private int PagerCount = 5;
 
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
-		{
-			base.OnActionExecuting(filterContext);
-			ViewBag.BreadCrumb = "Профиль пользователя";
-		}
-
 		public ActionResult Index()
 		{
 			ViewBag.Pager = 1;

@@ -23,6 +23,8 @@ namespace ProducerInterface.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
+			if (CurrentUser == null)
+				return;
 
 			helper = new ReportHelper(DB);
 			h = new NamesHelper(CurrentUser.Id);

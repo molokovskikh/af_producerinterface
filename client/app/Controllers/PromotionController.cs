@@ -19,19 +19,16 @@ namespace ProducerInterface.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
-
 			if (CurrentUser == null)
-				filterContext.Result = Redirect("~");
+				return;
+
+			h = new NamesHelper(CurrentUser.Id);
+			if (CurrentUser.AccountCompany.ProducerId.HasValue)
+				producerId = CurrentUser.AccountCompany.ProducerId.Value;
 			else
 			{
-				h = new NamesHelper(CurrentUser.Id);
-				if (CurrentUser.AccountCompany.ProducerId.HasValue)
-					producerId = CurrentUser.AccountCompany.ProducerId.Value;
-				else
-				{
-					ErrorMessage("Доступ в раздел Акции закрыт, так как вы не представляете кого-либо из производителей");
-					filterContext.Result = Redirect("~");
-				}
+				ErrorMessage("Доступ в раздел Акции закрыт, так как вы не представляете кого-либо из производителей");
+				filterContext.Result = Redirect("~");
 			}
 		}
 

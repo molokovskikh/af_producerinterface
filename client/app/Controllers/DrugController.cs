@@ -20,20 +20,19 @@ namespace ProducerInterface.Controllers
 		protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
+			if (CurrentUser == null)
+				return;
 			ccntx = new catalogsEntities();
 
-			if (CurrentUser != null)
+			userId = CurrentUser.Id;
+			if (CurrentUser.AccountCompany.ProducerId.HasValue)
 			{
-				userId = CurrentUser.Id;
-				if (CurrentUser.AccountCompany.ProducerId.HasValue)
-				{
-					producerId = CurrentUser.AccountCompany.ProducerId.Value;
-				}
-				else
-				{
-					ErrorMessage("Доступ в раздел Наша продукция закрыт, так как вы не представляете кого-либо из производителей");
-					filterContext.Result = Redirect("~");
-				}
+				producerId = CurrentUser.AccountCompany.ProducerId.Value;
+			}
+			else
+			{
+				ErrorMessage("Доступ в раздел Наша продукция закрыт, так как вы не представляете кого-либо из производителей");
+				filterContext.Result = Redirect("~");
 			}
 		}
 
