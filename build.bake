@@ -6,7 +6,8 @@ Global(
 	HumanReadableName : "Интерфейса производителя",
 	SkipFix : true,
 	Config: {
-		"db:seed": {@Profile: "ProducerInterface"}
+		"db:seed": {@Profile: "ProducerInterface"},
+		"deploy:backup": {@Skip: true}
 	}
 )
 
