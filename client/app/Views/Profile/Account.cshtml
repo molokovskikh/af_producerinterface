@@ -1,48 +1,50 @@
 ﻿@model ProducerInterfaceCommon.ViewModel.Interface.Profile.ProfileValidation
 @{
-  ViewBag.Title = "Мой профиль";
-  var className = "form-group collapse";
-  var stateMail = ViewData.ModelState["Mailname"];
-  if (stateMail != null && stateMail.Errors.Count > 0)
-  {
-      className = "form-group in";
-  }
+	ViewBag.Title = "Мой профиль";
+	var className = "form-group collapse";
+	var stateMail = ViewData.ModelState["Mailname"];
+	if (stateMail != null && stateMail.Errors.Count > 0) {
+		className = "form-group in";
+	}
 }
 
 
 <div class="container body-content">
-    @using (Html.BeginForm("Account", "Profile", FormMethod.Post))
-    {
-        @Html.HiddenFor(m => m.CompanyName)
-        <h3>Компания @Model.CompanyName</h3>
-        <hr />
-        <div class="row">
-            <div class="form-group col-md-4">
-                <label>@Html.LabelFor(m => m.LastName) <strong class="required">*</strong></label>
-                @Html.TextBoxFor(m => m.LastName, null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.LastName)
-            </div>
-            <div class="form-group col-md-4">
-                <label>@Html.LabelFor(m => m.FirstName) <strong class="required">*</strong></label>
-                @Html.TextBoxFor(m => m.FirstName, null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.FirstName)
-            </div>
-            <div class="form-group col-md-4">
-                <label>@Html.LabelFor(m => m.OtherName)</label>
-                @Html.TextBoxFor(m => m.OtherName, null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.OtherName)
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label>Номер телефона <strong class="required">*</strong></label>
-                @Html.TextBoxFor(m => m.PhoneNumber, null, new { @class = "form-control", @placeholder = "(999) 999-99-99" })
-                @Html.ValidationMessageFor(m => m.PhoneNumber)
-            </div>
-            <div class="form-group col-md-6">
-                <label>Должность <strong class="required">*</strong></label>
-                @Html.DropDownListFor(m => m.AppointmentId, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.AppointmentId)
+	@using (Html.BeginForm("Account", "Profile", FormMethod.Post)) {
+		@Html.HiddenFor(m => m.CompanyName)
+		<h3>Компания @Model.CompanyName</h3>
+		<hr/>
+		<div class="row">
+			<div class="form-group col-md-4">
+				<label>
+					@Html.LabelFor(m => m.LastName) <strong class="required">*</strong>
+				</label>
+				@Html.TextBoxFor(m => m.LastName, null, new {@class = "form-control"})
+				@Html.ValidationMessageFor(m => m.LastName)
+			</div>
+			<div class="form-group col-md-4">
+				<label>
+					@Html.LabelFor(m => m.FirstName) <strong class="required">*</strong>
+				</label>
+				@Html.TextBoxFor(m => m.FirstName, null, new {@class = "form-control"})
+				@Html.ValidationMessageFor(m => m.FirstName)
+			</div>
+			<div class="form-group col-md-4">
+				<label>@Html.LabelFor(m => m.OtherName)</label>
+				@Html.TextBoxFor(m => m.OtherName, null, new {@class = "form-control"})
+				@Html.ValidationMessageFor(m => m.OtherName)
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
+				<label>Номер телефона <strong class="required">*</strong></label>
+				@Html.TextBoxFor(m => m.PhoneNumber, null, new {@class = "form-control", @placeholder = "(999) 999-99-99"})
+				@Html.ValidationMessageFor(m => m.PhoneNumber)
+			</div>
+			<div class="form-group col-md-6">
+				<label>Должность <strong class="required">*</strong></label>
+				@Html.DropDownListFor(m => m.AppointmentId, new SelectList(ViewBag.AppointmentList, "Value", "Text", Model), new {@class = "form-control"})
+				@Html.ValidationMessageFor(m => m.AppointmentId)
 				<a href="#postname" data-toggle="collapse">Отсутствует ваша должность?</a>
 				<div class="collapse" id="postname">
 					<div class="input-group">
@@ -53,33 +55,33 @@
 						</div>
 					</div>
 				</div>
-            </div>
-        </div>
+			</div>
+		</div>
 
-        <a href="#LoginChange" data-toggle="collapse">Смена логина</a>
-        <div class="@className" id="LoginChange">
-            <div class="row">
-                <div class="col-xs-12">
-                    <label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
-                    <div class="input-group">
-                        @Html.EditorFor(m => m.Mailname)
-                        <div class="input-group-btn" style="min-width: 175px;">
-                            @Html.EditorFor(m => m.EmailDomain)
-                        </div>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.Mailname)
-                    @Html.ValidationMessageFor(model => model.EmailDomain)
-                </div>
-            </div>
-        </div>
+		<a href="#LoginChange" data-toggle="collapse">Смена логина</a>
+		<div class="@className" id="LoginChange">
+			<div class="row">
+				<div class="col-xs-12">
+					<label>Логин (Email) <strong class="text-info">введите имя и выберите доменное имя</strong></label>
+					<div class="input-group">
+						@Html.EditorFor(m => m.Mailname)
+						<div class="input-group-btn" style="min-width: 175px;">
+							@Html.EditorFor(m => m.EmailDomain)
+						</div>
+					</div>
+					@Html.ValidationMessageFor(model => model.Mailname)
+					@Html.ValidationMessageFor(model => model.EmailDomain)
+				</div>
+			</div>
+		</div>
 
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary col-md-12" value="Сохранить изменения" />
-        </div>
-    }
+		<div class="form-group">
+			<input type="submit" class="btn btn-primary col-md-12" value="Сохранить изменения"/>
+		</div>
+	}
 </div>
 
 @section JavaScript{
-    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
-    <script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
+	<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+	<script src="~/Scripts/WorkPlace/InitRegistrationAddAppointment.js"></script>
 }

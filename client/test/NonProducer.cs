@@ -20,7 +20,8 @@ namespace ProducerInterface.Test
 			AssertNoText("Акции");
 			Css("#profile-dropdown").Click();
 			Click("Мой профиль");
-			AssertText("Мой профиль");
+			AssertText("Компания");
+			AssertText("Фамилия");
 		}
 	}
 }
