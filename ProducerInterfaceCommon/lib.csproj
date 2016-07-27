@@ -191,16 +191,7 @@
     <Compile Include="ContextModels\cataloglogui.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\cataloglogview.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\CompanyDomainName.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\descriptionlogview.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\DrugDescriptionRemark.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\Context.cs" />
@@ -254,9 +245,6 @@
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\CustomModelsList.cs" />
-    <Compile Include="ContextModels\pharmacynames.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\producerinterface_Entities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -275,19 +263,10 @@
     <Compile Include="ContextModels\producernames.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ContextModels\ratingreportorderitems.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\reporttemplate.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ContextModels\reportxml.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ContextModels\suppliernames.cs">
-      <DependentUpon>producerinterface_Entities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContextModels\user_logs.cs">
       <DependentUpon>producerinterface_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Heap\MyAutoMapper.cs" />

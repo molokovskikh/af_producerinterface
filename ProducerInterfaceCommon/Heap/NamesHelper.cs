@@ -43,7 +43,6 @@ namespace ProducerInterfaceCommon.Heap
 			var report = _cntx.jobextend.SingleOrDefault(x => x.JobName == jobName);
 			if (report == null)
 				return "";
-			//var producerName = _cntx.producernames.Single(x => x.ProducerId == report.ProducerId).ProducerName;
 			return report.CustomName;
 		}
 

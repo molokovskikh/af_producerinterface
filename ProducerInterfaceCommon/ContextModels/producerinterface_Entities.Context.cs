@@ -22,18 +22,13 @@ namespace ProducerInterfaceCommon.ContextModels
         {
         }
 
-        public DbSet<reporttemplate> reporttemplate { get; set; }
         public DbSet<reportxml> reportxml { get; set; }
-        public DbSet<user_logs> user_logs { get; set; }
         public DbSet<assortment> assortment { get; set; }
         public DbSet<catalognames> catalognames { get; set; }
-        public DbSet<pharmacynames> pharmacynames { get; set; }
         public DbSet<producernames> producernames { get; set; }
-        public DbSet<ratingreportorderitems> ratingreportorderitems { get; set; }
         public DbSet<suppliernames> suppliernames { get; set; }
         public DbSet<AccountCompany> AccountCompany { get; set; }
         public DbSet<CompanyDomainName> CompanyDomainName { get; set; }
-        public DbSet<DrugDescriptionRemark> DrugDescriptionRemark { get; set; }
         public DbSet<ReportRunLog> ReportRunLog { get; set; }
         public DbSet<reportrunlogwithuser> reportrunlogwithuser { get; set; }
         public DbSet<mailformwithfooter> mailformwithfooter { get; set; }
@@ -46,8 +41,6 @@ namespace ProducerInterfaceCommon.ContextModels
         public DbSet<AccountEmail> AccountEmail { get; set; }
         public DbSet<ReportRegion> ReportRegion { get; set; }
         public DbSet<feedbackui> feedbackui { get; set; }
-        public DbSet<cataloglogview> cataloglogview { get; set; }
-        public DbSet<descriptionlogview> descriptionlogview { get; set; }
         public DbSet<AccountAppointment> AccountAppointment { get; set; }
         public DbSet<AccountFeedBack> AccountFeedBack { get; set; }
         public DbSet<AccountFeedBackComment> AccountFeedBackComment { get; set; }
