@@ -14,8 +14,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProducerInterface</RootNamespace>
-    <AssemblyName>ProducerInterface</AssemblyName>
+    <RootNamespace>client</RootNamespace>
+    <AssemblyName>client</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -471,6 +471,7 @@
     <Content Include="Views\Drug\History.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Bool.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Products.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductsFlag.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

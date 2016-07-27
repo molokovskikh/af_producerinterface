@@ -24,7 +24,7 @@ namespace ProducerInterfaceCommon.Models
 		public List<long> CatalogIdEqual { get; set; }
 
 		[Display(Name = "По всем нашим товарам")]
-		[UIHint("Bool")]
+		[UIHint("ProductsFlag")]
 		public bool AllCatalog { get; set; }
 
 		public SupplierRatingReport()
