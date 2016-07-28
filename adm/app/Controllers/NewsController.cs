@@ -104,24 +104,23 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (!ModelState.IsValid)
 				return View(news);
 
+			var user = DB2.Users.Find(CurrentUser.Id);
 			if (news.Id > 0)
 			{
-				var db = DB2.Newses.Find(news.Id);
+				var model = DB2.Newses.Find(news.Id);
 				// добавляем в историю изменения
 				var description = "Изменена новость";
-				if (!db.Enabled)
+				if (!model.Enabled)
 					description = "Опубликована архивная новость";
-				db.DatePublication = DateTime.Now;
-				db.Body = news.Body;
-				db.Subject = news.Subject;
-				db.Enabled = true;
-				DB2.SaveChanges();
-
-				var history = new NewsSnapshot(db, DB2.Users.Find(CurrentUser.Id), description);
+				model.DatePublication = DateTime.Now;
+				model.Body = news.Body;
+				model.Subject = news.Subject;
+				model.Enabled = true;
+				var history = new NewsSnapshot(model, user, description);
 				DB2.NewsHistory.Add(history);
+				Mails.NewsChanged(model, description, root);
+				//важно, сохранить после отправки уведомления иначе не будет работать вычисление изменений
 				DB2.SaveChanges();
-
-				Mails.NewsChanged(news, description, root);
 				SuccessMessage("Изменения успешно сохранены");
 			}
 			else
@@ -133,7 +132,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				DB2.SaveChanges();
 
 				// пишем в историю
-				var history = new NewsSnapshot(news, DB2.Users.Find(CurrentUser.Id), "Добавлена новость");
+				var history = new NewsSnapshot(news, user, "Добавлена новость");
 				DB2.NewsHistory.Add(history);
 				DB2.SaveChanges();
 				Mails.NewsChanged(news, "Добавлена новость", root);

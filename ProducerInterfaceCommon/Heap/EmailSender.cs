@@ -210,6 +210,15 @@ namespace ProducerInterfaceCommon.Heap
 
 		public void NewsChanged(News news, string description, string root)
 		{
+			var newsSubject = $"Оглавление: {news.Subject}";
+			var newsBody = $"Текст: {news.Body}";
+			var values = db2.Entry(news).OriginalValues;
+			if (!Equals(values["Subject"], news.Subject)) {
+				newsSubject = $"Изменилось оглавление<br>Было: {values["Subject"]}<br>Стало:{news.Subject}";
+			}
+			if (!Equals(values["Body"], news.Body)) {
+				newsBody = $"Изменился текст<br>Было: {values["Body"]}<br>Стало:{news.Body}";
+			}
 			var body = $@"
 <head>
 <base href=""{root}"" target=""_blank"">
@@ -219,8 +228,8 @@ namespace ProducerInterfaceCommon.Heap
 	Сотрудник: {currentUser.Login} {currentUser.Name}<br>
 	Хост: {currentUser.IP}<br>
 	Операция: {description} <br/>
-	Тема: {news.Subject}</br>
-	Текст: {news.Body}</br>
+	{newsSubject}</br>
+	{newsBody}</br>
 </body>";
 			SendEmail(ConfigurationManager.AppSettings["MailInfo"], description, body, new List<string>(), isHtml = true);
 		}
