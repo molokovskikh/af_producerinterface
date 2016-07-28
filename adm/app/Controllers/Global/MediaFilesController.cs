@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -15,7 +16,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult Index()
 		{
-			ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
+			ViewBag.FullUrlStringFile = ConfigurationManager.AppSettings["ImageFullUrlString"];
 
 #if DEBUG
 			{
@@ -62,7 +63,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var file = Request.Files[0];
 			var fileId = SaveFile(file, EntityType.News);
 			string ckEditorFuncNum = HttpContext.Request["CKEditorFuncNum"];
-			string url = $"{GetWebConfigParameters("ImageFullUrlString")}/GetFile/{fileId}";
+			string url = $"{ConfigurationManager.AppSettings["ImageFullUrlString"]}/GetFile/{fileId}";
 			return Content($"<script>window.parent.CKEDITOR.tools.callFunction({ckEditorFuncNum}, \"{url}\");</script>");
 		}
 

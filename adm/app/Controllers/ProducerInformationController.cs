@@ -5,6 +5,7 @@ using ProducerInterfaceCommon.Heap;
 using System.ComponentModel.DataAnnotations;
 using NHibernate.Linq;
 using ProducerInterfaceCommon.Helpers;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers

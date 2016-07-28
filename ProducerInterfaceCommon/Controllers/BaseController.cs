@@ -35,38 +35,14 @@ namespace ProducerInterfaceCommon.Controllers
 			ThreadContext.Properties["user"] = HttpContext.User.Identity.Name;
 		}
 
-		public void SetCookie(string name, string value, bool IsCoding = true)
-		{
-			if (value == null)
-			{
-				Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
-				return;
-			}
-			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
-			var text = "";
-			if (IsCoding) { text = Convert.ToBase64String(plainTextBytes); }
-			else { text = value; }
-			Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
-		}
-
 		public void SuccessMessage(string message)
 		{
-			SetCookie("SuccessMessage", message);
+			TempData["SuccessMessage"] = message;
 		}
 
 		public void ErrorMessage(string message)
 		{
-			SetCookie("ErrorMessage", message);
-		}
-
-		public void WarningMessage(string message)
-		{
-			SetCookie("WarningMessage", message);
-		}
-
-		public string GetWebConfigParameters(string key)
-		{
-			return ConfigurationManager.AppSettings[key];
+			TempData["ErrorMessage"] = message;
 		}
 
 		/// <summary>
@@ -76,7 +52,7 @@ namespace ProducerInterfaceCommon.Controllers
 		protected bool IgnoreRoutePermission()
 		{
 			// список игнорируемых маршрутов CSV. Сейчас Home_Index,FeedBack_*,Account_*
-			var ignoreRoute = GetWebConfigParameters("IgnoreRoute").ToLower().Split(',').ToList();
+			var ignoreRoute = ConfigurationManager.AppSettings["IgnoreRoute"].ToLower().Split(',').ToList();
 			return ignoreRoute.Any(x => x == permissionName || x == (controllerName + "_*").ToLower());
 		}
 
@@ -116,16 +92,9 @@ namespace ProducerInterfaceCommon.Controllers
 			// если пермишена в БД нет, то добаляем пермишен к группе администраторов
 
 			// проверим наличие группы "Администраторы"
-			var adminGroupName = GetWebConfigParameters("AdminGroupName");
+			var adminGroupName = ConfigurationManager.AppSettings["AdminGroupName"];
 			// убрал условие Enabled потому что группа будет создана заново, если disabled
 			var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == type);
-			if (adminGroup == null)
-			{
-				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = type };
-				DB.AccountGroup.Add(adminGroup);
-				DB.SaveChanges();
-			}
-
 			// добавляем новый доступ
 			var newPermission = new AccountPermission { ControllerAction = permissionName, ActionAttributes = controllerAcctributes, TypePermission = type, Enabled = true, Description = "новый пермишен" };
 			DB.AccountPermission.Add(newPermission);

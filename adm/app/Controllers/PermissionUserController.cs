@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
@@ -205,7 +206,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			// установка пейджера
 			var itemsCount = query.Count();
-			var itemsPerPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
+			var itemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ReportCountPage"]);
 			var info = new SortingPagingInfo() { CurrentPageIndex = filter.CurrentPageIndex, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
 			ViewBag.Info = info;
 

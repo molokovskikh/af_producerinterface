@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Web.Mvc;
 using System.Linq;
 using ProducerInterfaceCommon.Models;
@@ -82,7 +83,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		[HttpGet]
 		public ActionResult Create(long Id = 0)
 		{
-			ViewBag.FullUrlStringFile = GetWebConfigParameters("ImageFullUrlString");
+			ViewBag.FullUrlStringFile = ConfigurationManager.AppSettings["ImageFullUrlString"];
 
 #if DEBUG
 			{

@@ -1,6 +1,7 @@
 ﻿using ProducerInterfaceCommon.ContextModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -40,13 +41,13 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
 
 			if (CurrentUser.Name != null) {
 				var i = match + (CurrentUser.Name.Length*19801112).ToString() + match2;
-				var Url = GetWebConfigParameters("GoToProducerUserUrl");
+				var Url = ConfigurationManager.AppSettings["GoToProducerUserUrl"];
 				var UrlRedirect = Url + "?SecureHash=" + i + "&AdminLogin=" + CurrentUser.Login + "&IdProducerUSer=" +
 					produceruserid;
 				return Redirect(UrlRedirect);
 			} else {
 				var i = match + (18*19801112).ToString() + match2;
-				var Url = GetWebConfigParameters("GoToProducerUserUrl");
+				var Url = ConfigurationManager.AppSettings["GoToProducerUserUrl"];
 				var UrlRedirect = Url + "?SecureHash=" + i + "&AdminLogin=" + CurrentUser.Login + "&IdProducerUSer=" +
 					produceruserid;
 				return Redirect(UrlRedirect);

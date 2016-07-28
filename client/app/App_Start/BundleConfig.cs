@@ -32,10 +32,7 @@ namespace ProducerInterface
 						"~/Scripts/jquery.maskedinput.min.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/WorkPlace")
-				.Include(
-					"~/Scripts/WorkPlace/Analit.js",
-					"~/Scripts/WorkPlace/ZAnalit.js",
-					"~/Scripts/WorkPlace/ModalView.js"));
+				.Include("~/Scripts/WorkPlace/ModalView.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/cron")
 				.Include("~/Content/Chosen/js/initCron.js",

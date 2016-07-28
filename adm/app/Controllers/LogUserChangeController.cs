@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.LoggerModels;
@@ -16,7 +17,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult Index(int Id = 0)
 		{
 			var itemsCount = cntx__.logchangeview.Count();
-			var itemsPerPage = Convert.ToInt32(GetWebConfigParameters("LogItemsPerPage"));
+			var itemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["LogItemsPerPage"]);
 			var info = new SortingPagingInfo() { CurrentPageIndex = Id, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
 
 			if (info.PageCount < Id && Id != 0)

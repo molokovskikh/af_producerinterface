@@ -325,6 +325,7 @@
     <Compile Include="Models\HiddenAttribute.cs" />
     <Compile Include="Models\INotInterval.cs" />
     <Compile Include="Models\IInterval.cs" />
+    <Compile Include="Models\Job.cs" />
     <Compile Include="Models\News.cs" />
     <Compile Include="Models\NotIntervalReport.cs" />
     <Compile Include="Models\IntervalReport.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
@@ -8,6 +9,7 @@ using System.IO;
 using NHibernate.Linq;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Report;
 using ProducerInterfaceCommon.Helpers;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -71,7 +73,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				query = query.Where(x => x.LastRun <= param.RunTo);
 
 			var itemsCount = query.Count();
-			var itemsPerPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
+			var itemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ReportCountPage"]);
 			var info = new SortingPagingInfo() { CurrentPageIndex = param.CurrentPageIndex, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
 			ViewBag.Info = info;
 

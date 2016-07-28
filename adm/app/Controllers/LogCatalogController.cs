@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
 using System.Collections.Generic;
+using System.Configuration;
 using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.CatalogModels;
 using System.Web.Caching;
@@ -56,7 +57,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				query = query.Where(x => x.Apply == filter.Apply);
 
 			var itemsCount = query.Count();
-			var itemsPerPage = Convert.ToInt32(GetWebConfigParameters("ReportCountPage"));
+			var itemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ReportCountPage"]);
 			var info = new SortingPagingInfo() { CurrentPageIndex = filter.CurrentPageIndex, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
 			ViewBag.Info = info;
 

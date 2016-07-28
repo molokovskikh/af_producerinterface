@@ -9,6 +9,7 @@ using ProducerInterfaceCommon.Controllers;
 using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.ViewModel.Interface.Profile;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Web;
 using System.Web.Security;
 using ProducerInterfaceCommon.Helpers;
@@ -67,7 +68,7 @@ namespace ProducerInterface.Controllers
 				if (!otherUsersExists)
 				{
 					// если группы администраторов нет - создаем ее
-					var adminGroupName = GetWebConfigParameters("AdminGroupName");
+					var adminGroupName = ConfigurationManager.AppSettings["AdminGroupName"];
 					var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
 					if (adminGroup == null)
 					{
@@ -81,7 +82,7 @@ namespace ProducerInterface.Controllers
 				// если есть другие пользователи компании - включаем в группу Все пользователи
 				else
 				{
-					var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
+					var otherGroupName = ConfigurationManager.AppSettings["LogonGroupAcess"];
 					var otherGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == otherGroupName && x.TypeGroup == SbyteTypeUser);
 					if (otherGroup == null)
 					{
@@ -107,7 +108,7 @@ namespace ProducerInterface.Controllers
 			else if (thisUser.EnabledEnum == UserStatus.Blocked)
 			{
 				CurrentUser = null;
-				ErrorMessage("Ваша учетная запись заблокирована, обращайтесь на " + GetWebConfigParameters("MailFrom"));
+				ErrorMessage("Ваша учетная запись заблокирована, обращайтесь на " + ConfigurationManager.AppSettings["MailFrom"]);
 				return Redirect("~");
 			}
 
@@ -115,7 +116,7 @@ namespace ProducerInterface.Controllers
 			else if (thisUser.EnabledEnum == UserStatus.Request)
 			{
 				CurrentUser = null;
-				SuccessMessage("Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на " + GetWebConfigParameters("MailFrom"));
+				SuccessMessage("Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на " + ConfigurationManager.AppSettings["MailFrom"]);
 				return Redirect("~");
 			}
 			return Redirect("~");
@@ -164,7 +165,7 @@ namespace ProducerInterface.Controllers
 			// пользователь не найден, отсылаем на домашнюю с ошибкой
 			if (user == null)
 			{
-				ErrorMessage($"Пользователь с email {model.login} не найден, обращайтесь на {GetWebConfigParameters("MailFrom")}");
+				ErrorMessage($"Пользователь с email {model.login} не найден, обращайтесь на {ConfigurationManager.AppSettings["MailFrom"]}");
 				return View(model);
 			}
 
@@ -183,11 +184,11 @@ namespace ProducerInterface.Controllers
 
 			// если заблокирован
 			else if (user.EnabledEnum == UserStatus.Blocked)
-				ErrorMessage($"Ваша учетная запись заблокирована, обращайтесь на {GetWebConfigParameters("MailFrom")}");
+				ErrorMessage($"Ваша учетная запись заблокирована, обращайтесь на {ConfigurationManager.AppSettings["MailFrom"]}");
 
 			// если запросивший регистрацию
 			else if (user.EnabledEnum == UserStatus.Request)
-				SuccessMessage($"Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на {GetWebConfigParameters("MailFrom")}");
+				SuccessMessage($"Ваша заявка на регистрацию еще не рассмотрена, обращайтесь на {ConfigurationManager.AppSettings["MailFrom"]}");
 
 			return Redirect("~");
 		}
@@ -329,7 +330,7 @@ namespace ProducerInterface.Controllers
 				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionId = regionCode });
 
 			// добавили аккаунт в группу админов
-			var adminGroupName = GetWebConfigParameters("AdminGroupName");
+			var adminGroupName = ConfigurationManager.AppSettings["AdminGroupName"];
 			var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
 			if (adminGroup == null)
 			{
@@ -399,7 +400,7 @@ namespace ProducerInterface.Controllers
 				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionId = regionCode });
 
 			// ищем группу "все пользователи", если такой нет - создаем
-			var otherGroupName = GetWebConfigParameters("LogonGroupAcess");
+			var otherGroupName = ConfigurationManager.AppSettings["LogonGroupAcess"];
 			var otherGroup = DB.AccountGroup.FirstOrDefault(x => x.Name == otherGroupName && x.TypeGroup == account.TypeUser);
 			if (otherGroup == null)
 			{
@@ -489,7 +490,7 @@ namespace ProducerInterface.Controllers
 			// регионы и группы не добавляются здесь, потому что всё равно должен регистрировать админ
 			var user = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
 			user.AccountRegion = DB.Regions().Select(x => new AccountRegion(user, x)).ToList();
-			var name = GetWebConfigParameters("AdminGroupName");
+			var name = ConfigurationManager.AppSettings["AdminGroupName"];
 			var group = DB.AccountGroup.SingleOrDefault(x => x.Name == name && x.TypeGroup == SbyteTypeUser);
 			user.AccountGroup.Add(group);
 			user.IP = Request.UserHostAddress;

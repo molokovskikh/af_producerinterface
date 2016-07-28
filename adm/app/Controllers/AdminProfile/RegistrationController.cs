@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -51,7 +52,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			DB.Account.Add(account);
 			DB.SaveChanges();
 
-			string AdminGroup = GetWebConfigParameters("AdminGroupName");
+			string AdminGroup = ConfigurationManager.AppSettings["AdminGroupName"];
 
 			var GroupExsist = DB.AccountGroup.Any(xxx => xxx.Name == AdminGroup && xxx.TypeGroup == (sbyte)TypeUsers.ControlPanelUser);
 

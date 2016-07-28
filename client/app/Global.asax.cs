@@ -33,31 +33,9 @@ namespace ProducerInterface
 
 		protected void Application_Error(object sender, EventArgs e)
 		{
-			if (HttpContext.Current.IsCustomErrorEnabled) {
-				var ex = Server.GetLastError();
-				Log.Error(ex.Message, ex);
-				ErrorMessage("При выполнении запроса произошла непредвиденная ошибка");
-				Response.Redirect("~");
-			}
+			var ex = Server.GetLastError();
+			Log.Error(ex.Message, ex);
 		}
-
-		public void ErrorMessage(string message)
-		{
-			SetCookie("ErrorMessage", message);
-		}
-
-		public void SetCookie(string name, string value)
-		{
-			if (value == null)
-			{
-				Response.Cookies.Add(new HttpCookie(name, "false") { Path = "/", Expires = DateTime.Now });
-				return;
-			}
-			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
-			var text = Convert.ToBase64String(plainTextBytes);
-			Response.Cookies.Add(new HttpCookie(name, text) { Path = "/" });
-		}
-
 	}
 }
 

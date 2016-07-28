@@ -1,58 +1,60 @@
-﻿@using ProducerInterfaceCommon.ContextModels
-@using System.Web.Mvc.Html
-
-@{
-    var user = ViewBag.CurrentUser;
-
-}
+﻿@using ProducerInterfaceCommon.ViewModel.Interface.Global
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pharm-Статистика и Pro-движение @ViewBag.Title</title>
-    <link href="~/Content/Chosen/css/Site.css" rel="stylesheet" />
-    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
-    @Styles.Render("~/Content/css")
-    @RenderSection("styles", required: false)
-    <link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
-    @Scripts.Render("~/bundles/modernizr")
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pharm-Статистика и Pro-движение @ViewBag.Title</title>
+	<link href="~/Content/Chosen/css/Site.css" rel="stylesheet"/>
+	<link rel="icon" href="~/favicon.ico" type="image/x-icon"/>
+	@Styles.Render("~/Content/css")
+	@RenderSection("styles", false)
+	<link href="~/Content/Chosen/css/chosen.css" rel="stylesheet"/>
+	@Scripts.Render("~/bundles/modernizr")
 </head>
 <body name="main_container" class="main_container" id="main_container">
 
-    <div class="server-message" style="font-size:1.5em; text-align:center; margin-top:10px;"></div>
+<div class="server-message" style="font-size:1.5em; text-align:center; margin-top:10px;">
+	@if (TempData["SuccessMessage"] != null) {
+		<div class="alert alert-success">@TempData["SuccessMessage"]</div>
+	}
+	@if (TempData["ErrorMessage"] != null) {
+		<div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+	}
+</div>
 
-    @Html.Partial("MenuPartialView")
+@Html.Partial("MenuPartialView")
 
-    <div class="content" id="page_content">
+<div class="content" id="page_content">
 
-        @RenderBody()
+	@RenderBody()
 
-        <br />
-        <footer class="panel-footer navbar-fixed-bottom">
-            <p>&copy; @DateTime.Now.Year – Аналит Фармация | Email: <a href="mailto:marketing@analit.net">marketing@analit.net</a></p>
-        </footer>
-    </div>
+	<br/>
+	<footer class="panel-footer navbar-fixed-bottom">
+		<p>&copy; @DateTime.Now.Year – Аналит Фармация | Email: <a href="mailto:marketing@analit.net">marketing@analit.net</a>
+		</p>
+	</footer>
+</div>
 
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog" id="feedBack_ModalDialog">
-            <div class="modal-content" id="feedback_modal_content">
-                @Html.Partial("../FeedBack/FeedBack", new ProducerInterfaceCommon.ViewModel.Interface.Global.FeedBack())
-            </div>
-        </div>
-    </div>
+<div id="myModal" class="modal fade" role="dialog">
+	<div class="modal-dialog" id="feedBack_ModalDialog">
+		<div class="modal-content" id="feedback_modal_content">
+			@Html.Partial("../FeedBack/FeedBack", new FeedBack())
+		</div>
+	</div>
+</div>
 
-	@Scripts.Render("~/bundles/jquery")
-	@Scripts.Render("~/bundles/jqueryval")
-	@Scripts.Render("~/bundles/MvcAjax")
-	@Scripts.Render("~/bundles/chosen")
-	@Scripts.Render("~/bundles/WorkPlace")
-	@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/MvcAjax")
+@Scripts.Render("~/bundles/chosen")
+@Scripts.Render("~/bundles/WorkPlace")
+@Scripts.Render("~/bundles/bootstrap")
 
-	@RenderSection("JavaScript", required: false)
+@RenderSection("JavaScript", false)
 
-	<a hidden="hidden" name="UrlString" id="UrlString" value="@ViewBag.UrlString"></a>
+<a hidden="hidden" name="UrlString" id="UrlString" value="@ViewBag.UrlString"></a>
 </body>
 </html>
