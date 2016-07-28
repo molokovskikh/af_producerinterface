@@ -1,5 +1,4 @@
 ﻿$(function () {
-
     var dateTo = $('#DateEnd').datepicker({
         format: 'dd.mm.yyyy',
         language: 'ru',

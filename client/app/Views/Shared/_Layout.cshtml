@@ -54,6 +54,11 @@
 @Scripts.Render("~/bundles/bootstrap")
 
 @RenderSection("JavaScript", false)
+<script>
+	$(function () {
+		Globalize.culture("ru");
+	});
+</script>
 
 <a hidden="hidden" name="UrlString" id="UrlString" value="@ViewBag.UrlString"></a>
 </body>
