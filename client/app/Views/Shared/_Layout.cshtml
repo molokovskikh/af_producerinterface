@@ -52,11 +52,18 @@
 @Scripts.Render("~/bundles/chosen")
 @Scripts.Render("~/bundles/WorkPlace")
 @Scripts.Render("~/bundles/bootstrap")
-
 @RenderSection("JavaScript", false)
 <script>
 	$(function () {
 		Globalize.culture("ru");
+
+		var root = '@Url.Content("~")'.toLowerCase();
+		window.siteroot = root;
+		$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+			var url = options.url.toLowerCase();
+			if (url[0] == "/" && root != "" && url.indexOf(root) != 0)
+				options.url = root + options.url;
+		});
 	});
 </script>
 
