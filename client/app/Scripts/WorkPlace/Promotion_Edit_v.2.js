@@ -1,4 +1,4 @@
-﻿$(function () {     
+﻿$(function () {
     var elem = document.getElementById("PromotionUiDiv");
     ko.applyBindings(Promotion, elem);
     $("form").hide();
@@ -14,9 +14,9 @@
 });
 
 function UpdateSupplierList() {
-    var RegionListJson = ko.toJSON(Promotion.RegionList());   
+    var RegionListJson = ko.toJSON(Promotion.RegionList());
     $.ajax({
-        url: "GetUpdateSupplierList",
+        url: "/Promotion/GetUpdateSupplierList",
         cache: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -39,24 +39,14 @@ function UpdateSupplierList() {
 
 function AjaxLoadModel()
 {
-    var SendId = $('#PromotionId').val();
-   
-    var JsonSendData = "{'IdKey'" + ":" + "'" + SendId + "'}";
-
     $.ajax({
-        url: "EditGetPromotion",
+    	url: $("#LoadUrl").val(),
         cache: false,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        data: JsonSendData,
         type: "POST",
         success: function (result) {
-            if (result == "0") {
-
-            }
-            else {
-                bindModel(result);
-            }
+					bindModel(result);
         },
         error: function (jqXHR) {
             $('#message').html(jqXHR.statusText);
@@ -66,7 +56,7 @@ function AjaxLoadModel()
 
 function bindSupplierList(JsonList)
 {
-    var Array_ = Promotion.SuppierRegions();  
+    var Array_ = Promotion.SuppierRegions();
     Promotion.SuppierRegions([]);
     Promotion.SuppierRegionsList(JsonList);
     Promotion.SuppierRegionsList.valueHasMutated();
@@ -90,11 +80,11 @@ function bindSupplierList(JsonList)
         Promotion.SuppierRegions.valueHasMutated();
 
         if (EEE.length == 0)
-        {   
+        {
             Promotion.AllSupplier(false);
             Promotion.AllSupplier.valueHasMutated();
         }
-        
+
         DropdownReinit();
         SubmitValidationForm();
     }
@@ -131,28 +121,28 @@ function bindModel(JsonModel)
 
     Promotion.End(JsonModel.End);
     Promotion.End.valueHasMutated();
-   
+
     Promotion.DrugCatalogList(JsonModel.DrugCatalogList);
     Promotion.DrugCatalogList.valueHasMutated();
 
     Promotion.DrugList(JsonModel.DrugList);
     Promotion.DrugList.valueHasMutated();
-       
+
     Promotion.RegionGlobalList(JsonModel.RegionGlobalList);
     Promotion.RegionGlobalList.valueHasMutated();
 
     Promotion.RegionList(JsonModel.RegionList);
     Promotion.RegionList.valueHasMutated();
-          
+
     Promotion.SuppierRegionsList(JsonModel.SuppierRegionsList);
     Promotion.SuppierRegionsList.valueHasMutated();
 
     Promotion.SuppierRegions(JsonModel.SuppierRegions);
     Promotion.SuppierRegions.valueHasMutated();
- 
+
     if (JsonModel.PromotionFileName == null || JsonModel.PromotionFileName == "") {
         if (JsonModel.Id > 0) {
-            Promotion.PromotionFileName("Файл ранее не добавляли");         
+            Promotion.PromotionFileName("Файл ранее не добавляли");
             Promotion.PromotionFileName.valueHasMutated();
             Promotion.OldFileVisible(1);
             Promotion.OldFileVisible.valueHasMutated();
@@ -178,22 +168,19 @@ function bindModel(JsonModel)
         Promotion.OldFileVisible(1);
         Promotion.OldFileVisible.valueHasMutated();
     }
-           
+
     Promotion.ValiedationOnOff(false);
     Promotion.ValiedationOnOff.valueHasMutated();
 
     Event_Name_Change();
     Event_Annotation_Change();
 
-  //  Promotion.Event_Name();
-  //  Promotion.Event_Annotation();
-    
     var X = Promotion.RegionList();
 
     $("form").show();
     DropdownReinit();
     InitDatePicker();
-   
+
 }
 
 function InitDatePicker() {
@@ -201,7 +188,7 @@ function InitDatePicker() {
         format: 'dd.mm.yyyy',
         language: 'ru',
         weekStart: 1,
-        autoclose: true,     
+        autoclose: true,
         onRender: function (date) {
             return date.valueOf() > Date.now() ? 'disabled' : '';
         }
@@ -216,9 +203,8 @@ function InitDatePicker() {
         format: 'dd.mm.yyyy',
         autoclose: true,
         language: 'ru',
-        weekStart: 1,  
+        weekStart: 1,
         onRender: function (date) {
-            //return date.valueOf() <= dateFrom.date.valueOf() ? 'disabled' : '';
             return date.valueOf() > Date.now() ? 'disabled' : '';
         }
     }).data('datepicker');

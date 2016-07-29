@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion;
 using ProducerInterfaceCommon.Heap;
@@ -12,9 +13,6 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 {
 	public class PromotionController : BaseController
 	{
-		/// <summary>
-		/// Список промоакций
-		/// </summary>
 		[HttpGet]
 		public ActionResult Index()
 		{
@@ -23,14 +21,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			producerList.AddRange(h.RegisterListProducer());
 			ViewBag.ProducerList = producerList;
 
-			var model = new SearchProducerPromotion() {
-				Status = (byte)ActualPromotionStatus.All,
-				Begin = DateTime.Now.AddDays(-30),
-				End = DateTime.Now.AddDays(30),
-				EnabledDateTime = false
-			};
-
-			return View(model);
+			return View(new SearchProducerPromotion());
 		}
 
 		/// <summary>
@@ -44,36 +35,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (filter.Producer > 0)
 				query = query.Where(x => x.ProducerId == filter.Producer);
 
-			switch ((ActualPromotionStatus)filter.Status) {
-				// отключена пользователем
-				case ActualPromotionStatus.Disabled:
-					query = query.Where(x => !x.Enabled);
-					break;
-				// отклонена админом
-				case ActualPromotionStatus.Rejected:
-					query = query.Where(x => x.Status == PromotionStatus.Rejected);
-					break;
-				// ожидает подтверждения
-				case ActualPromotionStatus.NotConfirmed:
-					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.New);
-					break;
-				// не началась
-				case ActualPromotionStatus.ConfirmedNotBegin:
-					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.Confirmed && x.Begin > DateTime.Now);
-					break;
-				// закончилась
-				case ActualPromotionStatus.ConfirmedEnded:
-					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.Confirmed && x.End < DateTime.Now);
-					break;
-				// активна
-				case ActualPromotionStatus.Active:
-					query = query.Where(x => x.Enabled && x.Status == PromotionStatus.Confirmed && x.Begin < DateTime.Now && x.End > DateTime.Now);
-					break;
-				case ActualPromotionStatus.All:
-					break;
-			}
-
 			var model = query.OrderByDescending(x => x.UpdateTime).ToList();
+			if (filter.Status != null)
+				model = model.Where(x => x.GetStatus() == filter.Status.Value).ToList();
 
 			var h = new NamesHelper(CurrentUser.Id);
 			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };

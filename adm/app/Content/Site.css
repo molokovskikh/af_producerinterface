@@ -211,3 +211,19 @@ label.error {
 .unchanged {
 	font-weight: normal !important;
 }
+
+.promotion-ended, .promotion-ended td {
+	background: #B7B7B7 !important;
+}
+
+.promotion-active, .promotion-active td {
+	background: #60AF6F !important;
+}
+
+.promotion-await, .promotion-await td {
+	background: #E5D585 !important;
+}
+
+.promotion-rejected, .promotion-rejected td {
+	background: #E28585 !important;
+}

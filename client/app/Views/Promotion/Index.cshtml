@@ -1,36 +1,91 @@
-﻿@using ProducerInterfaceCommon.ViewModel.Interface.Promotion
-@model IEnumerable<PromotionUi>
+﻿@using ProducerInterfaceCommon.Heap
+@using ProducerInterfaceCommon.Models
+@model ProducerInterface.Controllers.PromotionFilter
 @{
-    ViewBag.Title = "Акции";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Акции";
 }
 <div class="container body-content">
+	<h3>
+		@ViewBag.Title
+		<a href="@Url.Action("New")" class="btn btn-primary pull-right">Добавить акцию</a>
+	</h3>
 
-    <div class="content panel-body">
-        <h3 class="title">@ViewBag.Title
-					<a href="@Url.Action("Edit")" class="btn btn-primary pull-right">Добавить акцию</a>
-        </h3>
-    </div>
+	<div class="row">
+		<div class="col-xs-4">
+			@using (@Html.BeginForm(null, null, FormMethod.Post, new {@class = "form-inline auto-post"})) {
+				@Html.EnumDropDownListFor(x => x.Status, "Все", new {@class = "form-control"})
+			}
+		</div>
+	</div>
 
-    <hr />
+	@if (Model.Items.Count > 0) {
+		<table class="table">
+			<thead>
+			<tr>
+				<th>
+					Наименование
+				</th>
+				<th>
+					Статус
+				</th>
+				<th>
+					Аннотация
+				</th>
+				<th>
+					Начало
+				</th>
+				<th>
+					Окончание
+				</th>
+				<th>
+					Препаратов
+				</th>
+				<th>
+					Поставщиков
+				</th>
+				<th>
+					Регионов
+				</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			@foreach (var item in Model.Items) {
+				<tr class="@item.RowStyle">
+					<td>@Html.ActionLink(item.Name, "Edit", new {item.Id})</td>
+					<td>@item.ActualStatus.DisplayName()</td>
+					<td>@item.Annotation</td>
+					<td>@item.Begin</td>
+					<td>@item.End</td>
+					<td>@item.DrugList.Count</td>
+					<td>@item.SuppierRegions.Count</td>
+					<td>@item.RegionList.Count</td>
+					<td>
+						@if (item.PromotionFileId != null) {
+							@Html.ActionLink("Листовка", "GetFile", "MediaFiles", new {id = item.PromotionFileId.Value}, null)
+						}
+					</td>
+				</tr>
+			}
+			</tbody>
+		</table>
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="panel-group">
-            @foreach (var item in Model)
-            {
-            @Html.Partial("PromotionItem", item)
-
-            <hr/>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            <div class="content blog col-sm-9 col-md-9">
-                <h4>Акций не зарегистрировано</h4>
-            </div>
-        </div>
-    }
+		<div class="row">
+			<div class="col-md-4">
+				<h4>Легенда</h4>
+				<ul class="list-group">
+					<li class="list-group-item promotion-ended">Завершена</li>
+					<li class="list-group-item promotion-active">Опубликована</li>
+					<li class="list-group-item promotion-await">Ожидание даты начала публикации</li>
+					<li class="list-group-item promotion-rejected">Отклонена администратором</li>
+				</ul>
+			</div>
+		</div>
+	} else {
+		<div class="row">
+			<div class="col-xs-12">
+				<h4>Акций не зарегистрировано</h4>
+			</div>
+		</div>
+	}
 </div>

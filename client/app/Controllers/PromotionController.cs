@@ -7,8 +7,10 @@ using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
 using System.Data.Entity;
 using System.IO;
+using System.Web.Mvc.Html;
 using ProducerInterfaceCommon.Models;
 using ProducerInterfaceCommon.ViewModel.Interface.Promotion;
+
 namespace ProducerInterface.Controllers
 {
 	public class PromotionController : BaseController
@@ -32,98 +34,70 @@ namespace ProducerInterface.Controllers
 			}
 		}
 
-		/// <summary>
-		/// Акции главная
-		/// </summary>
-		/// <param name="Id"></param>
-		/// <returns></returns>
-		public ActionResult Index(string Id = null)
+		public ActionResult Index()
 		{
-			var model = new List<PromotionUi>();
-			var promoList = DB2.Promotions.Where(x => x.ProducerId == producerId).ToList();
-			if (promoList.Count == 0)
-				return View(model);
-
-			var suppliers = DB.suppliernames.ToDictionary(x => x.SupplierId, x => x.SupplierName);
-			var assortment = DB.assortment.Where(x => x.ProducerId == producerId).ToDictionary(x => x.CatalogId, x => x.CatalogName);
-			foreach (var item in promoList) {
-				unchecked {
-					if (item.RegionMask == 0)
-						item.RegionMask = (long)ulong.MaxValue;
-				}
-				var supplierIds = item.PromotionsToSupplier.Select(x => x.SupplierId).ToList();
-				var drugsIds = item.PromotionToDrug.Select(x => x.DrugId).ToList();
-				var itemUi = new PromotionUi() {
-					Id = item.Id,
-					Name = item.Name,
-					Annotation = item.Annotation,
-					Begin = item.Begin.ToString("dd.MM.yyyy"),
-					End = item.End.ToString("dd.MM.yyyy"),
-					PromotionFileId = item.MediaFile?.Id,
-					PromotionFileName = item.MediaFile?.ImageName,
-					AllSuppliers = item.AllSuppliers,
-					ActualStatus = item.GetStatus(),
-					DrugList = assortment.Where(x => drugsIds.Contains(x.Key)).Select(x => x.Value).ToList(),
-					RegionList = DB.Regions((ulong)item.RegionMask).Select(x => x.Name).ToList(),
-					SuppierRegions = suppliers.Where(x => supplierIds.Contains(x.Key)).Select(x => x.Value).ToList()
-				};
-				model.Add(itemUi);
-			}
-
-			if (Id != null)
-				ViewBag.OpenPromotionId = Id;
-			return View(model);
+			var filter = new PromotionFilter();
+			if (Request.HttpMethod == "POST")
+				UpdateModel(filter);
+			filter.Find(DB, DB2, producerId);
+			return View(filter);
 		}
 
-		[HttpGet]
-		public ActionResult Edit(long IdKey = 0, bool Copy = false)
+		public ActionResult Edit(int id)
 		{
-			var id = IdKey.ToString();
-			if (Copy)
-				id += ", true";
-			ViewBag.PromotionId = id;
-			ViewBag.Id = IdKey;
-			return View();
+			ViewBag.Title = "Редактирование акции";
+			ViewBag.LoadUrl = Url.Action("Load", new { id });
+			return View(DB2.Promotions.Find(id));
+		}
+
+		public ActionResult Copy(int id)
+		{
+			ViewBag.Title = "Добавление акции";
+			ViewBag.LoadUrl = Url.Action("LoadCopy", new { id });
+			return View("Edit");
+		}
+
+		public ActionResult New()
+		{
+			ViewBag.Title = "Добавление акции";
+			ViewBag.LoadUrl = Url.Action("LoadNew");
+			return View("Edit");
 		}
 
 		[HttpPost]
-		public JsonResult EditGetPromotion(string IdKey = "0")
+		public JsonResult LoadCopy(int id)
+		{
+			return ToJson(new Promotion(DB2.Promotions.Find(id), CurrentUser));
+		}
+
+		public JsonResult LoadNew()
+		{
+			return ToJson(new Promotion(CurrentUser));
+		}
+
+		public JsonResult Load(int id)
+		{
+			return ToJson(DB2.Promotions.Find(id));
+		}
+
+		private JsonResult ToJson(Promotion model)
 		{
 			var viewModel = new PromotionUi();
-			var id = Convert.ToInt64(IdKey.Split(',').First());
-			if (IdKey.Contains("true"))
-				id = 0;
-
 			viewModel.DrugCatalogList = h.GetCatalogList().Select(x => new TextValue { Text = x.Text, Value = x.Value }).ToList();
 			viewModel.RegionGlobalList = DB.Regions().Select(x => new TextValue(x)).ToList();
-
-			Promotion model = null;
-			if (IdKey != "0") {
-				var idPromo = Convert.ToInt64(IdKey.Split(',').First());
-				model = DB2.Promotions.Find(idPromo);
-			}
-			if (model == null)
-				model = new Promotion(CurrentUser);
-
-			viewModel.Id = id;
+			viewModel.Id = model.Id;
 			viewModel.Name = model.Name;
 			viewModel.Annotation = model.Annotation;
 			if (model.MediaFile != null) {
 				viewModel.PromotionFileId = model.MediaFile.Id;
 				viewModel.PromotionFileName = model.MediaFile.ImageName;
-				viewModel.PromotionFileUrl = Url.Action("GetFile", "MediaFiles", new { model.MediaFile.Id });
+				viewModel.PromotionFileUrl = Url.Action("GetFile", "MediaFiles", new {model.MediaFile.Id});
 			}
 
 			if (model.Id == 0) {
 				viewModel.Title = "Новая промоакция";
 			} else {
-				if (id == 0)
-				{
-					viewModel.Name += " Копия";
-					viewModel.Title = "Создание промоакции: копия из " + model.Name;
-				}
-				else
-					viewModel.Title = "Редактирование промоакции: " + model.Name;
+				viewModel.Title = "Редактирование промоакции: " + model.Name;
 			}
 
 			viewModel.PromotionFileId = model.MediaFile?.Id;
@@ -138,17 +112,17 @@ namespace ProducerInterface.Controllers
 				viewModel.End = model.End.ToString("dd.MM.yyyy");
 
 			viewModel.DrugList = model.PromotionToDrug.ToList().Select(x => x.DrugId.ToString()).ToList();
-			var regions = DB.Regions((ulong)model.RegionMask);
+			var regions = DB.Regions((ulong) model.RegionMask);
 			viewModel.RegionList = regions.Select(x => x.Id.ToString()).ToList();
 
 			if (model.AllSuppliers)
-				viewModel.SuppierRegions = new List<string>() { "0" };
+				viewModel.SuppierRegions = new List<string>() {"0"};
 			else
 				viewModel.SuppierRegions = model.PromotionsToSupplier.Select(x => x.SupplierId.ToString()).ToList();
 			viewModel.SuppierRegionsList = h.GetSupplierList(regions.Select(x => x.Id).ToList())
-				.Select(x => new TextValue { Text = x.Text, Value = x.Value })
+				.Select(x => new TextValue {Text = x.Text, Value = x.Value})
 				.ToList();
-			viewModel.SuppierRegionsList.Add(new TextValue() { Text = "Все поставщики из выбранных регионов", Value = "0" });
+			viewModel.SuppierRegionsList.Add(new TextValue() {Text = "Все поставщики из выбранных регионов", Value = "0"});
 
 			return Json(viewModel, JsonRequestBehavior.AllowGet);
 		}
@@ -171,16 +145,15 @@ namespace ProducerInterface.Controllers
 		{
 			if (model.Id == 0)
 			{
-				// добавить
-				var idNewPromo = SaveNewPromotion(model);
+				SaveNewPromotion(model);
 				SuccessMessage("Промо акция добавлена и отправлен запрос на её подтверждение");
-				return RedirectToAction("Index", new { Id = idNewPromo });
+				return RedirectToAction("Index");
 			}
 			else
 			{
-				var idNewPromo = ChangePromotion(model);
+				ChangePromotion(model);
 				SuccessMessage("Промо акция изменена и отправлен запрос на её подтверждение");
-				return RedirectToAction("Index", new { Id = idNewPromo });
+				return RedirectToAction("Index");
 			}
 		}
 

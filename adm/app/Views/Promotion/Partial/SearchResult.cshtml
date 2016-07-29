@@ -2,42 +2,57 @@
 @using ProducerInterfaceCommon.Heap
 @model IEnumerable<ProducerInterfaceCommon.Models.Promotion>
 @{
-    var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
+	var ProducerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
 }
-    <div class="row">
-        <div class="col-xs-12">
-            <table class="table-bordered table-striped table-condensed table-custom" style="min-width:100%;">
-                <tr>
-                    <th>Наименование</th>
-                    <th>Статус</th>
-                    <th>Аннотация</th>
-                    <th>Дата начала</th>
-                    <th>Дата окончания</th>
-                    <th>Препараты</th>
-                    <th>Поствщики</th>
-                    <th>Производитель</th>
-                    <th>Файл</th>
-                </tr>
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table-bordered table-striped table-condensed table-custom" style="min-width:100%;">
+			<tr>
+				<th>Наименование</th>
+				<th>Статус</th>
+				<th>Аннотация</th>
+				<th>Дата начала</th>
+				<th>Дата окончания</th>
+				<th>Препараты</th>
+				<th>Поствщики</th>
+				<th>Производитель</th>
+				<th>Файл</th>
+			</tr>
 
-                @foreach (var Item in Model)
-                {
-                    <tr>
-                        <td>@Html.ActionLink(@Item.Name, "View", new { Item.Id })</td>
-                        <th>@Item.GetStatus().DisplayName()</th>
-                        <td>@Item.Annotation</td>
-                        <td>@Item.Begin.ToShortDateString()</td>
-                        <td>@Item.End.ToShortDateString()</td>
-                        <td>@Item.PromotionToDrug.Count()</td>
-                        <td>@Item.PromotionsToSupplier.Count()</td>
-                        <td>@ProducerList.Where(xx=>xx.Value == Item.ProducerId.ToString()).First().Text</td>
-                        <td>
-                            @if (Item.MediaFile != null) {
-                                <a href="@Url.Action("GetFile", "MediaFiles", new {Item.MediaFile.Id})">@Item.MediaFile.ImageName</a>
-                            }
-                        </td>
-                    </tr>
-                }
+			@foreach (var Item in Model) {
+				<tr class="@Item.RowStyle">
+					<td>@Html.ActionLink(@Item.Name, "View", new {Item.Id})</td>
+					<td>
+						<strong>
+							@Item.GetStatus().DisplayName()
+						</strong>
+					</td>
+					<td>@Item.Annotation</td>
+					<td>@Item.Begin.ToShortDateString()</td>
+					<td>@Item.End.ToShortDateString()</td>
+					<td>@Item.PromotionToDrug.Count()</td>
+					<td>@Item.PromotionsToSupplier.Count()</td>
+					<td>@ProducerList.Where(xx => xx.Value == Item.ProducerId.ToString()).First().Text</td>
+					<td>
+						@if (Item.MediaFile != null) {
+							<a href="@Url.Action("GetFile", "MediaFiles", new {Item.MediaFile.Id})">@Item.MediaFile.ImageName</a>
+						}
+					</td>
+				</tr>
+			}
 
-            </table>
-        </div>
-    </div>
+		</table>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<h4>Легенда</h4>
+		<ul class="list-group">
+			<li class="list-group-item promotion-ended">Завершена</li>
+			<li class="list-group-item promotion-active">Опубликована</li>
+			<li class="list-group-item promotion-await">Ожидание даты начала публикации</li>
+			<li class="list-group-item promotion-rejected">Отклонена администратором</li>
+		</ul>
+	</div>
+</div>

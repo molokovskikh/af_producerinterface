@@ -355,10 +355,10 @@
     <Compile Include="ReportModels\SupplierRating\SupplierRatingReportRow.cs" />
     <Compile Include="Models\TriggerParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\ControlPanel\FeedBack\FeedBackFilterView.cs" />
-    <Compile Include="ViewModel\ControlPanel\Permission\ListGroupView.cs" />
-    <Compile Include="ViewModel\ControlPanel\Promotion\SearchProducerPromotion.cs" />
-    <Compile Include="ViewModel\ControlPanel\Report\SearchProducerReportsModel.cs" />
+    <Compile Include="ViewModel\ControlPanel\FeedBackFilterView.cs" />
+    <Compile Include="ViewModel\ControlPanel\ListGroupView.cs" />
+    <Compile Include="ViewModel\ControlPanel\SearchProducerPromotion.cs" />
+    <Compile Include="ViewModel\ControlPanel\SearchProducerReportsModel.cs" />
     <Compile Include="ViewModel\Interface\Global\FeedBack.cs" />
     <Compile Include="ViewModel\Interface\Profile\ChangePassword.cs" />
     <Compile Include="ViewModel\Interface\Profile\ProfileValidation.cs" />

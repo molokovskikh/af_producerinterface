@@ -28,6 +28,7 @@ namespace ProducerInterfaceCommon.ViewModel.Interface.Promotion
 		public long? PromotionFileId { get; set; }
 		public string PromotionFileName { get; set; }
 		public string PromotionFileUrl { get; set; }
+		public string RowStyle { get; set; }
 	}
 
 	public class TextValue

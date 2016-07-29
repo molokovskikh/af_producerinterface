@@ -1,171 +1,188 @@
-﻿
-@{
-    ViewBag.Title = (ViewBag.Id != 0 ? "Редактирование акции" : "Добавление акции");
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
+﻿@using ProducerInterfaceCommon.Models
 <div class="container" id="PromotionUiDiv" name="PromotionUiDiv">
 	<ol class="breadcrumb">
 		<li>@Html.ActionLink("Промоакции", "Index") </li>
 		<li class="active">@ViewBag.Title</li>
 	</ol>
 
-    <div class="row">
-        <div class="col-xs-12">
-          <h3>
-            <img data-bind="visible: LoadingImageVisible" src="~/Content/Image/Loading_icon.gif" style="max-height:1.3em;" />
-            <span data-bind="text: Title"></span>
-          </h3>
-        </div>
-    </div>
+	@Html.Hidden("LoadUrl", (object)ViewBag.LoadUrl)
 
-    <input hidden="hidden" id="PromotionId" name="PromotionId" value="@ViewBag.PromotionId" />
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>
+				<img data-bind="visible: LoadingImageVisible" src="~/Content/Image/Loading_icon.gif" style="max-height:1.3em;"/>
+				<span data-bind="text: Title"></span>
+			</h3>
+		</div>
+	</div>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="row">
-                <form action="@Url.Action("EditSave")" method="post" data-bind="event:{submit: Validation}" enctype="multipart/form-data">
-                    <input type="text" id="Id" name="Id" data-bind="value: Id" hidden="hidden"/>
+	@if (Model != null) {
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="btn-group btn-group-primary btn-group-lg">
+					<a href="@Url.Action("Copy", new { Model.Id })" title="Создать копию" class="btn  btn-default glyphicon glyphicon-floppy-save"></a>
+					<a href="@Url.Action("Delete", new { Model.Id })" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить акцию?');" class="btn btn-default glyphicon glyphicon-trash delete"></a>
 
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-5">
-                                    <label>Наименование акции </label>
-                                </div>
-                                <div class="col-xs-7">
-                                    <p data-bind="text: NameLight" class="text-size-09em text-style-italic pull-right"></p>
-                                </div>
-                            </div>
+					<!-- если ещё не началась или активна - можно остановить -->
+					@if (Model.GetStatus() == ActualPromotionStatus.ConfirmedNotBegin || Model.GetStatus() == ActualPromotionStatus.NotConfirmed || Model.GetStatus() == ActualPromotionStatus.Active)
+					{
+							<a href="@Url.Action("Publication", new { Model.Id, Enabled = false })" title="Остановить публикацию" class="btn  btn-default glyphicon glyphicon-eye-close"></a>
+					}
+					else if(Model.GetStatus() == ActualPromotionStatus.Disabled)
+					{
+							<!-- если остановлена пользователем - можно запустить -->
+							<a href="@Url.Action("Publication", new { Model.Id, Enabled = true })" title="Начать публикацию акции*(При наступлении срока)" class="btn btn-default glyphicon glyphicon-eye-close"></a>
+					}
+				</div>
+			</div>
+		</div>
+	}
 
-                            <input type="text" data-bind="value: Name, valueUpdate: 'afterkeydown', event:{keyup: Event_Name}" id="Name" name="Name" class="form-control" />
-                            <span class="field-validation-error" data-bind="text: NameError"></span>
-                        </div>
-                    </div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="row">
+				<form action="@Url.Action("EditSave")" method="post" data-bind="event:{submit: Validation}" enctype="multipart/form-data">
+					<input type="text" id="Id" name="Id" data-bind="value: Id" hidden="hidden"/>
 
-                    <div class="col-xs-12">
-                        <div class="form-group">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-xs-5">
+									<label>Наименование акции</label>
+								</div>
+								<div class="col-xs-7">
+									<p data-bind="text: NameLight" class="text-size-09em text-style-italic pull-right"></p>
+								</div>
+							</div>
 
-                            <div class="row">
-                                <div class="col-xs-5">
-                                    <label>Аннотация</label>
-                                </div>
-                                <div class="col-xs-7">
-                                    <p class="text-size-09em text-style-italic pull-right" data-bind="text: AnnotationLight"></p>
-                                </div>
-                            </div>
+							<input type="text" data-bind="value: Name, valueUpdate: 'afterkeydown', event:{keyup: Event_Name}" id="Name" name="Name" class="form-control"/>
+							<span class="field-validation-error" data-bind="text: NameError"></span>
+						</div>
+					</div>
 
-                            <textarea rows="5" id="Annotation" name="Annotation" data-bind="value: Annotation, valueUpdate: 'afterkeydown', event:{keyup: Event_Annotation}" class="form-control" typeof="input"></textarea>
-                            <span class="field-validation-error" data-bind="text: AnnotationError"></span>
-                        </div>
-                    </div>
+					<div class="col-xs-12">
+						<div class="form-group">
 
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label>Список препаратов, участвующие в акции</label>
-                            <select typeod="input" id="DrugList" name="DrugList" multiple="" hidden="hidden" data-bind="foreach: DrugCatalogList, selectedOptions: DrugList, event: {change: Event_DrudList}" class="drop">
-                                <option data-bind="text: Text, value: Value"></option>
-                            </select>
-                            <span class="field-validation-error" data-bind="text: DrugListError"></span>
-                        </div>
-                    </div>
+							<div class="row">
+								<div class="col-xs-5">
+									<label>Аннотация</label>
+								</div>
+								<div class="col-xs-7">
+									<p class="text-size-09em text-style-italic pull-right" data-bind="text: AnnotationLight"></p>
+								</div>
+							</div>
+
+							<textarea rows="5" id="Annotation" name="Annotation" data-bind="value: Annotation, valueUpdate: 'afterkeydown', event:{keyup: Event_Annotation}" class="form-control" typeof="input"></textarea>
+							<span class="field-validation-error" data-bind="text: AnnotationError"></span>
+						</div>
+					</div>
+
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label>Список препаратов, участвующие в акции</label>
+							<select typeod="input" id="DrugList" name="DrugList" multiple="" hidden="hidden" data-bind="foreach: DrugCatalogList, selectedOptions: DrugList, event: {change: Event_DrudList}" class="drop">
+								<option data-bind="text: Text, value: Value"></option>
+							</select>
+							<span class="field-validation-error" data-bind="text: DrugListError"></span>
+						</div>
+					</div>
 
 
-                    <div class="col-xs-12">
-                        <div class="form-group">
-	                        <label>Список регионов</label>
-	                        <p>
-														<input type="button" value="Выбрать все" data-bind="click: selectAllRegions" />
-														<input type="button" value="Очистить" data-bind="click: clearRegions" />
-													</p>
-                            <select typeof="input" multiple="" id="RegionList" name="RegionList" hidden="hidden"  data-bind="foreach: RegionGlobalList, selectedOptions: RegionList,  event: {change: Event_RegionList}"  class="drop">
-                                <option data-bind="text: Text, value: Value"></option>
-                            </select>
-                            <span class="field-validation-error" data-bind="text: RegionListError"></span>
-                        </div>
-                    </div>
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label>Список регионов</label>
+							<p>
+								<input type="button" value="Выбрать все" data-bind="click: selectAllRegions"/>
+								<input type="button" value="Очистить" data-bind="click: clearRegions"/>
+							</p>
+							<select typeof="input" multiple="" id="RegionList" name="RegionList" hidden="hidden" data-bind="foreach: RegionGlobalList, selectedOptions: RegionList,  event: {change: Event_RegionList}" class="drop">
+								<option data-bind="text: Text, value: Value"></option>
+							</select>
+							<span class="field-validation-error" data-bind="text: RegionListError"></span>
+						</div>
+					</div>
 
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label>Список поставщиков</label>
-                            <label class="checkbox">
-                                <input id="all-suppliers" type="checkbox" data-bind="checked: AllSupplier, event: {change: Event_AllSupplier}" /> Отметить всех поставщиков в выбранных регионах
-                            </label>
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label>Список поставщиков</label>
+							<label class="checkbox">
+								<input id="all-suppliers" type="checkbox" data-bind="checked: AllSupplier, event: {change: Event_AllSupplier}"/> Отметить всех поставщиков в выбранных регионах
+							</label>
 
-                            <select multiple="" hidden="hidden" data-bind="foreach: SuppierRegionsList, selectedOptions: SuppierRegions, event: {change: Event_SuppierRegions}" id="SuppierRegions" name="SuppierRegions" class="drop">
-                                <option data-bind="text: Text, value: Value"></option>
-                            </select>
-                            <span class="field-validation-error" data-bind="text: SuppierRegionsError"></span>
-                        </div>
-                    </div>
+							<select multiple="" hidden="hidden" data-bind="foreach: SuppierRegionsList, selectedOptions: SuppierRegions, event: {change: Event_SuppierRegions}" id="SuppierRegions" name="SuppierRegions" class="drop">
+								<option data-bind="text: Text, value: Value"></option>
+							</select>
+							<span class="field-validation-error" data-bind="text: SuppierRegionsError"></span>
+						</div>
+					</div>
 
-                    <div class="row">
+					<div class="row">
 
-                        <div class="col-xs-6">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label>Дата начала акции</label>
-                                    <input type="text" id="Begin" name="Begin" data-bind="value: Begin" class="form-control" readonly />
-                                    <span class="field-validation-error" data-bind="text: BeginError"></span>
-                                </div>
-                            </div>
-                        </div>
+						<div class="col-xs-6">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<label>Дата начала акции</label>
+									<input type="text" id="Begin" name="Begin" data-bind="value: Begin" class="form-control" readonly/>
+									<span class="field-validation-error" data-bind="text: BeginError"></span>
+								</div>
+							</div>
+						</div>
 
-                        <div class="col-xs-6">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label>Дата окончания акции</label>
-                                    <input type="text" id="End" name="End" data-bind="value: End" class="form-control" readonly />
-                                    <span class="field-validation-error" data-bind="text: EndError"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+						<div class="col-xs-6">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<label>Дата окончания акции</label>
+									<input type="text" id="End" name="End" data-bind="value: End" class="form-control" readonly/>
+									<span class="field-validation-error" data-bind="text: EndError"></span>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-12" data-bind="visible: OldFileVisible">
-                                    <label>Файл-листовка: <a data-bind="text: PromotionFileName, attr: { href: PromotionFileUrl, class: PromoFileClass} "></a></label>
-                                    <input hidden="hidden" id="PromotionFileId" name="PromotionFileId" data-bind="value: PromotionFileId"/>
-                                </div>
-                            </div>
-                                 <label>Разместить файл-листовку</label>
-                                 <p class="text-size-09em text-style-italic"> Выберете файл для загрузки в форматах .jpg, .jpeg, .txt. Максимальный размер файла 500КБ</p>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="fileupload fileupload-new" data-provides="fileupload">
-                                        <span class="form-control btn btn-default btn-sm btn-file" style="max-width:300px;">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-xs-12" data-bind="visible: OldFileVisible">
+									<label>Файл-листовка: <a data-bind="text: PromotionFileName, attr: { href: PromotionFileUrl, class: PromoFileClass} "></a></label>
+									<input hidden="hidden" id="PromotionFileId" name="PromotionFileId" data-bind="value: PromotionFileId"/>
+								</div>
+							</div>
+							<label>Разместить файл-листовку</label>
+							<p class="text-size-09em text-style-italic"> Выберете файл для загрузки в форматах .jpg, .jpeg, .txt. Максимальный размер файла 500КБ</p>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="fileupload fileupload-new" data-provides="fileupload">
+										<span class="form-control btn btn-default btn-sm btn-file" style="max-width:300px;">
                                             <span class="fileupload-new">Выбрать файл-листовку</span>
                                             <span class="fileupload-exists">Файл-листовка выбран / изменить выбор</span>
                                             <input type="file" id="File" name="File" accept="image/jpeg,text/plain" hidden="hidden" value="@ViewBag.PromoFile" />
                                         </span>
-                                        <span class="fileupload-preview"></span>
-                                        <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
-                                    </div>
-                                </div>
-                            </div>
+										<span class="fileupload-preview"></span>
+										<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+									</div>
+								</div>
+							</div>
 
-                            <span class="field-validation-error" data-bind="text: FileError"></span>
-                        </div>
-                    </div>
+							<span class="field-validation-error" data-bind="text: FileError"></span>
+						</div>
+					</div>
 
 
-                    <div class="col-xs-12">
-                        <div class="form-group" style="min-height:50px;">
-                            <input type="submit" class="btn btn-primary pull-right" data-bind="value: SubmitText" />
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+					<div class="col-xs-12">
+						<div class="form-group" style="min-height:50px;">
+							<input type="submit" class="btn btn-primary pull-right" data-bind="value: SubmitText"/>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section styles
 {
-    <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
-    <link href="~/Content/FileUpload.css" rel="stylesheet" />
+	<link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet"/>
+	<link href="~/Content/FileUpload.css" rel="stylesheet"/>
 
 }
 

@@ -211,6 +211,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
+    <Compile Include="Controllers\PromotionFilter.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -339,6 +340,7 @@
     <Content Include="Scripts\SemanticUI\dropdown.min.js" />
     <Content Include="Scripts\SemanticUI\reset.min.css" />
     <Content Include="Scripts\SemanticUI\transition.min.js" />
+    <Content Include="Scripts\WorkPlace\app.js" />
     <Content Include="Scripts\WorkPlace\Paginator.js" />
     <Content Include="Scripts\WorkPlace\DatePicker.js" />
     <Content Include="Scripts\WorkPlace\FileUpLoad_v.2.0.js" />
@@ -367,6 +369,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>

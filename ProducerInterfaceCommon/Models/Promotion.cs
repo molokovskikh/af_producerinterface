@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using Common.Tools;
 using Newtonsoft.Json;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Heap;
@@ -22,8 +23,6 @@ namespace ProducerInterfaceCommon.Models
 		Active = 3,
 		[Display(Name = "Отключена пользователем")]
 		Disabled = 4,
-		[Display(Name = "Любой")]
-		All = 5,
 		[Display(Name = "Отклонена администратором")]
 		Rejected = 6
 	}
@@ -72,18 +71,38 @@ namespace ProducerInterfaceCommon.Models
 
 	public class PromotionToDrug
 	{
-			public long DrugId { get; set; }
-			public long PromotionId { get; set; }
+		public PromotionToDrug()
+		{
+		}
 
-			public virtual Promotion promotions { get; set; }
+		public PromotionToDrug(long drugId, long promotionId)
+		{
+			DrugId = drugId;
+			PromotionId = promotionId;
+		}
+
+		public long DrugId { get; set; }
+		public long PromotionId { get; set; }
+
+		public virtual Promotion promotions { get; set; }
 	}
 
 	public class PromotionsToSupplier
 	{
-			public long PromotionId { get; set; }
-			public long SupplierId { get; set; }
+		public PromotionsToSupplier()
+		{
+		}
 
-			public virtual Promotion promotions { get; set; }
+		public PromotionsToSupplier(long promotionId, long supplierId)
+		{
+			PromotionId = promotionId;
+			SupplierId = supplierId;
+		}
+
+		public long PromotionId { get; set; }
+		public long SupplierId { get; set; }
+
+		public virtual Promotion promotions { get; set; }
 	}
 
 	public class User
@@ -178,6 +197,18 @@ namespace ProducerInterfaceCommon.Models
 			PromotionsToSupplier = new HashSet<PromotionsToSupplier>();
 		}
 
+		public Promotion(Promotion promotion, Account user)
+			: this(user)
+		{
+			Name = promotion.Name + " Копия";
+			Annotation = promotion.Annotation;
+			MediaFile = promotion.MediaFile;
+			AllSuppliers = promotion.AllSuppliers;
+			RegionMask = promotion.RegionMask;
+			PromotionToDrug.AddEach(promotion.PromotionToDrug.Select(x => new PromotionToDrug(x.DrugId, x.PromotionId)));
+			PromotionsToSupplier.AddEach(promotion.PromotionsToSupplier.Select(x => new PromotionsToSupplier(x.PromotionId, x.SupplierId)));
+		}
+
 		public Promotion(Account user)
 			: this()
 		{
@@ -220,6 +251,10 @@ namespace ProducerInterfaceCommon.Models
 
 		public ActualPromotionStatus GetStatus()
 		{
+			// не отклонена, согласована, просрочена
+			if (End < DateTime.Today)
+				return ActualPromotionStatus.ConfirmedEnded;
+
 			// отклонена админом
 			if (Status == PromotionStatus.Rejected)
 				return ActualPromotionStatus.Rejected;
@@ -228,23 +263,34 @@ namespace ProducerInterfaceCommon.Models
 			if (!Enabled)
 				return ActualPromotionStatus.Disabled;
 
-			// ожидает согласования
-			if (Enabled && Status == PromotionStatus.New)
-				return ActualPromotionStatus.NotConfirmed;
-
 			// не отклонена, согласована, не началась
 			if (Enabled && Status == PromotionStatus.Confirmed && Begin > DateTime.Now)
 				return ActualPromotionStatus.ConfirmedNotBegin;
 
-			// не отклонена, согласована, просрочена
-			if (Enabled && Status == PromotionStatus.Confirmed && End < DateTime.Now)
-				return ActualPromotionStatus.ConfirmedEnded;
-
 			// активная
-			if (Enabled && Status == PromotionStatus.Confirmed && Begin < DateTime.Now && End > DateTime.Now)
+			if (Enabled && Status == PromotionStatus.Confirmed && Begin < DateTime.Now && End >= DateTime.Today)
 				return ActualPromotionStatus.Active;
 
-			throw new NotSupportedException("Неизвестный статус");
+			return ActualPromotionStatus.NotConfirmed;
+		}
+
+		public string RowStyle
+		{
+			get
+			{
+				var style = "";
+				var status = GetStatus();
+				if (status == ActualPromotionStatus.ConfirmedEnded) {
+					style = "promotion-ended";
+				} else if (status == ActualPromotionStatus.Active) {
+					style = "promotion-active";
+				} else if (status == ActualPromotionStatus.ConfirmedNotBegin) {
+					style = "promotion-await";
+				} else if (status == ActualPromotionStatus.Rejected) {
+					style = "promotion-rejected";
+				}
+				return style;
+			}
 		}
 
 		public virtual bool CheckSecurity(Account user)

@@ -65,21 +65,7 @@
 
                             <div class="form-group">
                                 <label>Статус</label>
-
-                                <select id="Status" name="Status" class="form-control">
-                                    @foreach (var item in listStatus)
-                                    {
-                                        if (item.Value == Model.Status.ToString())
-                                        {
-                                            <option value="@item.Value" selected="selected">@item.Text</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    }
-                                </select>
-
+																@Html.EnumDropDownListFor(x => x.Status, "Все", new {@class = "form-control"})
                             </div>
 
                             <div class="form-group">

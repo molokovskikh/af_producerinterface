@@ -9,6 +9,7 @@ namespace ProducerInterface
 		{
 			bundles.Add(new ScriptBundle("~/bundles/jquery")
 				.Include("~/Scripts/jquery-{version}.js",
+				"~/Scripts/WorkPlace/app.js",
 				"~/Scripts/jquery.globalize/*.js",
 				"~/Scripts/jquery.globalize/cultures/*.js"));
 
