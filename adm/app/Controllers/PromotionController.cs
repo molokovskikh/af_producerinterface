@@ -29,21 +29,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		/// </summary>
 		public ActionResult SearchResult(SearchProducerPromotion filter)
 		{
-			var query = DB2.Promotions.AsQueryable();
-			if (!filter.EnabledDateTime)
-				query = query.Where(x => x.Begin > filter.Begin && x.End < filter.End);
-			if (filter.Producer > 0)
-				query = query.Where(x => x.ProducerId == filter.Producer);
-
-			var model = query.OrderByDescending(x => x.UpdateTime).ToList();
-			if (filter.Status != null)
-				model = model.Where(x => x.GetStatus() == filter.Status.Value).ToList();
-
 			var h = new NamesHelper(CurrentUser.Id);
 			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
 			producerList.AddRange(h.RegisterListProducer());
 			ViewBag.ProducerList = producerList;
-			return PartialView("Partial/Promotions", model);
+			return PartialView("Partial/Promotions", filter.Find(DB2));
 		}
 
 		/// <summary>

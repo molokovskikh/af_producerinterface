@@ -749,6 +749,7 @@
     <Content Include="Views\Promotion\History.cshtml" />
     <Content Include="Views\Promotion\Partial\Snapshot.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
+    <Content Include="Views\ProducerInformation\Promotions.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

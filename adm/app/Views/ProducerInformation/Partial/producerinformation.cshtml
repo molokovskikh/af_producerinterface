@@ -3,7 +3,6 @@
 @model AccountCompany
 @{
 	var ListProducer = ViewBag.ListProducer as IEnumerable<OptionElement>;
-	var ListPromotion = ViewBag.PromotionList as IEnumerable<Promotion>;
 	var ListReport = ViewBag.ReportList as IEnumerable<Job>;
 }
 
@@ -19,7 +18,8 @@
 		<a data-toggle="tab" href="#panel2">Домены</a>
 	</li>
 	<li>
-		<a data-toggle="tab" href="#panel3">Промоакции</a>
+		@Ajax.ActionLink("Акции", "Promotions", new { id = Model.ProducerId },
+			new AjaxOptions { UpdateTargetId = "panel3"}, new { data_toggle="tab", data_target = "#panel3" })
 	</li>
 	<li>
 		<a data-toggle="tab" href="#panel4">Отчеты</a>
@@ -68,7 +68,6 @@
 	</div>
 
 	<div id="panel3" class="tab-pane fade">
-		@Html.Partial("Partial/Promotions", ListPromotion)
 	</div>
 
 	<div id="panel4" class="tab-pane fade">

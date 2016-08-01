@@ -1,0 +1,22 @@
+﻿@using ProducerInterfaceCommon.Models
+@model ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion.SearchProducerPromotion
+
+<br/>
+
+<div class="row">
+	<div class="col-xs-4">
+		@using (@Ajax.BeginForm("Promotions", new {id = Model.Producer}, new AjaxOptions {UpdateTargetId = "panel3"}, new {id = "promotion-filter", @class = "form-inline"})) {
+			@Html.EnumDropDownListFor(x => x.Status, "Все", new {@class = "form-control"})
+		}
+	</div>
+</div>
+
+<br/>
+
+@Html.Partial("Partial/Promotions", (IEnumerable<Promotion>)ViewBag.Promotions)
+
+<script type="text/javascript">
+	$("#promotion-filter select").change(function () {
+		$("#promotion-filter").submit();
+	});
+</script>

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using NHibernate.Linq;
 using ProducerInterfaceCommon.Helpers;
 using ProducerInterfaceCommon.Models;
+using ProducerInterfaceCommon.ViewModel.ControlPanel.Promotion;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -128,22 +129,33 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult GetProducerInformation(int Id)
 		{
 			var producerId = DB.AccountCompany.Single(x => x.Id == Id).ProducerId;
-			var promotionList = DB2.Promotions.Where(x => x.ProducerId == producerId).ToList();
-
 			var firstUserId = DB.Account.First(x => x.AccountCompany.Id == Id).Id;
 			var h = new NamesHelper(firstUserId);
 			ViewBag.ListProducer = h.RegisterListProducer();
-			ViewBag.PromotionList = promotionList;
-
-			foreach (var item in promotionList)
-				item.RegionnamesList = DB.Regions((ulong)item.RegionMask).ToOptions();
-
 			ViewBag.DrugList = h.GetCatalogListPromotion();
 			ViewBag.ReportList = DbSession.Query<Job>().Fetch(x => x.Owner).Where(x => x.Producer.Id == producerId)
 				.OrderByDescending(x => x.CreationDate).ToList();
 
 			var model = DB.AccountCompany.Find(Id);
 			return PartialView("partial/producerinformation", model);
+		}
+
+		public ActionResult Promotions(int id)
+		{
+			var filter = new SearchProducerPromotion {
+				Producer = id,
+				EnabledDateTime = true,
+				Status = ActualPromotionStatus.ConfirmedEnded
+			};
+			if (Request.HttpMethod == "POST") {
+				UpdateModel(filter);
+			}
+			var items = DB2.Promotions.Where(x => x.ProducerId == id).OrderByDescending(x => x.Begin).ToList();
+			foreach (var item in items)
+				item.RegionnamesList = DB.Regions((ulong)item.RegionMask).ToOptions();
+			ViewBag.Promotions = filter.Find(DB2);
+
+			return PartialView("Promotions", filter);
 		}
 	}
 }
