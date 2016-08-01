@@ -337,7 +337,6 @@
     <Content Include="Scripts\WorkPlace\GlobalAccount_AccountVerification.js" />
     <Content Include="Scripts\WorkPlace\InitFeedBack.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
-    <Content Include="Scripts\WorkPlace\ProducerInformation_Appointment.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
     <None Include="Content\Chosen\js\_references.js" />
     <Content Include="Content\Chosen\js\bootstrap-datepicker.js" />
@@ -713,9 +712,6 @@
     <Content Include="Views\News\Create.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\ProducerInformation\Index.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\AccountList.cshtml" />
-    <Content Include="Views\ProducerInformation\Promotion.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\SubMenu.cshtml" />
     <Content Include="Views\Shared\_MasterPage.cshtml" />
     <Content Include="Views\Shared\Partial\GlobalMenu.cshtml" />
     <Content Include="Views\AdminAccount\Index.cshtml" />
@@ -723,8 +719,6 @@
     <Content Include="Views\GoToProducerInterface\Index.cshtml" />
     <Content Include="Views\MediaFiles\Index.cshtml" />
     <Content Include="Views\ProducerInformation\DomainList.cshtml" />
-    <Content Include="Views\ProducerInformation\AppointmentNameList.cshtml" />
-    <Content Include="Views\ProducerInformation\Partial\customapointment.cshtml" />
     <Content Include="Views\ProducerInformation\Partial\producerinformation.cshtml" />
     <Content Include="Views\Report\Partial\Pager.cshtml" />
     <Content Include="Views\Report\DisplayTemplates\Enum.cshtml" />
@@ -732,10 +726,9 @@
     <Content Include="Views\Report\RunHistory.cshtml" />
     <Content Include="Views\News\Preview.cshtml" />
     <Content Include="Views\Promotion\Index.cshtml" />
-    <Content Include="Views\Promotion\Partial\SearchResult.cshtml" />
+    <Content Include="Views\Shared\Partial\Promotions.cshtml" />
     <Content Include="Views\Promotion\View.cshtml" />
     <Content Include="Views\News\History.cshtml" />
-    <Content Include="Views\ProducerInformation\GlobalListAppointment.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />
     <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Date.cshtml" />

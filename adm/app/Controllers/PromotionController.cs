@@ -43,7 +43,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var producerList = new List<OptionElement>() { new OptionElement { Text = "Все зарегистрированные", Value = "0" } };
 			producerList.AddRange(h.RegisterListProducer());
 			ViewBag.ProducerList = producerList;
-			return PartialView("Partial/SearchResult", model);
+			return PartialView("Partial/Promotions", model);
 		}
 
 		/// <summary>

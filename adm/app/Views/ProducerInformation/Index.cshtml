@@ -1,37 +1,36 @@
 ﻿@using ProducerInterfaceCommon.ContextModels;
-@model  IEnumerable<AccountCompany>
+@model IEnumerable<AccountCompany>
 @{
-    var ListProducer = ViewBag.ListProducer as IEnumerable<OptionElement>;
-    ViewBag.Title = "Производитель";
-    Layout = "~/Views/Shared/_MasterPage.cshtml";
+	ViewBag.Title = "Производитель";
+	Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
 <div class="row">
-    <div class="col-xs-12">
-        <label>Выберите производителя</label>
-        <select id="CompanySelectId" onchange="GetProducerInformation()" class="form-control">
-           <option value=""></option>
-            @foreach (var item in Model)
-            {
-                <option value="@item.Id">@item.Name</option>
-            }
-        </select>
-    </div>
+	<div class="col-xs-12">
+		<label>Выберите производителя</label>
+		<select id="CompanySelectId" onchange="GetProducerInformation()" class="form-control">
+			<option value=""></option>
+			@foreach (var item in Model) {
+				<option value="@item.Id">@item.Name</option>
+			}
+		</select>
+	</div>
 </div>
 
 <div class="row">
-    <div class="col-xs-12" style="display:none;" id="loading">
-        <br />
-        <h2><i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp; Ожидайте, сбор информации</h2>
-    </div>
-    <div class="col-xs-12" id="replacecontent">
+	<div class="col-xs-12" style="display:none;" id="loading">
+		<br/>
+		<h2><i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp; Ожидайте, сбор информации
+		</h2>
+	</div>
+	<div class="col-xs-12" id="replacecontent">
 
-    </div>
+	</div>
 </div>
 
 @section scripts
 {
-    <script type="text/javascript">
+	<script type="text/javascript">
         function GetProducerInformation()
         {
             var ElemUpdate = '#' + "replacecontent";
@@ -56,5 +55,5 @@
             });
         }
 
-    </script>    
+    </script>
 }

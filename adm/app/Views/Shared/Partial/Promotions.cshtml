@@ -14,14 +14,16 @@
 				<th>Дата начала</th>
 				<th>Дата окончания</th>
 				<th>Препараты</th>
-				<th>Поствщики</th>
+				<th>Поставщики</th>
 				<th>Производитель</th>
-				<th>Файл</th>
+				@if (ProducerList != null) {
+					<th>Файл</th>
+				}
 			</tr>
 
 			@foreach (var Item in Model) {
 				<tr class="@Item.RowStyle">
-					<td>@Html.ActionLink(@Item.Name, "View", new {Item.Id})</td>
+					<td>@Html.ActionLink(@Item.Name, "View", "Promotion", new {Item.Id}, null)</td>
 					<td>
 						<strong>
 							@Item.GetStatus().DisplayName()
@@ -32,7 +34,9 @@
 					<td>@Item.End.ToShortDateString()</td>
 					<td>@Item.PromotionToDrug.Count()</td>
 					<td>@Item.PromotionsToSupplier.Count()</td>
-					<td>@ProducerList.Where(xx => xx.Value == Item.ProducerId.ToString()).First().Text</td>
+					@if (ProducerList != null) {
+						<td>@ProducerList.Where(xx => xx.Value == Item.ProducerId.ToString()).First().Text</td>
+					}
 					<td>
 						@if (Item.MediaFile != null) {
 							<a href="@Url.Action("GetFile", "MediaFiles", new {Item.MediaFile.Id})">@Item.MediaFile.ImageName</a>
