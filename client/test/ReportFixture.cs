@@ -10,7 +10,7 @@ namespace ProducerInterface.Test
 
 		public ReportFixture()
 		{
-			username = "kvasovtest@analit.net";
+			username = "r.kvasov@analit.net";
 			defaultUrl = $"/?debug-user={username}";
 		}
 

@@ -8,7 +8,7 @@ namespace ProducerInterface.Test
 
 		public NonProducer()
 		{
-			username = "r.kvasov@analit.net";
+			username = "133@analit.net";
 			defaultUrl = $"/?debug-user={username}";
 		}
 

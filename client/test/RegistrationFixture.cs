@@ -35,7 +35,7 @@ namespace ProducerInterface.Test
 			Click("Вход на сайт");
 			Click("Забыли пароль?");
 			AssertText("Восстановление пароля");
-			Css("#password-recovery #login").SendKeys("kvasovtest@analit.net");
+			Css("#password-recovery #login").SendKeys("r.kvasov@analit.net");
 			Click("Восстановить");
 			AssertNoText("Ошибка сервера в приложении");
 			AssertText("Новый пароль отправлен на ваш email");

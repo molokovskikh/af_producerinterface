@@ -16,7 +16,7 @@ namespace ProducerInterface.Test
 
 		public PromotionFixture()
 		{
-			username = "kvasovtest@analit.net";
+			username = "r.kvasov@analit.net";
 			defaultUrl = $"/?debug-user={username}";
 		}
 
@@ -32,8 +32,8 @@ namespace ProducerInterface.Test
 			Css("#Annotation").SendKeys("test");
 			//Воронеж
 			ChoseRegion("#RegionList");
-			//БЕТАСЕРК табл. 16 мг N30
-			Eval("$('#DrugList').val('3677').trigger('chosen:updated').change();");
+			//АРИПРИЗОЛ табл. 10 мг N30
+			Eval("$('#DrugList').val('208437').trigger('chosen:updated').change();");
 			Css("#all-suppliers").Click();
 			while (true) {
 				try {
