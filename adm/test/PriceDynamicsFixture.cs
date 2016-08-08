@@ -23,6 +23,7 @@ namespace test
 		{
 			var report = new ProductRatingReport {
 				RegionCodeEqual = { 1 },
+				SupplierIdNonEqual = { 1 },
 				Var = CatalogVar.AllAssortment
 			};
 			report.Read<ProductRatingReportRow>().ToArray();

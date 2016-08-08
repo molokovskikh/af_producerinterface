@@ -86,7 +86,7 @@ namespace ProducerInterfaceCommon.Models
 				filter = $"and ri.CatalogId in ({CatalogIdEqual.Implode()})";
 			}
 			if (SupplierIdNonEqual.Count > 0)
-				filter += $" and ri.FirmCode not in ({SupplierIdNonEqual.Implode()})";
+				filter += $" and ri.SupplierId not in ({SupplierIdNonEqual.Implode()})";
 
 			var sql = $@"select c.CatalogName, ri.ProducerId, p.ProducerName, r.RegionName,
 Sum(ri.Cost * ri.Quantity) as Summ,
