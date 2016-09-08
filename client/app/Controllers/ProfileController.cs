@@ -115,12 +115,6 @@ namespace ProducerInterface.Controllers
 			return RedirectToAction("Index", "Profile");
 		}
 
-		public ActionResult GetOldNews(int Pages)
-		{
-			var items = DB2.Newses.OrderByDescending(x => x.DatePublication).Skip(Pages * 10).Take(10).ToList();
-			return PartialView(items);
-		}
-
 		public ActionResult GetNextList(int Pager)
 		{
 			ViewBag.Pager = Pager + 1;

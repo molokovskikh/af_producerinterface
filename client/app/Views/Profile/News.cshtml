@@ -1,17 +1,18 @@
 ﻿@model ProducerInterfaceCommon.Models.News
 @{
     ViewBag.Title = "Новости";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container body-content">
-    <div class="row">
-        @Html.ActionLink("Вернутся в кабинет производителя", "Index", null, null, new { @class = "btn btn-primary" })
-    </div>
-    <div class="row">
-        <h3>@Model.Subject <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>
-    </div>
-    <div class="row">
-        <p>@Html.Raw(Model.Body)</p>
-    </div>
+	<ol class="breadcrumb">
+		<li>@Html.ActionLink("Главная", "Index") </li>
+		<li class="active">Новость</li>
+	</ol>
+
+	<div class="row">
+		<h3>@Model.Subject <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>
+	</div>
+	<div class="row">
+		<p>@Html.Raw(Model.Body)</p>
+	</div>
 </div>

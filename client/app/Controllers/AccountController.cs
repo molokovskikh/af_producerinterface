@@ -63,36 +63,9 @@ namespace ProducerInterface.Controllers
 			// если логинится впервые
 			else if (thisUser.EnabledEnum == UserStatus.New)
 			{
-				var otherUsersExists = DB.Account.Any(x => x.CompanyId == thisUser.CompanyId.Value && x.Enabled == (sbyte)UserStatus.Active && x.TypeUser == SbyteTypeUser);
-				// если других активных (!) пользователей этой компании нет - добавляем пользователя в группу администраторов
-				if (!otherUsersExists)
-				{
-					// если группы администраторов нет - создаем ее
-					var adminGroupName = ConfigurationManager.AppSettings["AdminGroupName"];
-					var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
-					if (adminGroup == null)
-					{
-						adminGroup = new AccountGroup() { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-						DB.Entry(adminGroup).State = EntityState.Added;
-						DB.SaveChanges();
-					}
-					adminGroup.Account.Add(thisUser);
-					DB.SaveChanges();
-				}
-				// если есть другие пользователи компании - включаем в группу Все пользователи
-				else
-				{
-					var otherGroupName = ConfigurationManager.AppSettings["LogonGroupAcess"];
-					var otherGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == otherGroupName && x.TypeGroup == SbyteTypeUser);
-					if (otherGroup == null)
-					{
-						otherGroup = new AccountGroup() { Name = otherGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-						DB.Entry(otherGroup).State = EntityState.Added;
-						DB.SaveChanges();
-					}
-					otherGroup.Account.Add(thisUser);
-					DB.SaveChanges();
-				}
+				var group = DB.AdminGroup();
+				group.Account.Add(thisUser);
+				DB.SaveChanges();
 
 				thisUser.PasswordUpdated = DateTime.Now;
 				thisUser.EnabledEnum = UserStatus.Active;
@@ -330,15 +303,7 @@ namespace ProducerInterface.Controllers
 				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionId = regionCode });
 
 			// добавили аккаунт в группу админов
-			var adminGroupName = ConfigurationManager.AppSettings["AdminGroupName"];
-			var adminGroup = DB.AccountGroup.SingleOrDefault(x => x.Name == adminGroupName && x.TypeGroup == SbyteTypeUser);
-			if (adminGroup == null)
-			{
-				adminGroup = new AccountGroup { Name = adminGroupName, Enabled = true, Description = "Администраторы", TypeGroup = SbyteTypeUser };
-				DB.AccountGroup.Add(adminGroup);
-				DB.SaveChanges();
-			}
-
+			var adminGroup = DB.AdminGroup();
 			account.AccountGroup.Add(adminGroup);
 			account.LastUpdatePermisison = DateTime.Now;
 			DB.SaveChanges();
@@ -400,23 +365,7 @@ namespace ProducerInterface.Controllers
 				account.AccountRegion.Add(new AccountRegion() { AccountId = account.Id, RegionId = regionCode });
 
 			// ищем группу "все пользователи", если такой нет - создаем
-			var otherGroupName = ConfigurationManager.AppSettings["LogonGroupAcess"];
-			var otherGroup = DB.AccountGroup.FirstOrDefault(x => x.Name == otherGroupName && x.TypeGroup == account.TypeUser);
-			if (otherGroup == null)
-			{
-				otherGroup = new AccountGroup() { Name = otherGroupName, Description = "вновь зарегистрированные пользователи", Enabled = true };
-				DB.Entry(otherGroup).State = EntityState.Added;
-				DB.SaveChanges();
-
-				// добавляем в группу права TODO уточнить, какие
-				var permissionList = DB.AccountPermission.Where(x => x.Enabled && x.TypePermission == account.TypeUser).ToList();
-				foreach (var item in permissionList)
-					otherGroup.AccountPermission.Add(item);
-
-				DB.Entry(otherGroup).State = EntityState.Modified;
-				DB.SaveChanges();
-			}
-
+			var otherGroup = DB.AdminGroup();
 			// добавляем пользователя в группу все пользователи
 			account.AccountGroup.Add(otherGroup);
 			account.LastUpdatePermisison = DateTime.Now;
@@ -490,8 +439,7 @@ namespace ProducerInterface.Controllers
 			// регионы и группы не добавляются здесь, потому что всё равно должен регистрировать админ
 			var user = SaveAccount(accountCompany: company, RegNotProducer_ViewModel: model);
 			user.AccountRegion = DB.Regions().Select(x => new AccountRegion(user, x)).ToList();
-			var name = ConfigurationManager.AppSettings["AdminGroupName"];
-			var group = DB.AccountGroup.SingleOrDefault(x => x.Name == name && x.TypeGroup == SbyteTypeUser);
+			var group = DB.AdminGroup();
 			user.AccountGroup.Add(group);
 			user.IP = Request.UserHostAddress;
 			DB.SaveChanges();

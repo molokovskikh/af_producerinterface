@@ -6,7 +6,8 @@ namespace ProducerInterface.Controllers
 	{
 		public ActionResult Index()
 		{
-			// TODO список новостей
+			if (CurrentUser != null)
+				return RedirectToAction("Index", "Profile");
 			return View("Index");
 		}
 	}

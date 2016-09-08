@@ -387,9 +387,6 @@
     <Content Include="Views\Profile\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Drug\EditDescription.cshtml" />
     <Content Include="Views\Drug\Index.cshtml" />
-    <Content Include="Views\Report\Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\DateBegin.cshtml" />
     <Content Include="Views\Promotion\EditorTemplates\LongList.cshtml" />

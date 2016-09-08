@@ -113,5 +113,10 @@ order by Region").ToList();
 			builder.Entity<PromotionsToSupplier>().ToTable("PromotionsToSupplier");
 			builder.Entity<PromotionToDrug>().ToTable("PromotionToDrug");
 		}
+
+		public AccountGroup AdminGroup()
+		{
+			return AccountGroup.First(x => x.Name == "Администраторы" && x.TypeGroup == (sbyte)TypeUsers.ProducerUser);
+		}
 	}
 }

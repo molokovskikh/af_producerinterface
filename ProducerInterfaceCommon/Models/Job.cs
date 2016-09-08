@@ -18,6 +18,7 @@ namespace ProducerInterfaceCommon.Models
 		public virtual string JobGroup { get; set; }
 		[Display(Name = "Название")]
 		public virtual string CustomName { get; set; }
+		[Display(Name = "Расписание")]
 		public virtual string Scheduler { get; set; }
 		[Display(Name = "Тип и параметры")]
 		public virtual Reports ReportType { get; set; }
