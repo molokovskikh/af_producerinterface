@@ -24,7 +24,7 @@ namespace ProducerInterface.Test
 		public void TeardownFixture()
 		{
 			SeleniumFixture.GlobalTearDown();
-			_webServer.ShutDown();
+			_webServer?.ShutDown();
 		}
 	}
 }
