@@ -34,7 +34,9 @@ namespace ProducerInterface.Test
 			ChoseRegion("#RegionList");
 			//АРИПРИЗОЛ табл. 10 мг N30
 			Eval("$('#DrugList').val('208437').trigger('chosen:updated').change();");
-			Css("#all-suppliers").Click();
+			var el = (IWebElement)Css("#all-suppliers");
+			ScrollTo(el);
+			el.Click();
 			while (true) {
 				try {
 					Click("Добавить и отправить запрос на подтверждение");
