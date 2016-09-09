@@ -15,7 +15,6 @@ namespace ProducerInterface.Test
 		[OneTimeSetUp]
 		public void SetupFixture()
 		{
-			WaitHelper.WaitDebugger();
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
 			_webServer = SeleniumFixture.StartServer("../../../app/");

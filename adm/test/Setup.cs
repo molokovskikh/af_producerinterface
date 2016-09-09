@@ -15,7 +15,6 @@ namespace test
 		[OneTimeSetUp]
 		public void SetupFixture()
 		{
-			WaitHelper.WaitDebugger();
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
 			server = SeleniumFixture.StartServer("../../../app/");
