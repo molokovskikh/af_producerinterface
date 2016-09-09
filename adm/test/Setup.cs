@@ -1,5 +1,6 @@
 ﻿using System;
 using CassiniDev;
+using Common.Tools.Helpers;
 using NUnit.Framework;
 using Test.Support;
 using Test.Support.Selenium;
@@ -14,6 +15,7 @@ namespace test
 		[OneTimeSetUp]
 		public void SetupFixture()
 		{
+			WaitHelper.WaitDebugger();
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
 			server = SeleniumFixture.StartServer("../../../app/");
