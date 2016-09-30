@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
+using NHibernate.Linq;
+using ProducerInterfaceCommon.Models;
 
 namespace ProducerInterface.Controllers
 {
@@ -8,7 +11,8 @@ namespace ProducerInterface.Controllers
 		{
 			if (CurrentUser != null)
 				return RedirectToAction("Index", "Profile");
-			return View("Index");
+			var listResult = DbSession.Query<Slide>().Where(s => s.Enabled).OrderByDescending(s => s.PositionIndex).ToList();
+			return View(listResult);
 		}
 	}
 }

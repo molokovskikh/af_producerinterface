@@ -138,6 +138,7 @@
   <ItemGroup>
     <Compile Include="BaseFixture.cs" />
     <Compile Include="ModelFixture.cs" />
+    <Compile Include="MainPageFixture.cs" />
     <Compile Include="NonProducer.cs" />
     <Compile Include="PromotionFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,6 +148,10 @@
     <Compile Include="Tasks\Fixture.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\common-mysql\Common.NHibernate\Common.NHibernate.csproj">
+      <Project>{8BE188CA-A0D9-4609-AB2E-AB8EDF849FE0}</Project>
+      <Name>Common.NHibernate</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\lib\common-tools\Common.Tools\Common.Tools.csproj">
       <Project>{72AFCFE8-C9E9-45FA-9698-BEE896A517A3}</Project>
       <Name>Common.Tools</Name>

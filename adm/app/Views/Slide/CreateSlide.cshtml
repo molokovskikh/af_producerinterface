@@ -1,0 +1,50 @@
+﻿@using ProducerInterfaceCommon.Models
+@model ProducerInterfaceCommon.Models.Slide
+
+@{
+    ViewBag.Title = "Добавление слайда";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+    Slide slide = Model;
+}
+<div class="container">
+    <h2>@ViewBag.Title</h2>
+    <hr/>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        @using (@Html.BeginForm("CreateSlide", "Slide", FormMethod.Post, new {@class = "form-horizontal form-groups-bordered", EncType = "multipart/form-data"})) {
+                            <div class="form-group">
+                                @Html.HiddenFor(model => slide.Id)
+                                <label class="col-sm-3 control-label">Ссылка</label>
+                                <div class="col-sm-5">
+                                    @Html.TextBoxFor(model => slide.Url, new {@class = "form-control"})
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Изображение</label>
+                                <div class="col-md-5">
+                                    <input type="file" name="uploadedFile" class="file"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label c-pointer" for="isEnabled">Показ</label>
+                                <div class="col-md-5">
+                                    @Html.CheckBoxFor(model => slide.Enabled, new {@id = "isEnabled", @class = "c-pointer"})
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success" type="submit" value="Добавить">Добавить</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn" onclick="location.href = '@Url.Action("Index", "Slide")' " value="К списку">К списку</button>
+            </div>
+        </div>
+    </div>
+</div>

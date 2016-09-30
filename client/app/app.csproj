@@ -213,6 +213,7 @@
     <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\PromotionFilter.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\SlideController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

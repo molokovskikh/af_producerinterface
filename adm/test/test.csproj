@@ -36,6 +36,22 @@
       <HintPath>..\..\packages\CassiniDev.4.0\lib\net40\CassiniDev4-lib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Castle.ActiveRecord, Version=3.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.ActiveRecord.4.0.1\lib\net40\Castle.ActiveRecord.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.ActiveRecord.Web, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.ActiveRecord.4.0.1\lib\net40\Castle.ActiveRecord.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Components.Validator, Version=2.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Components.Validator.2.6.0\lib\net40\Castle.Components.Validator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
@@ -84,6 +100,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SliderFixture.cs" />
     <Compile Include="MenuFixture.cs" />
     <Compile Include="PriceDynamicsFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +111,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\common-mysql\Common.NHibernate\Common.NHibernate.csproj">
+      <Project>{8BE188CA-A0D9-4609-AB2E-AB8EDF849FE0}</Project>
+      <Name>Common.NHibernate</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\lib\common-tools\Common.Tools\Common.Tools.csproj">
       <Project>{72AFCFE8-C9E9-45FA-9698-BEE896A517A3}</Project>
       <Name>Common.Tools</Name>

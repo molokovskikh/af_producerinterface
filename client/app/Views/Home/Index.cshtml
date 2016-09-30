@@ -1,7 +1,65 @@
-﻿<div class="jumbotron">
-	<div class="container">
-		<h1 class="text-center">Начало!</h1>
-		<p>Начата тестовая эксплуатация интерфейса производителя.</p>
-		@Html.ActionLink("Регистрация", "Index", "Account", null, new { @class = "btn btn-primary btn-lg" })
-	</div>
+﻿@model IEnumerable<ProducerInterfaceCommon.Models.Slide>
+@{
+    int indexOfSlide = 0;
+    var urlPath = (string)ViewBag.pathFromConfigURL;
+}
+<div class="container-fluid" style="margin-top:0px; padding:0px;">
+    <div id="myCarousel3" class="carousel slide">
+
+        <ol class="carousel-indicators">
+            @if (!Model.Any())
+            {
+                <li data-target="#myCarousel3" data-slide-to="@indexOfSlide" class=active></li>
+            }
+            @foreach (var item in Model)
+            {
+                <li data-target="#myCarousel3" data-slide-to="@indexOfSlide" @(indexOfSlide == 0 ? "class=active" : "")></li>
+                indexOfSlide++;
+            }
+        </ol>
+        @{indexOfSlide = 0;
+        }
+        <div class="carousel-inner">
+            @if (!Model.Any())
+            {
+                <div class="item active">
+                    <div class="container center-block">
+                        <h1>Аналит Фармация</h1>
+                    </div>
+                </div>
+            }
+            @foreach (var item in Model)
+            {
+                <div class="item@(indexOfSlide == 0 ? " active" : "")">
+                    <div class="container center-block">
+                        @if (string.IsNullOrEmpty(item.Url))
+                        {
+                            <img src="@Url.Action("GetFile","Slide",new {id=item.ImagePath})" alt="изображение" />
+                        }
+                        else
+                        {
+                            <a href="@item.Url">
+                                <img src="@Url.Action("GetFile","Slide",new {id=item.ImagePath})" alt="изображение" />
+                            </a>
+                        }
+                    </div>
+                </div>
+                indexOfSlide++;
+            }
+        </div>
+        <!-- Система навигации для карусели, с помощью которой осуществляется переход на предыдущий и следующий слайд -->
+        <h1 class="carousel-control left" href="#myCarousel3" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </h1>
+        <h1 class="carousel-control right" href="#myCarousel3" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </h1>
+    </div>
 </div>
+
+
+@section JavaScript {
+    <script type="text/javascript">
+        $('#myCarousel3').carousel('cycle');
+    </script>
+} 

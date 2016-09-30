@@ -1,26 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProducerInterfaceCommon.ContextModels;
-using ProducerInterfaceCommon.Models;
+using ProducerInterfaceCommon.Helpers;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
 {
 	public class MediaFilesController : BaseController
 	{
-
-		public ActionResult Index()
+		public virtual ActionResult Index()
 		{
 			ViewBag.FullUrlStringFile = ConfigurationManager.AppSettings["ImageFullUrlString"];
 
 #if DEBUG
 			{
-				ViewBag.FullUrlStringFile = this.Request.Url.Segments[0] + @"mediafiles/";
+				ViewBag.FullUrlStringFile = Request.Url.Segments[0] + @"mediafiles/";
 			}
 #endif
 
@@ -61,8 +59,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult SaveNewsFile()
 		{
 			var file = Request.Files[0];
-			var fileId = SaveFile(file, EntityType.News);
-			string ckEditorFuncNum = HttpContext.Request["CKEditorFuncNum"];
+			var fileId = FileManager.SaveFile(DB2, file, EntityType.News);
+			var ckEditorFuncNum = HttpContext.Request["CKEditorFuncNum"];
 			string url = $"{ConfigurationManager.AppSettings["ImageFullUrlString"]}/GetFile/{fileId}";
 			return Content($"<script>window.parent.CKEDITOR.tools.callFunction({ckEditorFuncNum}, \"{url}\");</script>");
 		}
@@ -78,28 +76,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var fileName = Path.GetFileName(file.FileName);
 			if (DB2.MediaFiles.Any(x => x.ImageName == fileName && x.EntityType == EntityType.Email)) {
 				ErrorMessage("В системе уже есть файл с таким именем. Переименуйте этот или удалите существующий");
-				return RedirectToAction("Index", "Mail"); ;
+				return RedirectToAction("Index", "Mail");
 			}
 
-			SaveFile(file, EntityType.Email);
+			FileManager.SaveFile(DB2, file, EntityType.Email);
 			return RedirectToAction("Index", "Mail");
-		}
-
-		private int SaveFile(HttpPostedFileBase file, EntityType type)
-		{
-			var model = new MediaFile(file.FileName) {
-				ImageType = file.ContentType,
-				EntityType = type
-			};
-			using (var ms = new MemoryStream())
-			{
-				file.InputStream.CopyTo(ms);
-				model.ImageFile = ms.ToArray();
-				model.ImageSize = ms.Length;
-			}
-			DB2.MediaFiles.Add(model);
-			DB2.SaveChanges();
-			return model.Id;
 		}
 	}
 }

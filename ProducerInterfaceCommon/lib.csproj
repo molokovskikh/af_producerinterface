@@ -235,6 +235,7 @@
     <Compile Include="Helpers\CollectionRequired.cs" />
     <Compile Include="Helpers\ErrorFilter.cs" />
     <Compile Include="Helpers\ExceptionRenderer.cs" />
+    <Compile Include="Helpers\FileManager.cs" />
     <Compile Include="Helpers\Md5HashHelper.cs" />
     <Compile Include="Helpers\ReportHelper.cs" />
     <Compile Include="Helpers\SessionFilter.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="Models\PastDateAttribute.cs" />
     <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\RunNowNotIntervalParam.cs" />
+    <Compile Include="Models\Slide.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReportRow.cs" />
     <Compile Include="ReportModels\ProductConcurentRating\ProductConcurentRatingReport.cs" />
