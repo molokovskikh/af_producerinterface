@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.Models.Slide>
+
+@{
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+    ViewBag.Title = "Список слайдов";
+}
+<div class="container">
+    <h2>@ViewBag.Title</h2>
+    <hr/>
+    @Html.Hidden("SliderAjaxUpdateUrl", Url.Action("UpdatePositionIndex", "Slide"), new {id = "SliderAjaxUpdateUrl"})
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand">управление</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <div class="navbar-form navbar-left">
+                            <a class="btn btn-success" href="@Url.Action("CreateSlide", "Slide")">Добавить</a>
+                        </div>
+                        <div class="navbar-form navbar-left">
+                            <a class="btn btn-primary" href="@Url.Action("UpdatePositionIndexReset", "Slide")">Упорядочить по номеру</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Изображение</th>
+                    <th>Ссылка</th>
+                    <th>Опубликован</th>
+                    <th>Порядок</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model) {
+                    <tr class="SlideItem">
+                        <td class="pager">
+                            <span name="Id">@item.Id</span></td>
+                        <td>
+                            <a href="@Url.Action("GetFile", new {id = item.ImagePath})" target="_blank">
+                                <img src="@Url.Action("GetFile", new {id = item.ImagePath})" class="max-height-100"/>
+                            </a>
+                        </td>
+                        <td class="pager">
+                            @if (!string.IsNullOrEmpty(item.Url)) {
+                                <a href="@item.Url" target="_blank" class="btn btn-default" aria-label="Left Align">
+                                    <span name="SlideLink" class="glyphicon glyphicon-link" aria-hidden="true"></span>
+                                </a>
+                            }
+                        </td>
+                        <td class="pager">@Html.CheckBoxFor(modelItem => item.Enabled, new {@disabled = "disabled", @checked = "checked"})</td>
+                        <td class="pager">
+                            <a class="btn btn-sm">
+                                <span name="SlideButtonUp">вверх</span>
+                            </a>
+                            <a class="btn btn-sm">
+                                <span name="SlideButtonDown">вниз</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm green" href="@Url.Action("EditSlide", "Slide", new {id = item.Id})">
+                                Изменить
+                            </a>
+                            <a class="btn btn-sm red" href="@Url.Action("DeleteSlide", "Slide", new {id = item.Id})">
+                                Удалить
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/customJsSliderStuff.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var slider = new SliderStuff();
+            slider.OnLoad();
+        });
+    </script>
+}

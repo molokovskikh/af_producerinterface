@@ -25,7 +25,11 @@ namespace ProducerInterface.Test
 		{
 			Open();
 			Click("Акции");
-			Click("Добавить акцию");
+			var navbar = browser.FindElementsByCssSelector("div.navbar-collapse.collapse").First();
+			int navbarHeight = navbar.Size.Height;
+			var elAction = (IWebElement)Css("#AddItem");
+			ScrollTo(elAction, yAdditive: -navbarHeight);
+			Click("Добавить акцию",false);
 			WaitAjax();
 			AssertText("Новая промоакция");
 			Css("#Name").SendKeys("test");
@@ -35,7 +39,7 @@ namespace ProducerInterface.Test
 			//АРИПРИЗОЛ табл. 10 мг N30
 			Eval("$('#DrugList').val('208437').trigger('chosen:updated').change();");
 			var el = (IWebElement)Css("#all-suppliers");
-			ScrollTo(el);
+			ScrollTo(el, yAdditive: -navbarHeight);
 			el.Click();
 			while (true) {
 				try {
@@ -44,7 +48,6 @@ namespace ProducerInterface.Test
 				} catch (StaleElementReferenceException) {
 				}
 			}
-
 			AssertText("Промо акция добавлена и отправлен запрос на её подтверждение");
 		}
 
@@ -66,15 +69,22 @@ namespace ProducerInterface.Test
 
 			Open();
 			Click("Акции");
+			WaitForText(promotion.Name, 20);
+			var navbar = browser.FindElementsByCssSelector("div.navbar-collapse.collapse").First();
+			int navbarHeight = navbar.Size.Height;
 			var el = browser.FindElementsByCssSelector("a").First(x => x.Text?.Trim().StartsWith(promotion.Name) == true);
-			ScrollTo(el);
+			ScrollTo(el, yAdditive: -navbarHeight);
 			el.Click();
 			Thread.Sleep(100);
 			WaitAnimation();
-			var delete = browser.FindElementsByCssSelector("a.delete")
-				.First(x => x.GetAttribute("href").EndsWith($"/{promotion.Id}"));
-			ScrollTo(delete);
-			delete.Click();
+			WaitAjax();
+			var elAction = (IWebElement)Css("#ButtonDelete");
+			ScrollTo(elAction, yAdditive: -navbarHeight);
+			try {
+				elAction.Click();
+			} catch (InvalidOperationException ex) {
+				//отсутствует отклик из-за диалога "подтверждения"
+			}
 			var wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3));
 			wait.Until(ExpectedConditions.AlertIsPresent());
 			browser.SwitchTo().Alert().Accept();

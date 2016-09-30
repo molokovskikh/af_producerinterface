@@ -62,6 +62,9 @@ namespace ProducerInterfaceCommon.Heap
 				using (var client = new SmtpClient(ConfigurationManager.AppSettings["SmtpHost"], smtpPort))
 				{
 					client.UseDefaultCredentials = false;
+#if DEBUG
+					return;
+#endif
 					client.Send(message);
 				}
 			}

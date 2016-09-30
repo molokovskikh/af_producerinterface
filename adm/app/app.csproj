@@ -217,6 +217,7 @@
     <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\AdminProfile\RegistrationController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\SlideController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -238,6 +239,7 @@
     <Content Include="Content\Chosen\css\loading.gif" />
     <Content Include="Content\Chosen\css\Site.css" />
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
+    <Content Include="Content\default.css" />
     <Content Include="Content\Images\other.png" />
     <Content Include="Content\Images\txt.png" />
     <Content Include="Content\Images\xls.png" />
@@ -318,6 +320,7 @@
     <Content Include="Scripts\ckeditor\plugins\filebrowser\plugin.js" />
     <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
     <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Scripts\customJsSliderStuff.js" />
     <Content Include="Scripts\jquery.globalize\cultures\globalize.culture.ru.js" />
     <Content Include="Scripts\jquery.globalize\globalize.js" />
     <Content Include="Scripts\jquery.maskedinput.min.js" />
@@ -685,6 +688,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -751,6 +755,9 @@
     <Content Include="Views\Promotion\Partial\Snapshot.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
     <Content Include="Views\ProducerInformation\Promotions.cshtml" />
+    <Content Include="Views\Slide\CreateSlide.cshtml" />
+    <Content Include="Views\Slide\EditSlide.cshtml" />
+    <Content Include="Views\Slide\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

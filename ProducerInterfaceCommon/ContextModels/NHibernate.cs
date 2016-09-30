@@ -26,6 +26,11 @@ namespace ProducerInterfaceCommon.ContextModels
 				x.Schema("Catalogs");
 			});
 
+			Mapper.Class<Slide>(x => {
+				x.Table("Slides");
+				x.Schema("ProducerInterface");
+			});
+
 			var mapping = Mapper.CompileMappingForAllExplicitlyAddedEntities();
 			var @class = Generators.Native.Class;
 			foreach (var rootClass in mapping.RootClasses.Where(c => c.Id != null)) {

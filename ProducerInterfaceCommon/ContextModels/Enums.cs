@@ -200,7 +200,9 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Акции")]
 		Promotion = 2,
 		[Display(Name = "Рассылка")]
-		Email = 3
+		Email = 3,
+		[Display(Name = "Слайд")]
+		Slide = 4
 	}
 
 	public enum PromotionTypeChange

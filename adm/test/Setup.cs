@@ -1,6 +1,6 @@
 ﻿using System;
 using CassiniDev;
-using Common.Tools.Helpers;
+using Castle.ActiveRecord;
 using NUnit.Framework;
 using Test.Support;
 using Test.Support.Selenium;
@@ -18,7 +18,16 @@ namespace test
 			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			SeleniumFixture.GlobalSetup();
 			server = SeleniumFixture.StartServer("../../../app/");
-			IntegrationFixture2.Factory = Test.Support.Setup.Initialize("db");
+
+			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
+			Test.Support.Setup.BuildConfiguration("db");
+			var holder = ActiveRecordMediator.GetSessionFactoryHolder();
+			var cfg = holder.GetConfiguration(typeof (ActiveRecordBase));
+			var init = new ProducerInterfaceCommon.ContextModels.NHibernate();
+			init.Configuration = cfg;
+			init.Init();
+			var factory = holder.GetSessionFactory(typeof (ActiveRecordBase));
+			IntegrationFixture2.Factory = factory;
 		}
 
 		[OneTimeTearDown]
