@@ -335,6 +335,7 @@
     <Compile Include="Models\PastDateAttribute.cs" />
     <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\RunNowNotIntervalParam.cs" />
+    <Compile Include="Models\MailFormWithFooter.cs" />
     <Compile Include="Models\Slide.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReportRow.cs" />

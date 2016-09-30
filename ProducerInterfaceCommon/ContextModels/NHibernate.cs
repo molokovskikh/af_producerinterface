@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Common.NHibernate;
-using MySql.Data.MySqlClient.Memcached;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using ProducerInterfaceCommon.Models;
@@ -28,6 +26,11 @@ namespace ProducerInterfaceCommon.ContextModels
 
 			Mapper.Class<Slide>(x => {
 				x.Table("Slides");
+				x.Schema("ProducerInterface");
+			});
+
+			Mapper.Class<MailFormWithFooter>(x => {
+				x.Table("MailFormWithFooter");
 				x.Schema("ProducerInterface");
 			});
 
