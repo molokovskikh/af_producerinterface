@@ -1,0 +1,40 @@
+﻿@model ProducerInterfaceCommon.Models.CronParam
+
+<div class="container body-content">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>@Html.ActionLink("Отчеты", "Index") </li>
+            <li class="active">Расписание отчета</li>
+        </ol>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm()) {
+                <fieldset>
+                    <legend>@ViewBag.Title</legend>
+                    @Html.ValidationSummary(true)
+                    @Html.EditorForModel()
+                    <div class="row margin5">
+                        <div class="feditor col-md-8">
+                            <input id="btn" class="btn btn-primary" type="submit" value="Применить"/>
+                        </div>
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+@section css {
+<link href="~/Content/Chosen/css/chosen.css" rel="stylesheet" />
+}
+
+@section scripts {
+<script src="~/Content/Chosen/js/initRepDate.js"></script>
+    @Scripts.Render("~/bundles/chosen")
+	@Scripts.Render("~/bundles/cron")
+	@Styles.Render("~/content/cron")
+}

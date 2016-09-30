@@ -10,7 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель управления - @ViewBag.Title</title>
     <link href="/Content/default.css?v=0" rel="stylesheet">
-    @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/css")
+        @RenderSection("css", required: false)
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>

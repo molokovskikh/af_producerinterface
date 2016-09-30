@@ -1,0 +1,44 @@
+﻿@model ProducerInterfaceCommon.Models.CronIntervalParam
+@{
+	// класс для ошибки валидации, если есть
+	var errorClass = "";
+	var state = ViewData.ModelState["Interval"];
+	if (state != null && state.Errors.Count > 0) {
+		errorClass = " input-validation-error";
+	}
+}
+
+@Html.EditorFor(m => m.CronExpressionUi)
+
+<div class="form-group">
+	<div class="row margin5">
+			<div class="form-group form-group-otstup">
+					<div class="flabel col-md-4">
+							@Html.LabelFor(m => m.IntervalType)
+					</div>
+					<div class="feditor col-md-8">
+							@Html.EnumDropDownListFor(m => m.IntervalType)
+							@Html.ValidationMessageFor(m => m.IntervalType)
+					</div>
+			</div>
+	 </div>
+
+	<div id="Interval_param" style="display:none;">
+		<div class="row margin5">
+			<div class="form-group form-group-otstup">
+				<div class="flabel col-md-4">
+					@Html.LabelFor(m => m.Interval)
+				</div>
+				<div class="@("feditor col-md-8" + errorClass)">
+					@Html.EditorFor(m => m.Interval, new { htmlAttributes = new { min = 1 } })
+					@Html.ValidationMessageFor(m => m.Interval)
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@Html.EditorFor(m => m.CronHumanText)
+@Html.EditorFor(m => m.MailTo)
+

@@ -5,6 +5,8 @@
 	Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
+@Html.Hidden("GetProducerInformationUrl", Url.Action("GetProducerInformation"), new { id = "GetProducerInformationUrl" })
+
 <div class="row">
 	<div class="col-xs-12">
 		<label>Выберите производителя</label>
@@ -36,9 +38,8 @@
             var ElemUpdate = '#' + "replacecontent";
             $('#loading').css("display", "block");
             $(ElemUpdate).html("");
-            var CompanyId = $('#CompanySelectId').val();
-            var stringPathName = document.location.pathname;
-            stringPathName = stringPathName.replace("Index", "GetProducerInformation");
+            var CompanyId = $('#CompanySelectId').val(); 
+            stringPathName = $("#GetProducerInformationUrl").val();
             var sendParam = "Id=" + CompanyId;
             AjaxPost(stringPathName, sendParam, ElemUpdate);
         }

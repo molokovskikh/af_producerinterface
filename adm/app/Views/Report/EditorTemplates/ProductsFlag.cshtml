@@ -1,0 +1,16 @@
+﻿@model bool
+<div class="row margin5">
+	<div class="form-group form-group-otstup">
+		<div class="flabel col-md-4">
+			@if (ViewBag.CurrentUser.IsProducer) {
+				@Html.LabelFor(m => m)
+			} else {
+				@Html.LabelFor(m => m, "Все товары")
+			}
+		</div>
+		<div class="feditor col-md-8">
+			@Html.CheckBoxFor(m => m)
+			@Html.ValidationMessageFor(m => m)
+		</div>
+	</div>
+</div>

@@ -1,0 +1,53 @@
+﻿@using ProducerInterfaceCommon.ContextModels
+@model List<string>
+@{
+  // имя свойства
+  var propName = ViewData.ModelMetadata.PropertyName;
+  // лист всех вариантов для построения селекта
+  var propList = (List<OptionElement>)ViewData[propName];
+  if (Model != null) {
+      // сохранённые email
+      var propListVal = propList.Select(x => x.Value).ToList();
+      // новые email из модели, возможно, невалидные
+      var newMail = Model.Where(x => !propListVal.Contains(x)).Select(x => new OptionElement() { Value = x, Text = x }).ToList();
+      // добавили к сохранённым email новые
+      propList.AddRange(newMail);
+  }
+  // класс для ошибки валидации, если есть
+  var errorClass = "";
+  var state = ViewData.ModelState[propName];
+  if (state != null && state.Errors.Count > 0) {
+      errorClass = " input-validation-error";
+  }
+}
+
+<div class="row margin5">
+    <div class="form-group form-group-otstup">
+        <div class="flabel col-md-4">
+            @Html.LabelFor(m => m)
+        </div>
+        <div class="@("feditor col-md-8" + errorClass)">
+            @Html.ListBoxFor(m => m, new MultiSelectList(propList, "Value", "Text", Model), new { style = "display: none;" })
+            @Html.ValidationMessageFor(m => m)
+        </div>
+    </div>
+</div>
+
+<div class="row margin5">
+    <div class="form-group form-group-otstup">
+        <div class="flabel col-md-4">&nbsp;</div>
+        <div class="feditor col-md-8">
+            <label>Дополнительные email-адреса</label>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        @Html.TextBox("addMail", null, new { @class = "form-control", @placeholder = "Email" })
+                        <span class="input-group-btn">
+                            <input id="addBtn" name="addBtn" value="Добавить" class="btn btn-primary" />
+                        </span>
+                    </div>
+                </div>
+            </div>       
+        </div>
+    </div>
+</div>

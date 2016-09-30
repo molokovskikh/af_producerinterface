@@ -29,6 +29,11 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public FileResult GetFile(int id)
 		{
 			var file = DB2.MediaFiles.Find(id);
+#if DEBUG
+			if (file == null) {
+				return null;
+			}
+#endif
 			return File(file.ImageFile, file.ImageType);
 		}
 
