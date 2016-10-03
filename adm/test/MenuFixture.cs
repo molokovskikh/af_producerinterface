@@ -5,8 +5,7 @@ using Test.Support.Selenium;
 
 namespace test
 {
-	[TestFixture]
-	public class MenuFixture : SeleniumFixture
+	public class MenuFixture : BaseFixture
 	{
 		private string username;
 

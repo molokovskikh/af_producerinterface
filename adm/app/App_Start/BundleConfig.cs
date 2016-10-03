@@ -16,7 +16,7 @@ namespace ProducerInterfaceControlPanelDomain
 				.Include("~/Scripts/jquery.validate.js",
 					"~/Scripts/jquery.validate.unobtrusive.js",
 					"~/Scripts/jquery.validate.globalize.js")
-			);
+				);
 
 			bundles.Add(new ScriptBundle("~/bundles/datepicker").Include(
 				"~/Scripts/bootstrap-datepicker.js",
@@ -32,7 +32,23 @@ namespace ProducerInterfaceControlPanelDomain
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 				"~/Content/bootstrap.css",
 				"~/Content/bootstrap-datepicker.min.css",
+				"~/Content/Chosen/css/Site.css",
+				"~/Content/Chosen/css/Site.css",
 				"~/Content/site.css"));
+
+
+			bundles.Add(new ScriptBundle("~/bundles/chosen")
+				.Include(
+					"~/Content/Chosen/js/chosen.jquery.js",
+					"~/Scripts/jquery.maskedinput.min.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/cron")
+				.Include("~/Content/Chosen/js/initCron.js",
+					"~/Content/Chosen/js/jqCron.js",
+					"~/Content/Chosen/js/jqCron.ru.js"));
+
+			bundles.Add(new StyleBundle("~/Content/cron")
+				.Include("~/Content/Chosen/css/jqCron.css"));
 		}
 	}
 }

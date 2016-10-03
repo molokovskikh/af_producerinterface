@@ -8,8 +8,7 @@ using Test.Support.Selenium;
 
 namespace test
 {
-	[TestFixture]
-	public class SliderFixture : SeleniumFixture
+	public class SliderFixture : BaseFixture
 	{
 		private readonly string username;
 

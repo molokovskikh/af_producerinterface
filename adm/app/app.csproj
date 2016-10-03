@@ -115,6 +115,10 @@
       <HintPath>..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
@@ -239,6 +243,7 @@
     <Content Include="Content\Chosen\css\loading.gif" />
     <Content Include="Content\Chosen\css\Site.css" />
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
+    <Content Include="Content\Chosen\js\initMailTo.js" />
     <Content Include="Content\default.css" />
     <Content Include="Content\Images\other.png" />
     <Content Include="Content\Images\txt.png" />
@@ -324,6 +329,9 @@
     <Content Include="Scripts\jquery.globalize\cultures\globalize.culture.ru.js" />
     <Content Include="Scripts\jquery.globalize\globalize.js" />
     <Content Include="Scripts\jquery.maskedinput.min.js" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.globalize.js" />
     <Content Include="Scripts\jquery.validate.globalize.min.js" />
@@ -736,7 +744,6 @@
     <Content Include="Views\News\History.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />
     <Content Include="Views\MediaFiles\EmailFileList.cshtml" />
-    <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
     <Content Include="Views\MediaFiles\SaveEmailFile.cshtml" />
     <Content Include="Views\Report\ReportDescription.cshtml" />
     <Content Include="Views\Report\EditReportDescription.cshtml" />
@@ -758,6 +765,32 @@
     <Content Include="Views\Slide\CreateSlide.cshtml" />
     <Content Include="Views\Slide\EditSlide.cshtml" />
     <Content Include="Views\Slide\Index.cshtml" />
+    <Content Include="Views\Report\ScheduleJob.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Bool.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ByPreviousDay.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CatalogVar.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CostOrQuantity.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CronExpression.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CronIntervalParam.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\CronNotIntervalParam.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\DecimalList.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\IntList.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\LongList.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\MailTo.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\PharmacyRatingReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductConcurentRatingReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductPriceDynamicsReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductRatingReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductResidueReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Products.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\ProductsFlag.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\RunNowIntervalParam.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\RunNowNotIntervalParam.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\SecondarySalesReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\String.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\StringList.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\SupplierRatingReport.cshtml" />
+    <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

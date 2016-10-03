@@ -105,6 +105,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MailFixture.cs" />
+    <Compile Include="BaseFixture.cs" />
+    <Compile Include="ProducerInformationFixture.cs" />
     <Compile Include="SliderFixture.cs" />
     <Compile Include="MenuFixture.cs" />
     <Compile Include="PriceDynamicsFixture.cs" />

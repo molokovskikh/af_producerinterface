@@ -7,7 +7,12 @@ namespace ProducerInterface.Controllers
 		public FileResult GetFile(int id)
 		{
 			var model = DB2.MediaFiles.Find(id);
-			return File(model.ImageFile, model.ImageType, model.ImageName);
+#if DEBUG
+		    if (model == null) {
+		        return null;
+		    }
+#endif
+            return File(model.ImageFile, model.ImageType, model.ImageName);
 		}
 	}
 }
