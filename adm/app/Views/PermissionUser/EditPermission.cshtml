@@ -5,6 +5,18 @@
     ViewBag.Title = "Редактирование описание прав";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("ListPermission", "PermissionUser")">Список прав</a>
+                </li>
+                <li class="active">Редактировать</li>
+            </ol>
+        </div>
+    </div>
+}
 
 <h2>@ViewBag.Title</h2>
 

@@ -4,10 +4,26 @@
 @{
   ViewBag.Title = $"Редактирование пользователя {Model.Name}";
   Layout = "~/Views/Shared/_MasterPage.cshtml";
+  bool isControlPanelUser = (bool) ViewBag.IsControlPanelUser;
 }
 
 <h3>@ViewBag.Title</h3>
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    @if (isControlPanelUser) {
+                        <a href="@Url.Action("AdminList", "PermissionUser")">Список администраторов</a>
+                    } else {
+                        <a href="@Url.Action("Index", "PermissionUser")">Список пользователей</a>}
+                </li>
+                <li class="active">Редактировать</li>
+            </ol>
+        </div>
+    </div>
+}
 @using (Html.BeginForm())
 {
 @Html.HiddenFor(m => m.Id)

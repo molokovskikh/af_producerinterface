@@ -6,8 +6,10 @@
   Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h3 style="display: inline-block; margin-right: 20px;">@ViewBag.Title</h3>
-<input type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#filterModal" value="Фильтр" style="width: 300px; margin-bottom: 10px;"/>
+<div class="row">
+    <div class="col-md-3"><h3 class="headText">@ViewBag.Title</h3></div>
+    <div class="col-md-3"><input type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal" value="Фильтр" /></div>
+</div>
 <br />
 @Html.Action("SearchResult", Model)
 

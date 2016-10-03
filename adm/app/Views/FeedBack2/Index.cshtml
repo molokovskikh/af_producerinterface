@@ -5,9 +5,18 @@
   ViewBag.Title = "Обращения пользователей";
   Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Обращения пользователей</li>
+            </ol>
+        </div>
+    </div>
+}
 <div class="row">
-    <div class="col-md-3"><h2 style="white-space: nowrap;">@ViewBag.Title</h2></div>
-    <div class="col-md-3"><input type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#filterModal" value="Фильтр" style="margin-bottom:0px; margin-top:18px;" /></div>
+    <div class="col-md-3"><h3 class="headText">@ViewBag.Title</h3></div>
+    <div class="col-md-3"><input type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal" value="Фильтр" /></div>
 </div>
 <br />
 

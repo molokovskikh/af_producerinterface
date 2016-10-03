@@ -4,14 +4,20 @@
 @{
   ViewBag.Title = "Список пользователей Интерфейса производителя";
 }
-
-<h3>@ViewBag.Title</h3>
-<div class="row">
-    <div class="col-md-12">
-        <input type="button" value="Фильтр" class="btn btn-primary" data-toggle="modal" data-target="#ModalFilterForm" style="margin-bottom: 10px; margin-top: 0px;" />
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Список пользователей</li>
+            </ol>
+        </div>
     </div>
+}
+<div class="row">
+    <div class="col-md-3"><h3 class="headText wrap">@ViewBag.Title</h3></div>
+    <div class="col-md-3"><input type="button" value="Фильтр" class="btn btn-primary" data-toggle="modal" data-target="#ModalFilterForm"/></div>
 </div>
-
+<br/>
 @Html.Action("SearchUser", Model)
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "sform" }))

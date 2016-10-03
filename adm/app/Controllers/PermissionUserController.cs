@@ -69,6 +69,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				model.Message = user.AccountCompany.Name;
 
 			SetChangeModel(user, model);
+
+			ViewBag.IsControlPanelUser = user.TypeUser == (sbyte)TypeUsers.ControlPanelUser;
 			return View(model);
 		}
 
@@ -95,6 +97,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			if (!ModelState.IsValid)
 			{
 				SetChangeModel(user, model);
+				ViewBag.IsControlPanelUser = user.TypeUser == (sbyte)TypeUsers.ControlPanelUser;
 				return View(model);
 			}
 

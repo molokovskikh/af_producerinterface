@@ -18,11 +18,22 @@
         new SelectListItem { Text = "Удаленные", Value = "false", Selected = Model.Enable.HasValue && !Model.Enable.Value },
     };
 }
-<div class="row"> 
-    <h3 class="col-xs-2">@ViewBag.Title</h3> 
-    <button type="button" class="btn btn-info btn-sm col-xs-2" data-toggle="modal" data-target="#filterModal" style="margin-bottom:0px; margin-top:18px;">Фильтр</button>
+
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Список отчетов</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-3"><h3 class="headText">@ViewBag.Title</h3></div>
+    <div class="col-md-3"><input type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal" value="Фильтр" /></div>
 </div>
-<br/>
+<br />
 
 @Html.Action("SearchResult", Model)
 

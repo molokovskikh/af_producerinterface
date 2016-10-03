@@ -11,6 +11,19 @@
     var SupplierList = ViewBag.SupplierList as IEnumerable<OptionElement>;
 }
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "Promotion")">Список промо-акций</a>
+                </li>
+                <li class="active">Промоакция</li>
+            </ol>
+        </div>
+    </div>
+}
+
 <div class="container body-content">
 	<h2>Промоакция @Model.Name</h2>
 

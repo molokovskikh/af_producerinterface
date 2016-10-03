@@ -6,11 +6,33 @@
 }
 
 <div class="container body-content">
-	@if (Model.Id > 0) {
-		<h2>Редактирование новости</h2>
-	} else {
-		<h2>Создание новости</h2>
-	}
+    @if (Model.Id > 0) {
+        <h2>Редактирование новости</h2>
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "News")">Список новостей</a>
+                </li>
+                <li class="active">Редактировать</li>
+            </ol>
+        </div>
+    </div>
+}    } else {
+        <h2>Создание новости</h2>
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "News")">Список новостей</a>
+                </li>
+                <li class="active">Создать новость</li>
+            </ol>
+        </div>
+    </div>
+}    }
 	<hr />
 
 	<input hidden="hidden" id="FullUrlStringFile" value="@ViewBag.FullUrlStringFile" />
@@ -21,7 +43,6 @@
 		@Html.HiddenFor(m => m.Id)
 
 		<div class="form-group">
-			<a href="@Url.Action("Index")" class="btn btn-primary">Назад к списку новостей</a>
 			<a class="btn btn-primary" onclick="TargetBlackPreviewNews()">Посмотреть результат</a>
 			<input type="submit" class="btn btn-primary" value="Сохранить"/>
 			@if (Model.Id != 0) {
@@ -44,7 +65,6 @@
 		</div>
 
 		<div class="form-group">
-			<a href="@Url.Action("Index")" class="btn btn-primary">Назад к списку новостей</a>
 			<a class="btn btn-primary" onclick="TargetBlackPreviewNews()">Посмотреть результат</a>
 			<input type="submit" class="btn btn-primary" value="Сохранить"/>
 				@if (Model.Id != 0) {

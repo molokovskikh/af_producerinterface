@@ -4,6 +4,18 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "LogUserChange")">Лог изменений БД</a>
+                </li>
+                <li class="active">Подробнее</li>
+            </ol>
+        </div>
+    </div>
+	}
 <h2>Список правок модели</h2>
 
 <hr />
@@ -12,7 +24,7 @@
   <tr>
       <th>Свойство</th>
       <th>Старое значение</th>
-      <th>Новое значение</th>    
+      <th>Новое значение</th>
   </tr>
 
     @foreach (var ModelItem in Model)
@@ -23,5 +35,5 @@
             <td>@ModelItem.ValueNew</td>
         </tr>
     }
- 
+
 </table>

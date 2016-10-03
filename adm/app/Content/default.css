@@ -3,3 +3,6 @@ a.green,span.green{ color: #0e9e14 !important;}
 a.red,span.red{ color: #ff0000 !important;}
 .max-height-100{ max-height: 100px !important;}
 .c-pointer{cursor: pointer !important;}
+.headText{display: inline-block !important; margin:5px; margin-bottom:8px; white-space: nowrap;}
+.headText.wrap{white-space: normal;}
+.margin-b16{ margin-bottom: 16px !important;}
