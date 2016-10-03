@@ -21,7 +21,7 @@ namespace ProducerInterface.Test
 			Click("Отчеты");
 			AssertText("Создание нового отчета");
 			Css("#id").SelectByText("Рейтинг поставщиков");
-			Click("Создать");
+			Click("Создать",false);
 			Css("#CastomName").SendKeys("Рейтинг поставщиков");
 			ChoseRegion("#RegionCodeEqual");
 			Click("Сохранить");

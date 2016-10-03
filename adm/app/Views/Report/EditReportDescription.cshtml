@@ -7,10 +7,22 @@
   var propList = (List<SelectListItem>)ViewData["Regions"];
 }
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("ReportDescription", "Report")">Свойства отчетов</a>
+                </li>
+                <li class="active">Изменение свойств отчета</li>
+            </ol>
+        </div>
+    </div>
+}
+<div class="container">
 <h2>Отчет "@Html.DisplayFor(m=>m.Name)"</h2>
 
 <div class="row">
-    <div class="col-md-6">
         @using (Html.BeginForm()) {
             @Html.HiddenFor(m => m.Id)
             @Html.HiddenFor(m => m.Name)
@@ -25,9 +37,9 @@
                     @for (int i = 0; i < propList.Count; i++) {
                         var r = propList[i];
                         <div class="col-md-4">
-                            <input type="checkbox" name="RegionList" value="@r.Value"
+                            <input type="checkbox" class="c-pointer" id="checkN@(i.ToString())" name="RegionList" value="@r.Value"
                                    @{if (r.Selected) { <text> checked='checked' </text> } } />
-                            <span>@r.Text</span>
+                            <label class="c-pointer" for="checkN@(i.ToString())">@r.Text</label>
                         </div>
                     }
                 </div>
@@ -37,7 +49,5 @@
                 <input type="submit" class="btn btn-primary" value="Сохранить изменения" />
             </div>
         }
-    </div>
-    <div class="col-md-6">
-    </div>
+</div>
 </div>

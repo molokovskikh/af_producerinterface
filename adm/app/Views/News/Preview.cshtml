@@ -5,6 +5,18 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "News")">Список новостей</a>
+                </li>
+                <li class="active">Просмотреть</li>
+            </ol>
+        </div>
+    </div>
+}
 <div class="container body-content">
     <div class="row">
         <h3>@Model.Subject <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToShortDateString()</span></h3>

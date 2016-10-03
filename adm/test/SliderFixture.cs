@@ -45,7 +45,7 @@ namespace test
 			foreach (var item in list) {
 				AssertText(item.Id.ToString());
 			}
-			ClickLink("Изменить");
+			ClickLink("Редактировать");
 			WaitForVisibleCss(".btn-success");
 			ClickButton("Сохранить");
 			WaitForText("Список слайдов");

@@ -5,6 +5,18 @@
   Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Group", "PermissionUser")">Список групп</a>
+                </li>
+                <li class="active">Создать группу</li>
+            </ol>
+        </div>
+    </div>
+}
 <h2>Создание Группы</h2>
 
 <hr />

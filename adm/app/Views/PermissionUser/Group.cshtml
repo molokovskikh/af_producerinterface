@@ -5,6 +5,15 @@
     ViewBag.Title = "Список групп";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Список групп</li>
+            </ol>
+        </div>
+    </div>
+}
 <h2>@ViewBag.Title</h2>
 
 @foreach (var group in Model)

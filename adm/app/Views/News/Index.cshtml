@@ -3,18 +3,41 @@
 @{
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
+
     <div class="container">
         <h2>@ViewBag.Title</h2>
 
         <hr />
 
         @if (ViewBag.Title == "Новости") {
-	        <a href="~/News/Create" class="btn btn-primary">Создать новость</a>  <a href="~/News/Archive" class="btn btn-primary">Архив новостей</a>
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Список новостей</li>
+            </ol>
+        </div>
+    </div>
+}
+            <a href="~/News/Create" class="btn btn-primary">Создать новость</a>
+            <a href="~/News/Archive" class="btn btn-primary">Архив новостей</a>
+            <hr/>
         }
-        else {
-	        <a href="~/News/" class="btn btn-primary">К списку новостей</a>
+        else
+        {
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "News")">Список новостей</a>
+                </li>
+                <li class="active">Архив</li>
+            </ol>
+        </div>
+    </div>
+}
         }
-        <hr />
 
         @if (Model != null && Model.Any())
         {

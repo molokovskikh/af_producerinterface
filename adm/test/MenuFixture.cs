@@ -22,7 +22,7 @@ namespace test
 			AssertText("Статистика");
 			Click("Разделы сайта");
 			Click("Акции");
-			AssertText("Промо-Акции");
+			AssertText("Промо-акции");
 		}
 
 		[Test]

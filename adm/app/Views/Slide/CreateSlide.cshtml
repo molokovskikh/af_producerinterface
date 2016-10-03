@@ -6,6 +6,18 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
     Slide slide = Model;
 }
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "Slide")">Слайдер</a>
+                </li>
+                <li class="active">Добавить слайд</li>
+            </ol>
+        </div>
+    </div>
+}
 <div class="container">
     <h2>@ViewBag.Title</h2>
     <hr/>
@@ -40,10 +52,6 @@
                         }
                     </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <button class="btn" onclick="location.href = '@Url.Action("Index", "Slide")' " value="К списку">К списку</button>
             </div>
         </div>
     </div>

@@ -6,33 +6,46 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Свойства отчетов</h2>
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Свойства отчетов</li>
+            </ol>
+        </div>
+    </div>
+}
+<div class="container">
+    <h2>Свойства отчетов</h2>
 
-<div class="row">
-    <div class="col-md-4">
-        @using (Html.BeginForm()) {
+    <div class="row">
+        <div class="col-md-4">
+            @using (Html.BeginForm())
+            {
             <div class="form-group">
                 <select id="id" name="id" class="form-control">
                     <option selected="selected"></option>
-                    @if (Model != null) {
-                        foreach (var item in Model) {
-                            <option value="@item.Id">@item.Name</option>
-                        }
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                        <option value="@item.Id">@item.Name</option>}
                     }
                 </select>
                 @Html.ValidationMessage("id")
             </div>
             <div class="form-group">
                 <input type="submit" value="Редактировать" class="btn btn-primary" />
-            </div>
-        }
-    </div>
-    <div class="col-md-8">
-        @if (Model != null) {
-            foreach (var item in Model) {
-            <div id="@('d' + item.Id.ToString())" class="descr" style="display: none">@item.Description</div>
+            </div>}
+        </div>
+        <div class="col-md-8">
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                <div id="@('d' + item.Id.ToString())" class="descr" style="display: none">@item.Description</div>}
             }
-        }
+        </div>
     </div>
 </div>
 

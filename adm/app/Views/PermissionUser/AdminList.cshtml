@@ -6,6 +6,15 @@
   ViewBag.Title = "Список администраторов Панели управления";
   Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Список администраторов</li>
+            </ol>
+        </div>
+    </div>
+}
 <h3>@ViewBag.Title</h3>
 
 @if (Model != null && Model.Any())

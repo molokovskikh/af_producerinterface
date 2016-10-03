@@ -5,7 +5,19 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h2>Лог изменений базы данных</h2>
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Лог изменений БД</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-3"><h3 class="headText">@ViewBag.Title</h3></div>
+</div>
 <hr />
 
 @Html.Partial("Partial/PagerPArtial")
@@ -38,8 +50,8 @@
         <td>@LogChangeItem.Description</td>
        <td>@LogChangeItem.EntityCommandEnum.GetDescription()</td>
         <td>@LogChangeItem.TypeDisplayName</td>
-        <td>    
-        <a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a>        
+        <td>
+        <a href="~/LogUserChange/ReadMore/@LogChangeItem.ChangeObjectId"><span class="glyphicon glyphicon-pencil"></span></a>
         </td>
     </tr>
 }

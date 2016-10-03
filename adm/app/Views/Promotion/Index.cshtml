@@ -5,7 +5,7 @@
 @model SearchProducerPromotion
 
 @{
-    ViewBag.Title = "Промоакции";
+    ViewBag.Title = "Промо-акции";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 
     var listStatus = new List<SelectListItem>();
@@ -14,9 +14,19 @@
     var producerList = ViewBag.ProducerList as IEnumerable<OptionElement>;
 }
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Список промо-акций</li>
+            </ol>
+        </div>
+    </div>
+}
+
 <div class="row">
-    <h2 class="col-xs-2">Промо-Акции</h2>
-    <a data-toggle="modal" data-target="#FilterModal" class="pointer col-xs-2 btn btn-primary btn-sm" style="margin-top:2em;">Фильтр</a>
+    <div class="col-md-3"><h3 class="headText margin-b16">@ViewBag.Title</h3></div>
+    <div class="col-md-3"><a data-toggle="modal" data-target="#FilterModal" class="btn btn-primary  margin-b16" >Фильтр</a></div>
 </div>
 
 <div class="body-content">

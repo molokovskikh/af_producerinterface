@@ -7,6 +7,18 @@
 }
 <h2>@ViewBag.Title</h2>
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "FeedBack2")">Обращения пользователей</a>
+                </li>
+                <li class="active">Подробнее</li>
+            </ol>
+        </div>
+    </div>
+}
 @using (Html.BeginForm()) {
     <div class="row">
         <div class="col-md-12">
