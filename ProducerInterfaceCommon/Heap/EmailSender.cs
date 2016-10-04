@@ -326,7 +326,7 @@ namespace ProducerInterfaceCommon.Heap
 				Http = "<a href='" + ConfigurationManager.AppSettings["SiteHttp"] + "/Promotion/Manage/" + promotion.Id + "'>ссылке</a>",
 				UserName = currentUser.Name,
 				UserLogin = currentUser.Login,
-				Brake = "<br />"
+				Break = "<br />"
 			};
 			isHtml = true;
 			MessageFromTemplate(type, promotion.Author.Login, args);
