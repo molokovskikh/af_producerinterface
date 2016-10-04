@@ -9,6 +9,7 @@ namespace ProducerInterfaceCommon.Helpers
 
 		public override void OnException(ExceptionContext filterContext)
 		{
+			ThreadContext.Properties["url"] = filterContext.HttpContext.Request.Url;
 			log.Error("Ошибка при выполнении запроса", filterContext.Exception);
 			base.OnException(filterContext);
 		}

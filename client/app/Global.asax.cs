@@ -6,6 +6,7 @@ using System.Web.Routing;
 using log4net;
 using ProducerInterfaceCommon.Heap;
 using log4net.Config;
+using ProducerInterface.Controllers;
 using ProducerInterfaceCommon.ContextModels;
 using ProducerInterfaceCommon.Helpers;
 
@@ -17,22 +18,32 @@ namespace ProducerInterface
 
 		protected void Application_Start()
 		{
-			XmlConfigurator.Configure();
-			ViewEngines.Engines.Add(new MyViewEngine());
-			AreaRegistration.RegisterAllAreas();
+			try {
+				XmlConfigurator.Configure();
+				GlobalContext.Properties["version"] = typeof(HomeController).Assembly.GetName().Version;
+				Log.Logger.Repository.RendererMap.Put(typeof(Exception), new ExceptionRenderer());
+				ViewEngines.Engines.Add(new MyViewEngine());
+				AreaRegistration.RegisterAllAreas();
 
-			var nh = new ProducerInterfaceCommon.ContextModels.NHibernate();
-			nh.Init();
-			GlobalFilters.Filters.Add(new ErrorFilter());
-			GlobalFilters.Filters.Add(new SessionFilter(nh.Factory));
+				var nh = new ProducerInterfaceCommon.ContextModels.NHibernate();
+				nh.Init();
+				GlobalFilters.Filters.Add(new ErrorFilter());
+				GlobalFilters.Filters.Add(new SessionFilter(nh.Factory));
 
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
-			BundleConfig.RegisterBundles(BundleTable.Bundles);
-			Log.Logger.Repository.RendererMap.Put(typeof(Exception), new ExceptionRenderer());
+				RouteConfig.RegisterRoutes(RouteTable.Routes);
+				BundleConfig.RegisterBundles(BundleTable.Bundles);
+			} catch(Exception e) {
+				Log.Error("Ошибка при инициализации приложения", e);
+				throw;
+			}
 		}
 
 		protected void Application_Error(object sender, EventArgs e)
 		{
+			try {
+				ThreadContext.Properties["url"] = Request.Url;
+			} catch {
+			}
 			var ex = Server.GetLastError();
 			Log.Error(ex.Message, ex);
 		}
