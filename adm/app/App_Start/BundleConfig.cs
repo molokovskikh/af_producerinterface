@@ -32,7 +32,7 @@ namespace ProducerInterfaceControlPanelDomain
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 				"~/Content/bootstrap.css",
 				"~/Content/bootstrap-datepicker.min.css",
-				"~/Content/Chosen/css/Site.css",
+				"~/Content/default.css",
 				"~/Content/Chosen/css/Site.css",
 				"~/Content/site.css"));
 
