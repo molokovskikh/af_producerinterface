@@ -8,7 +8,7 @@ namespace ProducerInterfaceCommon.Helpers
 	{
 		public void RenderObject(RendererMap rendererMap, object obj, TextWriter writer)
 		{
-			rendererMap.FindAndRender(obj, writer);
+			rendererMap.DefaultRenderer.RenderObject(rendererMap, obj, writer);
 			var ex = obj as DbEntityValidationException;
 			if (ex != null) {
 				writer.WriteLine();
