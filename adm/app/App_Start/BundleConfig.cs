@@ -36,6 +36,9 @@ namespace ProducerInterfaceControlPanelDomain
 				"~/Content/Chosen/css/Site.css",
 				"~/Content/site.css"));
 
+			bundles.Add(new ScriptBundle("~/bundles/knockout")
+				.Include(
+					"~/Scripts/knockout-3.4.0.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/chosen")
 				.Include(

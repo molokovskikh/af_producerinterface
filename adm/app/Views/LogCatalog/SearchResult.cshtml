@@ -36,16 +36,35 @@
                 rowClass = "";
                 break;
         }
-        var details = Json.Encode(new { item.ObjectReference, item.Id, item.LogTimeUi, item.OperatorHost, item.ProducerId, item.ProducerName, item.Login, item.UserId, item.UserName, item.DateEditUi, item.AdminLogin });
+        var details = Json.Encode(new { item.ObjectReference, item.NameId, item.Id, item.LogTimeUi, item.OperatorHost, item.ProducerId, item.ProducerName, item.Login, item.UserId, item.UserName, item.DateEditUi, item.AdminLogin });
     <tr class="@rowClass">
         <td>@item.ObjectReferenceNameUi</td>
         <td>@item.TypeEnum.DisplayName() / @item.PropertyNameUi</td>
-        <td><span style="white-space: pre-wrap;">@item.BeforeUi</span></td>
-        <td><span style="white-space: pre-wrap;">@item.AfterUi</span></td>
+        <td>
+            @if (item.TypeEnum == CatalogLogType.Photo) {
+                var link = !string.IsNullOrEmpty(item.BeforeUi) 
+								? Url.Action("GetFile", "MediaFiles", new {id = item.BeforeUi}) : Url.Content("~/Content/Images/no_image.png");
+                <a target="_blank" href="@link">
+                    <img class="max-width-400" src="@link" alt="Изображение"/>
+                </a>} else {
+                <span style="white-space: pre-wrap;">@item.BeforeUi</span>
+            }
+        </td>
+        <td>
+            @if (item.TypeEnum == CatalogLogType.Photo) {
+                var link = !string.IsNullOrEmpty(item.AfterUi) 
+								? Url.Action("GetFile", "MediaFiles", new {id = item.AfterUi}) : Url.Content("~/Content/Images/no_image.png");
+                <a target="_blank" href="@link">
+                    <img class="max-width-400" src="@link" alt="Изображение"/>
+                </a>
+            } else {
+                <span style="white-space: pre-wrap;">@item.AfterUi</span>
+            }
+        </td>
         <td>
             @if (item.Apply == (sbyte)ApplyRedaction.New)
             {
-              <a href="#" class="btn btn-info btn-sm" onclick="applyChange(@item.Id)">Принять</a>  
+              <a href="#" class="btn btn-info btn-sm" onclick="applyChange(@item.Id)">Принять</a>
             }
             else
             {

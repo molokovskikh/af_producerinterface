@@ -11,8 +11,8 @@ namespace ProducerInterface.Controllers
 {
 	public class BaseController : ProducerInterfaceCommon.Controllers.BaseController
 	{
-		protected Account CurrentUser { get; set; }
-		protected Account CurrentAdmin { get; set; }
+		protected ProducerInterfaceCommon.ContextModels.Account CurrentUser { get; set; }
+		protected ProducerInterfaceCommon.ContextModels.Account CurrentAdmin { get; set; }
 		protected sbyte SbyteTypeUser => (sbyte)TypeUsers.ProducerUser;
 		protected EmailSender Mails;
 

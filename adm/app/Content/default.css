@@ -2,7 +2,11 @@
 a.green,span.green{ color: #0e9e14 !important;}
 a.red,span.red{ color: #ff0000 !important;}
 .max-height-100{ max-height: 100px !important;}
+.max-width-400{ max-width: 400px !important;}
 .c-pointer{cursor: pointer !important;}
 .headText{display: inline-block !important; margin:5px; margin-bottom:8px; white-space: nowrap;}
 .headText.wrap{white-space: normal;}
 .margin-b16{ margin-bottom: 16px !important;}
+.width-pers100{ width: 100% !important;}
+.margin-auto{ margin: auto !important;}
+.border-light{border: 1px solid #e6e6e6;}

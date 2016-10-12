@@ -41,7 +41,7 @@ function bindDetailsItem(result) {
 
     DetailsItem.ProducerName(result.ProducerName);
     DetailsItem.ProducerName.valueHasMutated();
-    
+
     DetailsItem.Login(result.Login);
     DetailsItem.Login.valueHasMutated();
 
@@ -51,6 +51,9 @@ function bindDetailsItem(result) {
     DetailsItem.UserName(result.UserName);
     DetailsItem.UserName.valueHasMutated();
 
+	if (result.DateEditUi !== undefined && result.DateEditUi !== "") {
+		result.DateEditUi = "<a href='" + $("input[name='LongChangesUrl']").val()+"/" + result.NameId + "'>" + result.DateEditUi + "</a>";
+	}
     DetailsItem.DateEditUi(result.DateEditUi);
     DetailsItem.DateEditUi.valueHasMutated();
 

@@ -40,6 +40,10 @@ namespace test
 			browser.Close();
 			browser.SwitchTo().Window(tabs2[1]);
 		}
+		protected dynamic Css(string selector)
+		{
+			return Css(browser, selector);
+		}
 
 		protected void CloseAllTabsButOne()
 		{

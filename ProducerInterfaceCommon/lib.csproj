@@ -318,9 +318,14 @@
     <Compile Include="LoggerModels\propertychangeview.cs">
       <DependentUpon>Logger_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\CatalogNames.cs" />
+    <Compile Include="Models\MediaFiles.cs" />
+    <Compile Include="Models\Catalog.cs" />
     <Compile Include="Models\CronNotIntervalParam.cs" />
     <Compile Include="Models\CronIntervalParam.cs" />
     <Compile Include="Models\CronParam.cs" />
+    <Compile Include="Models\CatalogLog.cs" />
     <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\FormatAttribute.cs" />
     <Compile Include="Models\HiddenAttribute.cs" />
@@ -336,6 +341,7 @@
     <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\RunNowNotIntervalParam.cs" />
     <Compile Include="Models\MailFormWithFooter.cs" />
+    <Compile Include="Models\DrugFormPicture.cs" />
     <Compile Include="Models\Slide.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReportRow.cs" />

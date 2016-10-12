@@ -1,0 +1,41 @@
+﻿@{
+}
+
+
+<div id="PictureUploadModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" id="PictureUploadModalDialog">
+        <div class="modal-content" id="PictureUpload">
+            @using (@Html.BeginForm("UpdatePicture", "Drug", FormMethod.Post, new {@class = "form-horizontal form-groups-bordered", EncType = "multipart/form-data"})) {
+                <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Предложение </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input id="DrugFamilyId" name="drugFamilyId" type="hidden"/>
+                        <input id="PictureUploadCatalogId" name="catalogId" type="hidden"/>
+                        <input id="PictureUploadProducerId" name="producerId" type="hidden"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Изображение</label>
+                        <div class="col-md-5">
+                            <a name="pictureUploadUrl" target="_blank">
+                                <img name="pictureUploadUrl" src="@Url.Content("~/Content/Image/no_image.png")" alt="Изображение" class="max-height-200 max-width-300"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Изменить изображение</label>
+                        <div class="col-md-5">
+                            <input type="file" name="uploadedFile" class="file"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    <button class="btn btn-primary" type="submit" value="Предложить правку">Предложить правку</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
