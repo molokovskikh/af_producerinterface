@@ -138,6 +138,7 @@
           <Property Name="After" Type="text" />
           <Property Name="Apply" Type="tinyint" Nullable="false" />
           <Property Name="AdminId" Type="uint" />
+          <Property Name="ProducerId" Type="uint" />
           <Property Name="DateEdit" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="CompanyDomainName">
@@ -1774,6 +1775,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <Property Name="Apply" Type="SByte" Nullable="false" />
           <Property Name="AdminId" Type="Int64" />
           <Property Name="DateEdit" Type="DateTime" />
+          <Property Name="ProducerId" Type="Int64" />
         </EntityType>
         <EntityType Name="cataloglogui">
           <Key>
@@ -2422,6 +2424,7 @@ FROM `usernames` AS `usernames`</DefiningQuery>
           <EntitySetMapping Name="CatalogLog">
             <EntityTypeMapping TypeName="producerinterface_Model.CatalogLog">
               <MappingFragment StoreEntitySet="CatalogLog">
+                <ScalarProperty Name="ProducerId" ColumnName="ProducerId" />
                 <ScalarProperty Name="DateEdit" ColumnName="DateEdit" />
                 <ScalarProperty Name="AdminId" ColumnName="AdminId" />
                 <ScalarProperty Name="Apply" ColumnName="Apply" />

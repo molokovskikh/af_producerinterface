@@ -6,6 +6,12 @@ using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using ProducerInterfaceCommon.CatalogModels;
 using System.Collections.Generic;
+using System.IO;
+using System.Web;
+using NHibernate.Linq;
+using ProducerInterfaceCommon.Helpers;
+using ProducerInterfaceCommon.Models;
+using CatalogLog = ProducerInterfaceCommon.ContextModels.CatalogLog;
 
 namespace ProducerInterface.Controllers
 {
@@ -129,12 +135,75 @@ namespace ProducerInterface.Controllers
 
 			ViewData["familyName"] = drugfamily.Name;
 			ViewData["familyId"] = id;
-			ViewData["producerName"] = ccntx.Producers.Single(x => x.Id == producerId).Name;
+			var producer = ccntx.Producers.Single(x => x.Id == producerId);
+			ViewData["producerName"] = producer.Name;
+			ViewData["producerId"] = producer.Id;
+			var formPicturesList = new Dictionary<long, int>();
+			var producerPictures =  DbSession.Query<DrugFormPicture>().Where(x=> x.ProducerId == producerId).ToList();
 			// формы данного лек.средства из ассортимента данного производителя
 			var model = ccntx.Catalog.Where(x => x.NameId == id && !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).ToList().OrderBy(x => x.Name);
+			foreach (var item in producerPictures) {
+				if (item.PictureKey.HasValue && model.Any(s=>s.Id == item.CatalogId)) {
+					formPicturesList.Add(item.CatalogId, item.PictureKey.Value);
+				}
+			}
+			ViewData["FormPicturesList"] = formPicturesList;
 			if (edit)
 				return View("EditForms", model);
 			return View(model);
+		}
+
+		/// <summary>
+		/// Отправляет запрос на правку ПКУ
+		/// </summary>
+		/// <param name="familyId">Идентификатор по таблице catalognames</param>
+		/// <param name="uploadedFile"></param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult UpdatePicture(long drugFamilyId, uint catalogId, uint producerId, HttpPostedFileBase uploadedFile)
+		{
+			var drugPicture = new DrugFormPicture();
+			var ext = uploadedFile == null ? "" : new FileInfo(uploadedFile.FileName).Extension;
+			if (ext == "" || (ext != ".jpg" && ext != ".jpeg")) {
+				ErrorMessage("Данный файл не может быть использован: допустимые форматы .jpg, .jpeg");
+				return RedirectToAction("DisplayForms", new {id = drugFamilyId });
+			}
+			if (uploadedFile != null && uploadedFile.ContentLength > 550000) {
+				ErrorMessage("Данный файл не может быть использован: допустимый вес файла 500 кбайт.");
+				return RedirectToAction("DisplayForms", new { id = drugFamilyId });
+			}
+
+			var fileInDb = FileManager.SaveFile(DB2, uploadedFile, EntityType.DrugFormPicture);
+			var photo =
+				DbSession.Query<DrugFormPicture>().FirstOrDefault(x => x.CatalogId == catalogId && x.ProducerId == producerId);
+			if (photo == null) {
+				photo = new DrugFormPicture();
+				photo.CatalogId = catalogId;
+				photo.ProducerId = producerId;
+				DbSession.Save(photo);
+			}
+
+			var model = ccntx.Catalog.First(x => x.Id == catalogId);
+
+			var dl = new CatalogLog()
+			{
+				After = fileInDb.ToString(),
+				Before = photo?.PictureKey?.ToString() ?? "",
+				ObjectReference = catalogId,
+				ObjectReferenceNameUi = model.Name,
+				Type = (int)CatalogLogType.Photo,
+				LogTime = DateTime.Now,
+				OperatorHost = CurrentUser.IP,
+				UserId = CurrentUser.ID_LOG,
+				PropertyName = "PictureKey",
+				PropertyNameUi = "Изображение",
+				NameId = drugFamilyId,
+				ProducerId = producerId
+			};
+			DB.CatalogLog.Add(dl);
+			DB.SaveChanges();
+			SuccessMessage("Замена изображения предложена");
+			return RedirectToAction("DisplayForms", new { id = drugFamilyId });
 		}
 
 		/// <summary>
@@ -158,7 +227,7 @@ namespace ProducerInterface.Controllers
 
 			// формы данного лек.средства из ассортимента данного производителя
 			var model = ccntx.Catalog.Where(x => x.NameId == familyId && !x.Hidden && x.assortment.Any(y => y.ProducerId == producerId)).ToList().OrderBy(x => x.Name);
-			var ufName = new string[] { "вЫкл", "вкл" };
+			var ufName = new string[] { "нет", "да" };
 			var regex = new Regex(@"(?<catalogId>\d+)_(?<field>\w+)", RegexOptions.IgnoreCase);
 			// форма возвращает значения для всех элементов. Ищем, что изменилось
 			for (int i = 0; i < Request.Form.Count; i++) {
@@ -191,7 +260,8 @@ namespace ProducerInterface.Controllers
 							UserId = CurrentUser.ID_LOG,
 							PropertyName = propertyInfo.Name,
 							PropertyNameUi = displayName,
-							NameId = familyId
+							NameId = familyId,
+							ProducerId = producerId
 						};
 						DB.CatalogLog.Add(dl);
 						DB.SaveChanges();
@@ -281,7 +351,7 @@ namespace ProducerInterface.Controllers
 				type = type.BaseType;
 
 			// пишем в лог для премодерации
-			var dl = new CatalogLog()
+			var dl = new ProducerInterfaceCommon.ContextModels.CatalogLog()
 			{
 				After = after?.Id.ToString(),
 				Before = before?.Id.ToString(),
@@ -314,9 +384,9 @@ namespace ProducerInterface.Controllers
 		{
 			var res = "";
 			if (val == "True")
-				res = "вкл";
+				res = "да";
 			else if (val == "False")
-				res = "вЫкл";
+				res = "нет";
 			return res;
 		}
 
@@ -324,9 +394,9 @@ namespace ProducerInterface.Controllers
 		{
 			var res = "";
 			if (val.HasValue && val.Value)
-				res = "вкл";
+				res = "да";
 			else if (val.HasValue && !val.Value)
-				res = "вЫкл";
+				res = "нет";
 			return res;
 		}
 

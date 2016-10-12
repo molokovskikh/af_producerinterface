@@ -167,6 +167,9 @@ namespace ProducerInterfaceCommon.ContextModels
 		public long? RejectId { get; set; }
 
 		public string RejectComment { get; set; }
+
+		public bool IsUserFilter { get; set; }
+
 	}
 
 	public class ReportDescriptionUI

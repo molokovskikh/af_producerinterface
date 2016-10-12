@@ -6,6 +6,15 @@
   Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="active">Запросы правок каталога</li>
+            </ol>
+        </div>
+    </div>
+}
 <div class="row">
     <div class="col-md-3"><h3 class="headText">@ViewBag.Title</h3></div>
     <div class="col-md-3"><input type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal" value="Фильтр" /></div>
@@ -26,6 +35,7 @@
                     <input type="hidden" name="ApplyId" id="ApplyId" value=""/>
                     <input type="hidden" name="RejectId" id="RejectId" value=""/>
                     <input type="hidden" name="RejectComment" id="RejectComment" value=""/>
+                    <input type="hidden" name="IsUserFilter" id="IsUserFilter" value="true" />
                     <div class="form-group">
                         @Html.LabelFor(m => m.Apply)
                         @Html.DropDownListFor(m => m.Apply, Model.ApplyList, new { @class = "form-control" })
@@ -68,6 +78,7 @@
 <p>&nbsp;</p>
 
 <div id="ModalDetailsItem" class="modal fade modal-open-noscroll" role="dialog">
+    @Html.Hidden("LongChangesUrl",Url.Action("Changes"))
     <div class="modal-dialog modal-dialog-full">
         <div class="modal-content modal-content-full">
             <div class="modal-header">
@@ -86,19 +97,19 @@
                     </tr>
                     <tr>
                         <td>Пользователь</td>
-                        <td><span data-bind="text:UserName"></span> (id=<span data-bind="text:UserId"></span>, <span data-bind="text:Login"></span>, IP <span data-bind="text:OperatorHost"></span>)</td>
+                        <td><span data-bind="text:UserName"></span><br/>(id=<span data-bind="text:UserId"></span>, <span data-bind="text:Login"></span>, IP <span data-bind="text:OperatorHost"></span>)</td>
                     </tr>
                     <tr>
                         <td>Производитель</td>
                         <td><span data-bind="text:ProducerName"></span> (id=<span data-bind="text:ProducerId"></span>)</td>
                     </tr>
                     <tr>
-                        <td>Правку принял</td>
+                        <td>Решение принял</td>
                         <td><span data-bind="text:AdminLogin"></span></td>
                     </tr>
                     <tr>
-                        <td>Дата принятия правки</td>
-                        <td><span data-bind="text:DateEditUi"></span></td>
+                        <td>Дата принятия решения</td>
+                        <td><div data-bind="html:DateEditUi"></div></td>
                     </tr>
                 </table>
             </div>

@@ -4,6 +4,7 @@
 @{
     var title = $"Формы выпуска и дозировки препарата {ViewData["familyName"]} в классификации АналитФармация";
     ViewBag.Title = title;
+	var imageList = (Dictionary<long,int>)ViewBag.FormPicturesList;
 }
 
 <div class="row">
@@ -15,7 +16,7 @@
 @if (Model != null && Model.Any()) {
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-striped table-bordered">
+            <table id="FormsList" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th class="w20p">
@@ -40,7 +41,7 @@
                             @Html.DisplayNameFor(m => m.Combined)
                         </th>
                         <th class="w8p">
-                            @Html.DisplayNameFor(m => m.Monobrend) 
+                            @Html.DisplayNameFor(m => m.Monobrend)
                             @ViewData["producerName"]
                         </th>
                         <th class="w24p">Свойства</th>
@@ -49,8 +50,20 @@
                 <tbody>
                     @foreach (var item in Model) {
                         <tr>
-                            <td style="white-space:nowrap">
-                                @Html.DisplayFor(modelItem => item.Name)
+                            <td style="white-space: nowrap">
+                                <div class="listItem">
+                                    <span>@Html.DisplayFor(modelItem => item.Name)</span>
+                                    <a onclick="new modalPicture().SetModelData(this)" iUrl="@(
+												imageList.ContainsKey(item.Id)?
+												Url.Action("GetFile","MediaFiles",new { id=imageList[item.Id] }): Url.Content("~/Content/Image/no_image.png")
+												)"  cId="@item.Id" pId="@ViewBag.producerId" dId="@ViewBag.familyId" data-toggle="modal" data-target="#PictureUploadModal" class="pointer">
+                                        @if (imageList.ContainsKey(item.Id)) {
+                                            <img src="@Url.Action("GetFile", "MediaFiles", new {id = imageList[item.Id]})" alt="изображение">
+                                        } else {
+                                            <img src="@Url.Content("~/Content/Image/no_image.png")" alt="изображение">
+                                        }
+                                    </a>
+                                </div>
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.VitallyImportant)
@@ -93,6 +106,7 @@
             <a href="@Url.Action("DisplayForms", new {id = ViewData["familyId"], edit = true})" class="btn btn-primary">Редактировать</a>
         </div>
     </div>
+
 }
 else {
     <div class="row">
@@ -100,6 +114,8 @@ else {
     </div>
 }
 
+@Html.Partial("Partial/ModalPictureUpload")
 
 @section JavaScript {
+	<script src="@Url.Content("~/Scripts/WorkPlace/modalPictureUpload.js")"></script>
 }

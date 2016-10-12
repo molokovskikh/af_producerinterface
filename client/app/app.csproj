@@ -253,10 +253,12 @@
     <Content Include="Content\Chosen\js\jqCron.js" />
     <Content Include="Content\Chosen\js\jqCron.ru.js" />
     <None Include="Content\Chosen\js\_references.js" />
+    <Content Include="Scripts\WorkPlace\modalPictureUpload.js" />
     <Content Include="Content\FileUpload.css" />
     <Content Include="Content\Image\aflogo.png" />
     <Content Include="Content\Image\Loading_icon.gif" />
     <Content Include="Content\Image\logo_temp.jpg" />
+    <Content Include="Content\Image\no_image.png" />
     <Content Include="Content\MyStyle.css" />
     <Content Include="Content\SemanticUI\icon.min.css" />
     <Content Include="Content\SemanticUI\item.min.css" />
@@ -465,6 +467,7 @@
     <Content Include="Views\Report\EditorTemplates\Products.cshtml" />
     <Content Include="Views\Report\EditorTemplates\ProductsFlag.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
+    <Content Include="Views\Drug\Partial\ModalPictureUpload.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

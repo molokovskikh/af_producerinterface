@@ -75,7 +75,7 @@ namespace ProducerInterfaceCommon.Models
 			}
 		}
 
-		public virtual void Init(Account currentUser)
+		public virtual void Init(ProducerInterfaceCommon.ContextModels.Account currentUser)
 		{
 			ProducerId = currentUser.AccountCompany.ProducerId;
 		}

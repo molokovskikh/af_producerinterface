@@ -37,7 +37,10 @@ namespace ProducerInterfaceCommon.ContextModels
 		MNN = 2,
 
 		[Display(Name = "ПКУ")]
-		PKU = 3
+		PKU = 3,
+
+		[Display(Name = "Изображение")]
+		Photo = 4
 	}
 
 	public enum DisplayStatus
@@ -202,7 +205,9 @@ namespace ProducerInterfaceCommon.ContextModels
 		[Display(Name = "Рассылка")]
 		Email = 3,
 		[Display(Name = "Слайд")]
-		Slide = 4
+		Slide = 4,
+		[Display(Name = "Изображение препарата")]
+		DrugFormPicture = 5
 	}
 
 	public enum PromotionTypeChange

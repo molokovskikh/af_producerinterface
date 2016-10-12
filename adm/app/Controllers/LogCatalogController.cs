@@ -8,6 +8,8 @@ using ProducerInterfaceCommon.Heap;
 using ProducerInterfaceCommon.CatalogModels;
 using System.Web.Caching;
 using System.Web.Mvc.Html;
+using NHibernate.Linq;
+using ProducerInterfaceCommon.Models;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers
@@ -40,12 +42,18 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				SuccessMessage("Комментарий отправлен пользователю");
 			}
 			var applyList = new List<SelectListItem>();
-			var emptyItem = new SelectListItem() { Value = "", Text = "Все правки" };
+			var emptyItem = new SelectListItem() {Value = "", Text = "Все правки"};
 			applyList.Add(emptyItem);
-			if (model.Apply.HasValue)
-				applyList.AddRange(EnumHelper.GetSelectList(typeof(ApplyRedaction), (ApplyRedaction)model.Apply));
-			else
-				applyList.AddRange(EnumHelper.GetSelectList(typeof(ApplyRedaction)));
+			if (model.Apply.HasValue && model.IsUserFilter)
+				applyList.AddRange(EnumHelper.GetSelectList(typeof (ApplyRedaction), (ApplyRedaction) model.Apply));
+			else {
+				if (model.IsUserFilter) {
+					applyList.AddRange(EnumHelper.GetSelectList(typeof (ApplyRedaction)));
+				} else {
+					var defaultValue = int.Parse(ConfigurationManager.AppSettings["FilterDefault_LogCatalogList"]);
+					applyList.AddRange(EnumHelper.GetSelectList(typeof (ApplyRedaction), (ApplyRedaction) defaultValue));
+				}
+			}
 			model.ApplyList = applyList;
 			return View(model);
 		}
@@ -53,15 +61,24 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		public ActionResult SearchResult(CatalogLogFilter filter)
 		{
 			var query = DB.cataloglogui.AsQueryable();
-			if (filter.Apply.HasValue)
+			if (filter.Apply.HasValue && filter.IsUserFilter)
 				query = query.Where(x => x.Apply == filter.Apply);
-
+			else {
+				if (!filter.IsUserFilter) {
+					var defaultValue = int.Parse(ConfigurationManager.AppSettings["FilterDefault_LogCatalogList"]);
+					query = query.Where(x => x.Apply == defaultValue);
+				}
+			}
 			var itemsCount = query.Count();
 			var itemsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["ReportCountPage"]);
-			var info = new SortingPagingInfo() { CurrentPageIndex = filter.CurrentPageIndex, ItemsCount = itemsCount, ItemsPerPage = itemsPerPage };
+			var info = new SortingPagingInfo() {
+				CurrentPageIndex = filter.CurrentPageIndex,
+				ItemsCount = itemsCount,
+				ItemsPerPage = itemsPerPage
+			};
 			ViewBag.Info = info;
 
-			var model = query.OrderByDescending(x => x.Id).Skip(itemsPerPage * filter.CurrentPageIndex).Take(itemsPerPage).ToList();
+			var model = query.OrderByDescending(x => x.Id).Skip(itemsPerPage*filter.CurrentPageIndex).Take(itemsPerPage).ToList();
 			var modelUi = MapListToUi(model);
 			return View(modelUi);
 		}
@@ -69,8 +86,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		private void Apply(long id)
 		{
 			var item = DB.CatalogLog.Single(x => x.Id == id);
-			switch (item.TypeEnum)
-			{
+			switch (item.TypeEnum) {
 				case CatalogLogType.Descriptions:
 					var description = ccntx.Descriptions.Single(x => x.Id == item.ObjectReference);
 					SetValue(description, item.PropertyName, item.After);
@@ -83,10 +99,18 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					var catalog = ccntx.Catalog.Single(x => x.Id == item.ObjectReference);
 					SetValue(catalog, item.PropertyName, item.After);
 					break;
+				case CatalogLogType.Photo:
+					var photo =
+						DbSession.Query<DrugFormPicture>()
+							.First(x => x.CatalogId == item.ObjectReference && x.ProducerId == item.ProducerId);
+					photo.PictureKey = Convert.ToInt32(item.After);
+					DbSession.SaveOrUpdate(photo);
+					DbSession.Transaction.Commit();
+					break;
 			}
 			ccntx.SaveChanges();
 
-			item.Apply = (sbyte)ApplyRedaction.Applied;
+			item.Apply = (sbyte) ApplyRedaction.Applied;
 			item.AdminId = CurrentUser.Id;
 			item.DateEdit = DateTime.Now;
 			DB.SaveChanges();
@@ -96,7 +120,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		private void Reject(long id, string comment)
 		{
 			var item = DB.CatalogLog.Single(x => x.Id == id);
-			item.Apply = (sbyte)ApplyRedaction.Rejected;
+			item.Apply = (sbyte) ApplyRedaction.Rejected;
 			item.AdminId = CurrentUser.Id;
 			item.DateEdit = DateTime.Now;
 			DB.SaveChanges();
@@ -105,8 +129,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var before = item.Before;
 			var after = item.After;
 
-			switch (item.TypeEnum)
-			{
+			switch (item.TypeEnum) {
 				case CatalogLogType.MNN:
 					after = item.After != null ? mnnNames[Int64.Parse(item.After)] : "";
 					before = item.Before != null ? mnnNames[Int64.Parse(item.Before)] : "";
@@ -115,11 +138,32 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					after = UserFrendlyName(item.After);
 					before = UserFrendlyName(item.Before);
 					break;
+				case CatalogLogType.Photo:
+					after = string.IsNullOrEmpty(item.After) ? "Изображение отсутствует" : "Новое изображение";
+					before = string.IsNullOrEmpty(item.Before) ? "Изображение отсутствует" : "Текущее изображение";
+					break;
 			}
 
-			EmailSender.SendRejectCatalogChangeMessage(DB, user, item.ObjectReferenceNameUi, item.PropertyNameUi, before, after, comment);
+			EmailSender.SendRejectCatalogChangeMessage(DB, user, item.ObjectReferenceNameUi, item.PropertyNameUi, before, after,
+				comment);
 		}
 
+
+		/// <summary>
+		/// Возвращает историю правок препарата
+		/// </summary>
+		/// <param name="id">идентификатор по таблице catalogs.catalognames</param>
+		/// <returns></returns>
+		public ActionResult Changes(long id)
+		{
+			ViewData["Name"] = ccntx.catalognames.Single(x => x.Id == id).Name;
+			var model =
+				DB.cataloglogui.Where(x => x.NameId == id && x.Apply == (sbyte) ApplyRedaction.Applied)
+					.OrderByDescending(x => x.LogTime)
+					.ToList();
+			var modelUi = MapListToUi(model);
+			return View(modelUi);
+		}
 
 		private void SetValue(object o, string propName, string value)
 		{
@@ -131,8 +175,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			var uType = Nullable.GetUnderlyingType(p.PropertyType);
 			// если тип допускает null и пришёл null - ставим null
-			if (uType != null && string.IsNullOrEmpty(value))
-			{
+			if (uType != null && string.IsNullOrEmpty(value)) {
 				p.SetValue(o, null);
 				return;
 			}
@@ -150,9 +193,9 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 		{
 			var res = "";
 			if (val == "True")
-				res = "вкл";
+				res = "да";
 			else if (val == "False")
-				res = "вЫкл";
+				res = "нет";
 			return res;
 		}
 
@@ -166,7 +209,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			foreach (var item in modelUi) {
 				switch (item.TypeEnum) {
 					case CatalogLogType.MNN:
-						item.AfterUi = item.After !=  null ? mnnNames[Int64.Parse(item.After)] : "";
+						item.AfterUi = item.After != null ? mnnNames[Int64.Parse(item.After)] : "";
 						item.BeforeUi = item.Before != null ? mnnNames[Int64.Parse(item.Before)] : "";
 						break;
 					case CatalogLogType.PKU:

@@ -121,7 +121,7 @@ namespace ProducerInterfaceCommon.Models
 		{
 		}
 
-		public PromotionSnapshot(Account author,
+		public PromotionSnapshot(ProducerInterfaceCommon.ContextModels.Account author,
 			Promotion promotion,
 			producerinterface_Entities db,
 			Context db2,
@@ -197,7 +197,7 @@ namespace ProducerInterfaceCommon.Models
 			PromotionsToSupplier = new HashSet<PromotionsToSupplier>();
 		}
 
-		public Promotion(Promotion promotion, Account user)
+		public Promotion(Promotion promotion, ContextModels.Account user)
 			: this(user)
 		{
 			Name = promotion.Name + " Копия";
@@ -209,7 +209,7 @@ namespace ProducerInterfaceCommon.Models
 			PromotionsToSupplier.AddEach(promotion.PromotionsToSupplier.Select(x => new PromotionsToSupplier(x.PromotionId, x.SupplierId)));
 		}
 
-		public Promotion(Account user)
+		public Promotion(ContextModels.Account user)
 			: this()
 		{
 			Name = "";
@@ -293,7 +293,7 @@ namespace ProducerInterfaceCommon.Models
 			}
 		}
 
-		public virtual bool CheckSecurity(Account user)
+		public virtual bool CheckSecurity(ContextModels.Account user)
 		{
 			return user.AccountCompany?.ProducerId == ProducerId;
 		}

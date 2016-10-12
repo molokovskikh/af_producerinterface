@@ -39,3 +39,11 @@ textarea {
 .promotion-rejected, .promotion-rejected td {
 	background: #E28585 !important;
 }
+#FormsList .listItem {display: inline-table;width: 100%;}
+#FormsList .listItem span{display: table-cell; vertical-align: middle;}
+#FormsList .listItem a{display: table-cell;padding-left: 12px;float: right;}
+#FormsList .listItem img{ max-width: 100px;max-height: 38px;border: 2px solid #599dd8;}
+#FormsList .listItem a:hover img{border-color: #22629a !important;}
+.max-height-200{ max-height: 200px !important;}
+.max-width-300{ max-width: 300px !important;}
+.max-width-400{ max-width: 400px !important;}

@@ -245,6 +245,7 @@
     <Content Include="Content\Chosen\js\GoToProducerInterface.js" />
     <Content Include="Content\Chosen\js\initMailTo.js" />
     <Content Include="Content\default.css" />
+    <Content Include="Content\Images\no_image.png" />
     <Content Include="Content\Images\other.png" />
     <Content Include="Content\Images\txt.png" />
     <Content Include="Content\Images\xls.png" />
@@ -346,6 +347,7 @@
     <Content Include="Scripts\WorkPlace\CatalogLog.js" />
     <Content Include="Scripts\WorkPlace\FeedBackModel.js" />
     <Content Include="Scripts\WorkPlace\GlobalAccount_AccountVerification.js" />
+    <Content Include="Scripts\WorkPlace\CatalogLogInit.js" />
     <Content Include="Scripts\WorkPlace\InitFeedBack.js" />
     <Content Include="Scripts\WorkPlace\Permission_ChangeAccount.js" />
     <Content Include="Scripts\WorkPlace\Promotion_Index.js" />
@@ -791,6 +793,7 @@
     <Content Include="Views\Report\EditorTemplates\StringList.cshtml" />
     <Content Include="Views\Report\EditorTemplates\SupplierRatingReport.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\LogCatalog\Changes.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

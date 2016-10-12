@@ -45,7 +45,7 @@ namespace ProducerInterfaceCommon.Models
 			CatalogIdEqual = new List<long>();
 		}
 
-		public override void Init(Account currentUser)
+		public override void Init(ProducerInterfaceCommon.ContextModels.Account currentUser)
 		{
 			base.Init(currentUser);
 			if (ProducerId == null)

@@ -29,8 +29,20 @@
     <tr>
         <td>@item.ObjectReferenceNameUi</td>
         <td>@item.TypeEnum.DisplayName() / @item.PropertyNameUi</td>
-        <td><span style="white-space: pre-wrap;">@item.BeforeUi</span></td>
-        <td><span style="white-space: pre-wrap;">@item.AfterUi</span></td>
+        <td>
+            @if (item.TypeEnum == CatalogLogType.Photo) {
+                <img class="max-width-400" src="@(!string.IsNullOrEmpty(item.BeforeUi) ? Url.Action("GetFile", "MediaFiles", new {id = item.BeforeUi})
+                                                      : Url.Content("~/Content/Images/no_image.png"))" alt="Изображение"/>} else {
+                <span style="white-space: pre-wrap;">@item.BeforeUi</span>
+            }
+        </td>
+        <td>
+            @if (item.TypeEnum == CatalogLogType.Photo) {
+                <img class="max-width-400" src="@(!string.IsNullOrEmpty(item.AfterUi) ? Url.Action("GetFile", "MediaFiles", new {id = item.AfterUi})
+                                                      : Url.Content("~/Content/Images/no_image.png"))" alt="Изображение"/>} else {
+                <span style="white-space: pre-wrap;">@item.AfterUi</span>
+            }
+        </td>
         <td><a onclick="bindDetailsItem(@details)"><span class="glyphicon glyphicon-eye-open"></span></a></td>
     </tr>
     }

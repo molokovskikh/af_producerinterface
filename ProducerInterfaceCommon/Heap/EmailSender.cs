@@ -6,9 +6,11 @@ using System.Net.Mail;
 using System.IO;
 using System.Text;
 using System.ComponentModel;
+using System.Net;
 using StringFormat;
 using ProducerInterfaceCommon.Models;
 using ProducerInterfaceCommon.ContextModels;
+using Account = ProducerInterfaceCommon.ContextModels.Account;
 
 namespace ProducerInterfaceCommon.Heap
 {
@@ -186,7 +188,7 @@ namespace ProducerInterfaceCommon.Heap
 			var header = Render(mailForm.Header, values);
 			var body = Render(mailForm.Body, values);
 			var footer = Render(mailForm.Footer, values);
-			attachments.AddRange(GetAttachments(type));
+			attachments.AddRange(EmailSender.GetAttachments(db2, type));
 
 			body = $"{header}\r\n\r\n{body}\r\n\r\n{footer}";
 			if (isHtml)
@@ -290,20 +292,23 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Отклонение правки в каталог
-		public static void SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName, string fieldName, string before, string after, string comment)
+		public static void SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName,
+			string fieldName, string before, string after, string comment)
 		{
-			throw new NotImplementedException();
-			//var siteName = ConfigurationManager.AppSettings["SiteName"];
-			//var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int)MailType.RejectCatalogChange);
-			//var subject = ReliableTokenizer(mailForm.Subject, new { SiteName = siteName });
-			//var header = ReliableTokenizer(mailForm.Header, new { UserName = user.Name });
-			//var body = $"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new { FieldName = fieldName, CatalogName = catalogName, Before = before, After = after, Comment = comment })}\r\n\r\n{mailForm.Footer}";
-			//var attachments = GetAttachments(cntx, MailType.RejectCatalogChange);
-			//EmailSender.SendEmail(user.Login, subject, body, attachments, false);
+			//throw new NotImplementedException();
+			var siteName = ConfigurationManager.AppSettings["SiteName"];
+			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int) MailType.RejectCatalogChange);
+			var subject = ReliableTokenizer(mailForm.Subject, new {SiteName = siteName});
+			var header = ReliableTokenizer(mailForm.Header, new {UserName = user.Name});
+			var body =
+				$"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new {FieldName = fieldName, CatalogName = catalogName, Before = before, After = after, Comment = comment})}\r\n\r\n{mailForm.Footer}";
 
-			//var di = new DiagnosticInformation(user) { Body = body, ActionName = MailType.RejectCatalogChange.DisplayName() };
-			//var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
-			//EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), attachments, false);
+			//var attachments = EmailSender.GetAttachments(cntx, MailType.RejectCatalogChange);
+			EmailSender.SendEmail(user.Login, subject, body, new List<string>(), false);
+
+			var di = new DiagnosticInformation(user) {Body = body, ActionName = MailType.RejectCatalogChange.DisplayName()};
+			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
+			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), new List<string>(), false);
 		}
 
 		// Обратная связь, сотрудникам
@@ -338,7 +343,7 @@ namespace ProducerInterfaceCommon.Heap
 			}
 		}
 
-		private List<string> GetAttachments(MailType mailType)
+		private static List<string> GetAttachments(Context db2, MailType mailType)
 		{
 			var result = new List<string>();
 

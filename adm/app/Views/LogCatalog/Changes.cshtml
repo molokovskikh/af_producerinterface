@@ -1,0 +1,156 @@
+﻿@using ProducerInterfaceCommon.ContextModels;
+@using ProducerInterfaceCommon.Heap
+
+@model IEnumerable<CataloglogUiPlus>
+@{
+  var name = (string)ViewData["Name"];
+
+  ViewBag.Title = $"История правок {name}";
+  Layout = "~/Views/Shared/_MasterPage.cshtml";
+    var lastElement = Model.LastOrDefault();
+}
+
+@section navigation{
+    <div class="body-content affix-top">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="@Url.Action("Index", "LogCatalog")">Запросы правок каталога</a>
+                </li>
+                <li class="active">История правок</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+@if (Model != null && Model.Any())
+{
+<table class="table-bordered table-striped" id="Table-LogUserChange">
+    <tr>
+        <th>Наименование</th>
+        <th>Свойство</th>
+        <th>Было</th>
+        <th>Стало</th>
+        <th>Подробнее</th>
+    </tr>
+
+    @foreach (var item in Model) {
+        var details = Json.Encode(new {item.ObjectReference, item.Id, item.LogTimeUi, item.OperatorHost, item.ProducerName, item.Login, item.UserName, item.DateEditUi});
+        <tr>
+            <td>
+                @item.DateEditUi
+            </td>
+            <td>@item.TypeEnum.DisplayName() / @item.PropertyNameUi</td>
+            <td>
+                @if (item.Id != lastElement.Id && item.TypeEnum != CatalogLogType.Photo && item.BeforeUi != null && item.BeforeUi.Length > 500) {
+                    <div class="collapseItem@(item.Id) @(item.Id != lastElement.Id ? "collapse" : "")">
+
+                        <span style="white-space: pre-wrap;">@item.BeforeUi</span>
+                    </div>
+                    <a onclick="ChangeArrowIcon(this)" data-toggle="collapse" href=".collapseItem@(item.Id)" class="btn btn-default width-pers100 border-light">
+                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                    </a>
+                } else {
+                    if (item.TypeEnum == CatalogLogType.Photo) {
+                        var link = !string.IsNullOrEmpty(item.BeforeUi)
+                            ? Url.Action("GetFile", "MediaFiles", new {id = item.BeforeUi}) : Url.Content("~/Content/Images/no_image.png");
+                        <a target="_blank" href="@link">
+                            <img class="max-width-400" src="@link" alt="Изображение"/>
+                        </a>
+                    } else {
+                        <span style="white-space: pre-wrap;">@item.BeforeUi</span>}
+                }
+            </td>
+            <td>
+                @if (item.Id != lastElement.Id && item.TypeEnum != CatalogLogType.Photo && item.AfterUi != null && item.AfterUi.Length > 500) {
+                    <div class="collapseItem@(item.Id) collapse">
+                        <span style="white-space: pre-wrap;">@item.AfterUi</span>
+                    </div>
+                    <a onclick="ChangeArrowIcon(this)" data-toggle="collapse" href=".collapseItem@(item.Id)" class="btn btn-default width-pers100 border-light">
+                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                    </a>
+                } else {
+                    if (item.TypeEnum == CatalogLogType.Photo) {
+                        var link = !string.IsNullOrEmpty(item.AfterUi)
+                            ? Url.Action("GetFile", "MediaFiles", new {id = item.AfterUi}) : Url.Content("~/Content/Images/no_image.png");
+                        <a target="_blank" href="@link">
+                            <img class="max-width-400" src="@link" alt="Изображение"/>
+                        </a>
+                    } else {
+                        <span style="white-space: pre-wrap;">@item.AfterUi</span>
+                    }
+                }
+            </td>
+            <td>
+                <a onclick="bindDetailsItem(@details)">
+                    <span class="glyphicon glyphicon-eye-open pointer"></span></a>
+            </td>
+        </tr>
+    }
+</table>
+
+<div id="ModalDetailsItem" class="modal fade modal-open-noscroll" role="dialog">
+    <div class="modal-dialog modal-dialog-full">
+        <div class="modal-content modal-content-full">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Правка № <span data-bind="text:Id"></span></h3>
+            </div>
+            <div class="modal-body">
+                <table class="table-bordered table-striped" id="Table-LogUserChange">
+                    <tr>
+                        <td>Дата добавления</td>
+                        <td><span data-bind="text:LogTimeUi"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Пользователь</td>
+                        <td><span data-bind="text:UserName"></span> (<span data-bind="text:Login"></span>, IP <span data-bind="text:OperatorHost"></span>)</td>
+                    </tr>
+                    <tr>
+                        <td>Производитель</td>
+                        <td><span data-bind="text:ProducerName"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Дата принятия правки</td>
+                        <td><span data-bind="text:DateEditUi"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div class="btn btn-group btn-group-sm">
+                    @*<p>&nbsp;</p>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+else
+{
+<h4>История правок пуста</h4>
+}
+
+<style>
+    .modal-dialog-full {
+        width: 50%;
+        height: 50%;
+    }
+
+    .modal-content-full {
+        height: 100%;
+    }
+
+    table.table-striped td, table.table-striped th {
+        vertical-align: top;
+        padding: 10px;
+    }
+</style>
+
+@section scripts
+{
+@Scripts.Render("~/bundles/knockout")
+    <script src="@Url.Content("~/Scripts/WorkPlace/CatalogLogInit.js")"></script>
+}
