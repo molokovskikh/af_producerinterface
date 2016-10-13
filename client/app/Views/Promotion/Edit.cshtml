@@ -1,9 +1,10 @@
 ﻿@using ProducerInterfaceCommon.Models
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Акции", "Index") </li>
+    <li class="active">@ViewBag.Title</li>
+</ol>
 <div class="container" id="PromotionUiDiv" name="PromotionUiDiv">
-	<ol class="breadcrumb">
-		<li>@Html.ActionLink("Промоакции", "Index") </li>
-		<li class="active">@ViewBag.Title</li>
-	</ol>
+
 
 	@Html.Hidden("LoadUrl", (object)ViewBag.LoadUrl)
 

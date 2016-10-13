@@ -5,15 +5,11 @@
 	var title = ViewData["repName"];
 	ViewBag.Title = title;
 }
-
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Отчеты", "Index") </li>
+    <li class="active">История запусков</li>
+</ol>
 <div class="body-content">
-	<div class="row">
-		<ol class="breadcrumb">
-			<li>@Html.ActionLink("Отчеты", "Index") </li>
-			<li class="active">История запусков</li>
-		</ol>
-	</div>
-
 	@if (Model != null && Model.Any()) {
 		<div class="row">
 			<div class="col-md-12">

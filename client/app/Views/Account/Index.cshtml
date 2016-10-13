@@ -6,6 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","Home")">Главная</a></li>
+    <li class="active">Регистрация</li>
+</ol>
 <div class="container body-content">
     <h2>Регистрация</h2>
 
@@ -24,7 +28,7 @@
                 </div>
             </div>
 
-       
+
 
             <br/>            <br />            <br />
             <div class="form-group">
@@ -37,6 +41,6 @@
 </div>
 
 @section JavaScript
-{ 
+{
     <script src="~/Content/Chosen/js/InitRegistrationChosen.js"></script>
 }

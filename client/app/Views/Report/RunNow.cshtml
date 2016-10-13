@@ -1,13 +1,10 @@
 ﻿@model ProducerInterfaceCommon.Models.RunNowParam
 
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Отчеты", "Index") </li>
+    <li class="active">Запуск отчета</li>
+</ol>
 <div class="container body-content">
-	<div class="row">
-		<ol class="breadcrumb">
-			<li>@Html.ActionLink("Отчеты", "Index") </li>
-			<li class="active">Запуск отчета</li>
-		</ol>
-	</div>
-
 	<div class="row">
 		<div class="col-md-12">
 			@using (Html.BeginForm()) {
