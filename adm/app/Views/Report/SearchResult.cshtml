@@ -1,61 +1,78 @@
-﻿@using ProducerInterfaceCommon.ContextModels
+﻿@using Common.Tools
+@using ProducerInterfaceCommon.ContextModels
 @model IEnumerable<ProducerInterfaceCommon.Models.Job>
 
 @{
   Layout = null;
+  var deleteOldReportsTerm = (int)ViewData["DeleteOldReportsTerm"];
 }
 
 
 @if (Model != null && Model.Any())
 {
 @Html.Partial("Partial/Pager")
-<table class="table table-bordered table-striped" id="table-width-100prc">
-    <tr>
-        <th class="th_275">Название</th>
-        <th>Активен</th>
-        <th>Тип</th>
-        <th>Формировать отчет</th>
-        <th>Производитель</th>
-        <th>Создана</th>
-        <th>Запуск</th>
-        <th>История запусков</th>
-        <th colspan="2">Посл.отчет</th>
-    </tr>
-    @foreach (var item in Model)
-    {
+    <table class="table table-bordered table-striped" id="table-width-100prc">
         <tr>
-            <td class="td_275">
-                @Html.DisplayFor(modelItem => item.CustomName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Enable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReportType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Scheduler)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Producer.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastRun)
-            </td>
-            <td>@Html.ActionLink("История запусков", "RunHistory", new { jobName = item.JobName })</td>
-            @if (item.DisplayStatus == DisplayStatus.Ready) {
-                <td> @Html.ActionLink("Просмотр", "DisplayReport", new { jobName = item.JobName })</td>
-                <td> @Html.ActionLink("Загрузить", "GetFile", new { jobName = item.JobName })</td>
-            } else {
-                <td></td>
-                <td></td>
-            }
+            <th class="th_275">Название</th>
+            <th>Активен</th>
+            <th>Тип</th>
+            <th>Формировать отчет</th>
+            <th>Производитель</th>
+            <th>Создана</th>
+            <th>Запуск</th>
+            <th>История запусков</th>
+            <th colspan="2">Посл.отчет</th>
+            <th></th>
         </tr>
-    }
-</table>
+        @foreach (var item in Model) {
+            <tr @(item.LastRun.HasValue && item.LastRun.Value < SystemTime.Now().AddMonths(-deleteOldReportsTerm) ? "class=danger" : "")>
+                <td class="td_275">
+                    @Html.DisplayFor(modelItem => item.CustomName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Enable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReportType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Scheduler)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producer.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastRun)
+                </td>
+                <td>@Html.ActionLink("История запусков", "RunHistory", new {jobName = item.JobName})</td>
+                @if (item.DisplayStatus == DisplayStatus.Ready) {
+                    <td> @Html.ActionLink("Просмотр", "DisplayReport", new {jobName = item.JobName})</td>
+                    <td> @Html.ActionLink("Загрузить", "GetFile", new {jobName = item.JobName})</td>
+                } else {
+                    <td></td>
+                    <td></td>
+}
+                <td>
+                    <a href="@Url.Action("Delete", "Report", new { jobName = item.JobName, jobGroup = item.JobGroup })" class="deleteItem" onclick="return confirm('Вы уверены что хотите удалить отчет?')">
+                        <span class="glyphicon glyphicon-trash" title="Удалить отчет"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="col-md-2 no-padding">
+        <h4>Легенда</h4>
+        <table class="table table-bordered table-striped">
+            <tbody>
+            <tr class='danger'>
+                <td>Не запускавшиеся больше года</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 <br />
 }
 else

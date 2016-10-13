@@ -341,6 +341,7 @@
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\modalConfirmation.js" />
     <Content Include="Scripts\semantic_ui\dropdown.js" />
     <Content Include="Scripts\semantic_ui\dropdown.min.js" />
     <Content Include="Scripts\WorkPlace\AdminAccount_Index.js" />
@@ -794,6 +795,7 @@
     <Content Include="Views\Report\EditorTemplates\SupplierRatingReport.cshtml" />
     <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
     <Content Include="Views\LogCatalog\Changes.cshtml" />
+    <Content Include="Views\Shared\Partial\modalConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

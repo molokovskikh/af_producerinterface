@@ -38,11 +38,13 @@
 </div>
 
 <br/>
+@Html.Partial("Partial/modalConfirmation")
 
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/jqueryval")
 @Scripts.Render("~/bundles/bootstrap")
 @Scripts.Render("~/bundles/datepicker")
+<script src="@Url.Content("~/Scripts/modalConfirmation.js")"></script>
 @RenderSection("scripts", required: false)
 <script>
 	$(function () {

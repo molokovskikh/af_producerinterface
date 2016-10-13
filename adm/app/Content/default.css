@@ -10,3 +10,5 @@ a.red,span.red{ color: #ff0000 !important;}
 .width-pers100{ width: 100% !important;}
 .margin-auto{ margin: auto !important;}
 .border-light{border: 1px solid #e6e6e6;}
+.no-padding{ padding: 0px !important;}
+.dark-red{ color: #b70000 !important;}

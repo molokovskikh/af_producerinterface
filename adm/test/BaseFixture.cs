@@ -2,6 +2,7 @@
 using System.Linq;
 using Common.Tools.Calendar;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using Test.Support.Selenium;
@@ -56,6 +57,20 @@ namespace test
 						GlobalDriver.Close();
 					}
 				}
+		}
+
+		protected void ConfirmDialog(string textToCheck = "")
+		{
+			WaitForVisibleCss("#messageConfirmDialog");
+			if (textToCheck != string.Empty) {
+				AssertText(textToCheck);
+			}
+			Click(By.CssSelector("#messageConfirmationLink"));
+		}
+
+		protected void ChoseRegion(string id)
+		{
+			Eval($"$('{id}').val('1').trigger('chosen:updated').change();");
 		}
 	}
 }

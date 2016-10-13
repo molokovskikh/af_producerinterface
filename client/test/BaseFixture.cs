@@ -61,6 +61,14 @@ namespace ProducerInterface.Test
 			button.Click();
 		}
 
+		protected void ConfirmDialog(string textToCheck = "")
+		{
+			WaitForVisibleCss("#messageConfirmDialog");
+			if (textToCheck != string.Empty) {
+				AssertText(textToCheck);
+			}
+			Click(By.CssSelector("#messageConfirmationLink"));
+		}
 
 		protected void ChoseRegion(string id)
 		{

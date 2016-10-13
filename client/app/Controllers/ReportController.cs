@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using Quartz;
@@ -123,6 +124,73 @@ namespace ProducerInterface.Controllers
 			DB.jobextend.Add(jext);
 			DB.SaveChanges(CurrentUser, "Добавление отчета");
 			SuccessMessage("Отчет успешно добавлен");
+			return RedirectToAction("Index", "Report");
+		}
+
+		/// <summary>
+		/// Ставит задание на паузу в Quartz, в расширенных параметрах задания снимает флаг Enable
+		/// </summary>
+		/// <param name="jobName">Имя задания в Quartz</param>
+		/// <param name="jobGroup">Группа задания в Quartz</param>
+		/// <returns></returns>
+		public ActionResult DeleteOld()
+		{
+			//выборка
+			var schedulerName = helper.GetSchedulerName();
+			IQueryable<Job> query;
+			var deleteOldReportsTerm = int.Parse(ConfigurationManager.AppSettings["DeleteOldReportsTerm"]);
+			long[] userIds;
+			if (CurrentUser.IsProducer) {
+				// вытащили всех создателей, создававших отчеты этого производителя
+				userIds = DB.jobextend
+					.Where(x => x.ProducerId == CurrentUser.AccountCompany.ProducerId && x.SchedName == schedulerName && x.Enable)
+					.Select(x => x.CreatorId)
+					.Distinct().ToArray();
+				query = DbSession.Query<Job>().Fetch(x => x.Owner).Fetch(x => x.Producer)
+					.Where(x => x.Producer.Id == CurrentUser.AccountCompany.ProducerId);
+			} else {
+				userIds = new[] {CurrentUser.Id};
+				query = DbSession.Query<Job>().Where(x => x.Owner.Id == CurrentUser.Id);
+			}
+			ViewData["creators"] = DB.Account.Where(x => userIds.Contains(x.Id)).
+				Select(x => new SelectListItem() {Text = x.Name + "(" + x.Login + ")", Value = x.Id.ToString()}).ToList();
+
+			var lastDate = SystemTime.Now().AddMonths(-deleteOldReportsTerm);
+			var list = query.Where(x => x.SchedName == schedulerName && x.Enable).ToList();
+			list = list.Where(x => x.LastRun.HasValue && x.LastRun.Value < lastDate).
+				OrderBy(x => x.LastRun).ToList();
+			//удаление
+			foreach (var item in list) {
+				var jobName = item.JobName;
+				var jobGroup = item.JobGroup;
+				var jext = GetJobExtend(jobName);
+				if (jext == null) {
+					logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+					ErrorMessage("Отчет не найден");
+					return RedirectToAction("Index", "Report");
+				}
+				if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin) {
+					continue;
+				}
+				var key = new JobKey(jobName, jobGroup);
+				var scheduler = helper.GetScheduler();
+				var job = scheduler.GetJobDetail(key);
+				if (job == null) {
+					logger.Error($"Отчет {jobName} не найден");
+					ErrorMessage("Отчет не найден");
+					return RedirectToAction("Index", "Report");
+				}
+				try {
+					scheduler.PauseJob(key);
+				} catch (Exception e) {
+					logger.Error($"Ошибка при удалении отчета {jobName}", e);
+					ErrorMessage("Непредвиденная ошибка при удалении отчета");
+					return RedirectToAction("Index", "Report");
+				}
+				jext.Enable = false;
+				DB.SaveChanges(CurrentUser, "Удаление отчета");
+			}
+			SuccessMessage("Отчеты, не запускавшиеся больше года, удалены");
 			return RedirectToAction("Index", "Report");
 		}
 
@@ -316,7 +384,9 @@ namespace ProducerInterface.Controllers
 				return RedirectToAction("AddJob", "Report", new { id = id.Value });
 
 			ModelState.AddModelError("id", "Выберите тип отчета, который хотите создать");
-			ViewData["descr"] = AvailableReports();
+			var reports = AvailableReports();
+			ViewData["descr"] = reports;
+			ViewData["HasOldReports"] = reports;
 			return View();
 		}
 
@@ -356,6 +426,10 @@ namespace ProducerInterface.Controllers
 					query = query.Where(x => x.Owner.Id == cid.Value);
 			var items = query.Where(x => x.SchedName == schedulerName && x.Enable)
 				.OrderByDescending(x => x.CreationDate).ToList();
+
+				var deleteOldReportsTerm = int.Parse(ConfigurationManager.AppSettings["DeleteOldReportsTerm"]);
+			ViewData["DeleteOldReportsTerm"] = deleteOldReportsTerm;
+			ViewData["OldReportsExists"] = items.Any(s=> s.LastRun.HasValue && s.LastRun.Value < SystemTime.Now().AddMonths(-deleteOldReportsTerm));
 			return View(items);
 		}
 
