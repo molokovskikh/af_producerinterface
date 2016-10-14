@@ -4,6 +4,9 @@
     ViewBag.Title = "Список пользователей из вашей компании";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<ol class="breadcrumb">
+    <li class="active">Сотрудники</li>
+</ol>
     <h3>Сотрудники</h3>
 
     @foreach (var User in ViewBag.UserList)
@@ -16,9 +19,9 @@
                 </h4>
             </div>
             <div id="collapseTwo_@User.Id" class="panel-collapse collapse">
-                
+
                 <div class="panel-body">
-                 
+
                         @if (User.Id == ViewBag.CurrentUser.Id)
                 {
                     <div class="form-group">
@@ -27,10 +30,10 @@
                         </p>
                     </div>
                 }
-  
+
                     <div class="form-group">
-                        <p>Список групп, в которых 
-                        
+                        <p>Список групп, в которых
+
                         @if (User.Id != ViewBag.CurrentUser.Id)
                         {
                         <p> cостоит пользователь</p>
@@ -56,7 +59,7 @@
             </div>
         </div>
 
-     
+
 
     <hr/>
 }

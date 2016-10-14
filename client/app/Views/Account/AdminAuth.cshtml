@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","Home")">Главная</a></li>
+    <li class="active">Авторизация</li>
+</ol>
 <div class="container body-content">
 
     <h3>@ViewBag.Title</h3>
@@ -15,7 +19,7 @@
         <div class="form-group" style="max-width:480px;">
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m=>m.IdProducerUser)
-          
+
             <div class="form-group">
                 <label>Введите ваш логин</label>
                 @Html.TextBoxFor(m => m.Login, new { @class = "form-control" })

@@ -33,7 +33,6 @@ namespace ProducerInterface.Test
 			Css("#id").SelectByText("Рейтинг товаров");
 			Click("Создать");
 			AssertText("Рейтинг товаров");
-			AssertText("Новый отчет");
 			Css("#CastomName").SendKeys("Рейтинг товаров");
 			ChoseRegion("#RegionCodeEqual");
 			Click("Сохранить");

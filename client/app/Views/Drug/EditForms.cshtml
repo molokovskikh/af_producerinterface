@@ -5,6 +5,10 @@
     var title = $"Формы выпуска и дозировки препарата {ViewData["familyName"]} в классификации АналитФармация";
     ViewBag.Title = title;
 }
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Наша продукция", "Index") </li>
+    <li class="active">Формы выпуска и дозировки</li>
+</ol>
 <div class="row">
     <div class="col-md-12">
         <h3>@title</h3>
@@ -47,7 +51,7 @@
                              @Html.CheckBox("Combined", false, new { @onchange = "$('.Combined').prop('checked', $(this).prop('checked'))" })
                          </th>
                          <th class="w8p">
-                             @Html.DisplayNameFor(m => m.Monobrend) 
+                             @Html.DisplayNameFor(m => m.Monobrend)
                              @ViewData["producerName"]<br />
                              @Html.CheckBox("Monobrend", false, new { @onchange = "$('.Monobrend').prop('checked', $(this).prop('checked'))" })
                         </th>

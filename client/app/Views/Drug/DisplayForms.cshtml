@@ -6,6 +6,10 @@
     ViewBag.Title = title;
 	var imageList = (Dictionary<long,int>)ViewBag.FormPicturesList;
 }
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Наша продукция", "Index") </li>
+    <li class="active">Формы выпуска и дозировки</li>
+</ol>
 
 <div class="row">
     <div class="col-md-12">
@@ -54,10 +58,10 @@
                                 <div class="listItem">
                                     <span>@Html.DisplayFor(modelItem => item.Name)</span>
                                     <a onclick="new modalPicture().SetModelData(this)" iUrl="@(
-												imageList.ContainsKey(item.Id)?
+												imageList != null && imageList.ContainsKey(item.Id)?
 												Url.Action("GetFile","MediaFiles",new { id=imageList[item.Id] }): Url.Content("~/Content/Image/no_image.png")
 												)"  cId="@item.Id" pId="@ViewBag.producerId" dId="@ViewBag.familyId" data-toggle="modal" data-target="#PictureUploadModal" class="pointer">
-                                        @if (imageList.ContainsKey(item.Id)) {
+                                        @if (imageList != null && imageList.ContainsKey(item.Id)) {
                                             <img src="@Url.Action("GetFile", "MediaFiles", new {id = imageList[item.Id]})" alt="изображение">
                                         } else {
                                             <img src="@Url.Content("~/Content/Image/no_image.png")" alt="изображение">

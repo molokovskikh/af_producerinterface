@@ -1,10 +1,10 @@
 ﻿@model ProducerInterfaceCommon.Models.Report
 
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Отчеты", "Index") </li>
+    <li class="active">Редактор отчета</li>
+</ol>
 <div class="container body-content">
-	<ol class="breadcrumb">
-		<li>@Html.ActionLink("Отчеты", "Index") </li>
-		<li class="active">Новый отчет</li>
-	</ol>
 	<div class="row">
 		<div class="col-md-12">
 			@using (Html.BeginForm()) {

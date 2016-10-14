@@ -8,6 +8,10 @@
   var mnn = (mnn)ViewData["mnn"];
 }
 
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Наша продукция", "Index") </li>
+    <li class="active">Описание препарата</li>
+</ol>
 <div class="row">
     <div class="col-md-12">
         <h3>@title</h3>
@@ -38,7 +42,7 @@
 <p>&nbsp;</p>
 
 
-@section JavaScript {    
+@section JavaScript {
     <script src="~/Content/Chosen/js/ajax-chosen.g.js"></script>
     <script src="~/Content/Chosen/js/initDrug.js"></script>
 }

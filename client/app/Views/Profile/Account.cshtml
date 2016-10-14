@@ -8,6 +8,10 @@
 	}
 }
 
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Главная", "Index") </li>
+    <li class="active">Мой профиль</li>
+</ol>
 
 <div class="container body-content">
 	@using (Html.BeginForm("Account", "Profile", FormMethod.Post)) {

@@ -3,11 +3,11 @@
     ViewBag.Title = "Новости";
 }
 
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Главная", "Index") </li>
+    <li class="active">Новость</li>
+</ol>
 <div class="container body-content">
-	<ol class="breadcrumb">
-		<li>@Html.ActionLink("Главная", "Index") </li>
-		<li class="active">Новость</li>
-	</ol>
 
 	<div class="row">
 		<h3>@Model.Subject <span class="pull-right col-xs-2">@Model.DatePublication.Value.ToString("dd.MM.yyyy")</span></h3>
