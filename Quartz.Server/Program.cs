@@ -1,4 +1,6 @@
-﻿using Topshelf;
+﻿using System.ComponentModel;
+using Quartz.Server.BackgroundServices;
+using Topshelf;
 
 namespace Quartz.Server
 {
@@ -33,6 +35,22 @@ namespace Quartz.Server
 					return server;
 				});
 			});
+
+
+			HostFactory.Run(x => {
+				x.Service<ServiceManager>(s => {
+					s.ConstructUsing(name => new ServiceManager());
+					s.WhenStarted((os, hostControl) => os.Start(hostControl));
+					s.WhenStopped((os, hostControl) => os.Stop(hostControl));
+				});
+				x.SetDescription(ServiceManager.ServiceDescription);
+				x.SetServiceName(ServiceManager.ServiceName);
+				x.SetDisplayName(ServiceManager.ServiceDisplayName);
+
+				x.RunAsLocalSystem();
+			});
+
+
 		}
 	}
 }

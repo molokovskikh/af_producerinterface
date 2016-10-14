@@ -62,7 +62,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult SearchResult(SearchProducerReportsModel param)
 		{
-			var schedulerName = helper.GetSchedulerName();
+			var schedulerName = ReportHelper.GetSchedulerName();
 			var query = DbSession.Query<Job>().Fetch(x => x.Owner).Fetch(x => x.Producer)
 				.Where(x => x.SchedName == schedulerName);
 			if (param.Enable.HasValue)
@@ -334,7 +334,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public List<OptionElement> GetProducerList()
 		{
-			var schedulerName = helper.GetSchedulerName();
+			var schedulerName = ReportHelper.GetSchedulerName();
 			// возвращаем только производителей, у которых есть отчёты
 			var producerIdList = DB.jobextend.Where(x => x.SchedName == schedulerName && x.ProducerId != null)
 				.Select(x => x.ProducerId).Distinct().ToList();

@@ -136,7 +136,7 @@ namespace ProducerInterface.Controllers
 		public ActionResult DeleteOld()
 		{
 			//выборка
-			var schedulerName = helper.GetSchedulerName();
+			var schedulerName = ReportHelper.GetSchedulerName();
 			IQueryable<Job> query;
 			var deleteOldReportsTerm = int.Parse(ConfigurationManager.AppSettings["DeleteOldReportsTerm"]);
 			long[] userIds;
@@ -404,7 +404,7 @@ namespace ProducerInterface.Controllers
 		/// <returns></returns>
 		public ActionResult SearchResult(long? cid)
 		{
-			var schedulerName = helper.GetSchedulerName();
+			var schedulerName = ReportHelper.GetSchedulerName();
 			long[] userIds;
 			IQueryable<Job> query;
 			if (CurrentUser.IsProducer) {
