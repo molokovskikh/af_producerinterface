@@ -246,6 +246,7 @@
     <Content Include="Content\Chosen\js\initDisplayReport.js" />
     <Content Include="Content\Chosen\js\initDrug.js" />
     <Content Include="Content\Chosen\js\initCron.js" />
+    <Content Include="Content\Chosen\js\forReports.js" />
     <Content Include="Content\Chosen\js\initRunNow.js" />
     <Content Include="Content\Chosen\js\initJobList.js" />
     <Content Include="Content\Chosen\js\InitPermission.js" />
@@ -339,6 +340,7 @@
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\modalConfirmation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -468,6 +470,8 @@
     <Content Include="Views\Report\EditorTemplates\ProductsFlag.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
     <Content Include="Views\Drug\Partial\ModalPictureUpload.cshtml" />
+    <Content Include="Views\Report\Partial\DeleteHalfYearOld.cshtml" />
+    <Content Include="Views\Shared\Partial\modalConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

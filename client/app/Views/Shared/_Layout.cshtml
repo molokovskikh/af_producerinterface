@@ -45,6 +45,7 @@
 		</div>
 	</div>
 </div>
+@Html.Partial("Partial/modalConfirmation")
 
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/jqueryval")
@@ -52,6 +53,7 @@
 @Scripts.Render("~/bundles/chosen")
 @Scripts.Render("~/bundles/WorkPlace")
 @Scripts.Render("~/bundles/bootstrap")
+<script src="@Url.Content("~/Scripts/modalConfirmation.js")"></script>
 @RenderSection("JavaScript", false)
 <script>
 	$(function () {

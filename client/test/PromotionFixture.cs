@@ -80,14 +80,9 @@ namespace ProducerInterface.Test
 			WaitAjax();
 			var elAction = (IWebElement)Css("#ButtonDelete");
 			ScrollTo(elAction, yAdditive: -navbarHeight);
-			try {
-				elAction.Click();
-			} catch (InvalidOperationException ex) {
-				//отсутствует отклик из-за диалога "подтверждения"
-			}
-			var wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3));
-			wait.Until(ExpectedConditions.AlertIsPresent());
-			browser.SwitchTo().Alert().Accept();
+			elAction.Click();
+			//подтверждение удаления
+			ConfirmDialog("Вы уверены, что хотите удалить акцию");
 			AssertText("Акция удалена");
 		}
 	}

@@ -62,7 +62,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public ActionResult SearchResult(SearchProducerReportsModel param)
 		{
-			var schedulerName = helper.GetSchedulerName();
+			var schedulerName = ReportHelper.GetSchedulerName();
 			var query = DbSession.Query<Job>().Fetch(x => x.Owner).Fetch(x => x.Producer)
 				.Where(x => x.SchedName == schedulerName);
 			if (param.Enable.HasValue)
@@ -89,6 +89,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 			var model =
 				query.OrderByDescending(x => x.CreationDate).Skip(param.CurrentPageIndex*itemsPerPage).Take(itemsPerPage).ToList();
+
+			ViewData["DeleteOldReportsTerm"] = int.Parse(ConfigurationManager.AppSettings["DeleteOldReportsTerm"]);
 			return View(model);
 		}
 
@@ -332,7 +334,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 
 		public List<OptionElement> GetProducerList()
 		{
-			var schedulerName = helper.GetSchedulerName();
+			var schedulerName = ReportHelper.GetSchedulerName();
 			// возвращаем только производителей, у которых есть отчёты
 			var producerIdList = DB.jobextend.Where(x => x.SchedName == schedulerName && x.ProducerId != null)
 				.Select(x => x.ProducerId).Distinct().ToList();
@@ -342,6 +344,49 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			var model = new List<OptionElement>() {new OptionElement {Text = "Все производители", Value = ""}};
 			model.AddRange(producers);
 			return model;
+		}
+
+
+		/// <summary>
+		/// Ставит задание на паузу в Quartz, в расширенных параметрах задания снимает флаг Enable
+		/// </summary>
+		/// <param name="jobName">Имя задания в Quartz</param>
+		/// <param name="jobGroup">Группа задания в Quartz</param>
+		/// <returns></returns>
+		public ActionResult Delete(string jobName, string jobGroup)
+		{
+			var jext = GetJobExtend(jobName);
+			if (jext == null) {
+				logger.Error($"Дополнительные параметры отчета {jobName} не найдены");
+				ErrorMessage("Отчет не найден");
+				return RedirectToAction("Index", "Report");
+			}
+
+			if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin) {
+				ErrorMessage("Вы можете удалять только свои отчеты");
+				return RedirectToAction("Index", "Report");
+			}
+
+			var key = new JobKey(jobName, jobGroup);
+			var scheduler = helper.GetScheduler();
+			var job = scheduler.GetJobDetail(key);
+			if (job == null) {
+				logger.Error($"Отчет {jobName} не найден");
+				ErrorMessage("Отчет не найден");
+				return RedirectToAction("Index", "Report");
+			}
+
+			try {
+				scheduler.PauseJob(key);
+			} catch (Exception e) {
+				logger.Error($"Ошибка при удалении отчета {jobName}", e);
+				ErrorMessage("Непредвиденная ошибка при удалении отчета");
+				return RedirectToAction("Index", "Report");
+			}
+			jext.Enable = false;
+			DB.SaveChanges(CurrentUser, "Удаление отчета");
+			SuccessMessage("Отчет удален");
+			return RedirectToAction("Index", "Report");
 		}
 	}
 }

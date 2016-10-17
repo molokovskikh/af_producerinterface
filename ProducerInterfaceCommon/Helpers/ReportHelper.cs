@@ -29,7 +29,7 @@ namespace ProducerInterfaceCommon.Helpers
 #endif
 		}
 
-		public string GetSchedulerName()
+		public static string GetSchedulerName()
 		{
 #if DEBUG
 			return "TestScheduler";
