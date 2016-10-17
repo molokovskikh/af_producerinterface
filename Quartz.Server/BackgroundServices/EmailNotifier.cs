@@ -37,9 +37,7 @@ namespace Quartz.Server.BackgroundServices
 			if (time.Hour == hour && time.Minute >= minutes && time.Minute < minutes + RepeatInterval) {
 				var term = Int32.Parse(ConfigurationManager.AppSettings["DeleteOldReportsTerm"]);
 				var href = ConfigurationManager.AppSettings["UrlToTheReportList"];
-				var nh = new ProducerInterfaceCommon.ContextModels.NHibernate();
-				nh.Init();
-				var dbSession = nh.Factory.OpenSession();
+				var dbSession = ServiceManager.DbFactory.OpenSession();
 				try {
 					dbSession.BeginTransaction();
 					var uselessReports =
@@ -55,9 +53,8 @@ namespace Quartz.Server.BackgroundServices
 						}
 						EmailSender.SendEmail(item.Owner.Login, "Не используемые отчеты", message, new EditableList<string>(), true);
 					}
-				} catch {
+				}  finally {
 					dbSession.Close();
-					throw;
 				}
 			}
 		}

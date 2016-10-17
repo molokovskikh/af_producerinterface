@@ -8,6 +8,7 @@ using Common.Logging;
 using Common.Tools;
 using Common.Tools.Calendar;
 using Common.Tools.Threading;
+using NHibernate;
 using ProducerInterfaceCommon.Heap;
 using Topshelf;
 
@@ -15,15 +16,9 @@ namespace Quartz.Server.BackgroundServices
 {
 	public class ServiceManager : ServiceControl
 	{
-		private bool NeedToBeCanceled { get; set; }
 		private RepeatableCommand CurrentComman { get; set; }
 
-
-		public static string ServiceDescription => "ServiceManager runs ProducereInterface tasks";
-
-		public static string ServiceName => "ServiceManager";
-
-		public static string ServiceDisplayName => "BackgroundServiceManager";
+		public static ISessionFactory DbFactory { get; set; }
 
 		private static readonly ILog logger = LogManager.GetLogger(typeof (ServiceManager));
 
@@ -46,6 +41,9 @@ namespace Quartz.Server.BackgroundServices
 				.Select(Activator.CreateInstance)
 				.OfType<IBackgroundService>()
 				.ToArray();
+			var nh = new ProducerInterfaceCommon.ContextModels.NHibernate();
+			nh.Init();
+			DbFactory = nh.Factory;
 
 			CurrentComman = new RepeatableCommand(30.Minute(), () => tasks.Each(t => {
 				try {
