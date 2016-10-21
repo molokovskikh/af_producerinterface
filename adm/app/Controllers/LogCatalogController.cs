@@ -38,8 +38,14 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 				SuccessMessage("Правки успешно внесены в каталог");
 			}
 			if (model.RejectId.HasValue) {
-				Reject(model.RejectId.Value, model.RejectComment);
-				SuccessMessage("Комментарий отправлен пользователю");
+				var result = Reject(model.RejectId.Value, model.RejectComment);
+				if (result) {
+					SuccessMessage("Правка отклонена, комментарий отправлен пользователю");
+				} else {
+					SuccessMessage(
+						"Правка отклонена, но комментарий не отправлен пользователю, т.к. его логин не является почтовым адресом");
+				}
+				
 			}
 			var applyList = new List<SelectListItem>();
 			var emptyItem = new SelectListItem() {Value = "", Text = "Все правки"};
@@ -117,7 +123,7 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 			// SendMessage
 		}
 
-		private void Reject(long id, string comment)
+		private bool Reject(long id, string comment)
 		{
 			var item = DB.CatalogLog.Single(x => x.Id == id);
 			item.Apply = (sbyte) ApplyRedaction.Rejected;
@@ -144,8 +150,8 @@ namespace ProducerInterfaceControlPanelDomain.Controllers
 					break;
 			}
 
-			EmailSender.SendRejectCatalogChangeMessage(DB, user, item.ObjectReferenceNameUi, item.PropertyNameUi, before, after,
-				comment);
+			return EmailSender.SendRejectCatalogChangeMessage(DB, user, item.ObjectReferenceNameUi,
+				item.PropertyNameUi, before, after, comment);
 		}
 
 

@@ -98,7 +98,7 @@ namespace test
 
 			Click(By.CssSelector("#commentModal .btn.btn-primary[value='Отклонить']"));
 
-			WaitForText("Комментарий отправлен пользователю");
+			WaitForText("отправлен пользователю");
 			//проверка результата принятия правки
 			var drugFormPicture =
 				session.Query<DrugFormPicture>().First(x => x.CatalogId == catalogId && x.ProducerId == producerId);

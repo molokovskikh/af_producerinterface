@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Threading;
 using Common.Tools;
 using NHibernate.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using ProducerInterfaceCommon.Models;
+using ProducerInterfaceCommon.TasksManager.Services;
 
 namespace test
 {
@@ -42,6 +44,34 @@ namespace test
 				browser.FindElementsByCssSelector("table a.deleteItem")
 					.FirstOrDefault(s => s.GetAttribute("href").IndexOf(order.JobName) != -1);
 			Assert.IsTrue(orderToCLick == null);
+		}
+
+		[Test]
+		public void EmailNotifierOldReportsFixture()
+		{
+			var list = session.Query<ServiceTaskManager>().ToList();
+			list.ForEach(s => { session.Delete(s); });
+			Open();
+			AssertText("Статистика");
+
+			Open("/adminaccount/ServiceJobList");
+			AssertText(typeof(EmailNotifierOldReports).Name);
+			var item = session.Query<ServiceTaskManager>().FirstOrDefault(s=>s.ServiceType == typeof(EmailNotifierOldReports).FullName);
+
+			Assert.IsFalse(item.Enabled);
+
+			Click(By.CssSelector("#interval" + item.Id));
+			WaitForText($"Задача {item.Id} запущена успешно");
+			Open("/adminaccount/ServiceJobList");
+			session.Refresh(item);
+			Assert.IsTrue(item.Enabled);
+			Assert.IsFalse(item.LastRun.HasValue);
+
+			Thread.Sleep(65000);
+			Open("/adminaccount/ServiceJobList");
+			session.Refresh(item);
+			Assert.IsTrue(item.Enabled);
+			Assert.IsTrue(item.LastRun.HasValue);
 		}
 	}
 }

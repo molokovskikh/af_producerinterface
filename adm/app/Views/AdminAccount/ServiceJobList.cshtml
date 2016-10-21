@@ -1,0 +1,98 @@
+﻿@model IEnumerable<ProducerInterfaceCommon.Models.ServiceTaskManager>
+
+@{
+    ViewBag.Title = "ServiceList";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<h2>Список задач</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceName)
+        </th>
+        <th>
+            Интервал
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastModified)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastRun)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Enabled)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <th>
+                @Html.DisplayFor(model => item.Id)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <td>
+                <a class="c-pointer" data-toggle="modal" data-target="#IntervalSetDialog" url-param="interval" url-val="@(item.DataFromJsonGet<string>())"
+									 onclick="stuff.UpdateModal($(this).attr('url-id'), $(this).attr('url-val'));" url-id="interval@(item.Id)">@(item.DataFromJsonGet<string>()??" не задано ")</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastRun)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enabled)
+            </td>
+            <td>
+                @if (item.Enabled) {
+                    <p>
+                        <a onclick="confirm('Вы действительно хотите приостановить выполнние задачи?')"
+                           id="item@(item.Id)" href="@Url.Action("ServiceJobStop", new {id = item.Id})">Остановить</a>
+                    </p>
+                } else {
+                    <p>
+                        <a id="interval@(item.Id)" url-clean="@Url.Action("ServiceJobStart", new {id = item.Id})" href="@Url.Action("ServiceJobStart", new {id = item.Id})">Запустить</a>
+                    </p>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<div id="IntervalSetDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Обновить интервал</h4>
+            </div>
+            <div class="modal-body">
+                <input url-attr="interval" url-target="interval" type="text" value=""/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Нет</button>
+                <a onclick="stuff.UpdateInterval()" class="btn btn-primary" data-dismiss="modal">Да</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/WorkPlace/AdminAccount_Index.js"></script>
+}

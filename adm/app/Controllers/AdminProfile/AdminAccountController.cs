@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Common.Tools;
+using NHibernate.Linq;
+using ProducerInterfaceCommon.Models;
+using ProducerInterfaceCommon.TasksManager;
 using ProducerInterfaceControlPanelDomain.Controllers.Global;
 
 namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
@@ -51,5 +55,74 @@ namespace ProducerInterfaceControlPanelDomain.Controllers.AdminProfile
 
             return PartialView(NewEmail);
         }
-    }
+
+	    public ActionResult ServiceJobList()
+	    {
+			TaskManager.JobServiceUpdateServiceList(DbSession);
+		    var list = DbSession.Query<ServiceTaskManager>().ToList();
+		    return View(list);
+	    }
+
+	    public ActionResult ServiceJobStart(uint id,string interval = "")
+	    {
+		    var item = DbSession.Query<ServiceTaskManager>().FirstOrDefault(s => s.Id == id);
+		    if (item == null) {
+			    ErrorMessage($"Запись {id} не существует");
+			    return RedirectToAction("ServiceJobList");
+		    }
+		    if (!item.Enabled) {
+				//пока не будет реализован (перенесен) полноценный функционал для задания даты, используется JSON
+			    var jDate = item.DataFromJsonGet<string>();
+			    if (interval != String.Empty)
+				    jDate = interval;
+			    if (string.IsNullOrEmpty(jDate))
+#if DEBUG
+				    item.DataFromJsonSet($"0 {SystemTime.Now().AddMinutes(1).Minute} {SystemTime.Now().AddMinutes(1).Hour} * * ?");
+#else
+				item.DataFromJsonSet("0 0 9 1 * ?");  // раз в месяц в 9 утра
+#endif
+			    else
+				    item.DataFromJsonSet(jDate);
+					var result = new TaskManager().ServiceQuartzStart
+				    (item.JobName, item.ServiceName, item.DataFromJsonGet<string>()??"");
+			    if (result) {
+				    item.Enabled = true;
+				    item.LastModified = SystemTime.Now();
+				    DbSession.Save(item);
+					SuccessMessage($"Задача {id} запущена успешно");
+			    } else {
+				    ErrorMessage($"При запуске задачи {id} произошла ошибка");
+			    }
+		    } else {
+			    ErrorMessage($"Задача {id} уже запущена");
+			    return RedirectToAction("ServiceJobList");
+		    }
+		    return RedirectToAction("ServiceJobList");
+	    }
+
+	    public ActionResult ServiceJobStop(uint id)
+	    {
+		    var item = DbSession.Query<ServiceTaskManager>().FirstOrDefault(s => s.Id == id);
+		    if (item == null) {
+			    ErrorMessage($"Запись {id} не существует");
+			    return RedirectToAction("ServiceJobList");
+		    }
+		    if (item.Enabled) {
+			    var tManager = new TaskManager();
+			    var result = tManager.ServiceQuartzStop(item.JobName);
+			    if (result) {
+				    item.Enabled = false;
+				    item.LastModified = SystemTime.Now();
+				    DbSession.Save(item);
+				    SuccessMessage($"Задача {id} отключена успешно");
+			    } else {
+				    ErrorMessage($"При отключении задачи {id} произошла ошибка");
+			    }
+		    } else {
+			    ErrorMessage($"Задача {id} уже отключена");
+			    return RedirectToAction("ServiceJobList");
+		    }
+		    return RedirectToAction("ServiceJobList");
+	    }
+	}
 }
