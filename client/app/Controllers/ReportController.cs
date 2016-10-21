@@ -169,7 +169,7 @@ namespace ProducerInterface.Controllers
 					ErrorMessage("Отчет не найден");
 					return RedirectToAction("Index", "Report");
 				}
-				if (jext.CreatorId != CurrentUser.Id && !CurrentUser.IsAdmin) {
+				if (jext.CreatorId != CurrentUser.Id) {
 					continue;
 				}
 				var key = new JobKey(jobName, jobGroup);
@@ -386,7 +386,6 @@ namespace ProducerInterface.Controllers
 			ModelState.AddModelError("id", "Выберите тип отчета, который хотите создать");
 			var reports = AvailableReports();
 			ViewData["descr"] = reports;
-			ViewData["HasOldReports"] = reports;
 			return View();
 		}
 
@@ -429,7 +428,7 @@ namespace ProducerInterface.Controllers
 
 				var deleteOldReportsTerm = int.Parse(ConfigurationManager.AppSettings["DeleteOldReportsTerm"]);
 			ViewData["DeleteOldReportsTerm"] = deleteOldReportsTerm;
-			ViewData["OldReportsExists"] = items.Any(s=> s.LastRun.HasValue && s.LastRun.Value < SystemTime.Now().AddMonths(-deleteOldReportsTerm));
+			ViewData["OldReportsExists"] = items.Any(s=> s.Owner.Id == CurrentUser.Id && s.LastRun.HasValue && s.LastRun.Value < SystemTime.Now().AddMonths(-deleteOldReportsTerm));
 			return View(items);
 		}
 
