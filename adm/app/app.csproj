@@ -796,6 +796,7 @@
     <Content Include="Views\Report\EditorTemplates\Date.cshtml" />
     <Content Include="Views\LogCatalog\Changes.cshtml" />
     <Content Include="Views\Shared\Partial\modalConfirmation.cshtml" />
+    <Content Include="Views\AdminAccount\ServiceJobList.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -812,6 +813,10 @@
     <ProjectReference Include="..\..\lib\common-mysql\Common.NHibernate\Common.NHibernate.csproj">
       <Project>{8BE188CA-A0D9-4609-AB2E-AB8EDF849FE0}</Project>
       <Name>Common.NHibernate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\common-tools\Common.Tools\Common.Tools.csproj">
+      <Project>{72AFCFE8-C9E9-45FA-9698-BEE896A517A3}</Project>
+      <Name>Common.Tools</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ProducerInterfaceCommon\lib.csproj">
       <Project>{01558158-99b8-4f25-98e7-b2edeadb987a}</Project>

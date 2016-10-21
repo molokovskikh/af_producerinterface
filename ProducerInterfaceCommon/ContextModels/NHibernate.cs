@@ -20,6 +20,13 @@ namespace ProducerInterfaceCommon.ContextModels
 				x.ManyToOne(y => y.Producer, y => y.Column("ProducerId"));
 			});
 
+			Mapper.Class<ProducerInterfaceCommon.Models.ServiceTaskManager>(x => {
+				x.Table("ServiceTaskManager");
+				x.Schema("ProducerInterface");
+				x.ManyToOne(y => y.User, y => y.Column("AccountId"));
+			});
+
+
 			Mapper.Class<Producer>(x => {
 				x.Table("Producers");
 				x.Schema("Catalogs");

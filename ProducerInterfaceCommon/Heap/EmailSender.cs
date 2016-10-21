@@ -292,10 +292,11 @@ namespace ProducerInterfaceCommon.Heap
 		}
 
 		// Отклонение правки в каталог
-		public static void SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName,
+		public static bool SendRejectCatalogChangeMessage(producerinterface_Entities cntx, Account user, string catalogName,
 			string fieldName, string before, string after, string comment)
 		{
 			//throw new NotImplementedException();
+			bool mailSentToTheUser = false;
 			var siteName = ConfigurationManager.AppSettings["SiteName"];
 			var mailForm = cntx.mailformwithfooter.Single(x => x.Id == (int) MailType.RejectCatalogChange);
 			var subject = ReliableTokenizer(mailForm.Subject, new {SiteName = siteName});
@@ -304,11 +305,15 @@ namespace ProducerInterfaceCommon.Heap
 				$"{header}\r\n\r\n{ReliableTokenizer(mailForm.Body, new {FieldName = fieldName, CatalogName = catalogName, Before = before, After = after, Comment = comment})}\r\n\r\n{mailForm.Footer}";
 
 			//var attachments = EmailSender.GetAttachments(cntx, MailType.RejectCatalogChange);
-			EmailSender.SendEmail(user.Login, subject, body, new List<string>(), false);
 
+			if (!user.IsAdmin || user.IsAdmin && user.Login.IndexOf("@") != -1) {
+				EmailSender.SendEmail(user.Login, subject, body, new List<string>(), false);
+				mailSentToTheUser = true;
+			}
 			var di = new DiagnosticInformation(user) {Body = body, ActionName = MailType.RejectCatalogChange.DisplayName()};
 			var mailInfo = ConfigurationManager.AppSettings["MailInfo"];
 			EmailSender.SendEmail(mailInfo, subject, di.ToString(cntx), new List<string>(), false);
+			return mailSentToTheUser;
 		}
 
 		// Обратная связь, сотрудникам

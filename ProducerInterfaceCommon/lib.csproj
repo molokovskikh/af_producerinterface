@@ -342,6 +342,7 @@
     <Compile Include="Models\RunNowNotIntervalParam.cs" />
     <Compile Include="Models\MailFormWithFooter.cs" />
     <Compile Include="Models\DrugFormPicture.cs" />
+    <Compile Include="Models\ServiceTaskManager.cs" />
     <Compile Include="Models\Slide.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReport.cs" />
     <Compile Include="ReportModels\PharmacyRating\PharmacyRatingReportRow.cs" />
@@ -364,6 +365,10 @@
     <Compile Include="ReportModels\SupplierRating\SupplierRatingReportRow.cs" />
     <Compile Include="Models\TriggerParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TasksManager\Services\EmailNotifierOldReports.cs" />
+    <Compile Include="TasksManager\BaseTaskManagerService.cs" />
+    <Compile Include="TasksManager\TaskManager.cs" />
+    <Compile Include="TasksManager\TaskManagerJob.cs" />
     <Compile Include="ViewModel\ControlPanel\FeedBackFilterView.cs" />
     <Compile Include="ViewModel\ControlPanel\ListGroupView.cs" />
     <Compile Include="ViewModel\ControlPanel\SearchProducerPromotion.cs" />
