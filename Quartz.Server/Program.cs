@@ -1,38 +1,55 @@
-﻿using Topshelf;
+﻿using System;
+using System.Configuration;
+using Common.Logging.Configuration;
+using log4net;
+using Topshelf;
 
 namespace Quartz.Server
 {
-	/// <summary>
-	/// The server's main entry point.
-	/// </summary>
 	public static class Program
 	{
-		/// <summary>
-		/// Main.
-		/// </summary>
-		public static void Main()
+		public const string DefaultServiceName = "QuartzServer";
+		public const string DefaultServiceDisplayName = "Quartz Server";
+		public const string DefaultServiceDescription = "Quartz Job Scheduling Server";
+		public const string PrefixServerConfiguration = "quartz.server";
+		public const string KeyServiceName = PrefixServerConfiguration + ".serviceName";
+		public const string KeyServiceDisplayName = PrefixServerConfiguration + ".serviceDisplayName";
+		public const string KeyServiceDescription = PrefixServerConfiguration + ".serviceDescription";
+
+		static ILog logger = LogManager.GetLogger(typeof(Program));
+
+		public static int Main()
 		{
-			// change from service account's dir to more logical one
-			//Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
+			try {
+				var configuration = (NameValueCollection)ConfigurationManager.GetSection("quartz");
+				HostFactory.Run(x => {
+					x.DependsOn("Dnscache");
+					x.DependsOn("Tcpip");
+					x.RunAsLocalSystem();
 
-			var hh = System.AppDomain.CurrentDomain.BaseDirectory;
-
-			HostFactory.Run(x => {
-				x.DependsOn("Dnscache");
-				x.DependsOn("Tcpip");
-				x.RunAsLocalSystem();
-				//x.RunAsNetworkService();
-
-				x.SetDescription(Configuration.ServiceDescription);
-				x.SetDisplayName(Configuration.ServiceDisplayName);
-				x.SetServiceName(Configuration.ServiceName);
-				x.Service(factory => {
-					QuartzServer server = QuartzServerFactory.CreateServer();
-					server.Initialize();
-					return server;
+					x.SetDescription(GetConfigurationOrDefault(configuration, KeyServiceDescription, DefaultServiceDescription));
+					x.SetDisplayName(GetConfigurationOrDefault(configuration, KeyServiceDisplayName, DefaultServiceDisplayName));
+					x.SetServiceName(GetConfigurationOrDefault(configuration, KeyServiceName, DefaultServiceName));
+					x.Service(factory => new QuartzServer());
 				});
-			});
+				return 0;
+			} catch(Exception e) {
+				logger.Error("Fail on application start", e);
+				return 1;
+			}
+		}
 
+		public static string GetConfigurationOrDefault(NameValueCollection config, string configurationKey, string defaultValue)
+		{
+			string retValue = null;
+			if (config != null) {
+				retValue = config[configurationKey];
+			}
+
+			if (retValue == null || retValue.Trim().Length == 0) {
+				retValue = defaultValue;
+			}
+			return retValue;
 		}
 	}
 }
